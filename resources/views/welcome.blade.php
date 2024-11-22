@@ -28,11 +28,10 @@
 </head>
 <body>
 
-    <div class="login-page bg-light">
+    <div class="login-page bg-light"  style="background-image: url(../theme/frontend/img/bg-reg.png); background-position: center; background-size: cover; background-repeat: no-repeat;">
         <div class="container">
             <div class="row">
-                <div class="col-lg-10 offset-lg-1">
-                  <h3 class="mb-3">Login Now</h3>
+                <div class="col-lg-8 offset-lg-2">
                     <div class="bg-white shadow rounded">
                         <div class="row">
                             <div class="col-md-6 pe-0">
@@ -78,30 +77,29 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                        <div class="col-sm-4">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="inlineFormCheck">
-                                                    <label class="form-check-label" for="inlineFormCheck">Remember me</label>
-                                                </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="inlineFormCheck">
+                                                <label class="form-check-label" for="inlineFormCheck">Remember me</label>
                                             </div>
+                                        </div>
 
-                                            <div class="col-sm-12">
-                                                <a href="{{route('forgot')}}" class="float-end text-primary">Forgot Password?</a>
-                                                <a href="/registration" class="text-primary">Register an Account Now!</a></p>
-                                            </div>
-
+                                        <div class="col-sm-12">
+                                            <a href="{{route('forgot')}}" class="float-end text-primary">Forgot Password?</a>
+                                            <a href="/registration" class="text-primary">Register an Account Now!</a></p>
+                                        </div>
 
                                         <div class="col-12">
-                                            <button type="submit" class="btn btn-primary w-50 px-4 py-2 float-end mt-2">Login</button>
+                                            <button type="submit" class="btn btn-primary w-50 px-4 py-2">Login</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                             <div class="col-md-6 ps-0 d-none d-md-block">
-                                <div class="form-right h-100 bg-primary text-white text-center pt-5 align-items-center">
-                                    <a href="http://127.0.0.1:8000/" class="navbar-brand p-0">
+                                <div class="form-right h-100 text-white text-center shadow align-items-center">
+                                    <a href="/" class="navbar-brand p-0">
                                         <!-- <h1 class="text-primary mb-0"><i class="fab fa-slack me-2"></i> LifeSure</h1> -->
-                                        <img src="{{ asset('theme') }}/frontend/img/user_login.png" alt="Logo" width="75%">
+                                        <img src="{{ asset('theme') }}/frontend/img/user_login.png" alt="Logo" class="w-100">
                                     </a>
                                 </div>
                             </div>
