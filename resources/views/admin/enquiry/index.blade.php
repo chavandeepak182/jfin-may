@@ -1,57 +1,53 @@
 @extends('layouts.header')
+
 @section('title')
 All Users
 @endsection
-@section('content')
 
+@section('content')
 
 <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet"/>
-
-<!-- export button -->
+<!-- Export button -->
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
 
-         <div style="padding: 1%"> 
-                    @if (session('status'))
-                        <div class="alert alert-success">{{ session('status') }}</div>
-                    @endif
-            <h1><center>Users</center></h1> 
-                 <div class="card shadow mb-4">                 
-                        <div class="card-header py-3">
-                           <h4>Enquiry Leads
-                           </h4>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Contact</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                @foreach ($enquiries as $enquiry)
-                                    <tr>
-                                        <td>{{ $enquiry->enquiry_id }}</td>
-                                        <td>{{ $enquiry->name }}</td>
-                                        <td>{{ $enquiry->email }}</td>
-                                        <td>{{ $enquiry->contact }}</td>
-                                        <td>
-                                            <a href="#" class="btn btn-success">view</a>
-                                           
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                 </div>
-         </div>               
- 
-   
+<div style="padding: 1%"> 
+    @if (session('status'))
+        <div class="alert alert-success">{{ session('status') }}</div>
+    @endif
+    <h1><center>Users</center></h1> 
+    <div class="card shadow mb-4">                 
+        <div class="card-header py-3">
+            <h4>Enquiry Leads</h4>
+        </div>
+        <div class="card-body">
+            <table id="example" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($enquiries as $enquiry)
+                        <tr>
+                            <td>{{ $enquiry->enquiry_id }}</td>
+                            <td>{{ $enquiry->name }}</td>
+                            <td>{{ $enquiry->email }}</td>
+                            <td>{{ $enquiry->contact }}</td>
+                            <td>
+                                <a href="#" class="btn btn-success">view</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 @endsection
 
@@ -62,9 +58,8 @@ All Users
 <script src="https://cdn.datatables.net/2.1.3/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.1.3/js/dataTables.bootstrap5.js"></script>
 
-<!--export button -->
+<!-- Export button -->
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 
@@ -73,10 +68,20 @@ All Users
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
+
 <script>
+$(document).ready(function() {
+    $('#example').DataTable({
+        dom: 'Bfrtip', // Configure buttons to appear at the top of the table
+        buttons: [
+            'copy', 
+            'csv', 
+            'excel', 
+            'pdf', 
+            'print' // These are the export buttons
+        ]
+    });
+});
+</script>
 
-$(document).ready( function () {
-    $('#example').DataTable();
-} );
-
-</script>   
+@endsection

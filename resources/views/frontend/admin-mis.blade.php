@@ -33,51 +33,39 @@ Admin MIS
         <div class="card-body">
             <div class="table-responsive">
             <table id="example" class="table table-striped" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Loan ID</th>
-                            <th>Name</th>
-                            <th>Email Id</th>
-                            <th>Contact</th>
-                            <th>Loan Amount</th>                            
-                            <th>Address</th>
-                            @if(session()->get('role_id') == 4)
-                                <th>Action</th>
-                            @endif
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($data['loans'] as $loan)                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $loan->user_name }}</td>
-                                <td>{{ $loan->email }}</td>
-                                <td>{{ $loan->mobile_no }}</td>
-                                <td>{{ $loan->amount }}</td>                                
-                                <td>{{ $loan->city }}</td>
-                                @if(session()->get('role_id') == 4)
-                                    <td>
-                                    <a class="btn btn-primary btn-xs view" title="View" href="{{ route('admin.mis.view', ['id' => $loan->loan_id]) }}">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                    </td>
-                                @endif
-                            </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>Loan ID</th>
-                            <th>Name</th>
-                            <th>Email Id</th>
-                            <th>Contact</th>
-                            <th>Loan Amount</th>                            
-                            <th>Address</th>
-                            @if(session()->get('role_id') == 2)
-                                <th>Action</th>
-                            @endif
-                        </tr>
-                    </tfoot>
-                </table>
+    <thead>
+        <tr>
+            <th>Loan ID</th>
+            <th>Name</th>
+            <th>Email Id</th>
+            <th>Contact</th>
+            <th>Loan Amount</th>                            
+            <th>Address</th>
+            @if(session()->get('role_id') == 4)
+                <th>Action</th>
+            @endif
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($data['loans'] as $loan)
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $loan->user_name }}</td>
+                <td>{{ $loan->email }}</td>
+                <td>{{ $loan->mobile_no }}</td>
+                <td>{{ $loan->amount }}</td>                                
+                <td>{{ $loan->city }}</td>
+                @if(session()->get('role_id') == 4)
+                    <td>
+                        <a class="btn btn-primary btn-xs view" title="View" href="{{ route('admin.mis.view', ['id' => $loan->loan_id]) }}">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </td>
+                @endif
+            </tr>
+        @endforeach
+    </tbody>
+</table>
                 <div class="d-flex justify-content-center mt-3"> 
                     {{ $data['loans']->links() }}
                 </div>
@@ -143,22 +131,43 @@ Admin MIS
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
 <script>
     $(document).ready(function() {
-        $('#loansTable').DataTable({
-            paging: true,
-            searching: true,
-            ordering: true,
-            lengthChange: true,
-            pageLength: 10,
-        });
-
-        $('#addLoanForm').on('submit', function(e) {
-            e.preventDefault();
-            // Add AJAX request for form submission
-        });
+    $('#example').DataTable({
+        paging: true,
+        searching: true,
+        ordering: true,
+        lengthChange: true,
+        pageLength: 10,
+        dom: 'Bfrtip',  // Add this line to place buttons above the table
+        buttons: [
+            {
+                extend: 'excelHtml5',  // Export to Excel
+                text: 'Export to Excel',
+                title: 'MIS Data', // Title of the file
+            },
+            {
+                extend: 'pdfHtml5',   // Export to PDF
+                text: 'Export to PDF',
+                title: 'MIS Data', // Title of the file
+                orientation: 'portrait', // 'portrait' or 'landscape'
+                pageSize: 'A4', // Page size
+                customize: function (doc) {
+                    // Customize the PDF here (Optional)
+                    doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                }
+            }
+        ],
     });
+});
 
     function deleteLoan(loanId) {
         Swal.fire({

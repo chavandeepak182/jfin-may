@@ -12,7 +12,7 @@
     <ol class="breadcrumb" style="margin-left: 20px;">
         <li class="breadcrumb-item"><a href="{{ route('loans.index') }}">Loans List</a></li>
         <li class="breadcrumb-item"><a href="{{ route('loans.index') }}">All Loans</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Loan Details</li>
+        <li class="breadcrumb-item active" aria-current="page">Loanc Details</li>
     </ol>
 </nav>
 

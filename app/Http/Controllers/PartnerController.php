@@ -65,7 +65,7 @@ class PartnerController extends Controller
                 $user->password = md5($request->password);
                 $user->role_id = 3;  //role_id = 3 for the partner standard user
                 $user->email_otp = $six_digit_random_number;
-                $user->referal_code	 = $randomString;
+                $user->referral_code	 = $randomString;
 
                 $user->save();
 
