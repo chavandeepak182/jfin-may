@@ -4,20 +4,20 @@
 
 @section('content')
     <!-- Contact Start -->
-    <div class="container-fluid py-5 bg-light">
+    <div class="container-fluid py-5 bg-light" style="background-image: url(../theme/frontend/img/bg-reg.png); background-position: center; background-size: cover; background-repeat: no-repeat;">
         <div class="container py-5">
-            <div class="row g-5">
+            <div class="row g-5 align-items-center">
                 <div class="col-md-6 wow fadeInLeft" data-wow-delay="0.2s">
                     <div class="contact-img d-flex justify-content-center">
                         <div class="contact-img-inner">
-                            <img src="{{ asset('theme/frontend/img/agreement.webp') }}" class="img-fluid w-100" alt="Image">
+                            <img src="{{ asset('theme/frontend/img/agreement.png') }}" class="img-fluid w-100" alt="Image">
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-md-6 wow fadeInRight" data-wow-delay="0.4s">
+                <div class="col-md-5 wow fadeInRight" data-wow-delay="0.4s">
                     <div>
-                        <h4 class="text-primary">Register Your Account</h4>
+                        <h4 class="text-white pb-3">Register Your Account</h4>
                         
                         <!-- Success Message -->
                         @if(session('success'))
@@ -93,7 +93,7 @@
                                         @enderror
                                     </div>        
                                 </div>
-                                <div class="col-md-6 offset-3">
+                                <div class="col-md-6 pt-3">
                                     <button class="btn btn-primary w-100 py-3" type="submit">Register Now</button>
                                 </div>
                             </div>
