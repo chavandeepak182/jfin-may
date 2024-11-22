@@ -1,6 +1,36 @@
 @extends('layouts.header')
 @section('content')
+<style>
+    @media print {
+        /* General body styling for printing */
+        body {
+            overflow: hidden; /* Hides the scrollbar */
+            margin: 0; /* Adjust margins */
+            padding: 0;
+        }
 
+        /* Optional: Limit printed area to a specific section */
+        #export-area {
+            margin: auto;
+            width: 100%; /* Full width of printable area */
+        }
+
+        /* Hide scrollbar */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+
+        /* Hide unnecessary UI elements */
+        .no-print {
+            display: none;
+        }
+    }
+</style>
+<div id="export-area">
 <div class="container">
     <h2>Eligibility Calculator Salaried</h2>
     <form id="eligibilityForm" action="{{ route('calculate.eligibility.salaried') }}" method="POST">
@@ -8,7 +38,12 @@
 
         <!-- Customer Name -->
         <h2>Customer Name: {{ $data['userDetails']->name }}</h2>
-
+        <div class="text-right mb-3">
+            <a href="{{ route('export.eligibility') }}" class="btn btn-success">
+                Export to Excel
+            </a>
+            <button onclick="exportToPdf()" class="btn btn-primary">Export as PDF</button>
+        </div>
         <!-- Salary input (Fixed) -->
         <div class="form-group">
             <label for="salary">Salary (Monthly)</label>
@@ -238,7 +273,7 @@
     <button type="button" class="btn btn-primary" onclick="calculateMaxLoanAmount()">Calculate Max Loan Amount</button>
 </div>
 </div>
-
+</div>
 <script>
     // emi calculator
     function calculateEMI() {
@@ -430,6 +465,22 @@
     }
 }
 </script>
+<script>
+    function exportToPdf() {
+        const originalContents = document.body.innerHTML; // Save original content
+        const exportArea = document.getElementById('export-area').innerHTML; // Get printable content
 
+        // Set body to only include printable content
+        document.body.innerHTML = exportArea;
+
+        // Trigger the print dialog
+        window.print();
+
+        // Restore the original content after printing
+        document.body.innerHTML = originalContents;
+
+        location.reload(); // Reload the page to reset any dynamic functionality
+    }
+</script>
 
 @endsection

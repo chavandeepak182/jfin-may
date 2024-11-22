@@ -17,6 +17,8 @@ use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\EligibilityCriteriaController;
 use App\Http\Controllers\CibilController;
 use Illuminate\Support\Facades\Route;
+use App\Exports\EligibilityExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 require __DIR__.'/auth.php';
 
@@ -153,7 +155,17 @@ Route::get('agent/mis/{id}', [AgentController::class, 'viewMis'])->name('agent.m
 Route::get('admin/mis', [AdminController::class, 'adminMis'])->name('admin.mis');
 Route::get('admin/mis/{id}', [AdminController::class, 'viewMis'])->name('admin.mis.view');
 //export
+Route::get('/export-eligibility', function () {
+    $data = [
+        ['Field', 'Value'],
+        ['Customer Name', 'John Doe'],
+        ['Salary', '50000'],
+        ['Tax Amount', '5000'],
+        // Add other fields dynamically from your logic
+    ];
 
+    return Excel::download(new EligibilityExport($data), 'eligibility.xlsx');
+})->name('export.eligibility');
 
 
 //enquiry form

@@ -60,6 +60,9 @@ Admin MIS
                         <a class="btn btn-primary btn-xs view" title="View" href="{{ route('admin.mis.view', ['id' => $loan->loan_id]) }}">
                             <i class="fa fa-eye"></i>
                         </a>
+                        <a class="btn btn-primary btn-xs edit" title="Edit" href="{{ route('editLoan', ['id' => $loan->loan_id]) }}">
+                            <i class="fa fa-edit"></i>
+                        </a>
                     </td>
                 @endif
             </tr>

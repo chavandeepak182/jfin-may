@@ -4,7 +4,7 @@
 
 @section('content')
     <!-- Contact Start -->
-    <div class="container-fluid py-5">
+    <div class="container-fluid py-5 bg-light">
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-md-6 wow fadeInLeft" data-wow-delay="0.2s">

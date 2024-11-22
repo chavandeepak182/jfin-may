@@ -78,6 +78,18 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
+                                        <div class="col-sm-4">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="inlineFormCheck">
+                                                    <label class="form-check-label" for="inlineFormCheck">Remember me</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-12">
+                                                <a href="{{route('forgot')}}" class="float-end text-primary">Forgot Password?</a>
+                                                <a href="/registration" class="text-primary">Register an Account Now!</a></p>
+                                            </div>
+
 
                                         <div class="col-12">
                                             <button type="submit" class="btn btn-primary w-50 px-4 py-2 float-end mt-2">Login</button>
