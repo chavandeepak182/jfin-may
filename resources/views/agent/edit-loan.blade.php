@@ -82,6 +82,12 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-6" id="approvedAmountBox" style="display: none;">
+                            <div class="form-group">
+                                <label for="amount_approved">Approved Amount:</label>
+                                <input type="number" class="form-control" id="amount_approved" name="amount_approved" value="{{ old('amount_approved', $loan->amount_approved ?? '') }}">
+                            </div>
+                        </div>
                          <!-- Sanction Letter (Visible only if status is 'approved') -->
                          <div class="col-md-8">
                             <div id="sanctionLetterBox" class="section mb-4" style="display: none;">
@@ -329,11 +335,25 @@
     }
 
     function toggleRemarkBox(status) {
-        const remarkBox = document.getElementById('remarkBox');
-        remarkBox.style.display = (status === 'approved' || status === 'rejected' || status === 'disbursed' || status === 'document pending') ? 'block' : 'none';
+    const remarkBox = document.getElementById('remarkBox');
+    remarkBox.style.display = (status === 'approved' || status === 'rejected' || status === 'disbursed' || status === 'document pending') ? 'block' : 'none';
+
+    // Show or hide the Approved Amount input field
+    const approvedAmountBox = document.getElementById('approvedAmountBox');
+    approvedAmountBox.style.display = (status === 'disbursed') ? 'block' : 'none';
+
+    // Add or remove the 'required' attribute dynamically for client-side validation
+    const approvedAmountInput = document.getElementById('amount_approved');
+    if (status === 'disbursed') {
+        approvedAmountInput.setAttribute('required', 'required');
+    } else {
+        approvedAmountInput.removeAttribute('required');
     }
-    function toggleSanctionLetterBox(status) {
-    document.getElementById('sanctionLetterBox').style.display = (status === 'approved') ? 'block' : 'none';
+}
+
+function toggleSanctionLetterBox(status) {
+    const sanctionLetterBox = document.getElementById('sanctionLetterBox');
+    sanctionLetterBox.style.display = (status === 'approved') ? 'block' : 'none';
 }
 
 // Initialize the form based on current status
