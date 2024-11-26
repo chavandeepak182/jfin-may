@@ -258,7 +258,8 @@
 
             <!-- Nav Item - Activity logs -->
             <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'activity' ? 'active' : '' }}">
-                <a class="nav-link" href="{{route('mlmView')}}">
+                <!-- <a class="nav-link" href="{{route('mlmView')}}"> -->
+                <a class="nav-link" href="{{route('admin.tree.show')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>MLM</span></a>
             </li>   
