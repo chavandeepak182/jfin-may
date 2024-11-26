@@ -561,67 +561,56 @@ public function rejected()
     }
 
     protected function handleLoanDetails(Request $request, $userId)
-    {
-        // Validate incoming request data
-        $validated = $request->validate([
-            'amount' => 'required|numeric',
-            'tenure' => 'required|integer',
-            'referral_code' => 'nullable|string|max:50' // Optional referral code
-        ]);
-    // Generate a unique loan reference ID
+{
+    $validated = $request->validate([
+        'amount' => 'required|numeric',
+        'tenure' => 'required|integer',
+        'referral_code' => 'nullable|string|max:50',
+    ]);
+
     $loanReferenceId = Str::upper(Str::random(8));
-    // Initialize referral user ID as null
     $referralUserId = null;
-    // Check if a referral code was provided and find the corresponding user
+
     if (!empty($validated['referral_code'])) {
-        $referralUser = DB::table('users')
-            ->where('referral_code', $validated['referral_code'])
-            ->first();
-        if ($referralUser) {
-            $referralUserId = $referralUser->id; // Assign the referral user ID if found
-        }
+        $referralUser = DB::table('users')->where('referral_code', $validated['referral_code'])->first();
+        $referralUserId = $referralUser->id ?? null;
     }
-        $is_loan = Session::get('is_loan');
-        $loan_id = Session::get('loan_id');
-        $is_exist = DB::table('loans')->where('user_id', $userId)->first();
-         if($is_loan == 1 && empty($is_exist)){
-            $l = new Loan;
-            $l->user_id = $userId;
-            $l->loan_category_id = $validated['loan_category_id'];
-            $l->bank_id = $validated['bank_id'];
-            $l->save();
-        }else{
-                $updateLoan = array(
-                    'referral_user_id' => $referralUserId,
-                    'amount' => $validated['amount'],
-                    'tenure' => $validated['tenure'],
-                );
-            $update_loan = DB::table('loans')->where('loan_id',$loan_id)->update($updateLoan);
+
+    $is_loan = Session::get('is_loan');
+    $loan_id = Session::get('loan_id', null);
+
+    if ($is_loan == 1 && empty(DB::table('loans')->where('user_id', $userId)->first())) {
+        $l = new Loan;
+        $l->user_id = $userId;
+        $l->loan_category_id = $validated['loan_category_id'];
+        $l->bank_id = $validated['bank_id'];
+        $l->loan_reference_id = $loanReferenceId;
+        $l->save();
+    } else {
+        if (!$loan_id) {
+            \Log::warning('No loan_id found in session for user_id: ' . $userId);
+            return redirect()->route('loan.getback')->withErrors('No active loan found.');
         }
-    // Store loan reference ID in session for later use
+        DB::table('loans')->where('loan_id', $loan_id)->update([
+            'referral_user_id' => $referralUserId,
+            'amount' => $validated['amount'],
+            'tenure' => $validated['tenure'],
+            'loan_reference_id' => $loanReferenceId,
+        ]);
+    }
+
     session(['loan_reference_id' => $loanReferenceId]);
-    //Fetch the credit score from the 'credit' table for the current user
+
     $credit = DB::table('credit')->where('user_id', $userId)->first();
     if ($credit) {
-        // Cast the credit_score to an integer to ensure correct comparison
         $creditScore = (int) $credit->credit_score;
-        // Debugging: Log the credit score to verify the value
         \Log::info('Credit score for user_id ' . $userId . ': ' . $creditScore);
-        // Check if the credit score is below 700
-        if ($creditScore < 700) {
-            \Log::info('Redirecting to loan.getback because score is below 700');
-            return redirect()->route('loan.getback');
-        } else {
-            \Log::info('Redirecting to loan.thankyou because score is 700 or higher');
-            return redirect()->route('loan.thankyou');
-        }
-    } else {
-        // If no credit score found, handle it by redirecting to another page or showing an error
-        \Log::error('No credit score found for user_id ' . $userId);
-        return redirect()->route('loan.getback')->withErrors('Credit score not found.');
+        return redirect()->route($creditScore < 700 ? 'loan.getback' : 'loan.thankyou');
     }
-}
 
+    \Log::error('No credit score found for user_id ' . $userId);
+    return redirect()->route('loan.getback')->withErrors('Credit score not found.');
+}
 
     public function thankYou()
     {

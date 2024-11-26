@@ -15,6 +15,7 @@ use App\Http\Controllers\MlmController;
 use App\Http\Controllers\BrokerController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\EligibilityCriteriaController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CibilController;
 use Illuminate\Support\Facades\Route;
 use App\Exports\EligibilityExport;
@@ -40,9 +41,9 @@ Route::prefix('admin')->group(function () {
     Route::resource('/category', App\Http\Controllers\CategoryController::class);    
 
 });
-
-
-
+Route::prefix('admin')->group(function () {
+    Route::get('/tree', [CategoryController::class, 'showTree'])->name('admin.tree.show');
+});
 
 //frontend routes
 Route::get('/', function () {

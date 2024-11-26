@@ -296,12 +296,12 @@ public function view($id)
 public function update(Request $request)
 {
     try {
-        // Validate the request input
         $validated = $request->validate([
             'loan_id' => 'required|integer',
             'status' => 'required|string',
             'loan_category_id' => 'required|integer',
             'amount' => 'required|numeric',
+            'amount_approved' => 'required_if:status,disbursed|numeric',
             'tenure' => 'required|integer',
             'in_principle' => 'nullable|string',
             'remarks' => 'nullable|string',
@@ -320,62 +320,85 @@ public function update(Request $request)
                 'new_status' => $newStatus,
             ]);
 
-            // Update loan details
-            $loan->loan_category_id = $request->input('loan_category_id');
-            $loan->amount = $request->input('amount');
-            $loan->tenure = $request->input('tenure');
-            $loan->status = $newStatus;
-            $loan->remarks = $request->input('remarks');
-            $loan->in_principle = $request->input('in_principle');
-            $loan->save();
+            $loan->update([
+                'loan_category_id' => $request->input('loan_category_id'),
+                'amount' => $request->input('amount'),
+                'tenure' => $request->input('tenure'),
+                'status' => $newStatus,
+                'remarks' => $request->input('remarks'),
+                'in_principle' => $request->input('in_principle'),
+            ]);
 
             \Log::info('Loan details updated for loan ID: ' . $loan->loan_id);
 
-            // Trigger commission logic if status changed to 'disbursed'
             if ($newStatus == 'disbursed') {
-                \Log::info('Starting commission distribution for loan: ' . $loan->loan_id);
+                $loan->amount_approved = $request->input('amount_approved');
+                $loan->status = $newStatus; // Set status again, to be sure
+                $loan->save(); // Explicitly save all changes
 
-                // Fetch the user related to referral_user_id from the loan
-                $referralUser = User::where('id', $loan->referral_user_id)->first();
+                \Log::info('Loan approved amount set for loan ID: ' . $loan->loan_id);
+
+                // Handle tree node addition
+                $referralUser = User::find($loan->referral_user_id);
 
                 if (!$referralUser) {
-                    \Log::error('User not found for referral_user_id: ' . $loan->referral_user_id);
-                    return;
-                }
+                    \Log::warning("Referral user not found for ID: {$loan->referral_user_id}. Searching for next available node.");
+                    $parentNode = app(CategoryController::class)->findNextAvailableNode();
 
-                // Get the name of the referral user
-                $parentName = $referralUser->name;
+                    if (!$parentNode) {
+                        \Log::error("No available position found in the tree.");
+                        return;
+                    }
 
-                // Now match the parent name with the category name
-                $parentCategory = Category::where('name', $parentName)->first();
-
-                if (!$parentCategory) {
-                    \Log::error('Category not found for parent name: ' . $parentName);
-                    return;
-                }
-
-                // Insert node
-                $nodeInserted = app(CategoryController::class)->addNode($parentName, $loan->user->name);
-                if ($nodeInserted) {
-                    \Log::info('Node successfully inserted for commission distribution');
+                    $parentUserId = $parentNode->user_id;
                 } else {
-                    \Log::warning('Failed to insert node for commission distribution');
+                    \Log::info("Referral user found: " . json_encode($referralUser->toArray()));
+                    $parentUserId = $referralUser->id;
+                }
+
+                $childName = $loan->user->name;
+                $childUserId = $loan->user->id;
+
+                if (app(CategoryController::class)->addNode($parentUserId, $childName, $childUserId)) {
+                    \Log::info("Node successfully inserted into tree for loan applicant.");
+                } else {
+                    \Log::error("Failed to insert node into tree for loan applicant.");
+                    return;
+                }
+
+                // Fetch ancestors for commission distribution
+                $childCategory = DB::table('categories')->where('user_id', $childUserId)->first();
+
+                if (!$childCategory) {
+                    \Log::error("Category not found for Child User ID: {$childUserId}");
+                    return;
+                }
+
+                $ancestors = DB::table('categories')
+                    ->where('_lft', '<', $childCategory->_lft)
+                    ->where('_rgt', '>', $childCategory->_rgt)
+                    ->orderBy('_lft', 'asc')
+                    ->get();
+
+                if ($ancestors->isEmpty()) {
+                    \Log::info("No ancestors found for Child User ID: {$childUserId}. Skipping commission distribution.");
+                    return;
                 }
 
                 // Distribute commission
-                $amountApproved = $loan->amount_approved;
-                app(CategoryController::class)->commissionDistribution($parentName, $amountApproved);
-                \Log::info('Commission distribution executed for user: ' . $loan->user_id . ', Parent: ' . $parentName);
-            }
+                app(CategoryController::class)->commissionDistribution($childUserId, $loan->amount_approved);
+
+                if ($referralUser) {
+                    \Log::info("Commission distribution executed for user: {$loan->user_id}, Parent: {$referralUser->name}");
+                } else {
+                    \Log::info("Commission distribution executed for user: {$loan->user_id}, No valid referral user found.");
+                }            }
         });
 
         return redirect()->back()->with('success', 'Loan updated successfully!');
     } catch (\Exception $e) {
-        \Log::error('Error updating loan:', ['exception' => $e->getMessage()]);
-        if ($request->expectsJson()) {
-            return response()->json(['status' => 0, 'msg' => 'An error occurred while updating: ' . $e->getMessage()]);
-        }
-        return redirect()->back()->withErrors(['error' => 'An error occurred while updating: ' . $e->getMessage()])->withInput();
+        \Log::error("Error updating loan:", ['exception' => $e->getMessage()]);
+        return redirect()->back()->withErrors(['error' => "An error occurred: {$e->getMessage()}"])->withInput();
     }
 }
 public function agentMis()
