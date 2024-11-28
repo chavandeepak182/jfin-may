@@ -422,12 +422,24 @@
 .bg-breadcrumb {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(rgba(1, 95, 201, 0.9), rgba(0, 0, 0, 0.2)), url(../img/bg-breadcrumb.jpg);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: url(../img/about.jpg);;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
     padding: 60px 0 60px 0;
     transition: 0.5s;
+}
+
+.bg-breadcrumb .text-center{
+    text-align: end !important;
+}
+
+.bg-breadcrumb .text-center .text-white{
+    color: #2f3188 !important;
+}
+
+.bg-breadcrumb .text-center ol{
+    display: none !important;
 }
 
 .bg-breadcrumb .breadcrumb {
