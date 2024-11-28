@@ -54,8 +54,7 @@
 					</li>
                     <li class="sidebar-item">
 						<a class="sidebar-link" href="{{ route('user.walletbalance')}}">
-                            <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Referrals</span>
-                        </a>
+						<i class="align-middle">₹</i> <span class="align-middle">Referrals</span>                        </a>
 					</li>
 				</ul>
 			</div>
@@ -111,18 +110,17 @@
 											<div class="card-body">
 												<div class="row">
 													<div class="col mt-0">
-														<h5 class="card-title">Sales</h5>
+														<h5 class="card-title">My Loans</h5>
 													</div>
 
 													<div class="col-auto">
 														<div class="stat text-primary">
-															<i class="align-middle" data-feather="truck"></i>
+															<i class="align-middle" data-feather="credit-card"></i>
 														</div>
 													</div>
 												</div>
 												<h1 class="mt-1 mb-3">2.382</h1>
 												<div class="mb-0">
-													<span class="text-danger">-3.65%</span>
 													<span class="text-muted">Since last week</span>
 												</div>
 											</div>
@@ -133,7 +131,7 @@
 											<div class="card-body">
 												<div class="row">
 													<div class="col mt-0">
-														<h5 class="card-title">Visitors</h5>
+														<h5 class="card-title">Approved Loans</h5>
 													</div>
 
 													<div class="col-auto">
@@ -144,7 +142,6 @@
 												</div>
 												<h1 class="mt-1 mb-3">14.212</h1>
 												<div class="mb-0">
-													<span class="text-success">5.25%</span>
 													<span class="text-muted">Since last week</span>
 												</div>
 											</div>
@@ -160,13 +157,12 @@
 
 													<div class="col-auto">
 														<div class="stat text-primary">
-															<i class="align-middle" data-feather="dollar-sign"></i>
+															<i class="align-middle" data-feather="briefcase"></i>
 														</div>
 													</div>
 												</div>
-												<h1 class="mt-1 mb-3">$21.300</h1>
+												<h1 class="mt-1 mb-3">₹21.300</h1>
 												<div class="mb-0">
-													<span class="text-success">6.65%</span>
 													<span class="text-muted">Since last week</span>
 												</div>
 											</div>
@@ -177,18 +173,17 @@
 											<div class="card-body">
 												<div class="row">
 													<div class="col mt-0">
-														<h5 class="card-title">Orders</h5>
+														<h5 class="card-title">Referrals</h5>
 													</div>
 
 													<div class="col-auto">
 														<div class="stat text-primary">
-															<i class="align-middle" data-feather="shopping-cart"></i>
+															<i class="align-middle" data-feather="share-2"></i>
 														</div>
 													</div>
 												</div>
 												<h1 class="mt-1 mb-3">64</h1>
 												<div class="mb-0">
-													<span class="text-danger">-2.25%</span>
 													<span class="text-muted">Since last week</span>
 												</div>
 											</div>

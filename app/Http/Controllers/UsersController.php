@@ -167,7 +167,7 @@ class UsersController extends Controller
     
             // Send email and redirect back
             $this->temail($request->email_id, $request->name, $msg, $temp_id);
-            return redirect()->back()->with('success', 'User added successfully');
+            return redirect()->back()->with('success', 'Registration Successful!Thank you for registering. Please check your email for a verification link to activate your account.');
     
         } catch (\Exception $e) {
             DB::rollback();

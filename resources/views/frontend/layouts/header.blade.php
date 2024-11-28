@@ -53,7 +53,7 @@
                     <div class="col-lg-8 text-center text-lg-start mb-lg-0">
                         <div class="d-flex flex-wrap">
                             <div class="border-end border-primary pe-3">
-                            <a href="tel:+918329729190" class="text-muted small"><i class="fas fa-phone text-primary me-2"></i>+91 83297 29190</a>
+                            <a href="tel:+918421216367" class="text-muted small"><i class="fas fa-phone text-primary me-2"></i>+91 84212 16367</a>
                             </div>
                             <div class="ps-3">
                                 <a href="mailto:example@gmail.com" class="text-muted small"><i class="fas fa-envelope text-primary me-2"></i>info@jfinserv.com</a>
@@ -63,10 +63,10 @@
                     <div class="col-lg-4 text-center text-lg-end">
                         <div class="d-flex justify-content-end">
                             <div class="d-flex border-end border-primary pe-3">
-                                <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-twitter"></i></a>
-                                <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-instagram"></i></a>
-                                <a class="btn p-0 text-primary me-0" href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a class="btn p-0 text-primary me-3" href="https://www.facebook.com/people/JFinserv/61558721093709/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                                <a class="btn p-0 text-primary me-3" href="https://x.com/i/flow/login?redirect_after_login=%2Fjfinserv9668" target="_blank"><i class="fab fa-twitter"></i></a>
+                                <a class="btn p-0 text-primary me-3" href="https://www.instagram.com/jfinserv_consultant/" target="_blank"> <i class="fab fa-instagram"></i></a>
+                                <a class="btn p-0 text-primary me-0" href="https://www.linkedin.com/company/jfinserv-consultant-india-private-limited/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
                             </div>
                             <div class="dropdown ms-3">
                                 <a href="{{ route('loan.profile') }}" class="text-dark">
