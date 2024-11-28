@@ -6,12 +6,12 @@
 @section('content')
 <!-- Header Start -->
     <div class="container-fluid bg-breadcrumb">
-        <div class="container text-center py-5" style="max-width: 900px;">
-            <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">About Jfinserv</h4>
-            <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <div class="container text-end py-5" style="max-width: 900px;">
+            <h4 class="text-primary display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">About Jfinserv</h4>
+            <!-- <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
+                <li class="breadcrumb-item"><a class="text-primary" href="/">Home</a></li>
                 <li class="breadcrumb-item active text-primary">About Us</li>
-            </ol>    
+            </ol>     -->
         </div>
     </div>
 
@@ -39,7 +39,7 @@
                         <div class="row g-4 justify-content-center">
                             <div class="col-12">
                                 <div class="rounded bg-light">
-                                    <img src="{{ asset('theme') }}/frontend/img/about-1.avif" class="img-fluid rounded w-100" alt="">
+                                    <img src="{{ asset('theme') }}/frontend/img/about-1.jpg" class="img-fluid rounded w-100" alt="">
                                 </div>
                             </div>
                             <div class="col-sm-6">

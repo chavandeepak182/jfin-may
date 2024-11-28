@@ -187,10 +187,13 @@
                                                 @error('password_confirmation')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
-                                            </div>
+                                            </div>                                            
 
                                             <div class="col-12">
                                                 <button class="btn btn-primary w-50 px-4 py-2" type="submit">Register Now</button>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <p>Already have an account? <a href="/login" class="text-primary">Login</a></p>
                                             </div>
                                         </form>
                                     </div>
