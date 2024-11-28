@@ -89,43 +89,43 @@
 
         <!-- Navbar & Hero Start -->
         <div class="container-fluid nav-bar px-0 px-lg-4 py-lg-0">
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <a href="{{ asset('') }}" class="navbar-brand p-0">
-                <img src="{{ asset('theme') }}/frontend/img/logo.png" alt="Logo">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="fa fa-bars"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="navbar-nav mx-0 mx-lg-auto">
-                    <a href="/" class="nav-item nav-link {{ Request::is('/') ? 'active' : '' }}">HOME</a>
-                    <a href="{{ url('about') }}" class="nav-item nav-link {{ Request::is('about') ? 'active' : '' }}">ABOUT</a>
-                    <div class="nav-item dropdown">
-                        <a href="{{ url('services') }}" class="nav-link dropdown-toggle {{ Request::is('services*') || Request::is('home-loan') || Request::is('loan-against-property') || Request::is('project-loan') || Request::is('overdraft-facility') || Request::is('lease-rental-discounting') || Request::is('msme-loan') ? 'active' : '' }}" data-bs-toggle="dropdown">
-                            SERVICES
-                        </a>
-                        <div class="dropdown-menu">
-                            <a href="{{ url('home-loan') }}" class="dropdown-item {{ Request::is('home-loan') ? 'active' : '' }}">HOME LOAN</a>
-                            <a href="{{ url('loan-against-property')}}" class="dropdown-item {{ Request::is('loan-against-property') ? 'active' : '' }}">LOAN AGAINST PROPERTY</a>
-                            <a href="{{ url('project-loan')}}" class="dropdown-item {{ Request::is('project-loan') ? 'active' : '' }}">PROJECT LOAN</a>
-                            <a href="{{ url('overdraft-facility')}}" class="dropdown-item {{ Request::is('overdraft-facility') ? 'active' : '' }}">OVERDRAFT FACILITY</a>
-                            <a href="{{ url('lease-rental-discounting')}}" class="dropdown-item {{ Request::is('lease-rental-discounting') ? 'active' : '' }}">LEASE RENTAL DISCOUNTING</a>
-                            <a href="{{ url('msme-loan')}}" class="dropdown-item {{ Request::is('msme-loan') ? 'active' : '' }}">MSME LOAN</a>
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a href="{{ asset('') }}" class="navbar-brand p-0">
+                        <img src="{{ asset('theme') }}/frontend/img/logo.png" alt="Logo">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <span class="fa fa-bars"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <div class="navbar-nav mx-0 mx-lg-auto">
+                            <a href="/" class="nav-item nav-link {{ Request::is('/') ? 'active' : '' }}">HOME</a>
+                            <a href="{{ url('about') }}" class="nav-item nav-link {{ Request::is('about') ? 'active' : '' }}">ABOUT</a>
+                            <div class="nav-item dropdown">
+                                <a href="{{ url('services') }}" class="nav-link dropdown-toggle {{ Request::is('services*') || Request::is('home-loan') || Request::is('loan-against-property') || Request::is('project-loan') || Request::is('overdraft-facility') || Request::is('lease-rental-discounting') || Request::is('msme-loan') ? 'active' : '' }}" data-bs-toggle="dropdown">
+                                    SERVICES
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a href="{{ url('home-loan') }}" class="dropdown-item {{ Request::is('home-loan') ? 'active' : '' }}">HOME LOAN</a>
+                                    <a href="{{ url('loan-against-property')}}" class="dropdown-item {{ Request::is('loan-against-property') ? 'active' : '' }}">LOAN AGAINST PROPERTY</a>
+                                    <a href="{{ url('project-loan')}}" class="dropdown-item {{ Request::is('project-loan') ? 'active' : '' }}">PROJECT LOAN</a>
+                                    <a href="{{ url('overdraft-facility')}}" class="dropdown-item {{ Request::is('overdraft-facility') ? 'active' : '' }}">OVERDRAFT FACILITY</a>
+                                    <a href="{{ url('lease-rental-discounting')}}" class="dropdown-item {{ Request::is('lease-rental-discounting') ? 'active' : '' }}">LEASE RENTAL DISCOUNTING</a>
+                                    <a href="{{ url('msme-loan')}}" class="dropdown-item {{ Request::is('msme-loan') ? 'active' : '' }}">MSME LOAN</a>
+                                </div>
+                            </div>
+                            <a href="{{ url('properties')}}" class="nav-item nav-link {{ Request::is('properties') ? 'active' : '' }}">PROPERTIES</a>
+                            <a href="{{ url('referral-program')}}" class="nav-item nav-link {{ Request::is('referral-program') ? 'active' : '' }}">REFERRALS</a>
+                            <a href="https://jfinserv.com/blog/" class="nav-item nav-link" target="_blank">BLOGS</a>
+                            <a href="{{ url('contact')}}" class="nav-item nav-link {{ Request::is('contact') ? 'active' : '' }}">CONTACT</a>
+                            <div class="nav-btn px-3">
+                                <a href="{{ url('applyNow')}}" class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0">Apply Now</a>
+                            </div>
                         </div>
                     </div>
-                    <a href="{{ url('properties')}}" class="nav-item nav-link {{ Request::is('properties') ? 'active' : '' }}">PROPERTIES</a>
-                    <a href="{{ url('referral-program')}}" class="nav-item nav-link {{ Request::is('referral-program') ? 'active' : '' }}">REFERRALS</a>
-                    <a href="https://jfinserv.com/blog/" class="nav-item nav-link" target="_blank">BLOGS</a>
-                    <a href="{{ url('contact')}}" class="nav-item nav-link {{ Request::is('contact') ? 'active' : '' }}">CONTACT</a>
-                    <div class="nav-btn px-3">
-                        <a href="{{ url('applyNow')}}" class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0">Apply Now</a>
-                    </div>
-                </div>
+                </nav>
             </div>
-        </nav>
-    </div>
-</div>
+        </div>
         <!-- Navbar & Hero End -->
 
         <!-- Modal Search Start -->
