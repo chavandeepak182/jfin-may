@@ -23,7 +23,7 @@
                             </div>
                             <div class="col-lg-6 animated fadeInRight">
                                 <div class="calrousel-img" style="object-fit: cover;">
-                                    <img src="{{ asset('theme') }}/frontend/img/referral.svg" class="img-fluid w-80" alt="Fast Loan Process">
+                                    <img src="{{ asset('theme') }}/frontend/img/referral.png" class="img-fluid" alt="Fast Loan Process">
                                 </div>
                             </div>
                         </div>
@@ -36,7 +36,7 @@
                         <div class="row gy-4 gy-lg-0 gx-0 gx-lg-5 align-items-center">
                             <div class="col-lg-6 animated fadeInLeft">
                                 <div class="calrousel-img">
-                                    <img src="{{ asset('theme') }}/frontend/img/Fast_Process.svg" class="img-fluid w-100" alt="">
+                                    <img src="{{ asset('theme') }}/frontend/img/fast-process.png" class="img-fluid" alt="">
                                 </div>
                             </div>
                             <div class="col-lg-6 animated fadeInRight">
