@@ -431,16 +431,8 @@
     background-position: center center !important;
     background-repeat: no-repeat !important;
     background-size: cover !important;
-    padding: 60px 0 60px 0;
+    padding: 90px 0 50px 0;
     transition: 0.5s;
-}
-
-.bg-breadcrumb .text-center{
-    text-align: end !important;
-}
-
-.bg-breadcrumb .text-center .text-white{
-    color: #2f3188 !important;
 }
 
 .bg-breadcrumb .text-center ol{
@@ -1021,7 +1013,7 @@
     width: auto;
     height: 65px;
     padding: 0;
-    padding-right: 3rem;
+    padding-right: 1.75rem;
 }
 
 .nav div.main_list ul li a {
