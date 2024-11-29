@@ -46,9 +46,37 @@
         </div>
         <!-- Salary input (Fixed) -->
         <div class="form-group">
-            <label for="salary">Salary (Monthly)</label>
-            <input type="number" name="salary" id="salary" class="form-control" placeholder="Enter your salary" 
+            <label>Select which months to include in the calculation</label><br>
+            <input type="checkbox" id="first_salary_checkbox" checked onclick="toggleSalaryFields()"> First Salary<br>
+            <input type="checkbox" id="second_salary_checkbox" onclick="toggleSalaryFields()"> Second Salary<br>
+            <input type="checkbox" id="third_salary_checkbox" onclick="toggleSalaryFields()"> Third Salary<br>
+        </div>
+
+        <!-- First Salary Input (Always Visible) -->
+        <div class="form-group">
+            <label for="salary">First Salary (Monthly)</label>
+            <input type="number" name="salary" id="salary" class="form-control" placeholder="Enter your first salary" 
                 value="{{ $data['userDetails']->netsalary ?? '' }}" required oninput="calculateTotalIncome()">
+        </div>
+
+        <!-- Second Salary Input (Initially Hidden) -->
+        <div class="form-group" id="second_salary_group" style="display:none;">
+            <label for="second_salary">Second Salary (Monthly)</label>
+            <input type="number" name="second_salary" id="second_salary" class="form-control" placeholder="Enter second month's salary" 
+                value="{{ $data['userDetails']->second_salary ?? '' }}" oninput="calculateTotalIncome()">
+        </div>
+
+        <!-- Third Salary Input (Initially Hidden) -->
+        <div class="form-group" id="third_salary_group" style="display:none;">
+            <label for="third_salary">Third Salary (Monthly)</label>
+            <input type="number" name="third_salary" id="third_salary" class="form-control" placeholder="Enter third month's salary" 
+                value="{{ $data['userDetails']->third_salary ?? '' }}" oninput="calculateTotalIncome()">
+        </div>
+
+        <!-- Average Salary Calculation -->
+        <div class="form-group">
+            <label for="average_salary">Average Salary</label>
+            <input type="number" id="average_salary" class="form-control" placeholder="Average salary will be displayed here" readonly>
         </div>
 
         <!-- Tax Input -->
@@ -126,25 +154,48 @@
             <div id="coApplicantSection" style="display: none;">
             <h3>Co-applicant Details</h3>
 
-            <div class="form-row">
-            <!-- Co-applicant Salary input -->
-            <div class="form-group col-md-6">
-                <label for="coapplicant_salary">Co-applicant Income from Business (Yearly)</label>
-                <input type="number" name="coapplicant_salary" id="coapplicant_salary" class="form-control" 
-                    placeholder="Enter co-applicant's salary" 
-                    value="{{ old('coapplicant_salary', $eligibilityCriteria->income_from_business_amount ?? '') }}" 
-                    oninput="calculateTotalIncome()">
-            </div>
+            <div class="form-group">
+    <label>Select which months to include in co-applicant's salary calculation</label><br>
+    <input type="checkbox" id="coapplicant_first_salary_checkbox" checked onclick="toggleCoApplicantSalaryFields()"> First Salary<br>
+    <input type="checkbox" id="coapplicant_second_salary_checkbox" onclick="toggleCoApplicantSalaryFields()"> Second Salary<br>
+    <input type="checkbox" id="coapplicant_third_salary_checkbox" onclick="toggleCoApplicantSalaryFields()"> Third Salary<br>
+</div>
 
-            <!-- Monthly Average Salary (read-only) -->
-            <div class="form-group col-md-6">
-                <label for="coapplicant_monthly_avg">Co-applicant Monthly Average Salary</label>
-                <input type="text" id="coapplicant_monthly_avg" class="form-control" 
-                    placeholder="Monthly average" 
-                    value="{{ old('coapplicant_monthly_avg', number_format(($eligibilityCriteria->income_from_business_amount ?? 0) / 12, 2)) }}" 
-                    readonly>
-                </div>
-            </div>
+<!-- Co-applicant First Salary Input (Always Visible) -->
+<div class="form-group col-md-6" id="coapplicant_first_salary_group">
+    <label for="coapplicant_salary">Co-applicant Income from Business (Yearly)</label>
+    <input type="number" name="coapplicant_salary" id="coapplicant_salary" class="form-control" 
+           placeholder="Enter co-applicant's first salary" 
+           value="{{ old('coapplicant_salary', $eligibilityCriteria->income_from_business_amount ?? '') }}" 
+           oninput="calculateCoApplicantTotalIncome()">
+</div>
+
+<!-- Co-applicant Second Salary Input (Initially Hidden) -->
+<div class="form-group col-md-6" id="coapplicant_second_salary_group" style="display:none;">
+    <label for="coapplicant_second_salary">Co-applicant Second Salary (Yearly)</label>
+    <input type="number" name="coapplicant_second_salary" id="coapplicant_second_salary" class="form-control" 
+           placeholder="Enter co-applicant's second salary" 
+           value="{{ old('coapplicant_second_salary', $eligibilityCriteria->second_income_from_business_amount ?? '') }}" 
+           oninput="calculateCoApplicantTotalIncome()">
+</div>
+
+<!-- Co-applicant Third Salary Input (Initially Hidden) -->
+<div class="form-group col-md-6" id="coapplicant_third_salary_group" style="display:none;">
+    <label for="coapplicant_third_salary">Co-applicant Third Salary (Yearly)</label>
+    <input type="number" name="coapplicant_third_salary" id="coapplicant_third_salary" class="form-control" 
+           placeholder="Enter co-applicant's third salary" 
+           value="{{ old('coapplicant_third_salary', $eligibilityCriteria->third_income_from_business_amount ?? '') }}" 
+           oninput="calculateCoApplicantTotalIncome()">
+</div>
+
+<!-- Co-applicant Monthly Average Salary (read-only) -->
+<div class="form-group col-md-6">
+    <label for="coapplicant_monthly_avg">Co-applicant Monthly Average Salary</label>
+    <input type="text" id="coapplicant_monthly_avg" class="form-control" 
+           placeholder="Monthly average" 
+           value="{{ old('coapplicant_monthly_avg', number_format(($eligibilityCriteria->income_from_business_amount ?? 0) / 12, 2)) }}" 
+           readonly>
+</div>
 
         
         <!-- Co-applicant Tax Input -->
@@ -343,6 +394,120 @@
     });
 </script>
 <!-- Script to calculate the average salary -->
+<script>
+    // Function to toggle visibility of second and third salary inputs based on checkbox selection
+    function toggleSalaryFields() {
+        const firstSalaryCheckbox = document.getElementById('first_salary_checkbox');
+        const secondSalaryCheckbox = document.getElementById('second_salary_checkbox');
+        const thirdSalaryCheckbox = document.getElementById('third_salary_checkbox');
+
+        // Show or hide the second and third salary input fields based on checkbox state
+        document.getElementById('second_salary_group').style.display = secondSalaryCheckbox.checked ? 'block' : 'none';
+        document.getElementById('third_salary_group').style.display = thirdSalaryCheckbox.checked ? 'block' : 'none';
+
+        // Recalculate the total income and average salary after toggling fields
+        calculateTotalIncome();
+    }
+
+    // Function to calculate total income and average salary based on selected months
+    function calculateTotalIncome() {
+        const firstSalary = parseFloat(document.getElementById('salary').value) || 0;
+        const secondSalary = parseFloat(document.getElementById('second_salary').value) || 0;
+        const thirdSalary = parseFloat(document.getElementById('third_salary').value) || 0;
+
+        const firstChecked = document.getElementById('first_salary_checkbox').checked;
+        const secondChecked = document.getElementById('second_salary_checkbox').checked;
+        const thirdChecked = document.getElementById('third_salary_checkbox').checked;
+
+        let totalSalary = 0;
+        let monthsSelected = 0;
+
+        // Sum salary for each selected month
+        if (firstChecked) {
+            totalSalary += firstSalary;
+            monthsSelected++;
+        }
+        if (secondChecked) {
+            totalSalary += secondSalary;
+            monthsSelected++;
+        }
+        if (thirdChecked) {
+            totalSalary += thirdSalary;
+            monthsSelected++;
+        }
+
+        // Calculate average salary if at least one salary is selected
+        if (monthsSelected > 0) {
+            const avgSalary = (totalSalary / monthsSelected).toFixed(2);
+            document.getElementById('average_salary').value = avgSalary;
+        } else {
+            document.getElementById('average_salary').value = '';  // Clear if no months are selected
+        }
+    }
+
+    // Initialize the page by calling toggleSalaryFields to handle initial state
+    document.addEventListener('DOMContentLoaded', function () {
+        toggleSalaryFields(); // To ensure the visibility of salary fields is set correctly
+        calculateTotalIncome(); // Initial calculation in case there's already data
+    });
+</script>
+<script>
+    // Function to toggle visibility of co-applicant salary input fields based on checkbox selection
+    function toggleCoApplicantSalaryFields() {
+    const firstSalaryCheckbox = document.getElementById('coapplicant_first_salary_checkbox');
+    const secondSalaryCheckbox = document.getElementById('coapplicant_second_salary_checkbox');
+    const thirdSalaryCheckbox = document.getElementById('coapplicant_third_salary_checkbox');
+
+    // Show or hide the second and third co-applicant salary input fields based on checkbox state
+    document.getElementById('coapplicant_second_salary_group').style.display = secondSalaryCheckbox.checked ? 'block' : 'none';
+    document.getElementById('coapplicant_third_salary_group').style.display = thirdSalaryCheckbox.checked ? 'block' : 'none';
+
+    // Recalculate the total income and monthly average salary after toggling fields
+    calculateCoApplicantTotalIncome();
+}
+
+// Function to calculate co-applicant's total income and average salary based on selected months
+function calculateCoApplicantTotalIncome() {
+    const firstSalary = parseFloat(document.getElementById('coapplicant_salary').value) || 0;
+    const secondSalary = parseFloat(document.getElementById('coapplicant_second_salary').value) || 0;
+    const thirdSalary = parseFloat(document.getElementById('coapplicant_third_salary').value) || 0;
+
+    const firstChecked = document.getElementById('coapplicant_first_salary_checkbox').checked;
+    const secondChecked = document.getElementById('coapplicant_second_salary_checkbox').checked;
+    const thirdChecked = document.getElementById('coapplicant_third_salary_checkbox').checked;
+
+    let totalSalary = 0;
+    let monthsSelected = 0;
+
+    // Sum salary for each selected month
+    if (firstChecked) {
+        totalSalary += firstSalary;
+        monthsSelected++;
+    }
+    if (secondChecked) {
+        totalSalary += secondSalary;
+        monthsSelected++;
+    }
+    if (thirdChecked) {
+        totalSalary += thirdSalary;
+        monthsSelected++;
+    }
+
+    // Calculate average monthly salary if at least one salary is selected
+    if (monthsSelected > 0) {
+        const avgSalary = (totalSalary / monthsSelected).toFixed(2); // Corrected: Divide by selected months, not by monthsSelected * 12
+        document.getElementById('coapplicant_monthly_avg').value = avgSalary;
+    } else {
+        document.getElementById('coapplicant_monthly_avg').value = '';  // Clear if no months are selected
+    }
+}
+
+// Initialize the page by calling toggleCoApplicantSalaryFields to handle initial state
+document.addEventListener('DOMContentLoaded', function () {
+    toggleCoApplicantSalaryFields(); // To ensure the visibility of co-applicant salary fields is set correctly
+    calculateCoApplicantTotalIncome(); // Initial calculation in case there's already data
+});
+</script>
 <script>
     function calculateMonthlyTax() {
         const taxAmount = parseFloat(document.getElementById('tax_amount').value) || 0; // User Tax
