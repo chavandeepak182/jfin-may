@@ -16,8 +16,8 @@
                                     <h1 class="display-3 text-white mb-4">Unique Reward & Earning Opportunity</h1>
                                     <p class="mb-5 fs-5">We offer a unique earning opportunity through our referral program, rewarding both your referrals and those made by your friends.</p>
                                     <div class="d-flex justify-content-center justify-content-md-start flex-shrink-0 mb-4">
-                                        <a class="btn-search btn btn-light rounded-pill py-3 px-4 px-md-5 me-2 flex-shrink-0" data-bs-toggle="modal" data-bs-target="#searchModal" href="#"><i class="fas fa-info-circle me-2"></i> Enquire Now</a>
-                                        <a class="btn btn-dark rounded-pill py-3 px-4 px-md-5 ms-2" href="/about">Learn More</a>
+                                    <a class="btn-search btn btn-light rounded-pill py-3 px-4 px-md-5 me-2 flex-shrink-0" data-bs-toggle="modal" data-bs-target="#searchModal" href="#"><i class="fas fa-info-circle me-2" style="font-size: 20px"></i> Enquire Now</a>
+                                    <a class="btn-search btn btn-light rounded-pill py-3 px-4 px-md-5 ms-2" href="{{ url('/applyNow') }}"><i class="far fa-hand-point-right me-2" style="font-size: 20px"></i> Apply Now</a>
                                     </div>
                                 </div>
                             </div>
@@ -45,8 +45,8 @@
                                     <h1 class="display-3 text-white mb-4">Fastest, Secure & Easy Loan Process</h1>
                                     <p class="mb-5 fs-5">Experience fast, secure loans with competitive rates and personalized support in Pune. Enjoy seamless service and exceptional rewards.</p>
                                     <div class="d-flex justify-content-center justify-content-md-end flex-shrink-0 mb-4">
-                                        <a class="btn-search btn btn-light rounded-pill py-3 px-4 px-md-5 me-2 flex-shrink-0" data-bs-toggle="modal" data-bs-target="#searchModal" href="#"><i class="fas fa-info-circle me-2"></i> Enquire Now</a>
-                                        <a class="btn btn-dark rounded-pill py-3 px-4 px-md-5 ms-2" href="/about">Learn More</a>
+                                        <a class="btn-search btn btn-light rounded-pill py-3 px-4 px-md-5 me-2 flex-shrink-0" data-bs-toggle="modal" data-bs-target="#searchModal" href="#"><i class="fas fa-info-circle me-2" style="font-size: 20px"></i> Enquire Now</a>
+                                        <a class="btn-search btn btn-light rounded-pill py-3 px-4 px-md-5 ms-2" href="{{ url('/applyNow') }}"><i class="far fa-hand-point-right me-2" style="font-size: 20px"></i> Apply Now</a>
                                     </div>
                                 </div>
                             </div>
