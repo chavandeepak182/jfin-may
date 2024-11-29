@@ -46,7 +46,8 @@
             </div>
         </div>
         <!-- Spinner End -->
-<!-- Topbar Start -->
+        
+        <!-- Topbar Start 
         <div class="container-fluid topbar px-0 px-lg-4 bg-white py-2 d-none d-lg-block">
             <div class="container-fluid">
                 <div class="row gx-0 align-items-center">
@@ -76,7 +77,6 @@
                                         @else
                                             Login
                                         @endif                                 
-                                    
                                 </a>                               
                             </div>
                         </div>
@@ -84,11 +84,11 @@
                 </div>
             </div>
         </div>
-        <!-- Topbar End -->
+        Topbar End -->
         
 
         <!-- Navbar & Hero Start -->
-        <div class="container-fluid nav-bar px-0 px-lg-4 py-lg-0">
+        <!-- <div class="container-fluid nav-bar px-0 px-lg-4 py-lg-0">
             <div class="container-fluid">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <a href="{{ asset('') }}" class="navbar-brand p-0">
@@ -125,8 +125,53 @@
                     </div>
                 </nav>
             </div>
-        </div>
+        </div> -->
         <!-- Navbar & Hero End -->
+
+        <nav class="nav">
+            <div class="container-fluid">
+                <div class="logo">
+                    <a href="{{ asset('') }}" class="navbar-brand p-0">
+                        <img src="{{ asset('theme') }}/frontend/img/logo-white.svg" alt="Logo" class="w-100">
+                    </a>
+                </div>
+                <div id="mainListDiv" class="main_list">
+                    <ul class="navlinks">
+                        <li><a href="/" class="nav-item {{ Request::is('/') ? 'active' : '' }}">HOME</a></li>
+                        <li><a href="{{ url('about') }}" class="nav-item {{ Request::is('about') ? 'active' : '' }}">ABOUT</a></li>
+                        <li>
+                            <div class="nav-item dropdown">
+                                <a href="{{ url('services') }}" class="nav-item dropdown-toggle {{ Request::is('services*') || Request::is('home-loan') || Request::is('loan-against-property') || Request::is('project-loan') || Request::is('overdraft-facility') || Request::is('lease-rental-discounting') || Request::is('msme-loan') ? 'active' : '' }}" data-bs-toggle="dropdown">
+                                    SERVICES
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a href="{{ url('home-loan') }}" class="dropdown-item {{ Request::is('home-loan') ? 'active' : '' }}">HOME LOAN</a>
+                                    <a href="{{ url('loan-against-property')}}" class="dropdown-item {{ Request::is('loan-against-property') ? 'active' : '' }}">LOAN AGAINST PROPERTY</a>
+                                    <a href="{{ url('project-loan')}}" class="dropdown-item {{ Request::is('project-loan') ? 'active' : '' }}">PROJECT LOAN</a>
+                                    <a href="{{ url('overdraft-facility')}}" class="dropdown-item {{ Request::is('overdraft-facility') ? 'active' : '' }}">OVERDRAFT FACILITY</a>
+                                    <a href="{{ url('lease-rental-discounting')}}" class="dropdown-item {{ Request::is('lease-rental-discounting') ? 'active' : '' }}">LEASE RENTAL DISCOUNTING</a>
+                                    <a href="{{ url('msme-loan')}}" class="dropdown-item {{ Request::is('msme-loan') ? 'active' : '' }}">MSME LOAN</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li><a href="{{ url('properties')}}" class="nav-item {{ Request::is('properties') ? 'active' : '' }}">PROPERTIES</a></li>
+                        <li><a href="{{ url('referral-program')}}" class="nav-item {{ Request::is('referral-program') ? 'active' : '' }}">REFERRALS</a></li>
+                        <li><a href="https://jfinserv.com/blog/" class="nav-item" target="_blank">BLOGS</a></li>
+                        <li><a href="{{ url('contact')}}" class="nav-item {{ Request::is('contact') ? 'active' : '' }}">CONTACT</a></li>
+                        <li>
+                            <div class="nav-btn px-3">
+                                <a href="{{ url('/login')}}" class="btn btn-primary rounded-pill py-2 px-5 ms-3 flex-shrink-0">LOGIN</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <span class="navTrigger">
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                </span>
+            </div>
+        </nav>
 
         <!-- Modal Search Start -->
         <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

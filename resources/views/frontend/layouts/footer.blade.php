@@ -152,3 +152,25 @@
 
         <!-- Template Javascript -->
         <script src="{{ asset('theme') }}/frontend/js/main.js"></script>
+
+        <!-- Jquery needed -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <!-- Function used to shrink nav bar removing paddings and adding black background -->
+        <script>
+            $(window).scroll(function() {
+                if ($(document).scrollTop() > 50) {
+                    $('.nav').addClass('affix');
+                    console.log("OK");
+                } else {
+                    $('.nav').removeClass('affix');
+                }
+            });
+
+            $('.navTrigger').click(function () {
+                $(this).toggleClass('active');
+                console.log("Clicked menu");
+                $("#mainListDiv").toggleClass("show_list");
+                $("#mainListDiv").fadeIn();
+            });
+        </script>
