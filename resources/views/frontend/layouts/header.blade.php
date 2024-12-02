@@ -143,7 +143,10 @@
                         <li><a href="{{ url('about') }}" class="nav-item {{ Request::is('about') ? 'active' : '' }}">ABOUT</a></li>
                         <li>
                             <div class="nav-item dropdown">
-                                <a href="{{ url('services') }}" class="nav-item dropdown-toggle {{ Request::is('services*') || Request::is('home-loan') || Request::is('loan-against-property') || Request::is('project-loan') || Request::is('overdraft-facility') || Request::is('lease-rental-discounting') || Request::is('msme-loan') ? 'active' : '' }}" data-bs-toggle="dropdown">
+                                <a href="{{ url('services') }}" 
+                                class="nav-item dropdown-toggle 
+                                {{ Request::is('services*') || Request::is('home-loan') || Request::is('loan-against-property') || Request::is('project-loan') || Request::is('overdraft-facility') || Request::is('lease-rental-discounting') || Request::is('msme-loan') ? 'active' : '' }}" 
+                                data-bs-toggle="dropdown">
                                     SERVICES
                                 </a>
                                 <div class="dropdown-menu">
@@ -161,9 +164,28 @@
                         <li><a href="https://jfinserv.com/blog/" class="nav-item" target="_blank">BLOGS</a></li>
                         <li><a href="{{ url('contact')}}" class="nav-item {{ Request::is('contact') ? 'active' : '' }}">CONTACT</a></li>
                         <li>
+                            <!-- Dropdown for Logged-in User -->
+                            @if(Session::has('role_id') && Session::get('role_id') == 1)
+                            <div class="dropdown ms-3">
+                                <a href="#" class="text-white dropdown-toggle" data-bs-toggle="dropdown">
+                                    <i class="fas fa-user text-primary me-2"></i>
+                                    {{ explode(" ", Session::get('username'))[0] }}
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a href="/my-profile" class="dropdown-item">
+                                        <i class="fa fa-tachometer-alt me-2"></i> Dashboard
+                                    </a>                                
+                                    <a href="/logout" class="dropdown-item text-danger">
+                                        <i class="fas fa-power-off me-2"></i> Logout
+                                    </a>
+                                </div>
+                            </div>
+                            @else
+                            <!-- Login Button for Guests -->
                             <div class="nav-btn px-3">
                                 <a href="{{ url('/login')}}" class="btn btn-primary rounded-pill py-2 px-5 ms-3 flex-shrink-0">LOGIN</a>
                             </div>
+                            @endif
                         </li>
                     </ul>
                 </div>
@@ -174,6 +196,7 @@
                 </span>
             </div>
         </nav>
+
 
         <!-- Modal Search Start -->
         <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
