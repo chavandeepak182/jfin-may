@@ -1036,8 +1036,15 @@
     color: #fff;
 }
 
-.nav div.main_list ul li .dropdown .dropdown-menu{
+.nav div.main_list ul li .dropdown .dropdown-menu {
     min-width: 15rem;
+    transform: translate(0px, 58px) !important;
+}
+
+.profile-dash-drop .dropdown-menu {
+    min-width: 10.3rem !important;
+    background-color: #fff;
+    border-radius: 5px;
 }
 
 .navTrigger {
@@ -1298,4 +1305,18 @@
 .dropdown-menu {
     padding: 0;
     background-color: #f2f5f9;
+}
+
+.profile-dash {
+    background-color: #fff;
+    padding: 15px 20px;
+    border-radius: 5px;
+    color: #000058 !important;
+}
+
+.profile-dash i{
+    background-color: #000058;
+    padding: 10px;
+    border-radius: 50%;
+    color: #fff !important;
 }
