@@ -453,24 +453,18 @@ class UsersController extends Controller
 
     // Fetch user-related data
     $user = DB::table('users')->where('id', $userId)->first();
+    $referralCode = $user->referral_code ?? ''; // Fetch referral code
+
+    // Other existing data fetching (loans, wallet, etc.)
     $profile = DB::table('profile')->where('user_id', $userId)->first();
     $professionalDetails = DB::table('professional_details')->where('user_id', $userId)->first();
     $educationalDetails = DB::table('education_details')->where('user_id', $userId)->first();
     $documents = DB::table('documents')->where('user_id', $userId)->get();
-
-    // Fetch loans and their counts
     $loans = DB::table('loans')->where('user_id', $userId)->get();
     $loanCount = $loans->count();
-
-    // Count of disbursed loans
-    $disbursedLoanCount = DB::table('loans')
-        ->where('user_id', $userId)
-        ->where('status', 'disbursed')
-        ->count();
-
-    // Fetch wallet balance from the wallet table
+    $disbursedLoanCount = DB::table('loans')->where('user_id', $userId)->where('status', 'disbursed')->count();
     $wallet = DB::table('wallet')->where('user_id', $userId)->first();
-    $walletBalance = $wallet->wallet_balance ?? 0; // Default to 0 if no wallet record exists
+    $walletBalance = $wallet->wallet_balance ?? 0;
 
     return view('frontend.user-dash', compact(
         'section',
@@ -482,7 +476,8 @@ class UsersController extends Controller
         'loans',
         'loanCount',
         'disbursedLoanCount',
-        'walletBalance' // Pass wallet balance to the view
+        'walletBalance',
+        'referralCode' // Pass referral code to the view
     ));
 }
     public function test(Request $request)
