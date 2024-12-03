@@ -4,9 +4,9 @@
 @section('content')
 
 <!-- Professional Details -->
-<div class="container-fluid contact bg-light py-5">
+<div class="container-fluid contact bg-breadcrumb ptb-100 mb-5">
     <div class="container">
-        <div class="row g-5 align-items-center">
+        <div class="row g-5 mt-3 mb-5 align-items-center">
             <div class="col-md-6 wow fadeInLeft" data-wow-delay="0.2s">
                 <div class="contact-img d-flex justify-content-center">
                     <div class="contact-img-inner text-center">

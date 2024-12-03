@@ -166,9 +166,9 @@
                         <li>
                             <!-- Dropdown for Logged-in User -->
                             @if(Session::has('role_id') && Session::get('role_id') == 1)
-                            <div class="dropdown ms-3">
-                                <a href="#" class="text-white dropdown-toggle" data-bs-toggle="dropdown">
-                                    <i class="fas fa-user text-primary me-2"></i>
+                            <div class="dropdown profile-dash-drop ms-3">
+                                <a href="#" class="profile-dash dropdown-toggle" data-bs-toggle="dropdown">
+                                    <i class="fas fa-user me-2"></i>
                                     {{ explode(" ", Session::get('username'))[0] }}
                                 </a>
                                 <div class="dropdown-menu">
