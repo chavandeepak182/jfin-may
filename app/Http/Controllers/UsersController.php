@@ -399,7 +399,6 @@ class UsersController extends Controller
 
         $headers = array();
         $headers[] = 'Accept: application/json';
-        $headers[] = 'Api-Key: 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';
         $headers[] = 'Content-Type: application/json';
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
