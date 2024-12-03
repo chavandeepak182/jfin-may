@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="{{ asset('theme') }}/user-dash/css/app.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- <link href="{{ asset('theme') }}/frontend/css/bootstrap.min.css" rel="stylesheet"> -->
@@ -175,16 +175,35 @@
 													<div class="col mt-0">
 														<h5 class="card-title">Referrals</h5>
 													</div>
-
 													<div class="col-auto">
-														<div class="stat text-primary">
-															<i class="align-middle" data-feather="share-2"></i>
+														<!-- Share Icon with Dropdown -->
+														<div class="dropdown">
+															<a href="#" class="stat text-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+																<i class="align-middle" data-feather="share-2"></i>
+															</a>
+															<ul class="dropdown-menu">
+																<li>
+																	<a class="dropdown-item" 
+																	href="https://wa.me/?text=Hi%2C%0AGood%20news%21%20You%27ve%20received%20a%20special%20referral%20code%20to%20unlock%20amazing%20benefits%20with%20JFinserv%0A%0AReferral%20Code%3A%20{{ $referralCode }}%0Ahttps%3A%2F%2Fjfs.digital%2F" 
+																	target="_blank">
+																		Share via WhatsApp
+																	</a>
+																</li>
+																<li>
+																	<a class="dropdown-item" 
+																	href="mailto:?subject=Special%20Referral%20Code%20from%20JFinserv&body=Hi%2C%0A%0AGood%20news%21%20You%27ve%20received%20a%20special%20referral%20code%20to%20unlock%20amazing%20benefits%20with%20JFinserv%0A%0AReferral%20Code%3A%20{{ $referralCode }}%0Ahttps%3A%2F%2Fjfs.digital%2F" 
+																	target="_blank">
+																		Share via Email
+																	</a>
+																</li>
+															</ul>
 														</div>
 													</div>
 												</div>
-												<h1 class="mt-1 mb-3">64</h1>
+												<!-- Display Referral Code -->
+												<h4 class="mt-1 mb-3">Code: {{ $referralCode }}</h4>
 												<div class="mb-0">
-													<span class="text-muted">Since last week</span>
+													<span class="text-muted">Share your referral code!</span>
 												</div>
 											</div>
 										</div>
