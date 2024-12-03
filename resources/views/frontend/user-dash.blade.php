@@ -112,14 +112,14 @@
 													<div class="col mt-0">
 														<h5 class="card-title">My Loans</h5>
 													</div>
-
 													<div class="col-auto">
 														<div class="stat text-primary">
 															<i class="align-middle" data-feather="credit-card"></i>
 														</div>
 													</div>
 												</div>
-												<h1 class="mt-1 mb-3">2.382</h1>
+												<!-- Display the loan count dynamically -->
+												<h1 class="mt-1 mb-3">{{ $loanCount }}</h1>
 												<div class="mb-0">
 													<span class="text-muted">Since last week</span>
 												</div>
@@ -131,16 +131,16 @@
 											<div class="card-body">
 												<div class="row">
 													<div class="col mt-0">
-														<h5 class="card-title">Approved Loans</h5>
+														<h5 class="card-title">Disbursed Loans</h5>
 													</div>
-
 													<div class="col-auto">
 														<div class="stat text-primary">
 															<i class="align-middle" data-feather="users"></i>
 														</div>
 													</div>
 												</div>
-												<h1 class="mt-1 mb-3">14.212</h1>
+												<!-- Display the disbursed loan count dynamically -->
+												<h1 class="mt-1 mb-3">{{ $disbursedLoanCount }}</h1>
 												<div class="mb-0">
 													<span class="text-muted">Since last week</span>
 												</div>
@@ -154,14 +154,14 @@
 													<div class="col mt-0">
 														<h5 class="card-title">Earnings</h5>
 													</div>
-
 													<div class="col-auto">
 														<div class="stat text-primary">
 															<i class="align-middle" data-feather="briefcase"></i>
 														</div>
 													</div>
 												</div>
-												<h1 class="mt-1 mb-3">₹21.300</h1>
+												<!-- Display the wallet balance dynamically -->
+												<h1 class="mt-1 mb-3">₹{{ number_format($walletBalance, 2) }}</h1>
 												<div class="mb-0">
 													<span class="text-muted">Since last week</span>
 												</div>

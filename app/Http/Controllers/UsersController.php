@@ -416,6 +416,7 @@ class UsersController extends Controller
 
     $headers = [
         'Accept: application/json',
+        'Api-Key: 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',
         'Content-Type: application/json'
     ];
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -442,24 +443,48 @@ class UsersController extends Controller
 }
     //customer profile
     public function showProfile(Request $request)
-    {
+{
     $section = $request->query('section', 'personal');
     $userId = session('user_id'); // Retrieve user ID from session
 
     if (!$userId) {
         return redirect()->route('login')->withErrors('User session expired. Please log in again.');
     }
-    
 
-    // Fetch the profile information
+    // Fetch user-related data
     $user = DB::table('users')->where('id', $userId)->first();
     $profile = DB::table('profile')->where('user_id', $userId)->first();
     $professionalDetails = DB::table('professional_details')->where('user_id', $userId)->first();
     $educationalDetails = DB::table('education_details')->where('user_id', $userId)->first();
     $documents = DB::table('documents')->where('user_id', $userId)->get();
+
+    // Fetch loans and their counts
     $loans = DB::table('loans')->where('user_id', $userId)->get();
-    return view('frontend.user-dash', compact('section','user', 'profile','professionalDetails','educationalDetails','documents','loans'));
-    }
+    $loanCount = $loans->count();
+
+    // Count of disbursed loans
+    $disbursedLoanCount = DB::table('loans')
+        ->where('user_id', $userId)
+        ->where('status', 'disbursed')
+        ->count();
+
+    // Fetch wallet balance from the wallet table
+    $wallet = DB::table('wallet')->where('user_id', $userId)->first();
+    $walletBalance = $wallet->wallet_balance ?? 0; // Default to 0 if no wallet record exists
+
+    return view('frontend.user-dash', compact(
+        'section',
+        'user',
+        'profile',
+        'professionalDetails',
+        'educationalDetails',
+        'documents',
+        'loans',
+        'loanCount',
+        'disbursedLoanCount',
+        'walletBalance' // Pass wallet balance to the view
+    ));
+}
     public function test(Request $request)
     {
     $userId = session('user_id'); // Retrieve user ID from session
