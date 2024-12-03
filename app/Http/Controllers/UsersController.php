@@ -89,7 +89,7 @@ class UsersController extends Controller
                 $update_user = User::where('id', $user_id)->update(['profile_id' => $profile_id]);
 
                 $msg = "http://127.0.0.1:8000/userAuth/".$user_id."/".$six_digit_random_number;
-                $temp_id = 1;
+                $temp_id = 3;
 
                 if($user && $profile ){
                     DB::commit();
@@ -161,7 +161,7 @@ class UsersController extends Controller
             User::where('id', $user_id)->update(['profile_id' => $profile_id]);
     
             $msg = "http://127.0.0.1:8000/userAuth/" . $user_id . "/" . $six_digit_random_number;
-            $temp_id = 1;
+            $temp_id = 3;
     
             DB::commit();
     
@@ -399,7 +399,7 @@ class UsersController extends Controller
 
         $headers = array();
         $headers[] = 'Accept: application/json';
-        $headers[] = 'Api-Key: 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';
+        $headers[] = 'Api-Key: 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';
         $headers[] = 'Content-Type: application/json';
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
