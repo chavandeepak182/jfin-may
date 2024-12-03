@@ -389,25 +389,57 @@ class UsersController extends Controller
 
     //send an email
     function temail($email, $firstname, $msg, $temp_id)
-    {
-        $ch = curl_init();
+{
+    $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, 'https://api.sendinblue.com/v3/smtp/email');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "{  \n   \"to\":[  \n      {  \n         \"email\":\"$email\",\n         \"name\":\"$firstname\"\n      }\n   ],\n   \"templateId\":$temp_id,\n   \"params\":{  \n      \"name\":\"$firstname\",\n    \"email\":\"$email\",\n      \"url\":\"$msg\"\n   },\n   \"headers\":{  \n      \"X-Mailin-custom\":\"custom_header_1:custom_value_1|custom_header_2:custom_value_2|custom_header_3:custom_value_3\",\n      \"charset\":\"iso-8859-1\"\n   }\n}");
+    curl_setopt($ch, CURLOPT_URL, 'https://api.sendinblue.com/v3/smtp/email');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+        "to" => [
+            [
+                "email" => $email,
+                "name" => $firstname
+            ]
+        ],
+        "templateId" => $temp_id,
+        "params" => [
+            "name" => $firstname,
+            "email" => $email,
+            "url" => $msg
+        ],
+        "headers" => [
+            "X-Mailin-custom" => "custom_header_1:custom_value_1|custom_header_2:custom_value_2|custom_header_3:custom_value_3",
+            "charset" => "iso-8859-1"
+        ]
+    ]));
 
-        $headers = array();
-        $headers[] = 'Accept: application/json';
-        $headers[] = 'Content-Type: application/json';
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    $headers = [
+        'Accept: application/json',
+        'Content-Type: application/json'
+    ];
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-        $result = curl_exec($ch);
-        if (curl_errno($ch)) {
-            echo 'Error:' . curl_error($ch);
+    // Execute curl request and fetch response
+    $result = curl_exec($ch);
+
+    // Check for curl errors
+    if (curl_errno($ch)) {
+        $error = curl_error($ch);
+        Log::error('Sendinblue Email Error: ' . $error);
+        echo 'Error: ' . $error;
+    } else {
+        // Decode the response and log the result
+        $response = json_decode($result, true);
+        if (isset($response['messageId'])) {
+            Log::info('Email sent successfully to ' . $email . ' with Message ID: ' . $response['messageId']);
+        } else {
+            Log::error('Email sending failed for ' . $email . '. Response: ' . $result);
         }
-        curl_close($ch);
     }
+
+    curl_close($ch);
+}
     //customer profile
     public function showProfile(Request $request)
     {
