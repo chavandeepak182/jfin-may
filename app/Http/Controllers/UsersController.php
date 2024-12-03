@@ -440,6 +440,7 @@ class UsersController extends Controller
 
     curl_close($ch);
 }
+
     //customer profile
     public function showProfile(Request $request)
 {
