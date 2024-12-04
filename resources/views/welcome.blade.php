@@ -85,6 +85,11 @@
                         <div class="bg-white shadow rounded">
                             <div class="row align-items-center">
                                 <div class="col-md-6 pe-0">
+                                    @if (session('error'))
+                                        <div class="alert alert-danger">
+                                            {{ session('error') }}
+                                        </div>
+                                    @endif
                                     <div class="form-left h-100 py-5 px-5">
                                         <form class="row g-4" action="{{Route('userLogin')}}" method="post">
                                             @csrf
