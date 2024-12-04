@@ -484,7 +484,7 @@
     left: 0;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    background: var(--bs-dark);
+    background: var(--bs-white);
     transition: 0.5s;
     z-index: 1;
 }
@@ -504,8 +504,9 @@
 }
 
 .feature .feature-item:hover .feature-icon {
-    color: var(--bs-white);
+    color: var(--bs-primary);
 }
+
 .feature .feature-item:hover h4,
 .feature .feature-item:hover p {
     color: var(--bs-white);
@@ -893,7 +894,7 @@
 
 .footer .footer-item a {
     line-height: 35px;
-    color: var(--bs-body);
+    color: #fff;
     transition: 0.5s;
 }
 
