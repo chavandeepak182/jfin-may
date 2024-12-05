@@ -1068,7 +1068,8 @@
         display: block;
     }
     .nav div.logo {
-        margin-left: 15px;
+        margin-left: 0px;
+        padding-left: 0;
     }
     .nav div.main_list {
         width: 100%;

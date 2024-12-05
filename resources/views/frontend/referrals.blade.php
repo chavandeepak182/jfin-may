@@ -7,11 +7,7 @@
 <!-- Header Start -->
     <div class="container-fluid bg-breadcrumb">
         <div class="container text-center py-5" style="max-width: 900px;">
-            <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Refer & Empower</h4>
-            <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item active text-primary">Referral Program</li>
-            </ol>    
+            <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Jfinserv Referral Program</h4>    
         </div>
     </div>
 
@@ -21,8 +17,7 @@
             <div class="row g-5">
                 <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.2s">
                     <div class="about-item-content bg-white rounded p-5 h-100">
-                        <h4 class="text-primary">Jfinserv Referral Program</h4>
-                        <h2 class="display-4 mb-4">Invite Friends & Help Them Achieve Their Dreams.</h2>
+                        <!-- <h2 class="display-4 mb-4">Invite Friends & Help Them Achieve Their Dreams.</h2> -->
                         <p>There’s no limit to your earning potential when you refer our service. Earn for each successful referral and unlock more with performance bonuses. Our referral process is quick and easy—share your code with friends and colleagues in under a minute.</p>
                         <h4 class="text-primary"><strong>How Does It Work?</strong></h4>
                         <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Go to ‘Refer Your Friend’ section.</p>
@@ -37,12 +32,12 @@
                 <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.2s">
                     <div class="bg-white rounded p-5 h-100">
                         <div class="row g-4 justify-content-center">
-                            <!-- <div class="col-12">
-                                <div class="rounded bg-light">
-                                    <img src="{{ asset('theme') }}/frontend/img/finance-discussion.png" class="img-fluid rounded w-100" alt="">
+                            <div class="col-12">
+                                <div class="rounded">
+                                    <img src="{{ asset('theme') }}/frontend/img/referral_inner.png" class="img-fluid rounded w-100" alt="">
                                 </div>
-                            </div> -->
-                            <div class="col-sm-12">
+                            </div>
+                            <!-- <div class="col-sm-12">
                                 <div class="bg-light rounded p-3 h-100">
                                     <h3 class="text-primary mb-4 text-center">Refer Your Friend Now!</h3>
                                     <form action="{{ route('enquiry.store') }}" method="POST">
@@ -114,7 +109,7 @@
                                         </div>
                                     </form>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -124,8 +119,8 @@
 <!-- About End -->
 
 <!-- FAQs Start -->
-    <div class="container-fluid faq-section bg-white pb-5">
-        <div class="container pb-5">
+    <div class="container-fluid faq-section bg-white py-5 pb-5 mb-5">
+        <div class="container py-5">
             <div class="row g-5 align-items-center">
                 <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.2s">
                     <div class="h-100">
