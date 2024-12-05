@@ -375,7 +375,7 @@
         <!-- Team End -->
 
         <!-- FAQs Start -->
-        <div class="container-fluid faq-section py-5 pb-5">
+        <div class="container-fluid faq-section py-5 pb-5 mb-4">
             <div class="container pb-5">
                 <div class="row g-5 align-items-center">
                     <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.2s">
