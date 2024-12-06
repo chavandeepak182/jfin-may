@@ -229,7 +229,7 @@ public function update(Request $request)
         return redirect()->back()->withErrors(['error' => 'An error occurred while updating: ' . $e->getMessage()])->withInput();
     }
 }
-   
+   //admin
     public function inprocess()
 {
     $data['loans'] = DB::table('loans')
@@ -263,6 +263,7 @@ public function approved()
     // Pass data to the view
     return view('frontend.approved_loans', compact('data'));
 }
+//admin
 public function rejected()
 {
     $data['loans'] = DB::table('loans')
@@ -273,6 +274,18 @@ public function rejected()
         ->paginate(10);
 
     return view('frontend.rejected_loans', compact('data'));
+}
+//admin
+public function disbursed()
+{
+    $data['loans'] = DB::table('loans')
+        ->join('users', 'loans.user_id', '=', 'users.id')
+        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+        ->select('loans.loan_id', 'loans.loan_reference_id', 'loans.amount', 'loans.tenure', 'users.name as user_name', 'loan_category.category_name')
+        ->where('loans.status', 'disbursed')
+        ->paginate(10);
+
+    return view('frontend.disbursed_loans', compact('data'));
 }
 
     public function start_loan($id)
