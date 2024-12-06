@@ -60,6 +60,17 @@ class AdminController extends Controller
             return redirect('/');
         }
     }
+
+	public function allUserN()
+    {
+        if (!empty(Session::get('role_id'))) {
+            return view('admindash.allUsers');
+			
+        }else{
+            return redirect('/');
+        }
+    }
+
     public function activities()
     {
             $data['allActivies'] = DB::table('activity_logs')

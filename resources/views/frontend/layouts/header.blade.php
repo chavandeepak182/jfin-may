@@ -37,7 +37,7 @@
         <script src="@yield('scripts2')"></script>
         <link rel="stylesheet" href="@yield('links')"/>
 
-        <link rel="icon" type="image/png" href="{{ asset('theme') }}/frontend/img/favicon.png">
+        <link rel="icon" type="image/png" href="{{ asset('theme') }}/frontend//img/favicon.png">
     </head>
 
     <body>
