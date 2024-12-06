@@ -23,15 +23,43 @@ class AdminController extends Controller
     }
 
     public function dashboard()
+{
+    if (!empty(Session::get('role_id'))) {
+        $totalLoans = DB::table('loans')->count();
+        $inProcessLoans = DB::table('loans')->where('status', 'in process')->count();
+        $approvedLoans = DB::table('loans')->where('status', 'approved')->count();
+        $disbursedLoans = DB::table('loans')->where('status', 'disbursed')->count();
+        $rejectedLoans = DB::table('loans')->where('status', 'rejected')->count();
+        $totalUsers = DB::table('users')->count();
+
+        $loanStatuses = [
+            'In Process' => $inProcessLoans,
+            'Approved' => $approvedLoans,
+            'Disbursed' => $disbursedLoans,
+            'Rejected' => $rejectedLoans,
+        ];
+
+        return view('admin.dashboard', compact(
+            'totalLoans', 
+			'approvedLoans',
+			'rejectedLoans',
+            'loanStatuses', 
+            'totalUsers', 
+            'disbursedLoans'
+        ));
+    } else {
+        return redirect('/');
+    }
+}
+	public function adminDashboard()
     {
         if (!empty(Session::get('role_id'))) {
-            return view('admin.dashboard');
+            return view('admindash.dashboard');
+			
         }else{
             return redirect('/');
         }
     }
-
-
     public function activities()
     {
             $data['allActivies'] = DB::table('activity_logs')

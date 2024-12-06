@@ -36,10 +36,10 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center bg-white" href="{{route('dashboard')}}">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('dashboard')}}">
                 <div class="sidebar-brand-icon">
                     {{-- <i class="fas fa-laugh-wink"></i> --}}
-                    <img style="background-color: white;" width="100%" height="50px" src="{{ asset('theme/logo.png') }}">
+                    <img width="100%" height="50px" src="{{ asset('theme/frontend/img/logo-white.svg') }}">
                 </div>
                 <!-- <div class="sidebar-brand-text mx-3">{{ Session::get('username')}}</div> -->
             </a>
@@ -112,8 +112,8 @@
                         <a class="collapse-item" href="{{ route('pendingLoans') }}">Pending Assign</a>                        
                         <a class="collapse-item" href="{{ route('inprocess.loans') }}">In Process Loans</a>
                         <a class="collapse-item" href="{{ route('approvedLoans')}}">Approved Loans</a>
+                        <a class="collapse-item" href="{{ route('disbursed.loans')}}">Disbursed Loans</a>
                         <a class="collapse-item" href="{{ route('rejectedLoans')}}">Rejected Loans</a>
-
                     </div>
                 </div>
             </li>
@@ -301,7 +301,8 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <nav class="navbar navbar-expand navbar-light topbar mb-4 static-top">
+                    <h2><b>Dashboard</b></h2>
 
     <!-- Sidebar Toggle (Topbar) -->
     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
