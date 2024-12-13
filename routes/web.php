@@ -185,7 +185,6 @@ Route::post('admin/insertUser',[UsersController::class,'insertUser'])->name('ins
     Route::get('/updateProfile', [UsersController::class, 'updateProfile'])->name('updateProfile');
     Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('admin/admindashboard', [AdminController::class, 'adminDashboard'])->name('adminDashboard');
-    Route::get('admin/allUserN', [AdminController::class, 'allUserN'])->name('allUserN');
     Route::get('admin/addUser', [UsersController::class, 'addUser'])->name('addUser');
     Route::get('admin/allUsers', [UsersController::class, 'allUsers'])->name('allUsers');  
     Route::post('admin/assignAgent', [LoanApplicationController::class, 'assignAgent'])->name('assignAgent');

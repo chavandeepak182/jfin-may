@@ -31,8 +31,9 @@ class LoanApplicationController extends Controller
     // }
 
     public function index()
-    {
-        $data['loans'] = DB::table('loans')
+{
+    // Fetch paginated loans
+    $data['loans'] = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
         ->select(
@@ -41,14 +42,27 @@ class LoanApplicationController extends Controller
             'loans.tenure',
             'loans.loan_reference_id',
             'users.name as user_name',
+            'loans.status',
             'loan_category.category_name as loan_category_name',
             'loans.agent_action'
         )
         ->paginate(10); // Adjust the pagination limit if necessary
 
-    return view('frontend.all-loans', compact('data'));
-    
-    }
+    // Fetch recent 5 loans
+    $recentLoans = DB::table('loans')
+        ->join('users', 'loans.user_id', '=', 'users.id')
+        ->select(
+            'loans.loan_id',
+            'loans.amount',
+            'users.name as user_name',
+            'loans.status'
+        )
+        ->latest('loans.created_at')
+        ->take(5)
+        ->get();
+
+    return view('frontend.all-loans', compact('data', 'recentLoans'));
+}
     public function view($id)
 {
     // Fetch loan details along with related user and category information
@@ -936,5 +950,22 @@ public function agentDocumentPending()
     public function applyNow(){
         return view('frontend.applyNow');
     }
+    //fetch recent loans
+    public function fetchRecentLoans($limit = 5)
+{
+    $recentLoans = DB::table('loans')
+        ->join('users', 'loans.user_id', '=', 'users.id')
+        ->select(
+            'loans.loan_id',
+            'loans.amount',
+            'users.name as user_name',
+            'loans.status'
+        )
+        ->latest('loans.created_at')
+        ->take($limit)
+        ->get();
+
+    return $recentLoans;
+}
 
 }
