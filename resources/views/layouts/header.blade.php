@@ -34,7 +34,6 @@
 
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('dashboard')}}">
                 <div class="sidebar-brand-icon">
@@ -44,25 +43,31 @@
                 <!-- <div class="sidebar-brand-text mx-3">{{ Session::get('username')}}</div> -->
             </a>
 
+            <?php
+            $role_id = session()->get('role_id');
+            if ($role_id == env('adminRole_id')) {
+            ?>
+                <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'dashboard' ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('dashboard') }}">
+                        <i class="fas fa-tachometer-alt custom-icon"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+            <?php 
+            } elseif ($role_id == env('agentRole_id')) { 
+            ?>
+                <li class="nav-item {{ Request::segment(1) == 'agent' && Request::segment(2) == 'dashboard' ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('agentDashboard') }}">
+                        <i class="fas fa-tachometer-alt custom-icon"></i>
+                        <span>Agent Dashboard</span>
+                    </a>
+                </li>
+            <?php 
+            }
+            ?>
+
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'dashboard' ? 'active' : '' }}">
-                <a class="nav-link" href="{{route('dashboard')}}">
-                    <i class="fas fa-tachometer-alt custom-icon"></i>
-                    <span>Dashboard</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Menu
-            </div>
 
             <?php
                  $role_id = session()->get('role_id');
