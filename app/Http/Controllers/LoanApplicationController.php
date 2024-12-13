@@ -31,8 +31,9 @@ class LoanApplicationController extends Controller
     // }
 
     public function index()
-    {
-        $data['loans'] = DB::table('loans')
+{
+    // Fetch paginated loans
+    $data['loans'] = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
         ->select(
@@ -41,14 +42,27 @@ class LoanApplicationController extends Controller
             'loans.tenure',
             'loans.loan_reference_id',
             'users.name as user_name',
+            'loans.status',
             'loan_category.category_name as loan_category_name',
             'loans.agent_action'
         )
         ->paginate(10); // Adjust the pagination limit if necessary
 
-    return view('frontend.all-loans', compact('data'));
-    
-    }
+    // Fetch recent 5 loans
+    $recentLoans = DB::table('loans')
+        ->join('users', 'loans.user_id', '=', 'users.id')
+        ->select(
+            'loans.loan_id',
+            'loans.amount',
+            'users.name as user_name',
+            'loans.status'
+        )
+        ->latest('loans.created_at')
+        ->take(5)
+        ->get();
+
+    return view('frontend.all-loans', compact('data', 'recentLoans'));
+}
     public function view($id)
 {
     // Fetch loan details along with related user and category information
@@ -129,17 +143,28 @@ public function update(Request $request)
     try {
         // Validate the request
         $validated = $request->validate([
-            // validation rules
+            'loan_id' => 'required|integer',
+            'status' => 'required|string',
+            'loan_category_id' => 'required|integer',
+            'amount' => 'required|numeric',
+            'amount_approved' => 'required_if:status,disbursed|numeric',
+            'tenure' => 'required|integer',
+            'in_principle' => 'nullable|string',
+            'remarks' => 'nullable|string',
+            'sanction_letter' => 'nullable|file|mimes:pdf,doc,docx',
+            'documents.*' => 'nullable|file|mimes:pdf,doc,docx',
         ]);
 
         \DB::transaction(function () use ($request) {
-
             $loan = Loan::where('loan_id', $request->input('loan_id'))->firstOrFail();
             $oldStatus = $loan->status;
             $newStatus = $request->input('status');
 
-            \Log::info('Current status: ' . $oldStatus);
-            \Log::info('New status: ' . $newStatus);
+            \Log::info('Loan status update:', [
+                'loan_id' => $loan->loan_id,
+                'old_status' => $oldStatus,
+                'new_status' => $newStatus,
+            ]);
 
             // Update loan details
             $loan->loan_category_id = $request->input('loan_category_id');
@@ -192,11 +217,10 @@ public function update(Request $request)
                 $status = $newStatus;
                 $remarks = $request->input('remarks');
                 $msg = "Your loan status has been updated to: $status. Remarks: $remarks";
-                $temp_id = 4; 
+                $temp_id = 4; // Example template ID, adjust accordingly
                 app(UsersController::class)->temail($customerEmail, $customerName, $msg, $temp_id);
 
-
-                //Start MLM insertion 
+                // Start MLM Insertion
                 if($newStatus == 'disbursed'){
                     $name = $customerName;
                     $parent = $loan->referral_user_id;
@@ -206,11 +230,8 @@ public function update(Request $request)
                     $userId = $loan->user_id;
                     app(CategoryController::class)->commission_destribution($parent, $amount_approved, $userId);
                 }
-                //end
-
+                // End MLM Insertion
             }
-
-
         });
 
         return redirect()->back()->with('success', 'Loan updated successfully!');
@@ -222,8 +243,7 @@ public function update(Request $request)
         return redirect()->back()->withErrors(['error' => 'An error occurred while updating: ' . $e->getMessage()])->withInput();
     }
 }
-
-   
+   //admin
     public function inprocess()
 {
     $data['loans'] = DB::table('loans')
@@ -257,6 +277,7 @@ public function approved()
     // Pass data to the view
     return view('frontend.approved_loans', compact('data'));
 }
+//admin
 public function rejected()
 {
     $data['loans'] = DB::table('loans')
@@ -267,6 +288,18 @@ public function rejected()
         ->paginate(10);
 
     return view('frontend.rejected_loans', compact('data'));
+}
+//admin
+public function disbursed()
+{
+    $data['loans'] = DB::table('loans')
+        ->join('users', 'loans.user_id', '=', 'users.id')
+        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+        ->select('loans.loan_id', 'loans.loan_reference_id', 'loans.amount', 'loans.tenure', 'users.name as user_name', 'loan_category.category_name')
+        ->where('loans.status', 'disbursed')
+        ->paginate(10);
+
+    return view('frontend.disbursed_loans', compact('data'));
 }
 
     public function start_loan($id)
@@ -917,5 +950,22 @@ public function agentDocumentPending()
     public function applyNow(){
         return view('frontend.applyNow');
     }
+    //fetch recent loans
+    public function fetchRecentLoans($limit = 5)
+{
+    $recentLoans = DB::table('loans')
+        ->join('users', 'loans.user_id', '=', 'users.id')
+        ->select(
+            'loans.loan_id',
+            'loans.amount',
+            'users.name as user_name',
+            'loans.status'
+        )
+        ->latest('loans.created_at')
+        ->take($limit)
+        ->get();
+
+    return $recentLoans;
+}
 
 }

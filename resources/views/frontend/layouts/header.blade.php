@@ -49,87 +49,7 @@
         </div>
         <!-- Spinner End -->
         
-        <!-- Topbar Start 
-        <div class="container-fluid topbar px-0 px-lg-4 bg-white py-2 d-none d-lg-block">
-            <div class="container-fluid">
-                <div class="row gx-0 align-items-center">
-                    <div class="col-lg-8 text-center text-lg-start mb-lg-0">
-                        <div class="d-flex flex-wrap">
-                            <div class="border-end border-primary pe-3">
-                            <a href="tel:+918421216367" class="text-muted small"><i class="fas fa-phone text-primary me-2"></i>+91 84212 16367</a>
-                            </div>
-                            <div class="ps-3">
-                                <a href="mailto:example@gmail.com" class="text-muted small"><i class="fas fa-envelope text-primary me-2"></i>info@jfinserv.com</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 text-center text-lg-end">
-                        <div class="d-flex justify-content-end">
-                            <div class="d-flex border-end border-primary pe-3">
-                                <a class="btn p-0 text-primary me-3" href="https://www.facebook.com/people/JFinserv/61558721093709/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn p-0 text-primary me-3" href="https://x.com/i/flow/login?redirect_after_login=%2Fjfinserv9668" target="_blank"><i class="fab fa-twitter"></i></a>
-                                <a class="btn p-0 text-primary me-3" href="https://www.instagram.com/jfinserv_consultant/" target="_blank"> <i class="fab fa-instagram"></i></a>
-                                <a class="btn p-0 text-primary me-0" href="https://www.linkedin.com/company/jfinserv-consultant-india-private-limited/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                            </div>
-                            <div class="dropdown ms-3">
-                                <a href="{{ route('loan.profile') }}" class="text-dark">
-                                    <i class="fas fa-user text-primary me-2"></i>
-                                        @if(Session::get('role_id') == 1)
-                                            {{ explode(" ",Session::get('username'))[0] }} | <a href="/my-profile">Profile</a> | <a href="/logout"><i class="fas fa-power-off text-danger me-2"></i></a>
-                                        @else
-                                            Login
-                                        @endif                                 
-                                </a>                               
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        Topbar End -->
-        
-
-        <!-- Navbar & Hero Start -->
-        <!-- <div class="container-fluid nav-bar px-0 px-lg-4 py-lg-0">
-            <div class="container-fluid">
-                <nav class="navbar navbar-expand-lg navbar-light">
-                    <a href="{{ asset('') }}" class="navbar-brand p-0">
-                        <img src="{{ asset('theme') }}/frontend/img/logo.png" alt="Logo">
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                        <span class="fa fa-bars"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <div class="navbar-nav mx-0 mx-lg-auto">
-                            <a href="/" class="nav-item nav-link {{ Request::is('/') ? 'active' : '' }}">HOME</a>
-                            <a href="{{ url('about') }}" class="nav-item nav-link {{ Request::is('about') ? 'active' : '' }}">ABOUT</a>
-                            <div class="nav-item dropdown">
-                                <a href="{{ url('services') }}" class="nav-link dropdown-toggle {{ Request::is('services*') || Request::is('home-loan') || Request::is('loan-against-property') || Request::is('project-loan') || Request::is('overdraft-facility') || Request::is('lease-rental-discounting') || Request::is('msme-loan') ? 'active' : '' }}" data-bs-toggle="dropdown">
-                                    SERVICES
-                                </a>
-                                <div class="dropdown-menu">
-                                    <a href="{{ url('home-loan') }}" class="dropdown-item {{ Request::is('home-loan') ? 'active' : '' }}">HOME LOAN</a>
-                                    <a href="{{ url('loan-against-property')}}" class="dropdown-item {{ Request::is('loan-against-property') ? 'active' : '' }}">LOAN AGAINST PROPERTY</a>
-                                    <a href="{{ url('project-loan')}}" class="dropdown-item {{ Request::is('project-loan') ? 'active' : '' }}">PROJECT LOAN</a>
-                                    <a href="{{ url('overdraft-facility')}}" class="dropdown-item {{ Request::is('overdraft-facility') ? 'active' : '' }}">OVERDRAFT FACILITY</a>
-                                    <a href="{{ url('lease-rental-discounting')}}" class="dropdown-item {{ Request::is('lease-rental-discounting') ? 'active' : '' }}">LEASE RENTAL DISCOUNTING</a>
-                                    <a href="{{ url('msme-loan')}}" class="dropdown-item {{ Request::is('msme-loan') ? 'active' : '' }}">MSME LOAN</a>
-                                </div>
-                            </div>
-                            <a href="{{ url('properties')}}" class="nav-item nav-link {{ Request::is('properties') ? 'active' : '' }}">PROPERTIES</a>
-                            <a href="{{ url('referral-program')}}" class="nav-item nav-link {{ Request::is('referral-program') ? 'active' : '' }}">REFERRALS</a>
-                            <a href="https://jfinserv.com/blog/" class="nav-item nav-link" target="_blank">BLOGS</a>
-                            <a href="{{ url('contact')}}" class="nav-item nav-link {{ Request::is('contact') ? 'active' : '' }}">CONTACT</a>
-                            <div class="nav-btn px-3">
-                                <a href="{{ url('applyNow')}}" class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0">Apply Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        </div> -->
-        <!-- Navbar & Hero End -->
-
+    <!-- Navbar & Hero End -->
         <nav class="nav">
             <div class="container-fluid">
                 <div class="logo">
@@ -143,10 +63,7 @@
                         <li><a href="{{ url('about') }}" class="nav-item {{ Request::is('about') ? 'active' : '' }}">ABOUT</a></li>
                         <li>
                             <div class="nav-item dropdown">
-                                <a href="{{ url('services') }}" 
-                                class="nav-item dropdown-toggle 
-                                {{ Request::is('services*') || Request::is('home-loan') || Request::is('loan-against-property') || Request::is('project-loan') || Request::is('overdraft-facility') || Request::is('lease-rental-discounting') || Request::is('msme-loan') ? 'active' : '' }}" 
-                                data-bs-toggle="dropdown">
+                                <a href="{{ url('services') }}" class="nav-item dropdown-toggle {{ Request::is('services*') || Request::is('home-loan') || Request::is('loan-against-property') || Request::is('project-loan') || Request::is('overdraft-facility') || Request::is('lease-rental-discounting') || Request::is('msme-loan') ? 'active' : '' }}" data-bs-toggle="dropdown">
                                     SERVICES
                                 </a>
                                 <div class="dropdown-menu">
@@ -166,9 +83,9 @@
                         <li>
                             <!-- Dropdown for Logged-in User -->
                             @if(Session::has('role_id') && Session::get('role_id') == 1)
-                            <div class="dropdown ms-3">
-                                <a href="#" class="text-white dropdown-toggle" data-bs-toggle="dropdown">
-                                    <i class="fas fa-user text-primary me-2"></i>
+                            <div class="dropdown profile-dash-drop ms-3">
+                                <a href="#" class="profile-dash dropdown-toggle" data-bs-toggle="dropdown">
+                                    <i class="fas fa-user me-2"></i>
                                     {{ explode(" ", Session::get('username'))[0] }}
                                 </a>
                                 <div class="dropdown-menu">
@@ -196,7 +113,6 @@
                 </span>
             </div>
         </nav>
-
 
         <!-- Modal Search Start -->
         <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

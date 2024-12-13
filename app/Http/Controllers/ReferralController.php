@@ -197,4 +197,20 @@ class ReferralController extends Controller
     // return view('admin.walletbalance', compact('walletBalance', 'combinedData'));
     return view('frontend.profile.referrals', compact('walletBalance', 'combinedData'));
 }
+public function listUsers(Request $request)
+{
+    $search = $request->input('search');
+
+    // Fetch users with their name, email, and referral code, filtered by search
+    $users = DB::table('users')
+        ->select('name', 'email_id', 'referral_code')
+        ->when($search, function ($query, $search) {
+            return $query->where('name', 'like', "%$search%")
+                         ->orWhere('email_id', 'like', "%$search%");
+        })
+        ->paginate(10); // Add pagination
+
+    // Pass the data to the view
+    return view('admin.refer-tool', compact('users'));
+}
 }

@@ -136,6 +136,7 @@ Route::get('admin/editLoan/{id}', [LoanApplicationController::class, 'edit'])->n
 Route::post('admin/updateLoan', [LoanApplicationController::class, 'update'])->name('updateLoan');
 Route::get('admin/loan/{id}', [LoanApplicationController::class, 'view'])->name('loan.view');
 Route::get('admin/inprocess-loans', [LoanApplicationController::class, 'inprocess'])->name('inprocess.loans');
+Route::get('admin/disbursed-loans', [LoanApplicationController::class, 'disbursed'])->name('disbursed.loans');
 Route::get('admin/pending-loans', [LoanApplicationController::class, 'pendingLoans'])->name('pendingLoans');
 Route::get('admin/approved-loans', [LoanApplicationController::class, 'approved'])->name('approvedLoans');
 Route::get('admin/rejected-loans', [LoanApplicationController::class, 'rejected'])->name('rejectedLoans');
@@ -183,6 +184,7 @@ Route::post('admin/insertUser',[UsersController::class,'insertUser'])->name('ins
     Route::post('/deleteUser', [UsersController::class, 'deleteUser'])->name('deleteUser');
     Route::get('/updateProfile', [UsersController::class, 'updateProfile'])->name('updateProfile');
     Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('admin/admindashboard', [AdminController::class, 'adminDashboard'])->name('adminDashboard');
     Route::get('admin/addUser', [UsersController::class, 'addUser'])->name('addUser');
     Route::get('admin/allUsers', [UsersController::class, 'allUsers'])->name('allUsers');  
     Route::post('admin/assignAgent', [LoanApplicationController::class, 'assignAgent'])->name('assignAgent');
@@ -193,6 +195,8 @@ Route::post('admin/insertUser',[UsersController::class,'insertUser'])->name('ins
     
     //referral
     Route::get('admin/referral_earnings', [ReferralController::class, 'referral_earnings'])->name('referral_earnings');
+    Route::get('/admin/refer-tool', [ReferralController::class, 'listUsers'])->name('admin.refer.tool');
+
 
     //bank 
     Route::get('admin/allbanks', [BankController::class, 'allbanks'])->name('allbanks');

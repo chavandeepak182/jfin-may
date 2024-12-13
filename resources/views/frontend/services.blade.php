@@ -29,10 +29,7 @@
                     <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="service-item">
                             <div class="service-img">
-                                <img src="{{ asset('theme') }}/frontend/img/blog-1.png" class="img-fluid rounded-top w-100" alt="">
-                                <div class="service-icon p-3">
-                                    <i class="fa-solid fa-house-chimney fa-2x"></i>
-                                </div>
+                                <img src="{{ asset('theme') }}/frontend/img/Home_Loan.svg" class="img-fluid rounded-top w-100" alt="">
                             </div>
                             <div class="service-content p-4">
                                 <div class="service-content-inner">
@@ -46,10 +43,7 @@
                     <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.4s">
                         <div class="service-item">
                             <div class="service-img">
-                                <img src="{{ asset('theme') }}/frontend/img/blog-2.png" class="img-fluid rounded-top w-100" alt="">
-                                <div class="service-icon p-3">
-                                    <i class="fa-solid fa-house-laptop fa-2x"></i>
-                                </div>
+                                <img src="{{ asset('theme') }}/frontend/img/Loan_Against_Property.svg" class="img-fluid rounded-top w-100" alt="">
                             </div>
                             <div class="service-content p-4">
                                 <div class="service-content-inner">
@@ -63,10 +57,7 @@
                     <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.6s">
                         <div class="service-item">
                             <div class="service-img">
-                                <img src="{{ asset('theme') }}/frontend/img/blog-3.png" class="img-fluid rounded-top w-100" alt="">
-                                <div class="service-icon p-3">
-                                    <i class="fa-solid fa-building-shield fa-2x"></i>
-                                </div>
+                                <img src="{{ asset('theme') }}/frontend/img/Project_Loan.svg" class="img-fluid rounded-top w-100" alt="">
                             </div>
                             <div class="service-content p-4">
                                 <div class="service-content-inner">
@@ -81,9 +72,6 @@
                         <div class="service-item">
                             <div class="service-img">
                                 <img src="{{ asset('theme') }}/frontend/img/blog-4.png" class="img-fluid rounded-top w-100" alt="">
-                                <div class="service-icon p-3">
-                                    <i class="fa-brands fa-firstdraft fa-2x"></i>
-                                </div>
                             </div>
                             <div class="service-content p-4">
                                 <div class="service-content-inner">
@@ -98,9 +86,6 @@
                         <div class="service-item">
                             <div class="service-img">
                                 <img src="{{ asset('theme') }}/frontend/img/blog-4.png" class="img-fluid rounded-top w-100" alt="">
-                                <div class="service-icon p-3">
-                                    <i class="fa-solid fa-tags fa-2x"></i>
-                                </div>
                             </div>
                             <div class="service-content p-4">
                                 <div class="service-content-inner">
@@ -114,10 +99,7 @@
                     <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.8s">
                         <div class="service-item">
                             <div class="service-img">
-                                <img src="{{ asset('theme') }}/frontend/img/blog-4.png" class="img-fluid rounded-top w-100" alt="">
-                                <div class="service-icon p-3">
-                                    <i class="fa-solid fa-business-time fa-2x"></i>
-                                </div>
+                                <img src="{{ asset('theme') }}/frontend/img/MSME_Loan.svg" class="img-fluid rounded-top w-100" alt="">
                             </div>
                             <div class="service-content p-4">
                                 <div class="service-content-inner">

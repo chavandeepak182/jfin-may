@@ -23,14 +23,86 @@ class AdminController extends Controller
     }
 
     public function dashboard()
+{
+    if (!empty(Session::get('role_id'))) {
+        $totalLoans = DB::table('loans')->count();
+        $inProcessLoans = DB::table('loans')->where('status', 'in process')->count();
+        $approvedLoans = DB::table('loans')->where('status', 'approved')->count();
+        $disbursedLoans = DB::table('loans')->where('status', 'disbursed')->count();
+        $rejectedLoans = DB::table('loans')->where('status', 'rejected')->count();
+        $totalUsers = DB::table('users')->count();
+        $recentLoans = $this->fetchRecentLoans();
+
+        // Fetch monthly data for disbursed loans
+        $monthlyDisbursedData = DB::table('loans')
+            ->select(
+                DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
+                DB::raw("COUNT(*) as total_loans"),
+                DB::raw("SUM(amount) as total_amount")
+            )
+            ->where('status', 'disbursed')
+            ->groupBy('month')
+            ->orderBy('month', 'ASC')
+            ->get();
+
+        $loanStatuses = [
+            'In Process' => $inProcessLoans,
+            'Approved' => $approvedLoans,
+            'Disbursed' => $disbursedLoans,
+            'Rejected' => $rejectedLoans,
+        ];
+
+        return view('admin.dashboard-dark', compact(
+            'totalLoans',
+            'approvedLoans',
+            'rejectedLoans',
+            'loanStatuses',
+            'totalUsers',
+            'disbursedLoans',
+            'recentLoans',
+            'monthlyDisbursedData'
+        ));
+    } else {
+        return redirect('/');
+    }
+}
+public function fetchRecentLoans($limit = 5)
+{
+    $recentLoans = DB::table('loans')
+        ->join('users', 'loans.user_id', '=', 'users.id')
+        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+        ->select(
+            'loans.loan_reference_id',
+            'loans.amount',
+            'users.name as user_name',
+            'loan_category.category_name as loan_category_name',
+            'loans.status'
+        )
+        ->latest('loans.created_at')
+        ->take($limit)
+        ->get();
+
+    return $recentLoans;
+}
+	public function adminDashboard()
     {
         if (!empty(Session::get('role_id'))) {
-            return view('admin.dashboard');
+            return view('admindash.dashboard');
+			
         }else{
             return redirect('/');
         }
     }
 
+	public function allUserN()
+    {
+        if (!empty(Session::get('role_id'))) {
+            return view('admindash.allUsers');
+			
+        }else{
+            return redirect('/');
+        }
+    }
 
     public function activities()
     {

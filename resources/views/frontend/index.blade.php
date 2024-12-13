@@ -33,6 +33,30 @@
             <div class="header-carousel-item bg-primary">
                 <div class="carousel-caption">
                     <div class="container">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-lg-6 animated fadeInLeft">
+                                <div class="text-sm-center text-md-start">
+                                    <h4 class="text-white text-uppercase fw-bold mb-4">Welcome To Jfinserv</h4>
+                                    <h1 class="display-3 text-white mb-4">Fastest, Secure & Easy Loan Process</h1>
+                                    <p class="mb-5 fs-5">Experience fast, secure loans with competitive rates and personalized support in Pune. Enjoy seamless service and exceptional rewards.</p>
+                                    <div class="d-flex justify-content-center justify-content-md-start flex-shrink-0 mb-4">
+                                    <a class="btn-search btn btn-light rounded-pill py-3 px-4 px-md-5 me-2 flex-shrink-0" data-bs-toggle="modal" data-bs-target="#searchModal" href="#"><i class="fas fa-info-circle me-2" style="font-size: 20px"></i> Enquire Now</a>
+                                    <a class="btn-search btn btn-light rounded-pill py-3 px-4 px-md-5 ms-2" href="{{ url('/applyNow') }}"><i class="far fa-hand-point-right me-2" style="font-size: 20px"></i> Apply Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 animated fadeInRight">
+                                <div class="calrousel-img" style="object-fit: cover;">
+                                    <img src="{{ asset('theme') }}/frontend/img/fast-process.png" class="img-fluid" alt="Fast Loan Process">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="header-carousel-item bg-primary">
+                <div class="carousel-caption">
+                    <div class="container">
                         <div class="row gy-4 gy-lg-0 gx-0 gx-lg-5 align-items-center">
                             <div class="col-lg-6 animated fadeInLeft">
                                 <div class="calrousel-img">
@@ -53,7 +77,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <!-- Carousel End -->
 
@@ -436,7 +460,7 @@
                 <!-- <p class="mb-0">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur adipisci facilis cupiditate recusandae aperiam temporibus corporis itaque quis facere, numquam, ad culpa deserunt sint dolorem autem obcaecati, ipsam mollitia hic.</p> -->
             </div>
 
-            <div class="slider pb-5">
+            <div class="slider pb-5 mb-5">
                 <div class="slide-track">
                     <div class="slide">
                         <img src="https://jfinserv.com/images/bnk_logos/ab.jpg" alt="">

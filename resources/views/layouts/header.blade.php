@@ -36,10 +36,10 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center bg-white" href="{{route('dashboard')}}">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('dashboard')}}">
                 <div class="sidebar-brand-icon">
                     {{-- <i class="fas fa-laugh-wink"></i> --}}
-                    <img style="background-color: white;" width="100%" height="50px" src="{{ asset('theme/logo.png') }}">
+                    <img width="100%" height="50px" src="{{ asset('theme/frontend/img/logo-white.svg') }}">
                 </div>
                 <!-- <div class="sidebar-brand-text mx-3">{{ Session::get('username')}}</div> -->
             </a>
@@ -50,7 +50,7 @@
             <!-- Nav Item - Dashboard -->
             <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'dashboard' ? 'active' : '' }}">
                 <a class="nav-link" href="{{route('dashboard')}}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fas fa-tachometer-alt custom-icon"></i>
                     <span>Dashboard</span></a>
             </li>
 
@@ -85,15 +85,15 @@
              <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers"
                     aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-users fa-users"></i>
+                    <i class="fas fa-users custom-icon"></i>
                     <span>Users</span>
                 </a>
                 <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Users Components:</h6>
                         <a class="collapse-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'allUsers' ? 'active' : '' }}" href="{{ route('allUsers') }}">All Users</a>
-                        <a class="collapse-item" href="{{ route('allAgents') }}">Employee/Officer</a>
-                        <a class="collapse-item" href="{{ route('allPartners') }}">Channel Partner</a>
+                        <a class="collapse-item {{ Request::segment(1) == 'agent' && Request::segment(2) == 'allAgents' ? 'active' : '' }}" href="{{ route('allAgents') }}">Employee/Officer</a>
+                        <a class="collapse-item {{ Request::segment(1) == 'partner' && Request::segment(2) == 'allPartners' ? 'active' : '' }}" href="{{ route('allPartners') }}">Channel Partner</a>
                     </div>
                 </div>
             </li>
@@ -102,7 +102,7 @@
              <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLoans"
                     aria-expanded="true" aria-controls="collapseLoans">
-                    <i class="fas fa-fw fa-folder"></i>
+                    <i class="fas fa-fw fa-folder custom-icon"></i>
                     <span>Loans</span>
                 </a>
                 <div id="collapseLoans" class="collapse" aria-labelledby="headingLoan" data-parent="#accordionSidebar">
@@ -112,8 +112,8 @@
                         <a class="collapse-item" href="{{ route('pendingLoans') }}">Pending Assign</a>                        
                         <a class="collapse-item" href="{{ route('inprocess.loans') }}">In Process Loans</a>
                         <a class="collapse-item" href="{{ route('approvedLoans')}}">Approved Loans</a>
+                        <a class="collapse-item" href="{{ route('disbursed.loans')}}">Disbursed Loans</a>
                         <a class="collapse-item" href="{{ route('rejectedLoans')}}">Rejected Loans</a>
-
                     </div>
                 </div>
             </li>
@@ -124,7 +124,7 @@
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLoans"
                         aria-expanded="true" aria-controls="collapseLoans">
-                        <i class="fas fa-fw fa-folder"></i>
+                        <i class="fas fa-fw fa-folder custom-icon"></i>
                         <span>Loans</span>
                     </a>
                     <div id="collapseLoans" class="collapse" aria-labelledby="headingLoan" data-parent="#accordionSidebar">
@@ -147,7 +147,7 @@
            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProperty"
                     aria-expanded="true" aria-controls="collapseLeads">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fas fa-fw fa-home custom-icon"></i>
                     <span>Property</span>
                 </a>
                 <div id="collapseProperty" class="collapse" aria-labelledby="headingLoan" data-parent="#accordionSidebar">
@@ -161,17 +161,12 @@
             </li>
        <?php } ?>     
                     
-
-           
-
-
-
         <?php    if($role_id == 4) { ?>
            <!-- Nav Item - Pages Collapse Menu -->
            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLeads"
                     aria-expanded="true" aria-controls="collapseLeads">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fas fa-fw fa-tasks custom-icon"></i>
                     <span>Web Form & Leads</span>
                 </a>
                 <div id="collapseLeads" class="collapse" aria-labelledby="headingLoan" data-parent="#accordionSidebar">
@@ -191,7 +186,7 @@
            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReferral"
                     aria-expanded="true" aria-controls="collapseReferral">
-                    <i class="fas fa-fw fa-dollar-sign fa-2x"></i>
+                    <i class="fas fa-rupee-sign custom-icon"></i>
                     <span>Referral</span>
                 </a>
                 <div id="collapseReferral" class="collapse" aria-labelledby="headingLoan" data-parent="#accordionSidebar">
@@ -209,7 +204,7 @@
            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReferral"
                     aria-expanded="true" aria-controls="collapseReferral">
-                    <i class="fas fa-fw fa-dollar-sign fa-2x"></i>
+                    <i class="fas fa-fw fa-dollar-sign fa-2x custom-icon"></i>
                     <span>Referral</span>
                 </a>
                 <div id="collapseReferral" class="collapse" aria-labelledby="headingLoan" data-parent="#accordionSidebar">
@@ -227,7 +222,7 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTools"
                     aria-expanded="true" aria-controls="collapseTools">
-                    <i class="fas fa-fw fa-wrench"></i>
+                    <i class="fas fa-fw fa-wrench custom-icon"></i>
                     <span>Tools</span>
                 </a>
                 <div id="collapseTools" class="collapse" aria-labelledby="headingLoan" data-parent="#accordionSidebar">
@@ -246,9 +241,9 @@
         <hr class="sidebar-divider">    
 
          <!-- Nav Item - Activity logs -->
-         <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'activity' ? 'active' : '' }}">
+         <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'activities' ? 'active' : '' }}">
                 <a class="nav-link" href="{{route('activities')}}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fas fa-history custom-icon"></i>
                     <span>Activity Logs</span></a>
         </li>
 
@@ -257,24 +252,24 @@
          <hr class="sidebar-divider">    
 
             <!-- Nav Item - Activity logs -->
-            <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'activity' ? 'active' : '' }}">
+            <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'tree' ? 'active' : '' }}">
                 <!-- <a class="nav-link" href="{{route('mlmView')}}"> -->
                 <a class="nav-link" href="{{route('admin.tree.show')}}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fas fa-project-diagram custom-icon"></i>
                     <span>MLM</span></a>
             </li>   
             
              <!-- Nav Item - Commission -->
-             <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'activity' ? 'active' : '' }}">
+             <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'allCommission' ? 'active' : '' }}">
                 <a class="nav-link" href="{{route('allCommission')}}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fas fa-percentage custom-icon"></i>
                     <span>Commission</span></a>
             </li>   
 
               <!-- Nav Item - Elgiblity criteria -->
-              <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'activity' ? 'active' : '' }}">
+              <li class="nav-item {{ Request::segment(1) == 'eligibilityCriteria' ? 'active' : '' }}">
                 <a class="nav-link" href="{{route('eligibilityCriteria')}}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fas fa-clipboard-list custom-icon"></i>
                     <span>Eligibility criteria</span></a>
             </li>   
 
@@ -301,7 +296,8 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <nav class="navbar navbar-expand topbar mb-4 static-top">
+                    <!-- <h2><b>Dashboard</b></h2> -->
 
     <!-- Sidebar Toggle (Topbar) -->
     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -409,8 +405,6 @@
             // $("#currentTimezone").val(zone);
         });
         </script>
-        <script>
-
-</script>
+      
         @yield('script')
 </body>
