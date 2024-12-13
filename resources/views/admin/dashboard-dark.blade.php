@@ -132,13 +132,7 @@
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th>
-                                                    <div class="form-check form-check-muted m-0">
-                                                        <label class="form-check-label">
-                                                            <input type="checkbox" class="form-check-input">
-                                                        </label>
-                                                    </div>
-                                                </th>
+                                                
                                                 <th> Reference ID </th>
                                                 <th> Name </th>
                                                 <th> Amount </th>
@@ -149,13 +143,7 @@
                                         <tbody>
                                             @forelse ($recentLoans as $loan)
                                                 <tr>
-                                                    <td>
-                                                        <div class="form-check form-check-muted m-0">
-                                                            <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input">
-                                                            </label>
-                                                        </div>
-                                                    </td>
+                                                    
                                                     <td>{{ $loan->loan_reference_id }}</td>
                                                     <td>{{ $loan->user_name }}</td>
                                                     <td>{{ $loan->amount }}</td>
@@ -189,7 +177,7 @@
     <!-- Page level plugins -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-    // Loan Status Distribution Chart (3D-Like Donut Chart)
+    // Loan Status Distribution Chart (Donut Chart)
     var ctx1 = document.getElementById('loanStatusChart').getContext('2d');
     var loanStatusChart = new Chart(ctx1, {
         type: 'doughnut', // Change to doughnut for donut chart
@@ -198,15 +186,15 @@
             datasets: [{
                 data: [{{$loanStatuses['In Process']}}, {{$loanStatuses['Approved']}}, {{$loanStatuses['Disbursed']}}, {{$loanStatuses['Rejected']}}],
                 backgroundColor: ['#D49B54', '#1E5128', '#1E3E62', '#C74B50'], // Colors for each status
-                borderColor: '#333333',
-                borderWidth: 2
+                borderColor: '#ffffff',
+                borderWidth: 2 // Border width for each segment
             }]
         },
         options: {
             responsive: true,
             plugins: {
                 legend: {
-                    position: 'top',
+                    position: 'top', // Legend position
                     labels: {
                         font: {
                             size: 12
@@ -224,33 +212,11 @@
                 }
             },
             cutout: '70%', // Inner cutout for donut chart
-            animation: {
-                animateScale: true, // Animate scaling for 3D effect
-                animateRotate: true // Animate rotation for 3D effect
-            }
-        },
-        plugins: [{
-            id: '3dEffect',
-            beforeDraw: function(chart) {
-                const ctx = chart.ctx;
-                const chartArea = chart.chartArea;
-                const centerX = (chartArea.left + chartArea.right) / 2;
-                const centerY = (chartArea.top + chartArea.bottom) / 2;
-
-                // Draw 3D base shadow
-                ctx.save();
-                ctx.fillStyle = '#aaa';
-                ctx.translate(centerX, centerY);
-                ctx.rotate((Math.PI / 180) * 20);
-                ctx.scale(1, 0.8);
-                ctx.fillRect(-chartArea.width / 2, -chartArea.height / 2, chartArea.width, chartArea.height / 2);
-                ctx.restore();
-            }
-        }]
+        }
     });
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const ctx = document.getElementById('monthlyDisbursedChart').getContext('2d');
         const monthlyData = @json($monthlyDisbursedData);
 
@@ -266,18 +232,26 @@
                     {
                         label: 'Total Loans',
                         data: totalLoans,
-                        backgroundColor: '#D49B54',
+                        backgroundColor: '#C74B50',
+                        borderRadius: 10, // Rounds the bar corners
                         borderWidth: 1,
                     },
                     {
                         label: 'Total Amount',
                         data: totalAmount,
                         backgroundColor: '#1E3E62',
+                        borderRadius: 10, // Rounds the bar corners
                         borderWidth: 1,
                     },
                 ],
             },
             options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                },
                 scales: {
                     y: {
                         beginAtZero: true,

@@ -8,6 +8,8 @@
         <!-- plugins:css -->
         <link rel="stylesheet" href="{{ asset('theme') }}/user-dash/assets/vendors/mdi/css/materialdesignicons.min.css">
         <link rel="stylesheet" href="{{ asset('theme') }}/user-dash/assets/vendors/css/vendor.bundle.base.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
         <!-- endinject -->
         <!-- Plugin css for this page -->
         <link rel="stylesheet" href="{{ asset('theme') }}/user-dash/assets/vendors/jvectormap/jquery-jvectormap.css">
@@ -15,6 +17,7 @@
         <link rel="stylesheet" href="{{ asset('theme') }}/user-dash/assets/vendors/owl-carousel-2/owl.carousel.min.css">
         <link rel="stylesheet" href="{{ asset('theme') }}/user-dash/assets/vendors/owl-carousel-2/owl.theme.default.min.css">
         <!-- End plugin css for this page -->
+         <!-- Bootstrap CSS -->
         <!-- inject:css -->
         <!-- endinject -->
         <!-- Layout styles -->
@@ -49,7 +52,7 @@
                         </a>
                         <div class="collapse" id="ui-basic">
                             <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" href="{{ route('allUserN') }}">All Users</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="{{ route('allUsers') }}">All Users</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
                             </ul>
@@ -337,6 +340,7 @@
         <!-- endinject -->
         <!-- Custom js for this page -->
         <script src="{{ asset('theme') }}/user-dash/assets/js/dashboard.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <!-- End custom js for this page -->
     </body>
 </html>
