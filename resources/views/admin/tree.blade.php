@@ -1,8 +1,8 @@
 @extends('layouts.header')
 
 @section('content')
-    <div class="container">
-        <h1>MLM Users by Nodes</h1>
+    <div class="container text-center">
+        <h1 class="text-light">MLM Users by Nodes</h1>
         <div class="tree">
             <ul>
                 @foreach ($tree as $node)
@@ -13,8 +13,6 @@
     </div>
 
     <style>
-        * { margin: 0; padding: 0; }
-
         .tree ul {
             padding-top: 20px;
             position: relative;

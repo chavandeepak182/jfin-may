@@ -15,7 +15,8 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('theme') }}/dist-assets/css/sb-admin-2.min.css" rel="stylesheet">
-    
+
+    <link rel="icon" type="image/png" href="{{ asset('theme') }}/frontend//img/favicon.png">   
 
 
     @yield('style')

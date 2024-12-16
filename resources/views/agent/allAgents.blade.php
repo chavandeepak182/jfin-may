@@ -7,102 +7,93 @@ JFS | Agents
 
 @section('content')
 @parent
-<!-- Breadcrumbs -->
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb" style="margin-left: 20px;">
-        <li class="breadcrumb-item"><a href="{{ route('agentDashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">All Agents</li>
-    </ol>
-</nav>
+<!-- Breadcrumbs and Search Bar -->
+<div class="card-header py-3">
+    <div class="d-flex justify-content-between align-items-center">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="d-flex align-items-center">
+            <ol class="breadcrumb m-0 bg-transparent">
+                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">All Agents</li>
+            </ol>
+        </nav>
+
+        <!-- Search Bar -->
+        <div class="d-flex ms-auto">
+            <input type="text" id="search" class="form-control" placeholder="Search..." onkeyup="searchUser()">
+        </div>
+
+        <!-- Add User Button -->
+        <button class="btn btn-primary ms-3" data-bs-toggle="modal" href="#addAgentView">
+            <i class="fa fa-plus"></i> Add Agent
+        </button>
+    </div>
+</div>
 
 <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
 <!-- export button -->
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
+<link href="{{ asset('theme') }}/dist-assets/css/sb-admin-2.min.css" rel="stylesheet">
 
-         <div style="padding: 1%"> 
-            <h1><center>All Agents Users</center></h1> 
-                 <!-- DataTales Example -->
-                 <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Agent Users List</h6>
-                            <div class="d-flex justify-content-end">
-                                <button class="btn btn-primary" data-bs-toggle="modal" href="#addAgentView" ><i class="fa fa-plus"></i>  Add Agent</button>
-                            </div>
-                        </div>
-                
+<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="card pt-3">
+            <div class="card-body">
+                <div class="table-responsive" id="user_table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th> ID </th>
+                                <th> Name </th>
+                                <th> Email ID </th>
+                                <th> Mobile Number </th>
+                                <th> DOB </th>
+                                <th> Action </th>
+                            </tr>
+                        </thead>
+                        <tbody id="user_table_body">
+                            @foreach($data['allAgents'] as $user)
+                            <tr>
+                                <td>{{ $user->id }}</td>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email_id }}</td>
+                                <td>{{ $user->mobile_no }}</td>
+                                <td>{{ $user->dob }}</td>
+                                <td>
+                                    <a class="btn btn-primary btn-xs edit" title="Edit" href="{{ url('editUser/'.$user->id) }}">
+                                        <i class="fa fa-edit"></i>
+                                    </a> 
+                                    <button class="btn btn-danger btn-xs delete" title="Delete" onclick="deleteUser('{{ $user->id }}')">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
 
-                        <div class="card-body">
-                            <div class="table-responsive" id="user_table">
-                         
-                            <table id="example" class="table table-striped" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Email ID</th>
-                                        <th>Mobile Number</th>
-                                        <th>Date of Birth</th>
-                                        <th>Action</th> 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                        @foreach($data['allAgents'] as $user)
-                                        <tr>
-                                            <td>
-                                                {{$user->id}}
-                                            </td>   
-                                            <td>
-                                                {{$user->name}}
-                                            </td>  
-                                            <td>
-                                                {{$user->email_id}}
-                                            </td> 
-                                            <td>
-                                                {{$user->mobile_no}}
-                                            </td> 
-                                            <td>
-                                                 {{$user->dob}}
-                                            </td> 
-                                           
-                                            <td>
-                                                <a class="btn btn-primary btn-xs edit" title="Edit"href="{{ url('editAgent/'.$user->id) }}"><i class="fa fa-edit"></i></a> 
-                                                <button class="btn btn-danger btn-xs delete" title="Delete" data-userid="" onclick="deleteAgent('{{$user->id}}')"><i class="fa fa-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                </tbody>
-                                  
-                                <tfoot>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Email ID</th>
-                                        <th>Mobile Number</th>
-                                        <th>Date of Birth</th>
-                                        <th>Action</th> 
-                                    </tr>
-                                </tfoot>
-                            </table>
-                            <div class="float-right"> 
-                                {{ $data['allAgents']->links() }}
-                            </div>
-                        </div>
+                    <div class="float-right">
+                        {{ $data['allAgents']->links() }}
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="modal fade" id="addAgentView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add New agent</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <form class="user" id="addAgent" method="post">
-                    @csrf   
+<!-- Add Agent Modal -->
+<div class="modal fade" id="addAgentView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New agent</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="user" id="addAgent" method="post">
+                @csrf   
                     <div class="row">
                         <div class="form-group col-lg-4">
                             <label for="recipient-name" class="col-form-label">Name:</label>
@@ -135,9 +126,7 @@ JFS | Agents
                             <input type="tel" class="form-control" id="address" name="address">
                         </div>
                     </div>
-
-                    
-                    
+   
                     <div class="row">
                         <div class="form-group col-lg-4">
                             <label for="recipient-name" class="col-form-label">City:</label>
@@ -155,22 +144,15 @@ JFS | Agents
                         </div>
                     </div>
 
-           
-                        <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
-               
-
-                </form>
-                </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+               </form>
             </div>
         </div>
-            
-
-
-   
-   
+    </div> 
+</div>  
 
 @endsection
 

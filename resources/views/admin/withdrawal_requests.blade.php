@@ -8,65 +8,85 @@ JFS | Wallet Balance
 @section('content')
 @parent
 <!-- Breadcrumbs -->
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Wallet Balance </li>
-    </ol>
-</nav>
+<div class="card-header py-3">
+    <div class="d-flex justify-content-between align-items-center">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="d-flex align-items-center">
+            <ol class="breadcrumb m-0 bg-transparent">
+                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Wallet Balance</li>
+            </ol>
+        </nav>
+
+        <!-- Search Bar -->
+        <!-- <div class="d-flex ms-auto">
+            <input type="text" id="search" class="form-control" placeholder="Search..." onkeyup="searchUser()">
+        </div> -->
+    </div>
+</div>
+
+<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
+<link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
+
+
 <div class="container">
-    <h3>Pending Withdrawal Requests</h3>
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="table-responsive" id="loan_table">
+                <table id="example" class="table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Loan ID</th>
+                            <th>Amount</th>
+                            <th>Tenure</th>
+                            <th>User Name</th>
+                            <th>Loan Category</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($requests as $request)
+                        <tr>
+                            <td>{{ $request->user_id }}</td>
+                            <td>{{ $request->name }}</td> <!-- Display the user's name -->
+                            <td>₹{{ number_format($request->amount, 2) }}</td>
+                            <td>{{ ucfirst($request->status) }}</td>
+                            <td>
+                                <form action="{{ route('admin.withdrawal.approve', $request->id) }}" method="POST">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="transaction_id">Transaction ID</label>
+                                        <input type="text" name="transaction_id" class="form-control" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Approve</button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Loan ID</th>
+                            <th>Amount</th>
+                            <th>Tenure</th>
+                            <th>User Name</th>
+                            <th>Loan Category</th>
+                            <th>Action</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
 
     @if(session('message'))
         <div class="alert alert-success mt-3">
             {{ session('message') }}
         </div>
     @endif
-
-    <table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>User ID</th>
-            <th>Name</th> <!-- New Name Column -->
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($requests as $request)
-        <tr>
-            <td>{{ $request->user_id }}</td>
-            <td>{{ $request->name }}</td> <!-- Display the user's name -->
-            <td>₹{{ number_format($request->amount, 2) }}</td>
-            <td>{{ ucfirst($request->status) }}</td>
-            <td>
-                <form action="{{ route('admin.withdrawal.approve', $request->id) }}" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="transaction_id">Transaction ID</label>
-                        <input type="text" name="transaction_id" class="form-control" required>
-                    </div>
-                    <button type="submit" class="btn btn-success">Approve</button>
-                </form>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
-</div>
-
-<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
-<link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet"/>
-
-<!-- export button -->
-<link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
-
-   
-
-
-   
-   
+</div> 
 
 @endsection
 

@@ -35,11 +35,10 @@ All Users
 <!-- export button -->
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
 <link href="{{ asset('theme') }}/dist-assets/css/sb-admin-2.min.css" rel="stylesheet">
-<div class="row mt-4">
+<div class="row">
     <div class="col-12 grid-margin">
-        <div class="card">
+        <div class="card pt-3">
             <div class="card-body">
-                <h4 class="card-title text-dark">All Users</h4>
                 <div class="table-responsive" id="user_table">
                     <table class="table">
                         <thead>
