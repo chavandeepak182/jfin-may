@@ -8,12 +8,22 @@ JFS | Eligiblity Criteria
 @section('content')
 @parent
 <!-- Breadcrumbs -->
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Eligiblity Criteria</li>
-    </ol>
-</nav>
+<div class="card-header py-3">
+    <div class="d-flex justify-content-between align-items-center">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="d-flex align-items-center">
+            <ol class="breadcrumb m-0 bg-transparent">
+                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Eligiblity Criteria</li>
+            </ol>
+        </nav>
+
+        <!-- Search Bar -->
+        <!-- <div class="d-flex ms-auto">
+            <input type="text" id="search" class="form-control" placeholder="Search..." onkeyup="searchUser()">
+        </div> -->
+    </div>
+</div>
 
 <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet"/>
@@ -21,64 +31,47 @@ JFS | Eligiblity Criteria
 <!-- export button -->
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
 
-         <div style="padding: 1%"> 
-            <h1><center>Eligiblity Criteria</center></h1> 
-                 <!-- DataTales Example -->
-                 <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Eligiblity Criteria </h6>
-                            <!-- <div class="d-flex justify-content-end">
-                                <a class="btn btn-primary" data-bs-toggle="modal" href="#addBankView" ><i class="fa fa-plus"></i>  Add Commission</a>
-                            </div> -->
-                        </div>
-                
-
-                        <div class="card-body">
-                            <div class="table-responsive" id="user_table">
-                         
-                            <table id="example" class="table table-striped" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Date of Birth</th>
-                                        <th>Age</th> 
-                                        <th>Created date</th> 
-                                        <th>Action</th> 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                     @foreach ($data['lists'] as $v)
-                                        <tr>
-                                            <td>{{ $v->name }}</td>
-                                            <td>{{ $v->dob }}</td>
-                                            <td>
-                                             {{ (date('Y') - date('Y',strtotime($v->dob))) }}
-                                            </td>
-                                            <td>{{ $v->created_at }}</td>
-                                            <td> 
-                                               <a class="btn btn-primary btn-xs edit" title="Details"href="{{ url('eligiblityDetails/'.$v->loan_id) }}"> Details </a> 
-                                            </td>
-                                        </tr>
-                                     @endforeach
-                                </tbody>
-                                  
-                                <tfoot>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Date of Birth</th>
-                                        <th>Age</th> 
-                                        <th>Created date</th> 
-                                        <th>Action</th> 
-                                    </tr>
-                                </tfoot>
-                            </table>
-                            <div class="float-right"> 
-                                {{ $data['lists']->links() }}
-                            </div>
-                        </div>
-                </div>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive" id="user_table">                         
+            <table id="example" class="table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date of Birth</th>
+                        <th>Age</th> 
+                        <th>Created date</th> 
+                        <th>Action</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($data['lists'] as $v)
+                    <tr>
+                        <td>{{ $v->name }}</td>
+                        <td>{{ $v->dob }}</td>
+                        <td>{{ (date('Y') - date('Y',strtotime($v->dob))) }}</td>
+                        <td>{{ $v->created_at }}</td>
+                        <td><a class="btn btn-primary btn-xs edit" title="Details"href="{{ url('eligiblityDetails/'.$v->loan_id) }}"> Details </a></td>
+                    </tr>
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date of Birth</th>
+                        <th>Age</th> 
+                        <th>Created date</th> 
+                        <th>Action</th> 
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="float-right"> 
+                {{ $data['lists']->links() }}
             </div>
         </div>
+    </div>
+</div>
 
         <div class="modal fade" id="addCommissionView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">

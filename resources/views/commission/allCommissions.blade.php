@@ -8,12 +8,22 @@ JFS | Commission
 @section('content')
 @parent
 <!-- Breadcrumbs -->
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Commissions</li>
-    </ol>
-</nav>
+<div class="card-header py-3">
+    <div class="d-flex justify-content-between align-items-center">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="d-flex align-items-center">
+            <ol class="breadcrumb m-0 bg-transparent">
+                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Commissions</li>
+            </ol>
+        </nav>
+
+        <!-- Search Bar -->
+        <!-- <div class="d-flex ms-auto">
+            <input type="text" id="search" class="form-control" placeholder="Search..." onkeyup="searchUser()">
+        </div> -->
+    </div>
+</div>
 
 <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet"/>
@@ -21,64 +31,46 @@ JFS | Commission
 <!-- export button -->
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
 
-         <div style="padding: 1%"> 
-            <h1><center>Commissions</center></h1> 
-                 <!-- DataTales Example -->
-                 <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Commission </h6>
-                            <!-- <div class="d-flex justify-content-end">
-                                <a class="btn btn-primary" data-bs-toggle="modal" href="#addBankView" ><i class="fa fa-plus"></i>  Add Commission</a>
-                            </div> -->
-                        </div>
-                
-
-                        <div class="card-body">
-                            <div class="table-responsive" id="user_table">
-                         
-                            <table id="example" class="table table-striped" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Commission Amount</th>
-                                        <th>Action</th> 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                        @foreach($data['allCommissions'] as $p)
-
-                                        <tr>
-                                            <td>
-                                                {{$p->com_id}}
-                                            </td>   
-                                            <td>
-                                                {{ $p->commission_amount }}
-                                            </td>  
-                                           
-                                         
-                                            <td>
-                                                <a class="btn btn-primary btn-xs edit" title="Edit"href="{{ url('editCommission/'.$p->com_id) }}"><i class="fa fa-edit"></i></a> 
-                                                <button class="btn btn-danger btn-xs delete" title="Delete" data-userid="" onclick="deleteCommission('{{$p->com_id}}')"><i class="fa fa-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                </tbody>
-                                  
-                                <tfoot>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Commission Amount</th>
-                                        <th>Action</th> 
-                                    </tr>
-                                </tfoot>
-                            </table>
-                            <div class="float-right"> 
-                                {{ $data['allCommissions']->links() }}
-                            </div>
-                        </div>
+<div style="padding: 1%"> 
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="table-responsive" id="user_table">
+                <table id="example" class="table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Commission Amount</th>
+                            <th>Action</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($data['allCommissions'] as $p)
+                        <tr>
+                            <td>{{$p->com_id}}</td>   
+                            <td>{{ $p->commission_amount }}</td>  
+                            <td>
+                                <a class="btn btn-primary btn-xs edit" title="Edit"href="{{ url('editCommission/'.$p->com_id) }}"><i class="fa fa-edit"></i></a> 
+                                <button class="btn btn-danger btn-xs delete" title="Delete" data-userid="" onclick="deleteCommission('{{$p->com_id}}')"><i class="fa fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>                                  
+                    <tfoot>
+                        <tr>
+                            <th>#</th>
+                            <th>Commission Amount</th>
+                            <th>Action</th> 
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="float-right"> 
+                    {{ $data['allCommissions']->links() }}
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
         <div class="modal fade" id="addCommissionView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">

@@ -7,12 +7,22 @@ JFS | Rejected Loans
 @section('content')
 
 <!-- Breadcrumbs -->
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb" style="margin-left: 20px;">
-        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Rejected Loans</li>
-    </ol>
-</nav>
+<div class="card-header py-3">
+    <div class="d-flex justify-content-between align-items-center">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="d-flex align-items-center">
+            <ol class="breadcrumb m-0 bg-transparent">
+                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Rejected Loans</li>
+            </ol>
+        </nav>
+
+        <!-- Search Bar -->
+        <!-- <div class="d-flex ms-auto">
+            <input type="text" id="search" class="form-control" placeholder="Search..." onkeyup="searchUser()">
+        </div> -->
+    </div>
+</div>
 
 <!-- Stylesheets for DataTables -->
 <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
@@ -20,17 +30,12 @@ JFS | Rejected Loans
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
 
-<div style="padding: 1%"> 
-    <h1><center>Rejected Loans</center></h1> 
+<div style="padding: 1%">
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Rejected Loans List</h6>
-        </div>
-
         <div class="card-body">
             <div class="table-responsive" id="loan_table">
-                <table id="example" class="table table-striped" style="width:100%">
+                <table id="example" class="table" style="width:100%">
                     <thead>
                         <tr>
                             <th>Loan ID</th>

@@ -76,7 +76,7 @@
                     <div class="col-md-4 mb-4">
                         <div class="card shadow h-100 py-2">
                             <div class="card-body">
-                                <h5 class="text-center font-weight-bold">Loan Status Distribution</h5>
+                                <h5 class="text-center font-weight-bold text-dark">Loan Status Distribution</h5>
                                 <canvas id="loanStatusChart" height="200"></canvas>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                     <div class="col-md-4 mb-4">
                         <div class="card shadow h-100 py-2">
                             <div class="card-body">
-                                <h5 class="text-center font-weight-bold">Monthly Disbursed Loans</h5>
+                                <h5 class="text-center font-weight-bold text-dark">Monthly Disbursed Loans</h5>
                                 <canvas id="monthlyDisbursedChart" height="200"></canvas>
                             </div>
                         </div>
@@ -94,7 +94,7 @@
                     <div class="col-md-4 mb-4">
                         <div class="card shadow h-100 py-2">
                             <div class="card-body">
-                                <h5 class="text-center font-weight-bold">To-Do Tasks</h5>
+                                <h5 class="text-center font-weight-bold text-dark">To-Do Tasks</h5>
                                 <!-- Task Input -->
                                 <div class="input-group mb-3">
                                     <input 
@@ -127,7 +127,7 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title text-dark">Recent Loans</h4>
+                                <h3 class="text-dark">Recent Loans</h3>
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
