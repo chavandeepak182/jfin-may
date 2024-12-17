@@ -1,6 +1,9 @@
 @extends('layouts.header')
 @section('content')
 <style>
+    body{
+        color: #fff !important;
+    }
     @media print {
         /* General body styling for printing */
         body {
