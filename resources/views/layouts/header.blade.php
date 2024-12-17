@@ -236,9 +236,9 @@
                         <h6 class="collapse-header">Tools:</h6>
                         <a class="collapse-item" href="{{ route('allbanks') }}">Tied Up Banks</a>
                         <a class="collapse-item" href="{{ route('loanbanks') }}">Loan Banks</a>
-                        <a class="collapse-item" href="{{ route('sanctioncalculator') }}">Eligiblity Calculation</a>
+                        <!-- <a class="collapse-item" href="{{ route('sanctioncalculator') }}">Eligiblity Calculation</a> -->
                         <a class="collapse-item" href="{{route('admin.mis')}}">MIS</a>
-                        <a class="collapse-item" href="buttons.html">Invoice</a>
+                        <!-- <a class="collapse-item" href="buttons.html">Invoice</a> -->
                     </div>
                 </div>
             </li>
