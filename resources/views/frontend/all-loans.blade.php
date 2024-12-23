@@ -45,7 +45,6 @@ All Loans
                             <th>Loan Category</th>
                             <th>Amount</th>
                             <th>Tenure</th>
-                            <th>Agent Status</th>
                             <th>Action</th> 
                         </tr>
                     </thead>
@@ -57,7 +56,7 @@ All Loans
                                 <td>{{ $loan->loan_category_name ?? 'N/A' }}</td>
                                 <td>{{ $loan->amount }}</td>
                                 <td>{{ $loan->tenure }}</td>
-                                <td>{{ ucfirst($loan->agent_action) ?? 'Pending' }}</td>
+                                <!-- <td>{{ ucfirst($loan->agent_action) ?? 'Pending' }}</td> -->
                                 <td>
                                     <a class="btn btn-primary btn-xs view" title="View" href="{{ route('loan.view', ['id' => $loan->loan_id]) }}">
                                         <i class="fa fa-eye"></i>
@@ -79,7 +78,6 @@ All Loans
                             <th>Loan Category</th>
                             <th>Amount</th>
                             <th>Tenure</th>
-                            <th>Agent Status</th>
                             <th>Action</th> 
                         </tr>
                     </tfoot>

@@ -366,49 +366,54 @@ public function disbursed()
     
    
     public function handleStep(Request $request)
-    {
-        $userId = session('user_id'); // Get user ID from session
-        if (!$userId) {
-            return redirect()->route('login')->withErrors('User session expired. Please log in again.');
-        }
-    
-        $currentStep = $request->input('current_step');
-    
-        try {
-            switch ($currentStep) {
-                case 1:
-                    $this->handlePersonalDetails($request, $userId);
-                    return redirect()->route('loan.form', ['current_step' => 2]);
-    
-                case 2:
-                    $this->handleProfessionalDetails($request, $userId);
-                    return redirect()->route('loan.form', ['current_step' => 3]);
-    
-                case 3:
-                    $this->handleEducationDetails($request, $userId);
-                    return redirect()->route('loan.form', ['current_step' => 4]);
-    
-                case 4:
-                    $this->handleExistingLoanDetails($request, $userId);
-                    return redirect()->route('loan.form', ['current_step' => 5]);
-    
-                case 5:
-                    $this->handleDocumentUpload($request, $userId);
-                    return redirect()->route('loan.form', ['current_step' => 6]);
-    
-                    case 6:
-                        $this->handleLoanDetails($request, $userId);
-                        return redirect()->route('loan.thankyou');
-        
-                    default:
-                        return redirect()->route('loan.form', ['current_step' => 1]);
-                }
-            } catch (\Exception $e) {
-                Log::error('Error handling step: ' . $e->getMessage());
-                return redirect()->back()->withErrors('Something went wrong. Please try again.');
-            }
+{
+    $userId = session('user_id'); // Get user ID from session
+    if (!$userId) {
+        return redirect()->route('login')->withErrors('User session expired. Please log in again.');
     }
-    
+
+    $currentStep = $request->input('current_step');
+
+    try {
+        // Validate and handle each step
+        switch ($currentStep) {
+            case 1:
+                $this->handlePersonalDetails($request, $userId);
+                break;
+
+            case 2:
+                $this->handleProfessionalDetails($request, $userId);
+                break;
+
+            case 3:
+                $this->handleEducationDetails($request, $userId);
+                break;
+
+            case 4:
+                $this->handleExistingLoanDetails($request, $userId);
+                break;
+
+            case 5:
+                $this->handleDocumentUpload($request, $userId);
+                break;
+
+            case 6:
+                $this->validateLoanDetails($request);
+                $this->handleLoanDetails($request, $userId);
+                return redirect()->route('loan.thankyou');
+
+            default:
+                return redirect()->route('loan.form', ['current_step' => 1])
+                    ->withErrors('Invalid step. Please restart the application process.');
+        }
+
+        // Redirect to the next step
+        return redirect()->route('loan.form', ['current_step' => $currentStep + 1]);
+    } catch (\Exception $e) {
+        Log::error('Error handling step: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
+        return redirect()->back()->withErrors('Something went wrong. Please try again.');
+    }
+}
     protected function handlePersonalDetails(Request $request, $userId)
     {
         $validated = $request->validate([
