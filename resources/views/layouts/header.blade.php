@@ -9,9 +9,7 @@
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="{{ asset('theme') }}/dist-assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('theme') }}/dist-assets/css/sb-admin-2.min.css" rel="stylesheet">
@@ -80,7 +78,7 @@
                     <span>Loan Applications</span></a>
             </li>
           
-         <?php } ?> 
+            <?php } ?> 
 
 
             <?php
@@ -88,7 +86,7 @@
                  if($role_id == 4) {
             ?>
              <!-- Nav Item - Pages Collapse Menu -->
-             <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-users custom-icon"></i>
@@ -106,8 +104,7 @@
           
 
              <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLoans"
-                    aria-expanded="true" aria-controls="collapseLoans">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLoans" aria-expanded="true" aria-controls="collapseLoans">
                     <i class="fas fa-fw fa-folder custom-icon"></i>
                     <span>Loans</span>
                 </a>
@@ -147,8 +144,7 @@
                 </li>
             <?php } ?> 
 
-
-        <?php    if($role_id == 4 || $role_id == env('partnerRole_id')) { ?>
+            <?php    if($role_id == 4 || $role_id == env('partnerRole_id')) { ?>
            <!-- Nav Item - Pages Collapse Menu -->
            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProperty"
@@ -165,31 +161,31 @@
                     </div>
                 </div>
             </li>
-       <?php } ?>     
+            <?php } ?>     
                     
-        <?php    if($role_id == 4) { ?>
-           <!-- Nav Item - Pages Collapse Menu -->
-           <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLeads"
-                    aria-expanded="true" aria-controls="collapseLeads">
-                    <i class="fas fa-fw fa-tasks custom-icon"></i>
-                    <span>Web Form & Leads</span>
-                </a>
-                <div id="collapseLeads" class="collapse" aria-labelledby="headingLoan" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Web Form & Leads:</h6>
-                        <a class="collapse-item" href="{{ route('enquiries.enquiryLead') }}">Enquiry Leads</a>
-                        <a class="collapse-item" href="#">Property Leads</a>
-                        <a class="collapse-item" href="#">Referral Tool</a>
+            <?php    if($role_id == 4) { ?>
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLeads"
+                        aria-expanded="true" aria-controls="collapseLeads">
+                        <i class="fas fa-fw fa-tasks custom-icon"></i>
+                        <span>Web Form & Leads</span>
+                    </a>
+                    <div id="collapseLeads" class="collapse" aria-labelledby="headingLoan" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Web Form & Leads:</h6>
+                            <a class="collapse-item" href="{{ route('enquiries.enquiryLead') }}">Enquiry Leads</a>
+                            <a class="collapse-item" href="#">Property Leads</a>
+                            <a class="collapse-item" href="#">Referral Tool</a>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
 
-        <?php } ?>  
+            <?php } ?>  
 
-         <!-- Nav Item - Pages Collapse Menu -->
-         <?php    if($role_id == 4) { ?>   
-           <li class="nav-item">
+            <!-- Nav Item - Pages Collapse Menu -->
+            <?php    if($role_id == 4) { ?>   
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReferral"
                     aria-expanded="true" aria-controls="collapseReferral">
                     <i class="fas fa-rupee-sign custom-icon"></i>
@@ -207,7 +203,7 @@
             <?php } ?>
             
             <?php    if($role_id == env('agentRole_id')) { ?>   
-           <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReferral"
                     aria-expanded="true" aria-controls="collapseReferral">
                     <i class="fas fa-fw fa-dollar-sign fa-2x custom-icon"></i>
@@ -223,8 +219,8 @@
             </li>
             <?php } ?>
 
-    <?php    if($role_id == 4) { ?>   
-         <!-- Nav Item - Pages Collapse Menu -->
+            <?php    if($role_id == 4) { ?>   
+            <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTools"
                     aria-expanded="true" aria-controls="collapseTools">
@@ -243,19 +239,19 @@
                 </div>
             </li>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider">    
+            <!-- Divider -->
+            <hr class="sidebar-divider">    
 
-         <!-- Nav Item - Activity logs -->
-         <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'activities' ? 'active' : '' }}">
+            <!-- Nav Item - Activity logs -->
+            <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'activities' ? 'active' : '' }}">
                 <a class="nav-link" href="{{route('activities')}}">
                     <i class="fas fa-history custom-icon"></i>
                     <span>Activity Logs</span></a>
-        </li>
+            </li>
 
          
-         <!-- Divider -->
-         <hr class="sidebar-divider">    
+            <!-- Divider -->
+            <hr class="sidebar-divider">    
 
             <!-- Nav Item - Activity logs -->
             <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'tree' ? 'active' : '' }}">
@@ -280,18 +276,18 @@
             </li>   
 
 
-       <?php } ?> 
-       <?php    if($role_id == env('agentRole_id')) { ?>
-       <hr class="sidebar-divider">    
+            <?php } ?> 
+            <?php    if($role_id == env('agentRole_id')) { ?>
+            <hr class="sidebar-divider">    
 
-        <!-- Nav Item - Agent MIS -->
-        <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'activity' ? 'active' : '' }}">
-            <a class="nav-link" href="{{route('agent.mis')}}">
+            <!-- Nav Item - Agent MIS -->
+            <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'activity' ? 'active' : '' }}">
+                <a class="nav-link" href="{{route('agent.mis')}}">
             
-                <i class="fa fa-address-book"></i>
-                <span>MIS</span></a>
-        </li> 
-        <?php } ?>
+                    <i class="fa fa-address-book"></i>
+                    <span>MIS</span></a>
+            </li> 
+            <?php } ?>
         </ul>
         <!-- End of Sidebar -->
 

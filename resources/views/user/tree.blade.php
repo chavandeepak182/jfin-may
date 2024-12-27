@@ -80,52 +80,55 @@
 
 <body>
 	<div class="wrapper">
-        <nav id="sidebar" class="sidebar js-sidebar">
+    <nav id="sidebar" class="sidebar js-sidebar">
 			<div class="sidebar-content js-simplebar">
-                <a class="sidebar-brand" href="{{ asset('') }}">
-                    <span class="align-middle"><img style="background-color: white;" width="100%" height="50px" src="{{ asset('theme/logo.png') }}"></span>
-                </a>
+				<a class="sidebar-brand" href="{{ asset('') }}">
+					<span class="align-middle"><img style="background-color: white;" width="100%" height="50px" src="{{ asset('theme/logo.png') }}"></span>
+				</a>
 
 				<ul class="sidebar-nav">
+					<!-- Dashboard Link -->
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="/my-profile">
-                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
-                        </a>
+							<i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+						</a>
 					</li>
-                    <li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('loan.myloans') }}">
-                            <i class="align-middle" data-feather="layers"></i> <span class="align-middle">My Loans</span>
-                        </a>
+
+					<!-- My Loans Dropdown -->
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="#" data-bs-toggle="collapse" data-bs-target="#loan-dropdown" aria-expanded="false">
+							<i class="align-middle" data-feather="layers"></i> <span class="align-middle">My Loans  <i class="fas fa-angle-down"></i></span>
+						</a>
+						<ul class="collapse" id="loan-dropdown">
+							<li><a class="sidebar-link" href="{{ route('loan.myloans') }}">Track Loan</a></li>
+							<li><a class="sidebar-link" href="#">Total Loans</a></li>
+						</ul>
 					</li>
-                    <li class="sidebar-item active">
+
+					<li class="sidebar-item active">
 						<a class="sidebar-link" href="{{ route('user.childNodes') }}">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">LegDown</span>
                         </a>
-					</li>
+					</li> 	
+
+					<!-- My Details Dropdown -->
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('loan.mypersonal') }}">
-                            <i class="align-middle" data-feather="user"></i> <span class="align-middle">Personal Information</span>
-                        </a>
+						<a class="sidebar-link" href="#" data-bs-toggle="collapse" data-bs-target="#details-dropdown" aria-expanded="false">
+							<i class="align-middle" data-feather="user"></i> <span class="align-middle">My Details <i class="fas fa-angle-down"></i></span>
+						</a>
+						<ul class="collapse" id="details-dropdown">
+							<li><a class="sidebar-link" href="{{ route('loan.mypersonal') }}">Personal Information</a></li>
+							<li><a class="sidebar-link" href="{{ route('loan.myprofessional') }}">Professional Information</a></li>
+							<li><a class="sidebar-link" href="{{ route('loan.myeducation') }}">Educational Information</a></li>
+							<li><a class="sidebar-link" href="{{ route('loan.mydocuments') }}">Document Information</a></li>
+						</ul>
 					</li>
+
+					<!-- Referrals Link -->
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('loan.myprofessional') }}">
-                            <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Professional Information</span>
-                        </a>
-					</li>
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('loan.myeducation') }}">
-                            <i class="align-middle" data-feather="book"></i> <span class="align-middle">Educational Information</span>
-                        </a>
-					</li>
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('loan.mydocuments') }}">
-                            <i class="align-middle" data-feather="file-text"></i> <span class="align-middle">Document Information</span>
-                        </a>
-					</li>
-                    <li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('user.walletbalance')}}">
-                            <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Referrals</span>
-                        </a>
+						<a class="sidebar-link" href="{{ route('user.walletbalance') }}">
+							<i class="align-middle">₹</i> <span class="align-middle">Referrals</span>
+						</a>
 					</li>
 				</ul>
 			</div>
