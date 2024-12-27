@@ -30,7 +30,33 @@ All Loans
 <link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-
+<div class="card-body">
+    <form method="GET" action="{{ route('loans.index') }}" class="mb-3">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="status">Status:</label>
+                <select name="status" id="status" class="form-control">
+                    <option value="">All</option>
+                    <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
+                    <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                    <option value="disbursed" {{ request('status') == 'disbursed' ? 'selected' : '' }}>Disbursed</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="start_date">Start Date:</label>
+                <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
+            </div>
+            <div class="col-md-3">
+                <label for="end_date">End Date:</label>
+                <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="{{ route('loans.index') }}" class="btn btn-secondary ms-2">Reset</a>
+            </div>
+        </div>
+    </form>
+</div>
 
 <div style="padding: 1%"> 
     <!-- DataTables Example -->
@@ -40,22 +66,26 @@ All Loans
                 <table id="loansTable" class="table" style="width:100%">
                     <thead>
                         <tr>
-                            <th>Loan ID</th>
-                            <th>User</th>
-                            <th>Loan Category</th>
+                            <th>Id</th>
+                            <th>Loan No.</th>
+                            <th>Name</th>
+                            <th>Product Type</th>
                             <th>Amount</th>
-                            <th>Tenure</th>
+                            <th>Bank</th>
+                            <th>Location</th>
                             <th>Action</th> 
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($data['loans'] as $loan)
                             <tr>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $loan->loan_reference_id }}</td>
                                 <td>{{ $loan->user_name ?? 'N/A' }}</td>
                                 <td>{{ $loan->loan_category_name ?? 'N/A' }}</td>
                                 <td>{{ $loan->amount }}</td>
-                                <td>{{ $loan->tenure }}</td>
+                                <td>{{ $loan->bank_name ?? 'N/A' }}</td>
+                                <td>{{ $loan->city ?? 'N/A' }}</td>
                                 <!-- <td>{{ ucfirst($loan->agent_action) ?? 'Pending' }}</td> -->
                                 <td>
                                     <a class="btn btn-primary btn-xs view" title="View" href="{{ route('loan.view', ['id' => $loan->loan_id]) }}">
@@ -73,11 +103,13 @@ All Loans
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>Loan ID</th>
-                            <th>User</th>
-                            <th>Loan Category</th>
+                            <th>Id</th>
+                            <th>Loan No.</th>
+                            <th>Name</th>
+                            <th>Product Type</th>
                             <th>Amount</th>
-                            <th>Tenure</th>
+                            <th>Bank</th>
+                            <th>Location</th>
                             <th>Action</th> 
                         </tr>
                     </tfoot>
@@ -150,20 +182,54 @@ All Loans
 
 <script>
     $(document).ready(function() {
-        $('#loansTable').DataTable({
-            paging: true,
-            searching: true,
-            ordering: true,
-            lengthChange: true,
-            pageLength: 10,
-        });
+        // Check if DataTable is already initialized
+        if (!$.fn.DataTable.isDataTable('#loansTable')) {
+            // Initialize DataTable with export buttons
+            $('#loansTable').DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                lengthChange: true,
+                pageLength: 10,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export to Excel',
+                        title: 'Loans Data'
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: 'Export to PDF',
+                        title: 'Loans Data'
+                    }
+                ]
+            });
+        }
 
+        // Handling the form submission (Example AJAX for adding loan)
         $('#addLoanForm').on('submit', function(e) {
             e.preventDefault();
             // Add AJAX request for form submission
+            $.ajax({
+                url: '/path-to-submit-loan',  // Change with the actual URL for submission
+                method: 'POST',
+                data: $(this).serialize(), // Serialize form data
+                success: function(response) {
+                    // Handle success (e.g., show a success message or update the table)
+                    alert('Loan added successfully!');
+                    // Optionally, reload the table after submission (if needed)
+                    reloadLoansTable();
+                },
+                error: function(response) {
+                    // Handle error (e.g., show an error message)
+                    alert('Error adding loan!');
+                }
+            });
         });
     });
 
+    // Delete loan function with confirmation
     function deleteLoan(loanId) {
         Swal.fire({
             title: 'Are you sure?',
@@ -176,7 +242,7 @@ All Loans
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: "{{ route('deleteLoan') }}",
+                    url: "{{ route('deleteLoan') }}",  // Adjust the route for deletion
                     method: "POST",
                     data: {
                         '_token': '{{ csrf_token() }}',
@@ -188,7 +254,8 @@ All Loans
                             'Your loan has been deleted.',
                             'success'
                         ).then(function() {
-                            location.reload();
+                            // Optionally reload table after deletion
+                            reloadLoansTable();
                         });
                     },
                     error: function(response) {
@@ -200,6 +267,35 @@ All Loans
                     }
                 });
             }
+        });
+    }
+
+    // Function to reload DataTable (after AJAX updates)
+    function reloadLoansTable() {
+        // Destroy current DataTable instance
+        var table = $('#loansTable').DataTable();
+        table.clear().destroy(); // Clears existing data and destroys current DataTable instance
+        
+        // Reinitialize DataTable
+        $('#loansTable').DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            lengthChange: true,
+            pageLength: 10,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export to Excel',
+                    title: 'Loans Data'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: 'Export to PDF',
+                    title: 'Loans Data'
+                }
+            ]
         });
     }
 </script>

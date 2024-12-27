@@ -92,12 +92,12 @@
                             <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
                         </a>
 					</li>
-                    <li class="sidebar-item active">
+                    <li class="sidebar-item">
 						<a class="sidebar-link" href="{{ route('loan.myloans') }}">
                             <i class="align-middle" data-feather="layers"></i> <span class="align-middle">My Loans</span>
                         </a>
 					</li>
-                    <li class="sidebar-item">
+                    <li class="sidebar-item active">
 						<a class="sidebar-link" href="{{ route('user.childNodes') }}">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">LegDown</span>
                         </a>
@@ -212,99 +212,101 @@
 					</ul>
 				</div>
 			</nav>
-
             <main class="content">
-				<div class="container-fluid p-0">
-					<h2 class="mb-3 text-center">My Loans</h2>
-					<div class="row">
-						<div class="col-md-10 mx-auto d-flex">
-							<div class="w-100">
-                                @if ($loans->isNotEmpty())
-                                    <div class="accordion" id="loanAccordion">
-                                        @foreach ($loans as $loan)
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="heading{{ $loan->loan_reference_id }}">
-                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $loan->loan_reference_id }}" aria-expanded="false" aria-controls="collapse{{ $loan->loan_reference_id }}">
-                                                        <b>Loan ID: </b> {{ $loan->loan_reference_id }} <span class="px-3">|</span> <b>Status: </b> {{ $loan->status }}
-                                                    </button>
-                                                </h2>
-                                                <div id="collapse{{ $loan->loan_reference_id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $loan->loan_reference_id }}" data-bs-parent="#loanAccordion">
-                                                    <div class="accordion-body loan-tracking-container py-5">
-                                                        <article class="card">
-                                                            <header class="card-header"> Loan Tracking </header>
-                                                            <div class="card-body">
-                                                                <h6>Loan Reference ID: {{ $loan->loan_reference_id }}</h6>
-                                                                <article class="card">
-                                                                    <div class="card-body row">
-                                                                        <div class="col"> <strong>Status:</strong> <br> {{ ucfirst($loan->status) }} </div>
-                                                                        <div class="col"> <strong>Last Updated:</strong> <br> {{ \Carbon\Carbon::parse($loan->updated_at)->format('d M, Y') }} </div>
-                                                                    </div>
-                                                                </article>
+            <div class="container-fluid p-0">
+    <h2 class="mb-3 text-center">Child Nodes and Their Loans</h2>
 
-                                                                <!-- Tracking Progress -->
-                                                                <div class="track">
-                                                                    @php
-                                                                        // Define the steps for each status
-                                                                        $statuses = [
-                                                                             'in process', 'approved', 'rejected', 'disbursed'
-                                                                        ];
+    @if($descendants->isEmpty())
+        <p>No child nodes found for this user.</p>
+    @else
+        <table class="table table-bordered mt-4">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Referral Code</th>
+                    <th>Parent Name</th>
+                    <th>Loans</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($descendants as $index => $descendant)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $descendant->name }}</td>
+                        <td>{{ $descendant->referral_code }}</td>
+                        <td>{{ $descendant->parent_name }}</td>
+                        <td>
+                            <select class="form-select child-loans-dropdown" data-user-id="{{ $descendant->user_id }}">
+                                <option value="" selected disabled>Select to view loans</option>
+                                <option value="view">View Loans</option>
+                            </select>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
 
-                                                                        // Initialize the steps to display
-                                                                        $stepsToShow = ['loan submitted']; // Always show this step
-
-                                                                        // Determine which additional steps to show based on the loan status
-                                                                        if ($loan->status == 'approved') {
-                                                                            $stepsToShow = array_merge($stepsToShow, ['in process', 'approved', 'rejected', 'disbursed']);
-                                                                        } elseif ($loan->status == 'disbursed') {
-                                                                            $stepsToShow = array_merge($stepsToShow, ['in process', 'approved', 'disbursed']);
-                                                                        } elseif ($loan->status == 'in process') {
-                                                                            $stepsToShow = array_merge($stepsToShow, ['in process']);
-                                                                        } elseif ($loan->status == 'rejected') {
-                                                                            $stepsToShow = array_merge($stepsToShow, ['in process', 'rejected']);
-                                                                        } else {
-                                                                            $stepsToShow = array_merge($stepsToShow, $statuses);
-                                                                        }
-
-                                                                        // Determine the index of the current status
-                                                                        $currentStatusIndex = array_search($loan->status, $statuses);
-                                                                    @endphp
-
-                                                                    @foreach ($stepsToShow as $index => $status)
-                                                                        <div class="step {{ $index <= $currentStatusIndex ? 'active' : '' }}">
-                                                                            <span class="icon">
-                                                                                <i class="fa {{ $status == 'rejected' ? 'fa-times' : 'fa-check' }}"></i>
-                                                                            </span>
-                                                                            <span class="text">{{ ucfirst($status) }}</span>
-                                                                        </div>
-                                                                    @endforeach
-                                                                </div>
-                                                            </div>
-                                                        </article>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <p>No loan information available.</p>
-                                @endif
-							</div>
-						</div>						
-					</div>
-                </div>
-			</main>
-			<footer class="sticky-footer bg-white py-3">
+        <div id="loan-details" class="mt-4" style="display:none;">
+    <h3>Loans for Selected User</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Loan Reference ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Category</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+    @endif
+</div>
+</main>
+<footer class="sticky-footer bg-white py-3">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <samll><span class="text-body"><a href="#" class="border-bottom text-primary">2024 <i class="far fa-copyright text-dark me-1"></i> Jfinserv Consultant</a>, All rights reserved | Developed By <a class="border-bottom text-primary" href="https://jfstechnologies.com">JFS Technologies</a>.</span></samll>
                     </div>
                 </div>
             </footer>
-		</div>
-	</div>
+            <script src="{{ asset('theme') }}/user-dash/js/app.js"></script>
+            <script>
+    document.querySelectorAll('.child-loans-dropdown').forEach(dropdown => {
+    dropdown.addEventListener('change', function() {
+        const userId = this.getAttribute('data-user-id');
+        
+        fetch(`/loans-by-child?user_id=${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                const loanDetailsDiv = document.getElementById('loan-details');
+                const tableBody = loanDetailsDiv.querySelector('tbody');
+                tableBody.innerHTML = '';
 
-	<script src="{{ asset('theme') }}/user-dash/js/app.js"></script>
-	
+                if (data.length > 0) {
+                    data.forEach((loan, index) => {
+                        const row = `<tr>
+                            <td>${index + 1}</td>
+                            <td>${loan.loan_reference_id}</td>  <!-- Display the loan_reference_id -->
+                            <td>${loan.amount}</td>
+                            <td>${loan.status}</td>
+                            <td>${loan.category_name}</td>
+                            <td>${loan.created_at}</td>
+                        </tr>`;
+                        tableBody.insertAdjacentHTML('beforeend', row);
+                    });
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="6">No loans found for this user.</td></tr>';
+                }
+
+                loanDetailsDiv.style.display = 'block';
+            });
+    });
+});
+</script>
 
 </body>
 </html>

@@ -14,6 +14,8 @@ use App\Models\Activity;
 use App\Models\UserRelation;
 use App\Models\MlmUsers;
 use App\Models\Category;
+use Illuminate\Support\Facades\Log;
+
 
 
 class MlmController extends Controller
@@ -31,8 +33,53 @@ class MlmController extends Controller
         return view('admin.category', compact('data'));
      
     }    
+    public function getAllChildNodes()
+    {
+        // Retrieve user_id from session (middleware ensures it exists)
+        $userId = Session::get('user_id');
     
- 
+        // Find the user's category node (or parent node) using their user_id
+        $userNode = Category::where('user_id', $userId)->first();
+    
+        // If the user does not have a category node, return an error
+        if (!$userNode) {
+            return response()->json(['message' => 'User node not found in the tree'], 404);
+        }
+    
+        // Fetch all child nodes (descendants) of the user node based on the nested set model
+        $descendants = Category::where('_lft', '>', $userNode->_lft)
+                               ->where('_rgt', '<', $userNode->_rgt)
+                               ->get();
+    
+        // Enhance each descendant by adding its parent name and referral code from the users table
+        $descendants->transform(function ($descendant) {
+            $parentName = DB::table('users')->where('id', $descendant->parent_id)->value('name');
+            $descendant->parent_name = $parentName ?: 'N/A'; // Default to 'N/A' if no parent found
+    
+            $referralCode = DB::table('users')->where('id', $descendant->user_id)->value('referral_code');
+            $descendant->referral_code = $referralCode ?: 'N/A';
+    
+            return $descendant;
+        });
+    
+        // Pass the descendants data to the Blade view
+        return view('user.tree', compact('descendants'));
+    }
+    
+    // Fetch loans for a specific child user
+    public function getLoansByChild(Request $request)
+{
+    $userId = $request->get('user_id');
+
+    // Fetch loans for the selected child user, including the category name from loan_category table
+    $loans = DB::table('loans')
+               ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+               ->where('loans.user_id', $userId)
+               ->select('loans.loan_reference_id', 'loans.amount', 'loans.status', 'loans.created_at', 'loan_category.category_name')
+               ->get();
+
+    return response()->json($loans);
+}
 }
 
    

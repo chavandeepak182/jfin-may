@@ -30,12 +30,13 @@ class LoanApplicationController extends Controller
     //     $this->creditScoreService = $creditScoreService;
     // }
 
-    public function index()
+    public function index(Request $request)
 {
-    // Fetch paginated loans
-    $data['loans'] = DB::table('loans')
+    $query = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+        ->leftJoin('loan_bank_details', 'loans.bank_id', '=', 'loan_bank_details.bank_id')
+        ->leftJoin('profile', 'users.id', '=', 'profile.user_id')
         ->select(
             'loans.loan_id',
             'loans.amount',
@@ -43,12 +44,24 @@ class LoanApplicationController extends Controller
             'loans.loan_reference_id',
             'users.name as user_name',
             'loans.status',
+            'profile.city as city',
             'loan_category.category_name as loan_category_name',
+            'loan_bank_details.bank_name as bank_name',
             'loans.agent_action'
-        )
-        ->paginate(10); // Adjust the pagination limit if necessary
+        );
 
-    // Fetch recent 5 loans
+    // Apply filters if present
+    if ($request->filled('status')) {
+        $query->where('loans.status', $request->input('status'));
+    }
+
+    if ($request->filled('start_date') && $request->filled('end_date')) {
+        $query->whereBetween('loans.created_at', [$request->input('start_date'), $request->input('end_date')]);
+    }
+
+    $data['loans'] = $query->paginate(10);
+
+    // Fetch recent 5 loans (optional, same as before)
     $recentLoans = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->select(
