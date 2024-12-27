@@ -35,12 +35,14 @@ Admin MIS
             <table id="example" class="table table-striped" style="width:100%">
     <thead>
         <tr>
-            <th>Loan ID</th>
+            <th>Id</th>
+            <th>Loan No.</th>
             <th>Name</th>
-            <th>Email Id</th>
+            <th>Product Type</th>
             <th>Contact</th>
-            <th>Loan Amount</th>                            
-            <th>Address</th>
+            <th>Loan Amount</th>
+            <th>Bank</th>                            
+            <th>Location</th>
             @if(session()->get('role_id') == 4)
                 <th>Action</th>
             @endif
@@ -50,10 +52,12 @@ Admin MIS
         @foreach($data['loans'] as $loan)
             <tr>
                 <td>{{ $loop->iteration }}</td>
+                <td>{{ $loan->loan_reference_id }}</td>
                 <td>{{ $loan->user_name }}</td>
-                <td>{{ $loan->email }}</td>
+                <td>{{ $loan->loan_category_name ?? 'N/A' }}</td>
                 <td>{{ $loan->mobile_no }}</td>
-                <td>{{ $loan->amount }}</td>                                
+                <td>{{ $loan->amount }}</td>   
+                <td>{{ $loan->bank_name ?? 'N/A' }}</td>                             
                 <td>{{ $loan->city }}</td>
                 @if(session()->get('role_id') == 4)
                     <td>

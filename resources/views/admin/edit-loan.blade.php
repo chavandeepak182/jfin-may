@@ -7,6 +7,11 @@ Edit Loan
 
 @section('content')
 @parent
+<style>
+    body{
+        color: #fff !important;
+    }
+</style>
 <!-- Breadcrumbs -->
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -32,7 +37,7 @@ Edit Loan
 
         <div class="row no-gutters">
             <!-- Left Section: Personal, Professional, Education & Loan Information -->
-            <div class="col-md-8">
+            <div class="col-md-7">
 
                 <!-- Personal Information -->
                 <div class="section mb-4">
@@ -212,6 +217,7 @@ Edit Loan
                 </div>
             </div>
             
+            <div class="col-md-1"></div>
 
             <!-- Right Section: Documents -->
             <div class="col-md-4">

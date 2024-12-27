@@ -119,6 +119,7 @@ public function fetchRecentLoans($limit = 5)
         $data['loans'] = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+		->leftJoin('loan_bank_details', 'loans.bank_id', '=', 'loan_bank_details.bank_id')
         ->join('profile', 'users.id', '=', 'profile.user_id')
         ->select(
             'loans.loan_id',
@@ -129,6 +130,7 @@ public function fetchRecentLoans($limit = 5)
             'users.email_id as email',
             'profile.mobile_no',
             'profile.city',
+			'loan_bank_details.bank_name as bank_name',
             'loan_category.category_name as loan_category_name',
             'loans.agent_action'
         )

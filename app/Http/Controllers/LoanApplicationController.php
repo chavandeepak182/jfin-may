@@ -30,12 +30,13 @@ class LoanApplicationController extends Controller
     //     $this->creditScoreService = $creditScoreService;
     // }
 
-    public function index()
+    public function index(Request $request)
 {
-    // Fetch paginated loans
-    $data['loans'] = DB::table('loans')
+    $query = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+        ->leftJoin('loan_bank_details', 'loans.bank_id', '=', 'loan_bank_details.bank_id')
+        ->leftJoin('profile', 'users.id', '=', 'profile.user_id')
         ->select(
             'loans.loan_id',
             'loans.amount',
@@ -43,12 +44,24 @@ class LoanApplicationController extends Controller
             'loans.loan_reference_id',
             'users.name as user_name',
             'loans.status',
+            'profile.city as city',
             'loan_category.category_name as loan_category_name',
+            'loan_bank_details.bank_name as bank_name',
             'loans.agent_action'
-        )
-        ->paginate(10); // Adjust the pagination limit if necessary
+        );
 
-    // Fetch recent 5 loans
+    // Apply filters if present
+    if ($request->filled('status')) {
+        $query->where('loans.status', $request->input('status'));
+    }
+
+    if ($request->filled('start_date') && $request->filled('end_date')) {
+        $query->whereBetween('loans.created_at', [$request->input('start_date'), $request->input('end_date')]);
+    }
+
+    $data['loans'] = $query->paginate(10);
+
+    // Fetch recent 5 loans (optional, same as before)
     $recentLoans = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->select(
@@ -366,49 +379,54 @@ public function disbursed()
     
    
     public function handleStep(Request $request)
-    {
-        $userId = session('user_id'); // Get user ID from session
-        if (!$userId) {
-            return redirect()->route('login')->withErrors('User session expired. Please log in again.');
-        }
-    
-        $currentStep = $request->input('current_step');
-    
-        try {
-            switch ($currentStep) {
-                case 1:
-                    $this->handlePersonalDetails($request, $userId);
-                    return redirect()->route('loan.form', ['current_step' => 2]);
-    
-                case 2:
-                    $this->handleProfessionalDetails($request, $userId);
-                    return redirect()->route('loan.form', ['current_step' => 3]);
-    
-                case 3:
-                    $this->handleEducationDetails($request, $userId);
-                    return redirect()->route('loan.form', ['current_step' => 4]);
-    
-                case 4:
-                    $this->handleExistingLoanDetails($request, $userId);
-                    return redirect()->route('loan.form', ['current_step' => 5]);
-    
-                case 5:
-                    $this->handleDocumentUpload($request, $userId);
-                    return redirect()->route('loan.form', ['current_step' => 6]);
-    
-                    case 6:
-                        $this->handleLoanDetails($request, $userId);
-                        return redirect()->route('loan.thankyou');
-        
-                    default:
-                        return redirect()->route('loan.form', ['current_step' => 1]);
-                }
-            } catch (\Exception $e) {
-                Log::error('Error handling step: ' . $e->getMessage());
-                return redirect()->back()->withErrors('Something went wrong. Please try again.');
-            }
+{
+    $userId = session('user_id'); // Get user ID from session
+    if (!$userId) {
+        return redirect()->route('login')->withErrors('User session expired. Please log in again.');
     }
-    
+
+    $currentStep = $request->input('current_step');
+
+    try {
+        // Validate and handle each step
+        switch ($currentStep) {
+            case 1:
+                $this->handlePersonalDetails($request, $userId);
+                break;
+
+            case 2:
+                $this->handleProfessionalDetails($request, $userId);
+                break;
+
+            case 3:
+                $this->handleEducationDetails($request, $userId);
+                break;
+
+            case 4:
+                $this->handleExistingLoanDetails($request, $userId);
+                break;
+
+            case 5:
+                $this->handleDocumentUpload($request, $userId);
+                break;
+
+            case 6:
+                $this->validateLoanDetails($request);
+                $this->handleLoanDetails($request, $userId);
+                return redirect()->route('loan.thankyou');
+
+            default:
+                return redirect()->route('loan.form', ['current_step' => 1])
+                    ->withErrors('Invalid step. Please restart the application process.');
+        }
+
+        // Redirect to the next step
+        return redirect()->route('loan.form', ['current_step' => $currentStep + 1]);
+    } catch (\Exception $e) {
+        Log::error('Error handling step: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
+        return redirect()->back()->withErrors('Something went wrong. Please try again.');
+    }
+}
     protected function handlePersonalDetails(Request $request, $userId)
     {
         $validated = $request->validate([

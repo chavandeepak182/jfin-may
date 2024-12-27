@@ -44,7 +44,10 @@ Route::prefix('admin')->group(function () {
 Route::prefix('admin')->group(function () {
     Route::get('/tree', [CategoryController::class, 'showTree'])->name('admin.tree.show');
 });
-
+Route::middleware([isUser::class])->group(function () {
+    Route::get('/child-nodes', [MlmController::class, 'getAllChildNodes'])->name('user.childNodes');
+    Route::get('/loans-by-child', [MlmController::class, 'getLoansByChild'])->name('loans.by.child');
+});
 //frontend routes
 Route::get('/', function () {
     return view('frontend.index');
