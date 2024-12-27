@@ -5,9 +5,12 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
 	<link href="{{ asset('theme') }}/user-dash/css/app.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="{{ asset('theme') }}/frontend/css/bootstrap.min.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
     <!-- <link href="{{ asset('theme') }}/frontend/css/bootstrap.min.css" rel="stylesheet"> -->
     <title>Professional</title>
    
@@ -18,43 +21,52 @@
         <nav id="sidebar" class="sidebar js-sidebar">
 			<div class="sidebar-content js-simplebar">
 				<a class="sidebar-brand" href="{{ asset('') }}">
-                    <span class="align-middle"><img style="background-color: white;" width="100%" height="50px" src="{{ asset('theme/logo.png') }}"></span>
-                </a>
+					<span class="align-middle"><img style="background-color: white;" width="100%" height="50px" src="{{ asset('theme/logo.png') }}"></span>
+				</a>
 
 				<ul class="sidebar-nav">
+					<!-- Dashboard Link -->
 					<li class="sidebar-item active">
 						<a class="sidebar-link" href="/my-profile">
-                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
-                        </a>
+							<i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+						</a>
 					</li>
-                    <li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('loan.myloans') }}">
-                            <i class="align-middle" data-feather="layers"></i> <span class="align-middle">My Loans</span>
-                        </a>
-					</li>
+
+					<!-- My Loans Dropdown -->
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('loan.mypersonal') }}">
-                            <i class="align-middle" data-feather="user"></i> <span class="align-middle">Personal Information</span>
-                        </a>
+						<a class="sidebar-link" href="#" data-bs-toggle="collapse" data-bs-target="#loan-dropdown" aria-expanded="false">
+							<i class="align-middle" data-feather="layers"></i> <span class="align-middle">My Loans <i class="fas fa-angle-down"></i></span>
+						</a>
+						<ul class="collapse" id="loan-dropdown">
+							<li><a class="sidebar-link" href="{{ route('loan.myloans') }}">Track Loan</a></li>
+							<li><a class="sidebar-link" href="#">Total Loans</a></li>
+						</ul>
 					</li>
+
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('loan.myprofessional') }}">
-                            <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Professional Information</span>
+						<a class="sidebar-link" href="{{ route('user.childNodes') }}">
+                            <i class="align-middle" data-feather="user"></i> <span class="align-middle">LegDown</span>
                         </a>
-					</li>
+					</li> 	
+
+					<!-- My Details Dropdown -->
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('loan.myeducation') }}">
-                            <i class="align-middle" data-feather="book"></i> <span class="align-middle">Educational Information</span>
-                        </a>
+						<a class="sidebar-link" href="#" data-bs-toggle="collapse" data-bs-target="#details-dropdown" aria-expanded="false">
+							<i class="align-middle" data-feather="user"></i> <span class="align-middle">My Details <i class="fas fa-angle-down"></i></span>
+						</a>
+						<ul class="collapse" id="details-dropdown">
+							<li><a class="sidebar-link" href="{{ route('loan.mypersonal') }}">Personal Information</a></li>
+							<li><a class="sidebar-link" href="{{ route('loan.myprofessional') }}">Professional Information</a></li>
+							<li><a class="sidebar-link" href="{{ route('loan.myeducation') }}">Educational Information</a></li>
+							<li><a class="sidebar-link" href="{{ route('loan.mydocuments') }}">Document Information</a></li>
+						</ul>
 					</li>
+
+					<!-- Referrals Link -->
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('loan.mydocuments') }}">
-                            <i class="align-middle" data-feather="file-text"></i> <span class="align-middle">Document Information</span>
-                        </a>
-					</li>
-                    <li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('user.walletbalance')}}">
-						<i class="align-middle">₹</i> <span class="align-middle">Referrals</span>                        </a>
+						<a class="sidebar-link" href="{{ route('user.walletbalance') }}">
+							<i class="align-middle">₹</i> <span class="align-middle">Referrals</span>
+						</a>
 					</li>
 				</ul>
 			</div>
@@ -67,33 +79,33 @@
                 </a>
 
 				<div class="navbar-collapse collapse">
-        <ul class="navbar-nav navbar-align">
-            <li class="nav-item dropdown">
-                <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
-                    <div class="position-relative">
-                        <i class="align-middle" data-feather="bell"></i>
-                        <span class="indicator" id="notification-count">0</span>
-                    </div>
-                </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
-                    <div class="dropdown-menu-header">
-                        <span id="notification-header">No New Notifications</span>
-                    </div>
-                    <div class="list-group" id="notification-list">
-                        <!-- Notifications will be dynamically inserted here -->
-                    </div>
-                    <div class="dropdown-menu-footer">
-                        <a href="/notifications" class="text-muted">Show all notifications</a>
-                    </div>
-                </div>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link d-none d-sm-inline-block" href="/logout">
-                    <i class="align-middle" data-feather="log-out"></i> <span class="align-middle" style="font-size: 14px">Logout</span>
-                </a>
-            </li>
-        </ul>
-    </div>
+					<ul class="navbar-nav navbar-align">
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+								<div class="position-relative">
+									<i class="align-middle" data-feather="bell"></i>
+									<span class="indicator" id="notification-count">0</span>
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+								<div class="dropdown-menu-header">
+									<span id="notification-header">No New Notifications</span>
+								</div>
+								<div class="list-group" id="notification-list">
+									<!-- Notifications will be dynamically inserted here -->
+								</div>
+								<div class="dropdown-menu-footer">
+									<a href="/notifications" class="text-muted">Show all notifications</a>
+								</div>
+							</div>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link d-none d-sm-inline-block" href="/logout">
+								<i class="align-middle" data-feather="log-out"></i> <span class="align-middle" style="font-size: 14px">Logout</span>
+							</a>
+						</li>
+					</ul>
+				</div>
 			</nav>
 
 			<main class="content">
@@ -178,21 +190,17 @@
 													<div class="col-auto">
 														<!-- Share Icon with Dropdown -->
 														<div class="dropdown">
-															<a href="#" class="stat text-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+															<a href="#" class="stat text-primary" data-bs-toggle="dropdown" aria-expanded="false">
 																<i class="align-middle" data-feather="share-2"></i>
 															</a>
 															<ul class="dropdown-menu">
 																<li>
-																	<a class="dropdown-item" 
-																	href="https://wa.me/?text=Hi%2C%0AGood%20news%21%20You%27ve%20received%20a%20special%20referral%20code%20to%20unlock%20amazing%20benefits%20with%20JFinserv%0A%0AReferral%20Code%3A%20{{ $referralCode }}%0Ahttps%3A%2F%2Fjfs.digital%2F" 
-																	target="_blank">
+																	<a class="dropdown-item" href="https://wa.me/?text=Hi%2C%0AGood%20news%21%20You%27ve%20received%20a%20special%20referral%20code%20to%20unlock%20amazing%20benefits%20with%20JFinserv%0A%0AReferral%20Code%3A%20{{ $referralCode }}%0Ahttps%3A%2F%2Fjfs.digital%2F" target="_blank">
 																		Share via WhatsApp
 																	</a>
 																</li>
 																<li>
-																	<a class="dropdown-item" 
-																	href="mailto:?subject=Special%20Referral%20Code%20from%20JFinserv&body=Hi%2C%0A%0AGood%20news%21%20You%27ve%20received%20a%20special%20referral%20code%20to%20unlock%20amazing%20benefits%20with%20JFinserv%0A%0AReferral%20Code%3A%20{{ $referralCode }}%0Ahttps%3A%2F%2Fjfs.digital%2F" 
-																	target="_blank">
+																	<a class="dropdown-item" href="mailto:?subject=Special%20Referral%20Code%20from%20JFinserv&body=Hi%2C%0A%0AGood%20news%21%20You%27ve%20received%20a%20special%20referral%20code%20to%20unlock%20amazing%20benefits%20with%20JFinserv%0A%0AReferral%20Code%3A%20{{ $referralCode }}%0Ahttps%3A%2F%2Fjfs.digital%2F" target="_blank">
 																		Share via Email
 																	</a>
 																</li>
