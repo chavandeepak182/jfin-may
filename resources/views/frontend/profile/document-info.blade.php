@@ -38,7 +38,7 @@
 						</a>
 						<ul class="collapse" id="loan-dropdown" >
 							<li class="sidebar-item"><a class="sidebar-link" href="{{ route('loan.myloans') }}">Track Loan</a></li>
-							<li><a class="sidebar-link" href="#">Total Loans</a></li>
+							<li><a class="sidebar-link" href="{{ route('loans.loans-list') }}">Total Loans</a></li>
 						</ul>
 					</li>
 

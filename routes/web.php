@@ -111,6 +111,7 @@ Route::middleware('isUser')->group(function () {
     Route::post('/check-referral-code', [LoanApplicationController::class, 'checkReferralCode'])->name('check.referral_code');
     Route::get('/my-profile', [UsersController::class, 'showProfile'])->name('loan.profile');
     Route::get('/myloans', [UsersController::class, 'myloans'])->name('loan.myloans');
+    Route::get('/loans-list', [UsersController::class, 'myLoanList'])->name('loans.loans-list');
     Route::get('/mypersonal', [UsersController::class, 'mypersonal'])->name('loan.mypersonal');
     Route::get('/myprofessional', [UsersController::class, 'myprofessional'])->name('loan.myprofessional');
     Route::get('/myeducation', [UsersController::class, 'myeducation'])->name('loan.myeducation');
