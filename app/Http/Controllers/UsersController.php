@@ -728,6 +728,35 @@ public function customerLoans()
     $loans = DB::table('loans')->where('user_id', $userId)->get();
     return view('frontend.profile.all-loans', compact('user', 'loans'));
     }
+
+    public function myLoanList(Request $request)
+{
+    $userId = session('user_id'); // Retrieve the user ID from the session
+
+    if (!$userId) {
+        return redirect()->route('login')->withErrors('User session expired. Please log in again.');
+    }
+
+    // Get the loan status filter from the query string, if any
+    $statusFilter = $request->query('status', ''); // Default to empty string if no filter is applied
+
+    // Define available loan statuses for the filter dropdown
+    $statuses = ['approved', 'rejected', 'disbursed', 'pending']; 
+
+    // Fetch loans for the logged-in customer with optional status filter
+    $query = DB::table('loans')->where('user_id', $userId);
+
+    // Apply the status filter if provided and valid
+    if ($statusFilter && in_array($statusFilter, $statuses)) {
+        $query->where('status', $statusFilter);
+    }
+
+    // Optionally, paginate results (for example, 10 loans per page)
+    $loans = $query->paginate(10); // Use paginate() for better performance with large datasets
+
+    return view('frontend.profile.myloanlist', compact('loans', 'statuses', 'statusFilter'));
+}
+
     public function mypersonal(Request $request)
 {
     $section = $request->query('section', 'personal');
