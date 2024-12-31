@@ -216,58 +216,58 @@
 				</div>
 			</nav>
             <main class="content">
-            <div class="container-fluid p-0">
-    <h2 class="mb-3 text-center">Child Nodes and Their Loans</h2>
+    <div class="container-fluid p-0">
+        <h2 class="mb-3 text-center">Child Nodes and Their Loans</h2>
 
-    @if($descendants->isEmpty())
-        <p>No child nodes found for this user.</p>
-    @else
-        <table class="table table-bordered mt-4">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Referral Code</th>
-                    <th>Parent Name</th>
-                    <th>Loans</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($descendants as $index => $descendant)
+        @if($descendants->isEmpty())
+            <p class="text-center">No child nodes found for this user.</p>
+        @else
+            <table class="table table-bordered mt-4">
+                <thead>
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $descendant->name }}</td>
-                        <td>{{ $descendant->referral_code }}</td>
-                        <td>{{ $descendant->parent_name }}</td>
-                        <td>
-                            <select class="form-select child-loans-dropdown" data-user-id="{{ $descendant->user_id }}">
-                                <option value="" selected disabled>Select to view loans</option>
-                                <option value="view">View Loans</option>
-                            </select>
-                        </td>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Referral Code</th>
+                        <th>Parent Name</th>
+                        <th>Loans</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach($descendants as $index => $descendant)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $descendant->name }}</td>
+                            <td>{{ $descendant->referral_code }}</td>
+                            <td>{{ $descendant->parent_name }}</td>
+                            <td>
+                                <select class="form-select child-loans-dropdown" data-user-id="{{ $descendant->user_id }}">
+                                    <option value="" selected disabled>Select to view loans</option>
+                                    <option value="view">View Loans</option>
+                                </select>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
 
-        <div id="loan-details" class="mt-4" style="display:none;">
-    <h3>Loans for Selected User</h3>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Loan Reference ID</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Category</th>
-                <th>Created At</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-</div>
-    @endif
-</div>
+            <div id="loan-details" class="mt-4" style="display:none;">
+                <h3>Loans for Selected User</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Loan Reference ID</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Category</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        @endif
+    </div>
 </main>
 <footer class="sticky-footer bg-white py-3">
                 <div class="container my-auto">
@@ -309,6 +309,49 @@
             });
     });
 });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const loanDetailsSection = document.getElementById('loan-details');
+        const loanDetailsBody = loanDetailsSection.querySelector('tbody');
+
+        document.querySelectorAll('.child-loans-dropdown').forEach(dropdown => {
+            dropdown.addEventListener('change', async (event) => {
+                const userId = event.target.getAttribute('data-user-id');
+                const action = event.target.value;
+
+                if (action === 'view') {
+                    try {
+                        const response = await fetch(`/api/loans/${userId}`);
+                        const loans = await response.json();
+
+                        loanDetailsBody.innerHTML = '';
+
+                        if (loans.length > 0) {
+                            loans.forEach((loan, index) => {
+                                loanDetailsBody.innerHTML += `
+                                    <tr>
+                                        <td>${index + 1}</td>
+                                        <td>${loan.loan_reference_id}</td>
+                                        <td>${loan.amount}</td>
+                                        <td>${loan.status}</td>
+                                        <td>${loan.category}</td>
+                                        <td>${loan.created_at}</td>
+                                    </tr>`;
+                            });
+                        } else {
+                            loanDetailsBody.innerHTML = '<tr><td colspan="6" class="text-center">No loans found for this user.</td></tr>';
+                        }
+
+                        loanDetailsSection.style.display = 'block';
+                    } catch (error) {
+                        console.error('Error fetching loans:', error);
+                        alert('An error occurred while fetching loan details. Please try again later.');
+                    }
+                }
+            });
+        });
+    });
 </script>
 
 </body>
