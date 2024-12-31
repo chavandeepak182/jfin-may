@@ -411,7 +411,6 @@ public function disbursed()
                 break;
 
             case 6:
-                $this->validateLoanDetails($request);
                 $this->handleLoanDetails($request, $userId);
                 return redirect()->route('loan.thankyou');
 
