@@ -34,37 +34,42 @@ class MlmController extends Controller
      
     }    
     public function getAllChildNodes()
-    {
-        // Retrieve user_id from session (middleware ensures it exists)
-        $userId = Session::get('user_id');
-    
-        // Find the user's category node (or parent node) using their user_id
-        $userNode = Category::where('user_id', $userId)->first();
-    
-        // If the user does not have a category node, return an error
-        if (!$userNode) {
-            return response()->json(['message' => 'User node not found in the tree'], 404);
-        }
-    
-        // Fetch all child nodes (descendants) of the user node based on the nested set model
-        $descendants = Category::where('_lft', '>', $userNode->_lft)
-                               ->where('_rgt', '<', $userNode->_rgt)
-                               ->get();
-    
-        // Enhance each descendant by adding its parent name and referral code from the users table
-        $descendants->transform(function ($descendant) {
-            $parentName = DB::table('users')->where('id', $descendant->parent_id)->value('name');
-            $descendant->parent_name = $parentName ?: 'N/A'; // Default to 'N/A' if no parent found
-    
-            $referralCode = DB::table('users')->where('id', $descendant->user_id)->value('referral_code');
-            $descendant->referral_code = $referralCode ?: 'N/A';
-    
-            return $descendant;
-        });
-    
-        // Pass the descendants data to the Blade view
-        return view('user.tree', compact('descendants'));
+{
+    // Retrieve user_id from session (middleware ensures it exists)
+    $userId = Session::get('user_id');
+
+    // Find the user's category node (or parent node) using their user_id
+    $userNode = Category::where('user_id', $userId)->first();
+
+    // If the user does not have a category node, return an empty view with a friendly message
+    if (!$userNode) {
+        $descendants = collect(); // Empty collection
+        $message = 'User node not found in the tree.';
+        return view('user.tree', compact('descendants', 'message'));
     }
+
+    // Fetch all child nodes (descendants) of the user node based on the nested set model
+    $descendants = Category::where('_lft', '>', $userNode->_lft)
+                           ->where('_rgt', '<', $userNode->_rgt)
+                           ->get();
+
+    // Enhance each descendant by adding its parent name and referral code from the users table
+    $descendants->transform(function ($descendant) {
+        $parentName = DB::table('users')->where('id', $descendant->parent_id)->value('name');
+        $descendant->parent_name = $parentName ?: 'N/A'; // Default to 'N/A' if no parent found
+
+        $referralCode = DB::table('users')->where('id', $descendant->user_id)->value('referral_code');
+        $descendant->referral_code = $referralCode ?: 'N/A';
+
+        return $descendant;
+    });
+
+    // If no descendants are found, pass a custom message to the view
+    $message = $descendants->isEmpty() ? 'No child nodes found for this user.' : null;
+
+    // Pass the data to the Blade view
+    return view('user.tree', compact('descendants', 'message'));
+}
     
     // Fetch loans for a specific child user
     public function getLoansByChild(Request $request)
