@@ -151,27 +151,34 @@
 			</nav>
 
 			<main class="content">
-				<div class="container-fluid p-0">
-                <h2 class="mb-3 text-center">Educational Information</h2>
-					<div class="row">
-						<div class="col-md-10 mx-auto d-flex">
-							<div class="w-100">
-                                @if ($educationalDetails)
-                                    <div class="bg-white py-5 px-5 rounded">
-                                        <p>Qualification: <strong>{{ $educationalDetails->qualification }}</strong></p>
-                                        <p>College Name: <strong>{{ $educationalDetails->college_name }}</strong></p>
-                                        <p>Passing Year: <strong>{{ $educationalDetails->pass_year }}</strong></p>
-                                        <p>College Address: <strong>{{ $educationalDetails->college_address }}</strong></p>
-                                        <p class="mt-5"><a class="btn btn-primary rounded-pill py-2 px-2 px-md-4" data-bs-toggle="modal" data-bs-target="#editEducationalModal"><i class="far fa-edit me-2"></i> Update</a></p>
-                                    </div>
-                                @else
-                                    <p>No educational information available.</p>
-                                @endif
-							</div>
-						</div>						
-					</div>
+    <div class="container-fluid p-0">
+        <h2 class="mb-3 text-center">Educational Information</h2>
+        <div class="row">
+            <div class="col-md-10 mx-auto d-flex">
+                <div class="w-100">
+                    @if ($educationalDetails)
+                        <div class="bg-white py-5 px-5 rounded">
+                            <input type="hidden" name="edu_id" value="{{ $educationalDetails->edu_id }}">
+                            <p>Qualification: <strong>{{ $educationalDetails->qualification }}</strong></p>
+                            <p>College Name: <strong>{{ $educationalDetails->college_name }}</strong></p>
+                            <p>Passing Year: <strong>{{ $educationalDetails->pass_year }}</strong></p>
+                            <p>College Address: <strong>{{ $educationalDetails->college_address }}</strong></p>
+                            <p class="mt-5">
+                                <a class="btn btn-primary rounded-pill py-2 px-2 px-md-4" data-bs-toggle="modal" data-bs-target="#editEducationalModal">
+                                    <i class="far fa-edit me-2"></i> Update
+                                </a>
+                            </p>
+                        </div>
+                    @else
+                        <div class="bg-light py-5 px-5 rounded text-center">
+                            <p class="text-muted mb-0">No educational information available.</p>
+                        </div>
+                    @endif
                 </div>
-			</main>
+            </div>						
+        </div>
+    </div>
+</main>
             <footer class="sticky-footer bg-white py-3">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
@@ -181,8 +188,6 @@
             </footer>
         </div>
 	</div>         
-
-
 
 <!-- Edit Educational Modal -->
 	<div class="modal fade" id="editEducationalModal" tabindex="-1" aria-labelledby="editEducationalModalLabel" aria-hidden="true">

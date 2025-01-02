@@ -813,18 +813,18 @@ public function customerLoans()
     }
     public function myeducation(Request $request)
     {
-    $section = $request->query('section', 'personal');
-    $userId = session('user_id'); // Retrieve user ID from session
-
-    if (!$userId) {
-        return redirect()->route('login')->withErrors('User session expired. Please log in again.');
-    }
+        $section = $request->query('section', 'personal');
+        $userId = session('user_id'); // Retrieve user ID from session
     
-
-    // Fetch the profile information
-    $user = DB::table('users')->where('id', $userId)->first();
-    $educationalDetails = DB::table('education_details')->where('user_id', $userId)->first();
-    return view('frontend.profile.educational-info', compact('user', 'educationalDetails'));
+        if (!$userId) {
+            return redirect()->route('login')->withErrors('User session expired. Please log in again.');
+        }
+    
+        // Fetch the profile information
+        $user = DB::table('users')->where('id', $userId)->first();
+        $educationalDetails = DB::table('education_details')->where('user_id', $userId)->first();
+    
+        return view('frontend.profile.educational-info', compact('user', 'educationalDetails'));
     }
 
     public function mydocuments(Request $request)
