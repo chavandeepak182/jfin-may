@@ -31,7 +31,13 @@ Edit MIS Record
                 </div>
                 <div class="form-group col-lg-6">
                     <label for="product_type" class="col-form-label">Product Type:</label>
-                    <input type="text" class="form-control" id="product_type" name="product_type" value="{{ $misRecord->product_type }}" required>
+                    <select class="form-control" id="product_type" name="product_type" required>
+                        <option value="">Select Product Type</option>
+                        <option value="Home Loan" {{ $misRecord->product_type == 'Home Loan' ? 'selected' : '' }}>Home Loan</option>
+                        <option value="Personal Loan" {{ $misRecord->product_type == 'Personal Loan' ? 'selected' : '' }}>Personal Loan</option>
+                        <option value="MSME" {{ $misRecord->product_type == 'MSME' ? 'selected' : '' }}>MSME</option>
+                        <option value="Vehicle Loan" {{ $misRecord->product_type == 'Vehicle Loan' ? 'selected' : '' }}>Vehicle Loan</option>
+                    </select>
                 </div>
             </div>
             <div class="row">
