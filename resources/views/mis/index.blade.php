@@ -21,7 +21,7 @@ MIS Dashboard
         </div>
 
         <button class="btn btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#addMISView">
-            <i class="fa fa-plus"></i> Add Record
+            <i class="fa fa-plus"></i> Add Mis
         </button>
     </div>
 </div>
@@ -112,7 +112,13 @@ MIS Dashboard
                         </div>
                         <div class="form-group col-lg-6">
                             <label for="product_type" class="col-form-label">Product Type:</label>
-                            <input type="text" class="form-control" id="product_type" name="product_type" required>
+                            <select class="form-control" id="product_type" name="product_type" required>
+                                <option value="">Select Product Type</option>
+                                <option value="Home Loan">Home Loan</option>
+                                <option value="Personal Loan">Personal Loan</option>
+                                <option value="MSME">MSME</option>
+                                <option value="Vehicle Loan">Vehicle Loan</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row">
