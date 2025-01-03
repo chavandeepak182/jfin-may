@@ -105,77 +105,64 @@ class UsersController extends Controller
     }
     //customer registration
     public function registerUser(Request $request)
-    {
-        DB::beginTransaction();
-    
-        try {
-            // Validate request
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'mobile_no' => 'required|numeric|digits:10', // Ensures 10 digits
-                'email_id' => 'required|email|unique:users,email_id',
-                'password' => 'required|min:6|confirmed', // 'confirmed' checks for password_confirmation field
-            ]);
-    
-            if ($validator->fails()) {
-                // Redirect back with input and errors
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
-    
-            $six_digit_random_number = random_int(100000, 999999);
-    
-            // Generating the referral code
-            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            $charactersLength = strlen($characters);
-            $randomString = '';
-            for ($i = 0; $i < 10; $i++) {
-                $randomString .= $characters[random_int(0, $charactersLength - 1)];
-            }
-    
-            // Creating a new user
-            $user = new User;
-            $user->name = $request->name;
-            $user->email_id = $request->email_id;
-            $user->password = md5($request->password); // MD5 hashing
-            $user->role_id = 1;  // role_id = 1 for the customer hardcoded
-            $user->email_otp = $six_digit_random_number;
-            $user->referral_code = $randomString;
-            $user->save();
-    
-            // Creating profile information
-            $profile = new Profile;
-            $profile->user_id = $user->id;
-            $profile->mobile_no = $request->mobile_no;
-            $profile->dob = $request->dob;
-            $profile->residence_address = $request->address;
-            $profile->city = $request->city;
-            $profile->state = $request->state;
-            $profile->pincode = $request->pincode;
-            $profile->save();
-    
-            // Fetching data after insertion in user and profile table
-            $user_id = $user->id;
-            $profile_id = $profile->profile_id;
-    
-            // Updating the profile id in users table
-            User::where('id', $user_id)->update(['profile_id' => $profile_id]);
-    
-            $msg = "http://127.0.0.1:8000/userAuth/" . $user_id . "/" . $six_digit_random_number;
-            $temp_id = 3;
-    
-            DB::commit();
-    
-            // Send email and redirect back
-            $this->temail($request->email_id, $request->name, $msg, $temp_id);
-            return redirect()->back()->with('success', 'Registration Successful!Thank you for registering. Please check your email for a verification link to activate your account.');
-    
-        } catch (\Exception $e) {
-            DB::rollback();
-            return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage())->withInput();
+{
+    DB::beginTransaction();
+
+    try {
+        // Validate request
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'mobile_no' => 'required|numeric|digits:10',
+            'email_id' => 'required|email|unique:users,email_id',
+            'password' => 'required|min:6|confirmed', // Confirmed rule checks for password confirmation
+        ], [
+            'email_id.unique' => 'This email address is already registered.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
+
+        // Generate OTP and Referral Code
+        $six_digit_random_number = random_int(100000, 999999);
+        $randomString = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 10);
+
+        // Create User
+        $user = new User;
+        $user->name = $request->name;
+        $user->email_id = $request->email_id;
+        $user->password = md5($request->password); // MD5 hashing
+        $user->role_id = 1; // role_id = 1 for the customer hardcoded
+        $user->email_otp = $six_digit_random_number;
+        $user->referral_code = $randomString;
+        $user->save();
+
+        // Create Profile
+        $profile = new Profile;
+        $profile->user_id = $user->id;
+        $profile->mobile_no = $request->mobile_no;
+        $profile->dob = $request->dob;
+        $profile->residence_address = $request->address;
+        $profile->city = $request->city;
+        $profile->state = $request->state;
+        $profile->pincode = $request->pincode;
+        $profile->save();
+
+        // Update Profile ID in User
+        $user->update(['profile_id' => $profile->profile_id]);
+
+        DB::commit();
+
+        // Send Email
+        $msg = "http://127.0.0.1:8000/userAuth/" . $user->id . "/" . $six_digit_random_number;
+        $this->temail($request->email_id, $request->name, $msg, 3);
+
+        return redirect()->back()->with('success', 'Registration Successful! Please check your email for a verification link.');
+    } catch (\Exception $e) {
+        DB::rollback();
+        return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage())->withInput();
     }
-
-
+}
     public function editUser($id){    
         $id = '"'.$id.'"';
         $data['user'] = DB::select('SELECT u.id,u.name, u.email_id, u.password, p.mobile_no, p.dob, p.residence_address,p.city, p.state, 
