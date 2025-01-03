@@ -269,12 +269,22 @@
             </li>   
 
               <!-- Nav Item - Elgiblity criteria -->
-              <li class="nav-item {{ Request::segment(1) == 'eligibilityCriteria' ? 'active' : '' }}">
-                <a class="nav-link" href="{{route('eligibilityCriteria')}}">
+              
+              <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEligibility"
+                    aria-expanded="true" aria-controls="collapseEligibility">
                     <i class="fas fa-clipboard-list custom-icon"></i>
-                    <span>Eligibility criteria</span></a>
-            </li>   
-
+                    <span>Calculator</span>
+                </a>
+                <div id="collapseEligibility" class="collapse" aria-labelledby="headingEligibility" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Eligibility:</h6>
+                        <a class="collapse-item" href="{{route('eligibilityCriteria')}}">Eligibility Criteria</a>
+                        <a class="collapse-item" href="{{route('standalone.self')}}">Self Employed</a>
+                        <a class="collapse-item" href="#">Salaried</a>
+                    </div>
+                </div>
+              </li>
 
             <?php } ?> 
             <?php    if($role_id == env('agentRole_id')) { ?>

@@ -10,14 +10,8 @@
 <div class="container">
     <h2>Eligibility Calculator Self</h2>
 <!-- kdkkd -->
-    <form id="eligibilityForm" action="{{ route('calculate.eligibility') }}" method="POST">
+    <form id="eligibilityForm" action="{{ route('calculateEligibilitystandalone') }}" method="POST">
         @csrf
-        <input type="hidden" name="loan_id" value="{{ $data['userDetails']->loan_id }}"/>
-        <input type="hidden" name="user_id" value="{{ $data['userDetails']->user_id }}"/>
-
-        <!-- Customer Name -->
-        <h2>Customer Name: {{ $data['userDetails']->name }}</h2>
-
         <!-- Salary input (Fixed) -->
         <div class="form-group">
             <label for="salary">Income from Business (Yearly)</label>
@@ -33,194 +27,88 @@
         <div class="form-group">
             <label>Remuneration Income (Yearly)</label>
             <div id="remunerationIncomeContainer">
-                @php
-                    $remunerationIncomeData = $data['criteria'] && !empty($data['criteria']->remunration_income_json)
-                        ? json_decode($data['criteria']->remunration_income_json, true)
-                        : [];
-                @endphp
-
-                @if(!empty($remunerationIncomeData))
-                    @foreach($remunerationIncomeData as $income)
-                        <div class="row remuneration-income-row">
-                            <div class="col-md-5 mt-2">
-                                <input type="text" name="remunration_income_json[]" class="form-control" placeholder="Enter remuneration income name" value="{{ $income['source'] ?? '' }}">
-                            </div>
-                            <div class="col-md-3 mt-2">
-                                <input type="number" name="remunration_income_amount[]" class="form-control remuneration-income" placeholder="Enter remuneration income amount (Yearly)" value="{{ $income['amount'] ?? '' }}" oninput="calculateAvgMonthlyIncome(this)">
-                            </div>
-                            <div class="col-md-3 mt-2">
-                                <input type="text" class="form-control avg-remuneration-income" placeholder="Avg Monthly Remuneration" readonly>
-                            </div>
-                            <div class="col-md-1 d-flex align-items-center">
-                                <i class="fas fa-plus add-remuneration-income-icon" style="cursor: pointer;" onclick="addRemunerationIncomeRow()"></i>
-                                <i class="fas fa-minus remove-income-icon" style="cursor: pointer; display: none;" onclick="removeIncomeRow(this)"></i>
-                            </div>
-                        </div>
-                    @endforeach
-                @else
-                    <div class="row remuneration-income-row">
-                        <div class="col-md-5 mt-2">
-                            <input type="text" name="remunration_income_json[]" class="form-control" placeholder="Enter remuneration income name">
-                        </div>
-                        <div class="col-md-3 mt-2">
-                            <input type="number" name="remunration_income_amount[]" class="form-control remuneration-income" placeholder="Enter remuneration income amount (Yearly)" oninput="calculateAvgMonthlyIncome(this)">
-                        </div>
-                        <div class="col-md-3 mt-2">
-                            <input type="text" class="form-control avg-remuneration-income" placeholder="Avg Monthly Remuneration" readonly>
-                        </div>
-                        <div class="col-md-1 d-flex align-items-center">
-                            <i class="fas fa-plus add-remuneration-income-icon" style="cursor: pointer;" onclick="addRemunerationIncomeRow()"></i>
-                        </div>
+                <!-- Default empty data -->
+                <div class="row remuneration-income-row">
+                    <div class="col-md-5 mt-2">
+                        <input type="text" name="remunration_income_json[]" class="form-control" placeholder="Enter remuneration income name">
                     </div>
-                @endif
+                    <div class="col-md-3 mt-2">
+                        <input type="number" name="remunration_income_amount[]" class="form-control remuneration-income" placeholder="Enter remuneration income amount (Yearly)" oninput="calculateAvgMonthlyIncome(this)">
+                    </div>
+                    <div class="col-md-3 mt-2">
+                        <input type="text" class="form-control avg-remuneration-income" placeholder="Avg Monthly Remuneration" readonly>
+                    </div>
+                    <div class="col-md-1 d-flex align-items-center">
+                        <i class="fas fa-plus add-remuneration-income-icon" style="cursor: pointer;" onclick="addRemunerationIncomeRow()"></i>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- Rental Income Section -->
         <div class="form-group">
-    <label>Rental Income (Yearly)</label>
-    <div id="rentIncomeContainer">
-        @php
-            $rentalIncomeData = $data['criteria'] && !empty($data['criteria']->rental_income_json)
-                ? json_decode($data['criteria']->rental_income_json, true)
-                : [];
-        @endphp
-
-        @if(!empty($rentalIncomeData))
-            @foreach($rentalIncomeData as $income)
+            <label>Rental Income (Yearly)</label>
+            <div id="rentIncomeContainer">
+                <!-- Default empty data -->
                 <div class="row rent-income-row">
                     <div class="col-md-5 mt-2">
-                        <input type="text" name="rent_income_name[]" class="form-control" placeholder="Enter rental income name" value="{{ $income['source'] ?? '' }}">
+                        <input type="text" name="rent_income_name[]" class="form-control" placeholder="Enter rental income name">
                     </div>
                     <div class="col-md-3 mt-2">
-                        <input type="number" name="rent_income_amount[]" class="form-control rent-income" placeholder="Enter rent income amount (Yearly)" value="{{ $income['amount'] ?? '' }}" oninput="calculateTotalIncome()">
+                        <input type="number" name="rent_income_amount[]" class="form-control rent-income" placeholder="Enter rent income amount (Yearly)" oninput="calculateTotalIncome()">
                     </div>
                     <div class="col-md-3 mt-2">
                         <input type="text" class="form-control avg-rent-income" placeholder="Avg Monthly Rent" readonly>
                     </div>
                     <div class="col-md-1 d-flex align-items-center">
                         <i class="fas fa-plus add-income-icon" style="cursor: pointer;" onclick="addRentIncomeRow()"></i>
-                        <i class="fas fa-minus remove-income-icon" style="cursor: pointer; margin-left: 5px;" onclick="removeRentIncomeRow(this)"></i> <!-- Minus icon to remove the row -->
                     </div>
                 </div>
-            @endforeach
-        @else
-            <div class="row rent-income-row">
-                <div class="col-md-5 mt-2">
-                    <input type="text" name="rent_income_name[]" class="form-control" placeholder="Enter rental income name">
-                </div>
-                <div class="col-md-3 mt-2">
-                    <input type="number" name="rent_income_amount[]" class="form-control rent-income" placeholder="Enter rent income amount (Yearly)" oninput="calculateTotalIncome()">
-                </div>
-                <div class="col-md-3 mt-2">
-                    <input type="text" class="form-control avg-rent-income" placeholder="Avg Monthly Rent" readonly>
-                </div>
-                <div class="col-md-1 d-flex align-items-center">
-                    <i class="fas fa-plus add-income-icon" style="cursor: pointer;" onclick="addRentIncomeRow()"></i>
-                    <i class="fas fa-minus remove-income-icon" style="cursor: pointer; margin-left: 5px;" onclick="removeRentIncomeRow(this)" style="display: none;"></i> <!-- Hidden by default -->
-                </div>
             </div>
-        @endif
-    </div>
-</div>
+        </div>
 
         <!-- Profit Share Income Section -->
         <div class="form-group">
-    <label>Profit Share Income (Yearly)</label>
-    <div id="profitShareIncomeContainer">
-        @php
-            $profitShareIncomeData = $data['criteria'] && !empty($data['criteria']->firm_share_profit_json) 
-                ? json_decode($data['criteria']->firm_share_profit_json, true) 
-                : [];
-        @endphp
-
-        @if(!empty($profitShareIncomeData))
-            @foreach($profitShareIncomeData as $income)
+            <label>Profit Share Income (Yearly)</label>
+            <div id="profitShareIncomeContainer">
+                <!-- Default empty data -->
                 <div class="row profit-income-row">
                     <div class="col-md-5 mt-2">
-                        <input type="text" name="firm_share_profit_json[]" class="form-control" placeholder="Enter Profit share income name" value="{{ $income['source'] ?? '' }}">
+                        <input type="text" name="firm_share_profit_json[]" class="form-control" placeholder="Enter Profit share income name">
                     </div>
                     <div class="col-md-3 mt-2">
-                        <input type="number" name="firm_share_profit_amount[]" class="form-control profit-income" placeholder="Enter Profit share income amount (Yearly)" value="{{ $income['amount'] ?? '' }}" oninput="calculateTotalIncome(this)">
+                        <input type="number" name="firm_share_profit_amount[]" class="form-control profit-income" placeholder="Enter Profit share income amount (Yearly)" oninput="calculateTotalIncome(this)">
                     </div>
                     <div class="col-md-3 mt-2">
                         <input type="text" class="form-control avg-profit-income" placeholder="Avg Monthly Profit" readonly>
                     </div>
                     <div class="col-md-1 d-flex align-items-center">
                         <i class="fas fa-plus add-income-icon" style="cursor: pointer;" onclick="addProfitShareIncomeRow()"></i>
-                        <i class="fas fa-minus remove-income-icon" style="cursor: pointer; margin-left: 5px; display: none;" onclick="removeIncomeRow(this)"></i> <!-- Hidden by default -->
                     </div>
                 </div>
-            @endforeach
-        @else
-            <div class="row profit-income-row">
-                <div class="col-md-5 mt-2">
-                    <input type="text" name="firm_share_profit_json[]" class="form-control" placeholder="Enter Profit share income name">
-                </div>
-                <div class="col-md-3 mt-2">
-                    <input type="number" name="firm_share_profit_amount[]" class="form-control profit-income" placeholder="Enter Profit share income amount (Yearly)" oninput="calculateTotalIncome(this)">
-                </div>
-                <div class="col-md-3 mt-2">
-                    <input type="text" class="form-control avg-profit-income" placeholder="Avg Monthly Profit" readonly>
-                </div>
-                <div class="col-md-1 d-flex align-items-center">
-                    <i class="fas fa-plus add-income-icon" style="cursor: pointer;" onclick="addProfitShareIncomeRow()"></i>
-                    <i class="fas fa-minus remove-income-icon" style="cursor: pointer; margin-left: 5px; display: none;" onclick="removeIncomeRow(this)"></i> <!-- Hidden for the first row -->
-                </div>
             </div>
-        @endif
-    </div>
-</div>
+        </div>
 
         <!-- Other Income Section -->
         <div class="form-group">
-    <label>Agriculture Income (Yearly)</label>
-    <div id="agricultureIncomeContainer">
-        @php
-            $agricultureIncomeData = $data['criteria'] && !empty($data['criteria']->agriculture_income_json)
-                ? json_decode($data['criteria']->agriculture_income_json, true)
-                : [];
-        @endphp
-
-        @if(!empty($agricultureIncomeData))
-            @foreach($agricultureIncomeData as $income)
+            <label>Agriculture Income (Yearly)</label>
+            <div id="agricultureIncomeContainer">
+                <!-- Default empty data -->
                 <div class="row agriculture-income-row">
                     <div class="col-md-5 mt-2">
-                        <input type="text" name="agriculture_income_json[]" class="form-control" placeholder="Enter agriculture income name" value="{{ $income['source'] ?? '' }}">
+                        <input type="text" name="agriculture_income_json[]" class="form-control" placeholder="Enter agriculture income name">
                     </div>
                     <div class="col-md-3 mt-2">
-                        <input type="number" name="agriculture_income_amount[]" class="form-control agriculture-income" placeholder="Enter agriculture income amount (Yearly)" value="{{ $income['amount'] ?? '' }}" oninput="calculateTotalIncome()">
+                        <input type="number" name="agriculture_income_amount[]" class="form-control agriculture-income" placeholder="Enter agriculture income amount (Yearly)" oninput="calculateTotalIncome()">
                     </div>
                     <div class="col-md-3 mt-2">
                         <input type="text" class="form-control avg-agriculture-income" placeholder="Avg Monthly Income" readonly>
                     </div>
                     <div class="col-md-1 d-flex align-items-center">
                         <i class="fas fa-plus add-income-icon" style="cursor: pointer;" onclick="addAgricultureIncomeRow()"></i>
-                        <i class="fas fa-minus remove-income-icon" style="cursor: pointer; margin-left: 5px;" onclick="removeIncomeRow(this)" style="display: none;"></i> <!-- Initially hidden -->
                     </div>
                 </div>
-            @endforeach
-        @else
-            <div class="row agriculture-income-row">
-                <div class="col-md-5 mt-2">
-                    <input type="text" name="agriculture_income_json[]" class="form-control" placeholder="Enter agriculture income name">
-                </div>
-                <div class="col-md-3 mt-2">
-                    <input type="number" name="agriculture_income_amount[]" class="form-control agriculture-income" placeholder="Enter agriculture income amount (Yearly)" oninput="calculateTotalIncome()">
-                </div>
-                <div class="col-md-3 mt-2">
-                    <input type="text" class="form-control avg-agriculture-income" placeholder="Avg Monthly Income" readonly>
-                </div>
-                <div class="col-md-1 d-flex align-items-center">
-                    <i class="fas fa-plus add-income-icon" style="cursor: pointer;" onclick="addAgricultureIncomeRow()"></i>
-                    <i class="fas fa-minus remove-income-icon" style="cursor: pointer; margin-left: 5px;" onclick="removeIncomeRow(this)" style="display: none;"></i> <!-- Initially hidden -->
-                </div>
             </div>
-        @endif
-    </div>
-</div>
-
-    
-
+        </div>
         <!-- Total Monthly Income Display -->
         <div class="form-group">
             <label>Total Monthly Income</label>
@@ -249,44 +137,22 @@
 
         <!-- Deduction Section -->
         <div class="form-group">
-                <label>Deductions (monthly)</label>
-                <div id="deductionContainer">
-                    @php
-                        $deductionData = $data['criteria'] && !empty($data['criteria']->deduction_json)
-                            ? json_decode($data['criteria']->deduction_json, true)
-                            : [];
-                    @endphp
-
-                    @if(!empty($deductionData))
-                        @foreach($deductionData as $deduction)
-                            <div class="row deduction-row">
-                                <div class="col-md-6 mt-2">
-                                    <input type="text" name="deduction_json[]" class="form-control" placeholder="Enter deduction name" value="{{ $deduction['source'] ?? '' }}">
-                                </div>
-                                <div class="col-md-5 mt-2">
-                                    <input type="number" name="deduction_amount[]" class="form-control" placeholder="Enter deduction amount" value="{{ $deduction['amount'] ?? '' }}">
-                                </div>
-                                <div class="col-md-1 d-flex align-items-center">
-                                    <i class="fas fa-plus add-income-icon" style="cursor: pointer;" onclick="addDeductionRow()"></i>
-                                    <i class="fas fa-minus remove-income-icon" style="cursor: pointer; margin-left: 5px; display: none;" onclick="removeDeductionRow(this)"></i>
-                                </div>
-                            </div>
-                        @endforeach
-                    @else
-                        <div class="row deduction-row">
-                            <div class="col-md-6">
-                                <input type="text" name="deduction_json[]" class="form-control" placeholder="Enter deduction name">
-                            </div>
-                            <div class="col-md-5">
-                                <input type="number" name="deduction_amount[]" class="form-control" placeholder="Enter deduction amount">
-                            </div>
-                            <div class="col-md-1 d-flex align-items-center">
-                                <i class="fas fa-plus add-income-icon" style="cursor: pointer;" onclick="addDeductionRow()"></i>
-                            </div>
-                        </div>
-                    @endif
+            <label>Deductions (monthly)</label>
+            <div id="deductionContainer">
+                <!-- Default empty data -->
+                <div class="row deduction-row">
+                    <div class="col-md-6 mt-2">
+                        <input type="text" name="deduction_json[]" class="form-control" placeholder="Enter deduction name">
+                    </div>
+                    <div class="col-md-5 mt-2">
+                        <input type="number" name="deduction_amount[]" class="form-control" placeholder="Enter deduction amount">
+                    </div>
+                    <div class="col-md-1 d-flex align-items-center">
+                        <i class="fas fa-plus add-income-icon" style="cursor: pointer;" onclick="addDeductionRow()"></i>
+                    </div>
                 </div>
             </div>
+        </div>
              <!-- Co-applicant Checkbox -->
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="coApplicantCheckbox" name="co_applicant" value="1" onclick="toggleCoApplicantSection()">
@@ -299,14 +165,14 @@
             <h3>Co-applicant Details</h3>
 
             <div class="form-row">
-    <!-- Co-applicant Salary input -->
-    <div class="form-group col-md-6">
-        <label for="coapplicant_salary">Co-applicant Income from Business (Yearly)</label>
-        <input type="number" name="coapplicant_salary" id="coapplicant_salary" class="form-control" 
-               placeholder="Enter co-applicant's salary" 
-               value="{{ old('coapplicant_salary', $eligibilityCriteria->income_from_business_amount ?? '') }}" 
-               oninput="calculateTotalIncome()">
-    </div>
+            <!-- Co-applicant Salary input -->
+            <div class="form-group col-md-6">
+                <label for="coapplicant_salary">Co-applicant Income from Business (Yearly)</label>
+                <input type="number" name="coapplicant_salary" id="coapplicant_salary" class="form-control" 
+                    placeholder="Enter co-applicant's salary" 
+                    value="{{ old('coapplicant_salary', $eligibilityCriteria->income_from_business_amount ?? '') }}" 
+                    oninput="calculateTotalIncome()">
+            </div>
 
     <!-- Monthly Average Salary (read-only) -->
     <div class="form-group col-md-6">
@@ -319,145 +185,68 @@
     </div>
 
         <!-- Co-applicant Remuneration Income -->
-<div class="form-group">
-    <label>Co-applicant Remuneration Income (Yearly)</label>
-    <div id="coapplicantRemunerationIncomeContainer">
-        @php
-            $coapplicantRemunerationIncomeData = $data['criteria'] && !empty($data['criteria']->coapplicant_remunration_income_json)
-                ? json_decode($data['criteria']->coapplicant_remunration_income_json, true)
-                : [];
-        @endphp
-
-        @if(!empty($coapplicantRemunerationIncomeData))
-            @foreach($coapplicantRemunerationIncomeData as $income)
+        <div class="form-group">
+            <label>Co-applicant Remuneration Income (Yearly)</label>
+            <div id="coapplicantRemunerationIncomeContainer">
+                <!-- Default empty data -->
                 <div class="row coapplicant-remuneration-income-row">
                     <div class="col-md-5 mt-2">
-                        <input type="text" name="coapplicant_remunration_income_json[]" class="form-control" placeholder="Enter remuneration income name" value="{{ $income['source'] ?? '' }}">
+                        <input type="text" name="coapplicant_remunration_income_json[]" class="form-control" placeholder="Enter remuneration income name">
                     </div>
                     <div class="col-md-3 mt-2">
-                        <input type="number" name="coapplicant_remunration_income_amount[]" class="form-control coapplicant-remuneration-income" placeholder="Enter remuneration income amount (Yearly)" value="{{ $income['amount'] ?? '' }}" oninput="calculateAvgMonthlyIncome(this)">
+                        <input type="number" name="coapplicant_remunration_income_amount[]" class="form-control coapplicant-remuneration-income" placeholder="Enter remuneration income amount (Yearly)" oninput="calculateAvgMonthlyIncome(this)">
                     </div>
                     <div class="col-md-3 mt-2">
                         <input type="text" class="form-control avg-coapplicant-remuneration-income" placeholder="Avg Monthly Remuneration" readonly>
                     </div>
                     <div class="col-md-1 d-flex align-items-center">
                         <i class="fas fa-plus add-coapplicant-remuneration-income-icon" style="cursor: pointer;" onclick="addCoapplicantRemunerationIncomeRow()"></i>
-                        <i class="fas fa-minus remove-income-icon" style="cursor: pointer; display: none;" onclick="removeIncomeRow(this)"></i>
                     </div>
-                </div>
-            @endforeach
-        @else
-            <div class="row coapplicant-remuneration-income-row">
-                <div class="col-md-5 mt-2">
-                    <input type="text" name="coapplicant_remunration_income_json[]" class="form-control" placeholder="Enter remuneration income name">
-                </div>
-                <div class="col-md-3 mt-2">
-                    <input type="number" name="coapplicant_remunration_income_amount[]" class="form-control coapplicant-remuneration-income" placeholder="Enter remuneration income amount (Yearly)" oninput="calculateAvgMonthlyIncome(this)">
-                </div>
-                <div class="col-md-3 mt-2">
-                    <input type="text" class="form-control avg-coapplicant-remuneration-income" placeholder="Avg Monthly Remuneration" readonly>
-                </div>
-                <div class="col-md-1 d-flex align-items-center">
-                    <i class="fas fa-plus add-coapplicant-remuneration-income-icon" style="cursor: pointer;" onclick="addCoapplicantRemunerationIncomeRow()"></i>
                 </div>
             </div>
-        @endif
-    </div>
-</div>
+        </div>
 <!-- Co-Applicant Rental Income Section -->
-<div class="form-group">
-    <label>Co-Applicant Rental Income (Yearly)</label>
-    <div id="coapplicantRentIncomeContainer">
-        @php
-            $coapplicantRentalIncomeData = $data['criteria'] && !empty($data['criteria']->coapplicant_rent_income_json)
-                ? json_decode($data['criteria']->coapplicant_rent_income_json, true)
-                : [];
-        @endphp
-
-        @if(!empty($coapplicantRentalIncomeData))
-            @foreach($coapplicantRentalIncomeData as $income)
+        <div class="form-group">
+            <label>Co-Applicant Rental Income (Yearly)</label>
+            <div id="coapplicantRentIncomeContainer">
+                <!-- Default empty data -->
                 <div class="row rent-income-row">
                     <div class="col-md-5 mt-2">
-                        <input type="text" name="coapplicant_rent_income_name[]" class="form-control" placeholder="Enter co-applicant rental income name" value="{{ $income['source'] ?? '' }}">
+                        <input type="text" name="coapplicant_rent_income_name[]" class="form-control" placeholder="Enter co-applicant rental income name">
                     </div>
                     <div class="col-md-3 mt-2">
-                        <input type="number" name="coapplicant_rent_income_amount[]" class="form-control rent-income" placeholder="Enter co-applicant rent income amount (Yearly)" value="{{ $income['amount'] ?? '' }}" oninput="calculateTotalIncome()">
+                        <input type="number" name="coapplicant_rent_income_amount[]" class="form-control rent-income" placeholder="Enter co-applicant rent income amount (Yearly)" oninput="calculateTotalIncome()">
                     </div>
                     <div class="col-md-3 mt-2">
                         <input type="text" class="form-control avg-coapplicant-rent-income" placeholder="Avg Monthly Rent" readonly>
                     </div>
                     <div class="col-md-1 d-flex align-items-center">
                         <i class="fas fa-plus add-income-icon" style="cursor: pointer;" onclick="addCoapplicantRentIncomeRow()"></i>
-                        <i class="fas fa-minus remove-income-icon" style="cursor: pointer; margin-left: 5px;" onclick="removeRentIncomeRow(this)"></i>
                     </div>
-                </div>
-            @endforeach
-        @else
-            <div class="row rent-income-row">
-                <div class="col-md-5 mt-2">
-                    <input type="text" name="coapplicant_rent_income_name[]" class="form-control" placeholder="Enter co-applicant rental income name">
-                </div>
-                <div class="col-md-3 mt-2">
-                    <input type="number" name="coapplicant_rent_income_amount[]" class="form-control rent-income" placeholder="Enter co-applicant rent income amount (Yearly)" oninput="calculateTotalIncome()">
-                </div>
-                <div class="col-md-3 mt-2">
-                    <input type="text" class="form-control avg-coapplicant-rent-income" placeholder="Avg Monthly Rent" readonly>
-                </div>
-                <div class="col-md-1 d-flex align-items-center">
-                    <i class="fas fa-plus add-income-icon" style="cursor: pointer;" onclick="addCoapplicantRentIncomeRow()"></i>
-                    <i class="fas fa-minus remove-income-icon" style="cursor: pointer; margin-left: 5px;" onclick="removeRentIncomeRow(this)" style="display: none;"></i>
                 </div>
             </div>
-        @endif
-    </div>
-</div>
+        </div>
 <!-- Co-Applicant Profit Share Income Section -->
-<div class="form-group">
-    <label>Co-Applicant Profit Share Income (Yearly)</label>
-    <div id="coApplicantProfitShareIncomeContainer">
-        @php
-            $coApplicantProfitShareIncomeData = isset($data['coApplicantCriteria']) && !empty($data['coApplicantCriteria']->firm_share_profit_json) 
-                ? json_decode($data['coApplicantCriteria']->firm_share_profit_json, true) 
-                : [];
-        @endphp
-
-        @if(!empty($coApplicantProfitShareIncomeData))
-            @foreach($coApplicantProfitShareIncomeData as $income)
+        <div class="form-group">
+            <label>Co-Applicant Profit Share Income (Yearly)</label>
+            <div id="coApplicantProfitShareIncomeContainer">
+                <!-- Default empty data -->
                 <div class="row profit-income-row">
                     <div class="col-md-5 mt-2">
-                        <input type="text" name="co_firm_share_profit_json[]" class="form-control" placeholder="Enter Profit share income name" value="{{ $income['source'] ?? '' }}">
+                        <input type="text" name="co_firm_share_profit_json[]" class="form-control" placeholder="Enter Profit share income name">
                     </div>
                     <div class="col-md-3 mt-2">
-                        <input type="number" name="co_firm_share_profit_amount[]" class="form-control profit-income" placeholder="Enter Profit share income amount (Yearly)" value="{{ $income['amount'] ?? '' }}" oninput="calculateTotalIncome()">
+                        <input type="number" name="co_firm_share_profit_amount[]" class="form-control profit-income" placeholder="Enter Profit share income amount (Yearly)" oninput="calculateTotalIncome()">
                     </div>
                     <div class="col-md-3 mt-2">
                         <input type="text" class="form-control avg-profit-income" placeholder="Avg Monthly Profit" readonly>
                     </div>
                     <div class="col-md-1 d-flex align-items-center">
                         <i class="fas fa-plus add-income-icon" style="cursor: pointer;" onclick="addCoProfitShareIncomeRow()"></i>
-                        <i class="fas fa-minus remove-income-icon" style="cursor: pointer; margin-left: 5px; display: none;" onclick="removeIncomeRow(this)"></i>
                     </div>
                 </div>
-            @endforeach
-        @else
-            <div class="row profit-income-row">
-                <div class="col-md-5 mt-2">
-                    <input type="text" name="co_firm_share_profit_json[]" class="form-control" placeholder="Enter Profit share income name">
-                </div>
-                <div class="col-md-3 mt-2">
-                    <input type="number" name="co_firm_share_profit_amount[]" class="form-control profit-income" placeholder="Enter Profit share income amount (Yearly)" oninput="calculateTotalIncome()">
-                </div>
-                <div class="col-md-3 mt-2">
-                    <input type="text" class="form-control avg-profit-income" placeholder="Avg Monthly Profit" readonly>
-                </div>
-                <div class="col-md-1 d-flex align-items-center">
-                    <i class="fas fa-plus add-income-icon" style="cursor: pointer;" onclick="addCoProfitShareIncomeRow()"></i>
-                    <i class="fas fa-minus remove-income-icon" style="cursor: pointer; margin-left: 5px; display: none;" onclick="removeIncomeRow(this)"></i>
-                </div>
             </div>
-        @endif
-    </div>
-</div>
+        </div>
 <!-- coapplicant aggricultrue income -->
 <div class="form-group">
     <label>Co-Applicant Agriculture Income (Yearly)</label>
