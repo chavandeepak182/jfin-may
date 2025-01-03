@@ -33,7 +33,7 @@ All Loans
 <div class="card-body">
     <form method="GET" action="{{ route('loans.index') }}" class="mb-3">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3 text-white">
                 <label for="status">Status:</label>
                 <select name="status" id="status" class="form-control">
                     <option value="">All</option>
@@ -42,11 +42,11 @@ All Loans
                     <option value="disbursed" {{ request('status') == 'disbursed' ? 'selected' : '' }}>Disbursed</option>
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 text-white">
                 <label for="start_date">Start Date:</label>
                 <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 text-white">
                 <label for="end_date">End Date:</label>
                 <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
             </div>

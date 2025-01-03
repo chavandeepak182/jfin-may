@@ -241,6 +241,11 @@ Route::post('admin/insertUser',[UsersController::class,'insertUser'])->name('ins
     Route::get('/eligiblityDetails/{loan_id}', [EligibilityCriteriaController::class, 'eligiblityDetails'])->name('eligiblityDetails');
     Route::post('/calculate-eligibilityself', [EligibilityCriteriaController::class, 'calculateEligibility'])->name('calculate.eligibility');
     Route::post('/calculate-eligibilitysalaried', [EligibilityCriteriaController::class, 'calculateEligibilitysalaried'])->name('calculate.eligibility.salaried');
+
+    //standalone
+    Route::post('/calculate-eligibility-standalone', [EligibilityCriteriaController::class, 'calculateStandaloneEligibility'])->name('calculateEligibilitystandalone');
+    Route::get('/standalone-self', [EligibilityCriteriaController::class, 'showStandaloneForm'])
+    ->name('standalone.self');
 });
 
 //admin user profile

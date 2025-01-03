@@ -552,4 +552,150 @@ class EligibilityCriteriaController extends Controller
         'bankName' => $bank->name,
     ]);
 }
+
+//stand alone calculator
+public function showStandaloneForm()
+    {
+        $userSalary = 50000;  // Replace with actual logic to get user's salary
+
+        // Fetch eligible banks based on salary
+        $data['foirBanks'] = Foir::where('min_salary', '<=', $userSalary)
+                                ->where('max_salary', '>=', $userSalary)
+                                ->get();
+    
+        return view('admin.calculator.standalone_self', compact('data'));
+    }
+public function calculateStandaloneEligibility(Request $request)
+{
+    $request->validate([
+        'salary' => 'required|numeric',
+        'rent_income_name' => 'array',
+        'rent_income_amount' => 'array',
+        'firm_share_profit_json' => 'array',
+        'firm_share_profit_amount' => 'array',
+        'agriculture_income_json' => 'array',
+        'agriculture_income_amount' => 'array',
+        'remunration_income_json' => 'array',
+        'remunration_income_amount' =>'array',
+        'tax_amount' => 'required|numeric',
+        'deduction_name' => 'array',
+        'deduction_amount' => 'array',
+        'bank_id' => 'required|exists:foir,id', // Check against the foir table
+    ]);
+
+    // Monthly salary
+    $salary = $request->input('salary') / 12; // Convert annual salary to monthly
+    
+    // Remuneration income
+    $remunerationIncomeNames = $request->input('remunration_income_json', []); 
+    $remunerationIncomeAmounts = $request->input('remunration_income_amount', []);
+    $remunerationIncomeDetails = [];
+    foreach ($remunerationIncomeNames as $key => $source) {
+        $amount = $remunerationIncomeAmounts[$key] ?? 0;
+        if ($source && $amount > 0) {
+            $remunerationIncomeDetails[] = [
+                'source' => $source,
+                'amount' => (float) $amount  // Convert to monthly remuneration income
+            ];
+        }
+    }
+    $totalRemunerationIncome = array_sum(array_column($remunerationIncomeDetails, 'amount'));
+
+    // Rent income
+    $rentIncomeNames = $request->input('rent_income_name', []);
+    $rentIncomeAmounts = $request->input('rent_income_amount', []);
+    $rentalIncomeDetails = [];
+    foreach ($rentIncomeNames as $key => $source) {
+        $amount = $rentIncomeAmounts[$key] ?? 0;
+        if ($source && $amount > 0) {
+            $rentalIncomeDetails[] = [
+                'source' => $source,
+                'amount' => (float) $amount  // Convert to monthly rent income
+            ];
+        }
+    }
+    $totalRentIncome = array_sum(array_column($rentalIncomeDetails, 'amount'));
+
+    // Profit Share income
+    $profitShareIncomeNames = $request->input('firm_share_profit_json', []);
+    $profitShareIncomeAmounts = $request->input('firm_share_profit_amount', []);
+    $profitShareIncomeDetails = [];
+    foreach ($profitShareIncomeNames as $key => $source) {
+        $amount = $profitShareIncomeAmounts[$key] ?? 0;
+        if ($source && $amount > 0) {
+            $profitShareIncomeDetails[] = [
+                'source' => $source,
+                'amount' => (float) $amount  // Convert to monthly profit share income
+            ];
+        }
+    }
+    $totalProfitShareIncome = array_sum(array_column($profitShareIncomeDetails, 'amount'));
+
+    // Agriculture income (other income)
+    $agricultureIncomeNames = $request->input('agriculture_income_json', []);
+    $agricultureIncomeAmounts = $request->input('agriculture_income_amount', []);
+    $agricultureIncomeDetails = [];
+    foreach ($agricultureIncomeNames as $key => $source) {
+        $amount = $agricultureIncomeAmounts[$key] ?? 0;
+        if ($source && $amount > 0) {
+            $agricultureIncomeDetails[] = [
+                'source' => $source,
+                'amount' => (float) $amount  // Store amount as a float
+            ];
+        }
+    }
+    $totalAgricultureIncome = array_sum(array_column($agricultureIncomeDetails, 'amount'));    // Total monthly income
+
+    // Total income calculation
+    $totalIncome = $salary + ($totalRentIncome / 12) + ($totalAgricultureIncome / 12) + ($totalProfitShareIncome / 12) + ($totalRemunerationIncome / 12);
+
+    // Deductions calculation
+    $deductionNames = $request->input('deduction_name', []);
+    $deductionAmounts = $request->input('deduction_amount', []);
+    $deductionDetails = [];
+    foreach ($deductionNames as $key => $source) {
+        $amount = $deductionAmounts[$key] ?? 0;
+        if ($source && $amount > 0) {
+            $deductionDetails[] = [
+                'source' => $source,
+                'amount' => (float) $amount // Store amount as a float
+            ];
+        }
+    }
+    $totalDeductions = array_sum(array_column($deductionDetails, 'amount'));
+
+    // Tax amount (assuming annual and converting to monthly)
+    $taxAmount = (float) $request->input('tax_amount', 0) / 12;
+
+    // Fetch bank's FOIR percentage
+    $selectedBank = $request->input('bank_id');
+    $bank = Foir::find($selectedBank);
+    $foirPercentage = $bank->foir_percentage / 100; // Convert to decimal
+
+    // Calculate eligibility based on formula
+    $remainingIncomeAfterTax = $totalIncome - $taxAmount;
+    $proposedEmi = ($remainingIncomeAfterTax * $foirPercentage) - $totalDeductions;
+
+    // Prepare eligibility data for storage or display
+    $eligibilityData = [
+        'salary' => $salary,
+        'rental_income_json' => json_encode($rentalIncomeDetails), // Rental income details
+        'rental_income_amount' => $totalRentIncome, // Total rental income
+        'remunration_income_json' => json_encode($remunerationIncomeDetails), // Remuneration income details
+        'remunration_income_amount' => $totalRemunerationIncome, // Total remuneration income
+        'firm_share_profit_json' => json_encode($profitShareIncomeDetails), // Profit share income details
+        'firm_share_profit_amount' => $totalProfitShareIncome, // Total profit share income
+        'agriculture_income_json' => json_encode($agricultureIncomeDetails), // Agriculture income details
+        'agriculture_income_amount' => $totalAgricultureIncome, // Total agriculture income
+        'deduction_json' => json_encode($deductionDetails), // Deduction details
+        'deduction_amount' => $totalDeductions, // Total deductions
+        'tax_amount' => $taxAmount, // Monthly tax amount
+        'emi' => $proposedEmi, // Proposed EMI based on eligibility
+    ];
+
+    return response()->json([
+        'eligibility_data' => $eligibilityData,
+        'proposed_emi' => $proposedEmi
+    ]);
+}
 }
