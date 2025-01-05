@@ -11,7 +11,7 @@
                 <div class="col-md-6 py-5">
                     <h2 class="text-dark display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Secure Your Dream Home with Easy Home Loans</h2>
                     <p class="mt-4 text-dark"><strong>We're dedicated to being your trusted companion on the journey to realizing your dream home.</strong></p>
-                    <a href="/loan-application" class="btn btn-primary rounded py-3 px-5 mt-5 flex-shrink-0">Apply Now</a>
+                    <a href="/loan-application" class="btn btn-light rounded py-3 px-5 mt-5 flex-shrink-0">Apply Now</a>
                 </div>
                 <div class="col-md-6 px-5">
                     <img src="{{ asset('theme') }}/frontend/img/personal-loan.png" width="528px">
@@ -22,25 +22,31 @@
     <!-- Header End -->
 
         <!-- Service Start -->
-        <div class="container-fluid">
+        <div class="container-fluid mt-5">
             <div class="container">
-                <div class="wow fadeInUp" data-wow-delay="0.2s">
+                <div class="wow fadeInUp text-dark" data-wow-delay="0.2s">
+                    <h2 class="display-6 mb-4">Overview</h2>
+                    <p>A home loan is a secured financial product designed to help individuals achieve their dream of owning a home. Whether it’s purchasing a new house, constructing one, or renovating an existing property, home loans provide the necessary funding with flexible repayment options. Given the rising costs of real estate, home loans have become an essential tool for making homeownership more accessible and affordable. Lenders offer home loans with competitive interest rates and long repayment tenures, ensuring borrowers can comfortably manage their finances while securing a valuable asset.</p>
+                    <p>The property being financed serves as collateral, making home loans a safer option for lenders and a more affordable choice for borrowers. Home loans not only offer financial support but also come with tax benefits, making them a preferred choice for buyers and investors looking to build long-term wealth through real estate. With advancements in digital banking, the loan application process has become faster and more transparent, providing a seamless experience for borrowers.</p>
+                </div>
+
+                <div class="wow fadeInUp pt-5" data-wow-delay="0.2s">
                     <h2 class="display-6 mb-4">Home Loan Features</h2>
                 </div>
                 <div class="row g-2 pb-4">
-                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
+                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3 wow fadeInUp" data-wow-delay="0.3s">
                         <div class="p-3">
                             <img src="{{ asset('theme') }}/frontend/img/interest-rate.png" class="w-25 pb-3">
                             <p class="m-0 text-dark">Competitive Interest Rates</p>
                         </div>
                     </div>
-                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
+                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3 wow fadeInUp" data-wow-delay="0.4s">
                         <div class="p-3">
                             <img src="{{ asset('theme') }}/frontend/img/process.png" class="w-25 pb-3">
                             <p class="m-0 text-dark">Streamlined Documentation</p>
                         </div>
                     </div>
-                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
+                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3 wow fadeInUp" data-wow-delay="0.5s">
                         <div class="p-3">
                             <img src="{{ asset('theme') }}/frontend/img/computer.png" class="w-25 pb-3">
                             <p class="m-0 text-dark">Online Application Process</p>
@@ -78,7 +84,7 @@
                 <div class="row g-5 py-2 px-5 justify-content-center align-items-center">
                     <div class="col-xl-12 wow fadeInRight" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInRight;">
                         <div class="rounded p-3 h-100">
-                            <div class="row g-4 justify-content-center align-items-center bg-light rounded p-3 mx-auto" style="background-image: url(https://jfinserv.com/assets/img/cta_banner.webp);">
+                            <div class="row g-4 justify-content-center align-items-center bg-light rounded p-3 mx-auto" style="background-image: url({{ asset('theme') }}/frontend/img/cta_banner.webp);">
                                 <div class="col-md-9">
                                     <div class="counter-item h-100">
                                         <h3 class="text-light">Home Loan Eligibility & Documents</h3>
@@ -226,7 +232,7 @@
         <!-- FAQs Start -->
         <div class="container-fluid faq-section bg-light py-5">
             <div class="container py-5">
-                <div class="row g-5 align-items-center">
+                <div class="row g-5 align-items-center pb-5">
                     <div class="col-xl-8 mx-auto wow fadeInLeft" data-wow-delay="0.2s">
                         <div class="h-100">
                             <div class="mb-4 text-center">

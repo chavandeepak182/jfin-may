@@ -173,49 +173,49 @@
                 <div class="row g-4 justify-content-center">
                     <div class="col-md-3 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="feature-item p-3 pb-4 text-center">
-                            <img src="https://jfinserv.com/images/bnk_logos/pnb.jpg" alt="" class="w-50 rounded mb-4">
+                            <img src="{{ asset('theme') }}/frontend/img/bnk_logos/pnb.jpg" alt="" class="w-50 rounded mb-4">
                             <h4 style="font-size: 18px;">Home Loan Sourcing - Rank 1<sup>st</sup></h4>
                             <p>Year 2023-24</p>
                         </div>
                     </div>
                     <div class="col-md-3 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="feature-item p-3 pb-4 text-center">
-                            <img src="https://jfinserv.com/images/bnk_logos/arks.jpg" alt="" class="w-50 rounded mb-4">
+                            <img src="{{ asset('theme') }}/frontend/img/bnk_logos/arks.jpg" alt="" class="w-50 rounded mb-4">
                             <h4 style="font-size: 18px;">Preferred Business Partner</h4>
                             <p>Year 2023-24</p>
                         </div>
                     </div>
                     <div class="col-md-3 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="feature-item p-3 pb-2 text-center">
-                            <img src="https://jfinserv.com/images/bnk_logos/pnb.jpg" alt="" class="w-50 rounded mb-4">
+                            <img src="{{ asset('theme') }}/frontend/img/bnk_logos/pnb.jpg" alt="" class="w-50 rounded mb-4">
                             <h4 style="font-size: 18px;">Best Performaning in Home Loan Sourcing</h4>
                             <p>Year 2023-24</p>
                         </div>
                     </div>
                     <div class="col-md-3 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="feature-item p-3 pb-2 text-center">
-                            <img src="https://jfinserv.com/images/bnk_logos/bom.jpg" alt="" class="w-50 rounded mb-4">
+                            <img src="{{ asset('theme') }}/frontend/img/bnk_logos/bom.jpg" alt="" class="w-50 rounded mb-4">
                             <h4 style="font-size: 18px;">For Mobilizing Mortgage Loan - Rank 1<sup>st</sup></h4>
                             <p>Year 2022-23</p>
                         </div>
                     </div>
                     <div class="col-md-3 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="feature-item p-3 pb-4 text-center text-center">
-                            <img src="https://jfinserv.com/images/bnk_logos/ar.jpg" alt="" class="w-50 rounded mb-4">
+                            <img src="{{ asset('theme') }}/frontend/img/bnk_logos/ar.jpg" alt="" class="w-50 rounded mb-4">
                             <h4 style="font-size: 18px;">Best Category in Business</h4>
                             <p>Year 2022-23</p>
                         </div>
                     </div>
                     <div class="col-md-3 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="feature-item p-3 pb-2 text-center">
-                            <img src="https://jfinserv.com/images/bnk_logos/bom.jpg" alt="" class="w-50 rounded mb-4">
+                            <img src="{{ asset('theme') }}/frontend/img/bnk_logos/bom.jpg" alt="" class="w-50 rounded mb-4">
                             <h4 style="font-size: 18px;">For Mobilizing Mortgage Loan - Rank 1<sup>st</sup></h4>
                             <p>Year 2021-22</p>
                         </div>
                     </div>
                     <div class="col-md-3 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="feature-item p-3 pb-4 text-center">
-                            <img src="https://jfinserv.com/images/bnk_logos/indian.png" alt="" class="w-50 rounded mb-4">
+                            <img src="{{ asset('theme') }}/frontend/img/bnk_logos/indian.png" alt="" class="w-50 rounded mb-4">
                             <h4 style="font-size: 18px;">Top Performing DSA</h4>
                             <p>Year 2021-22</p>
                         </div>
