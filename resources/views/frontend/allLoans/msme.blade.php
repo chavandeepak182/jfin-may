@@ -1,7 +1,7 @@
 @extends('frontend.layouts.header')
-@section('title', "Home Loan - Jfinserv")
-@section('description', "Discover tailored home loan solutions and comprehensive financial services in Pune. Our expert team is business loan services in Pune.")
-@section('keywords', "financial services in pune, Home loan services in Pune, business loan provider in pune, Business loan services in Pune, Business loan in Pune")
+@section('title', "MSME Loan - Jfinserv")
+@section('description', "Discover tailored MSME Loan solutions and comprehensive financial services in Pune. Our expert team is business loan services in Pune.")
+@section('keywords', "financial services in pune, MSME Loan services in Pune, business loan provider in pune, Business loan services in Pune, Business loan in Pune")
 
 @section('content')
 <!-- Header Start -->
@@ -9,8 +9,8 @@
         <div class="container d-flex align-items-center justify-content-between py-5">
             <div class="row">
                 <div class="col-md-6 py-5">
-                    <h2 class="text-dark display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Secure Your Dream Home with Easy Home Loans</h2>
-                    <p class="mt-4 text-dark"><strong>We're dedicated to being your trusted companion on the journey to realizing your dream home.</strong></p>
+                    <h2 class="text-dark display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Grow with Jfinserv MSME Business Loans</h2>
+                    <p class="mt-4 text-dark"><strong>MSME loans, or Micro, Small, and Medium Enterprises loans, are financial products that help small businesses grow and develop.</strong></p>
                     <a href="/loan-application" class="btn btn-primary rounded py-3 px-5 mt-5 flex-shrink-0">Apply Now</a>
                 </div>
                 <div class="col-md-6 px-5">
@@ -22,10 +22,14 @@
     <!-- Header End -->
 
         <!-- Service Start -->
-        <div class="container-fluid">
+        <div class="container-fluid mt-5">
             <div class="container">
-                <div class="wow fadeInUp" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">Home Loan Features</h2>
+                <div class="wow fadeInUp text-dark" data-wow-delay="0.2s">
+                    <h2 class="display-6 mb-4">Overview</h2>
+                    <p>MSME Loans are specialized financial products designed to support Micro, Small, and Medium Enterprises (MSMEs) in meeting their business needs. These loans provide much-needed funding for working capital, business expansion, equipment purchases, and infrastructure development. Tailored to boost entrepreneurship and economic growth, MSME loans come with flexible repayment options, competitive interest rates, and minimal documentation. They empower small businesses to scale operations, improve productivity, and seize growth opportunities without compromising cash flow. With government-backed initiatives and schemes like MUDRA Loans, CGTMSE, and PMEGP, MSME loans have become more accessible, enabling businesses to thrive in today’s competitive landscape.</p>
+                </div>
+                <div class="wow fadeInUp pt-5" data-wow-delay="0.2s">
+                    <h2 class="display-6 mb-4">MSME Loan Features</h2>
                 </div>
                 <div class="row g-2 pb-4">
                     <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
@@ -37,50 +41,38 @@
                     <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
                         <div class="p-3">
                             <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">Offers for New Customers</p>
+                            <p class="m-0 text-dark">Swift Loan Processing</p>
                         </div>
                     </div>
                     <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
                         <div class="p-3">
                             <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">Offers for New Customers</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                        <div class="p-3">
-                            <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">Offers for New Customers</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-6 col-sm-12 border">
-                        <div class="p-3">
-                            <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">Offers for New Customers</p>
+                            <p class="m-0 text-dark">Digital Loan Management</p>
                         </div>
                     </div>
                 </div>
 
-            <!-- Features and Benefits of our Home Loan -->
+            <!-- Features and Benefits of our MSME Loan -->
                 <div class="wow fadeInUp py-5 text-dark" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">Features & Benefits of our Home Loan</h2>
-                    <p>We acknowledge that buying a home is one of life's most significant financial decisions. With our array of customizable home loan options, we're here to assist you at every turn, ensuring a seamless and stress-free process. The followings are the ways a Home Loan can be useful:</p>
+                    <h2 class="display-6 mb-4">Features & Benefits of our MSME Loan</h2>
+                    <p>We acknowledge that buying a home is one of life's most significant financial decisions. With our array of customizable MSME Loan options, we're here to assist you at every turn, ensuring a seamless and stress-free process. The followings are the ways a MSME Loan can be useful:</p>
                     <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Competitive Interest Rates:</strong> Take advantage of our competitive interest rates, guaranteeing that you can comfortably afford your dream home while safeguarding your financial stability.</p>
                     <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Flexible Repayment Options:</strong> Customize your repayment schedule to align with your financial capacity, whether you opt for a shorter duration to minimize interest costs or a longer duration for more manageable monthly payments.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Simple Application Process:</strong> Easily apply for a home loan from the convenience of your own home through our intuitive online application process, saving you valuable time and effort.</p>
+                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Simple Application Process:</strong> Easily apply for a MSME Loan from the convenience of your own home through our intuitive online application process, saving you valuable time and effort.</p>
                     <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Transparent Terms & Conditions</strong> Transparency is our cornerstone. From the outset, you'll have complete clarity with no hidden fees or surprises along the way. You'll be fully informed about all terms and conditions from the start.</p>
                     <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Quick Approval and Disbursal:</strong> We comprehend the importance of achieving your dream home promptly. With our swift approval and disbursement process, you'll find yourself stepping into your new home sooner than you expect.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>No Foreclosure Charges:</strong> Acquire a Home Loan hassle-free, devoid of collateral requirements, streamlining the borrowing process while minimizing risks. Embrace worry-free pursuit of your dreams with no foreclosure charges.</p>
+                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>No Foreclosure Charges:</strong> Acquire a MSME Loan hassle-free, devoid of collateral requirements, streamlining the borrowing process while minimizing risks. Embrace worry-free pursuit of your dreams with no foreclosure charges.</p>
                 </div>
 
-            <!-- Home Loan Eligibility and Documents -->
+            <!-- MSME Loan Eligibility and Documents -->
                 <div class="row g-5 py-2 px-5 justify-content-center align-items-center">
                     <div class="col-xl-12 wow fadeInRight" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInRight;">
                         <div class="rounded p-3 h-100">
                             <div class="row g-4 justify-content-center align-items-center bg-light rounded p-3 mx-auto" style="background-image: url(https://jfinserv.com/assets/img/cta_banner.webp);">
                                 <div class="col-md-9">
                                     <div class="counter-item h-100">
-                                        <h3 class="text-light">Home Loan Eligibility & Documents</h3>
-                                        <p class="text-light pb-2">Your eligibility for a Home Loan application is usually determined by your age, work status, credit score, and income.</p>
+                                        <h3 class="text-light">MSME Loan Eligibility & Documents</h3>
+                                        <p class="text-light pb-2">Your eligibility for a MSME Loan application is usually determined by your age, work status, credit score, and income.</p>
                                     </div>
                                 </div>
                                 <div class="col-md-3 m-0">
@@ -91,15 +83,15 @@
                     </div>
                 </div>
                 
-            <!-- Home Loan Eligibility Criteria -->
+            <!-- MSME Loan Eligibility Criteria -->
                 <div class="wow fadeInUp py-5 text-dark" data-wow-delay="0.2s">
                     <div class="row py-3">
                         <div class="col-md-5 py-5 text-center">
                             <img src="{{ asset('theme') }}/frontend/img/criteria.png" alt="" width="256px">
                         </div>
                         <div class="col-md-7">
-                            <h2 class="display-6 mb-4">Home Loan Eligibility Criteria</h2>
-                            <p>The basic criteria for home loan eligibility are as follows:</p>
+                            <h2 class="display-6 mb-4">MSME Loan Eligibility Criteria</h2>
+                            <p>The basic criteria for MSME Loan eligibility are as follows:</p>
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="age-tab" data-bs-toggle="tab" data-bs-target="#age" type="button" role="tab" aria-controls="age" aria-selected="true">Age</button>
@@ -136,9 +128,9 @@
                     </div>
                 </div>
 
-            <!-- Documentation for Home Loan -->
+            <!-- Documentation for MSME Loan -->
                 <div class="wow fadeInUp py-3 text-dark" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">Documentation for Home Loan</h2>
+                    <h2 class="display-6 mb-4">Documentation for MSME Loan</h2>
                     <div class="row py-3">
                         <div class="col-md-7">
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -186,11 +178,11 @@
                     </div>
                 </div>
                     
-            <!-- EMI Calculator for Home Loan -->
+            <!-- EMI Calculator for MSME Loan -->
                 <div class="wow fadeInUp py-5 mb-5 text-dark" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">EMI Calculator for Home Loan</h2>
-                    <p>The monthly payments you make towards repaying your Home Loan are called Equated Monthly Instalments (EMIs). These payments cover both the principal loan amount, spread over the loan tenure, and the interest on the remaining loan balance.</p>
-                    <p>The Ruloans online Home Loan EMI Calculator is a helpful tool to guide you in making informed decisions for managing your Home Loan efficiently. This easy-to-use calculator quickly and accurately computes your EMIs, helping you plan your finances with ease.</p>
+                    <h2 class="display-6 mb-4">EMI Calculator for MSME Loan</h2>
+                    <p>The monthly payments you make towards repaying your MSME Loan are called Equated Monthly Instalments (EMIs). These payments cover both the principal loan amount, spread over the loan tenure, and the interest on the remaining loan balance.</p>
+                    <p>The Ruloans online MSME Loan EMI Calculator is a helpful tool to guide you in making informed decisions for managing your MSME Loan efficiently. This easy-to-use calculator quickly and accurately computes your EMIs, helping you plan your finances with ease.</p>
                     <a href="/emi-calculator" traget="_blank" class="btn bg-white btn-link rounded border border-2 border-dark px-5 mt-3 flex-shrink-0"><img src="{{ asset('theme') }}/frontend/img/accounting.gif" width="65px"><span class="px-3" style="font-size:20px;">Calculate Now</span></a>                    
                 </div>
             </div>
@@ -198,36 +190,36 @@
         <!-- Service End -->
 
         <!-- FAQs Start -->
-        <div class="container-fluid faq-section bg-light py-5">
+        <div class="container-fluid faq-section bg-light py-5 mb-5">
             <div class="container py-5">
                 <div class="row g-5 align-items-center">
                     <div class="col-xl-8 mx-auto wow fadeInLeft" data-wow-delay="0.2s">
                         <div class="h-100">
                             <div class="mb-4 text-center">
-                                <h2 class="display-4 mb-0">Home Loan​​​​​​​ FAQ's</h2>
+                                <h2 class="display-4 mb-0">MSME Loan​​​​​​​ FAQ's</h2>
                             </div>
                             <div class="accordion" id="accordionExample">
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button border-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            Q: What is a home loan?
+                                            Q: What is a MSME Loan?
                                         </button>
                                     </h2>
                                     <div id="collapseOne" class="accordion-collapse collapse show active" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                         <div class="accordion-body rounded">
-                                            A: A home loan is a loan provided by a financial organisation to help individuals or families purchase a home. It allows borrowers to finance the purchase of a property by borrowing money from the lender and repaying it over a specified period of time, along with interest.
+                                            A: A MSME Loan is a loan provided by a financial organisation to help individuals or families purchase a home. It allows borrowers to finance the purchase of a property by borrowing money from the lender and repaying it over a specified period of time, along with interest.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingTwo">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                            Q: What documents are required for a salaried individual to apply for a home loan?
+                                            Q: What documents are required for a salaried individual to apply for a MSME Loan?
                                         </button>
                                     </h2>
                                     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            A: Following documents of a salaried person are needed to apply for home loan.
+                                            A: Following documents of a salaried person are needed to apply for MSME Loan.
                                             <ul>
                                                 <li>KYC documents (identity and address proof)</li>
                                                 <li>Income proof (Salary slips)</li>
@@ -239,12 +231,12 @@
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingThree">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                            Q: What documents are required for a self-employed individual to apply for a home loan?
+                                            Q: What documents are required for a self-employed individual to apply for a MSME Loan?
                                         </button>
                                     </h2>
                                     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            A: Following documents of a salaried person are needed to apply for home loan.
+                                            A: Following documents of a salaried person are needed to apply for MSME Loan.
                                             <ul>
                                                 <li>KYC documents (identity and address proof)</li>
                                                 <li>Income proof (P & L Statement)</li>
@@ -257,48 +249,48 @@
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingFour">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                            Q: What are the interest rates for home loans offered by Jfinserv?
+                                            Q: What are the interest rates for MSME Loans offered by Jfinserv?
                                         </button>
                                     </h2>
                                     <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            A: The interest rate for home loans offered by Jfinserv is based on market conditions, the loan amount, tenure, and the applicant's credit profile. Jfinserv strives to offer competitive interest rates to make home ownership affordable for its customers.
+                                            A: The interest rate for MSME Loans offered by Jfinserv is based on market conditions, the loan amount, tenure, and the applicant's credit profile. Jfinserv strives to offer competitive interest rates to make home ownership affordable for its customers.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingFive">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                            Q: What is the maximum loan amount and tenure offered for home loans by Jfinserv?
+                                            Q: What is the maximum loan amount and tenure offered for MSME Loans by Jfinserv?
                                         </button>
                                     </h2>
                                     <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            A: The maximum loan amount and tenure offered for home loans may vary depending on factors like applicant's income, repayment capacity, and the value of the property. Jfinserv offers competitive loan amounts and flexible repayment tenures to suit the needs of borrowers.
+                                            A: The maximum loan amount and tenure offered for MSME Loans may vary depending on factors like applicant's income, repayment capacity, and the value of the property. Jfinserv offers competitive loan amounts and flexible repayment tenures to suit the needs of borrowers.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingSix">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                                            Q: What is the process for applying for a home loan with Jfinserv?
+                                            Q: What is the process for applying for a MSME Loan with Jfinserv?
                                         </button>
                                     </h2>
                                     <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            A: The process for applying for a home loan involves, filling out an application form, submitting the required documents, undergoing credit appraisal, property valuation, and loan approval. Our dedicated team of experts will assist you at every step of the application process to ensure a smooth and hassle-free experience.
+                                            A: The process for applying for a MSME Loan involves, filling out an application form, submitting the required documents, undergoing credit appraisal, property valuation, and loan approval. Our dedicated team of experts will assist you at every step of the application process to ensure a smooth and hassle-free experience.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingSeven">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-                                            Q: What are the different types of home loans offered by Jfinserv?
+                                            Q: What are the different types of MSME Loans offered by Jfinserv?
                                         </button>
                                     </h2>
                                     <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            A: Jfinserv offers various types of home loans to meet the diverse needs of customers, including home purchase loans, home construction loans, home improvement loans, and balance transfer loans. Each type of loan is designed to address specific requirements related to buying, constructing, or renovating a home.
+                                            A: Jfinserv offers various types of MSME Loans to meet the diverse needs of customers, including home purchase loans, home construction loans, home improvement loans, and balance transfer loans. Each type of loan is designed to address specific requirements related to buying, constructing, or renovating a home.
                                         </div>
                                     </div>
                                 </div>

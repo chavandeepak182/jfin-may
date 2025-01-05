@@ -30,12 +30,10 @@
 }
 
 .details-hero {
-    margin-top: -100px;
     min-height: 640px;
-    padding: 90px 0 103px;
+    padding: 50px 0 0px;
     background-repeat: no-repeat;
-    background-size: 100%;
-    background-position-y: 16px;
+    background-size: cover;
 }
 
 .prop-details table tr th{

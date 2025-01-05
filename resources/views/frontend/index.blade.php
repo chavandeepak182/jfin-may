@@ -463,58 +463,58 @@
             <div class="slider pb-5 mb-5">
                 <div class="slide-track">
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/ab.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/ab.jpg" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/ar.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/ar.jpg" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/arks.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/arks.jpg" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/bom.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/bom.jpg" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/cbi.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/cbi.jpg" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/chola.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/chola.jpg" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/hdb.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/hdb.jpg" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/ib.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/ib.jpg" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/indian.png" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/indian.png" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/kotak.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/kotak.jpg" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/pnb.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/pnb.jpg" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/rbl.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/rbl.jpg" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/sc.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/sc.jpg" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/ujjivan.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/ujjivan.jpg" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/union.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/union.jpg" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/yb.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/yb.jpg" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/boi.png" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/boi.png" alt="">
                     </div>
                     <div class="slide">
-                        <img src="https://jfinserv.com/images/bnk_logos/uco.jpg" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/bnk_logos/uco.jpg" alt="">
                     </div>
                 </div>
             </div>

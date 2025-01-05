@@ -11,7 +11,7 @@
                 <div class="col-md-6 py-5">
                     <h2 class="text-dark display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Get Instant Access to Funds with an Overdraft Facility Loan</h2>
                     <p class="mt-4 text-dark"><strong>An Overdraft (OD) is a credit option provided by banks, enabling borrowers to cover business expenditures.</strong></p>
-                    <a href="/loan-application" class="btn btn-primary rounded py-3 px-5 mt-5 flex-shrink-0">Apply Now</a>
+                    <a href="/loan-application" class="btn btn-light rounded py-3 px-5 mt-5 flex-shrink-0">Apply Now</a>
                 </div>
                 <div class="col-md-6 px-5">
                     <img src="{{ asset('theme') }}/frontend/img/personal-loan.png" width="528px">
@@ -22,7 +22,7 @@
     <!-- Header End -->
 
         <!-- Service Start -->
-        <div class="container-fluid">
+        <div class="container-fluid mt-5">
             <div class="container">
                 <div class="wow fadeInUp text-dark" data-wow-delay="0.2s">
                     <h2 class="display-6 mb-4">Overview</h2>
@@ -82,7 +82,7 @@
                 <div class="row g-5 py-2 px-5 justify-content-center align-items-center">
                     <div class="col-xl-12 wow fadeInRight" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInRight;">
                         <div class="rounded p-3 h-100">
-                            <div class="row g-4 justify-content-center align-items-center bg-light rounded p-3 mx-auto" style="background-image: url(https://jfinserv.com/assets/img/cta_banner.webp);">
+                            <div class="row g-4 justify-content-center align-items-center bg-light rounded p-3 mx-auto" style="background-image: url({{ asset('theme') }}/frontend/img/cta_banner.webp);">
                                 <div class="col-md-9">
                                     <div class="counter-item h-100">
                                         <h3 class="text-light">Overdraft Facility Loan Eligibility & Documents</h3>
@@ -204,7 +204,7 @@
         <!-- Service End -->
 
         <!-- FAQs Start -->
-        <div class="container-fluid faq-section bg-light py-5">
+        <div class="container-fluid faq-section bg-light py-5 mb-5">
             <div class="container py-5">
                 <div class="row g-5 align-items-center">
                     <div class="col-xl-8 mx-auto wow fadeInLeft" data-wow-delay="0.2s">
