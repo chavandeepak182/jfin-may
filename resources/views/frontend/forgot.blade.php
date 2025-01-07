@@ -16,9 +16,9 @@
 </script>
 
 <!-- Contact Start -->
-    <div class="container-fluid contact bg-light py-5">
+    <div class="container-fluid contact bg-breadcrumb ptb-100 mb-5">
         <div class="container">
-            <div class="row g-5 align-items-center">
+            <div class="row pt-5 pb-5 g-5 align-items-center">
                 <div class="col-md-6 wow fadeInLeft" data-wow-delay="0.2s">
                     <div class="contact-img d-flex justify-content-center" >
                         <div class="contact-img-inner">
@@ -29,8 +29,8 @@
                     
                 <div class="col-md-6 wow fadeInRight" data-wow-delay="0.4s">
                     <div>    
-                        <h4 class="text-primary">Reset Your Password </h4>
-                        <p class="mb-4">Forgot your password? Enter your email address below, and we'll send you a link to create a new one.</p>
+                        <h3 class="text-white">Reset Your Password</h3>
+                        <p class="text-white mb-4">Enter your email address below, and we'll send you a link to create a new one.</p>
                         @if (session('status'))
                             <div class="alert alert-dismissable alert-success" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">

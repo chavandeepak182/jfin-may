@@ -33,9 +33,9 @@
                             </div>
                             <div class="service-content p-4">
                                 <div class="service-content-inner">
-                                    <a href="#" class="d-inline-block h4 mb-4">Home Loan</a>
+                                    <a href="{{ url('home-loan') }}" class="d-inline-block h4 mb-4">Home Loan</a>
                                     <p class="mb-4">We acknowledge that buying a home is one of life's most significant financial decisions.</p>
-                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Read More</a>
+                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="{{ url('home-loan') }}">Read More</a>
                                 </div>
                             </div>
                         </div>
@@ -47,9 +47,9 @@
                             </div>
                             <div class="service-content p-4">
                                 <div class="service-content-inner">
-                                    <a href="#" class="d-inline-block h4 mb-4">Loan Against Property</a>
+                                    <a href="{{ url('loan-against-property')}}" class="d-inline-block h4 mb-4">Loan Against Property</a>
                                     <p class="mb-4">Check out your loan against property eligibility and get exclusive add on benefits and tax benefits.</p>
-                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Read More</a>
+                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="{{ url('loan-against-property')}}">Read More</a>
                                 </div>
                             </div>
                         </div>
@@ -61,9 +61,9 @@
                             </div>
                             <div class="service-content p-4">
                                 <div class="service-content-inner">
-                                    <a href="#" class="d-inline-block h4 mb-4">Project Loan</a>
+                                    <a href="{{ url('project-loan')}}" class="d-inline-block h4 mb-4">Project Loan</a>
                                     <p class="mb-4">We'll help take the stress out of financing your building or renovation with our low rates & easy app.</p>
-                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Read More</a>
+                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="{{ url('project-loan')}}">Read More</a>
                                 </div>
                             </div>
                         </div>
@@ -75,9 +75,9 @@
                             </div>
                             <div class="service-content p-4">
                                 <div class="service-content-inner">
-                                    <a href="#" class="d-inline-block h4 mb-4">Overdraft Facility</a>
+                                    <a href="{{ url('overdraft-facility')}}" class="d-inline-block h4 mb-4">Overdraft Facility</a>
                                     <p class="mb-4">An overdraft facility allows you to withdraw funds from a fixed line of credit as and when you need to.</p>
-                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Read More</a>
+                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="{{ url('overdraft-facility')}}">Read More</a>
                                 </div>
                             </div>
                         </div>
@@ -89,9 +89,9 @@
                             </div>
                             <div class="service-content p-4">
                                 <div class="service-content-inner">
-                                    <a href="#" class="d-inline-block h4 mb-4">Lease Rental Discounting (LRD)</a>
+                                    <a href="{{ url('lease-rental-discounting')}}" class="d-inline-block h4 mb-4">Lease Rental Discounting (LRD)</a>
                                     <p class="mb-4">An overdraft facility allows you to withdraw funds from a fixed line of credit as and when you need to.</p>
-                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Read More</a>
+                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="{{ url('lease-rental-discounting')}}">Read More</a>
                                 </div>
                             </div>
                         </div>
@@ -103,9 +103,9 @@
                             </div>
                             <div class="service-content p-4">
                                 <div class="service-content-inner">
-                                    <a href="#" class="d-inline-block h4 mb-4">MSME Loan</a>
+                                    <a href="{{ url('msme-loan')}}" class="d-inline-block h4 mb-4">MSME Loan</a>
                                     <p class="mb-4">An overdraft facility allows you to withdraw funds from a fixed line of credit as and when you need to fixed line of credit as and when.</p>
-                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Read More</a>
+                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="{{ url('msme-loan')}}">Read More</a>
                                 </div>
                             </div>
                         </div>

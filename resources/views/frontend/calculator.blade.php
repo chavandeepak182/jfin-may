@@ -98,8 +98,18 @@
     }
 </style>
 
+    <div class="container-fluid bg-breadcrumb">
+        <div class="container text-center py-5" style="max-width: 900px;">
+            <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">EMI Calculator</h4>
+            <!-- <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
+                <li class="breadcrumb-item"><a class="text-primary" href="/">Home</a></li>
+                <li class="breadcrumb-item active text-primary">About Us</li>
+            </ol>     -->
+        </div>
+    </div>
+
     <div class="container py-5">
-        <div class="row g-5">
+        <div class="row mt-2 pb-5 mb-5 g-5">
             <div class="col-md-5 wow fadeInLeft" data-wow-delay="0.2s">
                 <div class="calculator-container">
                     <h2>EMI Calculator</h2>

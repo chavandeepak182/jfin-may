@@ -318,7 +318,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.8s">
+                    <!-- <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.8s">
                         <div class="team-item">
                             <div class="team-img">
                                 <img src="{{ asset('theme') }}/frontend/img/team/Sakshi.png" class="img-fluid rounded-top w-100" alt="">
@@ -334,7 +334,7 @@
                                 <p class="mb-0">Sales Co-ordinator</p>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.8s">
                         <div class="team-item">
                             <div class="team-img">

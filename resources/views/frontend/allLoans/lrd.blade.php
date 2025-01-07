@@ -9,8 +9,8 @@
         <div class="container d-flex align-items-center justify-content-between py-5">
             <div class="row">
                 <div class="col-md-6 py-5">
-                    <h2 class="text-dark display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Breaking Down the Concept of Lease Rental Discounting</h2>
-                    <p class="mt-4 text-dark"><strong>A Lease Rental Loan is a secured loan offered against rental income from leased properties. It helps property owners unlock liquidity for personal or business needs while retaining ownership of the asset.</strong></p>
+                    <h2 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Breaking Down the Concept of Lease Rental Discounting</h2>
+                    <p class="mt-4 text-white"><strong>A Lease Rental Loan is a secured loan offered against rental income from leased properties. It helps property owners unlock liquidity for personal or business needs while retaining ownership of the asset.</strong></p>
                     <a href="/loan-application" class="btn btn-light rounded py-3 px-5 mt-5 flex-shrink-0">Apply Now</a>
                 </div>
                 <div class="col-md-6 px-5">
