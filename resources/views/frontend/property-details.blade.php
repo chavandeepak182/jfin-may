@@ -5,7 +5,7 @@
 
 @section('content')
 <!-- Details Start -->
-    <div class="container-fluid bg-light about">
+    <div class="container-fluid bg-primary about">
     <?php 
     
         foreach($data['propertie_details'] as $v) {  
@@ -18,7 +18,7 @@
        
     ?>
         <div class="container py-5">
-            <div class="row g-5 text-display" style="font-family: 'DM Sans';">
+            <div class="row mt-3 mb-5 g-5 text-display" style="font-family: 'DM Sans';">
                 <div class="col-xl-9 wow fadeInLeft" data-wow-delay="0.2s">
                     <div class="about-item-content bg-white rounded p-5">
                         <p><small>Posted On: 30-Aug-24 <span class="float-end">Property ID: 74438353</span></small>
@@ -164,7 +164,7 @@
                                 <div>
                                     <h5 class="mb-0"><strong>Reach Us</strong></h5>
                                     <h6 class="mb-0 text-dark">+91 96358 456712</h6>
-                                    <a href="#" class="btn btn-primary rounded-pill py-2 w-100 mt-3"><i class="fa fa-phone-alt"></i> Call Now</a>
+                                    <a href="tel:9196358456712" class="btn btn-primary rounded-pill py-2 w-100 mt-3"><i class="fa fa-phone-alt"></i> Call Now</a>
                                 </div>
                             </div>
                         </div>

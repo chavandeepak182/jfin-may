@@ -2,16 +2,22 @@
 @section('title', "Financial Services in Pune | Lowest Loan Interest in PCMC - Jfinserv")
 
 @section('content')
-    <div class="container">
-        <div class="text-center" style="margin-top: 1%">
+<div class="container-fluid bg-breadcrumb">
+    <div class="container text-center py-5" style="max-width: 900px;">
+        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Welcome to Jfinserv</h4>         
+    </div>
+</div>
 
-         
-            @if($result['status'] == 'failed')
-                <h4 class="text-danger"><?php echo $result['message']?></h4>
-            @else
-                <h4 class="text-success"><?php echo $result['message']?></h4>
-                <a href="{{ route('login') }}" class="btn btn-primary mt-4">Go to Login</a>
-                <br>
-            @endif
-        </div>
+<div class="container mb-5">
+    <div class="text-center pt-5 pb-5">       
+        @if($result['status'] == 'failed')
+        <img src="{{ asset('theme') }}/frontend/img/red-tick.jpg" class="w-100" alt="">
+        <h4 class="text-danger"><?php echo $result['message']?></h4>
+        @else
+        <img src="{{ asset('theme') }}/frontend/img/green-tick.jpg" class="w-100" alt="">
+        <h4 class="text-success"><?php echo $result['message']?></h4>  
+        <a href="{{ route('login') }}" class="btn btn-dark mt-4 rounded-pill py-3 px-4 px-md-5 ms-2">Let's Start</a>
+    <br>
+    </div>
+</div>
 @endsection

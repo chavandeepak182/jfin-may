@@ -344,3 +344,7 @@ Route::get('/mis/edit/{id}', [MISController::class, 'edit'])->name('mis.edit');
 Route::put('/mis/update/{id}', [MISController::class, 'update'])->name('mis.update');
 Route::get('mis/export/excel', [MisController::class, 'exportExcel'])->name('mis.exportExcel');
 Route::get('mis/export/pdf', [MisController::class, 'exportPDF'])->name('mis.exportPDF');
+
+Route::get('/activate', function () {
+    return view('frontend.account_activation');
+});
