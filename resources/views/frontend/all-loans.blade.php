@@ -114,7 +114,7 @@ All Loans
                         </tr>
                     </tfoot>
                 </table>
-                <div class="d-flex justify-content-center mt-3"> 
+                <div class="float-right"> 
                     {{ $data['loans']->links() }}
                 </div>
             </div>

@@ -48,7 +48,8 @@ class LoanApplicationController extends Controller
             'loan_category.category_name as loan_category_name',
             'loan_bank_details.bank_name as bank_name',
             'loans.agent_action'
-        );
+        )
+        ->whereNotNull('loans.loan_reference_id'); // Add the condition to exclude loans without loan_reference_id
 
     // Apply filters if present
     if ($request->filled('status')) {
@@ -70,6 +71,7 @@ class LoanApplicationController extends Controller
             'users.name as user_name',
             'loans.status'
         )
+        ->whereNotNull('loans.loan_reference_id') // Add the condition here too
         ->latest('loans.created_at')
         ->take(5)
         ->get();
@@ -257,39 +259,41 @@ public function update(Request $request)
     }
 }
    //admin
-    public function inprocess()
-{
-    $data['loans'] = DB::table('loans')
-        ->join('users', 'loans.user_id', '=', 'users.id')
-        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-        ->where('loans.status', 'in process')
-        ->select('loans.*', 'users.name as user_name', 'loan_category.category_name as category_name')
-        ->paginate(10);
-
-    $data['users'] = DB::table('users')->get();
-    $data['loanCategories'] = DB::table('loan_category')->get();
-    $data['agents'] = DB::table('users')->where('role_id', 2)->get();
-
-    return view('frontend.in-process', compact('data'));
-}
-public function approved()
-{
-    // Fetch approved loans with necessary joins
-    $data['loans'] = DB::table('loans')
-        ->join('users', 'loans.user_id', '=', 'users.id')
-        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-        ->where('loans.status', 'approved')
-        ->select('loans.*', 'users.name as user_name', 'loan_category.category_name')
-        ->paginate(10);
-
-    // Fetch users, loan categories, and agents for other purposes
-    $data['users'] = DB::table('users')->get();
-    $data['loanCategories'] = DB::table('loan_category')->get();
-    $data['agents'] = DB::table('users')->where('role_id', 2)->get();
-
-    // Pass data to the view
-    return view('frontend.approved_loans', compact('data'));
-}
+   public function inprocess()
+   {
+       $data['loans'] = DB::table('loans')
+           ->join('users', 'loans.user_id', '=', 'users.id')
+           ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+           ->where('loans.status', 'in process')
+           ->whereNotNull('loans.loan_reference_id') // Ensure loan_reference_id is present
+           ->select('loans.*', 'users.name as user_name', 'loan_category.category_name as category_name')
+           ->paginate(10);
+   
+       $data['users'] = DB::table('users')->get();
+       $data['loanCategories'] = DB::table('loan_category')->get();
+       $data['agents'] = DB::table('users')->where('role_id', 2)->get();
+   
+       return view('frontend.in-process', compact('data'));
+   }
+   public function approved()
+   {
+       // Fetch approved loans with necessary joins and only include loans with a loan_reference_id
+       $data['loans'] = DB::table('loans')
+           ->join('users', 'loans.user_id', '=', 'users.id')
+           ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+           ->where('loans.status', 'approved')
+           ->whereNotNull('loans.loan_reference_id') // Ensure loan_reference_id is present
+           ->select('loans.*', 'users.name as user_name', 'loan_category.category_name')
+           ->paginate(10);
+   
+       // Fetch users, loan categories, and agents for other purposes
+       $data['users'] = DB::table('users')->get();
+       $data['loanCategories'] = DB::table('loan_category')->get();
+       $data['agents'] = DB::table('users')->where('role_id', 2)->get();
+   
+       // Pass data to the view
+       return view('frontend.approved_loans', compact('data'));
+   }
 //admin
 public function rejected()
 {
@@ -298,6 +302,7 @@ public function rejected()
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
         ->select('loans.loan_id', 'loans.loan_reference_id', 'loans.amount', 'loans.tenure', 'users.name as user_name', 'loan_category.category_name')
         ->where('loans.status', 'rejected')
+        ->whereNotNull('loans.loan_reference_id')
         ->paginate(10);
 
     return view('frontend.rejected_loans', compact('data'));
@@ -310,6 +315,7 @@ public function disbursed()
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
         ->select('loans.loan_id', 'loans.loan_reference_id', 'loans.amount', 'loans.tenure', 'users.name as user_name', 'loan_category.category_name')
         ->where('loans.status', 'disbursed')
+        ->whereNotNull('loans.loan_reference_id')
         ->paginate(10);
 
     return view('frontend.disbursed_loans', compact('data'));
@@ -339,9 +345,10 @@ public function disbursed()
         ->where('user_id', $userId)
         ->first();
         $hasExistingLoan = !is_null($existingLoans);
+        $states = DB::table('states')->get();
         $user = DB::table('users')->where('id', $userId)->first();
         return view('frontend.professional-info', compact(
-            'currentStep', 'is_loan','loanCategories', 'hasExistingLoan','loanBanks', 'profile', 'professional', 'education', 'existingLoans', 'documents', 'loan'
+            'currentStep', 'is_loan','loanCategories', 'states', 'hasExistingLoan','loanBanks', 'profile', 'professional', 'education', 'existingLoans', 'documents', 'loan'
         ));
     }
 
@@ -369,11 +376,11 @@ public function disbursed()
         ->first();
         $hasExistingLoan = !is_null($existingLoans);
         $user = DB::table('users')->where('id', $userId)->first();
-
+        $states = DB::table('states')->get();
         $is_loan = Session::get('is_loan');
 
         return view('frontend.professional-info', compact(
-            'currentStep', 'loanCategories', 'hasExistingLoan','loanBanks', 'profile', 'professional', 'education', 'existingLoans', 'documents', 'loan','is_loan'
+            'currentStep', 'loanCategories', 'states', 'hasExistingLoan','loanBanks', 'profile', 'professional', 'education', 'existingLoans', 'documents', 'loan','is_loan'
         ));
     }
     
@@ -388,44 +395,47 @@ public function disbursed()
     $currentStep = $request->input('current_step');
 
     try {
-        // Validate and handle each step
-        switch ($currentStep) {
-            case 1:
-                $this->handlePersonalDetails($request, $userId);
-                break;
+        // Determine whether the "Previous" or "Next" button was clicked
+        if ($request->has('previous')) {
+            $currentStep = max(1, $currentStep - 1); // Ensure the step doesn't go below 1
+            return redirect()->route('loan.form', ['current_step' => $currentStep]);
+        } elseif ($request->has('next')) {
+            // Validate and handle the current step
+            switch ($currentStep) {
+                case 1:
+                    $this->handlePersonalDetails($request, $userId);
+                    break;
+                case 2:
+                    $this->handleProfessionalDetails($request, $userId);
+                    break;
+                case 3:
+                    $this->handleEducationDetails($request, $userId);
+                    break;
+                case 4:
+                    $this->handleExistingLoanDetails($request, $userId);
+                    break;
+                case 5:
+                    $this->handleDocumentUpload($request, $userId);
+                    break;
+                case 6:
+                    $this->handleLoanDetails($request, $userId);
+                    return redirect()->route('loan.thankyou');
+                default:
+                    return redirect()->route('loan.form', ['current_step' => 1])
+                        ->withErrors('Invalid step. Please restart the application process.');
+            }
 
-            case 2:
-                $this->handleProfessionalDetails($request, $userId);
-                break;
-
-            case 3:
-                $this->handleEducationDetails($request, $userId);
-                break;
-
-            case 4:
-                $this->handleExistingLoanDetails($request, $userId);
-                break;
-
-            case 5:
-                $this->handleDocumentUpload($request, $userId);
-                break;
-
-            case 6:
-                $this->handleLoanDetails($request, $userId);
-                return redirect()->route('loan.thankyou');
-
-            default:
-                return redirect()->route('loan.form', ['current_step' => 1])
-                    ->withErrors('Invalid step. Please restart the application process.');
+            // Move to the next step
+            return redirect()->route('loan.form', ['current_step' => $currentStep + 1]);
+        } else {
+            return redirect()->back()->withErrors('Invalid action. Please try again.');
         }
-
-        // Redirect to the next step
-        return redirect()->route('loan.form', ['current_step' => $currentStep + 1]);
     } catch (\Exception $e) {
         Log::error('Error handling step: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
         return redirect()->back()->withErrors('Something went wrong. Please try again.');
     }
 }
+
     protected function handlePersonalDetails(Request $request, $userId)
     {
         $validated = $request->validate([
@@ -433,8 +443,8 @@ public function disbursed()
             'marital_status' => 'required|string|max:50',
             'dob' => 'required|date',
             'residence_address' => 'required|string|max:255',
-            'city' => 'required|string|max:100',
-            'state' => 'required|string|max:100',
+            'city' => 'required|integer|exists:cities,id',
+            'state' => 'required|integer|exists:states,id',
             'pincode' => 'required|string|max:10',
             'loan_category_id' => 'required|integer',
             'bank_id' => 'required|integer',
@@ -841,14 +851,17 @@ public function rejectLoan(Request $request)
 }
 public function pendingLoans()
 {
-    $pendingLoans = Loan::whereNull('agent_id')
-        ->orWhere('agent_action', 'Pending')
-        ->orWhereNull('agent_action')
-        ->orWhere('agent_action', 'rejected') // Include rejected loans
-        ->with(['user', 'loanCategory']) // Include relations if needed
+    $pendingLoans = DB::table('loans')
+        ->whereNotNull('loan_reference_id') // Ensure loan_reference_id is present
+        ->where(function ($query) {
+            $query->whereNull('agent_id')
+                ->orWhere('agent_action', 'Pending')
+                ->orWhereNull('agent_action')
+                ->orWhere('agent_action', 'rejected'); // Include rejected loans
+        })
         ->paginate(10); // Adjust pagination as needed
 
-    $agents = User::where('role_id', 2)->get(); // Fetch agents from the users table
+    $agents = DB::table('users')->where('role_id', 2)->get(); // Fetch agents from the users table
 
     return view('frontend.pending_loans', compact('pendingLoans', 'agents'));
 }

@@ -400,7 +400,6 @@ class EligibilityCriteriaController extends Controller
         } 
     }
 
-
     //salaried function for calculator
     public function calculateEligibilitySalaried(Request $request)
 {

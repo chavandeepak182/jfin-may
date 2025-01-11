@@ -115,11 +115,8 @@ JFS | Eligiblity Criteria
                             <input type="text" class="form-control" id="address" name="bank_address">
                         </div>
 
-                       
                     </div>
 
-                    
-                    
                     <div class="row">
                         <div class="form-group col-lg-4">
                             <label for="recipient-name" class="col-form-label">Manager Number:</label>
@@ -138,11 +135,7 @@ JFS | Eligiblity Criteria
                 </div>
             </div>
         </div>
-            
-
-
-   
-   
+              
 
 @endsection
 
