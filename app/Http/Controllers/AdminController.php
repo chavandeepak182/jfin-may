@@ -78,6 +78,7 @@ public function fetchRecentLoans($limit = 5)
             'loan_category.category_name as loan_category_name',
             'loans.status'
         )
+        ->whereNotNull('loans.loan_reference_id') // Only fetch loans where loan_reference_id is not null
         ->latest('loans.created_at')
         ->take($limit)
         ->get();

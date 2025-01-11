@@ -49,7 +49,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-2 mb-4">
                         <div class="card classy-card total-users">
                             <div class="card-body-admin text-center">

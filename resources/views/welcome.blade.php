@@ -107,7 +107,7 @@
                                                 <label>Username<span class="text-danger">*</span></label>
                                                 <div class="input-group">
                                                     <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
-                                                    <input type="email" name="email" class="form-control" placeholder="Enter Username" value="{{ old('email') }}">
+                                                    <input type="email" name="email" class="form-control" placeholder="Enter your email-id" value="{{ old('email') }}">
                                                 </div>
                                                 @error('email')
                                                     <span class="text-danger">{{ $message }}</span>

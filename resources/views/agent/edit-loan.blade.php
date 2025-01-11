@@ -26,7 +26,11 @@
         </script>
     @endif
     <h2 class="mb-4">Edit Loan</h2>
-
+    <style>
+        body{
+            color: #fff !important;
+        }
+    </style>
     <!-- Breadcrumbs -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb" style="margin-left: 20px;">
@@ -84,7 +88,7 @@
                         </div>
                         <div class="col-md-6" id="approvedAmountBox" style="display: none;">
                             <div class="form-group">
-                                <label for="amount_approved">Approved Amount:</label>
+                                <label for="amount_approved">Approved Amount:<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" id="amount_approved" name="amount_approved" value="{{ old('amount_approved', $loan->amount_approved ?? '') }}">
                             </div>
                         </div>
