@@ -65,7 +65,7 @@ JFS | Pending Properties
                                                 {{$p->contact}}
                                             </td> 
                                             <td>
-                                                 {{$p->select_bhk}} BHK
+                                                 {{$p->land_type}}
                                             </td> 
 
                                             <td>

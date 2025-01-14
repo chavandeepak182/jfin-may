@@ -46,6 +46,16 @@
                                     </span>
                                 @enderror
                             </div>
+                            <div class="col-md-6">
+                                <label for="office_contact" class="col-form-label text-md-end">{{ __('Office Contact') }}</label>
+                                <input type="text" id="office_contact" class="form-control @error('office_contact') is-invalid @enderror" name="office_contact" value="{{ old('office_contact') }}" required>
+
+                                @error('office_contact')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
 
                             <div class="col-md-6">
                                 <label for="product_type" class="col-form-label text-md-end">{{ __('Product Type') }}</label>
@@ -62,7 +72,47 @@
                                     </span>
                                 @enderror
                             </div>
+                            <div class="col-md-6">
+                                <label for="occupation" class="col-form-label text-md-end">{{ __('Occupation') }}</label>
+                                <select id="occupation" class="form-control @error('occupation') is-invalid @enderror" name="occupation" required>
+                                    <option value="">Select Occupation</option>
+                                    <option value="Salaried" {{ old('occupation', $misRecord->occupation ?? '') == 'Salaried' ? 'selected' : '' }}>Salaried</option>
+                                    <option value="Self Employed" {{ old('occupation', $misRecord->occupation ?? '') == 'Self Employed' ? 'selected' : '' }}>Self Employed</option>
+                                </select>
+
+                                @error('occupation')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="bank_name" class="col-form-label text-md-end">{{ __('Bank Name') }}</label>
+                                <select id="bank_name" class="form-control @error('bank_name') is-invalid @enderror" name="bank_name" required>
+                                    <option value="">Select Bank Name</option>
+                                    @foreach($bankNames as $bank)
+                                        <option value="{{ $bank->bank_id }}">{{ $bank->bank_name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @error('bank_name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="branch_name" class="col-form-label text-md-end">{{ __('Branch Name') }}</label>
+                                <input type="text" id="branch_name" class="form-control @error('branch_name') is-invalid @enderror" name="branch_name" value="{{ old('branch_name') }}" required>
+
+                                @error('branch_name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
                         </div>
+                        
 
                         <div class="row mb-3">
                             <div class="col-md-6">
@@ -94,6 +144,18 @@
                                 <textarea id="address" class="form-control @error('address') is-invalid @enderror" name="address" rows="3" required>{{ old('address') }}</textarea>
 
                                 @error('address')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="office_address" class="col-form-label text-md-end">{{ __('Office Address') }}</label>
+                                <textarea id="office_address" class="form-control @error('office_address') is-invalid @enderror" name="office_address" rows="3" required>{{ old('office_address') }}</textarea>
+
+                                @error('office_address')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

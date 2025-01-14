@@ -110,11 +110,23 @@
                                             <input type="text" name="builder_name" class="form-control" placeholder="Builder Name"  value="{{ $v->builder_name }}" />
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <!-- <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Select BHK</label>
                                             <input type="text" name="select_bhk" class="form-control" placeholder="BHK" value="{{ $v->select_bhk }}"  />
 
+                                        </div>
+                                    </div> -->
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Land Type</label>
+                                            <select class="form-control" name="land_type">
+                                                <option>Select Type</option>
+                                                <option value="Flat" {{ old('land_type', $v->land_type) == 'Flat' ? 'selected' : '' }}>Flat</option>
+                                                <option value="Bunglow" {{ old('land_type', $v->land_type) == 'Bunglow' ? 'selected' : '' }}>Bunglow</option>
+                                                <option value="Villa" {{ old('land_type', $v->land_type) == 'Villa' ? 'selected' : '' }}>Villa</option>
+                                                <option value="Plot" {{ old('land_type', $v->land_type) == 'Plot' ? 'selected' : '' }}>Plot</option>
+                                            </select>
                                         </div>
                                     </div>
 
@@ -122,6 +134,12 @@
                                         <div class="mb-3">
                                             <label class="form-label">Carpet area</label>
                                             <input type="text" name="area" class="form-control" placeholder="Carpet Area" value="{{ $v->area }}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Built Up area</label>
+                                            <input type="text" name="builtup_area" class="form-control" placeholder="Builtup Area" value="{{ $v->builtup_area }}" />
                                         </div>
                                     </div>
 
@@ -159,7 +177,33 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <!-- Location -->
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Location</label>
+                                    <input type="text" name="location" class="form-control" value="{{ $data['propertie_details'][0]->location ?? '' }}" placeholder="Location" required>
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="row">
+                            <!-- Latitude -->
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Latitude</label>
+                                    <input type="text" name="latitude" class="form-control" value="{{ $data['propertie_details'][0]->latitude ?? '' }}" placeholder="Latitude" required>
+                                </div>
+                            </div>
+
+                            <!-- Longitude -->
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Longitude</label>
+                                    <input type="text" name="longitude" class="form-control" value="{{ $data['propertie_details'][0]->longitude ?? '' }}" placeholder="Longitude" required>
+                                </div>
+                            </div>
+                        </div>
                        
                         
                         <div class="card mb-4" style="padding:3%">

@@ -62,6 +62,16 @@
                     </a>
                 </li>
             <?php 
+            
+            } elseif ($role_id == env('partnerRole_id')) { 
+            ?>
+                <li class="nav-item {{ Request::segment(1) == 'agent' && Request::segment(2) == 'dashboard' ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('partnerDashboard') }}">
+                        <i class="fas fa-tachometer-alt custom-icon"></i>
+                        <span>CP Dashboard</span>
+                    </a>
+                </li>
+            <?php 
             }
             ?>
 
@@ -274,14 +284,14 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEligibility"
                     aria-expanded="true" aria-controls="collapseEligibility">
                     <i class="fas fa-clipboard-list custom-icon"></i>
-                    <span>Calculator</span>
+                    <span>Eligibility Calculation</span>
                 </a>
                 <div id="collapseEligibility" class="collapse" aria-labelledby="headingEligibility" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Eligibility:</h6>
                         <a class="collapse-item" href="{{route('eligibilityCriteria')}}">Eligibility Criteria</a>
-                        <a class="collapse-item" href="{{route('standalone.self')}}">Self Employed</a>
-                        <a class="collapse-item" href="#">Salaried</a>
+                        <a class="collapse-item" href="{{route('standalone.self')}}">Self(for admin)</a>
+                        <a class="collapse-item" href="#">Salaried(for admin)</a>
                     </div>
                 </div>
               </li>

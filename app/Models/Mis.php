@@ -10,6 +10,6 @@ class Mis extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'email', 'contact', 'product_type', 'amount', 'address', 'city'
+        'name', 'email', 'contact', 'product_type', 'amount', 'address', 'city', 'office_address', 'office_contact', 'bank_name', 'branch_name', 'occupation'
     ];
 }
