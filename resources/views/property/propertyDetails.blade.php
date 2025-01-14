@@ -5,6 +5,7 @@
 @endsection
 @section('content')
 @parent
+
 <!-- Breadcrumbs -->
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -30,7 +31,7 @@
             
                 <!-- Title -->
                 <div class="d-flex justify-content-between align-items-lg-center py-3 flex-column flex-lg-row">
-                    <h2 class="h5 mb-3 mb-lg-0"><a href="../../pages/admin/customers.html" class="text-muted"><i class="bi bi-arrow-left-square me-2"></i></a> Property Details</h2>
+                    <h2 class="h5 mb-3 mb-lg-0 text-white"><a href="../../pages/admin/customers.html" class="text-muted"><i class="bi bi-arrow-left-square me-2"></i></a> Property Details</h2>
 
                  <?php
                         if($v->is_active == 0){ ?>
@@ -54,7 +55,7 @@
                         <!-- Basic information -->
                         <div class="card mb-4">
                             <div class="card-body">
-                                <h3 class="h6 mb-4">Basic information</h3>
+                                <h3 class="h6 mb-4 ">Basic information</h3>
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
@@ -77,11 +78,44 @@
                                             <input type="text" name="builder_name" class="form-control" placeholder="Builder Name" readonly value="{{ $v->builder_name }}" />
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <!-- <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Select BHK</label>
                                             <input type="text"  class="form-control" placeholder="Property Title" value="{{ $v->select_bhk }}" readonly />
 
+                                        </div>
+                                    </div> -->
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Land Type</label>
+                                            <input type="text" name="land_type" class="form-control" placeholder="Land Type" readonly value="{{ $v->land_type }}" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Beds</label>
+                                            <input type="text" name="beds" class="form-control" placeholder="Total beds" readonly value="{{ $v->beds }}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Balconies</label>
+                                            <input type="text"  class="form-control" placeholder="Total Balcony" value="{{ $v->balconies }}" readonly />
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Parking</label>
+                                            <input type="text" name="parking" class="form-control" placeholder="Total Parking" readonly value="{{ $v->parking }}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Baths</label>
+                                            <input type="text" name="baths" class="form-control" placeholder="Total Baths" readonly value="{{ $v->baths }}" />
                                         </div>
                                     </div>
                                 </div>
@@ -93,15 +127,42 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Property Description</label>
+                                    <label class="form-label text-white">Property Description</label>
                                     <textarea name="property_description" class="form-control" rows="2" style="resize:none" maxlength="250" value="" readonly>{{ $v->property_details }} </textarea>
                                 </div>
                             </div>
 
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Property Address</label>
+                                    <label class="form-label text-white">Property Address</label>
                                     <textarea name="property_address" class="form-control" rows="2" style="resize:none" maxlength="250" value="" readonly>{{ $v->address }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- Location -->
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-white">Location</label>
+                                    <textarea name="property_location" class="form-control" rows="2" style="resize:none" maxlength="250" readonly>{{ $v->location }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Latitude -->
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-white">Latitude</label>
+                                    <textarea name="property_latitude" class="form-control" rows="2" style="resize:none" maxlength="250" readonly>{{ $v->latitude }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Longitude -->
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-white">Longitude</label>
+                                    <textarea name="property_longitude" class="form-control" rows="2" style="resize:none" maxlength="250" readonly>{{ $v->longitude }}</textarea>
                                 </div>
                             </div>
                         </div>

@@ -36,7 +36,7 @@ JFS | Referral
                             <table id="example" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Referral Code</th>
                                         <th>Name</th>
                                         <th>Email ID</th>
                                         <th>Mobile Number</th>
@@ -49,7 +49,7 @@ JFS | Referral
                                         @foreach($data['earnings'] as $user)
                                         <tr>
                                             <td>
-                                                {{$user->id}}
+                                                {{$user->referral_code}}
                                             </td>   
                                             <td>
                                                 {{$user->name}}
@@ -76,7 +76,7 @@ JFS | Referral
                                   
                                 <tfoot>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Referral Code</th>
                                         <th>Name</th>
                                         <th>Email ID</th>
                                         <th>Mobile Number</th>

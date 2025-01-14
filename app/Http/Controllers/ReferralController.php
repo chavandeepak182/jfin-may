@@ -22,7 +22,7 @@ class ReferralController extends Controller
             $data['earnings'] = DB::table('users')
         ->join('profile', 'users.id', '=', 'profile.user_id')
         ->join('wallet', 'users.id', '=', 'wallet.user_id')
-        ->select('users.id', 'users.name', 'users.email_id', 'profile.mobile_no', 'profile.dob', 'wallet.wallet_balance')
+        ->select('users.id', 'users.name', 'users.email_id', 'users.referral_code', 'profile.mobile_no', 'profile.dob', 'wallet.wallet_balance')
         ->paginate(10);
 
         return view('admin.earnings',compact('data'));

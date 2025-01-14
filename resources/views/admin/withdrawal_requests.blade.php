@@ -40,7 +40,6 @@ JFS | Wallet Balance
                         <tr>
                             <th>Loan ID</th>
                             <th>Amount</th>
-                            <th>Tenure</th>
                             <th>User Name</th>
                             <th>Loan Category</th>
                             <th>Action</th>
@@ -70,7 +69,6 @@ JFS | Wallet Balance
                         <tr>
                             <th>Loan ID</th>
                             <th>Amount</th>
-                            <th>Tenure</th>
                             <th>User Name</th>
                             <th>Loan Category</th>
                             <th>Action</th>

@@ -33,10 +33,15 @@ class MisController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'contact' => 'required|string|max:255',
+            'office_contact' => 'required|string|max:255',
             'product_type' => 'required|string|max:255',
+            'bank_name' => 'required|string|max:255',
+            'occupation' => 'required|string|max:255',
+            'branch_name' => 'required|string|max:255',
             'amount' => 'required|numeric',
             'address' => 'required|string',
             'city' => 'required|string|max:255',
+            'office_address' =>'nullable|string|max:255',
         ]);
     
         MIS::create($validatedData);
@@ -56,9 +61,14 @@ class MisController extends Controller
         'name' => 'required|string|max:255',
         'email' => 'required|email|max:255',
         'contact' => 'required|string|max:255',
+        'office_contact' => 'required|string|max:255',
         'product_type' => 'required|string|max:255',
+        'bank_name' => 'required|string|max:255',
+        'occupation' => 'required|string|max:255',
+        'branch_name' => 'required|string|max:255',
         'amount' => 'required|numeric',
         'address' => 'required|string',
+        'office_address' => 'nullable|string|max:255',
         'city' => 'required|string|max:255',
     ]);
 

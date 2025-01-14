@@ -32,69 +32,78 @@ class PropertyController extends Controller
     {  
         $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
         
+        // Handle Property Image Upload
         $property_image_name = substr(str_shuffle($permitted_chars), 0, 8);
         if ($request->hasFile('property_image')) {
-            $property_image = "property_photos/".$property_image_name.time().'.'.$request->property_image->extension();
+            $property_image = "property_photos/" . $property_image_name . time() . '.' . $request->property_image->extension();
             $request->property_image->move(public_path('property_photos'), $property_image);
         } else {
             $property_image = "";
         }
-
+    
+        // Handle Property Voucher Upload
         $boucher_name = substr(str_shuffle($permitted_chars), 0, 8);
         if ($request->hasFile('property_voucher')) {
-            $property_voucher = "property_brochures/".$boucher_name.time().'.'.$request->property_voucher->extension();
+            $property_voucher = "property_brochures/" . $boucher_name . time() . '.' . $request->property_voucher->extension();
             $request->property_voucher->move(public_path('property_brochures'), $property_voucher);
         } else {
             $property_voucher = "";
         }
-
+    
         DB::beginTransaction();
-
-        try{
-                
-                $p = new Property;
-                $p->title = $request->property_title;
-                $p->property_type_id = $request->property_type;
-                $p->builder_name = $request->builder_name;
-                $p->image = $property_image;  
-                $p->property_details = $request->property_description;
-                $p->address	 = $request->property_address;
-
-                $p->facilities	 = $request->amenities;
-                $p->creator_id	 = $request->creator_id;
-                $p->price_range_id	 = $request->price_range;
-                $p->contact	 = $request->contact_number;
-
-                $p->area	 = $request->area;
-                $p->localities	 = $request->localitie;
-                $p->city	 = $request->city;
-
-                $p->email	 = $request->email_id;
-                $p->select_bhk	 = $request->select_bhk;
-                $p->boucher = $property_voucher;
-                
-                $p->save();
-
-
-                //activityLogs
-                $username = Session::get('username');
-                $user_id = Session::get('user_id');
-                $details = $username. " is added is property";
-               
-                if($p ){
-                    DB::commit();
-                      //calling UsersController temail function from FrontendController
-                    //app(UsersController::class)->insertActivityLogs($details, $user_id);
-                 
-                    return response()->json(['status'=>1,'msg'=>'Property added successfully']);
-                 }
+    
+        try {
+            $p = new Property;
+            $p->title = $request->property_title;
+            $p->property_type_id = $request->property_type;
+            $p->builder_name = $request->builder_name;
+            $p->image = $property_image;
+            $p->property_details = $request->property_description;
+            $p->address = $request->property_address;
             
-
-        }catch (\Exception $e) {
+            // Handling Amenities (Checkboxes)
+            $amenities = $request->input('amenities'); // Get selected amenities
+            if ($amenities) {
+                $p->facilities = implode(', ', $amenities); // Store as a comma-separated string
+            } else {
+                $p->facilities = ''; // No amenities selected
+            }
+    
+            $p->creator_id = $request->creator_id;
+            $p->price_range_id = $request->price_range;
+            $p->contact = $request->contact_number;
+            $p->area = $request->area;
+            $p->builtup_area = $request->builtup_area;
+            $p->localities = $request->localitie;
+            $p->beds = $request->beds;
+            $p->baths = $request->baths;
+            $p->balconies = $request->balconies;
+            $p->parking = $request->parking;
+            $p->city = $request->city;
+            $p->email = $request->email_id;
+            $p->select_bhk = $request->select_bhk;
+            $p->land_type = $request->land_type;
+            $p->boucher = $property_voucher;
+            $p->location = $request->input('location'); 
+            $p->latitude = $request->input('latitude'); 
+            $p->longitude = $request->input('longitude');
+        
+            // Save property
+            $p->save();
+    
+            // Activity logs (if needed)
+            $username = Session::get('username');
+            $user_id = Session::get('user_id');
+            $details = $username . " has added a new property";
+            
+            // Commit transaction if successful
+            DB::commit();
+            return response()->json(['status' => 1, 'msg' => 'Property added successfully']);
+    
+        } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['status'=> 0,'msg'=>$e->getMessage()]);
-           // dd($e->getMessage());
-        } 
+            return response()->json(['status' => 0, 'msg' => $e->getMessage()]);
+        }
     }
 
     public function allProperties()
@@ -103,8 +112,8 @@ class PropertyController extends Controller
         ->join('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
         ->join('property_category', 'properties.property_type_id', '=', 'property_category.pid')
         ->where('properties.is_active',1)
-        ->select('properties.properties_id', 'properties.title', 'properties.property_type_id', 'properties.builder_name','properties.select_bhk', 
-        'properties.address','properties.facilities',  'properties.contact', 'price_range.from_price', 'price_range.to_price', 'property_category.category_name')
+        ->select('properties.properties_id', 'properties.title', 'properties.property_type_id', 'properties.builder_name','properties.select_bhk', 'properties.land_type',
+        'properties.address','properties.facilities','properties.beds', 'properties.baths', 'properties.balconies', 'properties.parking', 'properties.builtup_area',  'properties.contact', 'price_range.from_price', 'price_range.to_price', 'property_category.category_name')
         ->paginate(50);
 
         return view('property.allProperties',compact('data'));
@@ -116,10 +125,10 @@ class PropertyController extends Controller
         ->join('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
         ->join('property_category', 'properties.property_type_id', '=', 'property_category.pid')
         ->where('properties.is_active',0)
-        ->select('properties.properties_id', 'properties.title', 'properties.property_type_id', 'properties.builder_name','properties.select_bhk', 
-        'properties.address','properties.facilities',  'properties.contact', 'price_range.from_price', 'price_range.to_price', 'property_category.category_name')
+        ->select('properties.properties_id', 'properties.title', 'properties.property_type_id', 'properties.builder_name','properties.select_bhk', 'properties.land_type',
+        'properties.address','properties.facilities', 'properties.builtup_area', 'properties.beds', 'properties.baths', 'properties.balconies', 'properties.parking', 'properties.contact', 'price_range.from_price', 'price_range.to_price', 'property_category.category_name')
         ->paginate(50);
-
+        
         return view('property.pendingProperties',compact('data'));
     }
 
@@ -209,9 +218,18 @@ class PropertyController extends Controller
             'boucher'=> $property_voucher,
             'facilities' => $request->amenities,
             'area' => $request->area,
+            'builtup_area' => $request->builtup_area,
             'city' => $request->city,
-            'localities' => $request->localities
-            
+            'beds' => $request->beds,
+            'baths' => $request->baths,
+            'balconies' => $request->balconies,
+            'parking' => $request->parking,
+            'localities' => $request->localities,
+            'location' => $request->location,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'land_type' =>$request->land_type,
+                
         );
 
         try{    

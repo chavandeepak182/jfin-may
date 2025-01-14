@@ -111,6 +111,10 @@ MIS Dashboard
                             <input type="text" class="form-control" id="contact" name="contact" required>
                         </div>
                         <div class="form-group col-lg-6">
+                            <label for="office_contact" class="col-form-label">Office Contact:</label>
+                            <input type="text" class="form-control" id="office_contact" name="office_contact" required>
+                        </div>
+                        <div class="form-group col-lg-6">
                             <label for="product_type" class="col-form-label">Product Type:</label>
                             <select class="form-control" id="product_type" name="product_type" required>
                                 <option value="">Select Product Type</option>
@@ -120,7 +124,33 @@ MIS Dashboard
                                 <option value="Vehicle Loan">Vehicle Loan</option>
                             </select>
                         </div>
+                        <div class="form-group col-lg-6">
+                            <label for="occupation" class="col-form-label">Occupation:</label>
+                            <select class="form-control" id="occupation" name="occupation" required>
+                                <option value="">Select Occupation</option>
+                                <option value="Salaried" {{ old('occupation', $misRecord->occupation ?? '') == 'Salaried' ? 'selected' : '' }}>Salaried</option>
+                                <option value="Self Employed" {{ old('occupation', $misRecord->occupation ?? '') == 'Self Employed' ? 'selected' : '' }}>Self Employed</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="bank_name" class="col-form-label">Bank Name:</label>
+                            <select class="form-control" id="bank_name" name="bank_name" required>
+                                <option value="">Select Bank Name</option>
+                                <option value="IDFC" {{ old('bank_name', $misRecord->bank_name ?? '') == 'IDFC' ? 'selected' : '' }}>IDFC</option>
+                                <option value="SBI" {{ old('bank_name', $misRecord->bank_name ?? '') == 'SBI' ? 'selected' : '' }}>SBI</option>
+                                <option value="KOTAK" {{ old('bank_name', $misRecord->bank_name ?? '') == 'KOTAK' ? 'selected' : '' }}>KOTAK</option>
+                                <option value="HDFC" {{ old('bank_name', $misRecord->bank_name ?? '') == 'HDFC' ? 'selected' : '' }}>HDFC</option>
+                                <option value="MAHARASHTRA" {{ old('bank_name', $misRecord->bank_name ?? '') == 'MAHARASHTRA' ? 'selected' : '' }}>MAHARASHTRA</option>
+                                <option value="AXIS" {{ old('bank_name', $misRecord->bank_name ?? '') == 'AXIS' ? 'selected' : '' }}>AXIS</option>
+                                
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="branch_name" class="col-form-label">Branch Name:</label>
+                            <input type="text" class="form-control" id="branch_name" name="branch_name" required>
+                        </div>
                     </div>
+                    
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label for="amount" class="col-form-label">Amount:</label>
@@ -133,8 +163,14 @@ MIS Dashboard
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
-                            <label for="address" class="col-form-label">Address:</label>
+                            <label for="address" class="col-form-label">Residencial Address:</label>
                             <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label for="office_address" class="col-form-label">Office Address:</label>
+                            <textarea class="form-control" id="office_address" name="office_address" rows="3" required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">

@@ -310,6 +310,7 @@ Route::middleware('isPartner')->group(function () {
     Route::post('/updatePropertie', [PropertyController::class, 'updatePropertie'])->name('updatePropertie');
     Route::post('/deletePropertie', [PropertyController::class, 'deletePropertie'])->name('deletePropertie');
     Route::post('/activate', [PropertyController::class, 'activate'])->name('activate');
+
 });
 
 

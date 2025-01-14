@@ -246,7 +246,6 @@ class FrontendController extends Controller
 
         return view('frontend.property-details',compact('data'));
     }
-
     // Loan Application
     public function ProfessionalDetailView(){
         return view('frontend.professional-info');
@@ -263,7 +262,7 @@ class FrontendController extends Controller
             ->join('property_category', 'properties.property_type_id', '=', 'property_category.pid')
             ->where('properties.is_active',1)
             ->select('properties.properties_id', 'properties.title', 'properties.image', 'properties.property_type_id', 'properties.builder_name','properties.select_bhk', 
-            'properties.address','properties.facilities',  'properties.contact', 'price_range.from_price', 'price_range.to_price', 'property_category.category_name', 'properties.property_details', 'properties.localities', 'properties.city', 'properties.area')
+            'properties.address','properties.facilities', 'properties.beds',  'properties.baths', 'properties.balconies', 'properties.parking', 'properties.contact', 'price_range.from_price', 'price_range.to_price', 'property_category.category_name', 'properties.property_details', 'properties.localities', 'properties.city', 'properties.area')
         ->paginate(700);
 
         $data['category'] = DB::table('property_category')->get();
