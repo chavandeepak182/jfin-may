@@ -20,11 +20,11 @@ class EnquiryController extends Controller
             'email' => 'required|email|max:255',
             'contact' => 'required|string|max:15',
             'amount' => '|numeric',
-            'address' => 'required|string',
-            'message' => 'required|string',
+            'address' => '|string',
+            'message' => '|string',
             'enquiry_type' => 'string'
         ]);
         Enquiry::create($validated);
-        return redirect()->back()->with('success', 'Enquiry submitted successfully!');
+        return response()->json(['success' => true, 'message' => 'Enquiry submitted successfully!']);
     }
 }

@@ -97,7 +97,7 @@ class ReferralController extends Controller
         $requests = DB::table('withdrawal_requests')
             ->join('users', 'withdrawal_requests.user_id', '=', 'users.id') // Join with the users table
             ->where('withdrawal_requests.status', 'pending') // Filter pending requests
-            ->select('withdrawal_requests.*', 'users.name') // Select all fields from withdrawal_requests and the name from users
+            ->select('withdrawal_requests.*', 'users.name', 'users.referral_code') // Select all fields from withdrawal_requests, the name, and referral_code from users
             ->get();
     
         return view('admin.withdrawal_requests', compact('requests'));

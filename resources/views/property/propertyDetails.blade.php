@@ -118,6 +118,12 @@
                                             <input type="text" name="baths" class="form-control" placeholder="Total Baths" readonly value="{{ $v->baths }}" />
                                         </div>
                                     </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Starting Price</label>
+                                            <input type="text" name="s_price" class="form-control" placeholder="Starting Price" readonly value="{{ $v->s_price }}" />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

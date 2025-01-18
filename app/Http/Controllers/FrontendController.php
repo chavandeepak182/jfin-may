@@ -244,7 +244,7 @@ class FrontendController extends Controller
         $data['propertie_details'] = DB::select('select * from properties as p, price_range as pr, property_category as pc where 
         p.price_range_id = pr.range_id and pc.pid = p.property_type_id and p.properties_id =' . $property_id);
 
-        return view('frontend.property-details',compact('data'));
+        return view('frontend.property-details-test',compact('data'));
     }
     // Loan Application
     public function ProfessionalDetailView(){

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -113,4 +115,90 @@ class ProfileController extends Controller
         return redirect()->route('login')->with('error', 'You need to login first.');
     }
 }
+        // Channel Partner
+        public function showPartnerProfile()
+        {
+            $userId = session()->get('user_id'); // Assuming the logged-in user ID is stored in the session
+        
+            // Fetch data from both `users` and `profile` tables
+            $profile = DB::table('users')
+                ->leftJoin('profile', 'users.id', '=', 'profile.user_id')
+                ->select(
+                    'users.name',
+                    'users.email_id',
+                    'profile.mobile_no',
+                    'profile.dob',
+                    'profile.marital_status',
+                    'profile.gender',
+                    'profile.avatar',
+                    'profile.residence_address',
+                    'profile.city',
+                    'profile.state',
+                    'profile.pincode',
+                    'profile.rera_doc',
+                    'profile.licence_doc',
+                    'profile.address_proof'
+                )
+                ->where('users.id', $userId)
+                ->first();
+        
+            return view('profile.partnerProfile', compact('profile'));
+        }
+
+        // Update or create the profile
+        public function updatePartnerProfile(Request $request)
+        {
+            $userId = session()->get('user_id'); // Get logged-in user ID
+        
+            // Log the received data
+            Log::info('Updating profile for user ID: ' . $userId, $request->all());
+        
+            // Validate input
+            $request->validate([
+                'mobile_no' => 'nullable|digits:10',
+                'dob' => 'nullable|date',
+                'marital_status' => 'nullable|string',
+                'gender' => 'nullable|string',
+                'residence_address' => 'nullable|string',
+                'rera_doc' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+                'licence_doc' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+                'address_proof' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            ]);
+        
+            // Handle file uploads
+            $reraDocPath = $request->file('rera_doc') ? $request->file('rera_doc')->store('uploads', 'public') : null;
+            $licenceDocPath = $request->file('licence_doc') ? $request->file('licence_doc')->store('uploads', 'public') : null;
+            $addressProofPath = $request->file('address_proof') ? $request->file('address_proof')->store('uploads', 'public') : null;
+        
+            // Log file paths to check if files are correctly uploaded
+            Log::info('Uploaded file paths:', [
+                'rera_doc' => $reraDocPath,
+                'licence_doc' => $licenceDocPath,
+                'address_proof' => $addressProofPath,
+            ]);
+        
+            // Update or insert into `profile` table
+            $updated = DB::table('profile')->updateOrInsert(
+                ['user_id' => $userId],
+                [
+                    'mobile_no' => $request->mobile_no,
+                    'dob' => $request->dob,
+                    'marital_status' => $request->marital_status,
+                    'gender' => $request->gender,
+                    'residence_address' => $request->residence_address,
+                    'rera_doc' => $reraDocPath ?: DB::raw('rera_doc'),
+                    'licence_doc' => $licenceDocPath ?: DB::raw('licence_doc'),
+                    'address_proof' => $addressProofPath ?: DB::raw('address_proof'),
+                    'updated_at' => now(),
+                ]
+            );
+        
+            // Log the result of the update/insert operation
+            Log::info('Profile updated or inserted', [
+                'updated_rows' => $updated,
+            ]);
+        
+            return redirect()->back()->with('success', 'Profile updated successfully!');
+        }
 }
+

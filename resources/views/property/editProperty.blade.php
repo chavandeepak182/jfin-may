@@ -156,6 +156,13 @@
                                             <input type="text" name="city" class="form-control" placeholder="City" value="{{ $v->city }}" />
                                         </div>
                                     </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Starting Price</label>
+                                            <input type="text" name="s_price" class="form-control" placeholder="Staring price" value="{{ $v->s_price }}" />
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -165,14 +172,14 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Property Description</label>
+                                    <label class="form-label text-white">Property Description</label>
                                     <textarea name="property_description" class="form-control" rows="2" style="resize:none" maxlength="250" value="" >{{ $v->property_details }} </textarea>
                                 </div>
                             </div>
 
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Property Address</label>
+                                    <label class="form-label text-white">Property Address</label>
                                     <textarea name="property_address" class="form-control" rows="2" style="resize:none" maxlength="250" value="" >{{ $v->address }}</textarea>
                                 </div>
                             </div>
@@ -181,7 +188,7 @@
                             <!-- Location -->
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Location</label>
+                                    <label class="form-label text-white">Location</label>
                                     <input type="text" name="location" class="form-control" value="{{ $data['propertie_details'][0]->location ?? '' }}" placeholder="Location" required>
                                 </div>
                             </div>
@@ -191,7 +198,7 @@
                             <!-- Latitude -->
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Latitude</label>
+                                    <label class="form-label text-white">Latitude</label>
                                     <input type="text" name="latitude" class="form-control" value="{{ $data['propertie_details'][0]->latitude ?? '' }}" placeholder="Latitude" required>
                                 </div>
                             </div>
@@ -199,7 +206,7 @@
                             <!-- Longitude -->
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Longitude</label>
+                                    <label class="form-label text-white">Longitude</label>
                                     <input type="text" name="longitude" class="form-control" value="{{ $data['propertie_details'][0]->longitude ?? '' }}" placeholder="Longitude" required>
                                 </div>
                             </div>
@@ -269,6 +276,18 @@
                                     }
                                     ?>
                                 </select>
+                            </div>    
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <label class="form-label">Starting Price</label>
+                                <input type="text" name="s_price" class="form-control" placeholder="Price" value="{{ $v->s_price }}" />
+                            </div>    
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <label class="form-label">Rera No.</label>
+                                <input type="text" name="rera" class="form-control" placeholder="Rera No." value="{{ $v->rera }}" />
                             </div>    
                         </div>
 

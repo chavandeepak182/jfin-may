@@ -11,7 +11,7 @@ JFS | Add Property
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('partnerDashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Add Propertie</li>
+        <li class="breadcrumb-item active" aria-current="page">Add Property</li>
     </ol>
 </nav>
 

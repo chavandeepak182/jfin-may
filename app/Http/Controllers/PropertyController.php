@@ -82,11 +82,21 @@ class PropertyController extends Controller
             $p->city = $request->city;
             $p->email = $request->email_id;
             $p->select_bhk = $request->select_bhk;
+            $p->s_price = $request->s_price;
+            $p->rera = $request->rera;
             $p->land_type = $request->land_type;
             $p->boucher = $property_voucher;
             $p->location = $request->input('location'); 
             $p->latitude = $request->input('latitude'); 
             $p->longitude = $request->input('longitude');
+            $nearby_locations = $request->input('nearby', []);
+        
+            // If there are any nearby locations, store them as JSON
+            if (count($nearby_locations) > 0) {
+                $p->nearby_locations = json_encode($nearby_locations);
+            } else {
+                $p->nearby_locations = json_encode([]);  // Store an empty array if no locations are provided
+            }
         
             // Save property
             $p->save();
@@ -107,17 +117,49 @@ class PropertyController extends Controller
     }
 
     public function allProperties()
-    {
-            $data['allProperties'] = DB::table('properties')
+{
+    // Get the logged-in user's role and ID from the session
+    $role_id = Session::get('role_id'); // Assuming role_id is stored in the session
+    $user_id = Session::get('user_id'); // Assuming user_id is stored in the session
+
+    // Base query for fetching properties
+    $query = DB::table('properties')
         ->join('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
         ->join('property_category', 'properties.property_type_id', '=', 'property_category.pid')
-        ->where('properties.is_active',1)
-        ->select('properties.properties_id', 'properties.title', 'properties.property_type_id', 'properties.builder_name','properties.select_bhk', 'properties.land_type',
-        'properties.address','properties.facilities','properties.beds', 'properties.baths', 'properties.balconies', 'properties.parking', 'properties.builtup_area',  'properties.contact', 'price_range.from_price', 'price_range.to_price', 'property_category.category_name')
-        ->paginate(50);
+        ->where('properties.is_active', 1)
+        ->select(
+            'properties.properties_id',
+            'properties.title',
+            'properties.property_type_id',
+            'properties.builder_name',
+            'properties.select_bhk',
+            'properties.land_type',
+            'properties.address',
+            'properties.rera',
+            'properties.facilities',
+            'properties.s_price',
+            'properties.beds',
+            'properties.baths',
+            'properties.balconies',
+            'properties.parking',
+            'properties.builtup_area',
+            'properties.contact',
+            'price_range.from_price',
+            'price_range.to_price',
+            'property_category.category_name'
+        );
 
-        return view('property.allProperties',compact('data'));
+    // If the user is an agent (role_id == 3), show only their properties
+    if ($role_id == 3) {
+        $query->where('properties.creator_id', $user_id);
     }
+
+    // Paginate the results
+    $data['allProperties'] = $query->paginate(50);
+
+    // Return the view with the data
+    return view('property.allProperties', compact('data'));
+}
 
     public function pendingProperties()
     {
@@ -126,7 +168,7 @@ class PropertyController extends Controller
         ->join('property_category', 'properties.property_type_id', '=', 'property_category.pid')
         ->where('properties.is_active',0)
         ->select('properties.properties_id', 'properties.title', 'properties.property_type_id', 'properties.builder_name','properties.select_bhk', 'properties.land_type',
-        'properties.address','properties.facilities', 'properties.builtup_area', 'properties.beds', 'properties.baths', 'properties.balconies', 'properties.parking', 'properties.contact', 'price_range.from_price', 'price_range.to_price', 'property_category.category_name')
+        'properties.address','properties.facilities', 'properties.rera', 'properties.s_price', 'properties.builtup_area', 'properties.beds', 'properties.baths', 'properties.balconies', 'properties.parking', 'properties.contact', 'price_range.from_price', 'price_range.to_price', 'property_category.category_name')
         ->paginate(50);
         
         return view('property.pendingProperties',compact('data'));
@@ -207,6 +249,7 @@ class PropertyController extends Controller
             'title'=> $request->property_title,
             'property_type_id'=> $request->property_type_id,
             'builder_name'=> $request->builder_name,
+            's_price'=>$request->s_price,
             'select_bhk'=> $request->select_bhk,
             'property_details'=> $request->property_description,
             'address'=> $request->property_address,
@@ -220,6 +263,7 @@ class PropertyController extends Controller
             'area' => $request->area,
             'builtup_area' => $request->builtup_area,
             'city' => $request->city,
+            'rera' => $request->rera,
             'beds' => $request->beds,
             'baths' => $request->baths,
             'balconies' => $request->balconies,
