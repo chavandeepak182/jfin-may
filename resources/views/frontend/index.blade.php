@@ -303,8 +303,8 @@
                             </div>
                             <div class="col-8 col-lg-8 col-xl-9">
                                 <div class="d-flex flex-column my-auto text-start p-4">
-                                    <h4 class="text-dark mb-0">Client Name</h4>
-                                    <p class="mb-3">Profession</p>
+                                    <h4 class="text-dark mb-0">Vishal Sarraf</h4>
+                                    <p class="mb-3">Businessman</p>
                                     <div class="d-flex text-primary mb-3">
                                         <i class="fas fa-star"></i>
                                         <i class="fas fa-star"></i>
@@ -312,32 +312,7 @@
                                         <i class="fas fa-star"></i>
                                         <i class="fas fa-star"></i>
                                     </div>
-                                    <p class="mb-0">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Enim error molestiae aut modi corrupti fugit eaque rem nulla incidunt temporibus quisquam,
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testimonial-item bg-white rounded">
-                        <div class="row g-0">
-                            <div class="col-4  col-lg-4 col-xl-3">
-                                <div class="h-100">
-                                    <img src="{{ asset('theme') }}/frontend/img/testimonial-2.jpg" class="img-fluid h-100 rounded" style="object-fit: cover;" alt="">
-                                </div>
-                            </div>
-                            <div class="col-8 col-lg-8 col-xl-9">
-                                <div class="d-flex flex-column my-auto text-start p-4">
-                                    <h4 class="text-dark mb-0">Client Name</h4>
-                                    <p class="mb-3">Profession</p>
-                                    <div class="d-flex text-primary mb-3">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star text-body"></i>
-                                    </div>
-                                    <p class="mb-0">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Enim error molestiae aut modi corrupti fugit eaque rem nulla incidunt temporibus quisquam,
-                                    </p>
+                                    <p class="mb-0">JFinserv made my home loan process stress-free and quick. Their expert team guided me at every step, ensuring minimal paperwork and a competitive interest rate. Highly recommended for anyone seeking financial assistance!</p>
                                 </div>
                             </div>
                         </div>
@@ -351,17 +326,39 @@
                             </div>
                             <div class="col-8 col-lg-8 col-xl-9">
                                 <div class="d-flex flex-column my-auto text-start p-4">
-                                    <h4 class="text-dark mb-0">Client Name</h4>
-                                    <p class="mb-3">Profession</p>
+                                    <h4 class="text-dark mb-0">Dr. Neha Pawar</h4>
+                                    <p class="mb-3">Doctor</p>
                                     <div class="d-flex text-primary mb-3">
                                         <i class="fas fa-star"></i>
                                         <i class="fas fa-star"></i>
                                         <i class="fas fa-star"></i>
-                                        <i class="fas fa-star text-body"></i>
+                                        <i class="fas fa-star"></i>
                                         <i class="fas fa-star text-body"></i>
                                     </div>
-                                    <p class="mb-0">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Enim error molestiae aut modi corrupti fugit eaque rem nulla incidunt temporibus quisquam,
-                                    </p>
+                                    <p class="mb-0">Thanks to JFinserv, I secured a project loan effortlessly. Their dedicated support and transparent process made a complex procedure seem simple. I appreciate their commitment to helping clients achieve their financial goals.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-item bg-white rounded">
+                        <div class="row g-0">
+                            <div class="col-4  col-lg-4 col-xl-3">
+                                <div class="h-100">
+                                    <img src="{{ asset('theme') }}/frontend/img/testimonial-1.jpg" class="img-fluid h-100 rounded" style="object-fit: cover;" alt="">
+                                </div>
+                            </div>
+                            <div class="col-8 col-lg-8 col-xl-9">
+                                <div class="d-flex flex-column my-auto text-start p-4">
+                                    <h4 class="text-dark mb-0">Rahul Sonawane</h4>
+                                    <p class="mb-3">IT Professional</p>
+                                    <div class="d-flex text-primary mb-3">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star text-body"></i>
+                                    </div>
+                                    <p class="mb-0">JFinserv exceeded my expectations with their quick approvals & low-interest rates. The team's professionalism & expertise gave me confidence throughout the loan process. I would highly recommend them!</p>
                                 </div>
                             </div>
                         </div>
