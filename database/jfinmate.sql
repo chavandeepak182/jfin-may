@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Jan 07, 2025 at 12:44 PM
--- Server version: 10.11.10-MariaDB
--- PHP Version: 7.2.34
+-- Host: 127.0.0.1
+-- Generation Time: Jan 18, 2025 at 04:33 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `u838013575_jfin`
+-- Database: `jfs_role`
 --
 
 -- --------------------------------------------------------
@@ -33,7 +33,7 @@ CREATE TABLE `activity_logs` (
   `activity_details` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `activity_logs`
@@ -80,17 +80,34 @@ INSERT INTO `activity_logs` (`id`, `user_id`, `activity_details`, `created_at`, 
 (38, 1, 'Commission amount updated successfully by Sourabh', '2024-11-24 12:16:46', '2024-11-24 12:16:46'),
 (39, 1, 'Commission amount updated successfully by Sourabh', '2024-11-26 14:33:51', '2024-11-26 14:33:51'),
 (40, 1, 'Commission amount updated successfully by Sourabh', '2024-11-26 14:34:44', '2024-11-26 14:34:44'),
-(41, 1, 'Property Updated successfully by Sourabh', '2024-11-29 14:03:42', '2024-11-29 14:03:42'),
-(42, 1, 'Property Updated successfully by Sourabh', '2024-11-29 14:03:52', '2024-11-29 14:03:52'),
-(43, 1, 'Property Updated successfully by Sourabh', '2024-11-29 14:04:03', '2024-11-29 14:04:03'),
-(44, 1, 'Property Updated successfully by Sourabh', '2024-11-29 14:04:17', '2024-11-29 14:04:17'),
-(45, 1, 'Property Updated successfully by Sourabh', '2024-11-29 14:04:29', '2024-11-29 14:04:29'),
-(46, 1, 'Property Updated successfully by Sourabh', '2024-11-29 14:04:42', '2024-11-29 14:04:42'),
-(47, 1, 'Property Updated successfully by Sourabh', '2024-11-29 14:04:54', '2024-11-29 14:04:54'),
-(48, 1, 'Agent is created successfully by Sourabh', '2024-12-02 13:57:20', '2024-12-02 13:57:20'),
-(49, 1, 'Agent is created successfully by Sourabh', '2024-12-02 13:59:13', '2024-12-02 13:59:13'),
-(50, 1, 'Agent is created successfully by Sourabh', '2024-12-02 14:06:00', '2024-12-02 14:06:00'),
-(51, 1, 'Agent is created successfully by Sourabh', '2025-01-02 07:57:37', '2025-01-02 07:57:37');
+(41, 1, 'Commission amount updated successfully by Sourabh', '2024-11-27 01:58:44', '2024-11-27 01:58:44'),
+(42, 1, 'Property Updated successfully by Sourabh', '2024-11-28 09:06:21', '2024-11-28 09:06:21'),
+(43, 1, 'Property Updated successfully by Sourabh', '2024-11-28 09:06:50', '2024-11-28 09:06:50'),
+(44, 1, 'Property Updated successfully by Sourabh', '2024-11-28 09:07:03', '2024-11-28 09:07:03'),
+(45, 1, 'Property Updated successfully by Sourabh', '2024-11-28 09:07:19', '2024-11-28 09:07:19'),
+(46, 1, 'Property Updated successfully by Sourabh', '2024-11-28 09:07:31', '2024-11-28 09:07:31'),
+(47, 1, 'Property Updated successfully by Sourabh', '2024-11-28 09:07:44', '2024-11-28 09:07:44'),
+(48, 1, 'Property Updated successfully by Sourabh', '2024-11-28 09:07:57', '2024-11-28 09:07:57'),
+(49, 1, 'Agent is created successfully by Sourabh', '2024-12-02 08:24:51', '2024-12-02 08:24:51'),
+(50, 1, 'Commission amount updated successfully by Sourabh', '2024-12-16 00:57:55', '2024-12-16 00:57:55'),
+(51, 1, 'Partner user deleted successfully by Sourabh', '2024-12-16 05:21:07', '2024-12-16 05:21:07'),
+(52, 1, 'Partner user account is created successfully by Sourabh', '2025-01-13 01:58:05', '2025-01-13 01:58:05'),
+(53, 81, 'Property Activated successfully by deepak cp', '2025-01-13 05:53:16', '2025-01-13 05:53:16'),
+(54, 1, 'Property Activated successfully by Sourabh', '2025-01-13 05:58:17', '2025-01-13 05:58:17'),
+(55, 1, 'Property Updated successfully by Sourabh', '2025-01-13 06:32:43', '2025-01-13 06:32:43'),
+(56, 1, 'Property Updated successfully by Sourabh', '2025-01-13 06:32:55', '2025-01-13 06:32:55'),
+(57, 1, 'Property Updated successfully by Sourabh', '2025-01-13 08:23:24', '2025-01-13 08:23:24'),
+(58, 1, 'Property Updated successfully by Sourabh', '2025-01-13 08:42:31', '2025-01-13 08:42:31'),
+(59, 1, 'Property Updated successfully by Sourabh', '2025-01-13 08:42:43', '2025-01-13 08:42:43'),
+(60, 1, 'Property Activated successfully by Sourabh', '2025-01-14 06:16:14', '2025-01-14 06:16:14'),
+(61, 1, 'Property Updated successfully by Sourabh', '2025-01-14 06:17:23', '2025-01-14 06:17:23'),
+(62, 1, 'Property Updated successfully by Sourabh', '2025-01-14 07:29:17', '2025-01-14 07:29:17'),
+(63, 1, 'Property Updated successfully by Sourabh', '2025-01-14 07:29:57', '2025-01-14 07:29:57'),
+(64, 1, 'Property Updated successfully by Sourabh', '2025-01-14 08:28:32', '2025-01-14 08:28:32'),
+(65, 1, 'Property Updated successfully by Sourabh', '2025-01-15 06:29:17', '2025-01-15 06:29:17'),
+(66, 1, 'Property Updated successfully by Sourabh', '2025-01-16 03:57:07', '2025-01-16 03:57:07'),
+(67, 1, 'Property Updated successfully by Sourabh', '2025-01-16 04:20:18', '2025-01-16 04:20:18'),
+(68, 1, 'Property Updated successfully by Sourabh', '2025-01-17 03:55:34', '2025-01-17 03:55:34');
 
 -- --------------------------------------------------------
 
@@ -102,7 +119,7 @@ CREATE TABLE `area_type` (
   `area_type_id` int(11) NOT NULL,
   `carpet_area` varchar(255) DEFAULT NULL,
   `develop_area` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -120,7 +137,7 @@ CREATE TABLE `bank_loan_range` (
   `loan_category_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `bank_loan_range`
@@ -181,8 +198,16 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `_lft`, `_rgt`, `parent_id`, `created_at`, `updated_at`, `user_id`) VALUES
-(104, 'customer demo', 1, 4, NULL, '2024-12-16 13:24:03', '2024-12-16 13:24:03', 66),
-(105, 'VaiBhav', 2, 3, 66, '2024-12-31 09:02:36', '2024-12-31 09:02:36', 81);
+(86, 'SourabhTest Lastname', 1, 20, NULL, '2024-11-26 06:56:50', '2024-11-26 06:56:50', 29),
+(87, 'comission one', 2, 11, 29, '2024-11-26 01:29:11', '2024-11-26 01:29:11', 50),
+(88, 'commission two', 12, 19, 29, '2024-11-26 01:33:44', '2024-11-26 01:33:44', 51),
+(89, 'commission three', 3, 8, 50, '2024-11-26 01:38:00', '2024-11-26 01:38:00', 52),
+(90, 'dipak demo', 9, 10, 50, '2024-11-26 01:43:12', '2024-11-26 01:43:12', 48),
+(92, 'demo account', 13, 16, 51, '2024-11-26 04:01:52', '2024-11-26 04:01:52', 42),
+(93, 'Robin Shinde', 17, 18, 51, '2024-11-26 04:51:41', '2024-11-26 04:51:41', 35),
+(94, 'anandsarpatwari', 14, 15, 42, '2024-11-26 14:52:19', '2024-11-26 14:52:19', 47),
+(95, 'sandeep pawar', 4, 5, 52, '2024-12-16 00:47:20', '2024-12-16 00:47:20', 76),
+(97, 'new user', 6, 7, 52, '2025-01-08 08:31:16', '2025-01-08 08:31:16', 80);
 
 -- --------------------------------------------------------
 
@@ -213,6 +238,627 @@ INSERT INTO `categories_old` (`id`, `name`, `_lft`, `_rgt`, `parent_id`, `create
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cities`
+--
+
+CREATE TABLE `cities` (
+  `id` int(11) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `state_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `cities`
+--
+
+INSERT INTO `cities` (`id`, `city`, `state_id`) VALUES
+(1, 'North and Middle Andaman', 32),
+(2, 'South Andaman', 32),
+(3, 'Nicobar', 32),
+(4, 'Adilabad', 1),
+(5, 'Anantapur', 1),
+(6, 'Chittoor', 1),
+(7, 'East Godavari', 1),
+(8, 'Guntur', 1),
+(9, 'Hyderabad', 1),
+(10, 'Kadapa', 1),
+(11, 'Karimnagar', 1),
+(12, 'Khammam', 1),
+(13, 'Krishna', 1),
+(14, 'Kurnool', 1),
+(15, 'Mahbubnagar', 1),
+(16, 'Medak', 1),
+(17, 'Nalgonda', 1),
+(18, 'Nellore', 1),
+(19, 'Nizamabad', 1),
+(20, 'Prakasam', 1),
+(21, 'Rangareddi', 1),
+(22, 'Srikakulam', 1),
+(23, 'Vishakhapatnam', 1),
+(24, 'Vizianagaram', 1),
+(25, 'Warangal', 1),
+(26, 'West Godavari', 1),
+(27, 'Anjaw', 3),
+(28, 'Changlang', 3),
+(29, 'East Kameng', 3),
+(30, 'Lohit', 3),
+(31, 'Lower Subansiri', 3),
+(32, 'Papum Pare', 3),
+(33, 'Tirap', 3),
+(34, 'Dibang Valley', 3),
+(35, 'Upper Subansiri', 3),
+(36, 'West Kameng', 3),
+(37, 'Barpeta', 2),
+(38, 'Bongaigaon', 2),
+(39, 'Cachar', 2),
+(40, 'Darrang', 2),
+(41, 'Dhemaji', 2),
+(42, 'Dhubri', 2),
+(43, 'Dibrugarh', 2),
+(44, 'Goalpara', 2),
+(45, 'Golaghat', 2),
+(46, 'Hailakandi', 2),
+(47, 'Jorhat', 2),
+(48, 'Karbi Anglong', 2),
+(49, 'Karimganj', 2),
+(50, 'Kokrajhar', 2),
+(51, 'Lakhimpur', 2),
+(52, 'Marigaon', 2),
+(53, 'Nagaon', 2),
+(54, 'Nalbari', 2),
+(55, 'North Cachar Hills', 2),
+(56, 'Sibsagar', 2),
+(57, 'Sonitpur', 2),
+(58, 'Tinsukia', 2),
+(59, 'Araria', 4),
+(60, 'Aurangabad', 4),
+(61, 'Banka', 4),
+(62, 'Begusarai', 4),
+(63, 'Bhagalpur', 4),
+(64, 'Bhojpur', 4),
+(65, 'Buxar', 4),
+(66, 'Darbhanga', 4),
+(67, 'Purba Champaran', 4),
+(68, 'Gaya', 4),
+(69, 'Gopalganj', 4),
+(70, 'Jamui', 4),
+(71, 'Jehanabad', 4),
+(72, 'Khagaria', 4),
+(73, 'Kishanganj', 4),
+(74, 'Kaimur', 4),
+(75, 'Katihar', 4),
+(76, 'Lakhisarai', 4),
+(77, 'Madhubani', 4),
+(78, 'Munger', 4),
+(79, 'Madhepura', 4),
+(80, 'Muzaffarpur', 4),
+(81, 'Nalanda', 4),
+(82, 'Nawada', 4),
+(83, 'Patna', 4),
+(84, 'Purnia', 4),
+(85, 'Rohtas', 4),
+(86, 'Saharsa', 4),
+(87, 'Samastipur', 4),
+(88, 'Sheohar', 4),
+(89, 'Sheikhpura', 4),
+(90, 'Saran', 4),
+(91, 'Sitamarhi', 4),
+(92, 'Supaul', 4),
+(93, 'Siwan', 4),
+(94, 'Vaishali', 4),
+(95, 'Pashchim Champaran', 4),
+(96, 'Bastar', 36),
+(97, 'Bilaspur', 36),
+(98, 'Dantewada', 36),
+(99, 'Dhamtari', 36),
+(100, 'Durg', 36),
+(101, 'Jashpur', 36),
+(102, 'Janjgir-Champa', 36),
+(103, 'Korba', 36),
+(104, 'Koriya', 36),
+(105, 'Kanker', 36),
+(106, 'Kawardha', 36),
+(107, 'Mahasamund', 36),
+(108, 'Raigarh', 36),
+(109, 'Rajnandgaon', 36),
+(110, 'Raipur', 36),
+(111, 'Surguja', 36),
+(112, 'Diu', 29),
+(113, 'Daman', 29),
+(114, 'Central Delhi', 25),
+(115, 'East Delhi', 25),
+(116, 'New Delhi', 25),
+(117, 'North Delhi', 25),
+(118, 'North East Delhi', 25),
+(119, 'North West Delhi', 25),
+(120, 'South Delhi', 25),
+(121, 'South West Delhi', 25),
+(122, 'West Delhi', 25),
+(123, 'North Goa', 26),
+(124, 'South Goa', 26),
+(125, 'Ahmedabad', 5),
+(126, 'Amreli District', 5),
+(127, 'Anand', 5),
+(128, 'Banaskantha', 5),
+(129, 'Bharuch', 5),
+(130, 'Bhavnagar', 5),
+(131, 'Dahod', 5),
+(132, 'The Dangs', 5),
+(133, 'Gandhinagar', 5),
+(134, 'Jamnagar', 5),
+(135, 'Junagadh', 5),
+(136, 'Kutch', 5),
+(137, 'Kheda', 5),
+(138, 'Mehsana', 5),
+(139, 'Narmada', 5),
+(140, 'Navsari', 5),
+(141, 'Patan', 5),
+(142, 'Panchmahal', 5),
+(143, 'Porbandar', 5),
+(144, 'Rajkot', 5),
+(145, 'Sabarkantha', 5),
+(146, 'Surendranagar', 5),
+(147, 'Surat', 5),
+(148, 'Vadodara', 5),
+(149, 'Valsad', 5),
+(150, 'Ambala', 6),
+(151, 'Bhiwani', 6),
+(152, 'Faridabad', 6),
+(153, 'Fatehabad', 6),
+(154, 'Gurgaon', 6),
+(155, 'Hissar', 6),
+(156, 'Jhajjar', 6),
+(157, 'Jind', 6),
+(158, 'Karnal', 6),
+(159, 'Kaithal', 6),
+(160, 'Kurukshetra', 6),
+(161, 'Mahendragarh', 6),
+(162, 'Mewat', 6),
+(163, 'Panchkula', 6),
+(164, 'Panipat', 6),
+(165, 'Rewari', 6),
+(166, 'Rohtak', 6),
+(167, 'Sirsa', 6),
+(168, 'Sonepat', 6),
+(169, 'Yamuna Nagar', 6),
+(170, 'Palwal', 6),
+(171, 'Bilaspur', 7),
+(172, 'Chamba', 7),
+(173, 'Hamirpur', 7),
+(174, 'Kangra', 7),
+(175, 'Kinnaur', 7),
+(176, 'Kulu', 7),
+(177, 'Lahaul and Spiti', 7),
+(178, 'Mandi', 7),
+(179, 'Shimla', 7),
+(180, 'Sirmaur', 7),
+(181, 'Solan', 7),
+(182, 'Una', 7),
+(183, 'Anantnag', 8),
+(184, 'Badgam', 8),
+(185, 'Bandipore', 8),
+(186, 'Baramula', 8),
+(187, 'Doda', 8),
+(188, 'Jammu', 8),
+(189, 'Kargil', 8),
+(190, 'Kathua', 8),
+(191, 'Kupwara', 8),
+(192, 'Leh', 8),
+(193, 'Poonch', 8),
+(194, 'Pulwama', 8),
+(195, 'Rajauri', 8),
+(196, 'Srinagar', 8),
+(197, 'Samba', 8),
+(198, 'Udhampur', 8),
+(199, 'Bokaro', 34),
+(200, 'Chatra', 34),
+(201, 'Deoghar', 34),
+(202, 'Dhanbad', 34),
+(203, 'Dumka', 34),
+(204, 'Purba Singhbhum', 34),
+(205, 'Garhwa', 34),
+(206, 'Giridih', 34),
+(207, 'Godda', 34),
+(208, 'Gumla', 34),
+(209, 'Hazaribagh', 34),
+(210, 'Koderma', 34),
+(211, 'Lohardaga', 34),
+(212, 'Pakur', 34),
+(213, 'Palamu', 34),
+(214, 'Ranchi', 34),
+(215, 'Sahibganj', 34),
+(216, 'Seraikela and Kharsawan', 34),
+(217, 'Pashchim Singhbhum', 34),
+(218, 'Ramgarh', 34),
+(219, 'Bidar', 9),
+(220, 'Belgaum', 9),
+(221, 'Bijapur', 9),
+(222, 'Bagalkot', 9),
+(223, 'Bellary', 9),
+(224, 'Bangalore Rural District', 9),
+(225, 'Bangalore Urban District', 9),
+(226, 'Chamarajnagar', 9),
+(227, 'Chikmagalur', 9),
+(228, 'Chitradurga', 9),
+(229, 'Davanagere', 9),
+(230, 'Dharwad', 9),
+(231, 'Dakshina Kannada', 9),
+(232, 'Gadag', 9),
+(233, 'Gulbarga', 9),
+(234, 'Hassan', 9),
+(235, 'Haveri District', 9),
+(236, 'Kodagu', 9),
+(237, 'Kolar', 9),
+(238, 'Koppal', 9),
+(239, 'Mandya', 9),
+(240, 'Mysore', 9),
+(241, 'Raichur', 9),
+(242, 'Shimoga', 9),
+(243, 'Tumkur', 9),
+(244, 'Udupi', 9),
+(245, 'Uttara Kannada', 9),
+(246, 'Ramanagara', 9),
+(247, 'Chikballapur', 9),
+(248, 'Yadagiri', 9),
+(249, 'Alappuzha', 10),
+(250, 'Ernakulam', 10),
+(251, 'Idukki', 10),
+(252, 'Kollam', 10),
+(253, 'Kannur', 10),
+(254, 'Kasaragod', 10),
+(255, 'Kottayam', 10),
+(256, 'Kozhikode', 10),
+(257, 'Malappuram', 10),
+(258, 'Palakkad', 10),
+(259, 'Pathanamthitta', 10),
+(260, 'Thrissur', 10),
+(261, 'Thiruvananthapuram', 10),
+(262, 'Wayanad', 10),
+(263, 'Alirajpur', 11),
+(264, 'Anuppur', 11),
+(265, 'Ashok Nagar', 11),
+(266, 'Balaghat', 11),
+(267, 'Barwani', 11),
+(268, 'Betul', 11),
+(269, 'Bhind', 11),
+(270, 'Bhopal', 11),
+(271, 'Burhanpur', 11),
+(272, 'Chhatarpur', 11),
+(273, 'Chhindwara', 11),
+(274, 'Damoh', 11),
+(275, 'Datia', 11),
+(276, 'Dewas', 11),
+(277, 'Dhar', 11),
+(278, 'Dindori', 11),
+(279, 'Guna', 11),
+(280, 'Gwalior', 11),
+(281, 'Harda', 11),
+(282, 'Hoshangabad', 11),
+(283, 'Indore', 11),
+(284, 'Jabalpur', 11),
+(285, 'Jhabua', 11),
+(286, 'Katni', 11),
+(287, 'Khandwa', 11),
+(288, 'Khargone', 11),
+(289, 'Mandla', 11),
+(290, 'Mandsaur', 11),
+(291, 'Morena', 11),
+(292, 'Narsinghpur', 11),
+(293, 'Neemuch', 11),
+(294, 'Panna', 11),
+(295, 'Rewa', 11),
+(296, 'Rajgarh', 11),
+(297, 'Ratlam', 11),
+(298, 'Raisen', 11),
+(299, 'Sagar', 11),
+(300, 'Satna', 11),
+(301, 'Sehore', 11),
+(302, 'Seoni', 11),
+(303, 'Shahdol', 11),
+(304, 'Shajapur', 11),
+(305, 'Sheopur', 11),
+(306, 'Shivpuri', 11),
+(307, 'Sidhi', 11),
+(308, 'Singrauli', 11),
+(309, 'Tikamgarh', 11),
+(310, 'Ujjain', 11),
+(311, 'Umaria', 11),
+(312, 'Vidisha', 11),
+(313, 'Ahmednagar', 12),
+(314, 'Akola', 12),
+(315, 'Amrawati', 12),
+(316, 'Aurangabad', 12),
+(317, 'Bhandara', 12),
+(318, 'Beed', 12),
+(319, 'Buldhana', 12),
+(320, 'Chandrapur', 12),
+(321, 'Dhule', 12),
+(322, 'Gadchiroli', 12),
+(323, 'Gondiya', 12),
+(324, 'Hingoli', 12),
+(325, 'Jalgaon', 12),
+(326, 'Jalna', 12),
+(327, 'Kolhapur', 12),
+(328, 'Latur', 12),
+(329, 'Mumbai City', 12),
+(330, 'Mumbai suburban', 12),
+(331, 'Nandurbar', 12),
+(332, 'Nanded', 12),
+(333, 'Nagpur', 12),
+(334, 'Nashik', 12),
+(335, 'Osmanabad', 12),
+(336, 'Parbhani', 12),
+(337, 'Pune', 12),
+(338, 'Raigad', 12),
+(339, 'Ratnagiri', 12),
+(340, 'Sindhudurg', 12),
+(341, 'Sangli', 12),
+(342, 'Solapur', 12),
+(343, 'Satara', 12),
+(344, 'Thane', 12),
+(345, 'Wardha', 12),
+(346, 'Washim', 12),
+(347, 'Yavatmal', 12),
+(348, 'Bishnupur', 13),
+(349, 'Churachandpur', 13),
+(350, 'Chandel', 13),
+(351, 'Imphal East', 13),
+(352, 'Senapati', 13),
+(353, 'Tamenglong', 13),
+(354, 'Thoubal', 13),
+(355, 'Ukhrul', 13),
+(356, 'Imphal West', 13),
+(357, 'East Garo Hills', 14),
+(358, 'East Khasi Hills', 14),
+(359, 'Jaintia Hills', 14),
+(360, 'Ri-Bhoi', 14),
+(361, 'South Garo Hills', 14),
+(362, 'West Garo Hills', 14),
+(363, 'West Khasi Hills', 14),
+(364, 'Aizawl', 15),
+(365, 'Champhai', 15),
+(366, 'Kolasib', 15),
+(367, 'Lawngtlai', 15),
+(368, 'Lunglei', 15),
+(369, 'Mamit', 15),
+(370, 'Saiha', 15),
+(371, 'Serchhip', 15),
+(372, 'Dimapur', 16),
+(373, 'Kohima', 16),
+(374, 'Mokokchung', 16),
+(375, 'Mon', 16),
+(376, 'Phek', 16),
+(377, 'Tuensang', 16),
+(378, 'Wokha', 16),
+(379, 'Zunheboto', 16),
+(380, 'Angul', 17),
+(381, 'Boudh', 17),
+(382, 'Bhadrak', 17),
+(383, 'Bolangir', 17),
+(384, 'Bargarh', 17),
+(385, 'Baleswar', 17),
+(386, 'Cuttack', 17),
+(387, 'Debagarh', 17),
+(388, 'Dhenkanal', 17),
+(389, 'Ganjam', 17),
+(390, 'Gajapati', 17),
+(391, 'Jharsuguda', 17),
+(392, 'Jajapur', 17),
+(393, 'Jagatsinghpur', 17),
+(394, 'Khordha', 17),
+(395, 'Kendujhar', 17),
+(396, 'Kalahandi', 17),
+(397, 'Kandhamal', 17),
+(398, 'Koraput', 17),
+(399, 'Kendrapara', 17),
+(400, 'Malkangiri', 17),
+(401, 'Mayurbhanj', 17),
+(402, 'Nabarangpur', 17),
+(403, 'Nuapada', 17),
+(404, 'Nayagarh', 17),
+(405, 'Puri', 17),
+(406, 'Rayagada', 17),
+(407, 'Sambalpur', 17),
+(408, 'Subarnapur', 17),
+(409, 'Sundargarh', 17),
+(410, 'Karaikal', 27),
+(411, 'Mahe', 27),
+(412, 'Puducherry', 27),
+(413, 'Yanam', 27),
+(414, 'Amritsar', 18),
+(415, 'Bathinda', 18),
+(416, 'Firozpur', 18),
+(417, 'Faridkot', 18),
+(418, 'Fatehgarh Sahib', 18),
+(419, 'Gurdaspur', 18),
+(420, 'Hoshiarpur', 18),
+(421, 'Jalandhar', 18),
+(422, 'Kapurthala', 18),
+(423, 'Ludhiana', 18),
+(424, 'Mansa', 18),
+(425, 'Moga', 18),
+(426, 'Mukatsar', 18),
+(427, 'Nawan Shehar', 18),
+(428, 'Patiala', 18),
+(429, 'Rupnagar', 18),
+(430, 'Sangrur', 18),
+(431, 'Ajmer', 19),
+(432, 'Alwar', 19),
+(433, 'Bikaner', 19),
+(434, 'Barmer', 19),
+(435, 'Banswara', 19),
+(436, 'Bharatpur', 19),
+(437, 'Baran', 19),
+(438, 'Bundi', 19),
+(439, 'Bhilwara', 19),
+(440, 'Churu', 19),
+(441, 'Chittorgarh', 19),
+(442, 'Dausa', 19),
+(443, 'Dholpur', 19),
+(444, 'Dungapur', 19),
+(445, 'Ganganagar', 19),
+(446, 'Hanumangarh', 19),
+(447, 'Juhnjhunun', 19),
+(448, 'Jalore', 19),
+(449, 'Jodhpur', 19),
+(450, 'Jaipur', 19),
+(451, 'Jaisalmer', 19),
+(452, 'Jhalawar', 19),
+(453, 'Karauli', 19),
+(454, 'Kota', 19),
+(455, 'Nagaur', 19),
+(456, 'Pali', 19),
+(457, 'Pratapgarh', 19),
+(458, 'Rajsamand', 19),
+(459, 'Sikar', 19),
+(460, 'Sawai Madhopur', 19),
+(461, 'Sirohi', 19),
+(462, 'Tonk', 19),
+(463, 'Udaipur', 19),
+(464, 'East Sikkim', 20),
+(465, 'North Sikkim', 20),
+(466, 'South Sikkim', 20),
+(467, 'West Sikkim', 20),
+(468, 'Ariyalur', 21),
+(469, 'Chennai', 21),
+(470, 'Coimbatore', 21),
+(471, 'Cuddalore', 21),
+(472, 'Dharmapuri', 21),
+(473, 'Dindigul', 21),
+(474, 'Erode', 21),
+(475, 'Kanchipuram', 21),
+(476, 'Kanyakumari', 21),
+(477, 'Karur', 21),
+(478, 'Madurai', 21),
+(479, 'Nagapattinam', 21),
+(480, 'The Nilgiris', 21),
+(481, 'Namakkal', 21),
+(482, 'Perambalur', 21),
+(483, 'Pudukkottai', 21),
+(484, 'Ramanathapuram', 21),
+(485, 'Salem', 21),
+(486, 'Sivagangai', 21),
+(487, 'Tiruppur', 21),
+(488, 'Tiruchirappalli', 21),
+(489, 'Theni', 21),
+(490, 'Tirunelveli', 21),
+(491, 'Thanjavur', 21),
+(492, 'Thoothukudi', 21),
+(493, 'Thiruvallur', 21),
+(494, 'Thiruvarur', 21),
+(495, 'Tiruvannamalai', 21),
+(496, 'Vellore', 21),
+(497, 'Villupuram', 21),
+(498, 'Dhalai', 22),
+(499, 'North Tripura', 22),
+(500, 'South Tripura', 22),
+(501, 'West Tripura', 22),
+(502, 'Almora', 33),
+(503, 'Bageshwar', 33),
+(504, 'Chamoli', 33),
+(505, 'Champawat', 33),
+(506, 'Dehradun', 33),
+(507, 'Haridwar', 33),
+(508, 'Nainital', 33),
+(509, 'Pauri Garhwal', 33),
+(510, 'Pithoragharh', 33),
+(511, 'Rudraprayag', 33),
+(512, 'Tehri Garhwal', 33),
+(513, 'Udham Singh Nagar', 33),
+(514, 'Uttarkashi', 33),
+(515, 'Agra', 23),
+(516, 'Allahabad', 23),
+(517, 'Aligarh', 23),
+(518, 'Ambedkar Nagar', 23),
+(519, 'Auraiya', 23),
+(520, 'Azamgarh', 23),
+(521, 'Barabanki', 23),
+(522, 'Badaun', 23),
+(523, 'Bagpat', 23),
+(524, 'Bahraich', 23),
+(525, 'Bijnor', 23),
+(526, 'Ballia', 23),
+(527, 'Banda', 23),
+(528, 'Balrampur', 23),
+(529, 'Bareilly', 23),
+(530, 'Basti', 23),
+(531, 'Bulandshahr', 23),
+(532, 'Chandauli', 23),
+(533, 'Chitrakoot', 23),
+(534, 'Deoria', 23),
+(535, 'Etah', 23),
+(536, 'Kanshiram Nagar', 23),
+(537, 'Etawah', 23),
+(538, 'Firozabad', 23),
+(539, 'Farrukhabad', 23),
+(540, 'Fatehpur', 23),
+(541, 'Faizabad', 23),
+(542, 'Gautam Buddha Nagar', 23),
+(543, 'Gonda', 23),
+(544, 'Ghazipur', 23),
+(545, 'Gorkakhpur', 23),
+(546, 'Ghaziabad', 23),
+(547, 'Hamirpur', 23),
+(548, 'Hardoi', 23),
+(549, 'Mahamaya Nagar', 23),
+(550, 'Jhansi', 23),
+(551, 'Jalaun', 23),
+(552, 'Jyotiba Phule Nagar', 23),
+(553, 'Jaunpur District', 23),
+(554, 'Kanpur Dehat', 23),
+(555, 'Kannauj', 23),
+(556, 'Kanpur Nagar', 23),
+(557, 'Kaushambi', 23),
+(558, 'Kushinagar', 23),
+(559, 'Lalitpur', 23),
+(560, 'Lakhimpur Kheri', 23),
+(561, 'Lucknow', 23),
+(562, 'Mau', 23),
+(563, 'Meerut', 23),
+(564, 'Maharajganj', 23),
+(565, 'Mahoba', 23),
+(566, 'Mirzapur', 23),
+(567, 'Moradabad', 23),
+(568, 'Mainpuri', 23),
+(569, 'Mathura', 23),
+(570, 'Muzaffarnagar', 23),
+(571, 'Pilibhit', 23),
+(572, 'Pratapgarh', 23),
+(573, 'Rampur', 23),
+(574, 'Rae Bareli', 23),
+(575, 'Saharanpur', 23),
+(576, 'Sitapur', 23),
+(577, 'Shahjahanpur', 23),
+(578, 'Sant Kabir Nagar', 23),
+(579, 'Siddharthnagar', 23),
+(580, 'Sonbhadra', 23),
+(581, 'Sant Ravidas Nagar', 23),
+(582, 'Sultanpur', 23),
+(583, 'Shravasti', 23),
+(584, 'Unnao', 23),
+(585, 'Varanasi', 23),
+(586, 'Birbhum', 24),
+(587, 'Bankura', 24),
+(588, 'Bardhaman', 24),
+(589, 'Darjeeling', 24),
+(590, 'Dakshin Dinajpur', 24),
+(591, 'Hooghly', 24),
+(592, 'Howrah', 24),
+(593, 'Jalpaiguri', 24),
+(594, 'Cooch Behar', 24),
+(595, 'Kolkata', 24),
+(596, 'Malda', 24),
+(597, 'Midnapore', 24),
+(598, 'Murshidabad', 24),
+(599, 'Nadia', 24),
+(600, 'North 24 Parganas', 24),
+(601, 'South 24 Parganas', 24),
+(602, 'Purulia', 24),
+(603, 'Uttar Dinajpur', 24);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `commission`
 --
 
@@ -228,7 +874,7 @@ CREATE TABLE `commission` (
 --
 
 INSERT INTO `commission` (`com_id`, `commission_amount`, `created_date`, `updated_date`) VALUES
-(1, 0.4, '2024-11-18 14:17:10', '2024-11-18 14:17:10');
+(1, 0.04, '2024-11-18 14:17:10', '2024-11-18 14:17:10');
 
 -- --------------------------------------------------------
 
@@ -250,7 +896,7 @@ CREATE TABLE `company_bank_details` (
   `bank_address` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `company_bank_details`
@@ -264,6 +910,274 @@ INSERT INTO `company_bank_details` (`bank_id`, `acc_name`, `acc_number`, `ifsc_c
 (6, NULL, NULL, 'iffd34js', 'demo', 'demo', NULL, NULL, 'manager', '9898989898', 'viman', '2024-09-20 14:27:54', '2024-09-20 14:27:54'),
 (7, NULL, NULL, 'iffd34js', 'demo', 'demo', NULL, NULL, NULL, '9898989898', 'viman', '2024-09-20 14:30:15', '2024-09-20 14:30:15'),
 (8, NULL, NULL, 'ajskdfj', 'aklsjdf', 'aksdfj', NULL, NULL, 'aksdjf', '98978978989789', 'sakdjfk', '2024-09-20 14:33:19', '2024-09-20 14:33:19');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `countries`
+--
+
+CREATE TABLE `countries` (
+  `id` int(5) NOT NULL,
+  `countryCode` char(2) NOT NULL DEFAULT '',
+  `name` varchar(45) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `countries`
+--
+
+INSERT INTO `countries` (`id`, `countryCode`, `name`) VALUES
+(1, 'AD', 'Andorra'),
+(2, 'AE', 'United Arab Emirates'),
+(3, 'AF', 'Afghanistan'),
+(4, 'AG', 'Antigua and Barbuda'),
+(5, 'AI', 'Anguilla'),
+(6, 'AL', 'Albania'),
+(7, 'AM', 'Armenia'),
+(8, 'AO', 'Angola'),
+(9, 'AQ', 'Antarctica'),
+(10, 'AR', 'Argentina'),
+(11, 'AS', 'American Samoa'),
+(12, 'AT', 'Austria'),
+(13, 'AU', 'Australia'),
+(14, 'AW', 'Aruba'),
+(15, 'AX', 'Åland'),
+(16, 'AZ', 'Azerbaijan'),
+(17, 'BA', 'Bosnia and Herzegovina'),
+(18, 'BB', 'Barbados'),
+(19, 'BD', 'Bangladesh'),
+(20, 'BE', 'Belgium'),
+(21, 'BF', 'Burkina Faso'),
+(22, 'BG', 'Bulgaria'),
+(23, 'BH', 'Bahrain'),
+(24, 'BI', 'Burundi'),
+(25, 'BJ', 'Benin'),
+(26, 'BL', 'Saint Barthélemy'),
+(27, 'BM', 'Bermuda'),
+(28, 'BN', 'Brunei'),
+(29, 'BO', 'Bolivia'),
+(30, 'BQ', 'Bonaire'),
+(31, 'BR', 'Brazil'),
+(32, 'BS', 'Bahamas'),
+(33, 'BT', 'Bhutan'),
+(34, 'BV', 'Bouvet Island'),
+(35, 'BW', 'Botswana'),
+(36, 'BY', 'Belarus'),
+(37, 'BZ', 'Belize'),
+(38, 'CA', 'Canada'),
+(39, 'CC', 'Cocos [Keeling] Islands'),
+(40, 'CD', 'Democratic Republic of the Congo'),
+(41, 'CF', 'Central African Republic'),
+(42, 'CG', 'Republic of the Congo'),
+(43, 'CH', 'Switzerland'),
+(44, 'CI', 'Ivory Coast'),
+(45, 'CK', 'Cook Islands'),
+(46, 'CL', 'Chile'),
+(47, 'CM', 'Cameroon'),
+(48, 'CN', 'China'),
+(49, 'CO', 'Colombia'),
+(50, 'CR', 'Costa Rica'),
+(51, 'CU', 'Cuba'),
+(52, 'CV', 'Cape Verde'),
+(53, 'CW', 'Curacao'),
+(54, 'CX', 'Christmas Island'),
+(55, 'CY', 'Cyprus'),
+(56, 'CZ', 'Czech Republic'),
+(57, 'DE', 'Germany'),
+(58, 'DJ', 'Djibouti'),
+(59, 'DK', 'Denmark'),
+(60, 'DM', 'Dominica'),
+(61, 'DO', 'Dominican Republic'),
+(62, 'DZ', 'Algeria'),
+(63, 'EC', 'Ecuador'),
+(64, 'EE', 'Estonia'),
+(65, 'EG', 'Egypt'),
+(66, 'EH', 'Western Sahara'),
+(67, 'ER', 'Eritrea'),
+(68, 'ES', 'Spain'),
+(69, 'ET', 'Ethiopia'),
+(70, 'FI', 'Finland'),
+(71, 'FJ', 'Fiji'),
+(72, 'FK', 'Falkland Islands'),
+(73, 'FM', 'Micronesia'),
+(74, 'FO', 'Faroe Islands'),
+(75, 'FR', 'France'),
+(76, 'GA', 'Gabon'),
+(77, 'GB', 'United Kingdom'),
+(78, 'GD', 'Grenada'),
+(79, 'GE', 'Georgia'),
+(80, 'GF', 'French Guiana'),
+(81, 'GG', 'Guernsey'),
+(82, 'GH', 'Ghana'),
+(83, 'GI', 'Gibraltar'),
+(84, 'GL', 'Greenland'),
+(85, 'GM', 'Gambia'),
+(86, 'GN', 'Guinea'),
+(87, 'GP', 'Guadeloupe'),
+(88, 'GQ', 'Equatorial Guinea'),
+(89, 'GR', 'Greece'),
+(90, 'GS', 'South Georgia and the South Sandwich Islands'),
+(91, 'GT', 'Guatemala'),
+(92, 'GU', 'Guam'),
+(93, 'GW', 'Guinea-Bissau'),
+(94, 'GY', 'Guyana'),
+(95, 'HK', 'Hong Kong'),
+(96, 'HM', 'Heard Island and McDonald Islands'),
+(97, 'HN', 'Honduras'),
+(98, 'HR', 'Croatia'),
+(99, 'HT', 'Haiti'),
+(100, 'HU', 'Hungary'),
+(101, 'ID', 'Indonesia'),
+(102, 'IE', 'Ireland'),
+(103, 'IL', 'Israel'),
+(104, 'IM', 'Isle of Man'),
+(105, 'IN', 'India'),
+(106, 'IO', 'British Indian Ocean Territory'),
+(107, 'IQ', 'Iraq'),
+(108, 'IR', 'Iran'),
+(109, 'IS', 'Iceland'),
+(110, 'IT', 'Italy'),
+(111, 'JE', 'Jersey'),
+(112, 'JM', 'Jamaica'),
+(113, 'JO', 'Jordan'),
+(114, 'JP', 'Japan'),
+(115, 'KE', 'Kenya'),
+(116, 'KG', 'Kyrgyzstan'),
+(117, 'KH', 'Cambodia'),
+(118, 'KI', 'Kiribati'),
+(119, 'KM', 'Comoros'),
+(120, 'KN', 'Saint Kitts and Nevis'),
+(121, 'KP', 'North Korea'),
+(122, 'KR', 'South Korea'),
+(123, 'KW', 'Kuwait'),
+(124, 'KY', 'Cayman Islands'),
+(125, 'KZ', 'Kazakhstan'),
+(126, 'LA', 'Laos'),
+(127, 'LB', 'Lebanon'),
+(128, 'LC', 'Saint Lucia'),
+(129, 'LI', 'Liechtenstein'),
+(130, 'LK', 'Sri Lanka'),
+(131, 'LR', 'Liberia'),
+(132, 'LS', 'Lesotho'),
+(133, 'LT', 'Lithuania'),
+(134, 'LU', 'Luxembourg'),
+(135, 'LV', 'Latvia'),
+(136, 'LY', 'Libya'),
+(137, 'MA', 'Morocco'),
+(138, 'MC', 'Monaco'),
+(139, 'MD', 'Moldova'),
+(140, 'ME', 'Montenegro'),
+(141, 'MF', 'Saint Martin'),
+(142, 'MG', 'Madagascar'),
+(143, 'MH', 'Marshall Islands'),
+(144, 'MK', 'Macedonia'),
+(145, 'ML', 'Mali'),
+(146, 'MM', 'Myanmar [Burma]'),
+(147, 'MN', 'Mongolia'),
+(148, 'MO', 'Macao'),
+(149, 'MP', 'Northern Mariana Islands'),
+(150, 'MQ', 'Martinique'),
+(151, 'MR', 'Mauritania'),
+(152, 'MS', 'Montserrat'),
+(153, 'MT', 'Malta'),
+(154, 'MU', 'Mauritius'),
+(155, 'MV', 'Maldives'),
+(156, 'MW', 'Malawi'),
+(157, 'MX', 'Mexico'),
+(158, 'MY', 'Malaysia'),
+(159, 'MZ', 'Mozambique'),
+(160, 'NA', 'Namibia'),
+(161, 'NC', 'New Caledonia'),
+(162, 'NE', 'Niger'),
+(163, 'NF', 'Norfolk Island'),
+(164, 'NG', 'Nigeria'),
+(165, 'NI', 'Nicaragua'),
+(166, 'NL', 'Netherlands'),
+(167, 'NO', 'Norway'),
+(168, 'NP', 'Nepal'),
+(169, 'NR', 'Nauru'),
+(170, 'NU', 'Niue'),
+(171, 'NZ', 'New Zealand'),
+(172, 'OM', 'Oman'),
+(173, 'PA', 'Panama'),
+(174, 'PE', 'Peru'),
+(175, 'PF', 'French Polynesia'),
+(176, 'PG', 'Papua New Guinea'),
+(177, 'PH', 'Philippines'),
+(178, 'PK', 'Pakistan'),
+(179, 'PL', 'Poland'),
+(180, 'PM', 'Saint Pierre and Miquelon'),
+(181, 'PN', 'Pitcairn Islands'),
+(182, 'PR', 'Puerto Rico'),
+(183, 'PS', 'Palestine'),
+(184, 'PT', 'Portugal'),
+(185, 'PW', 'Palau'),
+(186, 'PY', 'Paraguay'),
+(187, 'QA', 'Qatar'),
+(188, 'RE', 'Réunion'),
+(189, 'RO', 'Romania'),
+(190, 'RS', 'Serbia'),
+(191, 'RU', 'Russia'),
+(192, 'RW', 'Rwanda'),
+(193, 'SA', 'Saudi Arabia'),
+(194, 'SB', 'Solomon Islands'),
+(195, 'SC', 'Seychelles'),
+(196, 'SD', 'Sudan'),
+(197, 'SE', 'Sweden'),
+(198, 'SG', 'Singapore'),
+(199, 'SH', 'Saint Helena'),
+(200, 'SI', 'Slovenia'),
+(201, 'SJ', 'Svalbard and Jan Mayen'),
+(202, 'SK', 'Slovakia'),
+(203, 'SL', 'Sierra Leone'),
+(204, 'SM', 'San Marino'),
+(205, 'SN', 'Senegal'),
+(206, 'SO', 'Somalia'),
+(207, 'SR', 'Suriname'),
+(208, 'SS', 'South Sudan'),
+(209, 'ST', 'São Tomé and Príncipe'),
+(210, 'SV', 'El Salvador'),
+(211, 'SX', 'Sint Maarten'),
+(212, 'SY', 'Syria'),
+(213, 'SZ', 'Swaziland'),
+(214, 'TC', 'Turks and Caicos Islands'),
+(215, 'TD', 'Chad'),
+(216, 'TF', 'French Southern Territories'),
+(217, 'TG', 'Togo'),
+(218, 'TH', 'Thailand'),
+(219, 'TJ', 'Tajikistan'),
+(220, 'TK', 'Tokelau'),
+(221, 'TL', 'East Timor'),
+(222, 'TM', 'Turkmenistan'),
+(223, 'TN', 'Tunisia'),
+(224, 'TO', 'Tonga'),
+(225, 'TR', 'Turkey'),
+(226, 'TT', 'Trinidad and Tobago'),
+(227, 'TV', 'Tuvalu'),
+(228, 'TW', 'Taiwan'),
+(229, 'TZ', 'Tanzania'),
+(230, 'UA', 'Ukraine'),
+(231, 'UG', 'Uganda'),
+(232, 'UM', 'U.S. Minor Outlying Islands'),
+(233, 'US', 'United States'),
+(234, 'UY', 'Uruguay'),
+(235, 'UZ', 'Uzbekistan'),
+(236, 'VA', 'Vatican City'),
+(237, 'VC', 'Saint Vincent and the Grenadines'),
+(238, 'VE', 'Venezuela'),
+(239, 'VG', 'British Virgin Islands'),
+(240, 'VI', 'U.S. Virgin Islands'),
+(241, 'VN', 'Vietnam'),
+(242, 'VU', 'Vanuatu'),
+(243, 'WF', 'Wallis and Futuna'),
+(244, 'WS', 'Samoa'),
+(245, 'XK', 'Kosovo'),
+(246, 'YE', 'Yemen'),
+(247, 'YT', 'Mayotte'),
+(248, 'ZA', 'South Africa'),
+(249, 'ZM', 'Zambia'),
+(250, 'ZW', 'Zimbabwe');
 
 -- --------------------------------------------------------
 
@@ -320,7 +1234,7 @@ CREATE TABLE `deductions` (
   `amount` decimal(15,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -335,17 +1249,37 @@ CREATE TABLE `documents` (
   `file_path` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `documents`
 --
 
 INSERT INTO `documents` (`document_id`, `user_id`, `document_name`, `file_path`, `created_at`, `updated_at`) VALUES
-(50, 80, 'aadhar_card', 'documents/aadhar_card_80.pdf', '2024-12-31 08:50:52', '2024-12-31 08:50:52'),
-(51, 80, 'pancard', 'documents/pancard_80.pdf', '2024-12-31 08:50:52', '2024-12-31 08:50:52'),
-(52, 80, 'passport', 'documents/passport_80.pdf', '2024-12-31 08:50:52', '2024-12-31 08:50:52'),
-(53, 80, 'rent_agree', 'documents/rent_agree_80.pdf', '2024-12-31 08:50:52', '2024-12-31 08:50:52');
+(7, 34, 'a_avatarpandorapedia_kiri_16x9_1098_04_39d940d1.jpeg', 'documents/1724584717_a_avatarpandorapedia_kiri_16x9_1098_04_39d940d1.jpeg', '2024-08-25 05:48:37', '2024-08-25 05:48:37'),
+(8, 34, 'a_avatarpandorapedia_kiri_16x9_1098_04_39d940d1.jpeg', 'documents/1724584899_a_avatarpandorapedia_kiri_16x9_1098_04_39d940d1.jpeg', '2024-08-25 05:51:39', '2024-08-25 05:51:39'),
+(27, 47, 'aadhar_card', 'documents/aadhar_card_47.png', '2024-09-19 13:01:14', '2024-09-19 13:01:14'),
+(28, 47, 'pancard', 'documents/pancard_47.png', '2024-09-19 13:01:14', '2024-09-19 13:01:14'),
+(29, 48, 'aadhar_card', 'documents/aadhar_card_48.png', '2024-09-19 16:03:28', '2024-09-19 16:03:28'),
+(30, 48, 'pancard', 'documents/pancard_48.png', '2024-09-19 16:03:28', '2024-09-19 16:03:28'),
+(33, 35, 'aadhar_card', 'documents/aadhar_card_35.png', '2024-09-24 05:50:44', '2024-09-24 05:50:44'),
+(34, 35, 'qualification_proof', 'documents/qualification_proof_35.png', '2024-09-24 05:50:44', '2024-09-24 05:50:44'),
+(35, 35, 'salary_slip', 'documents/salary_slip_35.png', '2024-09-24 05:50:44', '2024-09-24 05:50:44'),
+(36, 35, 'passport', 'documents/passport_35.png', '2024-09-24 05:50:44', '2024-09-24 05:50:44'),
+(37, 35, 'light_bill', 'documents/light_bill_35.png', '2024-09-24 05:50:44', '2024-09-24 05:50:44'),
+(38, 35, 'xyz', 'documents/YA9xjIYVKWsDTuy8s2WGrDn3d4cPUXfvLPqhn7H5.png', '2024-11-15 18:03:24', '2024-11-15 12:33:24'),
+(39, 50, 'aadhar_card', 'documents/aadhar_card_50.png', '2024-11-18 13:40:51', '2024-11-18 13:40:51'),
+(40, 50, 'pancard', 'documents/pancard_50.png', '2024-11-18 13:40:51', '2024-11-18 13:40:51'),
+(41, 50, 'passport', 'documents/passport_50.png', '2024-11-18 13:40:51', '2024-11-18 13:40:51'),
+(42, 51, 'aadhar_card', 'documents/aadhar_card_51.png', '2024-11-19 20:24:02', '2024-11-19 20:24:02'),
+(43, 51, 'pancard', 'documents/pancard_51.png', '2024-11-19 20:24:02', '2024-11-19 20:24:02'),
+(44, 52, 'aadhar_card', 'documents/aadhar_card_52.png', '2024-11-21 07:08:45', '2024-11-21 07:08:45'),
+(45, 29, 'aadhar_card', 'documents/aadhar_card_29.webp', '2024-11-25 07:03:18', '2024-11-25 07:03:18'),
+(46, 29, 'pancard', 'documents/pancard_29.webp', '2024-11-25 07:03:18', '2024-11-25 07:03:18'),
+(47, 76, 'aadhar_card', 'documents/aadhar_card_76.png', '2024-12-16 06:12:00', '2024-12-16 06:12:00'),
+(48, 77, 'aadhar_card', 'documents/aadhar_card_77.jpg', '2024-12-17 13:26:43', '2024-12-17 13:26:43'),
+(49, 80, 'aadhar_card', 'documents/aadhar_card_80.png', '2025-01-08 13:56:06', '2025-01-08 13:56:06'),
+(50, 79, 'aadhar_card', 'documents/aadhar_card_79.png', '2025-01-09 12:34:14', '2025-01-09 12:34:14');
 
 -- --------------------------------------------------------
 
@@ -376,15 +1310,29 @@ CREATE TABLE `education_details` (
   `college_address` varchar(255) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `education_details`
 --
 
 INSERT INTO `education_details` (`edu_id`, `user_id`, `qualification`, `college_name`, `pass_year`, `college_address`, `created_at`, `updated_at`) VALUES
-(19, 80, 'MBA', 'Indira', '2005', 'Pune', '2024-12-31 08:50:04', '2024-12-31 08:50:04'),
-(20, 81, 'MCA', 'ITM Univ', '2020', 'Gwalior', '2024-12-31 08:54:30', '2024-12-31 08:54:30');
+(1, 1, 'mca', 'd y patil', '2020', 'pune', '2024-08-06 08:09:05', '2024-08-06 08:09:05'),
+(2, 35, 'opopii', 'deogiri ollege', '2000', 'opop', '2024-08-12 12:38:43', '2024-08-16 08:45:10'),
+(3, 34, 'lol', 'lol', '2020', 'lol', '2024-08-13 10:13:43', '2024-08-13 10:13:43'),
+(4, 36, 'bca', 'zelum', '2012', 'dubai', '2024-08-21 18:27:38', '2024-08-21 18:27:38'),
+(5, 45, 'mca', 'dr d y patil', '2020', 'pune', '2024-09-19 14:57:07', '2024-09-19 14:57:07'),
+(6, 47, 'mca', 'djdj', '2020', 'djjd', '2024-09-19 18:30:48', '2024-09-19 18:30:48'),
+(7, 48, 'mca', 'dr d y patil', '2020', 'pune', '2024-09-19 21:27:55', '2024-09-19 21:27:55'),
+(8, 50, 'aklds', 'asdfkj', '2020', 'adkfj', '2024-11-18 14:12:50', '2024-11-18 14:12:50'),
+(9, 51, 'mca', 'afkajdf', '2020', 'akjdfks', '2024-11-19 20:23:41', '2024-11-19 20:23:41'),
+(10, 52, 'adfs', 'alkfdkl', '2020', 'akldfkl', '2024-11-21 07:08:33', '2024-11-21 07:08:33'),
+(11, 29, 'B.E.', 'deogiri college, pune', '2020', 'pune', '2024-11-25 07:02:52', '2024-11-25 07:02:52'),
+(12, 42, 'mca', 'deogiri', '2020', 'pune', '2024-11-26 08:03:48', '2024-11-26 08:03:48'),
+(13, 76, 'MBA', 'Pune university', '2014', 'Pune', '2024-12-16 06:11:06', '2024-12-16 06:11:06'),
+(14, 77, 'mca', 'd y patil', '2020', 'pune', '2024-12-17 13:25:58', '2024-12-17 13:25:58'),
+(15, 80, 'MCA', 'deogiri', '2010', 'pune', '2025-01-08 13:55:21', '2025-01-08 13:55:21'),
+(16, 79, 'uhuhu', 'okok', '2010', 'okko', '2025-01-09 07:34:15', '2025-01-09 07:34:15');
 
 -- --------------------------------------------------------
 
@@ -429,7 +1377,7 @@ CREATE TABLE `eligiblity_criteria` (
   `proposed_emi` float NOT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `eligiblity_criteria`
@@ -437,7 +1385,8 @@ CREATE TABLE `eligiblity_criteria` (
 
 INSERT INTO `eligiblity_criteria` (`ec_id`, `user_id`, `loan_id`, `rental_income_json`, `rental_income_amount`, `coapplicant_rent_income_json`, `coapplicant_rent_income_amount`, `income_from_business_json`, `income_from_business_amount`, `remunration_income_json`, `remunration_income_amount`, `coapplicant_remunration_income_json`, `coapplicant_remunration_income_amount`, `Salary_from_firm_json`, `Salary_from_firm_amount`, `coapplicant_salary`, `firm_share_profit_json`, `firm_share_profit_amount`, `capital_interest_income_json`, `capital_interest_income_amount`, `depreciation_json`, `depreciation_amount`, `income_json`, `income_amount`, `all_exiting_emi_json`, `all_exiting_emi_amount`, `agriculture_income_json`, `agriculture_income_amount`, `deduction_json`, `deduction_amount`, `tax_amount`, `pf_amount`, `pt_amount`, `proposed_emi`, `created_at`, `updated_at`) VALUES
 (27, 35, 3, '[{\"source\":\"rent 2\",\"amount\":120000},{\"source\":\"rent 3\",\"amount\":120000}]', 240000, NULL, NULL, '[]', 0, '[{\"source\":\"rem\",\"amount\":120000},{\"source\":\"rem3\",\"amount\":120000},{\"source\":\"rem4\",\"amount\":120000}]', 360000, NULL, NULL, NULL, NULL, NULL, '[{\"source\":\"profit\",\"amount\":120000},{\"source\":\"profit2\",\"amount\":120000},{\"source\":\"profit 3\",\"amount\":120000}]', 360000, '[]', 0, '[]', 0, '120075', 120075, NULL, NULL, '[{\"source\":\"agri\",\"amount\":120000},{\"source\":\"agri 2\",\"amount\":240000},{\"source\":\"agri 3\",\"amount\":120000}]', 480000, '[{\"source\":\"deduction\",\"amount\":100},{\"source\":\"deduction 2\",\"amount\":5},{\"source\":\"deduct\",\"amount\":1000}]', 1105, 120000, NULL, NULL, 42925, '2024-09-30 13:20:50', '2024-11-07 07:19:53'),
-(28, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '100000', 100000, NULL, NULL, NULL, NULL, '[{\"source\":\"ded\",\"amount\":1000}]', 1000, 18000, NULL, NULL, 37600, '2024-10-23 07:20:29', '2024-12-04 07:47:42');
+(28, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '100000', 100000, NULL, NULL, NULL, NULL, '[{\"source\":\"dedu\",\"amount\":1000}]', 1000, 12000, NULL, NULL, 36300, '2024-10-23 07:20:29', '2024-12-16 00:52:58'),
+(29, 47, 31, '[]', 0, NULL, NULL, '[]', 0, '[{\"source\":\"medical\",\"amount\":20000}]', 20000, NULL, NULL, NULL, NULL, NULL, '[{\"source\":\"adfs\",\"amount\":12000}]', 12000, '[]', 0, '[]', 0, '355618.75', 355619, NULL, NULL, '[{\"source\":\"asdfasdf\",\"amount\":235425}]', 235425, '[{\"source\":\"ded\",\"amount\":1000}]', 1000, 12000, NULL, NULL, 140848, '2025-01-10 04:51:17', '2025-01-10 04:51:17');
 
 -- --------------------------------------------------------
 
@@ -456,14 +1405,20 @@ CREATE TABLE `enquiries` (
   `updated_at` timestamp NULL DEFAULT current_timestamp(),
   `enquiry_type` varchar(255) DEFAULT NULL,
   `message` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `enquiries`
 --
 
 INSERT INTO `enquiries` (`enquiry_id`, `name`, `email`, `contact`, `created_at`, `amount`, `address`, `updated_at`, `enquiry_type`, `message`) VALUES
-(1, 'test', 'test@gmail.com', '9000000000', '2024-09-03 05:15:22', '989898', 'pune', '2024-09-03 05:15:22', NULL, 'testing');
+(1, 'test', 'test@gmail.com', '9000000000', '2024-09-03 05:15:22', '989898', 'pune', '2024-09-03 05:15:22', NULL, 'testing'),
+(2, 'shubhav', 'testone@gmail.com', '9898989898', '2024-12-04 07:53:30', NULL, '507 B wing phase 1', '2024-12-04 07:53:30', 'property', 'kkj'),
+(3, 'prop enquire', 'prop@gmail.com', '9090909090', '2025-01-15 01:39:29', NULL, NULL, '2025-01-15 01:39:29', NULL, 'enquirty'),
+(4, 'prop2', 'prop2@gmail.com', '8899008899', '2025-01-15 01:46:31', NULL, NULL, '2025-01-15 01:46:31', NULL, 'enquiry prop2'),
+(5, 'pupup test', 'pupup@gmail.com', '8989889988', '2025-01-15 07:07:06', NULL, NULL, '2025-01-15 07:07:06', 'brochure', NULL),
+(6, 'sarforosh', 'sarfa@gmail.com', '9876556789', '2025-01-15 07:59:54', NULL, NULL, '2025-01-15 07:59:54', 'brochure', NULL),
+(7, 'form', 'chalra@hai.com', '0909090909', '2025-01-15 08:07:59', NULL, NULL, '2025-01-15 08:07:59', NULL, 'chalra hai');
 
 -- --------------------------------------------------------
 
@@ -480,7 +1435,26 @@ CREATE TABLE `existing_loan` (
   `sanction_date` date DEFAULT NULL,
   `emi_bounce_count` int(11) DEFAULT NULL,
   `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `existing_loan`
+--
+
+INSERT INTO `existing_loan` (`existing_loan_id`, `type_loan`, `loan_amount`, `tenure_loan`, `emi_amount`, `sanction_date`, `emi_bounce_count`, `user_id`) VALUES
+(1, '1', 10000, 2, 20000, '2023-08-08', 0, 1),
+(2, 'test1', 9999999, 9, 999, '2009-09-09', 9, 35),
+(3, NULL, NULL, NULL, NULL, NULL, NULL, 34),
+(4, NULL, NULL, NULL, NULL, NULL, NULL, 36),
+(7, NULL, NULL, NULL, NULL, NULL, NULL, 45),
+(8, NULL, NULL, NULL, NULL, NULL, NULL, 47),
+(9, 'home loan', 2000000, 10, 15000, '2025-10-13', 0, 48),
+(10, 'test2', 8888888, 8, 888, '2008-08-08', 0, 35),
+(11, NULL, NULL, NULL, NULL, NULL, NULL, 35),
+(12, NULL, NULL, NULL, NULL, NULL, NULL, 35),
+(13, NULL, NULL, NULL, NULL, NULL, NULL, 50),
+(14, NULL, NULL, NULL, NULL, NULL, NULL, 50),
+(15, NULL, NULL, NULL, NULL, NULL, NULL, 79);
 
 -- --------------------------------------------------------
 
@@ -512,7 +1486,7 @@ CREATE TABLE `foir` (
   `foir_percentage` decimal(5,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `foir`
@@ -529,6 +1503,24 @@ INSERT INTO `foir` (`id`, `bank_name`, `min_salary`, `max_salary`, `foir_percent
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `friend_referrals`
+--
+
+CREATE TABLE `friend_referrals` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `friend_name` varchar(255) NOT NULL,
+  `friend_email` varchar(255) NOT NULL,
+  `friend_phone` varchar(20) NOT NULL,
+  `service_type` varchar(50) NOT NULL,
+  `referral_code` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `incomes`
 --
 
@@ -539,7 +1531,7 @@ CREATE TABLE `incomes` (
   `amount` decimal(15,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -552,7 +1544,7 @@ CREATE TABLE `income_details` (
   `user_id` int(11) NOT NULL,
   `net_salary` int(11) DEFAULT NULL,
   `gross_salary` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -619,15 +1611,42 @@ CREATE TABLE `loans` (
   `agent_id` int(11) DEFAULT NULL,
   `remarks` text DEFAULT NULL,
   `agent_action` enum('pending','accepted','rejected') DEFAULT 'pending'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `loans`
 --
 
 INSERT INTO `loans` (`loan_id`, `loan_reference_id`, `bank_id`, `is_broker`, `amount`, `amount_approved`, `interest`, `status`, `tenure`, `kyc_status`, `sanction_letter`, `address_verification`, `cibil_score`, `pan_number`, `in_principle`, `referral_user_id`, `user_id`, `loan_category_id`, `created_at`, `updated_at`, `agent_id`, `remarks`, `agent_action`) VALUES
-(39, NULL, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 80, 1, '2024-12-31 08:48:54', '2024-12-31 08:59:46', 33, NULL, 'pending'),
-(40, 'Z5ZNFWN0', 4, NULL, 2000000, 2000000, NULL, 'disbursed', 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 81, 1, '2024-12-31 08:53:21', '2024-12-31 09:02:36', 30, NULL, 'accepted');
+(24, 'LTS2UUUK', 5, NULL, 400000, 400000, NULL, 'disbursed', 5, NULL, NULL, NULL, NULL, NULL, 'Yes', NULL, 29, 4, '2024-11-25 01:30:45', '2024-11-25 02:44:42', 33, NULL, 'accepted'),
+(25, 'T7BNS1LV', 3, NULL, 500000, 500000, NULL, 'disbursed', 5, NULL, NULL, NULL, NULL, NULL, 'Yes', 29, 50, 2, '2024-08-25 03:00:32', '2024-11-26 01:29:11', 33, NULL, 'accepted'),
+(26, 'PZRVBTID', 5, NULL, 600000, 600000, NULL, 'disbursed', 7, NULL, NULL, NULL, NULL, NULL, 'Yes', 29, 51, 2, '2024-10-25 07:01:17', '2024-11-26 01:33:44', 33, NULL, 'accepted'),
+(27, 'FQH2MZSQ', 5, NULL, 700000, 700000, NULL, 'disbursed', 4, NULL, NULL, NULL, NULL, NULL, 'Yes', 50, 52, 3, '2024-09-25 07:07:40', '2024-11-26 01:38:00', 33, NULL, 'accepted'),
+(28, 'GF5TQ7XE', 5, NULL, 700000, 700000, NULL, 'disbursed', 3, NULL, NULL, NULL, NULL, NULL, NULL, 29, 48, 3, '2024-11-26 01:41:29', '2024-11-26 01:43:12', 33, NULL, 'accepted'),
+(29, 'KDGGQVGQ', 5, NULL, 700000, 700000, NULL, 'rejected', 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 42, 2, '2024-11-26 02:33:11', '2024-11-26 04:01:52', 33, NULL, 'accepted'),
+(30, 'VNP5B9XZ', 5, NULL, 700000, 700000, NULL, 'approved', 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 35, 2, '2024-11-26 04:49:05', '2024-11-26 04:51:41', 33, NULL, 'accepted'),
+(31, 'WADTCJQ5', 6, NULL, 650000, 650000, NULL, 'disbursed', 5, NULL, NULL, NULL, NULL, NULL, NULL, 42, 47, 3, '2024-11-26 14:48:56', '2024-11-26 14:52:19', 33, NULL, 'accepted'),
+(32, '4DTQISMU', 5, NULL, 5000000, 400000, NULL, 'disbursed', 8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 76, 1, '2024-12-16 00:38:11', '2024-12-16 00:47:20', 33, NULL, 'accepted'),
+(42, '6XXK1VSA', 4, NULL, 200000, 200000, NULL, 'disbursed', 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 80, 2, '2025-01-08 08:23:40', '2025-01-08 08:31:16', 30, NULL, 'accepted'),
+(43, NULL, 3, NULL, NULL, NULL, NULL, 'in process', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 50, 2, '2025-01-09 01:40:28', '2025-01-09 01:40:28', NULL, NULL, 'pending'),
+(44, NULL, 3, NULL, NULL, NULL, NULL, 'in process', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 50, 2, '2025-01-09 01:48:17', '2025-01-09 01:48:17', NULL, NULL, 'pending'),
+(45, 'W4UCI5IA', 4, NULL, 898989, 2000000, NULL, 'disbursed', 5, NULL, NULL, NULL, NULL, NULL, NULL, 52, 79, 3, '2025-01-09 02:03:10', '2025-01-09 02:06:30', 30, NULL, 'accepted'),
+(46, NULL, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 79, 3, '2025-01-09 06:17:12', '2025-01-09 06:17:12', NULL, NULL, 'pending'),
+(47, NULL, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 79, 3, '2025-01-09 06:30:37', '2025-01-09 06:30:37', NULL, NULL, 'pending'),
+(48, NULL, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 79, 3, '2025-01-09 06:47:24', '2025-01-09 06:47:24', NULL, NULL, 'pending'),
+(49, NULL, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 79, 3, '2025-01-09 06:47:33', '2025-01-09 06:47:33', NULL, NULL, 'pending'),
+(50, NULL, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 79, 3, '2025-01-09 06:56:30', '2025-01-09 06:56:30', NULL, NULL, 'pending'),
+(51, 'GBVONRBQ', 4, NULL, 3000000, NULL, NULL, 'in process', 8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 79, 3, '2025-01-09 07:07:06', '2025-01-09 07:07:06', NULL, NULL, 'pending'),
+(52, NULL, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 79, 3, '2025-01-09 08:36:25', '2025-01-09 08:36:25', NULL, NULL, 'pending'),
+(53, NULL, 4, NULL, NULL, NULL, NULL, 'approved', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 79, 3, '2025-01-09 10:51:03', '2025-01-09 10:51:03', NULL, NULL, 'pending'),
+(54, NULL, 4, NULL, NULL, NULL, NULL, 'approved', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 79, 3, '2025-01-09 10:51:47', '2025-01-09 10:51:47', NULL, NULL, 'pending'),
+(55, NULL, 4, NULL, NULL, NULL, NULL, 'disbursed', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 79, 3, '2025-01-09 10:56:41', '2025-01-09 10:56:41', NULL, NULL, 'pending'),
+(56, NULL, 3, NULL, NULL, NULL, NULL, 'rejected', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 50, 2, '2025-01-10 04:07:01', '2025-01-10 04:07:01', NULL, NULL, 'pending'),
+(57, NULL, 3, NULL, NULL, NULL, NULL, 'approved', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 50, 2, '2025-01-10 04:34:24', '2025-01-10 04:34:24', NULL, NULL, 'pending'),
+(58, 'G9LTYNNJ', 3, NULL, 56565656, NULL, NULL, 'in process', 9, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 50, 2, '2025-01-10 04:34:52', '2025-01-10 04:34:52', NULL, NULL, 'pending'),
+(59, NULL, 3, NULL, NULL, NULL, NULL, 'in process', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 50, 2, '2025-01-10 06:51:09', '2025-01-10 06:51:09', NULL, NULL, 'pending'),
+(60, NULL, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 50, 2, '2025-01-11 02:43:17', '2025-01-11 02:43:17', NULL, NULL, 'pending'),
+(61, NULL, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 50, 2, '2025-01-18 09:33:05', '2025-01-18 09:33:05', NULL, NULL, 'pending');
 
 -- --------------------------------------------------------
 
@@ -649,7 +1668,7 @@ CREATE TABLE `loan_bank_details` (
   `bank_address` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `loan_bank_details`
@@ -659,7 +1678,7 @@ INSERT INTO `loan_bank_details` (`bank_id`, `acc_name`, `acc_number`, `ifsc_code
 (3, NULL, NULL, 'HDFC', 'UNION', 'aklsdjf', NULL, NULL, 'aklsdjfkl', '7686678967896', 'kasjdfkj', '2024-09-20 14:42:54', '2024-09-20 14:42:54'),
 (4, NULL, NULL, 'AKSDFK', 'SBI', 'KASDFJ', NULL, NULL, 'ASDKF', '878978', 'ASFJD', '2024-09-20 14:46:49', '2024-09-20 14:46:49'),
 (5, NULL, NULL, 'KOTAK', 'Kotak', 'AFD', NULL, NULL, 'AFD', NULL, 'ADF', '2024-09-22 13:13:41', '2024-09-22 13:13:41'),
-(6, NULL, NULL, 'iffd34js', 'HDFC', 'demo', NULL, NULL, 'manager', '9898989898', 'viman', '2024-09-22 13:14:07', '2024-09-22 13:14:07');
+(6, NULL, NULL, 'iffd34js', 'MAHARASHTRA', 'demo', NULL, NULL, 'manager', '9898989898', 'viman', '2024-09-22 13:14:07', '2024-09-22 13:14:07');
 
 -- --------------------------------------------------------
 
@@ -670,17 +1689,17 @@ INSERT INTO `loan_bank_details` (`bank_id`, `acc_name`, `acc_number`, `ifsc_code
 CREATE TABLE `loan_category` (
   `loan_category_id` int(11) NOT NULL,
   `category_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `loan_category`
 --
 
 INSERT INTO `loan_category` (`loan_category_id`, `category_name`) VALUES
-(1, 'HOME'),
-(2, 'MSME'),
-(3, 'VEHICLE'),
-(4, 'LOAN AGAINST PROPERTY');
+(1, 'home'),
+(2, 'personal'),
+(3, 'vehicle'),
+(4, 'demo');
 
 -- --------------------------------------------------------
 
@@ -696,7 +1715,7 @@ CREATE TABLE `loan_referrals` (
   `status` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -712,7 +1731,7 @@ CREATE TABLE `loan_remarks` (
   `remarks` text NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -737,7 +1756,51 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (4, '2024_08_02_131959_create_permission_tables', 2),
 (5, '2024_08_03_110940_add_timestamps_to_users_table', 3),
 (6, '2024_08_03_143550_create_role_user_table', 4),
-(7, '2024_09_05_054304_create_categories_table', 5);
+(7, '2024_09_05_054304_create_categories_table', 5),
+(8, '2025_01_03_131452_create_password_resets_table', 6);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mis`
+--
+
+CREATE TABLE `mis` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `contact` varchar(255) NOT NULL,
+  `office_contact` varchar(255) DEFAULT NULL,
+  `product_type` varchar(255) NOT NULL,
+  `occupation` varchar(255) DEFAULT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `address` text NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `office_address` varchar(255) DEFAULT NULL,
+  `bank_name` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `branch_name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `mis`
+--
+
+INSERT INTO `mis` (`id`, `name`, `email`, `contact`, `office_contact`, `product_type`, `occupation`, `amount`, `address`, `city`, `office_address`, `bank_name`, `created_at`, `updated_at`, `branch_name`) VALUES
+(1, 'demo mis', 'demomis@gmail.com', '8990909898', NULL, 'home loan', NULL, 9000000.00, 'platinum sqaure viman nagar', 'pune east', NULL, '', '2025-01-02 04:09:14', '2025-01-02 04:13:31', NULL),
+(2, 'demo mis 1', 'demomis1@gmail.com', '7878777722', NULL, 'personal loan', NULL, 787878.00, 'cst road, mumbai', 'Mumbai', NULL, '', '2025-01-02 04:13:11', '2025-01-02 04:13:11', NULL),
+(3, 'deepak chavan', 'chavan@gmail.com', '89898989899', NULL, 'Personal Loan', NULL, 89899.00, 'jawahar nagar, nanded', 'Nanded', NULL, '', '2025-01-02 04:27:14', '2025-01-02 05:12:07', NULL),
+(4, 'sandip pawar', 'sandeep@jfstechnologies.com', '9000900909', NULL, 'MSME', NULL, 90000.00, 'shivaji nagar', 'Sambhajinagar', NULL, '', '2025-01-02 04:50:51', '2025-01-02 04:50:51', NULL),
+(5, 'irfana shaikh', 'irfana@jfstechnologies.com', '7897890099', NULL, 'personal_loan', NULL, 80000.00, 'undri', 'pune', NULL, '', '2025-01-02 05:08:13', '2025-01-02 05:08:13', NULL),
+(6, 'tarun pyne', 'tarun@jfstechnologies.com', '7800990099', NULL, 'Vehicle Loan', NULL, 70000.00, 'dhanori road', 'pune', NULL, '', '2025-01-02 05:09:31', '2025-01-02 05:09:31', NULL),
+(7, 'testing mis', 'mis@gmail.com', '8788908877', NULL, 'Personal Loan', NULL, 989889.00, 'camp office,pune', 'pune', NULL, '', '2025-01-11 02:25:53', '2025-01-11 02:25:53', NULL),
+(8, 'demo mis2', 'demomis2@gmail.com', '8765675643', NULL, 'Personal Loan', NULL, 898989.00, 'dubai', 'pune', 'autria', '', '2025-01-12 08:44:52', '2025-01-12 08:44:52', NULL),
+(9, 'aditya', 'aditya@gmail.com', '9000000099', NULL, 'Home Loan', NULL, 898989.00, 'viman nagar', 'pune', 'magarpatta', '', '2025-01-12 11:32:59', '2025-01-12 11:32:59', NULL),
+(10, 'sayyam', 'sayyam@gmail.com', '8999887788', '6766777777', 'MSME', NULL, 909090.00, 'duabi', 'pune', 'abu', '', '2025-01-12 11:42:10', '2025-01-12 11:42:10', NULL),
+(11, 'aniket', 'aniket@gmail.com', '9000998877', '6788990000', 'Home Loan', NULL, 898989.00, 'dubai', 'pune', 'aurangabad', 'IDFC', '2025-01-12 15:20:47', '2025-01-12 15:20:47', NULL),
+(12, 'abc', 'abc@gmail.com', '7867888888', '5688990099', 'MSME', NULL, 900000.00, 'viman nagar', 'nanded', 'dubai', 'IDFC', '2025-01-13 01:05:58', '2025-01-13 01:05:58', NULL),
+(13, 'xyz', 'xyz@gmail.com', '9090009988', '7890987890', 'MSME', 'Self Employed', 787878.00, 'resi add', 'abu city', 'off add', 'KOTAK', '2025-01-13 01:21:44', '2025-01-13 01:24:12', 'branch dub');
 
 -- --------------------------------------------------------
 
@@ -777,7 +1840,7 @@ CREATE TABLE `notifications` (
   `is_read` tinyint(1) DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `notifications`
@@ -804,19 +1867,30 @@ CREATE TABLE `otp` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `password_reset_tokens`
+-- Table structure for table `password_resets`
 --
 
-CREATE TABLE `password_reset_tokens` (
+CREATE TABLE `password_resets` (
+  `id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL
+  `exp_date` datetime NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `password_resets`
+--
+
+INSERT INTO `password_resets` (`id`, `email`, `token`, `exp_date`, `user_id`, `created_at`, `updated_at`) VALUES
+(1, 'testone@gmail.com', 'd0nzsqj53u', '2025-01-04 14:09:25', 50, '2025-01-03 08:39:25', '2025-01-03 08:39:25');
 
 -- --------------------------------------------------------
 
@@ -855,7 +1929,7 @@ CREATE TABLE `price_range` (
   `range_id` int(11) NOT NULL,
   `from_price` bigint(20) NOT NULL,
   `to_price` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `price_range`
@@ -888,7 +1962,7 @@ CREATE TABLE `professional_details` (
   `gross_salary` decimal(15,2) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `professional_details`
@@ -896,8 +1970,21 @@ CREATE TABLE `professional_details` (
 
 INSERT INTO `professional_details` (`professional_id`, `user_id`, `profession_type`, `company_name`, `experience_year`, `company_address`, `industry`, `designation`, `netsalary`, `gross_salary`, `created_at`, `updated_at`) VALUES
 (1, 1, NULL, 'jfs', 3, 'viman', 'software', 'developer', 3333.00, 4444.00, '2024-08-06 08:06:52', '2024-08-06 08:10:33'),
-(19, 80, 'salaried', 'JFIN', 10, 'Camp Pune', 'FINTECH', 'Manager', 48000.00, 50000.00, '2024-12-31 08:49:43', '2024-12-31 08:49:43'),
-(20, 81, 'salaried', 'JFS Tech', 15, 'Viman Nagar', 'IT', 'Frontend Developer', 5487910.00, 5304899.00, '2024-12-31 08:54:09', '2024-12-31 08:54:09');
+(2, 35, 'self', 'opopkj', 8, 'opopdddd', 'opop', 'opop', 9000.00, 9090.00, '2024-08-12 12:35:46', '2024-08-16 10:44:58'),
+(3, 34, NULL, 'lol', 7, 'lol', 'lol', 'lol', 888888.00, 88888.00, '2024-08-13 10:13:27', '2024-08-13 10:13:27'),
+(4, 36, NULL, 'jfs', 4, 'asdf', 'service', 'developer', 800000.00, 800000.00, '2024-08-21 18:27:21', '2024-08-21 18:27:21'),
+(5, 45, NULL, 'jfs', 3, 'viman nagar', 'service', 'software developer', 40000.00, 400000.00, '2024-09-19 14:56:51', '2024-09-19 14:56:51'),
+(6, 47, 'self', 'demo', 4, 'sdakldj', 'demo', 'sof', 4000000.00, 4000000.00, '2024-09-19 18:29:43', '2024-09-19 18:29:43'),
+(7, 48, 'salaried', 'jfs technologies', 4, 'viman nagar', 'service', 'developer', 300000.00, 300000.00, '2024-09-19 21:26:11', '2024-09-19 21:26:11'),
+(8, 50, 'salaried', 'adjkl', 899, 'aksdjf', 'akjdks', 'ajkdf', 89899.00, 98989.00, '2024-11-18 14:12:23', '2024-11-18 14:12:23'),
+(9, 51, 'salaried', 'jfinmate', 2022, 'ajkldfjak', 'akds', 'akldsk', 909090.00, 909090.00, '2024-11-19 20:23:29', '2024-11-19 20:23:29'),
+(10, 52, 'salaried', 'akfdj', 2020, 'akjdfkl', 'askfjk', 'askdf', 909090.00, 909090.00, '2024-11-21 07:08:24', '2024-11-21 07:08:24'),
+(11, 29, 'salaried', 'foundtech', 6, 'pune', 'electrical', 'designer', 90000.00, 90000.00, '2024-11-25 07:01:50', '2024-11-25 07:01:50'),
+(12, 42, 'salaried', 'demo', 3, 'demo', 'demo', 'demo', 909090.00, 909090.00, '2024-11-26 08:03:32', '2024-11-26 08:03:32'),
+(13, 76, 'salaried', 'jfs technologies', 10, 'viman', 'IT', 'CMO', 100000.00, 100000.00, '2024-12-16 06:09:44', '2024-12-16 06:09:44'),
+(14, 77, 'salaried', 'jfs', 4, 'pune', 'it', 'akdj', 8989.00, 9898.00, '2024-12-17 13:24:08', '2024-12-17 13:24:08'),
+(15, 80, 'salaried', 'jfs technologies', 10, 'viman nagar', 'service based', 'developer', 909090.00, 909090.00, '2025-01-08 13:54:15', '2025-01-08 13:54:15'),
+(16, 79, 'salaried', 'hudhu', 7878, 'hhuhuh', 'uuhu', 'yuuhuh', 87787.00, 7887878.00, '2025-01-09 07:33:26', '2025-01-09 07:33:26');
 
 -- --------------------------------------------------------
 
@@ -918,32 +2005,58 @@ CREATE TABLE `profile` (
   `residence_address` text DEFAULT NULL,
   `city` varchar(45) DEFAULT NULL,
   `state` varchar(45) DEFAULT NULL,
-  `pincode` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+  `pincode` int(11) DEFAULT NULL,
+  `rera_doc` varchar(255) DEFAULT NULL,
+  `licence_doc` varchar(255) DEFAULT NULL,
+  `address_proof` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `profile`
 --
 
-INSERT INTO `profile` (`profile_id`, `user_id`, `created_at`, `updated_at`, `mobile_no`, `dob`, `marital_status`, `gender`, `avatar`, `residence_address`, `city`, `state`, `pincode`) VALUES
-(1, 1, '2024-08-07 16:07:48', '2024-08-07 16:07:48', '8421197789', '2020-08-14', NULL, NULL, '7vbLhAi0Qw8hKyV4Y3jQRvvVDFE3NprZqTAfFuUJ.png', '', 'Maithon', 'Jharkhand', 828207),
-(25, 30, '2024-08-08 12:11:45', '2024-08-08 12:11:45', '9898989898', '2024-07-02', NULL, NULL, NULL, '507 B wing phase 1', 'pune', 'MAHARASHTRA', 412207),
-(27, 33, '2024-08-08 13:02:11', '2024-08-08 13:02:11', '9090909098', '2024-08-14', NULL, NULL, 'Vu2YrvQ3S8dut8wh4UYy38zhzNsgi0zqbIfacjAo.png', NULL, NULL, NULL, NULL),
-(61, 66, '2024-12-04 06:41:45', '2024-12-04 06:41:45', '9900990099', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(69, 74, '2024-12-13 10:41:10', '2024-12-13 10:41:10', '9027796161', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(70, 75, '2024-12-13 10:44:54', '2024-12-13 10:44:54', '8267910640', '1997-12-25', 'Single', NULL, NULL, 'Kuch nahi h', 'Pune', 'Maharastra', 845162),
-(71, 76, '2024-12-29 19:32:11', '2024-12-29 19:32:11', '2666231180', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(72, 77, '2024-12-30 17:51:06', '2024-12-30 17:51:06', '9876789023', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(73, 78, '2024-12-30 17:52:55', '2024-12-30 17:52:55', '9876589045', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(74, 79, '2024-12-31 08:35:38', '2024-12-31 08:35:38', '8267910640', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(75, 80, '2024-12-31 08:41:34', '2024-12-31 08:41:34', '9665338377', '1980-02-05', 'Married', NULL, NULL, 'Pune', 'Pune, Maharashtra', 'Maharashtra', 411001),
-(76, 81, '2024-12-31 08:45:59', '2024-12-31 08:45:59', '8267910640', '1998-05-03', 'Single', NULL, NULL, 'kch bhi ni', 'Pune', 'MH', 425778),
-(77, 82, '2024-12-31 10:23:48', '2024-12-31 10:23:48', '8267910640', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(78, 83, '2024-12-31 10:36:08', '2024-12-31 10:36:08', '8267910640', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(79, 84, '2024-12-31 10:58:23', '2024-12-31 10:58:23', '9090909090', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(80, 85, '2024-12-31 14:19:55', '2024-12-31 14:19:55', '9322078413', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(81, 86, '2025-01-02 07:51:49', '2025-01-02 07:51:49', '8208246946', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(82, 87, '2025-01-02 07:57:36', '2025-01-02 07:57:36', '9175646855', '2004-11-21', NULL, NULL, NULL, 'A10 durani complex mithanagar kondhwa', 'pune', 'maharashtra', 411048);
+INSERT INTO `profile` (`profile_id`, `user_id`, `created_at`, `updated_at`, `mobile_no`, `dob`, `marital_status`, `gender`, `avatar`, `residence_address`, `city`, `state`, `pincode`, `rera_doc`, `licence_doc`, `address_proof`) VALUES
+(1, 1, '2024-08-07 16:07:48', '2024-08-07 16:07:48', '8421197789', '2020-08-14', NULL, NULL, '7vbLhAi0Qw8hKyV4Y3jQRvvVDFE3NprZqTAfFuUJ.png', '', 'Maithon', 'Jharkhand', 828207, NULL, NULL, NULL),
+(24, 29, '2024-08-08 10:08:00', '2024-08-08 10:08:00', '8421197788', '2024-08-01', 'Single', NULL, NULL, 'Pune, Maharashtra 411032, India', 'DHANBAD', 'JHARKHAND', 828207, NULL, NULL, NULL),
+(25, 30, '2024-08-08 12:11:45', '2024-08-08 12:11:45', '9898989898', '2024-07-02', NULL, NULL, NULL, '507 B wing phase 1', 'pune', 'MAHARASHTRA', 412207, NULL, NULL, NULL),
+(26, 31, '2024-08-08 12:12:43', '2024-08-08 12:12:43', '8788524747', '1996-10-13', NULL, NULL, NULL, 'jsj', 'sjsj', 'sjjs', 767656, NULL, NULL, NULL),
+(27, 33, '2024-08-08 13:02:11', '2024-08-08 13:02:11', '9090909098', '2024-08-14', NULL, NULL, 'Vu2YrvQ3S8dut8wh4UYy38zhzNsgi0zqbIfacjAo.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(28, 34, '2024-08-08 13:04:57', '2024-08-13 10:13:01', '8888888888', '1880-08-08', 'female', NULL, NULL, 'lol', 'lol', 'lol', 999999, NULL, NULL, NULL),
+(29, 35, '2024-08-08 13:26:58', '2024-08-13 09:52:06', '9623436111', '1999-08-08', 'Married', NULL, NULL, 'kio', 'pune', 'maharashtra', 9999, NULL, NULL, NULL),
+(30, 27, '2024-08-08 13:26:58', '2024-08-13 09:52:06', '9999999999', '1090-09-09', 'male', NULL, NULL, '507 B wing phase 1\r\nMajestique manhattan\r\nwagholi', 'pune', 'MAHARASHTRA', 412207, NULL, NULL, NULL),
+(31, 36, '2024-08-21 12:26:32', '2024-08-21 12:26:32', '9898989898', '1999-09-09', 'Married', NULL, NULL, 'pune', 'pune', 'maharashtra', 989898, NULL, NULL, NULL),
+(37, 42, '2024-09-19 07:30:16', '2024-09-19 07:30:16', '9900990099', '2000-05-09', 'Married', NULL, NULL, '507 B wing phase 1', 'pune', 'MAHARASHTRA', 412207, NULL, NULL, NULL),
+(40, 45, '2024-09-19 08:23:40', '2024-09-19 08:23:40', '9090909090', '1999-10-13', 'Single', NULL, NULL, 'pune local', 'pune', 'mh', 989898, NULL, NULL, NULL),
+(42, 47, '2024-09-19 12:53:07', '2024-09-19 12:53:07', '9975931041', '1999-11-12', 'Married', NULL, NULL, 'pune', 'pune', 'pune', 99999, NULL, NULL, NULL),
+(43, 48, '2024-09-19 15:51:26', '2024-09-19 15:51:26', '9898989898', '2000-11-20', 'Single', NULL, NULL, 'pune', 'pune', 'maharashtra', 989898, NULL, NULL, NULL),
+(44, 49, '2024-10-01 05:49:20', '2024-10-01 05:49:20', '9122222222', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(45, 50, '2024-11-17 18:31:51', '2024-11-17 18:31:51', '9111111111', '1997-02-06', 'Married', NULL, NULL, 'pune', '155', '6', 909909, NULL, NULL, NULL),
+(46, 51, '2024-11-19 20:21:17', '2024-11-19 20:21:17', '9333333333', '2000-11-11', 'Married', NULL, NULL, 'pune', 'pune', 'mhaa', 909909, NULL, NULL, NULL),
+(47, 52, '2024-11-21 07:04:16', '2024-11-21 07:04:16', '9666666666', '2002-10-10', 'Married', NULL, NULL, 'viman nagar', 'pune', 'Mahārāshtra', 411014, NULL, NULL, NULL),
+(49, 54, '2024-11-27 18:32:24', '2024-11-27 18:32:24', '9900990099', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(50, 55, '2024-11-27 18:35:06', '2024-11-27 18:35:06', '9900990099', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51, 56, '2024-11-27 18:37:47', '2024-11-27 18:37:47', '9900990099', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(52, 57, '2024-11-27 18:38:55', '2024-11-27 18:38:55', '9900990099', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(53, 58, '2024-12-02 13:54:49', '2024-12-02 13:54:49', '9090909000', '1990-11-11', NULL, NULL, NULL, 'pune', 'pune', 'MAHARASHTRA', 412207, NULL, NULL, NULL),
+(54, 59, '2024-12-02 15:06:36', '2024-12-02 15:06:36', '9090909000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(55, 60, '2024-12-02 15:08:20', '2024-12-02 15:08:20', '9000099999', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(56, 61, '2024-12-02 15:18:19', '2024-12-02 15:18:19', '9900990099', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(57, 62, '2024-12-02 15:20:49', '2024-12-02 15:20:49', '9900990099', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(58, 63, '2024-12-03 06:49:07', '2024-12-03 06:49:07', '9999999999', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(59, 64, '2024-12-03 06:50:09', '2024-12-03 06:50:09', '0999999999', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(60, 65, '2024-12-03 06:53:56', '2024-12-03 06:53:56', '0999999999', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(61, 66, '2024-12-03 14:31:17', '2024-12-03 14:31:17', '9121999999', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(62, 67, '2024-12-04 06:58:54', '2024-12-04 06:58:54', '9090909090', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(63, 68, '2024-12-09 14:47:31', '2024-12-09 14:47:31', '9999999999', '1990-10-10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(64, 69, '2024-12-09 15:08:12', '2024-12-09 15:08:12', '9999000099', '1990-10-10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(65, 70, '2024-12-10 06:22:58', '2024-12-10 06:22:58', '009900990099', '1990-10-10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(66, 71, '2024-12-10 06:48:05', '2024-12-10 06:48:05', '989898989', '1990-10-10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(71, 76, '2024-12-16 06:05:06', '2024-12-16 06:05:06', '9922212234', '1990-10-10', 'Married', NULL, NULL, 'pune', 'pune', 'Mahārāshtra', 411014, NULL, NULL, NULL),
+(72, 77, '2024-12-17 12:35:17', '2024-12-17 12:35:17', '9889009988', '1990-10-10', 'Single', NULL, NULL, 'pune', 'pune', 'Mahārāshtra', 411014, NULL, NULL, NULL),
+(73, 78, '2024-12-31 10:46:22', '2024-12-31 10:46:22', '9900999900', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(74, 79, '2025-01-03 11:01:04', '2025-01-03 11:01:04', '9900990099', '1990-10-10', 'Married', NULL, NULL, 'ijijij', 'jjj', 'ijjij', 87877, NULL, NULL, NULL),
+(75, 80, '2025-01-08 13:52:26', '2025-01-08 13:52:26', '9122222222', '1990-10-19', 'Married', NULL, NULL, 'viman nagar', 'pune', 'Mahārāshtra', 411014, NULL, NULL, NULL),
+(76, 81, '2025-01-13 07:28:05', '2025-01-17 13:15:26', '8998899889', '1990-10-10', 'Married', 'Female', NULL, 'viman nagar, pune', 'pune', 'MAHARASHTRA', 412207, 'uploads/gHX4XeE2ErbETukCfelASXYbO2lzM3WOLInuir7y.jpg', 'uploads/4An0K8lUchR2OaeS4Ee7Kx8Dxppy4RwYPMFq3An6.jpg', NULL);
 
 -- --------------------------------------------------------
 
@@ -955,37 +2068,56 @@ CREATE TABLE `properties` (
   `properties_id` int(11) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
   `property_type_id` int(11) NOT NULL,
+  `land_type` varchar(255) DEFAULT NULL,
   `builder_name` varchar(255) DEFAULT NULL,
+  `rera` text DEFAULT NULL,
+  `s_price` double DEFAULT NULL,
   `select_bhk` int(11) DEFAULT NULL,
   `image` text DEFAULT NULL,
   `property_details` varchar(255) DEFAULT NULL,
   `boucher` text DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `facilities` varchar(255) DEFAULT NULL,
+  `beds` int(11) DEFAULT NULL,
+  `baths` int(11) DEFAULT NULL,
+  `balconies` int(11) DEFAULT NULL,
+  `parking` int(11) DEFAULT NULL,
   `price_range_id` int(11) DEFAULT NULL,
   `creator_id` int(11) DEFAULT NULL,
   `contact` text DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `is_active` int(11) NOT NULL DEFAULT 0 COMMENT '0 = not active, 1 = active',
   `area` text NOT NULL,
+  `builtup_area` text DEFAULT NULL,
   `localities` text NOT NULL,
   `city` text NOT NULL,
   `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+  `updated_at` datetime DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
+  `latitude` decimal(10,7) DEFAULT NULL,
+  `longitude` decimal(10,7) DEFAULT NULL,
+  `nearby_locations` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`nearby_locations`))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `properties`
 --
 
-INSERT INTO `properties` (`properties_id`, `title`, `property_type_id`, `builder_name`, `select_bhk`, `image`, `property_details`, `boucher`, `address`, `facilities`, `price_range_id`, `creator_id`, `contact`, `email`, `is_active`, `area`, `localities`, `city`, `created_at`, `updated_at`) VALUES
-(3, 'Deepak properties', 2, 'Deepak', 2, 'property_photoes/n2i0qxcp1732889022.webp', 'Life Republic is a thoughtfully planned township spread across...', 'property_bouchers/ed054cfn1724157834.pdf', 'Pune, Maharashtra', 'Gym, garden', 2, 1, '08421197788', 'sour.sk@gmail.com', 1, '1120', 'Pune', 'Maharashtra', '2024-08-20 12:43:54', '2024-08-20 12:43:54'),
-(4, 'Sourabh Propertie', 3, 'SKS builder', 4, 'property_photoes/t0kis4qj1732889082.webp', 'Life Republic is a thoughtfully planned township spread across...', '', 'Khadki, Pune', 'gym work, play ground', 5, 1, '08421197788', 'skorg@mailinator.com', 1, '1700', 'Khadki', 'Pune', '2024-08-21 04:56:16', '2024-08-21 04:56:16'),
-(6, 'Vaibhav Properties', 4, 'Vaibhav', 7, 'property_photoes/q27ji96u1732889094.webp', 'Life Republic is a thoughtfully planned township spread across...', 'property_bouchers/q7l3yfwo1724308621.pdf', 'Viman Nagar, Pune', 'Gym, Garden', 6, 1, '8421197788', 'skorg@mailinator.com', 1, '8800', 'Viman Nagar', 'Pune', '2024-08-22 06:37:01', '2024-08-22 06:37:01'),
-(7, 'Life Republic', 1, 'Kolte-Patil', 3, 'property_photoes/61qu03k81732889032.webp', 'Life Republic is a thoughtfully planned township spread across...', 'property_bouchers/47z6wbur1724754507.pdf', 'Flat No 1002 Floor No 10 Wing A Unique legacy grand Keshav Nagar Mundhwa Pune., Keshav Nagar, Pune - East, Maharashtra', 'Gym, Swimming Pool, Cricket Turf, Open Podium, Guest Parking', 4, 1, '8267910640', 'vaibhav@jfstechnologies.com', 1, '2122', 'Keshav Nagar', 'Pune', '2024-08-27 10:28:27', '2024-08-27 10:28:27'),
-(8, 'Life Republic', 3, 'Kolte-Patil', 4, 'property_photoes/5z4xfk6y1732889043.webp', 'Life Republic is a thoughtfully planned township spread across...', 'property_bouchers/cf35i7l01724849617.pdf', 'Wagholi, Pune', 'Gym, Parking', 4, 1, '8956727444', 'vaibhav@jfstechnologies.com', 1, '3500', 'Wagholi', 'Pune', '2024-08-28 12:53:38', '2024-08-28 12:53:38'),
-(9, 'Life Republic', 3, 'Kolte-Patil', 4, 'property_photoes/2crzn7a31732889057.webp', 'Life Republic is a thoughtfully planned township spread across...', 'property_bouchers/hiuva4361724849645.pdf', 'Kalyani Nagar, Pune', 'Gym, Parking', 3, 1, '8956727444', 'vaibhav@jfstechnologies.com', 1, '2048', 'Kalyani Nagar', 'Puna', '2024-08-28 12:54:05', '2024-08-28 12:54:05'),
-(10, 'Life Republic', 3, 'Kolte-Patil', 6, 'property_photoes/g6fuhyx31732889069.webp', 'Life Republic is a thoughtfully planned township spread across...', 'property_bouchers/aro6mdcy1724850024.pdf', 'Khadki, Pune', 'Parking, Outdoor Turf', 5, 1, '8956727444', 'vaibhav@jfstechnologies.com', 1, '5245', 'Khadki', 'Pune', '2024-08-28 13:00:24', '2024-08-28 13:00:24');
+INSERT INTO `properties` (`properties_id`, `title`, `property_type_id`, `land_type`, `builder_name`, `rera`, `s_price`, `select_bhk`, `image`, `property_details`, `boucher`, `address`, `facilities`, `beds`, `baths`, `balconies`, `parking`, `price_range_id`, `creator_id`, `contact`, `email`, `is_active`, `area`, `builtup_area`, `localities`, `city`, `created_at`, `updated_at`, `location`, `latitude`, `longitude`, `nearby_locations`) VALUES
+(3, 'Deepak properties', 2, 'Flat', 'Deepak', NULL, 20009, NULL, 'property_photoes/jg85zso61737019627.jpg', 'Life Republic is a thoughtfully planned township spread across...', 'property_bouchers/ed054cfn1724157834.pdf', 'Pune, Maharashtra', 'Gym, garden', NULL, NULL, NULL, NULL, 2, 1, '08421197788', 'sour.sk@gmail.com', 1, '1120', '2200', 'Pune', 'Maharashtra', '2024-08-20 12:43:54', '2024-08-20 12:43:54', 'viman nagar location', 18.5723900, 73.9065480, '[\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",null,null,null]'),
+(4, 'Sourabh Propertie', 3, NULL, 'SKS builder', NULL, NULL, 4, 'property_photoes/hyr6st5b1732804664.webp', 'Life Republic is a thoughtfully planned township spread across...', '', 'Khadki, Pune', 'gym work, play ground', NULL, NULL, NULL, NULL, 5, 1, '08421197788', 'skorg@mailinator.com', 1, '1700', NULL, 'Khadki', 'Pune', '2024-08-21 04:56:16', '2024-08-21 04:56:16', NULL, NULL, NULL, '[\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",null,null,null]'),
+(6, 'Vaibhav Properties', 4, NULL, 'Vaibhav', NULL, NULL, 7, 'property_photoes/gm92lwz61732804677.webp', 'Life Republic is a thoughtfully planned township spread across...', 'property_bouchers/q7l3yfwo1724308621.pdf', 'Viman Nagar, Pune', 'Gym, Garden', NULL, NULL, NULL, NULL, 6, 1, '8421197788', 'skorg@mailinator.com', 1, '8800', NULL, 'Viman Nagar', 'Pune', '2024-08-22 06:37:01', '2024-08-22 06:37:01', NULL, NULL, NULL, '[\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",null,null,null]'),
+(7, 'Life Republic', 1, NULL, 'Kolte-Patil', NULL, NULL, 3, 'property_photoes/e3fg94rn1732804610.webp', 'Life Republic is a thoughtfully planned township spread across...', 'property_bouchers/47z6wbur1724754507.pdf', 'Flat No 1002 Floor No 10 Wing A Unique legacy grand Keshav Nagar Mundhwa Pune., Keshav Nagar, Pune - East, Maharashtra', 'Gym, Swimming Pool, Cricket Turf, Open Podium, Guest Parking', NULL, NULL, NULL, NULL, 4, 1, '8267910640', 'vaibhav@jfstechnologies.com', 1, '2122', NULL, 'Keshav Nagar', 'Pune', '2024-08-27 10:28:27', '2024-08-27 10:28:27', NULL, NULL, NULL, '[\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",null,null,null]'),
+(8, 'Life Republic', 3, NULL, 'Kolte-Patil', NULL, NULL, 4, 'property_photoes/xbh8i0av1732804623.webp', 'Life Republic is a thoughtfully planned township spread across...', 'property_bouchers/cf35i7l01724849617.pdf', 'Wagholi, Pune', 'Gym, Parking', NULL, NULL, NULL, NULL, 4, 1, '8956727444', 'vaibhav@jfstechnologies.com', 1, '3500', NULL, 'Wagholi', 'Pune', '2024-08-28 12:53:38', '2024-08-28 12:53:38', NULL, NULL, NULL, '[\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",null,null,null]'),
+(9, 'Life Republic', 3, NULL, 'Kolte-Patil', NULL, NULL, 4, 'property_photoes/rh3wnujc1732804639.webp', 'Life Republic is a thoughtfully planned township spread across...', 'property_bouchers/hiuva4361724849645.pdf', 'Kalyani Nagar, Pune', 'Gym, Parking', NULL, NULL, NULL, NULL, 3, 1, '8956727444', 'vaibhav@jfstechnologies.com', 1, '2048', NULL, 'Kalyani Nagar', 'Puna', '2024-08-28 12:54:05', '2024-08-28 12:54:05', NULL, NULL, NULL, '[\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",null,null,null]'),
+(10, 'Life Republic', 3, NULL, 'Kolte-Patil', NULL, NULL, 6, 'property_photoes/ski1lhqg1732804651.webp', 'Life Republic is a thoughtfully planned township spread across...', 'property_bouchers/aro6mdcy1724850024.pdf', 'Khadki, Pune', 'Parking, Outdoor Turf', NULL, NULL, NULL, NULL, 5, 1, '8956727444', 'vaibhav@jfstechnologies.com', 1, '5245', NULL, 'Khadki', 'Pune', '2024-08-28 13:00:24', '2024-08-28 13:00:24', NULL, NULL, NULL, '[\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",null,null,null]'),
+(11, 'demo', 3, NULL, 'demo', NULL, NULL, 2, 'property_photos/atdjnw9y1736754407.png', 'asdfasdf', '', 'asdfsadf', 'adsf', NULL, NULL, NULL, NULL, 3, 81, '8989898989', 'cp@gmail.com', 0, '87878', NULL, 'adjhjdsf', 'adsfk', '2025-01-13 07:46:47', '2025-01-13 07:46:47', NULL, NULL, NULL, '[\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",null,null,null]'),
+(12, 'demo', 3, NULL, 'demo', NULL, NULL, 2, 'property_photos/sbop64qn1736764383.png', 'kkjj', '', 'kjkjk', 'WiFi, Garden, Central Heating', NULL, NULL, NULL, NULL, 5, 81, '8989898989', 'kkjkjk@kjkj.ck', 1, '87878', NULL, 'asdffasd', 'asdfsa', '2025-01-13 10:33:03', '2025-01-13 10:33:03', NULL, NULL, NULL, '[\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",null,null,null]'),
+(13, 'Jfinserv', 4, 'Bunglow', 'Sukhwani', NULL, NULL, NULL, 'property_photoes/ljzocs691736859597.jpg', 'good jfin', 'property_bouchers/zcpxkurs1736942357.pdf', 'good jfin', 'WiFi, Swimming Pool, Fitness Center, Pets Allowed', NULL, NULL, NULL, NULL, 5, 1, '8989898989', 'jfin@gmail.com', 1, '8978', '8788', 'kadfh', 'pune', '2025-01-13 11:27:54', '2025-01-13 11:27:54', 'viman nagar location', 18.5477885, 74.1310162, '[\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",null,null,null]'),
+(14, 'Tarun properties', 1, 'Bunglow', 'Tarun developer', NULL, NULL, NULL, 'property_photos/xlk9o7ic1736838167.png', 'Somras tombra', 'property_brochures/h1u02k581736838167.pdf', '507 B wing phase 1\r\nMajestique manhattan\r\nwagholi', 'WiFi, Parking, Swimming Pool, Balcony, Security, Fitness Center, Air Conditioning', NULL, NULL, NULL, NULL, 3, 1, '90009990000', 'tarun@jfstechnologies.com', 1, '1120', '1120', 'Dhanori', 'pune', '2025-01-14 07:02:47', '2025-01-14 07:02:47', 'viman nagar location', 18.5723900, 73.9065480, '[\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",null,null,null]'),
+(15, 'project', 4, 'Flat', 'lkajdkfj', NULL, NULL, NULL, 'property_photos/oz4iemdq1736949514.jpg', 'jijiji', 'property_brochures/v0qol2cn1736949514.pdf', 'ijijij', 'Swimming Pool, Security', 2, 2, 2, 2, 6, 1, '8898989898', 'huhu@hhu.huh', 0, '898', '9898', 'kjhkjh', 'hhk', '2025-01-15 13:58:34', '2025-01-15 13:58:34', 'jiji', 78.9900000, 88.9090000, '[\"21 km from dubai\"]'),
+(16, 'project', 2, 'Bunglow', 'Deepak', NULL, NULL, NULL, 'property_photos/gpdb9s5z1736949855.png', 'kokoko', 'property_brochures/h7sq8i5y1736949855.pdf', '507 B wing phase 1\r\nMajestique manhattan\r\nwagholio', 'Parking, Fitness Center', 2, 2, 2, 2, 3, 1, '08421197788', 'devon@gamil.com', 0, '1120', '2200', 'Dhanori', 'pune', '2025-01-15 14:04:15', '2025-01-15 14:04:15', 'viman nagar location', 18.5723900, 73.9065480, '[\"21 km from dubai\",\"67 km from koko\"]'),
+(17, 'Deepak properties', 4, 'Flat', 'Deepak', 'PS89878IJ', 7800000, NULL, 'property_photoes/mryp5i0n1737105934.jpg', 'sss', '', '507 B wing phase 1\r\nMajestique manhattan\r\nwagholi', 'Laundry Room, Pets Allowed', NULL, NULL, NULL, NULL, 4, 1, '08421197788', 'testone@gmail.com', 1, '1120', '1120', 'Dhanori', 'pune', '2025-01-15 14:51:31', '2025-01-15 14:51:31', 'sss', 18.5723900, 73.9065480, '[\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",\"21 km from dubai\",null,null,null]');
 
 -- --------------------------------------------------------
 
@@ -997,7 +2129,7 @@ CREATE TABLE `properties_img` (
   `properties_img_id` int(11) NOT NULL,
   `property_image` blob DEFAULT NULL,
   `properties_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1008,7 +2140,7 @@ CREATE TABLE `properties_img` (
 CREATE TABLE `property_category` (
   `pid` int(11) NOT NULL,
   `category_name` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `property_category`
@@ -1035,7 +2167,7 @@ CREATE TABLE `property_owner` (
   `pancard` varchar(45) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1047,7 +2179,7 @@ CREATE TABLE `property_subcategory` (
   `property_subcategory_id` int(11) NOT NULL,
   `property_category_id` int(11) NOT NULL,
   `name` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1059,7 +2191,7 @@ CREATE TABLE `referral_code` (
   `referral_code_id` int(11) NOT NULL,
   `code` varchar(255) DEFAULT NULL,
   `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1072,7 +2204,7 @@ CREATE TABLE `refer_user` (
   `refer_user_by` int(11) NOT NULL,
   `loan_id` int(11) NOT NULL,
   `status` enum('default','claim','claimed','claim & approved') DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1085,7 +2217,7 @@ CREATE TABLE `role` (
   `rname` varchar(255) NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1406,20 +2538,62 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('3QXSR6lQmauRAwWQ3gUvboKUXNANnQLsWfqWUZRY', NULL, '205.169.39.17', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.5938.132 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoickNySzdoUlJjcVI4ZnBFSmpOWTNPbDFycjd0UU1kS0d4QlNTVnV4ZyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjA6Imh0dHBzOi8vamZpbnNlcnYuY29tIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1736250217),
-('76GGIdXxwGbz78WUskqvzzVUMJ55gWQ8j33lO1Wg', NULL, '2401:4900:889e:e5d3:54d4:ee43:b62c:7553', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', 'YTo4OntzOjY6Il90b2tlbiI7czo0MDoibEtnc3M3S21XRjJTc0tkNHhIRGRvaHQzMEJzR0s2Sll0UXQ5RUdYVyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjQ6Imh0dHBzOi8vamZpbnNlcnYuY29tL21pcyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6ODoidXNlcm5hbWUiO3M6NzoiU291cmFiaCI7czo5OiJyb2xlX25hbWUiO3M6NToiQWRtaW4iO3M6NzoidXNlcl9pZCI7aToxO3M6Nzoicm9sZV9pZCI7aTo0O3M6NToiZW1haWwiO3M6MTg6ImFkbWluQGpmaW5zZXJ2LmNvbSI7fQ==', 1736253470),
-('EsbJEgH851ZkL9rKR7GT5sCJSEhHr9te66rNx60h', NULL, '34.217.253.81', 'Mozilla/5.0 (compatible; DashLinkPreviews/5.1;)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiWUhLUHdFdG0yUG9QeU5mQzdBb1FsbEJINTVrYXpROEY3UUtYOWFCWCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjA6Imh0dHBzOi8vamZpbnNlcnYuY29tIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1736253573),
-('eTK0ue9Ks2m8jNaWVJ6QmH5sGuxr7xY6kxNWQoEP', NULL, '52.89.103.56', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/600.3.18 (KHTML, like Gecko) Version/8.0.3 Safari/600.3.18', 'YToyOntzOjY6Il90b2tlbiI7czo0MDoiVHkxY0VYNVNOTVlzanhjWVEzTURLZ0xPdHltVHNmQWpacHJWT3NldyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1736253572),
-('heC39nEXSOaRrz1KzjPluXK7iBVrlQKVoQ9uZm0d', NULL, '34.217.253.81', 'Mozilla/5.0 (compatible; DashLinkPreviews/5.1;)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiVk9lYWhkZjRxQk1GakZwYnR0cmZscFNpaEtnMDZaSUNzSjlVY0hLVyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjA6Imh0dHBzOi8vamZpbnNlcnYuY29tIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1736253574),
-('jiwf8PMCzDhgK5yOSVHSvyIkjcWkXPXfZLu6YrXT', NULL, '2401:4900:1c9b:d94:d52c:1e6:108e:a0d6', 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoibFFscFdBQU5OM0h6clp5b01WUTNDVUI5UUNQWkV5enVVVGlYRDZ1TiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjA6Imh0dHBzOi8vamZpbnNlcnYuY29tIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1736250360),
-('jp1nCl5bWG9qv66oDiwzdyF9ovGrFvNqLD7fcrl5', NULL, '72.13.62.26', 'Mozilla/5.0 (compatible; ips-agent)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiRVhGaUNDYk53QkNLbk10NEdoUXJNbGk1eVpmbXBHMGsyS09MZVdRVSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzM6Imh0dHBzOi8vd3d3LmpmaW5zZXJ2LmNvbS9zZXJ2aWNlcyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1736248594),
-('Ot7qI17jhv09ZMEpZntaTmHXGs3dGFPM4NXZEfwY', NULL, '2a02:598:128:8a00::b00:6', 'Mozilla/5.0 (compatible; SeznamBot/4.0; +http://napoveda.seznam.cz/seznambot-intro/)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiYVBSTVpCUWdLQ0FEVEh2cm5EcFllNmVIck5LYjQ2aHdjclNhWVlWWSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHBzOi8vamZpbnNlcnYuY29tL215cHJvZmlsZSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1736250551),
-('PxJ889LgN5mEnvX5lz1zXTCaGc5LDI7N084NKma8', NULL, '54.203.242.6', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/600.3.18 (KHTML, like Gecko) Version/8.0.3 Safari/600.3.18', 'YToyOntzOjY6Il90b2tlbiI7czo0MDoiREJWVXlUNlZhUXdvR1dVbXVsNDRiS01UVkhuYjVSTkhMNWxFWlllaSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1736253575),
-('py2SYfPeMx2D3TBy1xyw7RxPBQi2jFDf6T4KwC6Y', NULL, '52.89.103.56', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/600.3.18 (KHTML, like Gecko) Version/8.0.3 Safari/600.3.18', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiaGZ0VDdyNzA1dnJFWnR0dkt6b1lESTF4YWVWSWg3WU1WYUtYWU1leSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjA6Imh0dHBzOi8vamZpbnNlcnYuY29tIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1736253572),
-('sexEoFZQVe4Xxlvq8AaPvetA0cqH3qlek4byDbeY', NULL, '2401:4900:889e:e5d3:54d4:ee43:b62c:7553', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', 'YTo4OntzOjY6Il90b2tlbiI7czo0MDoicnlEdlVYZ0Q0UWRmR3p0UDNSeXNVcHFYVzJQa0J1U0lPenA4M1d6TiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjg6Imh0dHBzOi8vamZpbnNlcnYuY29tL215bG9hbnMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjg6InVzZXJuYW1lIjtzOjc6IlZhaUJoYXYiO3M6OToicm9sZV9uYW1lIjtzOjg6IkN1c3RvbWVyIjtzOjc6InVzZXJfaWQiO2k6ODE7czo3OiJyb2xlX2lkIjtpOjE7czo1OiJlbWFpbCI7czoyNzoidmFpYmhhdkBqZnN0ZWNobm9sb2dpZXMuY29tIjt9', 1736253248),
-('vfg2WnC3l8TPJ9OAw1DRYAeMnBIhCJovABjFaJwI', NULL, '2401:4900:889e:e5d3:54d4:ee43:b62c:7553', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoidTJ0bndod2c2VUk4WGJ0V1dHWlpuZ3lHcks2dGFvcHdtQWRFVkhqaiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHBzOi8vamZpbnNlcnYuY29tL2ZvcmdvdCI7fX0=', 1736249390),
-('zD3qi6rpbvndA4cyNFpwmtVC3AP1j30qRf4HBHQ9', NULL, '117.193.147.118', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZXlIY2I4TGVuUDNkdTJuR2NvNTdIWkhLVnhOYW5aREZ3MjFjZ3JoSCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzM6Imh0dHBzOi8vamZpbnNlcnYuY29tL3JlZ2lzdHJhdGlvbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1736253779),
-('ZhQ8Z1UmD4TTH3dA0XZ8rVC3XrohhTll41GqPiY6', NULL, '54.203.242.6', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/600.3.18 (KHTML, like Gecko) Version/8.0.3 Safari/600.3.18', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiOEtmZVpQcnRMNjFLN0JlRnNwMWJNVUtyR1VVMGFDU2RobDdHUkFmSiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjA6Imh0dHBzOi8vamZpbnNlcnYuY29tIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1736253575);
+('jLmrnSlErvmBKUZmvZNFVZmOApJuCXlPWzJ3dsbw', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36', 'YToxMDp7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NjoiX3Rva2VuIjtzOjQwOiJXdk9ZbWI4dGdtRkdDazZ0NzBJdERGUktycm9DbVBxM0dvOTRZVFJrIjtzOjg6InVzZXJuYW1lIjtzOjEzOiJjb21pc3Npb24gb25lIjtzOjk6InJvbGVfbmFtZSI7czo4OiJDdXN0b21lciI7czo3OiJ1c2VyX2lkIjtpOjUwO3M6Nzoicm9sZV9pZCI7aToxO3M6NToiZW1haWwiO3M6MTc6InRlc3RvbmVAZ21haWwuY29tIjtzOjc6ImlzX2xvYW4iO3M6MToiMSI7czo3OiJsb2FuX2lkIjtpOjYxO30=', 1737212665),
+('LIDwI2F8JKYNFQiYaCsa42sWFIhhpEHfqwYzdBug', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36', 'YTo4OntzOjY6Il90b2tlbiI7czo0MDoiTWNPQmFZRDF0WEtOckFaMkhkVVVJc2FJMHFSanVleTEzVTA1V2N4ayI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wYXJ0bmVyL3Byb2ZpbGUiO31zOjg6InVzZXJuYW1lIjtzOjk6ImRlZXBhayBjcCI7czo5OiJyb2xlX25hbWUiO3M6MTU6IkNoYW5uZWwgUGFydG5lciI7czo3OiJ1c2VyX2lkIjtpOjgxO3M6Nzoicm9sZV9pZCI7aTozO3M6NToiZW1haWwiO3M6MTI6ImNwQGdtYWlsLmNvbSI7fQ==', 1737121752),
+('WOVQFNq0GKHlKs1Jc8FQKyMAjjML7PoTuJHQUqEG', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36', 'YTo4OntzOjY6Il90b2tlbiI7czo0MDoib1c2dVA2T3E1MFg5NDNGTTJ3THp3OGltWkFHOER4TWh4QnhFWTBpciI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi93aXRoZHJhd2FsLXJlcXVlc3RzIjt9czo4OiJ1c2VybmFtZSI7czo3OiJTb3VyYWJoIjtzOjk6InJvbGVfbmFtZSI7czo1OiJBZG1pbiI7czo3OiJ1c2VyX2lkIjtpOjE7czo3OiJyb2xlX2lkIjtpOjQ7czo1OiJlbWFpbCI7czoxODoiYWRtaW5AamZpbnNlcnYuY29tIjt9', 1737126557);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `states`
+--
+
+CREATE TABLE `states` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `country_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `states`
+--
+
+INSERT INTO `states` (`id`, `name`, `country_id`) VALUES
+(1, 'ANDHRA PRADESH', 105),
+(2, 'ASSAM', 105),
+(3, 'ARUNACHAL PRADESH', 105),
+(4, 'BIHAR', 105),
+(5, 'GUJRAT', 105),
+(6, 'HARYANA', 105),
+(7, 'HIMACHAL PRADESH', 105),
+(8, 'JAMMU & KASHMIR', 105),
+(9, 'KARNATAKA', 105),
+(10, 'KERALA', 105),
+(11, 'MADHYA PRADESH', 105),
+(12, 'MAHARASHTRA', 105),
+(13, 'MANIPUR', 105),
+(14, 'MEGHALAYA', 105),
+(15, 'MIZORAM', 105),
+(16, 'NAGALAND', 105),
+(17, 'ORISSA', 105),
+(18, 'PUNJAB', 105),
+(19, 'RAJASTHAN', 105),
+(20, 'SIKKIM', 105),
+(21, 'TAMIL NADU', 105),
+(22, 'TRIPURA', 105),
+(23, 'UTTAR PRADESH', 105),
+(24, 'WEST BENGAL', 105),
+(25, 'DELHI', 105),
+(26, 'GOA', 105),
+(27, 'PONDICHERY', 105),
+(28, 'LAKSHDWEEP', 105),
+(29, 'DAMAN & DIU', 105),
+(30, 'DADRA & NAGAR', 105),
+(31, 'CHANDIGARH', 105),
+(32, 'ANDAMAN & NICOBAR', 105),
+(33, 'UTTARANCHAL', 105),
+(34, 'JHARKHAND', 105),
+(35, 'CHATTISGARH', 105);
 
 -- --------------------------------------------------------
 
@@ -1435,7 +2609,7 @@ CREATE TABLE `transactions` (
   `status` varchar(255) NOT NULL DEFAULT 'completed',
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `transactions`
@@ -1448,7 +2622,10 @@ INSERT INTO `transactions` (`id`, `user_id`, `amount`, `transaction_id`, `status
 (4, 30, 100, 'UHDJ887L', 'completed', '2024-09-10 01:58:11', '2024-09-10 07:28:11'),
 (5, 35, 50, 'DHU87O', 'completed', '2024-09-12 08:24:23', '2024-09-12 13:54:23'),
 (6, 33, 25, 'huhuhu8j', 'completed', '2024-09-19 07:19:11', '2024-09-19 12:49:11'),
-(7, 35, 25, 'huhu88j', 'completed', '2024-09-19 07:19:31', '2024-09-19 12:49:31');
+(7, 35, 25, 'huhu88j', 'completed', '2024-09-19 07:19:31', '2024-09-19 12:49:31'),
+(8, 76, 2000, 'jjjjsd', 'completed', '2024-12-16 00:51:12', '2024-12-16 06:21:12'),
+(9, 30, 10, 'jjjjsd', 'completed', '2025-01-17 08:32:59', '2025-01-17 14:02:59'),
+(10, 33, 4, 'iijiji', 'completed', '2025-01-17 08:36:07', '2025-01-17 14:06:07');
 
 -- --------------------------------------------------------
 
@@ -1461,7 +2638,7 @@ CREATE TABLE `type` (
   `type_name` varchar(45) DEFAULT NULL,
   `created-at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `type`
@@ -1495,7 +2672,7 @@ CREATE TABLE `users` (
   `is_email_verify` int(11) NOT NULL DEFAULT 0 COMMENT '0 = not verified, 1 = verified',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `users`
@@ -1503,17 +2680,28 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email_id`, `pan_no`, `password`, `wallet_id`, `existing_loan_id`, `role_id`, `profile_id`, `edu_id`, `professional_id`, `referral_code`, `refer_user_id`, `email_otp`, `is_email_verify`, `created_at`, `updated_at`) VALUES
 (1, 'Sourabh', 'admin@jfinserv.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 4, 1, NULL, NULL, NULL, NULL, '', 1, '2024-08-07 10:37:37', '2024-11-21 06:35:32'),
+(29, 'SourabhTest', 'sour.skhosting@gmail.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, 24, NULL, NULL, 'sour88', NULL, '140595', 1, '2024-08-08 04:38:00', '2024-12-18 10:54:39'),
 (30, 'amol dagale', 'amol@jfstechnologies.com', NULL, '25d55ad283aa400af464c76d713c07ad', NULL, NULL, 2, 25, NULL, NULL, NULL, NULL, '869934', 1, '2024-08-08 06:41:45', '2024-08-16 14:26:38'),
 (33, 'tarun pynee', 'tarun@jfstechnologies.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 2, 27, NULL, NULL, NULL, NULL, '559991', 1, '2024-08-08 07:32:11', '2024-09-04 07:45:34'),
-(66, 'customer demo', 'customer@gmail.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, 'customer2', NULL, '758373', 1, '2024-12-04 06:41:45', '2024-12-13 10:51:16'),
-(76, 'vRGdUTKA', 'lmpmarchalonis@yahoo.com', NULL, 'f0232e01bee775c219cc33107f6ebf0b', NULL, NULL, 1, NULL, NULL, NULL, 'rJmLXVDpqS', NULL, '612441', 1, '2024-12-29 19:32:11', '2024-12-31 08:45:37'),
-(80, 'Ajay Kumar', 'srivastava2504@gmail.com', NULL, '430902ba2065ed2ae11266e3661dc1a9', NULL, NULL, 1, NULL, NULL, NULL, 'a0UywWisPB', NULL, '171358', 1, '2024-12-31 08:41:34', '2024-12-31 08:45:28'),
-(81, 'VaiBhav', 'vaibhav@jfstechnologies.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, 'Y9vxZUGtlK', NULL, '758572', 1, '2024-12-31 08:45:59', '2024-12-31 08:46:08'),
-(83, 'Sumedh', 'jfstechnologies1981@gmail.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, 'cCbyPbfNpI', NULL, '993084', 1, '2024-12-31 10:36:08', '2024-12-31 10:36:19'),
-(84, 'Deepak chavan', 'deepak@jfstechnologies.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, 'tKoDt3QQeO', NULL, '533479', 1, '2024-12-31 10:58:23', '2024-12-31 10:58:36'),
-(85, 'Nidhi Sonigra', 'nidhisonigra777@gmail.com', NULL, '6e08b9ce9657e1307b4243928ff189e7', NULL, NULL, 1, NULL, NULL, NULL, 'N2FNttErmp', NULL, '841050', 0, '2024-12-31 14:19:55', '2024-12-31 14:19:55'),
-(86, 'Lokesh Bhosale', 'lokeshbhosale007@gmail.com', NULL, '7286f1e3c9c77af19db6f7a00c859efa', NULL, NULL, 1, NULL, NULL, NULL, '1wCAty2yUI', NULL, '399123', 1, '2025-01-02 07:51:49', '2025-01-02 07:57:13'),
-(87, 'Sara Shaikh', 'sarashaikh5107@gmail.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 2, NULL, NULL, NULL, 'q4SSKNG8xG', NULL, '946266', 1, '2025-01-02 07:57:36', '2025-01-02 08:13:57');
+(34, 'shalaka kashala', 'shalaka@jfstechnologies.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, 28, NULL, NULL, 'OOOL', NULL, '685178', 1, '2024-08-08 07:34:57', '2024-09-02 10:06:47'),
+(35, 'Robin Shinde', 'chavandeepak182@gmail.com', 'BJYPS9324M', '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, 29, NULL, NULL, 'KKOOLL', NULL, '504826', 1, '2024-08-08 07:56:58', '2024-11-26 10:17:50'),
+(42, 'demo account', 'chavanbala182@gmail.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, 'uqAJgMCMDW', NULL, '866596', 1, '2024-09-19 02:00:16', '2024-11-26 07:47:24'),
+(47, 'anandsarpatwari', 'anand.gs1@gmail.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, 'ATyx13ao5K', NULL, '354102', 1, '2024-09-19 07:23:07', '2024-11-26 20:07:15'),
+(48, 'dipak demo', 'deepak@jfstechnologies.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, 'yacI4x4k63', NULL, '381011', 1, '2024-09-19 10:21:26', '2024-09-19 10:22:48'),
+(49, 'broker', 'broker@gmail.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 5, NULL, NULL, NULL, 'VpP3mlhMOz', NULL, '733585', 1, '2024-10-01 00:19:20', '2024-10-01 05:57:36'),
+(50, 'comission one', 'testone@gmail.com', NULL, '25d55ad283aa400af464c76d713c07ad', NULL, NULL, 1, NULL, NULL, NULL, 'syzFVIDUBO', NULL, '699026', 1, '2024-11-17 13:01:51', '2024-11-17 18:33:24'),
+(51, 'commission two', 'testtwo@gmail.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, '3aRkeXhI3S', NULL, '645762', 1, '2024-11-19 14:51:17', '2024-11-19 20:22:01'),
+(52, 'commission three', 'testthree@gmail.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, 'mPQZoQIk9s', NULL, '927970', 1, '2024-11-21 01:34:16', '2024-11-21 07:04:45'),
+(58, 'agent demo', 'agent@gmail.com', NULL, '25d55ad283aa400af464c76d713c07ad', NULL, NULL, 2, NULL, NULL, NULL, 'ixPkd2wTTp', NULL, '323019', 0, '2024-12-02 08:24:49', '2024-12-02 08:24:49'),
+(65, 'vaibhav', 'vaibhav@jfstechnologies.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, 'x107LNEKeD', NULL, '875299', 0, '2024-12-03 01:23:56', '2024-12-03 01:23:56'),
+(66, 'test demo', 'testdemo@gmail.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, 'MZs9tYSCbD', NULL, '601307', 1, '2024-12-03 09:01:17', '2024-12-03 14:31:53'),
+(67, 'shubhav', 'shubhav260397@gmail.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, 'lNPieY9Hep', NULL, '808484', 0, '2024-12-04 01:28:54', '2024-12-04 01:28:54'),
+(76, 'sandeep pawar', 'sandeep@jfstechnologies.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, '6b5uSBeBni', NULL, '670636', 1, '2024-12-16 00:35:06', '2024-12-16 06:05:51'),
+(77, 'finserv demo1', 'finserv1@gmail.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, 'mWC3Sc7D8B', NULL, '478946', 1, '2024-12-17 07:05:17', '2024-12-17 12:36:20'),
+(78, 'deepak', 'deepak@yahoo.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, 'ToiHEDt8jA', NULL, '797178', 1, '2024-12-31 05:16:22', '2024-12-31 10:46:54'),
+(79, 'shubhav', 'qtestone@gmail.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, 'oIS3HvUmc8', NULL, '451818', 1, '2025-01-03 05:31:04', '2025-01-09 07:32:21'),
+(80, 'new user', 'newuser@gmail.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 1, NULL, NULL, NULL, 'NHBla0VXgE', NULL, '803707', 1, '2025-01-08 08:22:26', '2025-01-08 13:52:49'),
+(81, 'deepak cp', 'cp@gmail.com', NULL, '8ddcff3a80f4189ca1c9d4d902c3c909', NULL, NULL, 3, NULL, NULL, NULL, '6gD1lXp0Sz', NULL, '403496', 1, '2025-01-13 01:58:05', '2025-01-13 07:28:51');
 
 -- --------------------------------------------------------
 
@@ -1525,7 +2713,7 @@ CREATE TABLE `user_loan` (
   `lid` int(11) NOT NULL,
   `loan_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1539,14 +2727,19 @@ CREATE TABLE `wallet` (
   `wallet_balance` int(11) NOT NULL DEFAULT 0,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `wallet`
 --
 
 INSERT INTO `wallet` (`wallet_id`, `user_id`, `wallet_balance`, `updated_at`, `created_at`) VALUES
-(37, 66, 8000, '2024-12-04 07:10:53', '2024-12-04 07:10:53');
+(30, 29, 50947, '2024-11-26 01:29:11', '2024-11-26 01:29:11'),
+(31, 50, 14080, '2024-11-26 01:38:00', '2024-11-26 01:38:00'),
+(33, 51, 14867, '2024-11-26 04:01:52', '2024-11-26 04:01:52'),
+(34, 42, 867, '2024-11-26 14:52:19', '2024-11-26 14:52:19'),
+(35, 52, 80, '2024-12-16 00:47:20', '2024-12-16 00:47:20'),
+(36, 76, 3300, '2024-12-16 00:47:20', '2024-12-16 00:47:20');
 
 -- --------------------------------------------------------
 
@@ -1561,7 +2754,7 @@ CREATE TABLE `withdrawal_requests` (
   `status` varchar(255) NOT NULL DEFAULT 'pending',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `withdrawal_requests`
@@ -1574,12 +2767,15 @@ INSERT INTO `withdrawal_requests` (`id`, `user_id`, `amount`, `status`, `created
 (4, 30, 50, 'approved', '2024-09-10 00:45:06', NULL),
 (5, 30, 30, 'approved', '2024-09-10 01:02:33', NULL),
 (6, 30, 100, 'approved', '2024-09-10 01:57:50', NULL),
-(7, 30, 10, 'pending', '2024-09-10 02:11:58', NULL),
+(7, 30, 10, 'approved', '2024-09-10 02:11:58', NULL),
 (8, 33, 25, 'approved', '2024-09-10 13:59:34', NULL),
-(9, 33, 4, 'pending', '2024-09-10 14:31:15', NULL),
+(9, 33, 4, 'approved', '2024-09-10 14:31:15', NULL),
 (10, 35, 50, 'approved', '2024-09-12 08:23:24', NULL),
-(11, 35, 70, 'pending', '2024-09-12 08:38:46', NULL),
-(12, 35, 25, 'approved', '2024-09-19 07:18:52', NULL);
+(11, 35, 70, 'approved', '2024-09-12 08:38:46', NULL),
+(12, 35, 25, 'approved', '2024-09-19 07:18:52', NULL),
+(13, 50, 700, 'pending', '2024-11-27 14:39:42', NULL),
+(14, 76, 2000, 'approved', '2024-12-16 00:50:23', NULL),
+(15, 50, 5000, 'pending', '2025-01-11 05:07:20', NULL);
 
 --
 -- Indexes for dumped tables
@@ -1631,6 +2827,13 @@ ALTER TABLE `categories_old`
   ADD KEY `categories__lft__rgt_parent_id_index` (`_lft`,`_rgt`,`parent_id`);
 
 --
+-- Indexes for table `cities`
+--
+ALTER TABLE `cities`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `state_id` (`state_id`);
+
+--
 -- Indexes for table `commission`
 --
 ALTER TABLE `commission`
@@ -1641,6 +2844,12 @@ ALTER TABLE `commission`
 --
 ALTER TABLE `company_bank_details`
   ADD PRIMARY KEY (`bank_id`);
+
+--
+-- Indexes for table `countries`
+--
+ALTER TABLE `countries`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `credit`
@@ -1711,6 +2920,13 @@ ALTER TABLE `failed_jobs`
 --
 ALTER TABLE `foir`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `friend_referrals`
+--
+ALTER TABLE `friend_referrals`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `incomes`
@@ -1784,6 +3000,13 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `mis`
+--
+ALTER TABLE `mis`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
 -- Indexes for table `model_has_permissions`
 --
 ALTER TABLE `model_has_permissions`
@@ -1812,10 +3035,12 @@ ALTER TABLE `otp`
   ADD PRIMARY KEY (`otp_id`,`user_id`);
 
 --
--- Indexes for table `password_reset_tokens`
+-- Indexes for table `password_resets`
 --
-ALTER TABLE `password_reset_tokens`
-  ADD PRIMARY KEY (`email`);
+ALTER TABLE `password_resets`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `email` (`email`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `permissions`
@@ -1924,6 +3149,12 @@ ALTER TABLE `sessions`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `states`
+--
+ALTER TABLE `states`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `transactions`
 --
 ALTER TABLE `transactions`
@@ -1969,7 +3200,7 @@ ALTER TABLE `withdrawal_requests`
 -- AUTO_INCREMENT for table `activity_logs`
 --
 ALTER TABLE `activity_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `bank_loan_range`
@@ -1981,13 +3212,19 @@ ALTER TABLE `bank_loan_range`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
 -- AUTO_INCREMENT for table `categories_old`
 --
 ALTER TABLE `categories_old`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT for table `cities`
+--
+ALTER TABLE `cities`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=604;
 
 --
 -- AUTO_INCREMENT for table `commission`
@@ -2000,6 +3237,12 @@ ALTER TABLE `commission`
 --
 ALTER TABLE `company_bank_details`
   MODIFY `bank_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `countries`
+--
+ALTER TABLE `countries`
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=251;
 
 --
 -- AUTO_INCREMENT for table `credit`
@@ -2023,7 +3266,7 @@ ALTER TABLE `deductions`
 -- AUTO_INCREMENT for table `documents`
 --
 ALTER TABLE `documents`
-  MODIFY `document_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `document_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `dumps`
@@ -2035,25 +3278,25 @@ ALTER TABLE `dumps`
 -- AUTO_INCREMENT for table `education_details`
 --
 ALTER TABLE `education_details`
-  MODIFY `edu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `edu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `eligiblity_criteria`
 --
 ALTER TABLE `eligiblity_criteria`
-  MODIFY `ec_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `ec_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `enquiries`
 --
 ALTER TABLE `enquiries`
-  MODIFY `enquiry_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `enquiry_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `existing_loan`
 --
 ALTER TABLE `existing_loan`
-  MODIFY `existing_loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `existing_loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -2066,6 +3309,12 @@ ALTER TABLE `failed_jobs`
 --
 ALTER TABLE `foir`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `friend_referrals`
+--
+ALTER TABLE `friend_referrals`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `incomes`
@@ -2083,7 +3332,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `loans`
 --
 ALTER TABLE `loans`
-  MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `loan_bank_details`
@@ -2113,7 +3362,13 @@ ALTER TABLE `loan_remarks`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `mis`
+--
+ALTER TABLE `mis`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `notifications`
@@ -2126,6 +3381,12 @@ ALTER TABLE `notifications`
 --
 ALTER TABLE `otp`
   MODIFY `otp_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `password_resets`
+--
+ALTER TABLE `password_resets`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -2143,19 +3404,19 @@ ALTER TABLE `price_range`
 -- AUTO_INCREMENT for table `professional_details`
 --
 ALTER TABLE `professional_details`
-  MODIFY `professional_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `professional_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `profile`
 --
 ALTER TABLE `profile`
-  MODIFY `profile_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `profile_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `properties`
 --
 ALTER TABLE `properties`
-  MODIFY `properties_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `properties_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `property_category`
@@ -2188,10 +3449,16 @@ ALTER TABLE `sanction_calculator`
   MODIFY `sanction_calc_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `states`
+--
+ALTER TABLE `states`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+
+--
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `type`
@@ -2203,7 +3470,7 @@ ALTER TABLE `type`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT for table `user_loan`
@@ -2215,13 +3482,13 @@ ALTER TABLE `user_loan`
 -- AUTO_INCREMENT for table `wallet`
 --
 ALTER TABLE `wallet`
-  MODIFY `wallet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `wallet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `withdrawal_requests`
 --
 ALTER TABLE `withdrawal_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables
@@ -2244,6 +3511,12 @@ ALTER TABLE `deductions`
 --
 ALTER TABLE `documents`
   ADD CONSTRAINT `documents_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `friend_referrals`
+--
+ALTER TABLE `friend_referrals`
+  ADD CONSTRAINT `friend_referrals_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `incomes`
@@ -2287,11 +3560,36 @@ ALTER TABLE `model_has_roles`
   ADD CONSTRAINT `model_has_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `fk_receiver` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_sender` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `password_resets`
+--
+ALTER TABLE `password_resets`
+  ADD CONSTRAINT `password_resets_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `role_has_permissions`
 --
 ALTER TABLE `role_has_permissions`
   ADD CONSTRAINT `role_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `role_has_permissions_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `withdrawal_requests`
+--
+ALTER TABLE `withdrawal_requests`
+  ADD CONSTRAINT `withdrawal_requests_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
