@@ -15,6 +15,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Log;
 
 
+
 class PartnerController extends Controller
 {
     public function addAgent()

@@ -92,10 +92,6 @@
                             <input type="date" name="dob" id="dob" class="form-control" value="{{ old('dob', $profile->dob) }}" required />
                         </div>
                         <div class="mb-3">
-                            <label for="gender">Gender</label>
-                            <input type="text" name="gender" id="gender" class="form-control" value="{{ old('gender', $profile->gender) }}" required />
-                        </div>
-                        <div class="mb-3">
                             <button type="submit" class="btn btn-primary">Update</button>
                         </div>
                     </form>

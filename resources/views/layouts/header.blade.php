@@ -154,7 +154,7 @@
                 </li>
             <?php } ?> 
 
-            <?php    if($role_id == 4 || $role_id == env('partnerRole_id')) { ?>
+            <?php    if($role_id == 4) { ?>
            <!-- Nav Item - Pages Collapse Menu -->
            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProperty"
@@ -171,7 +171,24 @@
                     </div>
                 </div>
             </li>
-            <?php } ?>     
+            <?php } ?>   
+            <?php    if($role_id == env('partnerRole_id')) { ?>
+                <!-- Nav Item - Pages Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProperty"
+                        aria-expanded="true" aria-controls="collapseLeads">
+                        <i class="fas fa-fw fa-home custom-icon"></i>
+                        <span>Property</span>
+                    </a>
+                    <div id="collapseProperty" class="collapse" aria-labelledby="headingLoan" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Property:</h6>
+                            <a class="collapse-item" href="{{ route('allProperties') }}">List Property</a>
+                            <a class="collapse-item" href="{{ route('addProperty') }}">Add Property</a>
+                        </div>
+                    </div>
+                </li>
+            <?php } ?>   
                     
             <?php    if($role_id == 4) { ?>
             <!-- Nav Item - Pages Collapse Menu -->
@@ -347,7 +364,8 @@
             </div>
         </div>
     </li>
-
+    
+    <?php    if($role_id == env('adminRole_id')) { ?>
     <!-- Nav Item - User Information -->
     <li class="nav-item dropdown no-arrow">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -367,6 +385,28 @@
             </a>
         </div>
     </li>
+    <?php } ?> 
+    <?php    if($role_id == env('partnerRole_id')) { ?>
+    <!-- Nav Item - User Information -->
+    <li class="nav-item dropdown no-arrow">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Session::get('username') }}</span>
+            <img class="img-profile rounded-circle" src="{{ asset('theme') }}/dist-assets/img/undraw_profile_2.svg">
+        </a>
+        <!-- Dropdown - User Information -->
+        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+            <a class="dropdown-item" href="{{ route('partner.profile') }}">
+                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-600"></i>
+                 Profile
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/logout">
+                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-600"></i>
+                Logout
+            </a>
+        </div>
+    </li>
+    <?php } ?>
 </ul>
 </nav>
                 <!-- End of Topbar -->

@@ -8,20 +8,10 @@
     
         foreach($data['propertie_details'] as $v) {  
             $price_range = $v->from_price. " to ". $v->to_price;
-            $img = env('baseURL'). "/".$v->image;
-            $boucher = env('baseURL'). "/".$v->boucher;
-            $address = $v->localities.", ".$v->city;
-            $area = $v->area;
-            $category = $v->category_name;
-            $builder_name = $v->builder_name;
-            $facilities = $v->facilities;
-            $title = $v->title;
-            $created_at = $v->created_at;
-            $beds = $v->beds;
-            $baths = $v->baths;
+            $img = env('baseURL'). "/".$v->image; $boucher = env('baseURL'). "/".$v->boucher;  $address = $v->localities.", ".$v->city; $area = $v->area; $category = $v->category_name;  $builder_name = $v->builder_name; $facilities = $v->facilities; $title = $v->title; $created_at = $v->created_at; $beds = $v->beds; $baths = $v->baths; $balconies = $v->balconies; $parking = $v->parking;
        
-    ?>
-<div class="container-fluid bg-breadcrumb">
+?>
+<div class="container-fluid bg-breadcrumb" style="background: url(../theme/frontend/img/prop-2.jpg);">
         <div class="container text-center py-5" style="max-width: 900px;">
             <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">{{$title}}</h4>
             <!-- <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
@@ -42,9 +32,14 @@
                         <h4 class="mb-4">{{ $v->select_bhk }} BHK Flat for Sale in {{ $v->title }}, {{ $address }}</h4>
                         <div class="row g-4">
                             <div class="col-md-6">
-                                <div class="rounded bg-light">
-                                    <img src="https://housing-images.n7net.in/4f2250e8/bf5048809763fdb490e4c4ad51134884/v0/large/f_premium-tathawade_chinchwad-pune-aishwaryam_group.jpeg" class="img-fluid rounded w-100" alt="">
-                                </div>
+                            <div class="rounded bg-light">
+                                <img src="{{ $img }}" 
+                                    class="img-fluid rounded" 
+                                    alt="Property Image" 
+                                    style="width: 450px; height: 250px; object-fit: cover; cursor: pointer;" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#imageModal">
+                            </div>
                                 <ul class="d-inline-flex p-0 mt-2" style="list-style: none;">
                                     <li><img src="https://housing-images.n7net.in/4f2250e8/bf5048809763fdb490e4c4ad51134884/v0/large/f_premium-tathawade_chinchwad-pune-aishwaryam_group.jpeg" class="img-fluid rounded w-100" alt=""></li>
                                     <li class="px-2"><img src="https://housing-images.n7net.in/4f2250e8/bf5048809763fdb490e4c4ad51134884/v0/large/f_premium-tathawade_chinchwad-pune-aishwaryam_group.jpeg" class="img-fluid rounded w-100" alt=""></li>
@@ -57,16 +52,13 @@
                                         <ul class="d-inline-flex p-0 m-0 text-dark" style="list-style: none;">
                                             <li class="px-2 border-end border-2 border-dark"><i class="fas fa-bed  text-muted"></i> <strong>{{ $beds}}</strong> Beds</li>
                                             <li class="px-2 border-end border-2 border-dark"><i class="fas fa-bath  text-muted"></i> <strong>{{ $baths}}</strong> Baths</li>
-                                            <li class="px-2 border-end border-2 border-dark"><i class="fas fa-border-none  text-muted"></i> <strong>3</strong> Balconies</li>
-                                            <li class="px-2"><i class="fas fa-car  text-muted"></i> <strong>1</strong> Parkings</li>
+                                            <li class="px-2 border-end border-2 border-dark"><i class="fas fa-border-none  text-muted"></i> <strong>{{ $balconies}}</strong> Balconies</li>
+                                            <li class="px-2"><i class="fas fa-car  text-muted"></i> <strong>{{ $parking }}</strong> Parkings</li>
                                         </ul>
                                     </div>
                                     <div class="col-md-12 mt-3">
                                         <ul class="p-0 m-0 text-dark body-list" style="list-style: none;">
-                                            <li class="body-list--item">
-                                                <p class="m-0 text-muted">Carpet Area</p>
-                                                <p><strong>{{ $area }} sqft</strong></p>
-                                            </li>
+                                            
                                             <li class="body-list--item">
                                                 <p class="m-0 text-muted">Developer</p>
                                                 <p><strong>{{$builder_name}}</strong></p>
@@ -74,6 +66,10 @@
                                             <li class="body-list--item">
                                                 <p class="m-0 text-muted">Project</p>
                                                 <p><strong>{{ $v->title }}</strong></p>
+                                            </li>
+                                            <li class="body-list--item">
+                                                <p class="m-0 text-muted">Carpet Area</p>
+                                                <p><strong>{{ $area }} sqft</strong></p>
                                             </li>
                                             <li class="body-list--item">
                                                 <p class="m-0 text-muted">Floor</p>
@@ -162,7 +158,7 @@
                         <div class="row g-4 justify-content-center">
                             <div class="col-12">
                                 <div class="rounded bg-light">
-                                    <img src="https://housing-images.n7net.in/4f2250e8/bf5048809763fdb490e4c4ad51134884/v0/large/f_premium-tathawade_chinchwad-pune-aishwaryam_group.jpeg" class="img-fluid rounded w-100" alt="">
+                                    <img src="{{ $img }}" class="img-fluid rounded w-100" alt="">
                                 </div>
                             </div>
                             <div class="col-12">
@@ -188,6 +184,16 @@
                 </div>
             </div>
         </div>
+            <!-- Image Modal -->
+            <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body p-0">
+                            <img src="{{ $img }}" class="img-fluid w-100" alt="Property Image">
+                        </div>
+                    </div>
+                </div>
+            </div>
         <?php } ?> 
     </div>
 <!-- Details End -->

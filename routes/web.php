@@ -290,6 +290,9 @@ Route::post('/admin/withdrawal-approve/{id}', [ReferralController::class, 'appro
 Route::get('/admin/transactions', [ReferralController::class, 'showAllTransactions'])->name('admin.transactions');
 Route::get('/agent/transactions', [ReferralController::class, 'showTransactionHistory'])->name('agent.transactions');
 
+Route::get('transaction/{transaction_id}/view-invoice', [ReferralController::class, 'viewInvoice'])->name('transaction.viewInvoice');
+Route::get('transaction/{transaction_id}/download-pdf', [ReferralController::class, 'downloadPDF'])->name('transaction.downloadPDF');
+
 
 //channel partner
 Route::middleware('isPartner')->group(function () {
@@ -310,6 +313,10 @@ Route::middleware('isPartner')->group(function () {
     Route::post('/updatePropertie', [PropertyController::class, 'updatePropertie'])->name('updatePropertie');
     Route::post('/deletePropertie', [PropertyController::class, 'deletePropertie'])->name('deletePropertie');
     Route::post('/activate', [PropertyController::class, 'activate'])->name('activate');
+
+    //profile
+    Route::get('/partner/profile', [ProfileController::class, 'showPartnerProfile'])->name('partner.profile');
+    Route::post('/partner/profile/update', [ProfileController::class, 'updatePartnerProfile'])->name('partner.updateProfile');
 
 });
 
