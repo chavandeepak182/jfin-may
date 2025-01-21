@@ -78,8 +78,8 @@ JFS | Wallet Balance
                                                             <option value="18">18%</option>
                                                         </select>
                                                     </div>
-                                                     <!-- TDS Dropdown -->
-                                                     <div class="form-group mt-3">
+
+                                                    <div class="form-group mt-3">
                                                         <label for="tds">Select TDS (%)</label>
                                                         <select name="tds" id="tds{{ $request->id }}" class="form-control">
                                                             <option value="0">0%</option>
@@ -88,7 +88,7 @@ JFS | Wallet Balance
                                                             <option value="5">5%</option>
                                                         </select>
                                                     </div>
-                                                    
+
                                                     <div class="form-group mt-3">
                                                         <label for="transaction_id">Transaction ID</label>
                                                         <input type="text" name="transaction_id" class="form-control" required>
@@ -96,7 +96,7 @@ JFS | Wallet Balance
 
                                                     <div class="form-group mt-3">
                                                         <label for="actual_amount">Actual Amount After GST Deduction</label>
-                                                        <input type="text" id="actual_amount{{ $request->id }}" class="form-control" value="₹{{ number_format($request->amount, 2) }}" disabled>
+                                                        <input type="text" id="actual_amount{{ $request->id }}" class="form-control" disabled>
                                                     </div>
 
                                                     <button type="submit" class="btn btn-success mt-3">Approve</button>
@@ -175,7 +175,6 @@ function calculateAmount(requestId, amount) {
 
     $('#actual_amount' + requestId).val('₹' + actualAmount.toFixed(2)); // Display actual amount after GST and TDS
 }
-
 </script>
 
 @endsection

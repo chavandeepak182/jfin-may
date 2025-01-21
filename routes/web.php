@@ -289,9 +289,7 @@ Route::post('/user/withdraw-request', [ReferralController::class, 'requestWithdr
 Route::post('/admin/withdrawal-approve/{id}', [ReferralController::class, 'approveWithdrawal'])->name('admin.withdrawal.approve');
 Route::get('/admin/transactions', [ReferralController::class, 'showAllTransactions'])->name('admin.transactions');
 Route::get('/agent/transactions', [ReferralController::class, 'showTransactionHistory'])->name('agent.transactions');
-
-Route::get('transaction/{transaction_id}/view-invoice', [ReferralController::class, 'viewInvoice'])->name('transaction.viewInvoice');
-Route::get('transaction/{transaction_id}/download-pdf', [ReferralController::class, 'downloadPDF'])->name('transaction.downloadPDF');
+Route::get('/admin/transactions/{transactionId}/history', [ReferralController::class, 'showTransactionHistoryadmin']);
 
 
 //channel partner
