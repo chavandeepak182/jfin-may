@@ -131,8 +131,19 @@
         </div>
         <!-- Feature End -->
 
+        <!-- Video Section Start -->
+        <section class="video aos-init aos-animate" data-aos="zoom-in-right" data-aos-duration="700">
+            <div class="container-fluid">
+                <video class="w-100" preload="auto" autoplay="true" loop="loop" muted="muted" volume="0">
+                    <source src="../theme/frontend/img/intro-video.mp4" type="video/mp4">
+                    <source src="movie.webm" type="video/webm">Sorry, your browser does not support HTML5 video.
+                </video>
+            </div>
+        </section>
+        <!-- Feature End -->
+
         <!-- About Start -->
-        <div class="container-fluid bg-light about pb-5">
+        <div class="container-fluid bg-light about py-5 pt-5">
             <div class="container pb-5">
                 <div class="row g-5">
                     <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.2s">

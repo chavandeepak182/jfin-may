@@ -58,39 +58,46 @@ class ReferralController extends Controller
 
     return view('admin.walletbalance', compact('walletBalance', 'combinedData'));
 }
-    public function requestWithdrawal(Request $request)
-    {
-        $request->validate([
-            'amount' => 'required|numeric|min:1',
-        ]);
-    
-        // Fetch the user ID from the session
-        $userId = session('user_id');
-        $amount = $request->input('amount');
-    
-        // Retrieve the user's current wallet balance
-        $walletBalance = DB::table('wallet')->where('user_id', $userId)->value('wallet_balance');
-    
-        // Check if the requested withdrawal amount exceeds the wallet balance
-        if ($amount > $walletBalance) {
-            return redirect()->back()->with('message', 'You cannot withdraw more than your current wallet balance.');
-        }
-    
-        // Check if the user has sufficient balance for the withdrawal
-        if ($walletBalance >= $amount) {
-            // Create a new withdrawal request
-            DB::table('withdrawal_requests')->insert([
-                'user_id' => $userId,
-                'amount' => $amount,
-                'status' => 'pending',
-                'created_at' => now(),
-            ]);
-    
-            return redirect()->back()->with('message', 'Withdrawal request submitted successfully.');
-        } else {
-            return redirect()->back()->with('message', 'Insufficient balance.');
-        }
+public function requestWithdrawal(Request $request)
+{
+    $request->validate([
+        'amount' => 'required|numeric|min:1',
+    ]);
+
+    // Fetch the user ID from the session
+    $userId = session('user_id');
+    $requestedAmount = $request->input('amount');
+
+    // Retrieve the user's current wallet balance
+    $walletBalance = DB::table('wallet')->where('user_id', $userId)->value('wallet_balance');
+
+    // Check if the requested withdrawal amount exceeds the wallet balance
+    if ($requestedAmount > $walletBalance) {
+        return redirect()->back()->with('message', 'You cannot withdraw more than your current wallet balance.');
     }
+
+    // GST and TDS percentages
+    $gstPercentage = 10; // Example: 10%
+    $tdsPercentage = 5;  // Example: 5%
+
+    // Calculate GST, TDS, and final amount after deductions
+    $gstAmount = ($requestedAmount * $gstPercentage) / 100;
+    $tdsAmount = ($requestedAmount * $tdsPercentage) / 100;
+    $finalAmount = $requestedAmount - $gstAmount - $tdsAmount;
+
+    // Create a new withdrawal request
+    DB::table('withdrawal_requests')->insert([
+        'user_id' => $userId,
+        'amount' => $requestedAmount, // Requested amount
+        'gst' => $gstAmount,
+        'tds' => $tdsAmount,
+        'final_amount' => $finalAmount, // Amount after GST & TDS
+        'status' => 'pending',
+        'created_at' => now(),
+    ]);
+
+    return redirect()->back()->with('message', 'Withdrawal request submitted successfully.');
+}
 
     public function viewWithdrawalRequests()
     {
@@ -107,41 +114,123 @@ class ReferralController extends Controller
     public function approveWithdrawal(Request $request, $id)
     {
         $transactionId = $request->input('transaction_id');
+    
+        // Find the withdrawal request
         $withdrawal = DB::table('withdrawal_requests')->where('id', $id)->first();
-
+    
         if ($withdrawal) {
-            // Update the request status to approved
-            DB::table('withdrawal_requests')->where('id', $id)->update(['status' => 'approved']);
-
-            // Subtract the amount from the user's wallet
-            DB::table('wallet')->where('user_id', $withdrawal->user_id)->decrement('wallet_balance', $withdrawal->amount);
-
+            // Check if the request is already approved
+            if ($withdrawal->status === 'approved') {
+                return redirect()->back()->with('message', 'This withdrawal request is already approved.');
+            }
+    
+            // Retrieve requested amount, GST, TDS, and final amount
+            $requestedAmount = $withdrawal->amount; // Full amount requested
+            $gstPercentage = 2; // Example GST rate
+            $tdsPercentage = 2; // Example TDS rate
+    
+            // Calculate GST and TDS based on the requested amount
+            $gstAmount = ($requestedAmount * $gstPercentage) / 100;
+            $tdsAmount = ($requestedAmount * $tdsPercentage) / 100;
+    
+            // Final amount to be transferred after GST and TDS deductions
+            $finalAmount = $requestedAmount - $gstAmount - $tdsAmount;
+    
+            // Check if the wallet balance is sufficient
+            $walletBalance = DB::table('wallet')->where('user_id', $withdrawal->user_id)->value('wallet_balance');
+    
+            if ($walletBalance < $requestedAmount) {
+                return redirect()->back()->with('message', 'Insufficient wallet balance for this transaction.');
+            }
+    
+            // Deduct the requested amount (full amount) from the user's wallet
+            DB::table('wallet')->where('user_id', $withdrawal->user_id)->decrement('wallet_balance', $requestedAmount);
+    
+            // Update the withdrawal request to approved and save the updated amounts
+            DB::table('withdrawal_requests')->where('id', $id)->update([
+                'status' => 'approved',
+                'gst' => $gstAmount,
+                'tds' => $tdsAmount,
+                'final_amount' => $finalAmount, // Save the calculated final amount
+                'transaction_id' => $transactionId,
+                'updated_at' => now(),
+            ]);
+    
             // Record the transaction
             DB::table('transactions')->insert([
                 'user_id' => $withdrawal->user_id,
-                'amount' => $withdrawal->amount,
+                'amount' => $requestedAmount, // The full amount requested
                 'transaction_id' => $transactionId,
                 'status' => 'completed',
+                'gst' => $gstAmount,
+                'tds' => $tdsAmount,
+                'final_amount' => $finalAmount, // Final amount after GST and TDS
                 'created_at' => now(),
             ]);
-
+    
             return redirect()->back()->with('message', 'Withdrawal approved successfully.');
         } else {
             return redirect()->back()->with('message', 'Withdrawal request not found.');
         }
     }
     //admin
-    public function showAllTransactions()
+    public function showAllTransactions(Request $request)
 {
-    // Fetch all transactions with user details
-    $data['transactions'] = DB::table('transactions')
-        ->join('users', 'transactions.user_id', '=', 'users.id')
-        ->select('transactions.id', 'users.name as user_name', 'transactions.transaction_id', 'transactions.amount', 'transactions.status', 'transactions.created_at')
-        ->orderBy('transactions.created_at', 'desc')
-        ->paginate(10);
+    $search = $request->input('search');
 
-    // Pass the transactions data to the view
+    $query = DB::table('transactions')
+        ->join('users', 'transactions.user_id', '=', 'users.id')
+        ->select(
+            'transactions.id',
+            'users.name as user_name',
+            'users.email_id',
+            'transactions.transaction_id',
+            'transactions.amount',
+            'transactions.status',
+            'transactions.created_at'
+        )
+        ->orderBy('transactions.created_at', 'desc');
+
+    // Apply search filter if search term exists
+    if (!empty($search)) {
+        $query->where(function ($q) use ($search) {
+            $q->where('users.name', 'LIKE', "%$search%")
+                ->orWhere('users.email_id', 'LIKE', "%$search%")
+                ->orWhere('transactions.transaction_id', 'LIKE', "%$search%")
+                ->orWhere('transactions.status', 'LIKE', "%$search%");
+        });
+    }
+
+    // Paginate AFTER filtering results
+    $data['transactions'] = $query->paginate(10)->appends(['search' => $search]);
+
     return view('admin.transactions', compact('data'));
+}
+public function showTransactionHistoryadmin($transactionId)
+{
+    // Fetch the transaction details by transaction ID
+    $transaction = DB::table('transactions')
+                    ->join('users', 'transactions.user_id', '=', 'users.id')
+                    ->select(
+                        'transactions.transaction_id',
+                        'users.name as user_name',
+                        'transactions.amount',
+                        'transactions.gst',
+                        'transactions.tds',
+                        'transactions.final_amount',
+                        'transactions.status',
+                        'transactions.created_at'
+                    )
+                    ->where('transactions.transaction_id', $transactionId)
+                    ->first();
+
+    // If no transaction is found, return an error
+    if (!$transaction) {
+        return response()->json(['error' => 'Transaction not found.'], 404);
+    }
+
+    // Return the transaction data as a JSON response
+    return response()->json($transaction);
 }
     //users & agent
     public function showTransactionHistory()
