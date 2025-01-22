@@ -22,7 +22,7 @@ Assigned Loans
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
 
 <div style="padding: 1%">
-    <h1><center>Assigned Loans</center></h1>
+    <h1 class="text-white"><center>Assigned Loans</center></h1>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
