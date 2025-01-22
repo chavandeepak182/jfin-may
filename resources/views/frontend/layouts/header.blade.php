@@ -78,7 +78,6 @@
                         </li>
                         <li><a href="{{ url('properties')}}" class="nav-item {{ Request::is('properties') ? 'active' : '' }}">PROPERTIES</a></li>
                         <li><a href="{{ url('referral-program')}}" class="nav-item {{ Request::is('referral-program') ? 'active' : '' }}">REFERRALS</a></li>
-                        <li><a href="https://jfinserv.com/blog/" class="nav-item" target="_blank">BLOGS</a></li>
                         <li><a href="{{ url('contact')}}" class="nav-item {{ Request::is('contact') ? 'active' : '' }}">CONTACT</a></li>
                         <li>
                             <!-- Dropdown for Logged-in User -->

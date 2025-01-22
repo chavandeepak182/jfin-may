@@ -1442,3 +1442,7 @@ ul.detail_features li strong {
     border-radius: 10px;
     font-weight: 600;
 }
+
+.video video{
+    height: 790px; 
+}

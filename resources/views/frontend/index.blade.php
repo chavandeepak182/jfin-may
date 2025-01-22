@@ -133,7 +133,7 @@
 
         <!-- Video Section Start -->
         <section class="video aos-init aos-animate" data-aos="zoom-in-right" data-aos-duration="700">
-            <div class="container-fluid">
+            <div class="container-fluid p-0">
                 <video class="w-100" preload="auto" autoplay="true" loop="loop" muted="muted" volume="0">
                     <source src="../theme/frontend/img/intro-video.mp4" type="video/mp4">
                     <source src="movie.webm" type="video/webm">Sorry, your browser does not support HTML5 video.
@@ -301,8 +301,7 @@
             <div class="container pb-5">
                 <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
                     <h4 class="text-primary">Testimonial</h4>
-                    <h1 class="display-4 mb-4">Hear from Our Customers</h1>
-                    <!-- <p class="mb-0">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur adipisci facilis cupiditate recusandae aperiam temporibus corporis itaque quis facere, numquam, ad culpa deserunt sint dolorem autem obcaecati, ipsam mollitia hic.</p> -->
+                    <h2 class="display-4 mb-4">Hear from Our Customers</h2>
                 </div>
                 <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.2s">
                     <div class="testimonial-item bg-white rounded">
