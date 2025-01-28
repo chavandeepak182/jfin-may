@@ -1443,6 +1443,7 @@ ul.detail_features li strong {
     font-weight: 600;
 }
 
-.video video{
-    height: 790px; 
-}
+/* .video video{
+    height: 790px;
+    width: 100%; 
+} */

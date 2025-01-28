@@ -29,92 +29,100 @@ class PropertyController extends Controller
     }
 
     public function insertProperty(Request $request)
-    {  
-        $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
-        
-        // Handle Property Image Upload
-        $property_image_name = substr(str_shuffle($permitted_chars), 0, 8);
-        if ($request->hasFile('property_image')) {
-            $property_image = "property_photos/" . $property_image_name . time() . '.' . $request->property_image->extension();
-            $request->property_image->move(public_path('property_photos'), $property_image);
-        } else {
-            $property_image = "";
-        }
-    
-        // Handle Property Voucher Upload
-        $boucher_name = substr(str_shuffle($permitted_chars), 0, 8);
-        if ($request->hasFile('property_voucher')) {
-            $property_voucher = "property_brochures/" . $boucher_name . time() . '.' . $request->property_voucher->extension();
-            $request->property_voucher->move(public_path('property_brochures'), $property_voucher);
-        } else {
-            $property_voucher = "";
-        }
-    
-        DB::beginTransaction();
-    
-        try {
-            $p = new Property;
-            $p->title = $request->property_title;
-            $p->property_type_id = $request->property_type;
-            $p->builder_name = $request->builder_name;
-            $p->image = $property_image;
-            $p->property_details = $request->property_description;
-            $p->address = $request->property_address;
-            
-            // Handling Amenities (Checkboxes)
-            $amenities = $request->input('amenities'); // Get selected amenities
-            if ($amenities) {
-                $p->facilities = implode(', ', $amenities); // Store as a comma-separated string
-            } else {
-                $p->facilities = ''; // No amenities selected
+{
+    $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
+
+    DB::beginTransaction();
+
+    try {
+        // Save the property details
+        $p = new Property;
+        $p->title = $request->property_title;
+        $p->property_type_id = $request->property_type;
+        $p->builder_name = $request->builder_name;
+        $p->property_details = $request->property_description;
+        $p->address = $request->property_address;
+
+        // Handle Amenities
+        $amenities = $request->input('amenities', []); // Default to an empty array if null
+        $p->facilities = implode(', ', $amenities);
+
+        $p->creator_id = $request->creator_id;
+        $p->price_range_id = $request->price_range;
+        $p->contact = $request->contact_number;
+        $p->area = $request->area;
+        $p->builtup_area = $request->builtup_area;
+        $p->localities = $request->localitie;
+        $p->beds = $request->beds;
+        $p->baths = $request->baths;
+        $p->balconies = $request->balconies;
+        $p->parking = $request->parking;
+        $p->city = $request->city;
+        $p->email = $request->email_id;
+        $p->select_bhk = $request->select_bhk;
+        $p->s_price = $request->s_price;
+        $p->rera = $request->rera;
+        $p->land_type = $request->land_type;
+        $p->location = $request->input('location');
+        $p->latitude = $request->input('latitude');
+        $p->longitude = $request->input('longitude');
+        $p->boucher = $this->handleFileUpload($request, 'property_voucher', 'property_brochures');
+
+        // Handle nearby locations
+        $nearby_locations = $request->input('nearby', []); // Default to empty array if null
+        $p->nearby_locations = json_encode($nearby_locations);
+
+        // Save the property record
+        $p->save();
+
+        // Save multiple images in the `property_images` table
+        if ($request->hasFile('property_images')) {
+            foreach ($request->file('property_images') as $property_image) {
+                $image_name = substr(str_shuffle($permitted_chars), 0, 8) . time() . '.' . $property_image->extension();
+                $image_path = "property_photos/" . $image_name;
+                $property_image->move(public_path('property_photos'), $image_path);
+
+                // Insert into `property_images` table
+                DB::table('property_images')->insert([
+                    'properties_id' => $p->id, // Use the correct property ID
+                    'image_url' => $image_path,
+                    'is_featured' => 0, // Default to non-featured
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
             }
-    
-            $p->creator_id = $request->creator_id;
-            $p->price_range_id = $request->price_range;
-            $p->contact = $request->contact_number;
-            $p->area = $request->area;
-            $p->builtup_area = $request->builtup_area;
-            $p->localities = $request->localitie;
-            $p->beds = $request->beds;
-            $p->baths = $request->baths;
-            $p->balconies = $request->balconies;
-            $p->parking = $request->parking;
-            $p->city = $request->city;
-            $p->email = $request->email_id;
-            $p->select_bhk = $request->select_bhk;
-            $p->s_price = $request->s_price;
-            $p->rera = $request->rera;
-            $p->land_type = $request->land_type;
-            $p->boucher = $property_voucher;
-            $p->location = $request->input('location'); 
-            $p->latitude = $request->input('latitude'); 
-            $p->longitude = $request->input('longitude');
-            $nearby_locations = $request->input('nearby', []);
-        
-            // If there are any nearby locations, store them as JSON
-            if (count($nearby_locations) > 0) {
-                $p->nearby_locations = json_encode($nearby_locations);
-            } else {
-                $p->nearby_locations = json_encode([]);  // Store an empty array if no locations are provided
-            }
-        
-            // Save property
-            $p->save();
-    
-            // Activity logs (if needed)
-            $username = Session::get('username');
-            $user_id = Session::get('user_id');
-            $details = $username . " has added a new property";
-            
-            // Commit transaction if successful
-            DB::commit();
-            return response()->json(['status' => 1, 'msg' => 'Property added successfully']);
-    
-        } catch (\Exception $e) {
-            DB::rollback();
-            return response()->json(['status' => 0, 'msg' => $e->getMessage()]);
         }
+
+        // Commit transaction if successful
+        DB::commit();
+        return response()->json(['status' => 1, 'msg' => 'Property added successfully']);
+
+    } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(['status' => 0, 'msg' => $e->getMessage()]);
     }
+}
+
+/**
+ * Handle file uploads for single files.
+ * 
+ * @param Request $request
+ * @param string $inputName - The name of the input field in the request
+ * @param string $folder - The folder where the file should be saved
+ * @return string - The file path of the uploaded file
+ */
+private function handleFileUpload(Request $request, $inputName, $folder)
+{
+    $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
+    if ($request->hasFile($inputName)) {
+        $file_name = substr(str_shuffle($permitted_chars), 0, 8) . time() . '.' . $request->file($inputName)->extension();
+        $file_path = "$folder/" . $file_name;
+        $request->file($inputName)->move(public_path($folder), $file_path);
+        return $file_path;
+    }
+    return ""; // Return an empty string if no file was uploaded
+}
+
 
     public function allProperties()
 {
@@ -174,14 +182,21 @@ class PropertyController extends Controller
         return view('property.pendingProperties',compact('data'));
     }
 
-    public function viewDetails($property_id){    
-        $data['propertie_details'] = DB::select('select * from properties as p, price_range as pr, property_category as pc where 
-        p.price_range_id = pr.range_id and pc.pid = p.property_type_id and p.properties_id =' . $property_id);
-
-        return view('property.propertyDetails',compact('data'));
-
+    public function viewDetails($property_id) {
+        // Fetch property details
+        $data['propertie_details'] = DB::select('SELECT * 
+                                                 FROM properties AS p
+                                                 JOIN price_range AS pr ON p.price_range_id = pr.range_id
+                                                 JOIN property_category AS pc ON pc.pid = p.property_type_id
+                                                 WHERE p.properties_id = ?', [$property_id]);
+    
+        // Fetch all images for the property
+        $data['property_images'] = DB::table('property_images')
+                                      ->where('properties_id', $property_id)
+                                      ->get();
+    
+        return view('property.propertyDetails', compact('data'));
     }
-
     public function activate(Request $request){
         $updatePropertie = array(
             'is_active'=> 1
@@ -208,57 +223,68 @@ class PropertyController extends Controller
         }
     }
 
-    public function editProperty($property_id){    
+    public function editProperty($property_id) {
         $data['range'] = DB::table('price_range')->get();
         $data['category'] = DB::table('property_category')->get();
-        $data['propertie_details'] = DB::select('select * from properties as p, price_range as pr, property_category as pc where 
-        p.price_range_id = pr.range_id and pc.pid = p.property_type_id and p.properties_id =' . $property_id);
-
-        return view('property.editProperty',compact('data'));
-
+        $data['propertie_details'] = DB::select('SELECT * 
+                                                 FROM properties AS p
+                                                 JOIN price_range AS pr ON p.price_range_id = pr.range_id
+                                                 JOIN property_category AS pc ON pc.pid = p.property_type_id
+                                                 WHERE p.properties_id = ?', [$property_id]);
+    
+        // Fetch existing images for the property
+        $data['property_images'] = DB::table('property_images')
+                                      ->where('properties_id', $property_id)
+                                      ->get();
+    
+        return view('property.editProperty', compact('data'));
     }
-
-    public function updatePropertie(Request $request){
+    public function updatePropertie(Request $request) {
         $propertie_id = $request->propertie_id;
-
-        //fetching old images and boucher
-        $p = DB::table('properties')->where('properties_id', $propertie_id)->get();
-
-        $p_image = $p[0]->image;
-        $p_boucher = $p[0]->boucher;
-
+    
+        // Fetching old images and boucher
+        $property = DB::table('properties')->where('properties_id', $propertie_id)->first();
+        $old_image = $property->image;
+        $old_boucher = $property->boucher;
+    
         $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
         $property_image_name = substr(str_shuffle($permitted_chars), 0, 8);
+    
+        // Handle property image upload
         if ($request->hasFile('property_image')) {
-            $property_image = "property_photoes/".$property_image_name.time().'.'.$request->property_image->extension();
-            $request->property_image->move(public_path('property_photoes'), $property_image);
+            $property_image_name = substr(str_shuffle($permitted_chars), 0, 8) . time() . '.' . $request->property_image->extension();
+            // Move the uploaded image to the public directory
+            $request->property_image->move(public_path('property_photoes'), $property_image_name);
         } else {
-            $property_image = $p_image;
+            // Keep the old image if no new one is uploaded
+            $property_image_name = $old_image;
         }
-
+    
+        // Handle property voucher upload
         $boucher_name = substr(str_shuffle($permitted_chars), 0, 8);
         if ($request->hasFile('property_voucher')) {
-            $property_voucher = "property_bouchers/".$boucher_name.time().'.'.$request->property_voucher->extension();
+            $property_voucher = "property_bouchers/" . $boucher_name . time() . '.' . $request->property_voucher->extension();
             $request->property_voucher->move(public_path('property_bouchers'), $property_voucher);
         } else {
-            $property_voucher = $p_boucher;
+            // Keep the old boucher if no new one is uploaded
+            $property_voucher = $old_boucher;
         }
-        
-        
-        $updatePropertie = array(
-            'title'=> $request->property_title,
-            'property_type_id'=> $request->property_type_id,
-            'builder_name'=> $request->builder_name,
-            's_price'=>$request->s_price,
-            'select_bhk'=> $request->select_bhk,
-            'property_details'=> $request->property_description,
-            'address'=> $request->property_address,
-            'email'=> $request->email_id,
-            'contact'=> $request->contact_number,
-            'price_range_id'=> $request->price_range,
-            'creator_id'=> $request->creator_id,
-            'image'=> $property_image,
-            'boucher'=> $property_voucher,
+    
+        // Update property details in the database
+        $updateProperty = [
+            'title' => $request->property_title,
+            'property_type_id' => $request->property_type_id,
+            'builder_name' => $request->builder_name,
+            's_price' => $request->s_price,
+            'select_bhk' => $request->select_bhk,
+            'property_details' => $request->property_description,
+            'address' => $request->property_address,
+            'email' => $request->email_id,
+            'contact' => $request->contact_number,
+            'price_range_id' => $request->price_range,
+            'creator_id' => $request->creator_id,
+            'image' => $property_image,
+            'boucher' => $property_voucher,
             'facilities' => $request->amenities,
             'area' => $request->area,
             'builtup_area' => $request->builtup_area,
@@ -272,24 +298,38 @@ class PropertyController extends Controller
             'location' => $request->location,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
-            'land_type' =>$request->land_type,
-                
-        );
-
-        try{    
-
-            //activity logs
+            'land_type' => $request->land_type,
+        ];
+    
+        try {
+            // Activity logs
             $username = Session::get('username');
             $user_id = Session::get('user_id');
-            $details = "Property Updated successfully by ".$username; 
+            $details = "Property Updated successfully by " . $username;
             app(UsersController::class)->insertActivityLogs($user_id, $details);
-            //end of activity logs   
-            
-            $update_propertie = DB::table('properties')->where('properties_id',$propertie_id)->update($updatePropertie);
-            return response()->json(['status'=>1,'msg'=>'Propertie information updated successfully !']);
-
-        }catch (\Exception $e) {           
-            return $e->getMessage();
+    
+            // Update property information in the database
+            DB::table('properties')->where('properties_id', $propertie_id)->update($updateProperty);
+    
+            // Handle multiple images update
+            if ($request->hasFile('additional_images')) {
+                foreach ($request->file('additional_images') as $image) {
+                    $imageName = "property_photoes/" . time() . rand(1000, 9999) . '.' . $image->extension();
+                    $image->move(public_path('property_photoes'), $imageName);
+    
+                    // Insert the new image record into the database
+                    DB::table('property_images')->insert([
+                        'properties_id' => $propertie_id,
+                        'image_url' => $imageName,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
+    
+            return response()->json(['status' => 1, 'msg' => 'Property information updated successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 0, 'msg' => 'Error updating property: ' . $e->getMessage()]);
         }
     }
 

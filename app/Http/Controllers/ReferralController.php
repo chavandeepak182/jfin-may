@@ -206,6 +206,38 @@ public function requestWithdrawal(Request $request)
 
     return view('admin.transactions', compact('data'));
 }
+public function showAllTransactionsUser(Request $request)
+{
+    $userId = session('user_id'); // Ensure user is logged in
+
+    // If no user is logged in, redirect to login
+    if (!$userId) {
+        return redirect()->route('login')->with('error', 'Please log in to view your transactions.');
+    }
+
+    $search = $request->input('search'); // Get the search term
+
+    // Query transactions for the logged-in user
+    $query = DB::table('transactions')
+        ->where('transactions.user_id', $userId)
+        ->join('users', 'transactions.user_id', '=', 'users.id') // Join users table for user details
+        ->select('transactions.id', 'transactions.transaction_id', 'transactions.amount', 'transactions.status', 'transactions.created_at', 'users.name as user_name')
+        ->orderBy('transactions.created_at', 'desc');
+
+    // Apply search filter if search term exists
+    if (!empty($search)) {
+        $query->where(function ($q) use ($search) {
+            $q->where('transactions.transaction_id', 'LIKE', "%$search%")
+              ->orWhere('transactions.status', 'LIKE', "%$search%");
+        });
+    }
+
+    // Paginate the results
+    $transactions = $query->paginate(10)->appends(['search' => $search]);
+
+    // Return the transactions view
+    return view('user.transaction-user', compact('transactions', 'search'));
+}
 public function showTransactionHistoryadmin($transactionId)
 {
     // Fetch the transaction details by transaction ID

@@ -196,12 +196,14 @@
 							<li class="sidebar-item"><a class="sidebar-link" href="{{ route('loan.mydocuments') }}">Document Information</a></li>
 						</ul>
 					</li>
-
-					<!-- Referrals Link -->
-					<li class="sidebar-item active">
-						<a class="sidebar-link" href="{{ route('user.walletbalance') }}">
-							<i class="align-middle">₹</i> <span class="align-middle">Referrals</span>
+                    <li class="sidebar-item">
+						<a class="sidebar-link" href="#" data-bs-toggle="collapse" data-bs-target="#referral-dropdown" aria-expanded="false">
+							<i class="align-middle" data-feather="layers"></i> <span class="align-middle">Referral <i class="fas fa-angle-down"></i></span>
 						</a>
+						<ul class="collapse" id="referral-dropdown" >
+							<li class="sidebar-item"><a class="sidebar-link" href="{{ route('user.walletbalance') }}">Wallet</a></li>
+							<li><a class="sidebar-link" href="{{ route('transactions.list') }}">Transactions</a></li>
+						</ul>
 					</li>
 				</ul>
 			</div>
@@ -323,7 +325,7 @@
                                         <table id="transactionHistory" class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th>ID</th>
+                                                    <th>REFERRAL ID</th>
                                                     <th>Amount</th>
                                                     <th>Status</th>
                                                     <th>Date</th>
@@ -396,8 +398,5 @@
             });
         });
     </script>
-
-	
-
 </body>
 </html>

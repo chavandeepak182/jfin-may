@@ -220,6 +220,16 @@
                             </div>                            
                         </div>
                     </div>
+                    <div>
+                    @if($data['additional_images']->isNotEmpty())
+    <h3>Additional Images</h3>
+    <div class="additional-images">
+        @foreach($data['additional_images'] as $image)
+            <img src="{{ asset('property_photos/' . $image->image_url) }}" alt="Additional Property Image">
+        @endforeach
+    </div>
+@endif
+                    </div>
                     <div class="bg-white rounded p-3 mt-3">
                         <div class="row g-4 justify-content-center">
                             <div class="col-12 text-center">
