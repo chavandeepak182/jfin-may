@@ -291,6 +291,7 @@ Route::get('/admin/transactions', [ReferralController::class, 'showAllTransactio
 Route::get('/agent/transactions', [ReferralController::class, 'showTransactionHistory'])->name('agent.transactions');
 Route::get('/admin/transactions/{transactionId}/history', [ReferralController::class, 'showTransactionHistoryadmin']);
 
+Route::get('user/transactions', [ReferralController::class, 'showAllTransactionsUser'])->name('transactions.list');
 
 //channel partner
 Route::middleware('isPartner')->group(function () {

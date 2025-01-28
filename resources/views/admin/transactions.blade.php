@@ -36,7 +36,6 @@ JFS | Wallet Balance
 
 <div style="padding: 1%"> 
     <h1 class="text-white"><center>All Transactions</center></h1> 
-
     <!-- Search Form -->
     <form method="GET" action="{{ route('admin.transactions') }}" class="mb-4">
         <div class="input-group">
@@ -100,11 +99,11 @@ JFS | Wallet Balance
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-            <div style="text-align: right; margin-bottom: 10px;">
-                <button id="downloadInvoice" class="btn btn-primary">
-                    <i class="fa fa-download"></i>
-                </button>
-            </div>
+                <div style="text-align; margin-bottom: 10px;">
+                    <button id="downloadInvoice" class="btn btn-primary">
+                        <i class="fa fa-download"></i>
+                    </button>
+                </div>
                 <h5 class="modal-title" id="invoiceModalLabel">Transaction Invoice</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>

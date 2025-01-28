@@ -200,8 +200,8 @@
                     <div class="col-lg-4">
                         <div class="card mb-4">
                             <div class="card-body">
-                                <h3 class="h6">Property Image</h3>
-                                <img src="{{ $img }}" class="img-thumbnail" />
+                                <!-- <h3 class="h6">Property Image</h3>
+                                <img src="{{ $img }}" class="img-thumbnail" /> -->
 
                                 <h3 class="h6 mt-2">Property Boucher</h3>
                                 <a href = "{{ $boucher }}">Boucher URL </a>
@@ -229,6 +229,18 @@
                     </div>
                 </div>
             </div>
+            <div class="card-body">
+        <h3 class="h6">Property Images</h3>
+        <div class="row">
+            @foreach($data['property_images'] as $image)
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <img src="{{ env('baseURL') . '/' . $image->image_url }}" 
+                         class="img-thumbnail" 
+                         alt="Property Image" 
+                         style="max-width: 100%; height: auto;">
+                </div>
+            @endforeach
+        </div>
   
    <?php } ?>
 </div>            
