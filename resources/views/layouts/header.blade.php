@@ -345,8 +345,16 @@
 
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <!-- Mail Icon (Clickable link) -->
+            <a class="nav-link" href="{{ route('messages.index') }}" id="mailDropdown" role="button">
+                <i class="fas fa-envelope fa-fw mr-2 text-gray-600"></i>
+                <span class="indicator" id="mail-notification-count"></span>
+            </a>
+        </li>
     <!-- Notification Icon -->
     <li class="nav-item dropdown no-arrow">
+        
         <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-bell fa-fw mr-2 text-gray-600"></i>
             <span class="indicator" id="notification-count">0</span>
