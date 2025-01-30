@@ -568,7 +568,8 @@ public function updateUserProfile(Request $request)
     // Validate the request
     $request->validate([
         'name' => 'required|string|max:255',
-        'email_id' => 'required|email|max:255'
+        'email_id' => 'required|email|max:255',
+        'mobile_no' => 'nullable'
     ]);
 
     // Update the user
@@ -576,7 +577,7 @@ public function updateUserProfile(Request $request)
         ->where('id', $request->user_id)
         ->update([
             'name' => $request->name,
-            'email_id' => $request->email_id
+            'email_id' => $request->email_id,
         ]);
 
     \Log::info('User update result:', ['user_id' => $request->user_id, 'result' => $userUpdated]);
