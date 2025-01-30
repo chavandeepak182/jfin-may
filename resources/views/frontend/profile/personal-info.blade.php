@@ -201,7 +201,7 @@
                         <form action="{{ route('user.profile.update') }}" method="POST">
                             @csrf
                             <input type="hidden" name="user_id" value="{{ $user->id }}">
-
+							<input type="hidden" name="profile_id" value="{{ $profile->profile_id }}">
                             <!-- Name -->
                             <div class="mb-3">
                                 <label for="name" class="form-label">Name</label>
