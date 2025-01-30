@@ -135,7 +135,7 @@
 							<li class="sidebar-item"><a class="sidebar-link" href="{{ route('user.walletbalance') }}">Wallet</a></li>
 							<li><a class="sidebar-link" href="{{ route('transactions.list') }}">Transactions</a></li>
 						</ul>
-					</li>
+					</li> 
 				</ul>
 			</div>
 		</nav>

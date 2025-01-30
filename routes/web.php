@@ -18,6 +18,7 @@ use App\Http\Controllers\EligibilityCriteriaController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CibilController;
 use App\Http\Controllers\MisController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
 use App\Exports\EligibilityExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -183,7 +184,7 @@ Route::get('/export-eligibility', function () {
 Route::get('enquiry', [EnquiryController::class, 'showForm'])->name('enquiry.form');
 Route::post('enquiry', [EnquiryController::class, 'store'])->name('enquiry.store');
 //register 
-// Route::post('register', [UsersController::class, 'register'])->name('register');
+Route::post('register', [UsersController::class, 'register'])->name('register');
 
 
 Route::middleware('isAdmin')->group(function () {
@@ -359,3 +360,10 @@ Route::get('mis/export/pdf', [MisController::class, 'exportPDF'])->name('mis.exp
 Route::get('/activate', function () {
     return view('frontend.account_activation');
 });
+
+// Mail
+Route::get('/messages', [MessageController::class, 'index'])->name('messages.index'); // Inbox
+Route::get('/messages/compose', [MessageController::class, 'compose'])->name('messages.compose'); // Compose Mail
+Route::post('/messages/send', [MessageController::class, 'send'])->name('messages.send'); // Send Mail
+Route::get('/messages/{id}', [MessageController::class, 'show'])->name('messages.show'); // View Mail
+Route::get('/messages/sent-messages', [MessageController::class, 'sentMessages'])->name('messages.sent');

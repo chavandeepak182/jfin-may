@@ -568,7 +568,14 @@ public function updateUserProfile(Request $request)
     // Validate the request
     $request->validate([
         'name' => 'required|string|max:255',
-        'email_id' => 'required|email|max:255'
+        'email_id' => 'required|email|max:255',
+        'mobile_no' => 'nullable|string|max:15',
+        'dob' => 'nullable|date',
+        'marital_status' => 'nullable|string|max:20',
+        'residence_address' => 'nullable|string|max:255',
+        'city' => 'nullable|string|max:100',
+        'state' => 'nullable|string|max:100',
+        'pincode' => 'nullable|numeric|digits:6'
     ]);
 
     // Update the user
@@ -598,8 +605,11 @@ public function updateUserProfile(Request $request)
 
     // Check if update was successful
     if ($userUpdated === 0 && $profileUpdated === 0) {
-        \Log::error('Update failed or no changes made.');
-        return redirect()->back()->with('error', 'Failed to update profile or no changes were made.');
+        \Log::warning('No changes detected during update.', [
+            'user_id' => $request->user_id,
+            'profile_id' => $request->profile_id
+        ]);
+        return redirect()->back()->with('warning', 'No changes were made to your profile.');
     }
 
     return redirect()->back()->with('success', 'Profile updated successfully!');
