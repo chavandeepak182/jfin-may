@@ -24,6 +24,32 @@
 		</div>						
 	</div>
 </div>
+@extends('frontend.layouts.customer-dash')
+@section('title', "All Personal Details")
+
+@section('content')
+<div class="container-fluid p-0">
+	<h2 class="mb-3 text-center">Personal Information</h2>
+	<div class="row">
+		<div class="col-md-10 mx-auto d-flex">
+			<div class="w-100">
+				@if ($profile)
+					<div class="bg-white py-5 px-5 rounded">
+						<h4 class="m-0 text-primary"><strong>{{ $user->name }}</strong></h4>
+						<p>{{ $user->email_id }}</p>
+						<p class="m-0">Mobile No.: <strong>{{ $profile->mobile_no }}</strong></p>
+						<p>Gender: <strong>{{ $profile->gender }}</strong> <span class="px-2">|</span> DOB: <strong>{{ $profile->dob }}</strong> <span class="px-2">|</span> Marital Status: <strong>{{ $profile->marital_status }}</strong></p>
+						<p class="m-0">Residence: <strong>{{ $profile->residence_address }}</strong></p>
+						<p>City: <strong>{{ $profile->city }}</strong> <span class="px-2">|</span> State: <strong>{{ $profile->state }}</strong> <span class="px-2">|</span> Pincode: <strong>{{ $profile->pincode }}</strong></p>
+						<p class="mt-5"><a class="btn btn-primary rounded-pill py-2 px-2 px-md-4" data-bs-toggle="modal" data-bs-target="#editProfileModal"><i class="far fa-edit me-2"></i> Update</a></p>
+					</div>
+				@else
+					<p>No personal information available.</p>
+				@endif
+			</div>
+		</div>						
+	</div>
+</div>
 
 <!-- Edit Profile Modal -->
 <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
