@@ -28,12 +28,19 @@ class UsersController extends Controller
     {
             $data['allUsers'] = DB::table('users')
         ->join('profile', 'users.id', '=', 'profile.user_id')
-        ->select('users.id', 'users.name', 'users.email_id', 'profile.mobile_no', 'profile.dob')
+        ->select('users.id', 'users.name', 'users.email_id', 'profile.mobile_no', 'profile.dob', 'users.is_email_verify')
         ->paginate(100);
 
         return view('admin.allUsers',compact('data'));
     }
-
+    public function updateUserStatus(Request $request)
+    {
+        DB::table('users')
+            ->where('id', $request->user_id)
+            ->update(['is_email_verify' => $request->is_email_verify]);
+    
+        return response()->json(['message' => 'User status updated successfully']);
+    }
 
     public function insertUser(Request $request)
     {   

@@ -30,7 +30,7 @@
 					<!-- Dashboard Link -->
 					<li class="sidebar-item active">
 						<a class="sidebar-link" href="{{ url('/my-profile') }}">
-							<i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+							<i class="fas fa-tachometer-alt custom-icon"></i> <span class="align-middle">Dashboard</span>
 						</a>
 					</li>
 
@@ -85,6 +85,14 @@
 
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav navbar-align">
+						<li class="nav-item">
+							<a class="nav-icon" href="{{ route('messages.index') }}">
+								<div class="position-relative">
+									<i class="align-middle" data-feather="mail"></i>
+									<span class="indicator" id="mailbox-count">0</span>
+								</div>
+							</a>
+						</li>
 						<li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
 								<div class="position-relative">

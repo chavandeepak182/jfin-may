@@ -48,6 +48,7 @@ All Users
                                 <th> Email ID </th>
                                 <th> Mobile Number </th>
                                 <th> DOB </th>
+                                <th> Status </th>
                                 <th> Action </th>
                             </tr>
                         </thead>
@@ -59,6 +60,16 @@ All Users
                                 <td>{{ $user->email_id }}</td>
                                 <td>{{ $user->mobile_no }}</td>
                                 <td>{{ $user->dob }}</td>
+                                <td>
+                                    <label>
+                                        <input type="radio" name="status_{{ $user->id }}" value="1" onclick="updateStatus({{ $user->id }}, 1)" {{ $user->is_email_verify == 1 ? 'checked' : '' }}>
+                                        Active
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="status_{{ $user->id }}" value="0" onclick="updateStatus({{ $user->id }}, 0)" {{ $user->is_email_verify == 0 ? 'checked' : '' }}>
+                                        Inactive
+                                    </label>
+                                </td>
                                 <td>
                                     <a class="btn btn-primary btn-xs edit" title="Edit" href="{{ url('editUser/'.$user->id) }}">
                                         <i class="fa fa-edit"></i>
@@ -271,6 +282,26 @@ function searchUser() {
             }
         });      
     }
+</script>
+<script>
+function updateStatus(userId, status) {
+    $.ajax({
+        url: '{{ route("updateUserStatus") }}',
+        type: 'POST',
+        data: {
+            _token: '{{ csrf_token() }}',
+            user_id: userId,
+            is_email_verify: status
+        },
+        success: function(response) {
+            alert(response.message);
+        },
+        error: function(error) {
+            console.log(error);
+            alert('Error updating status');
+        }
+    });
+}
 </script>
 
 @endsection
