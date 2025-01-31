@@ -200,6 +200,7 @@ Route::post('admin/insertUser',[UsersController::class,'insertUser'])->name('ins
     Route::get('admin/admindashboard', [AdminController::class, 'adminDashboard'])->name('adminDashboard');
     Route::get('admin/addUser', [UsersController::class, 'addUser'])->name('addUser');
     Route::get('admin/allUsers', [UsersController::class, 'allUsers'])->name('allUsers');  
+    Route::post('/update-user-status', [UsersController::class, 'updateUserStatus'])->name('updateUserStatus');
     Route::post('admin/assignAgent', [LoanApplicationController::class, 'assignAgent'])->name('assignAgent');
 
     //activity list
@@ -368,5 +369,5 @@ Route::get('/activate', function () {
 Route::get('/messages', [MessageController::class, 'index'])->name('messages.index'); // Inbox
 Route::get('/messages/compose', [MessageController::class, 'compose'])->name('messages.compose'); // Compose Mail
 Route::post('/messages/send', [MessageController::class, 'send'])->name('messages.send'); // Send Mail
-Route::get('/messages/{id}', [MessageController::class, 'show'])->name('messages.show'); // View Mail
-Route::get('/messages/sent-messages', [MessageController::class, 'sentMessages'])->name('messages.sent');
+Route::get('/messages/sent', [MessageController::class, 'sentMessages'])->name('messages.sent'); // Sent Messages
+Route::get('/messages/{id}', [MessageController::class, 'show'])->name('messages.show');
