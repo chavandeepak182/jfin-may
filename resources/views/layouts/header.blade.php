@@ -30,7 +30,6 @@
 <body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
-
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             <!-- Sidebar - Brand -->
@@ -335,109 +334,109 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand topbar mb-4 static-top">
+    <nav class="navbar navbar-expand topbar mb-4 static-top">
                     <!-- <h2><b>Dashboard</b></h2> -->
 
-    <!-- Sidebar Toggle (Topbar) -->
-    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-        <i class="fa fa-bars"></i>
-    </button>
+        <!-- Sidebar Toggle (Topbar) -->
+        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+        </button>
 
     <!-- Topbar Navbar -->
-    <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-            <!-- Mail Icon (Clickable link) -->
-            <a class="nav-link" href="{{ route('messages.index') }}" id="mailDropdown" role="button">
-                <i class="fas fa-envelope fa-fw mr-2 text-gray-600"></i>
-                <span class="indicator" id="mail-notification-count"></span>
-            </a>
-        </li>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <!-- Mail Icon (Clickable link) -->
+                <a class="nav-link" href="{{ route('messages.index') }}" id="mailDropdown" role="button">
+                    <i class="fas fa-envelope fa-fw mr-2 text-gray-600"></i>
+                    <span class="indicator" id="mail-notification-count"></span>
+                </a>
+            </li>
     <!-- Notification Icon -->
-    <li class="nav-item dropdown no-arrow">
-        
-        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-bell fa-fw mr-2 text-gray-600"></i>
-            <span class="indicator" id="notification-count">0</span>
-        </a>
-        <!-- Dropdown - Notifications -->
-        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-            <div class="dropdown-menu-header">
-                <span id="notification-header">No New Notifications</span>
-            </div>
-            <div class="list-group" id="notification-list">
-                <!-- Notifications will be dynamically inserted here -->
-            </div>
-            <div class="dropdown-menu-footer">
-                <a href="/notifications" class="text-muted">Show all notifications</a>
-            </div>
-        </div>
-    </li>
+            <li class="nav-item dropdown no-arrow">
+                
+                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-bell fa-fw mr-2 text-gray-600"></i>
+                    <span class="indicator" id="notification-count">0</span>
+                </a>
+                <!-- Dropdown - Notifications -->
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                    <div class="dropdown-menu-header">
+                        <span id="notification-header">No New Notifications</span>
+                    </div>
+                    <div class="list-group" id="notification-list">
+                        <!-- Notifications will be dynamically inserted here -->
+                    </div>
+                    <div class="dropdown-menu-footer">
+                        <a href="/notifications" class="text-muted">Show all notifications</a>
+                    </div>
+                </div>
+            </li>
     
-    <?php    if($role_id == env('adminRole_id')) { ?>
-    <!-- Nav Item - User Information -->
-    <li class="nav-item dropdown no-arrow">
-        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Session::get('username') }}</span>
-            <img class="img-profile rounded-circle" src="{{ asset('theme') }}/dist-assets/img/undraw_profile_2.svg">
-        </a>
-        <!-- Dropdown - User Information -->
-        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="{{ route('admin.profile') }}">
-                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-600"></i>
-                Profile
-            </a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/logout">
-                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-600"></i>
-                Logout
-            </a>
-        </div>
-    </li>
-    <?php } ?> 
-    <?php    if($role_id == env('partnerRole_id')) { ?>
-    <!-- Nav Item - User Information -->
-    <li class="nav-item dropdown no-arrow">
-        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Session::get('username') }}</span>
-            <img class="img-profile rounded-circle" src="{{ asset('theme') }}/dist-assets/img/undraw_profile_2.svg">
-        </a>
-        <!-- Dropdown - User Information -->
-        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="{{ route('partner.profile') }}">
-                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-600"></i>
-                 Profile
-            </a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/logout">
-                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-600"></i>
-                Logout
-            </a>
-        </div>
-    </li>
-    <?php } ?>
-    <?php    if($role_id == env('agentRole_id')) { ?>
-    <!-- Nav Item - User Information -->
-    <li class="nav-item dropdown no-arrow">
-        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Session::get('username') }}</span>
-            <img class="img-profile rounded-circle" src="{{ asset('theme') }}/dist-assets/img/undraw_profile_2.svg">
-        </a>
-        <!-- Dropdown - User Information -->
-        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="{{ route('admin.profile') }}">
-                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-600"></i>
-                 Profile
-            </a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/logout">
-                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-600"></i>
-                Logout
-            </a>
-        </div>
-    </li>
-    <?php } ?>
-</ul>
-</nav>
+            <?php    if($role_id == env('adminRole_id')) { ?>
+        <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Session::get('username') }}</span>
+                    <img class="img-profile rounded-circle" src="{{ asset('theme') }}/dist-assets/img/undraw_profile_2.svg">
+                </a>
+                <!-- Dropdown - User Information -->
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="{{ route('admin.profile') }}">
+                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-600"></i>
+                        Profile
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/logout">
+                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-600"></i>
+                        Logout
+                    </a>
+                </div>
+            </li>
+            <?php } ?> 
+            <?php    if($role_id == env('partnerRole_id')) { ?>
+            <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Session::get('username') }}</span>
+                    <img class="img-profile rounded-circle" src="{{ asset('theme') }}/dist-assets/img/undraw_profile_2.svg">
+                </a>
+                <!-- Dropdown - User Information -->
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="{{ route('partner.profile') }}">
+                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-600"></i>
+                        Profile
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/logout">
+                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-600"></i>
+                        Logout
+                    </a>
+                </div>
+            </li>
+            <?php } ?>
+            <?php    if($role_id == env('agentRole_id')) { ?>
+        <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Session::get('username') }}</span>
+                    <img class="img-profile rounded-circle" src="{{ asset('theme') }}/dist-assets/img/undraw_profile_2.svg">
+                </a>
+                <!-- Dropdown - User Information -->
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="{{ route('admin.profile') }}">
+                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-600"></i>
+                        Profile
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/logout">
+                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-600"></i>
+                        Logout
+                    </a>
+                </div>
+            </li>
+            <?php } ?>
+        </ul>
+    </nav>
                 <!-- End of Topbar -->
 
                 {{-- main content --}}
@@ -450,7 +449,7 @@
             </div>
             <!-- End of Content Wrapper -->
             @include('layouts.footer')
-        </div>
+</div>
         <!-- End of Page Wrapper -->
 
         <!-- Scroll to Top Button-->
