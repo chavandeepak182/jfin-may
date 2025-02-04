@@ -44,15 +44,12 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Type Property</label><span class="text-danger">*</span>
-                                            <select class="form-control" name="property_type">
-                                            <?php
-                                                foreach($data['category'] as $v) {  
-                                                    ?>
-                                                    <option value="<?php echo $v->pid; ?>"><?php echo $v->category_name; ?></option>     
-                                                <?php 
-                                                }
-                                                ?>
-                                            </select> 
+                                            <select class="form-control" name="property_type" id="propertyType">
+                                                <option value="">Select Property Type</option>
+                                                <?php foreach($data['category'] as $v) { ?>
+                                                    <option value="<?php echo $v->category_name; ?>"><?php echo $v->category_name; ?></option>
+                                                <?php } ?>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -73,14 +70,9 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Land Type</label><span class="text-danger">*</span>
-                                            <select class="form-control" name="land_type">
-                                                <option>Select Type</option>
-                                                <option value="Flat">Flat</option>
-                                                <option value="Bunglow">Bunglow</option>
-                                                <option value="Villa">Villa</option>
-                                                <option value="Plot">Plot</option>
-                                            </select> 
-
+                                            <select class="form-control" name="land_type" id="landType">
+                                                <option value="">Select Type</option>
+                                            </select>
                                         </div>
                                     </div>
 
@@ -425,5 +417,31 @@ function deletePropertie(id)
 	}
 
 </script>
+<script>
+    document.getElementById('propertyType').addEventListener('change', function() {
+        var propertyType = this.value;
+        var landTypeDropdown = document.getElementById('landType');
+        landTypeDropdown.innerHTML = ''; // Clear existing options
 
+        var defaultOption = document.createElement("option");
+        defaultOption.text = "Select Type";
+        defaultOption.value = "";
+        landTypeDropdown.appendChild(defaultOption);
+
+        if (propertyType === 'Residential') {
+            var options = ['Plot', 'Flat', 'Bungalow', 'Villa'];
+        } else if (propertyType === 'Commercial') {
+            var options = ['Office', 'Shop', 'Showroom'];
+        } else {
+            var options = [];
+        }
+
+        options.forEach(function(type) {
+            var option = document.createElement("option");
+            option.text = type;
+            option.value = type;
+            landTypeDropdown.appendChild(option);
+        });
+    });
+</script>
 @endsection
