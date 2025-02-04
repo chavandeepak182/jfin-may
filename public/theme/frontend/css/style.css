@@ -329,16 +329,17 @@
         transform: rotateX(-75deg);
         transform-origin: 0% 0%;
         border: 0;
-        border-radius: 10px;
+        border-radius: 0px;
         transition: .5s;
         opacity: 0;
+        padding: 0px 0px 20px;
     }
 
     .navbar .nav-item:hover .dropdown-menu {
         transform: rotateX(0deg);
         visibility: visible;
-        margin-top: 20px;
-        background: #26276d;
+        margin-top: 8px;
+        background: #000046;
         transition: .5s;
         opacity: 1;
     }
