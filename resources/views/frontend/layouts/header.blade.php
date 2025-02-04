@@ -218,11 +218,11 @@
                             <div class="row text-center pt-3">
                                 <div class="col-lg-6 border-end">
                                     <img src="{{ asset('theme') }}/frontend/img/loan.png" alt="Logo" class="w-50">
-                                    <a class="btn-search btn btn-dark mt-3 px-md-5 ms-2" href="{{ url('/applyNow') }}"> For Finance</a>
+                                    <a class="btn-search btn btn-dark mt-3 px-md-5 ms-2" href="{{ url('/login') }}"> For Finance</a>
                                 </div>
                                 <div class="col-lg-6">
                                     <img src="{{ asset('theme') }}/frontend/img/housing.png" alt="Logo" class="w-50">
-                                    <a class="btn-search btn btn-dark mt-3 px-md-5 ms-2" href="{{ url('/applyNow') }}"> For Property</a>
+                                    <a class="btn-search btn btn-dark mt-3 px-md-5 ms-2" href="{{ url('/login') }}"> For Property</a>
                                 </div>
                             </div>
                         </div>
