@@ -7,7 +7,7 @@
                     <div class="row g-4">
                         <div class="col-md-6 col-lg-6 col-xl-5">
                             <div class="footer-item">
-                                <a href="index.html" class="pb-3">
+                                <a href="{{ url('/') }}" class="pb-3">
                                     <!-- <h3 class="text-white"><i class="fab fa-slack me-3"></i> LifeSure</h3> -->
                                     <img src="{{ asset('theme') }}/frontend/img/logo-white.svg" alt="Logo" width="50%">
                                 </a>

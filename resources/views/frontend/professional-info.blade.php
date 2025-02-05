@@ -300,10 +300,8 @@
                         <!-- Qualification Details -->
                         @elseif ($currentStep == 3)
                             <fieldset>
-                                <legend class="mb-3">Step 3: Qualification Details</legend>
-                                <p class="text-muted">Include your qualifications to support your application.</p>
+                                <h4 class="text-primary mb-3">Qualification Details</h4>
                                 <div class="row g-3">
-                                    <h4 class="text-primary">Qualification Details</h4>
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input type="text" class="form-control" id="qualification" name="qualification" value="{{ old('qualification', $education->qualification ?? '') }}" placeholder="Qualification" required>
@@ -334,8 +332,7 @@
                         <!-- Existing Loan Details -->
                         @elseif ($currentStep == 4)
                             <fieldset>
-                                <legend class="mb-3">Step 4: Existing Loan Details</legend>
-                                <p class="text-muted">Provide information about any existing loans you have.</p>
+                                <h4 class="text-primary">Existing Loan Details</h4>
                                 <div id="existing-loans-container">
                                     @if (!empty($existingLoans) && count($existingLoans) > 0)
                                         @foreach($existingLoans as $existingLoan)
@@ -410,10 +407,8 @@
                         <!-- Upload Documents -->
                         @elseif ($currentStep == 5)
                             <fieldset>
-                                <legend class="mb-3">Step 5: Upload Documents</legend>
-                                <p class="text-muted">Upload the necessary documents to complete your application.</p>
+                                <h4 class="text-primary">Upload Documents</h4>
                                 <div class="row g-3">
-                                    <h4 class="text-primary">Upload Documents</h4>
                                     <div class="accordion" id="accordionExample">
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="headingOne">
@@ -530,11 +525,8 @@
                         <!-- Loan Details -->
                         @elseif ($currentStep == 6)
                             <fieldset>
-                                <legend class="mb-3">Step 6: Loan Details</legend>
-                                <p class="text-muted">Enter details about the loan you are applying for.</p>
+                                <h4 class="text-primary mb-3">Loan Details</h4>
                                 <div class="row g-3">
-                                    <h4 class="text-primary">Loan Details</h4>                                   
-                                
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input type="number" step="0.01" name="amount" value="{{ old('amount', $loan->amount ?? '') }}" class="form-control" id="amount" placeholder="Amount" required>
@@ -543,7 +535,8 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating">
-                                            <select name="tenure" class="form-select border-0" id="tenure" required>
+                                            <select name="tenure" id="tenure" class="form-control" required>
+                                            <!-- <select name="tenure" class="form-select form-control border-0" id="tenure" required> -->
                                                 <option value="">Select Tenure</option>
                                                 @for ($i = 1; $i <= 10; $i++)
                                                     <option value="{{ $i }}" {{ old('tenure', $loan->tenure ?? '') == $i ? 'selected' : '' }}>{{ $i }} year{{ $i > 1 ? 's' : '' }}</option>
@@ -552,21 +545,20 @@
                                             <label for="tenure">Tenure (in years)</label>
                                         </div>
                                     </div>
-                                    <div class="row mt-2">
-                                        <!-- Referral Code Input -->
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="text" name="referral_code" value="{{ old('referral_code') }}" class="form-control" id="referral_code" placeholder="Referral Code">
-                                                <label for="referral_code">Referral Code (Optional)</label>
-                                            </div>
-                                        </div>
 
-                                        <!-- Promo Code Input -->
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="text" name="pan_number" value="{{ old('pan_number', $loan->pan_number ?? '') }}" class="form-control" id="pan_number" placeholder="PAN Number">
-                                                <label for="pan_number">PAN Number</label>
-                                            </div>
+                                    <!-- Referral Code Input -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" name="referral_code" value="{{ old('referral_code') }}" class="form-control" id="referral_code" placeholder="Referral Code">
+                                            <label for="referral_code">Referral Code (Optional)</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Promo Code Input -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" name="pan_number" value="{{ old('pan_number', $loan->pan_number ?? '') }}" class="form-control" id="pan_number" placeholder="PAN Number">
+                                            <label for="pan_number">PAN Number</label>
                                         </div>
                                     </div>
 
