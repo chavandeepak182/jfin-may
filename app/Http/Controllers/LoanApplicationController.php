@@ -496,8 +496,9 @@ public function disbursed()
         'company_address' => 'required|string|max:255',
         'experience_year' => 'required|integer',
         'designation' => 'required|string|max:100',
-        'netsalary' => 'required|numeric',
-        'gross_salary' => 'required|numeric'
+        'netsalary' => 'nullable|numeric',
+        'selfincome' => 'nullable|numeric',
+        'gross_salary' => 'nullable|numeric'
     ]);
 
         $is_loan = Session::get('is_loan');
@@ -514,6 +515,7 @@ public function disbursed()
             $p->designation = $validated['designation'];
             $p->netsalary = $validated['netsalary'];
             $p->gross_salary = $validated['gross_salary'];
+            $p->selfincome = $validated['selfincome'];
             $p->save();
 
         }else{
@@ -525,7 +527,8 @@ public function disbursed()
                     'experience_year' => $validated['experience_year'],
                     'designation' => $validated['designation'],
                     'netsalary' => $validated['netsalary'],
-                    'gross_salary' => $validated['gross_salary']
+                    'gross_salary' => $validated['gross_salary'],
+                    'selfincome' => $validated['selfincome']
                 );
 
             $update_loan = DB::table('professional_details')->where('user_id',$userId)->update($updateLoan);
