@@ -283,11 +283,13 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <div class="form-floating" id="estabish_date">
-                                            <input type="date" class="form-control" id="business_estabish_date" name="business_estabish_date" value="{{ old('business_estabish_date') }}" placeholder="Business Establish Date">
-                                            <label for="business_estabish_date">Business Establish Date <span class="text-danger">*</span></label>
+                                        <div class="form-floating" id="establish_date">
+                                        <input type="date" class="form-control" id="business_establish_date" name="business_establish_date" 
+                                            value="{{ old('business_establish_date', $professionalDetails->business_establish_date ?? '') }}" 
+                                            placeholder="Business Establish Date">
+                                            <label for="business_establish_date">Business Establish Date <span class="text-danger">*</span></label>
                                         </div>
-                                        @error('business_estabish_date')
+                                        @error('business_establish_date')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -678,7 +680,6 @@
     }
 });
 </script>
-
 <script>
     // Initialize loan index based on the count of existing loans
     let loanIndex = {{ count($existingLoans) ?? 0 }}; // Start from the number of existing loans
@@ -760,37 +761,70 @@
         if (loanEntry) {
             loanEntry.remove();
         }
+
+        // Optionally, you can update the loan index to re-adjust the index values if needed.
+        // Example: Loop through remaining entries and re-index them
+        const remainingLoans = document.querySelectorAll('.existing-loan-entry');
+        loanIndex = remainingLoans.length;
     }
+
+    // Function to validate and clean empty loan entries before form submission
+    function cleanEmptyLoanEntries() {
+        const loanEntries = document.querySelectorAll('.existing-loan-entry');
+        loanEntries.forEach(entry => {
+            const typeLoan = entry.querySelector('input[name="type_loan[]"]').value.trim();
+            const loanAmount = entry.querySelector('input[name="loan_amount[]"]').value.trim();
+            const tenureLoan = entry.querySelector('input[name="tenure_loan[]"]').value.trim();
+            const emiAmount = entry.querySelector('input[name="emi_amount[]"]').value.trim();
+            const sanctionDate = entry.querySelector('input[name="sanction_date[]"]').value.trim();
+            const emiBounceCount = entry.querySelector('input[name="emi_bounce_count[]"]').value.trim();
+
+            // Remove entry if all fields are empty
+            if (!typeLoan && !loanAmount && !tenureLoan && !emiAmount && !sanctionDate && !emiBounceCount) {
+                entry.remove(); // Remove this empty entry from the DOM
+            }
+        });
+    }
+
+    // Attach this function to your form submission event
+    document.getElementById('your-form-id').addEventListener('submit', function(event) {
+        cleanEmptyLoanEntries(); // Clean empty loan entries before submitting the form
+    });
 </script>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const salariedTab = document.getElementById('salariedTab');
-        const selfTab = document.getElementById('selfTab');
-        const business_estabish_date = document.getElementById('estabish_date');
-        const selfincome = document.getElementById('selfincome');
-        const netsalary = document.getElementById('netsalary');
-        const gross_salary = document.getElementById('gross_salary');
+    const salariedTab = document.getElementById('salariedTab');
+    const selfTab = document.getElementById('selfTab');
+    const businessEstablishDate = document.getElementById('business_establish_date');  // Fixed ID here
+    const selfincome = document.getElementById('selfincome');
+    const netsalary = document.getElementById('netsalary');
+    const gross_salary = document.getElementById('gross_salary');
 
-        function toggleTextField() {
-            if (selfTab.checked) {
-                business_estabish_date.style.display = 'block';
-                selfincome.style.display = 'block';
-                netsalary.style.display = 'none';
-                gross_salary.style.display = 'none';
-            } else if (salariedTab.checked) {
-                business_estabish_date.style.display = 'none';
-                selfincome.style.display = 'none';
-                netsalary.style.display = 'block';
-                gross_salary.style.display = 'block';
-            }
+    function toggleTextField() {
+        // If selfTab (self-employed) is selected
+        if (selfTab.checked) {
+            businessEstablishDate.style.display = 'block';  // Show business establish date
+            selfincome.style.display = 'block';  // Show self income
+            netsalary.style.display = 'none';  // Hide netsalary
+            gross_salary.style.display = 'none';  // Hide gross salary
+        } 
+        // If salariedTab (salaried) is selected
+        else if (salariedTab.checked) {
+            businessEstablishDate.style.display = 'none';  // Hide business establish date
+            selfincome.style.display = 'none';  // Hide self income
+            netsalary.style.display = 'block';  // Show netsalary
+            gross_salary.style.display = 'block';  // Show gross salary
         }
+    }
 
-        salariedTab.addEventListener('change', toggleTextField);
-        selfTab.addEventListener('change', toggleTextField);
+    // Add event listeners to toggle based on user selection
+    salariedTab.addEventListener('change', toggleTextField);
+    selfTab.addEventListener('change', toggleTextField);
 
-        toggleTextField();
-    });
+    // Initially set visibility based on the pre-selected radio button (if any)
+    toggleTextField();
+});
 </script>
 
 <script>

@@ -498,6 +498,7 @@ public function disbursed()
         'designation' => 'required|string|max:100',
         'netsalary' => 'nullable|numeric',
         'selfincome' => 'nullable|numeric',
+        'business_establish_date' => 'nullable|date',
         'gross_salary' => 'nullable|numeric'
     ]);
 
@@ -515,6 +516,7 @@ public function disbursed()
             $p->designation = $validated['designation'];
             $p->netsalary = $validated['netsalary'];
             $p->gross_salary = $validated['gross_salary'];
+            $p->business_establish_date = $validated['business_establish_date'];
             $p->selfincome = $validated['selfincome'];
             $p->save();
 
@@ -528,6 +530,7 @@ public function disbursed()
                     'designation' => $validated['designation'],
                     'netsalary' => $validated['netsalary'],
                     'gross_salary' => $validated['gross_salary'],
+                    'business_establish_date' => $validated['business_establish_date'],
                     'selfincome' => $validated['selfincome']
                 );
 
