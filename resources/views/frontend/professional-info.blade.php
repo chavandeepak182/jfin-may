@@ -3,9 +3,9 @@
 
 @section('content')
 
-<div class="container-fluid bg-primary py-5">
+<div class="container-fluid bg-white py-5">
     <div class="container">
-        <div class="row g-5 align-items-start py-5">
+        <div class="row g-5 align-items-start mb-5 pb-5">
             <!-- Progress Bar Section -->
             <div class="col-md-3">
                 <div class="progress-steps shadow rounded bg-white p-4">
@@ -36,8 +36,6 @@
             <!-- Form Section -->
             <div class="col-md-9">
                 <div class="form-container shadow rounded bg-white p-5">
-                    <h4 class="text-dark mb-4">Loan Application Form</h4>
-
                     @if (session('success'))
                         <div class="alert alert-success">
                             {{ session('success') }}
@@ -62,9 +60,8 @@
                         <!-- Personal Details -->
                         @if ($currentStep == 1)
                             <fieldset>
-                                <legend class="mb-3">Personal Details</legend>
+                                <h4 class="text-primary mb-3">Personal Details</h4>
                                 <div class="row g-3">
-                                    <h4 class="text-primary">Select Loan Category & Bank</h4>
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <select name="loan_category_id" id="loan_category" class="form-control" required>
@@ -76,7 +73,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            <label for="loan_category">Loan Category</label>
+                                            <label for="loan_category">Loan Category <span class="text-danger">*</span></label>
                                         </div>
                                     </div>
 
@@ -98,78 +95,74 @@
                                         </div>
                                     </div>    
 
-                                    <div class="col-md-12">
-                                        <h4 class="text-primary">Personal Details</h4>
-                                    </div>
-
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-floating">
                                             <input type="tel" class="form-control" id="phone" name="mobile_no" 
                                                 value="{{ old('mobile_no', $profile->mobile_no ?? '') }}" placeholder="Phone" required>
-                                            <label for="phone">Phone</label>
+                                            <label for="phone">Phone <span class="text-danger">*</span></label>
                                             @error('mobile_no')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-floating">
                                             <input type="date" class="form-control" id="dob" name="dob" 
                                                 value="{{ old('dob', $profile->dob ?? '') }}" placeholder="DOB" required>
-                                            <label for="dob">Date of Birth</label>
+                                            <label for="dob">Date of Birth <span class="text-danger">*</span></label>
                                             @error('dob')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-floating">
                                             <select class="form-control" id="marital_status" name="marital_status" required>
                                                 <option value="" selected disabled hidden>Select Marital Status</option>
                                                 <option value="Single" {{ old('marital_status', $profile->marital_status ?? '') == 'Single' ? 'selected' : '' }}>Single</option>
                                                 <option value="Married" {{ old('marital_status', $profile->marital_status ?? '') == 'Married' ? 'selected' : '' }}>Married</option>
                                             </select>
-                                            <label for="marital_status">Marital Status</label>
+                                            <label for="marital_status">Marital Status <span class="text-danger">*</span></label>
                                             @error('marital_status')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-floating">
                                             <input type="text" class="form-control" id="residence_address" name="residence_address" 
                                                 value="{{ old('residence_address', $profile->residence_address ?? '') }}" placeholder="Address" required>
-                                            <label for="residence_address">Address</label>
+                                            <label for="residence_address">Address <span class="text-danger">*</span></label>
                                             @error('residence_address')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-floating">
                                             <select class="form-control" id="state" name="state" required>
-                                                <option value="">Select State</option>
+                                                <option value="">Select State <span class="text-danger">*</span></option>
                                                 @foreach ($states as $state)
                                                     <option value="{{ $state->id }}" {{ old('state', $profile->state ?? '') == $state->id ? 'selected' : '' }}>
                                                         {{ $state->name }}
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            <label for="state">State</label>
+                                            <label for="state">State <span class="text-danger">*</span></label>
                                             @error('state')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-floating">
                                             <select class="form-control" id="city" name="city" required>
-                                                <option value="">Select City</option>
+                                                <option value="">Select City <span class="text-danger">*</span></option>
                                             </select>
                                             <label for="city">City</label>
                                             @error('city')
@@ -177,11 +170,11 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-floating">
                                             <input type="text" class="form-control" id="pincode" name="pincode" 
                                                 value="{{ old('pincode', $profile->pincode ?? '') }}" placeholder="Pincode">
-                                            <label for="pincode">Pincode</label>
+                                            <label for="pincode">Pincode <span class="text-danger">*</span></label>
                                             @error('pincode')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -194,11 +187,11 @@
                         <!-- Professional Details -->
                         @elseif ($currentStep == 2)
                             <fieldset>
-                                <legend class="mb-3">Professional Details</legend>
+                                <h4 class="text-primary mb-3">Professional Details</h4>
                                 <div class="row g-3">
                                     <div class="col-md-12">
                                         <div class="form-check form-check-inline me-5">
-                                            <input class="form-check-input profession_type" type="radio" name="profession_type" id="salariedTab" value="salaried" 
+                                            <input class="form-check-input profession_type" type="radio" name="profession_type" id="salariedTab" value="salaried" checked 
                                                 {{ old('profession_type', $professional->profession_type ?? '') == 'salaried' ? 'checked' : '' }}>
                                             <label for="salariedTab">Salaried Employees</label>
                                         </div>
@@ -212,7 +205,7 @@
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input type="text" class="form-control" id="company_name" name="company_name" value="{{ old('company_name', $professional->company_name ?? '') }}" placeholder="Company Name" required>
-                                            <label for="company_name">Company Name</label>
+                                            <label for="company_name">Company Name <span class="text-danger">*</span></label>
                                         </div>
                                         @error('company_name')
                                             <span class="text-danger">{{ $message }}</span>
@@ -222,7 +215,7 @@
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input type="text" class="form-control" id="industry" name="industry" value="{{ old('industry', $professional->industry ?? '') }}" placeholder="Industry" required>
-                                            <label for="industry">Industry</label>
+                                            <label for="industry">Nature of Business <span class="text-danger">*</span></label>
                                         </div>
                                         @error('industry')
                                             <span class="text-danger">{{ $message }}</span>
@@ -232,7 +225,7 @@
                                     <div class="col-md-12">
                                         <div class="form-floating">
                                             <input type="text" class="form-control" id="company_address" name="company_address" value="{{ old('company_address', $professional->company_address ?? '') }}" placeholder="Company Address" required>
-                                            <label for="company_address">Company Address</label>
+                                            <label for="company_address">Company Address <span class="text-danger">*</span></label>
                                         </div>
                                         @error('company_address')
                                             <span class="text-danger">{{ $message }}</span>
@@ -242,7 +235,7 @@
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input type="number" class="form-control" id="experience_year" name="experience_year" value="{{ old('experience_year', $professional->experience_year ?? '') }}" placeholder="Experience Year" required>
-                                            <label for="experience_year">Experience Year</label>
+                                            <label for="experience_year">Experience Year <span class="text-danger">*</span></label>
                                         </div>
                                         @error('experience_year')
                                             <span class="text-danger">{{ $message }}</span>
@@ -252,37 +245,47 @@
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input type="text" class="form-control" id="designation" name="designation" value="{{ old('designation', $professional->designation ?? '') }}" placeholder="Designation" required>
-                                            <label for="designation">Designation</label>
+                                            <label for="designation">Designation <span class="text-danger">*</span></label>
                                         </div>
                                         @error('designation')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-6" id="netsalary">
                                         <div class="form-floating">
                                             <input type="number" class="form-control" id="netsalary" name="netsalary" value="{{ old('netsalary', $professional->netsalary ?? '') }}" placeholder="Net Salary" required>
-                                            <label for="netsalary">Net Salary</label>
+                                            <label for="netsalary">Net Salary <span class="text-danger">*</span></label>
                                         </div>
                                         @error('netsalary')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-6" id="gross_salary">
                                         <div class="form-floating">
                                             <input type="number" class="form-control" id="gross_salary" name="gross_salary" value="{{ old('gross_salary', $professional->gross_salary ?? '') }}" placeholder="Gross Salary" required>
-                                            <label for="gross_salary">Gross Salary</label>
+                                            <label for="gross_salary">Gross Salary <span class="text-danger">*</span></label>
                                         </div>
                                         @error('gross_salary')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <div class="form-floating" id="selfincome">
+                                            <input type="number" class="form-control" id="selfincome" name="selfincome" value="{{ old('selfincome', $professional->selfincome ?? '') }}" placeholder="Total Income" required>
+                                            <label for="selfincome">Total Income <span class="text-danger">*</span></label>
+                                        </div>
+                                        @error('selfincome')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-6">
                                         <div class="form-floating" id="estabish_date">
                                             <input type="date" class="form-control" id="business_estabish_date" name="business_estabish_date" value="{{ old('business_estabish_date') }}" placeholder="Business Establish Date">
-                                            <label for="business_estabish_date">Business Establish Date</label>
+                                            <label for="business_estabish_date">Business Establish Date <span class="text-danger">*</span></label>
                                         </div>
                                         @error('business_estabish_date')
                                             <span class="text-danger">{{ $message }}</span>
@@ -648,6 +651,7 @@
         background-color: #0056b3;
     }
 </style>
+
 <script>
     document.getElementById('state').addEventListener('change', function () {
     const stateId = this.value;
@@ -682,6 +686,7 @@
     }
 });
 </script>
+
 <script>
     // Initialize loan index based on the count of existing loans
     let loanIndex = {{ count($existingLoans) ?? 0 }}; // Start from the number of existing loans
@@ -765,17 +770,27 @@
         }
     }
 </script>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const salariedTab = document.getElementById('salariedTab');
         const selfTab = document.getElementById('selfTab');
         const business_estabish_date = document.getElementById('estabish_date');
+        const selfincome = document.getElementById('selfincome');
+        const netsalary = document.getElementById('netsalary');
+        const gross_salary = document.getElementById('gross_salary');
 
         function toggleTextField() {
             if (selfTab.checked) {
                 business_estabish_date.style.display = 'block';
+                selfincome.style.display = 'block';
+                netsalary.style.display = 'none';
+                gross_salary.style.display = 'none';
             } else if (salariedTab.checked) {
                 business_estabish_date.style.display = 'none';
+                selfincome.style.display = 'none';
+                netsalary.style.display = 'block';
+                gross_salary.style.display = 'block';
             }
         }
 
