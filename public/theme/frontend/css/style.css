@@ -188,7 +188,7 @@
 .topbar .dropdown .dropdown-menu {
     transform: rotateX(0deg);
     visibility: visible;
-    background: var(--bs-light);
+    background: var(--bs-dark);
     padding-top: 10px;
     border: 0;
     transition: .5s;
@@ -1056,7 +1056,7 @@
 .profile-dash-drop .dropdown-menu {
     min-width: 10.3rem !important;
     background-color: #fff;
-    border-radius: 5px;
+    border-radius: 0px;
 }
 
 .navTrigger {
