@@ -6,7 +6,7 @@
 @section('content')
         <!-- Carousel Start -->
         <div class="header-carousel owl-carousel">
-            <div class="header-carousel-item bg-primary">
+            <div class="header-carousel-item hero-bg" style="background-image: url(../theme/frontend/img/banner-1.png);">
                 <div class="carousel-caption">
                     <div class="container">
                         <div class="row g-4 align-items-center">
@@ -21,11 +21,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6 animated fadeInRight">
+                            <!-- <div class="col-lg-6 animated fadeInRight">
                                 <div class="calrousel-img" style="object-fit: cover;">
                                     <img src="{{ asset('theme') }}/frontend/img/referral.png" class="img-fluid" alt="Fast Loan Process">
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
