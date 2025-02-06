@@ -5,7 +5,7 @@
             <div class="col-xl-9">
                 <div class="mb-5">
                     <div class="row g-4">
-                        <div class="col-md-6 col-lg-6 col-xl-5">
+                        <div class="col-md-6 col-sm-12">
                             <div class="footer-item">
                                 <a href="{{ url('/') }}" class="pb-3">
                                     <!-- <h3 class="text-white"><i class="fab fa-slack me-3"></i> LifeSure</h3> -->
@@ -21,7 +21,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="col-md-6 col-sm-6 col-xs-6">
                                 <div class="footer-item">
                                     <h4 class="text-white mb-4">Useful Links</h4>
                                     <a href="/about"><i class="fas fa-angle-right me-2"></i> About Us</a>
@@ -32,7 +32,7 @@
                                     <a href="/contact"><i class="fas fa-angle-right me-2"></i> Contact</a>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="col-md-6 col-sm-6 col-xs-6">
                                 <div class="footer-item">
                                     <h4 class="text-white mb-4">Services</h4>
                                     <a href="/about"><i class="fas fa-angle-right me-2"></i> Home Loan</a>
@@ -44,47 +44,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="pt-5" style="border-top: 1px solid rgba(255, 255, 255, 0.08);">
-                        <div class="row g-0">
-                            <div class="col-12">
-                                <div class="row g-4">
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="d-flex">
-                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                <i class="fas fa-map-marker-alt fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-white">Address</h4>
-                                                <p class="mb-0">Office No. 423, Sterling Center Pune.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="d-flex">
-                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                <i class="fas fa-envelope fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-white">Mail Us</h4>
-                                                <p class="mb-0">contact@jfinserv.com</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="d-flex">
-                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                <i class="fa fa-phone-alt fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-white">Phone</h4>
-                                                <p class="mb-0">+91 84212 16367</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
                     
                 <div class="col-xl-3">
@@ -122,9 +81,6 @@
                     <samll><span class="text-body"><a href="#" class="border-bottom text-white">2024 <i class="far fa-copyright text-light me-1"></i>Jfinserv Consultant</a>, All rights reserved | Developed By <a class="border-bottom text-white" href="https://jfstechnologies.com">JFS Technologies</a>.</span></small>
                 </div>
                 <div class="col-md-6 text-md-end text-body">
-                    <!--/*** This template is free as long as you keep the below author’s credit link/attribution link/backlink. ***/-->
-                    <!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
-                    <!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
                     <small>
                         <a class="text-white" href="/privacy-policy">Privacy Policy</a> | <a class="text-white" href="/terms-and-conditions">Terms & Condition</a>
                     </small>

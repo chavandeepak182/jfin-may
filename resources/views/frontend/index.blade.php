@@ -12,12 +12,12 @@
                         <div class="row g-4 align-items-center">
                             <div class="col-lg-6 animated fadeInLeft">
                                 <div class="text-sm-center text-md-start">
-                                    <h4 class="text-white text-uppercase fw-bold mb-4">Welcome To Jfinserv</h4>
-                                    <h1 class="display-3 text-white mb-4">Unique Reward & Earning Opportunity</h1>
+                                    <h4 class="text-white text-uppercase fw-bold mb-2">Welcome To Jfinserv</h4>
+                                    <h1 class="display-4 text-white mb-4">Unique Reward & Earning Opportunity</h1>
                                     <p class="mb-5 fs-5">We offer a unique earning opportunity through our referral program, rewarding both your referrals and those made by your friends.</p>
                                     <div class="d-flex justify-content-center justify-content-md-start flex-shrink-0 mb-4">
-                                        <a class="btn-search btn btn-light rounded-pill py-3 px-4 px-md-5 me-2 flex-shrink-0" data-bs-toggle="modal" data-bs-target="#searchModal" href="#"><i class="fas fa-info-circle me-2" style="font-size: 20px"></i> Enquire Now</a>
-                                        <a class="btn-search btn btn-light rounded-pill py-3 px-4 px-md-5 ms-2" href="{{ url('/applyNow') }}"><i class="far fa-hand-point-right me-2" style="font-size: 20px"></i> Apply Now</a>
+                                        <a class="btn-search btn btn-light rounded-1 py-3 px-4 px-md-5 me-2 flex-shrink-0" data-bs-toggle="modal" data-bs-target="#searchModal" href="#">ENQUIRE NOW</a>
+                                        <a class="btn-search btn btn-danger rounded-1 py-3 px-4 px-md-5 ms-2" href="{{ url('/applyNow') }}">APPLY NOW</a>
                                     </div>
                                 </div>
                             </div>
@@ -36,12 +36,12 @@
                         <div class="row g-4 align-items-center">
                             <div class="col-lg-6 animated fadeInLeft">
                                 <div class="text-sm-center text-md-start">
-                                    <h4 class="text-white text-uppercase fw-bold mb-4">Welcome To Jfinserv</h4>
-                                    <h1 class="display-3 text-white mb-4">Fastest, Secure & Easy Loan Process</h1>
+                                    <h4 class="text-white text-uppercase fw-bold mb-2">Welcome To Jfinserv</h4>
+                                    <h1 class="display-4 text-white mb-4">Fastest, Secure & Easy Loan Process</h1>
                                     <p class="mb-5 fs-5">Experience fast, secure loans with competitive rates and personalized support in Pune. Enjoy seamless service and exceptional rewards.</p>
                                     <div class="d-flex justify-content-center justify-content-md-start flex-shrink-0 mb-4">
-                                    <a class="btn-search btn btn-light rounded-pill py-3 px-4 px-md-5 me-2 flex-shrink-0" data-bs-toggle="modal" data-bs-target="#searchModal" href="#"><i class="fas fa-info-circle me-2" style="font-size: 20px"></i> Enquire Now</a>
-                                    <a class="btn-search btn btn-light rounded-pill py-3 px-4 px-md-5 ms-2" href="{{ url('/applyNow') }}"><i class="far fa-hand-point-right me-2" style="font-size: 20px"></i> Apply Now</a>
+                                    <a class="btn-search btn btn-light rounded-1 py-3 px-4 px-md-5 me-2 flex-shrink-0" data-bs-toggle="modal" data-bs-target="#searchModal" href="#">ENQUIRE NOW</a>
+                                    <a class="btn-search btn btn-danger rounded-1 py-3 px-4 px-md-5 ms-2" href="{{ url('/applyNow') }}">APPLY NOW</a>
                                     </div>
                                 </div>
                             </div>
@@ -146,7 +146,7 @@
         <div class="container-fluid bg-light about py-5 pt-5">
             <div class="container pb-5">
                 <div class="row g-5">
-                    <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.2s">
+                    <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.1s">
                         <div class="about-item-content bg-white rounded p-5 h-100">
                             <h4 class="text-primary">About Our Company</h4>
                             <h2 class="display-4 mb-4">Your Security. Our Priority.</h2>
@@ -156,10 +156,10 @@
                             <p class="text-dark"><i class="fas fa-check text-primary me-3 fa-lg"></i>Fast Disbursal Procedure</p>
                             <p class="text-dark"><i class="fas fa-check text-primary me-3 fa-lg"></i>Lowest rate of Interest</p>
                             <p class="text-dark mb-4"><i class="fas fa-check text-primary me-3 fa-lg"></i>Endless earning potential through referrals</p>
-                            <a class="btn btn-primary rounded-pill py-3 px-5" href="/about" target="_blank">Know More</a>
+                            <a class="btn btn-primary rounded-1 py-2 px-4 uppercase" href="/about" target="_blank">Know More</a>
                         </div>
                     </div>
-                    <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.2s">
+                    <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.1s">
                         <div class="bg-white rounded p-5 h-100">
                             <div class="row g-4 justify-content-center">
                                 <div class="col-12">
@@ -223,7 +223,7 @@
                     <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="service-item">
                             <div class="service-img">
-                                <img src="{{ asset('theme') }}/frontend/img/Home_Loan.svg" class="img-fluid rounded-top w-100" alt="">
+                                <img src="{{ asset('theme') }}/frontend/img/Home_Loan.jpg" class="img-fluid rounded-top w-100" alt="">
                                 <!-- <div class="service-icon p-3">
                                     <i class="fa-solid fa-house-chimney fa-2x"></i>
                                 </div> -->
@@ -232,7 +232,7 @@
                                 <div class="service-content-inner">
                                     <a href="#" class="d-inline-block h4 mb-4">Home Loan</a>
                                     <p class="mb-4">We understand you're seeking a new home, with low rates & a seamless process, we’re here to help you through this important financial decision.</p>
-                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="/home-loan" target="_blank">Know More</a>
+                                    <a class="btn btn-primary rounded-1 uppercase py-2 px-4" href="/home-loan" target="_blank">Know More</a>
                                 </div>
                             </div>
                         </div>
@@ -240,7 +240,7 @@
                     <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.4s">
                         <div class="service-item">
                             <div class="service-img">
-                                <img src="{{ asset('theme') }}/frontend/img/Project_Loan.svg" class="img-fluid rounded-top w-100" alt="">
+                                <img src="{{ asset('theme') }}/frontend/img/Project_Loan.jpg" class="img-fluid rounded-top w-100" alt="">
                                 <!-- <div class="service-icon p-3">
                                     <i class="fa-solid fa-building-shield fa-2x"></i>
                                 </div> -->
@@ -249,7 +249,7 @@
                                 <div class="service-content-inner">
                                     <a href="#" class="d-inline-block h4 mb-4">Project Loan</a>
                                     <p class="mb-4">We simplify construction financing with low rates and an easy online application, offering tailored loans that ensure a smooth and timely process.</p>
-                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="/project-loan" target="_blank">Know More</a>
+                                    <a class="btn btn-primary rounded-1 uppercase py-2 px-4" href="/project-loan" target="_blank">Know More</a>
                                 </div>
                             </div>
                         </div>
@@ -257,7 +257,7 @@
                     <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.6s">
                         <div class="service-item">
                             <div class="service-img">
-                                <img src="{{ asset('theme') }}/frontend/img/MSME_Loan.svg" class="img-fluid rounded-top w-100" alt="">
+                                <img src="{{ asset('theme') }}/frontend/img/MSME_Loan.jpg" class="img-fluid rounded-top w-100" alt="">
                                 <!-- <div class="service-icon p-3">
                                     <i class="fa-solid fa-business-time fa-2x"></i>
                                 </div> -->
@@ -266,7 +266,7 @@
                                 <div class="service-content-inner">
                                     <a href="#" class="d-inline-block h4 mb-4">MSME Loan</a>
                                     <p class="mb-4">This service meets the diverse needs of small and medium businesses. Whether you're expanding, investing in equipment, or increasing capital.</p>
-                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="/msme-loan" target="_blank">Know More</a>
+                                    <a class="btn btn-primary rounded-1 uppercase py-2 px-4" href="/msme-loan" target="_blank">Know More</a>
                                 </div>
                             </div>
                         </div>
@@ -274,7 +274,7 @@
                     <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.8s">
                         <div class="service-item">
                             <div class="service-img">
-                                <img src="{{ asset('theme') }}/frontend/img/Loan_Against_Property.svg" class="img-fluid rounded-top w-100" alt="">
+                                <img src="{{ asset('theme') }}/frontend/img/Loan_Against_Property.jpg" class="img-fluid rounded-top w-100" alt="">
                                 <!-- <div class="service-icon p-3">
                                     <i class="fa-solid fa-house-laptop fa-2x"></i>
                                 </div> -->
@@ -283,13 +283,13 @@
                                 <div class="service-content-inner">
                                     <a href="#" class="d-inline-block h4 mb-4">Loan Against Property</a>
                                     <p class="mb-4">Jfinserv offers Loan Against Property with flexible repayment options, secured by your property. Check your eligibility and enjoy exclusive add-on and tax benefits.</p>
-                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="/loan-against-property">Know More</a>
+                                    <a class="btn btn-primary uppercase rounded-1 py-2 px-4" href="/loan-against-property">Know More</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.2s">
-                        <a class="btn btn-primary rounded-pill py-3 px-5" href="/services">More Services</a>
+                    <div class="col-12 text-center wow fadeInUp mt-5" data-wow-delay="0.2s">
+                        <a class="btn btn-dark uppercase rounded-1 py-3 px-5" href="/services">More Services</a>
                     </div>
                 </div>
             </div>
@@ -306,12 +306,7 @@
                 <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.2s">
                     <div class="testimonial-item bg-white rounded">
                         <div class="row g-0">
-                            <div class="col-4  col-lg-4 col-xl-3">
-                                <div class="h-100">
-                                    <img src="{{ asset('theme') }}/frontend/img/testimonial-1.jpg" class="img-fluid h-100 rounded" style="object-fit: cover;" alt="">
-                                </div>
-                            </div>
-                            <div class="col-8 col-lg-8 col-xl-9">
+                            <div class="col-12 col-lg-12 col-xl-12">
                                 <div class="d-flex flex-column my-auto text-start p-4">
                                     <h4 class="text-dark mb-0">Vishal Sarraf</h4>
                                     <p class="mb-3">Businessman</p>
@@ -329,12 +324,7 @@
                     </div>
                     <div class="testimonial-item bg-white rounded">
                         <div class="row g-0">
-                            <div class="col-4 col-lg-4 col-xl-3">
-                                <div class="h-100">
-                                    <img src="{{ asset('theme') }}/frontend/img/testimonial-3.jpg" class="img-fluid h-100 rounded" style="object-fit: cover;" alt="">
-                                </div>
-                            </div>
-                            <div class="col-8 col-lg-8 col-xl-9">
+                            <div class="col-12 col-lg-12 col-xl-12">
                                 <div class="d-flex flex-column my-auto text-start p-4">
                                     <h4 class="text-dark mb-0">Dr. Neha Pawar</h4>
                                     <p class="mb-3">Doctor</p>
@@ -352,12 +342,7 @@
                     </div>
                     <div class="testimonial-item bg-white rounded">
                         <div class="row g-0">
-                            <div class="col-4  col-lg-4 col-xl-3">
-                                <div class="h-100">
-                                    <img src="{{ asset('theme') }}/frontend/img/testimonial-1.jpg" class="img-fluid h-100 rounded" style="object-fit: cover;" alt="">
-                                </div>
-                            </div>
-                            <div class="col-8 col-lg-8 col-xl-9">
+                            <div class="col-12 col-lg-12 col-xl-12">
                                 <div class="d-flex flex-column my-auto text-start p-4">
                                     <h4 class="text-dark mb-0">Rahul Sonawane</h4>
                                     <p class="mb-3">IT Professional</p>
@@ -439,10 +424,22 @@
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingFive">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                            Q: Does Jfinserv charges any commission?
+                                            Q: Is collateral required for obtaining a loan?
                                         </button>
                                     </h2>
                                     <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            A: Loan qualification depends on the financial viability of your project. Partial security may be required depending on the nature and size of the loan amount.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingSix">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                            Q: Does Jfinserv charges any commission?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
                                             A: No, We do not charge any commission from customer. Our services are free of cost for all users/customers.
                                         </div>
@@ -452,7 +449,7 @@
                         </div>
                     </div>
                     <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.4s">
-                        <img src="{{ asset('theme') }}/frontend/img/faq-2.png" class="img-fluid w-100" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/faq.jpg" class="img-fluid w-100" alt="">
                     </div>
                 </div>
             </div>
