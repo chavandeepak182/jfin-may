@@ -19,6 +19,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CibilController;
 use App\Http\Controllers\MisController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\LeadController;
 use Illuminate\Support\Facades\Route;
 use App\Exports\EligibilityExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -371,3 +372,6 @@ Route::get('/messages/compose', [MessageController::class, 'compose'])->name('me
 Route::post('/messages/send', [MessageController::class, 'send'])->name('messages.send'); // Send Mail
 Route::get('/messages/sent', [MessageController::class, 'sentMessages'])->name('messages.sent'); // Sent Messages
 Route::get('/messages/{id}', [MessageController::class, 'show'])->name('messages.show');
+
+//Lead management
+Route::resource('/admin/leads', LeadController::class);

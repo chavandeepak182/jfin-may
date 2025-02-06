@@ -208,6 +208,22 @@
                 </li>
 
             <?php } ?>  
+            <?php    if($role_id == env('agentRole_id') || $role_id == env('adminRole_id')) { ?>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLead"
+                        aria-expanded="true" aria-controls="collapseLead">
+                        <i class="fas fa-fw fa-folder custom-icon"></i>
+                        <span>Lead Management</span>
+                    </a>
+                    <div id="collapseLead" class="collapse" aria-labelledby="headingLoan" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Lead Management</h6>
+                            <a class="collapse-item" href="{{ route('leads.create') }}">Add Lead </a>
+                            <a class="collapse-item" href="{{ route('leads.index') }}">All Leads </a>
+                        </div>
+                    </div>
+                </li>
+            <?php } ?> 
 
             <!-- Nav Item - Pages Collapse Menu -->
             <?php    if($role_id == 4) { ?>   
