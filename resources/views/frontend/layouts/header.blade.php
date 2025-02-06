@@ -87,12 +87,12 @@
                             @else
                             <!-- Login Button for Guests -->
                             <div class="nav-btn">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn btn-dark rounded-0 px-3 me-3 flex-shrink-0">LOGIN</a>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn btn-dark rounded-1 px-3 me-3 flex-shrink-0">LOGIN</a>
                             </div>
                             @endif
 
                             <div class="nav-btn">
-                                <a class="btn-search btn btn-danger rounded-0 px-3 ms-1" href="{{ url('/applyNow') }}">APPLY NOW</a>
+                                <a class="btn-search btn btn-danger rounded-1 px-3 ms-1" href="{{ url('/applyNow') }}">APPLY NOW</a>
                             </div>
                         </div>
                     </div>
@@ -132,7 +132,7 @@
                             <a href="{{ url('referral-program')}}" class="nav-item {{ Request::is('referral-program') ? 'active' : '' }}">REFERRALS</a>
                             <a href="https://jfinserv.com/blog/" class="nav-item {{ Request::is('blog') ? 'active' : '' }}">BLOGS</a>
                             <div class="nav-btn px-3">
-                                <a href="{{ url('contact')}}" class="btn btn-primary rounded-0 py-2 px-4 ms-3 flex-shrink-0 nav-item {{ Request::is('contact') ? 'active' : '' }}">CONTACT</a>
+                                <a href="{{ url('contact')}}" class="btn btn-primary rounded-1 py-2 px-4 ms-3 flex-shrink-0 nav-item {{ Request::is('contact') ? 'active' : '' }}">CONTACT</a>
                             </div>
                         </div>
                     </div>
