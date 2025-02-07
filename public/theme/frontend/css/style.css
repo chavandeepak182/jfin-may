@@ -343,7 +343,7 @@
         transform: rotateX(0deg);
         visibility: visible;
         margin-top: 8px;
-        background: #000046;
+        background: #000000;
         transition: .5s;
         opacity: 1;
     }
@@ -446,7 +446,7 @@
     background-position: center center !important;
     background-repeat: no-repeat !important;
     background-size: cover !important;
-    padding: 90px 0 50px 0;
+    padding: 90px 0 80px 0;
     transition: 0.5s;
 }
 

@@ -2,61 +2,64 @@
 @section('title', "Transactions History")
 
 @section('content')
-<div style="padding: 1%"> 
-    <h1><center>All Transactions</center></h1> 
+<div class="container-fluid p-0">
+	<h1 class="h3 mb-3"><strong>Welcome</strong> to Jfinserv</h1>
+	<div class="row">
 
-    <!-- Search Form -->
-    <form method="GET" action="{{ route('transactions.list') }}" class="mb-4">
-        <div class="input-group">
-            <input type="text" name="search" class="form-control" placeholder="Search transactions..." value="{{ request()->input('search') }}">
-            <button type="submit" class="btn btn-primary">Search</button>
-        </div>
-    </form>
+        <!-- Search Form -->
+        <form method="GET" action="{{ route('transactions.list') }}" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Search transactions..." value="{{ request()->input('search') }}">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+    </div> 
 
     <!-- Transactions Table -->
     <div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Transactions List</h6>
-    </div>
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Transactions List</h6>
+        </div>
 
-    <div class="card-body">
-        <div class="table-responsive" id="transaction_table">
-            <table class="table table-striped" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>User Name</th>
-                        <th>Transaction ID</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Created At</th>
-                        <th>Action</th> <!-- Added Action Column for Eye Button -->
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach($transactions as $transaction) <!-- Directly use transactions variable -->
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $transaction->user_name ?? 'No Name' }}</td>
-                        <td>{{ $transaction->transaction_id }}</td>
-                        <td>{{ $transaction->amount }}</td>
-                        <td>{{ $transaction->status }}</td>
-                        <td>{{ \Carbon\Carbon::parse($transaction->created_at)->format('d M Y, h:i A') }}</td>
-                        <td>
-                            <button class="btn btn-info show-history-btn" data-transaction-id="{{ $transaction->transaction_id }}">
-                                <i class="fa fa-eye"></i> View Invoice
-                            </button>
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+        <div class="card-body">
+            <div class="table-responsive" id="transaction_table">
+                <table class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>User Name</th>
+                            <th>Transaction ID</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th>Action</th> <!-- Added Action Column for Eye Button -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($transactions as $transaction) <!-- Directly use transactions variable -->
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $transaction->user_name ?? 'No Name' }}</td>
+                            <td>{{ $transaction->transaction_id }}</td>
+                            <td>{{ $transaction->amount }}</td>
+                            <td>{{ $transaction->status }}</td>
+                            <td>{{ \Carbon\Carbon::parse($transaction->created_at)->format('d M Y, h:i A') }}</td>
+                            <td>
+                                <button class="btn btn-info show-history-btn" data-transaction-id="{{ $transaction->transaction_id }}">
+                                    <i class="fa fa-eye"></i> View Invoice
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
 
-            <!-- Laravel Pagination -->
-            <div class="d-flex justify-content-center mt-3">
-                {!! $transactions->appends(['search' => request()->input('search')])->links('pagination::bootstrap-5') !!}
+                <!-- Laravel Pagination -->
+                <div class="d-flex justify-content-center mt-3">
+                    {!! $transactions->appends(['search' => request()->input('search')])->links('pagination::bootstrap-5') !!}
+                </div>
+
             </div>
-
         </div>
     </div>
 </div>

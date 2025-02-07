@@ -10,7 +10,7 @@
 				@if ($loans->isNotEmpty())
 					<div class="accordion" id="loanAccordion">
 						@foreach ($loans as $loan)
-							<div class="accordion-item">
+							<div class="accordion-item mb-3 rounded-0 shadow">
 								<h2 class="accordion-header" id="heading{{ $loan->loan_reference_id }}">
 									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $loan->loan_reference_id }}" aria-expanded="false" aria-controls="collapse{{ $loan->loan_reference_id }}">
 										<b>Loan ID: </b> {{ $loan->loan_reference_id }} <span class="px-3">|</span> <b>Status: </b> {{ $loan->status }}

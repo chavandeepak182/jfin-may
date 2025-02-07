@@ -21,7 +21,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-6">
+                            <div class="col-md-3 col-sm-6 col-xs-6">
                                 <div class="footer-item">
                                     <h4 class="text-white mb-4">Useful Links</h4>
                                     <a href="/about"><i class="fas fa-angle-right me-2"></i> About Us</a>
@@ -32,7 +32,7 @@
                                     <a href="/contact"><i class="fas fa-angle-right me-2"></i> Contact</a>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-6">
+                            <div class="col-md-3 col-sm-6 col-xs-6">
                                 <div class="footer-item">
                                     <h4 class="text-white mb-4">Services</h4>
                                     <a href="/about"><i class="fas fa-angle-right me-2"></i> Home Loan</a>
