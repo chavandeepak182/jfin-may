@@ -445,8 +445,7 @@
     background: url(../img/about.jpg);;
     background-position: center center !important;
     background-repeat: no-repeat !important;
-    background-size: cover !important;
-    padding: 90px 0 80px 0;
+    padding: 65px 0 65px 0;
     transition: 0.5s;
 }
 
