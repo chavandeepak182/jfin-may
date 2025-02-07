@@ -59,7 +59,7 @@
         </div>
 
         <div class="form-group">
-            <label>Campaign Name</label>
+            <label>Builder/Project Name</label>
             <input type="text" name="campaign_name" class="form-control">
         </div>
 
@@ -95,11 +95,11 @@
         <div class="form-group">
             <label>Possession Timeframe *</label>
             <select name="possession_time" class="form-control" required>
-                <option value="Immediate">Immediate</option>
+                <option value="Ready To Move">Ready To Move</option>
                 <option value="3 Months">3 Months</option>
                 <option value="6 Months">6 Months</option>
                 <option value="1 Year">1 Year</option>
-                <option value="Custom">Custom</option>
+                <option value="Ongoing">Ongoing</option>
             </select>
         </div>
 
@@ -140,7 +140,7 @@
         </div>
 
         <div class="form-group">
-            <label>Lead Score *</label>
+            <label>Available Units *</label>
             <input type="number" name="lead_score" class="form-control" required>
         </div>
 
