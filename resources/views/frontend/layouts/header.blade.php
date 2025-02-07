@@ -116,7 +116,7 @@
                             <a href="{{ url('/') }}" class="nav-item {{ Request::is('/') ? 'active' : '' }}">HOME</a>
                             <a href="{{ url('about') }}" class="nav-item {{ Request::is('about') ? 'active' : '' }}">ABOUT</a>
                             <div class="nav-item dropdown">
-                                <a href="{{ url('services') }}" class="nav-link nav-item" data-bs-toggle="dropdown">
+                                <a href="{{ url('services') }}" class="nav-link nav-item">
                                     <span class="dropdown-toggle">SERVICES</span>
                                 </a>
                                 <div class="dropdown-menu">

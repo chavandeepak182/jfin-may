@@ -3,56 +3,61 @@
 
 @section('content')
 <div class="container-fluid p-0">
-    <h2 class="mb-3 text-center">Child Nodes and Their Loans</h2>
+	<h2 class="mb-3 text-center">Your Downline & Their Loans</h2>
+	<div class="row">
+		<div class="col-md-10 mx-auto d-flex">
+			<div class="w-100">
+                @if($descendants->isEmpty())
+                    <p class="text-center">No child nodes found for this user.</p>
+                @else
+                    <table class="table table-bordered bg-white mt-4">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Referral Code</th>
+                                <th>Parent Name</th>
+                                <th>Loans</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($descendants as $index => $descendant)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $descendant->name }}</td>
+                                    <td>{{ $descendant->referral_code }}</td>
+                                    <td>{{ $descendant->parent_name }}</td>
+                                    <td>
+                                        <select class="form-select child-loans-dropdown" data-user-id="{{ $descendant->user_id }}">
+                                            <option value="" selected disabled>Select to view loans</option>
+                                            <option value="view">View Loans</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
 
-    @if($descendants->isEmpty())
-        <p class="text-center">No child nodes found for this user.</p>
-    @else
-        <table class="table table-bordered mt-4">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Referral Code</th>
-                    <th>Parent Name</th>
-                    <th>Loans</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($descendants as $index => $descendant)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $descendant->name }}</td>
-                        <td>{{ $descendant->referral_code }}</td>
-                        <td>{{ $descendant->parent_name }}</td>
-                        <td>
-                            <select class="form-select child-loans-dropdown" data-user-id="{{ $descendant->user_id }}">
-                                <option value="" selected disabled>Select to view loans</option>
-                                <option value="view">View Loans</option>
-                            </select>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        <div id="loan-details" class="mt-4" style="display:none;">
-            <h3>Loans for Selected User</h3>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Loan Reference ID</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Category</th>
-                        <th>Created At</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+                    <div id="loan-details" class="mt-4" style="display:none;">
+                        <h3>Loans for Selected User</h3>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Loan Reference ID</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Category</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                @endif
+            </div>
         </div>
-    @endif
+    </div>
 </div>
 @endsection
 

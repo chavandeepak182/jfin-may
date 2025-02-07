@@ -28,31 +28,31 @@
 
 				<ul class="sidebar-nav">
 					<!-- Dashboard Link -->
-					<li class="sidebar-item active">
+					<li class="sidebar-item {{ Request::is('my-profile') ? 'active' : '' }}">
 						<a class="sidebar-link" href="{{ url('/my-profile') }}">
 							<i class="fas fa-tachometer-alt custom-icon"></i> <span class="align-middle">Dashboard</span>
 						</a>
 					</li>
 
 					<!-- My Loans Dropdown -->
-					<li class="sidebar-item">
+					<li class="sidebar-item {{ Request::is('myloans*') || Request::is('loans-list') || Request::is('myloans') ? 'active' : ''}}">
 						<a class="sidebar-link" href="#" data-bs-toggle="collapse" data-bs-target="#loan-dropdown" aria-expanded="false">
 							<i class="align-middle" data-feather="layers"></i> <span class="align-middle">My Loans <i class="fas fa-angle-down"></i></span>
 						</a>
 						<ul class="collapse" id="loan-dropdown">
-							<li><a class="sidebar-link" href="{{ route('loan.myloans') }}">Track Loan</a></li>
 							<li><a class="sidebar-link" href="{{ route('loans.loans-list') }}">Total Loans</a></li>
+							<li><a class="sidebar-link" href="{{ route('loan.myloans') }}">Track Loan</a></li>
 						</ul>
 					</li>
 
-					<li class="sidebar-item">
+					<li class="sidebar-item {{ Request::is('child-nodes*') ? 'active' : ''}}">
 						<a class="sidebar-link" href="{{ route('user.childNodes') }}">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">LegDown</span>
                         </a>
 					</li> 	
 
 					<!-- My Details Dropdown -->
-					<li class="sidebar-item">
+					<li class="sidebar-item {{ Request::is('mypersonal*') || Request::is('mypersonal') || Request::is('myprofessional') || Request::is('myeducation') || Request::is('mydocuments') ? 'active' : ''}}">
 						<a class="sidebar-link" href="#" data-bs-toggle="collapse" data-bs-target="#details-dropdown" aria-expanded="false">
 							<i class="align-middle" data-feather="user"></i> <span class="align-middle">My Details <i class="fas fa-angle-down"></i></span>
 						</a>
@@ -64,7 +64,7 @@
 						</ul>
 					</li>
 
-					<li class="sidebar-item">
+					<li class="sidebar-item {{ Request::is('user/walletbalance*') || Request::is('user/walletbalance') || Request::is('user/transactions') ? 'active' : ''}}">
 						<a class="sidebar-link" href="#" data-bs-toggle="collapse" data-bs-target="#referral-dropdown" aria-expanded="false">
 							<i class="align-middle" data-feather="layers"></i> <span class="align-middle">Referral <i class="fas fa-angle-down"></i></span>
 						</a>
