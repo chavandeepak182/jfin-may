@@ -47,7 +47,7 @@
                 </select>
             </div>
             <div class="form-group col-md-6">
-                <label>Campaign Name</label>
+                <label>Builder/Project Name</label>
                 <input type="text" name="campaign_name" class="form-control" value="{{ old('campaign_name', $lead->campaign_name) }}">
             </div>
         </div>
@@ -80,11 +80,11 @@
             <div class="form-group col-md-6">
                 <label>Possession Timeframe *</label>
                 <select name="possession_time" class="form-control" required>
-                    <option value="Immediate" {{ $lead->possession_time == 'Immediate' ? 'selected' : '' }}>Immediate</option>
+                    <option value="Ready To Move" {{ $lead->possession_time == 'Ready To Move' ? 'selected' : '' }}>Ready To Move</option>
                     <option value="3 Months" {{ $lead->possession_time == '3 Months' ? 'selected' : '' }}>3 Months</option>
                     <option value="6 Months" {{ $lead->possession_time == '6 Months' ? 'selected' : '' }}>6 Months</option>
                     <option value="1 Year" {{ $lead->possession_time == '1 Year' ? 'selected' : '' }}>1 Year</option>
-                    <option value="Custom" {{ $lead->possession_time == 'Custom' ? 'selected' : '' }}>Custom</option>
+                    <option value="Ongoing" {{ $lead->possession_time == 'Ongoing' ? 'selected' : '' }}>Ongoing</option>
                 </select>
             </div>
         </div>
@@ -117,7 +117,7 @@
                 <input type="date" name="follow_up_date" class="form-control" value="{{ old('follow_up_date', $lead->follow_up_date) }}">
             </div>
             <div class="form-group col-md-6">
-                <label>Lead Score *</label>
+                <label>Available Units *</label>
                 <input type="number" name="lead_score" class="form-control" value="{{ old('lead_score', $lead->lead_score) }}" required>
             </div>
         </div>

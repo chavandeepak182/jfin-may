@@ -39,21 +39,25 @@ JFS | Leads
                 <table id="example" class="table" style="width:100%">
                     <thead>
                         <tr>
+                            <th>#</th> <!-- Index Column -->
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Lead Source</th>
+                            <th>Follow Up Date</th>
                             <th>Assigned To</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($leads as $lead)
+                        @foreach($leads as $index => $lead)
                         <tr>
+                            <td>{{ $leads->firstItem() + $index }}</td> <!-- Serial Number -->
                             <td>{{ $lead->name }}</td>
                             <td>{{ $lead->email }}</td>
                             <td>{{ $lead->phone }}</td>
                             <td>{{ $lead->lead_source }}</td>
+                            <td>{{ \Carbon\Carbon::parse($lead->follow_up_date)->format('d M Y') }}</td>
                             <td>{{ $lead->agent->name ?? 'N/A' }}</td>
                             <td>
                                 <a class="btn btn-info btn-xs view" title="View" href="{{ route('leads.show', $lead->id) }}">
@@ -75,10 +79,12 @@ JFS | Leads
                     </tbody>
                     <tfoot>
                         <tr>
+                            <th>#</th> <!-- Index Column -->
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Lead Source</th>
+                            <th>Follow Up Date</th>
                             <th>Assigned To</th>
                             <th>Action</th>
                         </tr>
@@ -88,6 +94,7 @@ JFS | Leads
                     {{ $leads->links() }}
                 </div>
             </div>
+
         </div>
     </div>
 </div>
