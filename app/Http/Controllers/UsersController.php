@@ -760,6 +760,42 @@ public function customerLoans()
 
     return view('frontend.profile.myloanlist', compact('loans', 'statuses', 'statusFilter'));
 }
+public function mydetails(Request $request)
+{
+    $section = $request->query('section', 'personal'); // Default to 'personal'
+    $userId = session('user_id'); // Retrieve user ID from session
+
+    if (!$userId) {
+        return redirect()->route('login')->withErrors('User session expired. Please log in again.');
+    }
+
+    // Fetch user information
+    $user = DB::table('users')->where('id', $userId)->first();
+
+    // Fetch profile, professional, and educational details
+    $profile = DB::table('profile')->where('user_id', $userId)->first();
+    $professionalDetails = DB::table('professional_details')->where('user_id', $userId)->first();
+    $educationalDetails = DB::table('education_details')->where('user_id', $userId)->first();
+
+    // Fetch user documents
+    $documents = DB::table('documents')->where('user_id', $userId)->get();
+
+    // Fetch notifications
+    $notificationsResponse = $this->getNotifications($userId, 5, 'Profile update');
+
+    if ($notificationsResponse->status() !== 200) {
+        Log::error('Failed to fetch notifications', ['response' => $notificationsResponse->getContent()]);
+        $notifications = [];
+    } else {
+        $notifications = $notificationsResponse->getData()->notifications;
+    }
+
+    // Return a single Blade view
+    return view('frontend.profile.personal-info', compact(
+        'user', 'profile', 'professionalDetails', 'educationalDetails', 'documents', 'notifications', 'section'
+    ));
+}
+
 
     public function mypersonal(Request $request)
 {
