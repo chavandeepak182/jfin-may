@@ -994,14 +994,14 @@
 
 /* Navbar section */
 
-.nav {
+/* .nav {
     width: 100% !important;
     height: 65px!important;
     position: fixed!important;
     line-height: 65px!important;
     text-align: center!important;
     z-index: 99999;
-}
+} */
 
 .nav div.logo {
     float: left;
@@ -1587,6 +1587,8 @@ ul.detail_features li strong {
     h4,.h4{font-size:1.25rem}
 }
 
-.rt-img{
+.rt-img {
     background-image: url(../img/firstloan.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
 }
