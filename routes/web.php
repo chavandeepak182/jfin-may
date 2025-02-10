@@ -102,9 +102,7 @@ Route::post('update_password', [FrontendController::class, 'update_password'])->
 Route::get('/notifications', [UsersController::class, 'showNotifications'])->name('notifications.index');
 Route::post('/notifications/read/{id}', [UsersController::class, 'markAsRead']);
 Route::get('/notifications', [UsersController::class, 'getNotifications']);
-Route::get('/cities/{state_id}', function ($state_id) {
-    return DB::table('cities')->where('state_id', $state_id)->get();
-})->name('getCities');
+Route::get('/cities/{state_id}', [LoanApplicationController::class, 'getCities'])->name('getCities');
 
 
 //loan
