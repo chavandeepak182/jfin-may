@@ -320,7 +320,11 @@ public function disbursed()
 
     return view('frontend.disbursed_loans', compact('data'));
 }
-
+public function getCities($state_id)
+    {
+        $cities = DB::table('cities')->where('state_id', $state_id)->get();
+        return response()->json($cities);
+    }
     public function start_loan($id)
     {
         $currentStep = 1;
@@ -489,18 +493,18 @@ public function disbursed()
 
     protected function handleProfessionalDetails(Request $request, $userId)
     {
-    $validated = $request->validate([
-        'profession_type' => 'required|string|in:salaried,self',
-        'company_name' => 'required|string|max:255',
-        'industry' => 'required|string|max:100',
-        'company_address' => 'required|string|max:255',
-        'experience_year' => 'required|integer',
-        'designation' => 'required|string|max:100',
-        'netsalary' => 'nullable|numeric',
-        'selfincome' => 'nullable|numeric',
-        'business_establish_date' => 'nullable|date',
-        'gross_salary' => 'nullable|numeric'
-    ]);
+        $validated = $request->validate([
+            'profession_type' => 'required|string|in:salaried,self',
+            'company_name' => 'required|string|max:255',
+            'industry' => 'required|string|max:100',
+            'company_address' => 'required|string|max:255',
+            'experience_year' => 'required|integer',
+            'designation' => 'required|string|max:100',
+            'netsalary' => 'nullable|numeric',
+            'selfincome' => 'nullable|numeric',
+            'business_establish_date' => 'nullable|date',
+            'gross_salary' => 'nullable|numeric'
+        ]);
 
         $is_loan = Session::get('is_loan');
         $is_exist = DB::table('professional_details')->where('user_id', $userId)->first();

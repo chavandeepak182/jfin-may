@@ -162,7 +162,10 @@
                                     <div class="col-md-4">
                                         <div class="form-floating">
                                             <select class="form-control" id="city" name="city" required>
-                                                <option value="">Select City <span class="text-danger">*</span></option>
+                                                <option value="">Select City</option>
+                                                @if(isset($profile->city))
+                                                    <option value="{{ $profile->city }}" selected>{{ optional(DB::table('cities')->where('id', $profile->city)->first())->city }}</option>
+                                                @endif
                                             </select>
                                             <label for="city">City</label>
                                             @error('city')
@@ -284,9 +287,9 @@
 
                                     <div class="col-md-6">
                                         <div class="form-floating" id="establish_date">
-                                        <input type="date" class="form-control" id="business_establish_date" name="business_establish_date" 
-                                            value="{{ old('business_establish_date', $professionalDetails->business_establish_date ?? '') }}" 
-                                            placeholder="Business Establish Date">
+                                            <input type="date" class="form-control" id="business_establish_date" name="business_establish_date" 
+                                                value="{{ old('business_establish_date', isset($professional->business_establish_date) ? \Carbon\Carbon::parse($professional->business_establish_date)->format('Y-m-d') : '') }}" 
+                                                placeholder="Business Establish Date">
                                             <label for="business_establish_date">Business Establish Date <span class="text-danger">*</span></label>
                                         </div>
                                         @error('business_establish_date')
@@ -647,36 +650,27 @@
 </style>
 
 <script>
-    document.getElementById('state').addEventListener('change', function () {
+   document.getElementById('state').addEventListener('change', function () {
     const stateId = this.value;
     const citySelect = document.getElementById('city');
-    citySelect.innerHTML = '<option value="">Select City</option>';  // Reset the options first
+    citySelect.innerHTML = '<option value="">Select City</option>';  // Reset options
 
     if (stateId) {
         fetch(`/cities/${stateId}`)
             .then(response => response.json())
             .then(cities => {
-                // Ensure the cities data is received correctly
-                console.log(cities);  // Log to the console to verify the data
-
                 if (cities.length > 0) {
                     cities.forEach(city => {
                         const option = document.createElement('option');
-                        option.value = city.id;  // Use the 'id' field as value
-                        option.textContent = city.city;  // Use the 'city' field as text
+                        option.value = city.id;  // ID of city
+                        option.textContent = city.city;  // Name of city
                         citySelect.appendChild(option);
                     });
                 } else {
-                    // If no cities are found, show an option indicating that
-                    const option = document.createElement('option');
-                    option.value = '';
-                    option.textContent = 'No cities available';
-                    citySelect.appendChild(option);
+                    citySelect.innerHTML = '<option value="">No cities available</option>';
                 }
             })
-            .catch(error => {
-                console.error('Error fetching cities:', error);
-            });
+            .catch(error => console.error('Error fetching cities:', error));
     }
 });
 </script>

@@ -47,7 +47,7 @@
                                             <select class="form-control" name="property_type" id="propertyType">
                                                 <option value="">Select Property Type</option>
                                                 <?php foreach($data['category'] as $v) { ?>
-                                                    <option value="<?php echo $v->category_name; ?>"><?php echo $v->category_name; ?></option>
+                                                    <option value="<?php echo $v->pid; ?>"><?php echo $v->category_name; ?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -419,7 +419,7 @@ function deletePropertie(id)
 </script>
 <script>
     document.getElementById('propertyType').addEventListener('change', function() {
-        var propertyType = this.value;
+        var propertyTypeId = this.value; // Now stores ID instead of category name
         var landTypeDropdown = document.getElementById('landType');
         landTypeDropdown.innerHTML = ''; // Clear existing options
 
@@ -428,20 +428,20 @@ function deletePropertie(id)
         defaultOption.value = "";
         landTypeDropdown.appendChild(defaultOption);
 
-        if (propertyType === 'Residential') {
-            var options = ['Plot', 'Flat', 'Bungalow', 'Villa'];
-        } else if (propertyType === 'Commercial') {
-            var options = ['Office', 'Shop', 'Showroom'];
-        } else {
-            var options = [];
-        }
+        // Mapping property category IDs to land type options
+        var landTypeOptions = {
+            1: ['Plot', 'Flat', 'Bungalow', 'Villa'], // Example: Residential (pid = 1)
+            2: ['Office', 'Shop', 'Showroom'] // Example: Commercial (pid = 2)
+        };
 
-        options.forEach(function(type) {
-            var option = document.createElement("option");
-            option.text = type;
-            option.value = type;
-            landTypeDropdown.appendChild(option);
-        });
+        if (landTypeOptions.hasOwnProperty(propertyTypeId)) {
+            landTypeOptions[propertyTypeId].forEach(function(type) {
+                var option = document.createElement("option");
+                option.text = type;
+                option.value = type;
+                landTypeDropdown.appendChild(option);
+            });
+        }
     });
 </script>
 @endsection
