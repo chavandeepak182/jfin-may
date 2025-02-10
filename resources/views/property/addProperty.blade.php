@@ -5,28 +5,26 @@
 @endsection
 @section('content')
 @parent
-<!-- Breadcrumbs and Search Bar -->
-<div class="card-header py-3">
-    <div class="d-flex justify-content-between align-items-center">
-        <!-- Breadcrumb -->
-        <nav aria-label="breadcrumb" class="d-flex align-items-center">
-            <ol class="breadcrumb m-0 bg-transparent">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Add Property</li>
-            </ol>
-        </nav>
-
-        <div class="hstack gap-3">
-            <button class="btn btn-light border btn-icon-text"><i class="bi bi-x"></i> <span class="text">Cancel</span></button>
-            {{-- <button type="submit" class="btn btn-primary btn-icon-text"><i class="bi bi-save"></i> <span class="text">Save</span></button> --}}
-            <input type="submit" class="btn btn-primary btn-icon-text" value="Save">
-        </div>
-    </div>
-</div>
-
-
 <form id="addNewProperty">
     @csrf
+    <div class="card-header py-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="d-flex align-items-center">
+                <ol class="breadcrumb m-0 bg-transparent">
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Add Property</li>
+                </ol>
+            </nav>
+
+            <div class="hstack gap-3">
+                <button class="btn btn-light border btn-icon-text"><i class="bi bi-x"></i> <span class="text">Cancel</span></button>
+                {{-- <button type="submit" class="btn btn-primary btn-icon-text"><i class="bi bi-save"></i> <span class="text">Save</span></button> --}}
+                <input type="submit" class="btn btn-primary btn-icon-text" value="Save">
+            </div>
+        </div>
+    </div>
+
     <input type="hidden" name="creator_id" value=" {{ Session::get('user_id') }}" />
     <!-- Main content -->
     <div class="row bg-white">
