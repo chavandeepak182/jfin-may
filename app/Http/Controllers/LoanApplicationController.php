@@ -984,7 +984,7 @@ public function agentDocumentPending()
 
 
     public function applyNow(){
-        return view('frontend.applyNow');
+        return view('frontend.firstloan');
     }
     //fetch recent loans
     public function fetchRecentLoans($limit = 5)
