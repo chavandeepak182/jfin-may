@@ -1008,6 +1008,19 @@
     color: #fff !important;
 }
 
+.profile-dash-drop .dropdown-menu {
+    background-color: var(--bs-white) !important;
+}
+
+.profile-dash-drop .dropdown-menu a {
+    color: var(--bs-dark);
+}
+
+.profile-dash-drop .dropdown-menu a:hover {
+    background: var(--bs-darker) !important;
+    color: var(--bs-white) !important;
+}
+
 /* Property Detail Page CSS */
 .block-body ul.detail_features {
     display: flex;
@@ -1258,4 +1271,8 @@ ul.detail_features li strong {
     background-image: url(../img/firstloan.jpg);
     background-size: cover;
     background-repeat: no-repeat;
+}
+
+.form-control:disabled, .form-control:read-only {
+    background-color: rgba(0, 0, 0, 0);
 }
