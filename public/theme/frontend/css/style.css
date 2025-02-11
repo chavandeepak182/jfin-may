@@ -1276,3 +1276,12 @@ ul.detail_features li strong {
 .form-control:disabled, .form-control:read-only {
     background-color: rgba(0, 0, 0, 0);
 }
+
+.form-floating>.form-control, .form-floating>.form-select {
+    border: 0;
+    border-bottom: 1px solid;
+}
+
+.form-control:focus {
+    box-shadow: none;
+}
