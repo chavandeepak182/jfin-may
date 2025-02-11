@@ -8,7 +8,7 @@
         <div class="row g-5 align-items-start mb-5 pb-5">
             <!-- Progress Bar Section -->
             <div class="col-md-3">
-                <div class="progress-steps shadow rounded bg-white p-4">
+                <div class="progress-steps p-4">
                     <h5 class="text-primary mb-3">Application Steps</h5>
                     <ul class="list-group">
                         <li class="list-group-item {{ $currentStep == 1 ? 'active' : '' }}">
@@ -598,11 +598,6 @@
 
 <style>
     /* Progress Bar Styling */
-    .progress-steps {
-        border-left: 4px solid #007bff;
-        padding-left: 10px;
-    }
-
     .progress-steps .list-group-item {
         border: none;
         font-size: 16px;
@@ -615,6 +610,7 @@
         background-color: #007bff;
         color: #fff;
         font-weight: bold;
+        border-radius: 0;
     }
 
     /* Form Styling */
