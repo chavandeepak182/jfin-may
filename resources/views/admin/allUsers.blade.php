@@ -39,8 +39,8 @@ All Users
     <div class="col-12 grid-margin">
         <div class="card pt-3">
             <div class="card-body">
-                <div class="table-responsive" id="user_table">
-                    <table class="table">
+                <div class="table-responsive" id="user_table_container">
+                    <table id="user_table" class="table">
                         <thead>
                             <tr>
                                 <th> ID </th>
@@ -82,9 +82,8 @@ All Users
                             @endforeach
                         </tbody>
                     </table>
-
-                    <div class="float-right">
-                        {{ $data['allUsers']->links() }}
+                    <div class="d-flex justify-content-center">
+                        {!! $data['allUsers']->appends(request()->query())->links() !!}
                     </div>
                 </div>
             </div>
@@ -164,144 +163,139 @@ All Users
 </div>
 
 @endsection
-
 @section('script')
 @parent
 
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- Bootstrap -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!--export button -->
+
+<!-- DataTables Core -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<!-- DataTables Buttons Extension -->
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
+<!-- SweetAlert -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
 
 <script>
-
-$(document).ready( function () {
-    new DataTable('#example', {
-        info: false,
-        ordering: false,
-        paging: false
+$(document).ready(function () {
+    $('#user_table').DataTable({
+        dom: 'Bfrtip',
+        buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+        info: true,
+        ordering: true,
+        paging: true,
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
     });
-} );
 
-// Search functionality
-function searchUser() {
-    let input = document.getElementById('search').value.toLowerCase();
-    let rows = document.getElementById('user_table_body').getElementsByTagName('tr');
+    // Search functionality
+    $('#search').on('keyup', function () {
+        let input = this.value.toLowerCase();
+        $('#user_table_body tr').each(function () {
+            let name = $(this).find('td:nth-child(2)').text().toLowerCase();
+            let email = $(this).find('td:nth-child(3)').text().toLowerCase();
+            let mobile = $(this).find('td:nth-child(4)').text().toLowerCase();
+            $(this).toggle(name.includes(input) || email.includes(input) || mobile.includes(input));
+        });
+    });
 
-    for (let i = 0; i < rows.length; i++) {
-        let name = rows[i].getElementsByTagName('td')[1].textContent.toLowerCase();
-        let email = rows[i].getElementsByTagName('td')[2].textContent.toLowerCase();
-        let mobile = rows[i].getElementsByTagName('td')[3].textContent.toLowerCase();
-
-        if (name.includes(input) || email.includes(input) || mobile.includes(input)) {
-            rows[i].style.display = "";
-        } else {
-            rows[i].style.display = "none";
-        }
-    }
-}
-
-</script>
-<script>   
-    $('#addUser').on('submit',function(e){
+    // Add User Form Submission
+    $('#addUser').on('submit', function (e) {
         e.preventDefault();
-        $.ajax({               
-            url:"{{Route('insertUser')}}", 
-            method:"POST",                             
-            data:new FormData(this) ,
-            processData:false,
-            dataType:'json',
-            contentType:false,
-            beforeSend:function(){
-                $(document).find('span.error-text').text('');
+        $.ajax({
+            url: "{{ route('insertUser') }}",
+            method: "POST",
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            beforeSend: function () {
+                $('span.error-text').text('');
             },
-            success:function(data){              
-                if(data.status == 0){
-                    $.each(data.error,function(prefix,val){
-                        $('span.'+prefix+'_error').text(val[0]);
-                    });                      
-                }else if(data.status == 2){
-                    document.getElementById("skill_title_error["+data.id+"]").innerHTML =data.msg;
-                }else{
-                    $('#addUser').get(0).reset();   
+            success: function (data) {
+                if (data.status == 0) {
+                    $.each(data.error, function (prefix, val) {
+                        $('span.' + prefix + '_error').text(val[0]);
+                    });
+                } else if (data.status == 2) {
+                    $("#skill_title_error[" + data.id + "]").text(data.msg);
+                } else {
+                    $('#addUser')[0].reset();
                     swal({
                         title: data.msg,
-                        text: "",
-                        type: "success",
                         icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){
-                        location.reload();
-                    });
+                    }).then(() => location.reload());
                 }
             }
         });
-    }); 
+    });
 
-    function deleteUser(id) {
+    // Delete User Function
+    window.deleteUser = function (id) {
+        swal({
+            title: "Are you sure?",
+            text: "Do you really want to delete this user? This action cannot be undone.",
+            icon: "warning",
+            buttons: ["Cancel", "Yes, Delete"],
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    url: "{{ route('deleteUser') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        user_id: id
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        swal({
+                            title: response.msg,
+                            icon: response.status == 0 ? "error" : "success",
+                        }).then(() => location.reload());
+                    },
+                    error: function () {
+                        swal("Error", "Something went wrong! Please try again.", "error");
+                    }
+                });
+            }
+        });
+    };
+
+    // Update User Status
+    window.updateStatus = function (userId, status) {
         $.ajax({
-            url:"{{Route('deleteUser')}}", 
-            type: 'post',
-            dataType: 'json',
+            url: "{{ route('updateUserStatus') }}",
+            type: "POST",
             data: {
-                'user_id': id,               
-                '_token': '{{ csrf_token() }}',
+                _token: "{{ csrf_token() }}",
+                user_id: userId,
+                is_email_verify: status
             },
             success: function (response) {
-                if(response.status == 0){
-                    swal({
-                        title: response.error,
-                        text: "",
-                        type: "success",
-                        icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){ 
-                        location.reload();
-                    });
-                }else{
-                    swal({
-                        title: response.msg,
-                        text: "",
-                        type: "success",
-                        icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){ 
-                        location.reload();
-                    });
-                }                           
+                alert(response.message);
+            },
+            error: function (error) {
+                console.log(error);
+                alert("Error updating status");
             }
-        });      
-    }
-</script>
-<script>
-function updateStatus(userId, status) {
-    $.ajax({
-        url: '{{ route("updateUserStatus") }}',
-        type: 'POST',
-        data: {
-            _token: '{{ csrf_token() }}',
-            user_id: userId,
-            is_email_verify: status
-        },
-        success: function(response) {
-            alert(response.message);
-        },
-        error: function(error) {
-            console.log(error);
-            alert('Error updating status');
-        }
-    });
-}
+        });
+    };
+});
 </script>
 
 @endsection
+

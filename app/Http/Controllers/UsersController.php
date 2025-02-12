@@ -24,15 +24,16 @@ class UsersController extends Controller
         return view('admin.addUser');
     }
 
-    public function allUsers()
-    {
-            $data['allUsers'] = DB::table('users')
+   public function allUsers()
+{
+    $query = DB::table('users')
         ->join('profile', 'users.id', '=', 'profile.user_id')
         ->select('users.id', 'users.name', 'users.email_id', 'profile.mobile_no', 'profile.dob', 'users.is_email_verify')
-        ->paginate(100);
+        ->whereNull('users.deleted_at');
+    $data['allUsers'] = $query->paginate(10);
 
-        return view('admin.allUsers',compact('data'));
-    }
+    return view('admin.allUsers', compact('data'));
+}
     public function updateUserStatus(Request $request)
     {
         DB::table('users')
@@ -206,16 +207,16 @@ class UsersController extends Controller
     }
 
     public function deleteUser(Request $request){
-        try{        
-            $user_id = $request->user_id;    
-            $user = DB::table('users')->where('id', $user_id)->delete();
-            $profile = DB::table('profile')->where('user_id', $user_id)->delete();
-            if($user){
-                return response()->json(['status'=>1,'msg'=>'User deleted successfully !']);
+        try {
+            $user = User::find($request->user_id);
+            if ($user) {
+                $user->delete(); // Soft delete instead of hard delete
+                return response()->json(['status' => 1, 'msg' => 'User deleted successfully!']);
+            } else {
+                return response()->json(['status' => 0, 'error' => 'User not found']);
             }
-        }catch (\Exception $e) {
-            DB::rollback();            
-            dd($e->getMessage());
+        } catch (\Exception $e) {
+            return response()->json(['status' => 0, 'error' => $e->getMessage()]);
         }
     }
     //user register

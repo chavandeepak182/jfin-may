@@ -65,7 +65,7 @@ JFS | Channel Partners
                                     <a class="btn btn-primary btn-xs edit" title="Edit" href="{{ url('editUser/'.$user->id) }}">
                                         <i class="fa fa-edit"></i>
                                     </a> 
-                                    <button class="btn btn-danger btn-xs delete" title="Delete" onclick="deleteUser('{{ $user->id }}')">
+                                    <button class="btn btn-danger btn-xs delete" title="Delete" onclick="confirmDelete('{{ $user->id }}')">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </td>
@@ -224,42 +224,43 @@ $(document).ready( function () {
         });
     }); 
 
-    function deletePartner(id)
-	{
-		$.ajax({
-            url:"{{Route('deletePartner')}}", 
-            type: 'post',
-            dataType: 'json',
-            data: {
-                'user_id': id,               
-                '_token': '{{ csrf_token() }}',
-                },
-            success: function (response) {
-                // console.log(response);
-                if(response.status == 0){
-                    swal({
-                        title: response.error,
-                        text: "",
-                        type: "success",
-                        icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){ 
-                        location.reload();
-                    });
-                }else{
-                    swal({
-                        title: response.msg,
-                        text: "",
-                        type: "success",
-                        icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){ 
-                        location.reload();
-                    });
-                }                           
+    function confirmDelete(id) {
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, you can restore the partner later!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            deletePartner(id);
+        }
+    });
+}
+
+function deletePartner(id) {
+    $.ajax({
+        url: "{{ route('deletePartner') }}",
+        type: 'post',
+        dataType: 'json',
+        data: {
+            'user_id': id,
+            '_token': '{{ csrf_token() }}',
+        },
+        success: function(response) {
+            if (response.status === 1) {
+                swal("Deleted!", response.msg, "success").then(function() {
+                    location.reload();
+                });
+            } else {
+                swal("Error!", response.error, "error");
             }
-        });      
-	}
+        },
+        error: function(xhr) {
+            swal("Error!", "Something went wrong.", "error");
+        }
+    });
+}
 
 </script>
 

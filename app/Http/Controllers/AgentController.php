@@ -32,15 +32,16 @@ class AgentController extends Controller
     }
 
     public function allAgents()
-    {
-            $data['allAgents'] = DB::table('users')
+{
+    $data['allAgents'] = DB::table('users')
         ->join('profile', 'users.id', '=', 'profile.user_id')
         ->where('users.role_id', 2)
+        ->whereNull('users.deleted_at') // Exclude soft deleted users
         ->select('users.id', 'users.name', 'users.email_id', 'profile.mobile_no', 'profile.dob')
         ->paginate(10);
 
-        return view('agent.allAgents',compact('data'));
-    }
+    return view('agent.allAgents', compact('data'));
+}
 
 
     public function insertAgent(Request $request)
@@ -166,25 +167,39 @@ class AgentController extends Controller
         }
     }
 
-    public function deleteAgent(Request $request){
-        try{        
-            $user_id = $request->user_id;    
-            $user = DB::table('users')->where('id', $user_id)->delete();
-            $profile = DB::table('profile')->where('user_id', $user_id)->delete();
-            if($user){
-                //activity logs
-                $username = Session::get('username');
-                $user_id = Session::get('user_id');
-                $details = "Agent is deleted successfully by ".$username; 
-                app(UsersController::class)->insertActivityLogs($user_id, $details);
-                //end of activity logs   
-                return response()->json(['status'=>1,'msg'=>'Agent user deleted successfully !']);
-            }
-        }catch (\Exception $e) {
-            DB::rollback();            
-            dd($e->getMessage());
+    public function deleteAgent(Request $request)
+{
+    try {
+        DB::beginTransaction();
+
+        $user_id = $request->user_id;
+
+        // Find user and soft delete
+        $user = User::find($user_id);
+        if (!$user) {
+            return response()->json(['status' => 0, 'error' => 'Agent not found']);
         }
+        $user->delete(); // Soft delete user
+
+        // Soft delete profile if the model supports it
+        $profile = Profile::where('user_id', $user_id)->first();
+        if ($profile) {
+            $profile->delete(); // This will automatically update deleted_at if SoftDeletes is used
+        }
+
+        // Log activity
+        $username = session()->get('username');
+        $admin_id = session()->get('user_id');
+        $details = "Agent was deleted successfully by " . $username;
+        app(UsersController::class)->insertActivityLogs($admin_id, $details);
+
+        DB::commit();
+        return response()->json(['status' => 1, 'msg' => 'Agent user deleted successfully!']);
+    } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(['status' => 0, 'error' => 'Error deleting agent: ' . $e->getMessage()]);
     }
+}
 
     public function agentDashboard()
 {
