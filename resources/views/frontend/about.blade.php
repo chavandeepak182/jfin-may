@@ -140,15 +140,15 @@
     <!-- Vision Mission Values Start -->
         <div class="container-fluid faq-section py-5">
             <div class="container">
-                <div class="row g-5 align-items-center">
+                <div class="row align-items-center">
                     <div class="col-xl-5 wow fadeInLeft mx-auto" data-wow-delay="0.2s">
-                        <img src="{{ asset('theme') }}/frontend/img/target.svg" class="img-fluid w-100" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/target.jpg" class="w-100 rounded shadow" alt="">
                     </div>
                     <div class="col-xl-7 wow fadeInRight" data-wow-delay="0.4s">
-                        <div class="h-100">
-                            <div class="mb-5">
+                        <div>
+                            <div>
                                 <h4 class="text-primary">Future Ready</h4>
-                                <h2 class="display-4 mb-5">Mission, Vision & Values</h2>
+                                <h2 class="display-4">Mission, Vision & Values</h2>
                                 <h3 class="text-primary"><strong>Our Mission</strong></h3>
                                 <p>Our mission is to be the leading finance company, offering secured loans at competitive rates. We focus on maximizing shareholder value while delivering exceptional, customer-centered service.</p>
                                 <h3 class="text-primary"><strong>Our Values</strong></h3>

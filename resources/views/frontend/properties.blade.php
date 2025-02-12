@@ -9,13 +9,19 @@
 
 @section('content')
 <!-- Header Start -->
-<div class="container-fluid bg-breadcrumb">
+<!-- <div class="container-fluid bg-breadcrumb">
     <div class="container text-center py-5" style="max-width: 900px;">
         <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Find Your Dream Home</h4>
         <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
             <li class="breadcrumb-item"><a href="">Home</a></li>
             <li class="breadcrumb-item active text-primary">Properties</li>
         </ol>    
+    </div>
+</div> -->
+
+<div class="container-fluid bg-breadcrumb" style="background-image: url(../theme/frontend/img/prop-bnr.jpg);">
+    <div class="container py-5">
+        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Find Your Dream Home</h4>
     </div>
 </div>
 
@@ -58,10 +64,10 @@
 
                     <div class="row g-3">
                         <div class="col-md-2 pt-3">
-                            <button class="btn btn-primary w-100 py-3" type="button" onclick="search()">Search</button>
+                            <button class="btn btn-danger w-100 py-2 rounded-1 uppercase" type="button" onclick="search()">Search</button>
                         </div>
                         <div class="col-md-2 pt-3">
-                            <button class="btn btn-dark w-100 py-3">Clear Filter</button>
+                            <button class="btn btn-dark w-100 py-2 rounded-1 uppercase">Clear Filter</button>
                         </div>
                     </div>
                 </form>

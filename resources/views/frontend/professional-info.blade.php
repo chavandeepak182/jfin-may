@@ -20,14 +20,14 @@
                         <li class="list-group-item {{ $currentStep == 3 ? 'active' : '' }}">
                             <span>3. Qualification Details</span>
                         </li>
-                        <li class="list-group-item {{ $currentStep == 4 ? 'active' : '' }}">
+                        <!-- <li class="list-group-item {{ $currentStep == 4 ? 'active' : '' }}">
                             <span>4. Existing Loan Details</span>
+                        </li> -->
+                        <li class="list-group-item {{ $currentStep == 4 ? 'active' : '' }}">
+                            <span>4. Upload Documents</span>
                         </li>
                         <li class="list-group-item {{ $currentStep == 5 ? 'active' : '' }}">
-                            <span>5. Upload Documents</span>
-                        </li>
-                        <li class="list-group-item {{ $currentStep == 6 ? 'active' : '' }}">
-                            <span>6. Loan Details</span>
+                            <span>5. Loan Details</span>
                         </li>
                     </ul>
                 </div>
@@ -332,83 +332,8 @@
                                 </div>
                             </fieldset>
 
-                        <!-- Existing Loan Details -->
-                        @elseif ($currentStep == 4)
-                            <fieldset>
-                                <h4 class="text-primary">Existing Loan Details</h4>
-                                <div id="existing-loans-container">
-                                    @if (!empty($existingLoans) && count($existingLoans) > 0)
-                                        @foreach($existingLoans as $existingLoan)
-                                            <div class="existing-loan-entry mb-3" id="existing-loan-{{ $loop->index }}">
-                                                <input type="hidden" name="existing_loan_id[]" value="{{ $existingLoan->existing_loan_id ?? '' }}">
-                                                <div class="row g-3">
-                                                    <!-- Type of Loan -->
-                                                    <div class="col-md-6">
-                                                        <div class="form-floating">
-                                                            <input type="text" name="type_loan[]" value="{{ old('type_loan.' . $loop->index, $existingLoan->type_loan ?? '') }}" class="form-control" placeholder="Type of Loan">
-                                                            <label>Type of Loan</label>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <!-- Loan Amount -->
-                                                    <div class="col-md-6">
-                                                        <div class="form-floating">
-                                                            <input type="number" step="0.01" name="loan_amount[]" value="{{ old('loan_amount.' . $loop->index, $existingLoan->loan_amount ?? '') }}" class="form-control" placeholder="Loan Amount">
-                                                            <label>Loan Amount</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Tenure of Loan -->
-                                                    <div class="col-md-6">
-                                                        <div class="form-floating">
-                                                            <input type="number" name="tenure_loan[]" value="{{ old('tenure_loan.' . $loop->index, $existingLoan->tenure_loan ?? '') }}" class="form-control" placeholder="Tenure of Loan (in months)">
-                                                            <label>Tenure of Loan (in months)</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- EMI Amount -->
-                                                    <div class="col-md-6">
-                                                        <div class="form-floating">
-                                                            <input type="number" step="0.01" name="emi_amount[]" value="{{ old('emi_amount.' . $loop->index, $existingLoan->emi_amount ?? '') }}" class="form-control" placeholder="EMI Amount">
-                                                            <label>EMI Amount</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Sanction Date -->
-                                                    <div class="col-md-6">
-                                                        <div class="form-floating">
-                                                            <input type="date" name="sanction_date[]" value="{{ old('sanction_date.' . $loop->index, $existingLoan->sanction_date ?? '') }}" class="form-control">
-                                                            <label>Sanction Date</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- EMI Bounce Count -->
-                                                    <div class="col-md-6">
-                                                        <div class="form-floating">
-                                                            <input type="number" name="emi_bounce_count[]" value="{{ old('emi_bounce_count.' . $loop->index, $existingLoan->emi_bounce_count ?? '') }}" class="form-control" placeholder="EMI Bounce Count">
-                                                            <label>EMI Bounce Count</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Remove Button for each entry -->
-                                                    <div class="col-md-12">
-                                                        <button type="button" class="btn btn-danger" onclick="removeLoanEntry({{ $loop->index }})">Remove Loan</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    @else
-                                        <p>No existing loans found.</p>
-                                    @endif
-                                </div>
-                                <!-- Add Another Loan Button -->
-                                <div class="col-md-12 mt-3 d-flex justify-content-between">
-                                    <button type="button" class="btn btn-primary" id="add-loan-button" onclick="addLoanEntry()">Add Another Loan</button>
-                                </div>
-                            </fieldset>
-
                         <!-- Upload Documents -->
-                        @elseif ($currentStep == 5)
+                        @elseif ($currentStep == 4)
                             <fieldset>
                                 <h4 class="text-primary">Upload Documents</h4>
                                 <div class="row g-3">
@@ -526,7 +451,7 @@
                             </fieldset>
 
                         <!-- Loan Details -->
-                        @elseif ($currentStep == 6)
+                        @elseif ($currentStep == 5)
                             <fieldset>
                                 <h4 class="text-primary mb-3">Loan Details</h4>
                                 <div class="row g-3">
@@ -604,6 +529,7 @@
         font-weight: 500;
         padding: 10px 15px;
         color: #333;
+        margin-bottom: 15px;
     }
 
     .progress-steps .list-group-item.active {
