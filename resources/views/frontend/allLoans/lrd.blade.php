@@ -5,7 +5,7 @@
 
 @section('content')
 <!-- Header Start -->
-    <div class="details-hero d-flex justify-content-center align-items-center" style="background-image: url({{ asset('theme') }}/frontend/img/loan-background.webp);">
+    <!-- <div class="details-hero d-flex justify-content-center align-items-center" style="background-image: url({{ asset('theme') }}/frontend/img/loan-background.webp);">
         <div class="container d-flex align-items-center justify-content-between py-5">
             <div class="row">
                 <div class="col-md-6 py-5">
@@ -18,7 +18,13 @@
                 </div>
             </div>
         </div>
+    </div> -->
+
+<div class="container-fluid bg-breadcrumb" style="background-image: url(../theme/frontend/img/lrd-bnr.jpg);">
+    <div class="container py-5">
+        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Lease Rental Discounting</h4>
     </div>
+</div>
     <!-- Header End -->
 
         <!-- Service Start -->
@@ -92,9 +98,9 @@
                 
             <!-- Lease Rental Discounting Loan Eligibility Criteria -->
                 <div class="wow fadeInUp py-5 text-dark" data-wow-delay="0.2s">
-                    <div class="row py-3">
-                        <div class="col-md-5 py-5 text-center">
-                            <img src="{{ asset('theme') }}/frontend/img/criteria.png" alt="" width="256px">
+                    <div class="row py-3 align-items-center">
+                        <div class="col-md-5">
+                            <img src="{{ asset('theme') }}/frontend/img/criteria.jpg" alt="" class="w-75 rounded shadow">
                         </div>
                         <div class="col-md-7">
                             <h2 class="display-6 mb-4">Lease Rental Discounting Loan Eligibility Criteria</h2>
@@ -137,9 +143,9 @@
 
             <!-- Documentation for Lease Rental Discounting Loan -->
                 <div class="wow fadeInUp py-3 text-dark" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">Documentation for Lease Rental Discounting Loan</h2>
-                    <div class="row py-3">
+                    <div class="row py-3 align-items-center">
                         <div class="col-md-7">
+                            <h2 class="display-6 mb-4">Documentation for Lease Rental Discounting Loan</h2>
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="salaried-tab" data-bs-toggle="tab" data-bs-target="#salaried" type="button" role="tab" aria-controls="salaried" aria-selected="true">Salaried Individuals</button>
@@ -180,7 +186,7 @@
                             </div>
                         </div>
                         <div class="col-md-5 text-center">
-                            <img src="{{ asset('theme') }}/frontend/img/checklist.png" alt="" width="256px">
+                            <img src="{{ asset('theme') }}/frontend/img/checklist.jpg" alt="" class="w-75 rounded shadow">
                         </div>
                     </div>
                 </div>

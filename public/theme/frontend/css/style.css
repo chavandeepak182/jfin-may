@@ -624,8 +624,8 @@
 }
 
 .service .service-item:hover .service-content .service-content-inner .h4,
-.service .service-item:hover .service-content .service-content-inner p {
-    color: var(--bs-white);
+.service .service-item:hover .service-content .service-content-inner p,  .service .service-item .service-content .service-content-inner a:hover{
+    color: var(--bs-white) !important;
 }
 
 .service .service-item:hover .service-content .service-content-inner .btn.btn-primary {
@@ -1284,4 +1284,13 @@ ul.detail_features li strong {
 
 .form-control:focus {
     box-shadow: none;
+}
+
+.form-container form input[type="file"]::file-selector-button {
+    background-color: #fff;
+}
+
+.form-floating>.form-control:focus, .form-floating>.form-control:not(:placeholder-shown) {
+    padding-top: 1.925rem;
+    padding-bottom: .525rem;
 }
