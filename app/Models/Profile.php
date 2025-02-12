@@ -4,9 +4,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Profile extends Model
 {
     use HasFactory, Notifiable;
+    use SoftDeletes;
     protected $table = 'profile';
     public $timestamps = true;
     protected $primaryKey = 'user_id';

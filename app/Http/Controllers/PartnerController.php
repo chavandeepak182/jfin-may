@@ -24,15 +24,16 @@ class PartnerController extends Controller
     }
 
     public function allPartners()
-    {
-            $data['allPartners'] = DB::table('users')
+{
+    $data['allPartners'] = DB::table('users')
         ->join('profile', 'users.id', '=', 'profile.user_id')
         ->where('users.role_id', 3)
+        ->whereNull('users.deleted_at') // Exclude soft-deleted users
         ->select('users.id', 'users.name', 'users.email_id', 'profile.mobile_no', 'profile.dob')
         ->paginate(10);
 
-        return view('partner.allPartners',compact('data'));
-    }
+    return view('partner.allPartners', compact('data'));
+}
 
 
     public function insertPartner(Request $request)
@@ -157,27 +158,36 @@ class PartnerController extends Controller
         }
     }
 
-    public function deletePartner(Request $request){
-        try{        
-            $user_id = $request->user_id;    
-            $user = DB::table('users')->where('id', $user_id)->delete();
-            $profile = DB::table('profile')->where('user_id', $user_id)->delete();
+    public function deletePartner(Request $request)
+{
+    try {
+        DB::beginTransaction();
 
-            //activity logs
-            $username = Session::get('username');
-            $user_id = Session::get('user_id');
-            $details = "Partner user deleted successfully by ".$username; 
-            app(UsersController::class)->insertActivityLogs($user_id, $details);
-            //end of activity logs   
+        $user_id = $request->user_id;
 
-            if($user){
-                return response()->json(['status'=>1,'msg'=>'Channel Partner deleted successfully !']);
-            }
-        }catch (\Exception $e) {
-            DB::rollback();            
-            dd($e->getMessage());
+        $user = User::find($user_id);
+        if (!$user) {
+            return response()->json(['status' => 0, 'error' => 'Partner not found']);
         }
+
+        // Soft delete user and profile
+        $user->delete();
+        Profile::where('user_id', $user_id)->update(['deleted_at' => now()]);
+
+        // Log the action
+        $username = Session::get('username');
+        $admin_id = Session::get('user_id');
+        $details = "Partner user soft-deleted by " . $username;
+        app(UsersController::class)->insertActivityLogs($admin_id, $details);
+
+        DB::commit();
+
+        return response()->json(['status' => 1, 'msg' => 'Channel Partner deleted successfully!']);
+    } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(['status' => 0, 'error' => 'Error deleting partner: ' . $e->getMessage()]);
     }
+}
 
     public function partnerDashboard()
     {

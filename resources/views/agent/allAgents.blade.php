@@ -42,7 +42,7 @@ JFS | Agents
         <div class="card pt-3">
             <div class="card-body">
                 <div class="table-responsive" id="user_table">
-                    <table class="table">
+                    <table id="example" class="table">
                         <thead>
                             <tr>
                                 <th> ID </th>
@@ -65,7 +65,7 @@ JFS | Agents
                                     <a class="btn btn-primary btn-xs edit" title="Edit" href="{{ url('editUser/'.$user->id) }}">
                                         <i class="fa fa-edit"></i>
                                     </a> 
-                                    <button class="btn btn-danger btn-xs delete" title="Delete" onclick="deleteUser('{{ $user->id }}')">
+                                    <button class="btn btn-danger btn-xs delete" title="Delete" data-id="{{ $user->id }}">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </td>
@@ -159,112 +159,123 @@ JFS | Agents
 @section('script')
 @parent
 
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.datatables.net/2.1.3/js/dataTables.js"></script>
-<script src="https://cdn.datatables.net/2.1.3/js/dataTables.bootstrap5.js"></script>
 
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
-
-
-<!--export button -->
+<!-- Export Buttons -->
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
+<!-- SweetAlert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <script>
+$(document).ready(function () {
+    // Initialize DataTable
+    $('#example').DataTable({
+        dom: 'Bfrtip',
+        buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+    });
 
-$(document).ready( function () {
-    $('#example').DataTable();
-} );
+    // Attach click event to delete buttons dynamically
+    $(document).on('click', '.delete', function () {
+        var userId = $(this).data('id'); // Get user ID from button
+        deleteAgent(userId);
+    });
 
-</script>
-<script>   
-    $('#addAgent').on('submit',function(e){
+    // AJAX Setup to ensure CSRF Token is included
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Handle Add Agent Form Submission
+    $('#addAgent').on('submit', function (e) {
         e.preventDefault();
-        $.ajax({               
-            url:"{{Route('insertAgent')}}", 
-            method:"POST",                             
-            data:new FormData(this) ,
-            processData:false,
-            dataType:'json',
-            contentType:false,
-            beforeSend:function(){
+        $.ajax({
+            url: "{{ route('insertAgent') }}",
+            method: "POST",
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            beforeSend: function () {
                 $(document).find('span.error-text').text('');
             },
-            success:function(data){   
-                if(data.status == 0){
-                    
-                    $.each(data.error,function(prefix,val){
-                        $('span.'+prefix+'_error').text(val[0]);
-                        swal("Oh noes!", val[0], "error");
-                    });                      
-                }else if(data.status == 2){
-                    document.getElementById("skill_title_error["+data.id+"]").innerHTML =data.msg;
-                    // console.log(data); console.log('skill_title_error['+data.id+']');
-                    // return false;
-                }else{
-                    $('#addAgent').get(0).reset();   
+            success: function (data) {
+                if (data.status === 0) {
+                    $.each(data.error, function (prefix, val) {
+                        $('span.' + prefix + '_error').text(val[0]);
+                        swal("Error!", val[0], "error");
+                    });
+                } else {
+                    $('#addAgent')[0].reset();
                     swal({
                         title: data.msg,
-                        text: "",
-                        type: "success",
                         icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){
+                        button: "OK"
+                    }).then(function () {
                         location.reload();
                     });
-                        
                 }
+            },
+            error: function (xhr, status, error) {
+                swal("Error!", "Something went wrong. Please try again.", "error");
             }
         });
-    }); 
+    });
+});
 
-    function deleteAgent(id)
-	{
-		$.ajax({
-            url:"{{Route('deleteAgent')}}", 
-            type: 'post',
-            dataType: 'json',
-            data: {
-                'user_id': id,               
-                '_token': '{{ csrf_token() }}',
+// Delete Agent Function
+function deleteAgent(id) {
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this agent!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url: "{{ route('deleteAgent') }}",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    'user_id': id,
+                    '_token': '{{ csrf_token() }}'
                 },
-            success: function (response) {
-                // console.log(response);
-                if(response.status == 0){
-                    swal({
-                        title: response.error,
-                        text: "",
-                        type: "success",
-                        icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){ 
-                        location.reload();
-                    });
-                }else{
-                    swal({
-                        title: response.msg,
-                        text: "",
-                        type: "success",
-                        icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){ 
-                        location.reload();
-                    });
-                }                           
-            }
-        });      
-	}
-
+                success: function (response) {
+                    if (response.status === 0) {
+                        swal("Error!", response.error, "error");
+                    } else {
+                        swal({
+                            title: "Deleted!",
+                            text: response.msg,
+                            icon: "success",
+                            button: "OK"
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    swal("Error!", "Failed to delete. Please try again.", "error");
+                }
+            });
+        }
+    });
+}
 </script>
-
-
-
 @endsection
