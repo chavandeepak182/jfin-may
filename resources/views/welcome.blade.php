@@ -79,10 +79,10 @@
 
         <div class="login-page bg-light" style="background-image: url(../theme/frontend/img/bg-reg.jpg); background-position: center; background-size: cover; background-repeat: no-repeat;">
             <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 offset-lg-2 mt-2">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
                         <div class="bg-white shadow rounded">
-                            <div class="row align-items-center">
+                            <div class="row">
                                 <div class="col-md-6 pe-0">
                                     @if (session('error'))
                                         <div class="alert alert-danger">
@@ -106,7 +106,7 @@
                                                 <label>Username<span class="text-danger">*</span></label>
                                                 <div class="input-group">
                                                     <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
-                                                    <input type="email" name="email" class="form-control" placeholder="Enter your email-id" value="{{ old('email') }}">
+                                                    <input type="email" name="email" class="form-control" placeholder="Enter your email" value="{{ old('email') }}">
                                                 </div>
                                                 @error('email')
                                                     <span class="text-danger">{{ $message }}</span>
@@ -136,19 +136,12 @@
                                             </div>
 
                                             <div class="col-12">
-                                                <button type="submit" class="btn btn-primary w-50 px-4 py-2">Login</button>
+                                                <button type="submit" class="btn btn-danger w-50 px-3 py-2 rounded-1 uppercase">Login</button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
-                                <div class="col-md-6 ps-0 d-none d-md-block">
-                                    <div class="form-right h-100 text-white text-center">
-                                        <a class="navbar-brand p-0">
-                                            <!-- <h1 class="text-primary mb-0"><i class="fab fa-slack me-2"></i> LifeSure</h1> -->
-                                            <img src="{{ asset('theme') }}/frontend/img/user-login.jpg" alt="Logo" class="w-100">
-                                        </a>
-                                    </div>
-                                </div>
+                                <div class="col-md-6" style="background-image: url(../theme/frontend/img/user-login.jpg); background-position: center; background-size: cover; background-repeat: no-repeat; border-radius: 0 10px 10px 0;"></div>
                             </div>
                         </div>
                     </div>
