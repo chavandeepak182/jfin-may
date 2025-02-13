@@ -84,16 +84,12 @@
         <!-- Registration Form Start -->
         <div class="login-page">
             <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 offset-lg-2 mt-2">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
                         <div class="bg-white shadow rounded">
-                            <div class="row align-items-center p-5">
-                                <div class="col-md-5 d-none d-md-block">
-                                    <div class="form-right text-center">
-                                        <img src="{{ asset('theme/frontend/img/agreement.png') }}" alt="Logo" style="width: 100%;">
-                                    </div>
-                                </div>
-                                <div class="col-md-7">
+                            <div class="row">
+                                <div class="col-md-5" style="background-image: url(../theme/frontend/img/agreement.jpg); background-position: center; background-size: cover; background-repeat: no-repeat; border-radius: 10px 0px 0px 10px;"></div>
+                                <div class="col-md-7 p-5">
                                     <h4 class="pb-3">Register Your Account</h4>
 
                                     <!-- Success and Error Messages -->
