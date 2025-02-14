@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->nestedSet();
-            $table->timestamps();
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id(); // Auto-increment primary key
+            $table->string('name'); // Role name
+            $table->string('guard_name'); // Guard name for authentication
+            $table->timestamps(); // created_at & updated_at
         });
     }
 
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('roles');
     }
 };

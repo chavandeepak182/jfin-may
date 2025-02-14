@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('type');
-            $table->morphs('notifiable');
-            $table->text('data');
-            $table->timestamp('read_at')->nullable();
-            $table->timestamps();
+        Schema::create('countries', function (Blueprint $table) {
+            $table->id(); // Auto-increment primary key
+            $table->char('countryCode', 2)->default(''); // Country code (ISO Alpha-2)
+            $table->string('name', 45)->default(''); // Country name
         });
     }
 
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('countries');
     }
 };
