@@ -7,23 +7,7 @@ Pending Loans
 
 @section('content')
 @parent
-<!-- Breadcrumbs -->
-<div class="card-header py-3">
-    <div class="d-flex justify-content-between align-items-center">
-        <!-- Breadcrumb -->
-        <nav aria-label="breadcrumb" class="d-flex align-items-center">
-            <ol class="breadcrumb m-0 bg-transparent">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Pending Loans</li>
-            </ol>
-        </nav>
 
-        <!-- Search Bar -->
-        <!-- <div class="d-flex ms-auto">
-            <input type="text" id="search" class="form-control" placeholder="Search..." onkeyup="searchUser()">
-        </div> -->
-    </div>
-</div>
 
 <!-- DataTables CSS -->
 <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
@@ -31,84 +15,93 @@ Pending Loans
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
 
-<div style="padding: 1%">
-    <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="example" class="table" style="width:100%">
-                    <thead>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="d-flex align-items-center">
+                <ol class="breadcrumb m-0 bg-transparent">
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Pending Loans</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="example" class="table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Loan ID</th>
+                        <th>User</th>
+                        <th>Loan Category</th>
+                        <th>Amount</th>
+                        <th>Tenure</th>
+                        <th>Assign To</th>
+                        <th>Agent Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($pendingLoans as $loan)
                         <tr>
-                            <th>Loan ID</th>
-                            <th>User</th>
-                            <th>Loan Category</th>
-                            <th>Amount</th>
-                            <th>Tenure</th>
-                            <th>Assign To</th>
-                            <th>Agent Status</th>
-                            <th>Action</th>
+                            <td>{{ $loan->loan_reference_id }}</td>
+                            <td>{{ $loan->user->name ?? 'N/A' }}</td>
+                            <td>{{ $loan->loanCategory->category_name ?? 'N/A' }}</td>
+                            <td>{{ $loan->amount }}</td>
+                            <td>{{ $loan->tenure }}</td>
+                            <td>
+                                <form action="{{ route('assignAgent') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="loan_id" value="{{ $loan->loan_id }}">
+                                    <div class="form-group">
+                                        <label for="agent_id">Assign Agent:</label>
+                                        <select name="agent_id" id="agent_id_{{ $loan->loan_id }}" class="form-control assign-agent" data-loan-id="{{ $loan->loan_id }}">
+                                            <option value="">Select Agent</option>
+                                            @foreach($agents as $agent)
+                                                <option value="{{ $agent->id }}" {{ $loan->agent_id == $agent->id ? 'selected' : '' }}>
+                                                    {{ $agent->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @if($loan->agent_action === 'pending')
+                                        <button type="submit" class="btn btn-primary">Assign</button>
+                                    @elseif($loan->agent_action === 'rejected')
+                                        <button type="submit" class="btn btn-warning">Reassign</button>
+                                    @endif
+                                </form>
+                            </td>
+                            <td>{{ ucfirst($loan->agent_action) ?? 'Pending' }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-xs edit" title="Edit" href="{{ route('editLoan', ['id' => $loan->loan_id]) }}">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <button class="btn btn-danger btn-xs delete" title="Delete" onclick="deleteLoan('{{ $loan->loan_id }}')">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($pendingLoans as $loan)
-                            <tr>
-                                <td>{{ $loan->loan_reference_id }}</td>
-                                <td>{{ $loan->user->name ?? 'N/A' }}</td>
-                                <td>{{ $loan->loanCategory->category_name ?? 'N/A' }}</td>
-                                <td>{{ $loan->amount }}</td>
-                                <td>{{ $loan->tenure }}</td>
-                                <td>
-                                    <form action="{{ route('assignAgent') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="loan_id" value="{{ $loan->loan_id }}">
-                                        <div class="form-group">
-                                            <label for="agent_id">Assign Agent:</label>
-                                            <select name="agent_id" id="agent_id_{{ $loan->loan_id }}" class="form-control assign-agent" data-loan-id="{{ $loan->loan_id }}">
-                                                <option value="">Select Agent</option>
-                                                @foreach($agents as $agent)
-                                                    <option value="{{ $agent->id }}" {{ $loan->agent_id == $agent->id ? 'selected' : '' }}>
-                                                        {{ $agent->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @if($loan->agent_action === 'pending')
-                                            <button type="submit" class="btn btn-primary">Assign</button>
-                                        @elseif($loan->agent_action === 'rejected')
-                                            <button type="submit" class="btn btn-warning">Reassign</button>
-                                        @endif
-                                    </form>
-                                </td>
-                                <td>{{ ucfirst($loan->agent_action) ?? 'Pending' }}</td>
-                                <td>
-                                    <a class="btn btn-primary btn-xs edit" title="Edit" href="{{ route('editLoan', ['id' => $loan->loan_id]) }}">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
-                                    <button class="btn btn-danger btn-xs delete" title="Delete" onclick="deleteLoan('{{ $loan->loan_id }}')">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>Loan ID</th>
-                            <th>User</th>
-                            <th>Loan Category</th>
-                            <th>Amount</th>
-                            <th>Tenure</th>
-                            <th>Assign To</th>
-                            <th>Agent Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </tfoot>
-                </table>
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Loan ID</th>
+                        <th>User</th>
+                        <th>Loan Category</th>
+                        <th>Amount</th>
+                        <th>Tenure</th>
+                        <th>Assign To</th>
+                        <th>Agent Status</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+            </table>
 
-                <!-- Pagination -->
-                <div class="float-right mt-3">
-                    {{ $pendingLoans->links() }}
-                </div>
+            <!-- Pagination -->
+            <div class="float-right mt-3">
+                {{ $pendingLoans->links() }}
             </div>
         </div>
     </div>
