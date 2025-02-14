@@ -17,11 +17,6 @@ All Users
             </ol>
         </nav>
 
-        <!-- Search Bar -->
-        <div class="d-flex ms-auto">
-            <input type="text" id="search" class="form-control" placeholder="Search..." onkeyup="searchUser()">
-        </div>
-
         <!-- Add User Button -->
         <button class="btn btn-primary ms-3" data-bs-toggle="modal" href="#addUserView">
             <i class="fa fa-plus"></i> Add User
@@ -82,9 +77,6 @@ All Users
                             @endforeach
                         </tbody>
                     </table>
-                    <div class="d-flex justify-content-center">
-                        {!! $data['allUsers']->appends(request()->query())->links() !!}
-                    </div>
                 </div>
             </div>
         </div>
