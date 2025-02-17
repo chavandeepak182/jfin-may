@@ -8,12 +8,17 @@ JFS | Pending Properties
 @section('content')
 @parent
 <!-- Breadcrumbs -->
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('partnerDashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Pending Properties</li>
-    </ol>
-</nav>
+<div class="card-header py-3">
+    <div class="d-flex justify-content-between align-items-center">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="d-flex align-items-center">
+            <ol class="breadcrumb m-0 bg-transparent">
+                <li class="breadcrumb-item"><a href="{{ route('partnerDashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">All Pending Propertiess</li>
+            </ol>
+        </nav>
+    </div>
+</div>
 
 <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet"/>
@@ -21,174 +26,75 @@ JFS | Pending Properties
 <!-- export button -->
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
 
-         <div style="padding: 1%"> 
-            <h1><center>All Pending Properties</center></h1> 
-                 <!-- DataTales Example -->
-                 <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Pending Properties List</h6>
-                            
-                        </div>
-                
 
-                        <div class="card-body">
-                            <div class="table-responsive" id="user_table">
-                         
-                            <table id="example" class="table table-striped" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Property Type</th>
-                                        <th>Builder Name</th>
-                                        <th>Mobile Number</th>
-                                        <th>BHK Details</th>
-                                        <th>Address</th>
-                                        <th>Amenties</th>
-                                        <th>Price</th>
-                                        <th>Action</th> 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                        @foreach($data['allProperties'] as $p)
-
-                                        <tr>
-                                            <td>
-                                                {{$p->title}}
-                                            </td>   
-                                            <td>
-                                                {{ $p->category_name }}
-                                            </td>  
-                                            <td>
-                                                {{$p->builder_name}}
-                                            </td> 
-                                            <td>
-                                                {{$p->contact}}
-                                            </td> 
-                                            <td>
-                                                 {{$p->land_type}}
-                                            </td> 
-
-                                            <td>
-                                                 {{$p->address}}
-                                            </td> 
-
-                                            <td>
-                                                 {{$p->facilities}}
-                                            </td> 
-
-                                            <td>
-                                                 {{$p->from_price}} to {{$p->to_price}} 
-                                            </td> 
-                                           
-                                            <td>
-                                                <a class="btn btn-primary btn-xs eye" title="ViewDetails"href="{{ url('viewDetails/'.$p->properties_id) }}"><i class="fa fa-eye"></i></a> 
-                                                <button class="btn btn-danger btn-xs delete" title="Delete" data-userid="" onclick="deletePropertie('{{$p->properties_id}}')"><i class="fa fa-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                </tbody>
-                                  
-                                <tfoot>
-                                    <tr>
-                                    <th>Title</th>
-                                        <th>Property Type</th>
-                                        <th>Builder Name</th>
-                                        <th>Mobile Number</th>
-                                        <th>BHK Details</th>
-                                        <th>Address</th>
-                                        <th>Amenties</th>
-                                        <th>Price</th>
-                                        <th>Action</th> 
-                                    </tr>
-                                </tfoot>
-                            </table>
-                            <div class="float-right"> 
-                                {{ $data['allProperties']->links() }}
-                            </div>
-                        </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="addPartnerView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add New Channel Partner</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <form class="user" id="addPartner" method="post">
-                    @csrf   
-                    <div class="row">
-                        <div class="form-group col-lg-4">
-                            <label for="recipient-name" class="col-form-label">Name:</label>
-                            <input type="text" class="form-control" id="full_name" name="full_name" required>
-                        </div>
-                        <div class="form-group col-lg-4">
-                            <label for="recipient-name" class="col-form-label">Email ID:</label>
-                            <input type="email" class="form-control" id="email_id" name="email_id" required>
-                        </div>
-
-                        <div class="form-group col-lg-4">
-                            <label for="recipient-name" class="col-form-label">Password:</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
-                        </div>
-                    </div>    
-
-                    <div class="row">
-                        <div class="form-group col-lg-4">
-                            <label for="recipient-name" class="col-form-label">Mobile Number:</label>
-                            <input type="tel" class="form-control" id="mobile_no" name="mobile_no" required>
-                        </div>
-
-                        <div class="form-group col-lg-4">
-                            <label for="recipient-name" class="col-form-label">Date of Birth:</label>
-                            <input type="date" class="form-control" id="dob" name="dob">
-                        </div>
-
-                        <div class="form-group col-lg-4">
-                            <label for="recipient-name" class="col-form-label">Address:</label>
-                            <input type="tel" class="form-control" id="address" name="address">
-                        </div>
-                    </div>
-
-                    
-                    
-                    <div class="row">
-                        <div class="form-group col-lg-4">
-                            <label for="recipient-name" class="col-form-label">City:</label>
-                            <input type="text" class="form-control" id="city" name="city">
-                        </div>
-
-                        <div class="form-group col-lg-4">
-                            <label for="recipient-name" class="col-form-label">State:</label>
-                            <input type="text" class="form-control" id="state" name="state" >
-                        </div>
-
-                        <div class="form-group col-lg-4">
-                            <label for="recipient-name" class="col-form-label">Pincode:</label>
-                            <input type="text" class="form-control" id="pincode" name="pincode">
-                        </div>
-                    </div>
-
-           
-                        <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
-               
-
-                </form>
-                </div>
-            </div>
-        </div>
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive" id="user_table">
+            <table id="example" class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Property Type</th>
+                        <th>Builder Name</th>
+                        <th>Mobile Number</th>
+                        <th>Address</th>
+                        <th>Price</th>
+                        <th>Action</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($data['allProperties'] as $p)
+                    <tr>
+                        <td>
+                            {{$p->title}}
+                        </td>   
+                        <td>
+                            {{ $p->category_name }}
+                        </td>  
+                        <td>
+                            {{$p->builder_name}}
+                        </td> 
+                        <td>
+                            {{$p->contact}}
+                        </td> 
+                        <!-- <td>
+                            {{$p->land_type}}
+                        </td>  -->
+                        <td>
+                            {{$p->address}}
+                        </td> 
+                        <!-- <td>
+                            {{$p->facilities}}
+                        </td>  -->
+                        <td>
+                            {{$p->from_price}} to {{$p->to_price}} 
+                        </td>                                 
+                        <td>
+                            <a class="btn btn-primary btn-xs eye" title="ViewDetails"href="{{ url('viewDetails/'.$p->properties_id) }}"><i class="fa fa-eye"></i></a> 
+                            <button class="btn btn-danger btn-xs delete" title="Delete" data-userid="" onclick="deletePropertie('{{$p->properties_id}}')"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
             
-
-
-   
-   
-
+                <tfoot>
+                    <tr>
+                        <th>Title</th>
+                        <th>Property Type</th>
+                        <th>Builder Name</th>
+                        <th>Mobile Number</th>
+                        <th>Address</th>
+                        <th>Price</th>
+                        <th>Action</th> 
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="float-right"> 
+                {{ $data['allProperties']->links() }}
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('script')

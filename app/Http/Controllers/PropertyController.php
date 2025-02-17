@@ -185,15 +185,16 @@ private function handleFileUpload(Request $request, $inputName, $folder)
     public function viewDetails($property_id) {
         // Fetch property details
         $data['propertie_details'] = DB::select('SELECT * 
-                                                 FROM properties AS p
-                                                 JOIN price_range AS pr ON p.price_range_id = pr.range_id
-                                                 JOIN property_category AS pc ON pc.pid = p.property_type_id
-                                                 WHERE p.properties_id = ?', [$property_id]);
+            FROM properties AS p
+            JOIN price_range AS pr ON p.price_range_id = pr.range_id
+            JOIN property_category AS pc ON pc.pid = p.property_type_id
+            WHERE p.properties_id = ?', [$property_id]
+        );
     
         // Fetch all images for the property
         $data['property_images'] = DB::table('property_images')
-                                      ->where('properties_id', $property_id)
-                                      ->get();
+        ->where('properties_id', $property_id)
+        ->get();
     
         return view('property.propertyDetails', compact('data'));
     }

@@ -6,46 +6,53 @@ All Users
 
 @section('content')
 
+<!-- Breadcrumbs -->
+<div class="card-header py-3">
+    <div class="d-flex justify-content-between align-items-center">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="d-flex align-items-center">
+            <ol class="breadcrumb m-0 bg-transparent">
+                <li class="breadcrumb-item"><a href="{{ route('partnerDashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Enquiry Leads</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
 <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet"/>
 <!-- Export button -->
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
 
-<div style="padding: 1%"> 
+<div class="card shadow mb-4"> 
     @if (session('status'))
         <div class="alert alert-success">{{ session('status') }}</div>
     @endif
-    <h1><center>Users</center></h1> 
-    <div class="card shadow mb-4">                 
-        <div class="card-header py-3">
-            <h4>Enquiry Leads</h4>
-        </div>
-        <div class="card-body">
-            <table id="example" class="table table-bordered table-striped">
-                <thead>
+    <div class="card-body">
+        <table id="example" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($enquiries as $enquiry)
                     <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Contact</th>
-                        <th>Action</th>
+                        <td>{{ $enquiry->enquiry_id }}</td>
+                        <td>{{ $enquiry->name }}</td>
+                        <td>{{ $enquiry->email }}</td>
+                        <td>{{ $enquiry->contact }}</td>
+                        <td>
+                            <a href="#" class="btn btn-success">view</a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach ($enquiries as $enquiry)
-                        <tr>
-                            <td>{{ $enquiry->enquiry_id }}</td>
-                            <td>{{ $enquiry->name }}</td>
-                            <td>{{ $enquiry->email }}</td>
-                            <td>{{ $enquiry->contact }}</td>
-                            <td>
-                                <a href="#" class="btn btn-success">view</a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 </div>
 
