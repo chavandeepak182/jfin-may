@@ -341,7 +341,7 @@
                                 <button type="submit" class="btn btn-dark px-4 py-2 rounded-1 uppercase">Login</button>
                             </div>
                             
-                            <p class="signup">Don't have an account ? <a href="#" onclick="toggleForm();">Sign Up.</a></p>
+                            <p class="signup">Don't have an account ? <a onclick="toggleForm();" style="cursor: pointer;">Sign Up.</a></p>
                         </form>
                     </div>
                 </div>
@@ -389,9 +389,11 @@
 
                             <div class="col-12">
                                 <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Enter Password" required>
-                                <!-- <button type="button" class="btn btn-outline-secondary toggle-password" data-target="#password">
-                                    <i class="bi bi-eye-slash"></i>
-                                </button> -->
+                                <div class="pos-ryt">
+                                    <button type="button" class="btn btn-outline-secondary toggle-password" data-target="#password">
+                                        <i class="bi bi-eye-slash"></i>
+                                    </button>
+                                </div>
                                 @error('password')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -399,19 +401,21 @@
 
                             <div class="col-12">
                                 <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror" id="password_confirmation" name="password_confirmation" placeholder="Re-type Password" required>
-                                <!-- <button type="button" class="btn btn-outline-secondary toggle-password" data-target="#password_confirmation">
-                                    <i class="bi bi-eye-slash"></i>
-                                </button> -->
+                                <div class="pos-ryt">
+                                    <button type="button" class="btn btn-outline-secondary toggle-password" data-target="#password_confirmation">
+                                        <i class="bi bi-eye-slash"></i>
+                                    </button>
+                                </div>
                                 @error('password_confirmation')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
 
-                            <div class="col-12">
-                                <button class="btn btn-primary w-50 py-2" type="submit">Register Now</button>
+                            <div class="col-12 mt-2">
+                                <button class="btn btn-dark px-4 py-2 rounded-1 uppercase" type="submit">Register Now</button>
                             </div>
 
-                            <p class="signup">Already have an account ? <a href="#" onclick="toggleForm();">Sign in.</a>                            </p>
+                            <p class="signup">Already have an account ? <a onclick="toggleForm();" style="cursor: pointer;">Sign in.</a>                            </p>
                         </form>
                     </div>
                     <div class="imgBx"><img src="{{ asset('theme') }}/frontend/img/agreement.jpg" alt="" /></div>

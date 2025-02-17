@@ -1294,3 +1294,11 @@ ul.detail_features li strong {
     padding-top: 1.925rem;
     padding-bottom: .525rem;
 }
+
+.pos-ryt button {
+    float: right;
+    margin-top: -14.75%;
+    z-index: 99999;
+    position: relative;
+    background-color: #fff;
+}
