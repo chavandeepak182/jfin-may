@@ -277,7 +277,7 @@
 
                                     <div class="col-md-6">
                                         <div class="form-floating" id="selfincome">
-                                            <input type="number" class="form-control" id="selfincome" name="selfincome" value="{{ old('selfincome', $professional->selfincome ?? '') }}" placeholder="Total Income" required>
+                                            <input type="number" class="form-control" id="selfincome" name="selfincome" value="{{ old('selfincome', $professional->selfincome ?? '') }}" placeholder="Total Income">
                                             <label for="selfincome">Total Income <span class="text-danger">*</span></label>
                                         </div>
                                         @error('selfincome')
@@ -286,7 +286,7 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <div class="form-floating" id="establish_date">
+                                        <div class="form-floating" id="business_establish_date">
                                             <input type="date" class="form-control" id="business_establish_date" name="business_establish_date" 
                                                 value="{{ old('business_establish_date', isset($professional->business_establish_date) ? \Carbon\Carbon::parse($professional->business_establish_date)->format('Y-m-d') : '') }}" 
                                                 placeholder="Business Establish Date">

@@ -20,6 +20,7 @@ use App\Http\Controllers\CibilController;
 use App\Http\Controllers\MisController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\LeadController;
+use App\Http\Controllers\PropertyTakerController;
 use Illuminate\Support\Facades\Route;
 use App\Exports\EligibilityExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -373,3 +374,7 @@ Route::get('/messages/{id}', [MessageController::class, 'show'])->name('messages
 
 //Lead management
 Route::resource('/admin/leads', LeadController::class);
+
+//property taker
+Route::get('/property-takers/create', [PropertyTakerController::class, 'create'])->name('property_takers.create');
+Route::post('/property-takers/store', [PropertyTakerController::class, 'store'])->name('property_takers.store');
