@@ -376,5 +376,9 @@ Route::get('/messages/{id}', [MessageController::class, 'show'])->name('messages
 Route::resource('/admin/leads', LeadController::class);
 
 //property taker
-Route::get('/property-takers/create', [PropertyTakerController::class, 'create'])->name('property_takers.create');
-Route::post('/property-takers/store', [PropertyTakerController::class, 'store'])->name('property_takers.store');
+Route::get('admin/property-takers/create', [PropertyTakerController::class, 'create'])->name('property_takers.create');
+Route::post('admin/property-takers/store', [PropertyTakerController::class, 'store'])->name('property_takers.store');
+Route::get('admin/property-takers', [PropertyTakerController::class, 'index'])->name('property_takers.index');
+Route::get('admin/property-takers/{id}/edit', [PropertyTakerController::class, 'edit'])->name('property_takers.edit');
+Route::put('admin/property-takers/{id}', [PropertyTakerController::class, 'update'])->name('property_takers.update');
+Route::get('admin/property-takers/{id}', [PropertyTakerController::class, 'show'])->name('property_takers.view');
