@@ -10,7 +10,9 @@ class PropertyTaker extends Model
     use HasFactory;
 
     protected $table = 'property_takers';
-
+    protected $casts = [
+        'agreement_date' => 'datetime',
+    ];
     protected $fillable = [
         'builder_name',
         'project_name',
