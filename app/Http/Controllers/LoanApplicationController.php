@@ -415,13 +415,11 @@ public function getCities($state_id)
                 case 3:
                     $this->handleEducationDetails($request, $userId);
                     break;
+                
                 case 4:
-                    $this->handleExistingLoanDetails($request, $userId);
-                    break;
-                case 5:
                     $this->handleDocumentUpload($request, $userId);
                     break;
-                case 6:
+                case 5:
                     $this->handleLoanDetails($request, $userId);
                     return redirect()->route('loan.thankyou');
                 default:
