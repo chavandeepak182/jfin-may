@@ -714,35 +714,31 @@
     document.addEventListener('DOMContentLoaded', () => {
     const salariedTab = document.getElementById('salariedTab');
     const selfTab = document.getElementById('selfTab');
-    const businessEstablishDate = document.getElementById('business_establish_date');  // Fixed ID here
-    const selfincome = document.getElementById('selfincome');
-    const netsalary = document.getElementById('netsalary');
-    const gross_salary = document.getElementById('gross_salary');
+    const businessEstablishDate = document.getElementById('business_establish_date').closest('.col-md-6');
+    const selfIncome = document.getElementById('selfincome').closest('.col-md-6');
+    const netSalary = document.getElementById('netsalary').closest('.col-md-6');
+    const grossSalary = document.getElementById('gross_salary').closest('.col-md-6');
 
     function toggleTextField() {
-        // If selfTab (self-employed) is selected
         if (selfTab.checked) {
-            businessEstablishDate.style.display = 'block';  // Show business establish date
-            selfincome.style.display = 'block';  // Show self income
-            netsalary.style.display = 'none';  // Hide netsalary
-            gross_salary.style.display = 'none';  // Hide gross salary
-        } 
-        // If salariedTab (salaried) is selected
-        else if (salariedTab.checked) {
-            businessEstablishDate.style.display = 'none';  // Hide business establish date
-            selfincome.style.display = 'none';  // Hide self income
-            netsalary.style.display = 'block';  // Show netsalary
-            gross_salary.style.display = 'block';  // Show gross salary
+            businessEstablishDate.classList.remove('d-none');
+            selfIncome.classList.remove('d-none');
+            netSalary.classList.add('d-none');
+            grossSalary.classList.add('d-none');
+        } else {
+            businessEstablishDate.classList.add('d-none');
+            selfIncome.classList.add('d-none');
+            netSalary.classList.remove('d-none');
+            grossSalary.classList.remove('d-none');
         }
     }
 
-    // Add event listeners to toggle based on user selection
     salariedTab.addEventListener('change', toggleTextField);
     selfTab.addEventListener('change', toggleTextField);
 
-    // Initially set visibility based on the pre-selected radio button (if any)
-    toggleTextField();
+    toggleTextField(); // Ensure correct fields are visible on page load
 });
+
 </script>
 
 <script>

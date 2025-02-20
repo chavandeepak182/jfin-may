@@ -47,8 +47,8 @@ Pending Loans
                     @foreach($pendingLoans as $loan)
                         <tr>
                             <td>{{ $loan->loan_reference_id }}</td>
-                            <td>{{ $loan->user->name ?? 'N/A' }}</td>
-                            <td>{{ $loan->loanCategory->category_name ?? 'N/A' }}</td>
+                            <td>{{ $loan->user_name ?? 'N/A' }}</td>
+                            <td>{{ $loan->category_name ?? 'N/A' }}</td>
                             <td>{{ $loan->amount }}</td>
                             <td>{{ $loan->tenure }}</td>
                             <td>

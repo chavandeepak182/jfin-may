@@ -17,7 +17,7 @@ class IsPartnerMiddleware
     {
        
         $role_id = session()->get('role_id');
-       if( $role_id == env('partnerRole_id') || $role_id == env('adminRole_id') ){
+       if( $role_id == env('partnerRole_id') || $role_id == 4 ){
         return $next($request);
        }
        return redirect('/')->with('error', 'You are not the authorized user to access this page');
