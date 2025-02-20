@@ -31,233 +31,233 @@ class LoanApplicationController extends Controller
     // }
 
     public function index(Request $request)
-{
-    $query = DB::table('loans')
-        ->join('users', 'loans.user_id', '=', 'users.id')
-        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-        ->leftJoin('loan_bank_details', 'loans.bank_id', '=', 'loan_bank_details.bank_id')
-        ->leftJoin('profile', 'users.id', '=', 'profile.user_id')
-        ->select(
-            'loans.loan_id',
-            'loans.amount',
-            'loans.tenure',
-            'loans.loan_reference_id',
-            'users.name as user_name',
-            'loans.status',
-            'profile.city as city',
-            'loan_category.category_name as loan_category_name',
-            'loan_bank_details.bank_name as bank_name',
-            'loans.agent_action'
-        )
-        ->whereNotNull('loans.loan_reference_id'); // Add the condition to exclude loans without loan_reference_id
+    {
+        $query = DB::table('loans')
+            ->join('users', 'loans.user_id', '=', 'users.id')
+            ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+            ->leftJoin('loan_bank_details', 'loans.bank_id', '=', 'loan_bank_details.bank_id')
+            ->leftJoin('profile', 'users.id', '=', 'profile.user_id')
+            ->select(
+                'loans.loan_id',
+                'loans.amount',
+                'loans.tenure',
+                'loans.loan_reference_id',
+                'users.name as user_name',
+                'loans.status',
+                'profile.city as city',
+                'loan_category.category_name as loan_category_name',
+                'loan_bank_details.bank_name as bank_name',
+                'loans.agent_action'
+            )
+            ->whereNotNull('loans.loan_reference_id'); // Add the condition to exclude loans without loan_reference_id
 
-    // Apply filters if present
-    if ($request->filled('status')) {
-        $query->where('loans.status', $request->input('status'));
+        // Apply filters if present
+        if ($request->filled('status')) {
+            $query->where('loans.status', $request->input('status'));
+        }
+
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('loans.created_at', [$request->input('start_date'), $request->input('end_date')]);
+        }
+
+        $data['loans'] = $query->paginate(10);
+
+        // Fetch recent 5 loans (optional, same as before)
+        $recentLoans = DB::table('loans')
+            ->join('users', 'loans.user_id', '=', 'users.id')
+            ->select(
+                'loans.loan_id',
+                'loans.amount',
+                'users.name as user_name',
+                'loans.status'
+            )
+            ->whereNotNull('loans.loan_reference_id') // Add the condition here too
+            ->latest('loans.created_at')
+            ->take(5)
+            ->get();
+
+        return view('frontend.all-loans', compact('data', 'recentLoans'));
     }
-
-    if ($request->filled('start_date') && $request->filled('end_date')) {
-        $query->whereBetween('loans.created_at', [$request->input('start_date'), $request->input('end_date')]);
-    }
-
-    $data['loans'] = $query->paginate(10);
-
-    // Fetch recent 5 loans (optional, same as before)
-    $recentLoans = DB::table('loans')
-        ->join('users', 'loans.user_id', '=', 'users.id')
-        ->select(
-            'loans.loan_id',
-            'loans.amount',
-            'users.name as user_name',
-            'loans.status'
-        )
-        ->whereNotNull('loans.loan_reference_id') // Add the condition here too
-        ->latest('loans.created_at')
-        ->take(5)
-        ->get();
-
-    return view('frontend.all-loans', compact('data', 'recentLoans'));
-}
     public function view($id)
-{
-    // Fetch loan details along with related user and category information
-    $loan = DB::selectOne(
-        'SELECT l.*, u.name AS user_name, lc.category_name AS loan_category_name
-         FROM loans AS l
-         JOIN users AS u ON l.user_id = u.id
-         JOIN loan_category AS lc ON l.loan_category_id = lc.loan_category_id
-         WHERE l.loan_id = ?',
-        [$id]
-    );
+    {
+        // Fetch loan details along with related user and category information
+        $loan = DB::selectOne(
+            'SELECT l.*, u.name AS user_name, lc.category_name AS loan_category_name
+            FROM loans AS l
+            JOIN users AS u ON l.user_id = u.id
+            JOIN loan_category AS lc ON l.loan_category_id = lc.loan_category_id
+            WHERE l.loan_id = ?',
+            [$id]
+        );
 
-    if (!$loan) {
-        return redirect()->route('loans.index')->with('error', 'Loan not found');
-    }
+        if (!$loan) {
+            return redirect()->route('loans.index')->with('error', 'Loan not found');
+        }
 
-    // Fetch related profile details
-    $profile = DB::selectOne(
-        'SELECT * FROM profile WHERE user_id = ?',
-        [$loan->user_id]
-    );
+        // Fetch related profile details
+        $profile = DB::selectOne(
+            'SELECT * FROM profile WHERE user_id = ?',
+            [$loan->user_id]
+        );
 
-    // Fetch related professional details
-    $professional = DB::selectOne(
-        'SELECT * FROM professional_details WHERE user_id = ?',
-        [$loan->user_id]
-    );
+        // Fetch related professional details
+        $professional = DB::selectOne(
+            'SELECT * FROM professional_details WHERE user_id = ?',
+            [$loan->user_id]
+        );
 
-    // Fetch related educational details
-    $education = DB::selectOne(
-        'SELECT * FROM education_details WHERE user_id = ?',
-        [$loan->user_id]
-    );
-    //Fetch related document
-    $documents = DB::select(
-        'SELECT * FROM documents WHERE user_id = ?',
-        [$loan->user_id]
-    );
+        // Fetch related educational details
+        $education = DB::selectOne(
+            'SELECT * FROM education_details WHERE user_id = ?',
+            [$loan->user_id]
+        );
+        //Fetch related document
+        $documents = DB::select(
+            'SELECT * FROM documents WHERE user_id = ?',
+            [$loan->user_id]
+        );
 
-    // Pass all data to the view
-    return view('frontend.loan-details', [
-        'loan' => $loan,
-        'profile' => $profile,
-        'professional' => $professional,
-        'education' => $education,
-        'documents' => $documents,
-        'sanctionLetter' => $loan->sanction_letter,
-    ]);
-}
-    public function edit($id)
-{
-    $loan = Loan::with(['user', 'loanCategory'])->where('loan_id', $id)->first();
-
-    if (!$loan) {
-        return redirect()->route('agent.allAgentLoans')->with('error', 'Loan not found');
-    }
-
-    // Fetch related data
-    $profile = Profile::where('user_id', $loan->user_id)->first();
-    $professional = Professional::where('user_id', $loan->user_id)->first();
-    $education = Education::where('user_id', $loan->user_id)->first();
-    $documents = \DB::table('documents')->where('user_id', $loan->user_id)->get();
-
-    // Fetch all users with role_id 2 (agents) and loan categories
-    $agents = User::join('role_user', 'users.id', '=', 'role_user.user_id')
-                  ->where('role_user.role_id', 2)
-                  ->select('users.id', 'users.name')
-                  ->get();
-    
-    $applyingUser = User::find($loan->user_id);
-    $loanCategories = LoanCategory::all();
-
-    // Pass all data to the view
-    return view('admin.edit-loan', compact('loan', 'loanCategories', 'profile', 'documents', 'professional', 'education', 'agents', 'applyingUser'));
-}
-public function update(Request $request)
-{
-    try {
-        // Validate the request
-        $validated = $request->validate([
-            'loan_id' => 'required|integer',
-            'status' => 'required|string',
-            'loan_category_id' => 'required|integer',
-            'amount' => 'required|numeric',
-            'amount_approved' => 'required_if:status,disbursed|numeric',
-            'tenure' => 'required|integer',
-            'in_principle' => 'nullable|string',
-            'remarks' => 'nullable|string',
-            'sanction_letter' => 'nullable|file|mimes:pdf,doc,docx',
-            'documents.*' => 'nullable|file|mimes:pdf,doc,docx',
+        // Pass all data to the view
+        return view('frontend.loan-details', [
+            'loan' => $loan,
+            'profile' => $profile,
+            'professional' => $professional,
+            'education' => $education,
+            'documents' => $documents,
+            'sanctionLetter' => $loan->sanction_letter,
         ]);
+    }
+    public function edit($id)
+    {
+        $loan = Loan::with(['user', 'loanCategory'])->where('loan_id', $id)->first();
 
-        \DB::transaction(function () use ($request) {
-            $loan = Loan::where('loan_id', $request->input('loan_id'))->firstOrFail();
-            $oldStatus = $loan->status;
-            $newStatus = $request->input('status');
+        if (!$loan) {
+            return redirect()->route('agent.allAgentLoans')->with('error', 'Loan not found');
+        }
 
-            \Log::info('Loan status update:', [
-                'loan_id' => $loan->loan_id,
-                'old_status' => $oldStatus,
-                'new_status' => $newStatus,
+        // Fetch related data
+        $profile = Profile::where('user_id', $loan->user_id)->first();
+        $professional = Professional::where('user_id', $loan->user_id)->first();
+        $education = Education::where('user_id', $loan->user_id)->first();
+        $documents = \DB::table('documents')->where('user_id', $loan->user_id)->get();
+
+        // Fetch all users with role_id 2 (agents) and loan categories
+        $agents = User::join('role_user', 'users.id', '=', 'role_user.user_id')
+                    ->where('role_user.role_id', 2)
+                    ->select('users.id', 'users.name')
+                    ->get();
+        
+        $applyingUser = User::find($loan->user_id);
+        $loanCategories = LoanCategory::all();
+
+        // Pass all data to the view
+        return view('admin.edit-loan', compact('loan', 'loanCategories', 'profile', 'documents', 'professional', 'education', 'agents', 'applyingUser'));
+    }
+    public function update(Request $request)
+    {
+        try {
+            // Validate the request
+            $validated = $request->validate([
+                'loan_id' => 'required|integer',
+                'status' => 'required|string',
+                'loan_category_id' => 'required|integer',
+                'amount' => 'required|numeric',
+                'amount_approved' => 'required_if:status,disbursed|numeric',
+                'tenure' => 'required|integer',
+                'in_principle' => 'nullable|string',
+                'remarks' => 'nullable|string',
+                'sanction_letter' => 'nullable|file|mimes:pdf,doc,docx',
+                'documents.*' => 'nullable|file|mimes:pdf,doc,docx',
             ]);
 
-            // Update loan details
-            $loan->loan_category_id = $request->input('loan_category_id');
-            $loan->amount = $request->input('amount');
-            $loan->tenure = $request->input('tenure');
-            $loan->status = $newStatus;
-            $loan->remarks = $request->input('remarks');
-            $loan->in_principle = $request->input('in_principle');
-            $loan->save();
+            \DB::transaction(function () use ($request) {
+                $loan = Loan::where('loan_id', $request->input('loan_id'))->firstOrFail();
+                $oldStatus = $loan->status;
+                $newStatus = $request->input('status');
 
-            // Save the remark in the loan_remarks table
-            if ($request->input('remarks')) {
-                \DB::table('loan_remarks')->insert([
+                \Log::info('Loan status update:', [
                     'loan_id' => $loan->loan_id,
-                    'agent_id' => session()->get('user_id'),
-                    'status' => $newStatus,
-                    'remarks' => $request->input('remarks'),
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'old_status' => $oldStatus,
+                    'new_status' => $newStatus,
                 ]);
-            }
 
-            // Handle sanction letter upload
-            if ($request->hasFile('sanction_letter')) {
-                $sanctionLetter = $request->file('sanction_letter');
-                $sanctionLetterPath = $sanctionLetter->storeAs('sanction_letters', time() . '_' . $sanctionLetter->getClientOriginalName(), 'public');
-                $loan->update(['sanction_letter' => $sanctionLetterPath]);
-            }
+                // Update loan details
+                $loan->loan_category_id = $request->input('loan_category_id');
+                $loan->amount = $request->input('amount');
+                $loan->tenure = $request->input('tenure');
+                $loan->status = $newStatus;
+                $loan->remarks = $request->input('remarks');
+                $loan->in_principle = $request->input('in_principle');
+                $loan->save();
 
-            // Handle document uploads
-            if ($request->hasFile('documents')) {
-                foreach ($request->file('documents') as $index => $document) {
-                    $filename = time() . '_' . $document->getClientOriginalName();
-                    $filePath = $document->storeAs('documents', $filename, 'public');
-                    \DB::table('documents')->insert([
-                        'user_id' => $loan->user_id,
-                        'document_name' => $request->input('document_names.' . $index, $filename),
-                        'file_path' => $filePath,
+                // Save the remark in the loan_remarks table
+                if ($request->input('remarks')) {
+                    \DB::table('loan_remarks')->insert([
+                        'loan_id' => $loan->loan_id,
+                        'agent_id' => session()->get('user_id'),
+                        'status' => $newStatus,
+                        'remarks' => $request->input('remarks'),
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
                 }
-            }
 
-            // Send email notification if the status has changed
-            if ($oldStatus !== $newStatus) {
-                $customer = $loan->user; 
-                $customerEmail = $customer->email_id;
-                $customerName = $customer->name;
-                $status = $newStatus;
-                $remarks = $request->input('remarks');
-                $msg = "Your loan status has been updated to: $status. Remarks: $remarks";
-                $temp_id = 4; // Example template ID, adjust accordingly
-                app(UsersController::class)->temail($customerEmail, $customerName, $msg, $temp_id);
-
-                // Start MLM Insertion
-                if($newStatus == 'disbursed'){
-                    $name = $customerName;
-                    $parent = $loan->referral_user_id;
-                    $nodeInserted = app(CategoryController::class)->addNode($parent, $name);
-                    $amount_approved = $loan->amount_approved;
-                    
-                    $userId = $loan->user_id;
-                    app(CategoryController::class)->commission_destribution($parent, $amount_approved, $userId);
+                // Handle sanction letter upload
+                if ($request->hasFile('sanction_letter')) {
+                    $sanctionLetter = $request->file('sanction_letter');
+                    $sanctionLetterPath = $sanctionLetter->storeAs('sanction_letters', time() . '_' . $sanctionLetter->getClientOriginalName(), 'public');
+                    $loan->update(['sanction_letter' => $sanctionLetterPath]);
                 }
-                // End MLM Insertion
-            }
-        });
 
-        return redirect()->back()->with('success', 'Loan updated successfully!');
-    } catch (\Exception $e) {
-        \Log::error('Error updating loan', ['exception' => $e->getMessage()]);
-        if ($request->expectsJson()) {
-            return response()->json(['status' => 0, 'msg' => 'An error occurred while updating: ' . $e->getMessage()]);
+                // Handle document uploads
+                if ($request->hasFile('documents')) {
+                    foreach ($request->file('documents') as $index => $document) {
+                        $filename = time() . '_' . $document->getClientOriginalName();
+                        $filePath = $document->storeAs('documents', $filename, 'public');
+                        \DB::table('documents')->insert([
+                            'user_id' => $loan->user_id,
+                            'document_name' => $request->input('document_names.' . $index, $filename),
+                            'file_path' => $filePath,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+                }
+
+                // Send email notification if the status has changed
+                if ($oldStatus !== $newStatus) {
+                    $customer = $loan->user; 
+                    $customerEmail = $customer->email_id;
+                    $customerName = $customer->name;
+                    $status = $newStatus;
+                    $remarks = $request->input('remarks');
+                    $msg = "Your loan status has been updated to: $status. Remarks: $remarks";
+                    $temp_id = 4; // Example template ID, adjust accordingly
+                    app(UsersController::class)->temail($customerEmail, $customerName, $msg, $temp_id);
+
+                    // Start MLM Insertion
+                    if($newStatus == 'disbursed'){
+                        $name = $customerName;
+                        $parent = $loan->referral_user_id;
+                        $nodeInserted = app(CategoryController::class)->addNode($parent, $name);
+                        $amount_approved = $loan->amount_approved;
+                        
+                        $userId = $loan->user_id;
+                        app(CategoryController::class)->commission_destribution($parent, $amount_approved, $userId);
+                    }
+                    // End MLM Insertion
+                }
+            });
+
+            return redirect()->back()->with('success', 'Loan updated successfully!');
+        } catch (\Exception $e) {
+            \Log::error('Error updating loan', ['exception' => $e->getMessage()]);
+            if ($request->expectsJson()) {
+                return response()->json(['status' => 0, 'msg' => 'An error occurred while updating: ' . $e->getMessage()]);
+            }
+            return redirect()->back()->withErrors(['error' => 'An error occurred while updating: ' . $e->getMessage()])->withInput();
         }
-        return redirect()->back()->withErrors(['error' => 'An error occurred while updating: ' . $e->getMessage()])->withInput();
     }
-}
    //admin
    public function inprocess()
    {
@@ -390,104 +390,111 @@ public function getCities($state_id)
     
    
     public function handleStep(Request $request)
-{
-    $userId = session('user_id'); // Get user ID from session
-    if (!$userId) {
-        return redirect()->route('login')->withErrors('User session expired. Please log in again.');
-    }
-
-    $currentStep = $request->input('current_step');
-
-    try {
-        // Determine whether the "Previous" or "Next" button was clicked
-        if ($request->has('previous')) {
-            $currentStep = max(1, $currentStep - 1); // Ensure the step doesn't go below 1
-            return redirect()->route('loan.form', ['current_step' => $currentStep]);
-        } elseif ($request->has('next')) {
-            // Validate and handle the current step
-            switch ($currentStep) {
-                case 1:
-                    $this->handlePersonalDetails($request, $userId);
-                    break;
-                case 2:
-                    $this->handleProfessionalDetails($request, $userId);
-                    break;
-                case 3:
-                    $this->handleEducationDetails($request, $userId);
-                    break;
-                
-                case 4:
-                    $this->handleDocumentUpload($request, $userId);
-                    break;
-                case 5:
-                    $this->handleLoanDetails($request, $userId);
-                    return redirect()->route('loan.thankyou');
-                default:
-                    return redirect()->route('loan.form', ['current_step' => 1])
-                        ->withErrors('Invalid step. Please restart the application process.');
-            }
-
-            // Move to the next step
-            return redirect()->route('loan.form', ['current_step' => $currentStep + 1]);
-        } else {
-            return redirect()->back()->withErrors('Invalid action. Please try again.');
+    {
+        $userId = session('user_id'); // Get user ID from session
+        if (!$userId) {
+            return redirect()->route('login')->withErrors('User session expired. Please log in again.');
         }
-    } catch (\Exception $e) {
-        Log::error('Error handling step: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
-        return redirect()->back()->withErrors('Something went wrong. Please try again.');
+
+        $currentStep = $request->input('current_step');
+
+        try {
+            // Determine whether the "Previous" or "Next" button was clicked
+            if ($request->has('previous')) {
+                $currentStep = max(1, $currentStep - 1); // Ensure the step doesn't go below 1
+                return redirect()->route('loan.form', ['current_step' => $currentStep]);
+            } elseif ($request->has('next')) {
+                // Validate and handle the current step
+                switch ($currentStep) {
+                    case 1:
+                        $this->handlePersonalDetails($request, $userId);
+                        break;
+                    case 2:
+                        $this->handleProfessionalDetails($request, $userId);
+                        break;
+                    case 3:
+                        $this->handleEducationDetails($request, $userId);
+                        break;
+                    
+                    case 4:
+                        $this->handleDocumentUpload($request, $userId);
+                        break;
+                    case 5:
+                        $this->handleLoanDetails($request, $userId);
+                        return redirect()->route('loan.thankyou');
+                    default:
+                        return redirect()->route('loan.form', ['current_step' => 1])
+                            ->withErrors('Invalid step. Please restart the application process.');
+                }
+
+                // Move to the next step
+                return redirect()->route('loan.form', ['current_step' => $currentStep + 1]);
+            } else {
+                return redirect()->back()->withErrors('Invalid action. Please try again.');
+            }
+        } catch (\Exception $e) {
+            Log::error('Error handling step: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
+            return redirect()->back()->withErrors('Something went wrong. Please try again.');
+        }
     }
-}
 
     protected function handlePersonalDetails(Request $request, $userId)
-    {
-        $validated = $request->validate([
-            'mobile_no' => 'required|string|max:15',
-            'marital_status' => 'required|string|max:50',
-            'dob' => 'required|date',
-            'residence_address' => 'required|string|max:255',
-            'city' => 'required|integer|exists:cities,id',
-            'state' => 'required|integer|exists:states,id',
-            'pincode' => 'required|string|max:10',
-            'loan_category_id' => 'required|integer',
-            'bank_id' => 'required|integer',
+{
+    $validated = $request->validate([
+        'mobile_no' => 'required|string|max:15',
+        'marital_status' => 'required|string|max:50',
+        'dob' => 'required|date',
+        'residence_address' => 'required|string|max:255',
+        'city' => 'required|integer|exists:cities,id',
+        'state' => 'required|integer|exists:states,id',
+        'pincode' => 'required|string|max:10',
+        'loan_category_id' => 'required|integer',
+        'bank_id' => 'required|integer',
+    ]);
+
+    // Update or insert into the 'profile' table
+    DB::table('profile')->updateOrInsert(
+        ['user_id' => $userId],
+        [
+            'mobile_no' => $validated['mobile_no'],
+            'marital_status' => $validated['marital_status'],
+            'dob' => $validated['dob'],
+            'residence_address' => $validated['residence_address'],
+            'city' => $validated['city'],
+            'state' => $validated['state'],
+            'pincode' => $validated['pincode']
+        ]
+    );
+
+    // Store loan_category_id and bank_id in session
+    Session::put('loan_category_id', $validated['loan_category_id']);
+    Session::put('bank_id', $validated['bank_id']);
+
+    // Check if a loan already exists for this user
+    $existingLoan = Loan::where('user_id', $userId)->first();
+
+    if (!$existingLoan) {
+        // Create new loan
+        $loan = new Loan();
+        $loan->user_id = $userId;
+        $loan->loan_reference_id = Str::upper(Str::random(8)); // Generate unique reference ID
+        $loan->loan_category_id = $validated['loan_category_id'];
+        $loan->bank_id = $validated['bank_id'];
+        $loan->status = 'in process'; // Default status
+        $loan->save();
+
+        Session::put('loan_id', $loan->loan_id);
+    } else {
+        // Update existing loan
+        $existingLoan->update([
+            'loan_category_id' => $validated['loan_category_id'],
+            'bank_id' => $validated['bank_id']
         ]);
-    
-        // Update or insert into the 'profile' table for personal details
-        DB::table('profile')->updateOrInsert(
-            ['user_id' => $userId],
-            [
-                'mobile_no' => $validated['mobile_no'],
-                'marital_status' => $validated['marital_status'],
-                'dob' => $validated['dob'],
-                'residence_address' => $validated['residence_address'],
-                'city' => $validated['city'],
-                'state' => $validated['state'],
-                'pincode' => $validated['pincode']
-            ]
-        );
 
-        $is_loan = Session::get('is_loan');
-        $is_exist = DB::table('loans')->where('user_id', $userId)->first();
-
-         if($is_loan == 1){
-            $l = new Loan;
-            $l->user_id = $userId;
-            $l->loan_category_id = $validated['loan_category_id'];
-            $l->bank_id = $validated['bank_id'];
-            $l->save();
-            
-            $loan_id = $l->loan_id;
-            Session::put('loan_id', $loan_id);
-
-        }else{
-                $updateLoan = array(
-                    'loan_category_id' => $validated['loan_category_id']
-                );
-
-            $update_loan = DB::table('loans')->where('user_id',$userId)->update($updateLoan);
-        }
+        Session::put('loan_id', $existingLoan->loan_id);
     }
-
+}
+    
 
     protected function handleProfessionalDetails(Request $request, $userId)
     {
@@ -575,8 +582,6 @@ public function getCities($state_id)
         
     }
 
-
-
     protected function handleExistingLoanDetails(Request $request, $userId)
     {
         $existingLoanIds = $request->input('existing_loan_id', []);
@@ -607,78 +612,83 @@ public function getCities($state_id)
     }
     protected function handleDocumentUpload(Request $request, $userId)
     {
-    $documents = ['aadhar_card', 'pancard', 'qualification_proof', 'salary_slip', 'form_16', 'bank_statement', 'passport', 'light_bill', 'dl', 'rent_agree']; // List of possible document types
+        $documents = ['aadhar_card', 'pancard', 'qualification_proof', 'salary_slip', 'form_16', 'bank_statement', 'passport', 'light_bill', 'dl', 'rent_agree']; // List of possible document types
 
-    foreach ($documents as $docType) {
-        if ($request->hasFile($docType)) {
-            $file = $request->file($docType);
-            $fileName = $docType . '_' . $userId . '.' . $file->extension();
-            $filePath = $file->storeAs('documents', $fileName);
+        foreach ($documents as $docType) {
+            if ($request->hasFile($docType)) {
+                $file = $request->file($docType);
+                $fileName = $docType . '_' . $userId . '.' . $file->extension();
+                $filePath = $file->storeAs('documents', $fileName);
 
-                DB::table('documents')->updateOrInsert(
-                    [
-                        'user_id' => $userId,
-                        'document_name' => $docType
-                    ],
-                    [
-                        'file_path' => $filePath
-                    ]
-                );
+                    DB::table('documents')->updateOrInsert(
+                        [
+                            'user_id' => $userId,
+                            'document_name' => $docType
+                        ],
+                        [
+                            'file_path' => $filePath
+                        ]
+                    );
+                }
             }
-        }
     }
-
     protected function handleLoanDetails(Request $request, $userId)
-{
-    $validated = $request->validate([
-        'amount' => 'required|numeric',
-        'tenure' => 'required|integer',
-        'referral_code' => 'nullable|string|max:50',
-    ]);
-
-    $loanReferenceId = Str::upper(Str::random(8));
-    $referralUserId = null;
-
-    if (!empty($validated['referral_code'])) {
-        $referralUser = DB::table('users')->where('referral_code', $validated['referral_code'])->first();
-        $referralUserId = $referralUser->id ?? null;
-    }
-
-    $is_loan = Session::get('is_loan');
-    $loan_id = Session::get('loan_id', null);
-
-    if ($is_loan == 1 && empty(DB::table('loans')->where('user_id', $userId)->first())) {
-        $l = new Loan;
-        $l->user_id = $userId;
-        $l->loan_category_id = $validated['loan_category_id'];
-        $l->bank_id = $validated['bank_id'];
-        $l->loan_reference_id = $loanReferenceId;
-        $l->save();
-    } else {
-        if (!$loan_id) {
-            \Log::warning('No loan_id found in session for user_id: ' . $userId);
-            return redirect()->route('loan.getback')->withErrors('No active loan found.');
+    {
+        // Retrieve stored loan category and bank from session
+        $loan_category_id = Session::get('loan_category_id');
+        $bank_id = Session::get('bank_id');
+    
+        if (!$loan_category_id || !$bank_id) {
+            return redirect()->back()->withErrors(['error' => 'Loan category and bank ID are required.']);
         }
-        DB::table('loans')->where('loan_id', $loan_id)->update([
-            'referral_user_id' => $referralUserId,
-            'amount' => $validated['amount'],
-            'tenure' => $validated['tenure'],
-            'loan_reference_id' => $loanReferenceId,
+    
+        $validated = $request->validate([
+            'amount' => 'required|numeric',
+            'tenure' => 'required|integer',
+            'referral_code' => 'nullable|string|max:50',
         ]);
+    
+        $loanReferenceId = Str::upper(Str::random(8));
+        $referralUserId = null;
+    
+        if (!empty($validated['referral_code'])) {
+            $referralUser = DB::table('users')->where('referral_code', $validated['referral_code'])->first();
+            $referralUserId = $referralUser->id ?? null;
+        }
+    
+        $is_loan = Session::get('is_loan');
+        $loan_id = Session::get('loan_id', null);
+    
+        if ($is_loan == 1) {
+            // Ensure the loan is created if not existing
+            $loan = Loan::updateOrCreate(
+                ['user_id' => $userId, 'loan_id' => $loan_id], // Find existing loan if any
+                [
+                    'user_id' => $userId,
+                    'loan_reference_id' => $loanReferenceId,
+                    'loan_category_id' => $loan_category_id,
+                    'bank_id' => $bank_id,
+                    'amount' => $validated['amount'],
+                    'tenure' => $validated['tenure'],
+                    'referral_user_id' => $referralUserId,
+                    'status' => 'in process',
+                ]
+            );
+    
+            // Store loan ID in session for further steps
+            Session::put('loan_id', $loan->loan_id);
+        } else {
+            // If not a new loan, update the existing loan details
+            DB::table('loans')->where('user_id', $userId)->update([
+                'loan_category_id' => $loan_category_id,
+                'amount' => $validated['amount'],
+                'tenure' => $validated['tenure'],
+                'referral_user_id' => $referralUserId,
+            ]);
+        }
     }
-
-    session(['loan_reference_id' => $loanReferenceId]);
-
-    $credit = DB::table('credit')->where('user_id', $userId)->first();
-    if ($credit) {
-        $creditScore = (int) $credit->credit_score;
-        \Log::info('Credit score for user_id ' . $userId . ': ' . $creditScore);
-        return redirect()->route($creditScore < 700 ? 'loan.getback' : 'loan.thankyou');
-    }
-
-    \Log::error('No credit score found for user_id ' . $userId);
-    return redirect()->route('loan.getback')->withErrors('Credit score not found.');
-}
+    
+    
 
     public function thankYou()
     {

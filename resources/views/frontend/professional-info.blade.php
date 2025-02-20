@@ -56,6 +56,8 @@
                         @csrf
                         <input type="hidden" name="current_step" value="{{ $currentStep }}">
                         <input type="hidden" name="is_loan" value="{{ $is_loan }}">
+                        <input type="hidden" name="loan_category_id" value="{{ session('loan_category_id', '') }}">
+                        <input type="hidden" name="bank_id" value="{{ session('bank_id', '') }}">
 
                         <!-- Personal Details -->
                         @if ($currentStep == 1)
