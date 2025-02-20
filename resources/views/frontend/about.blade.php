@@ -232,143 +232,147 @@
                     <h4 class="text-primary">Our Team</h4>
                     <h2 class="display-4 mb-4">Meet Our Leadership Team</h2>
                 </div>
-                <div class="row g-4">
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.2s">
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-2 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="team-item">
                             <div class="team-img">
-                                <img src="{{ asset('theme') }}/frontend/img/team/Dilip.png" class="img-fluid rounded-top w-100" alt="">
+                                <img src="{{ asset('theme') }}/frontend/img/team/dilip-y.jpg" class="img-fluid rounded-top w-100" alt="">
                                 <div class="team-icon">
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-linkedin-in"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-0" href=""><i class="fab fa-instagram"></i></a>
+                                    <a class="btn btn-primary btn-sm-square rounded-pill" href=""><i class="fab fa-linkedin-in"></i></a>
                                 </div>
                             </div>
-                            <div class="team-title p-4">
+                            <div class="team-title p-3">
                                 <h4 class="mb-0">Dilip Kumar Yadav</h4>
                                 <p class="mb-0">Managing Director</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="col-md-2 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="team-item">
                             <div class="team-img">
-                                <img src="{{ asset('theme') }}/frontend/img/team/taniya.png" class="img-fluid rounded-top w-100" alt="">
+                                <img src="{{ asset('theme') }}/frontend/img/team/parag.png" class="img-fluid rounded-top w-100" alt="">
                                 <div class="team-icon">
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-linkedin-in"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-0" href=""><i class="fab fa-instagram"></i></a>
+                                    <a class="btn btn-primary btn-sm-square rounded-pill" href=""><i class="fab fa-linkedin-in"></i></a>
                                 </div>
                             </div>
-                            <div class="team-title p-4">
-                                <h4 class="mb-0">Taniya Dixit</h4>
-                                <p class="mb-0">Director</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.6s">
-                        <div class="team-item">
-                            <div class="team-img">
-                                <img src="{{ asset('theme') }}/frontend/img/team/Sandeep.png" class="img-fluid rounded-top w-100" alt="">
-                                <div class="team-icon">
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-linkedin-in"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-0" href=""><i class="fab fa-instagram"></i></a>
-                                </div>
-                            </div>
-                            <div class="team-title p-4">
-                                <h4 class="mb-0">Sandeep Pawar</h4>
-                                <p class="mb-0">Marketing Head</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.8s">
-                        <div class="team-item">
-                            <div class="team-img">
-                                <img src="{{ asset('theme') }}/frontend/img/team/Anusha.png" class="img-fluid rounded-top w-100" alt="">
-                                <div class="team-icon">
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-linkedin-in"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-0" href=""><i class="fab fa-instagram"></i></a>
-                                </div>
-                            </div>
-                            <div class="team-title p-4">
-                                <h4 class="mb-0">Anusha Patil</h4>
-                                <p class="mb-0">HR-Operations</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.8s">
-                        <div class="team-item">
-                            <div class="team-img">
-                                <img src="{{ asset('theme') }}/frontend/img/team/Parag.png" class="img-fluid rounded-top w-100" alt="">
-                                <div class="team-icon">
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-linkedin-in"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-0" href=""><i class="fab fa-instagram"></i></a>
-                                </div>
-                            </div>
-                            <div class="team-title p-4">
+                            <div class="team-title p-3">
                                 <h4 class="mb-0">Parag Bhosale</h4>
                                 <p class="mb-0">Sales Manager</p>
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.8s">
+                    <div class="col-md-2 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="team-item">
                             <div class="team-img">
-                                <img src="{{ asset('theme') }}/frontend/img/team/Sakshi.png" class="img-fluid rounded-top w-100" alt="">
+                                <img src="{{ asset('theme') }}/frontend/img/team/lokesh.png" class="img-fluid rounded-top w-100" alt="">
                                 <div class="team-icon">
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-linkedin-in"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-0" href=""><i class="fab fa-instagram"></i></a>
+                                    <a class="btn btn-primary btn-sm-square rounded-pill" href=""><i class="fab fa-linkedin-in"></i></a>
                                 </div>
                             </div>
-                            <div class="team-title p-4">
-                                <h4 class="mb-0">Sakshi Gawali</h4>
-                                <p class="mb-0">Sales Co-ordinator</p>
+                            <div class="team-title p-3">
+                                <h4 class="mb-0">Lokesh Bhosale</h4>
+                                <p class="mb-0">Manager</p>
                             </div>
                         </div>
-                    </div> -->
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.8s">
+                    </div>
+                    <div class="col-md-2 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="team-item">
                             <div class="team-img">
-                                <img src="{{ asset('theme') }}/frontend/img/team/Nadir.png" class="img-fluid rounded-top w-100" alt="">
+                                <img src="{{ asset('theme') }}/frontend/img/team/sunil.png" class="img-fluid rounded-top w-100" alt="">
                                 <div class="team-icon">
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-linkedin-in"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-0" href=""><i class="fab fa-instagram"></i></a>
+                                    <a class="btn btn-primary btn-sm-square rounded-pill" href=""><i class="fab fa-linkedin-in"></i></a>
                                 </div>
                             </div>
-                            <div class="team-title p-4">
-                                <h4 class="mb-0">Nadir Ahmed</h4>
+                            <div class="team-title p-3">
+                                <h4 class="mb-0">Sunil Sukhwani</h4>
+                                <p class="mb-0">BDM</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 wow fadeInUp" data-wow-delay="0.2s">
+                        <div class="team-item">
+                            <div class="team-img">
+                                <img src="{{ asset('theme') }}/frontend/img/team/ajay.png" class="img-fluid rounded-top w-100" alt="">
+                                <div class="team-icon">
+                                    <a class="btn btn-primary btn-sm-square rounded-pill" href=""><i class="fab fa-linkedin-in"></i></a>
+                                </div>
+                            </div>
+                            <div class="team-title p-3">
+                                <h4 class="mb-0">Ajay Shrivastav</h4>
+                                <p class="mb-0">BDM</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 wow fadeInUp" data-wow-delay="0.2s">
+                        <div class="team-item">
+                            <div class="team-img">
+                                <img src="{{ asset('theme') }}/frontend/img/team/viraj.png" class="img-fluid rounded-top w-100" alt="">
+                                <div class="team-icon">
+                                    <a class="btn btn-primary btn-sm-square rounded-pill" href=""><i class="fab fa-linkedin-in"></i></a>
+                                </div>
+                            </div>
+                            <div class="team-title p-3">
+                                <h4 class="mb-0">Viraj</h4>
                                 <p class="mb-0">Sales Manager</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.8s">
+                    <div class="col-md-2 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="team-item">
                             <div class="team-img">
-                                <img src="{{ asset('theme') }}/frontend/img/team/Sunil.png" class="img-fluid rounded-top w-100" alt="">
+                                <img src="{{ asset('theme') }}/frontend/img/team/nidhi.png" class="img-fluid rounded-top w-100" alt="">
                                 <div class="team-icon">
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-2" href=""><i class="fab fa-linkedin-in"></i></a>
-                                    <a class="btn btn-primary btn-sm-square rounded-pill mb-0" href=""><i class="fab fa-instagram"></i></a>
+                                    <a class="btn btn-primary btn-sm-square rounded-pill" href=""><i class="fab fa-linkedin-in"></i></a>
                                 </div>
                             </div>
-                            <div class="team-title p-4">
-                                <h4 class="mb-0">Sunil Sukhwani</h4>
-                                <p class="mb-0">Business Development</p>
+                            <div class="team-title p-3">
+                                <h4 class="mb-0">Nidhi Sonigra</h4>
+                                <p class="mb-0">Manager - Admin</p>
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-2 wow fadeInUp" data-wow-delay="0.2s">
+                        <div class="team-item">
+                            <div class="team-img">
+                                <img src="{{ asset('theme') }}/frontend/img/team/dumy.jpg" class="img-fluid rounded-top w-100" alt="">
+                                <div class="team-icon">
+                                    <a class="btn btn-primary btn-sm-square rounded-pill" href=""><i class="fab fa-linkedin-in"></i></a>
+                                </div>
+                            </div>
+                            <div class="team-title p-3">
+                                <h4 class="mb-0">Prakash</h4>
+                                <p class="mb-0">Sales Manager</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 wow fadeInUp" data-wow-delay="0.2s">
+                        <div class="team-item">
+                            <div class="team-img">
+                                <img src="{{ asset('theme') }}/frontend/img/team/dumy.jpg" class="img-fluid rounded-top w-100" alt="">
+                                <div class="team-icon">
+                                    <a class="btn btn-primary btn-sm-square rounded-pill" href=""><i class="fab fa-linkedin-in"></i></a>
+                                </div>
+                            </div>
+                            <div class="team-title p-3">
+                                <h4 class="mb-0">Sara Shaikh</h4>
+                                <p class="mb-0">Officer</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 wow fadeInUp" data-wow-delay="0.2s">
+                        <div class="team-item">
+                            <div class="team-img">
+                                <img src="{{ asset('theme') }}/frontend/img/team/dumy.jpg" class="img-fluid rounded-top w-100" alt="">
+                                <div class="team-icon">
+                                    <a class="btn btn-primary btn-sm-square rounded-pill" href=""><i class="fab fa-linkedin-in"></i></a>
+                                </div>
+                            </div>
+                            <div class="team-title p-3">
+                                <h4 class="mb-0">Nadir Ahmed</h4>
+                                <p class="mb-0">Manager - Operation</p>
+                            </div>
+                        </div>
+                    </div>                   
                 </div>
             </div>
         </div>
@@ -425,7 +429,7 @@
                         </div>
                     </div>
                     <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.4s">
-                        <img src="{{ asset('theme') }}/frontend/img/faq-2.png" class="img-fluid w-100" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/faq-2.jpg" class="img-fluid w-100" alt="">
                     </div>
                 </div>
             </div>

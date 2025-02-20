@@ -66,40 +66,41 @@
                     <ul class="list-unstyled">
                         <li class="mb-2">
                             <i class="fa fa-check-circle text-danger"></i>
-                            <strong>Identity Proof (Any one of the following)</strong>
+                            <strong>KYC Documents</strong>
                             <ul>
                                 <li>Aadhaar Card</li>
                                 <li>PAN Card</li>
                                 <li>Passport</li>
-                                <li>Driving License</li>
-                            </ul>
-                        </li>
-                        <li class="mb-2">
-                            <i class="fa fa-check-circle text-danger"></i>
-                            <strong>Address Proof (Any one of the following)</strong>
-                            <ul>
-                                <li>Aadhaar Card</li>
-                                <li>Passport</li>
-                                <li>Utility Bill (Electricity, Water, or Gas – last 3 months)</li>
-                                <li>Business Registration Certificate</li>
+                                <li>Current & Permanent Residence Proof</li>
                             </ul>
                         </li>
                         <li class="mb-2">
                             <i class="fa fa-check-circle text-danger"></i>
                             <strong>Income Proof</strong>
                             <ul>
-                                <li>ITR & Profit-Loss Statement (Last 2-3 years)</li>
+                                <li>ITR with Tax Paid challan</li>
                                 <li>Balance Sheet (Last 2-3 years)</li>
                                 <li>Bank Statement (Last 12 months)</li>
+                                <li>Bank account statements for the last 12 months from all banks</li>
                             </ul>
                         </li>
                         <li class="mb-2">
                             <i class="fa fa-check-circle text-danger"></i>
                             <strong>Business Proof</strong>
                             <ul>
-                                <li>GST Registration Certificate</li>
-                                <li>Business License or Registration Certificate</li>
-                                <li>Company PAN Card</li>
+                                <li>Workplace rent agreement (if rented) & Electricity Bill</li>
+                                <li>Business License like Shop Act, GST Registration, UDYAM, last 3 months GST Return</li>
+                            </ul>
+                        </li>
+                        <li class="mb-2">
+                            <i class="fa fa-check-circle text-danger"></i>
+                            <strong>Others</strong>
+                            <ul>
+                                <li>Closure letter</li>
+                                <li>Degree Certificate</li>
+                                <li>All Property (Chain) Documents</li>
+                                <li>If takeover existing loan statement, sanction letter</li>
+                                <li>Loan statement for the last 12 months with sanction letter & repayment schedule</li>
                             </ul>
                         </li>
                     </ul>

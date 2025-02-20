@@ -810,6 +810,7 @@
 
 .team .team-item .team-title h4 {
     color: var(--bs-white);
+    font-size: 18px;
 }
 
 .team .team-item:hover .team-title {
