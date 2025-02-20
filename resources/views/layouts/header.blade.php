@@ -43,7 +43,7 @@
 
             <?php
             $role_id = session()->get('role_id');
-            if ($role_id == env('adminRole_id')) {
+            if ($role_id == 4) {
             ?>
                 <li class="nav-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'dashboard' ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('dashboard') }}">
@@ -52,7 +52,7 @@
                     </a>
                 </li>
             <?php 
-            } elseif ($role_id == env('agentRole_id')) { 
+            } elseif ($role_id == 2) { 
             ?>
                 <li class="nav-item {{ Request::segment(1) == 'agent' && Request::segment(2) == 'dashboard' ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('agentDashboard') }}">
@@ -132,7 +132,7 @@
             <?php } ?> 
 
             <!--Agent navigation -->
-            <?php    if($role_id == env('agentRole_id')) { ?>
+            <?php    if($role_id == 2) { ?>
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLoans"
                         aria-expanded="true" aria-controls="collapseLoans">
@@ -229,7 +229,7 @@
             </li>
             <?php } ?>
             
-            <?php    if($role_id == env('agentRole_id')) { ?>   
+            <?php    if($role_id == 2) { ?>   
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReferral"
                     aria-expanded="true" aria-controls="collapseReferral">
@@ -314,7 +314,7 @@
               </li>
 
             <?php } ?> 
-            <?php    if($role_id == env('agentRole_id')) { ?>
+            <?php    if($role_id == 2) { ?>
             <hr class="sidebar-divider">    
 
             <!-- Nav Item - Agent MIS -->
@@ -373,7 +373,7 @@
                 </div>
             </li>
     
-            <?php    if($role_id == env('adminRole_id')) { ?>
+            <?php    if($role_id == 4) { ?>
         <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -415,7 +415,7 @@
                 </div>
             </li>
             <?php } ?>
-            <?php    if($role_id == env('agentRole_id')) { ?>
+            <?php    if($role_id == 2) { ?>
         <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

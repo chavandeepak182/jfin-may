@@ -439,61 +439,61 @@ public function getCities($state_id)
     }
 
     protected function handlePersonalDetails(Request $request, $userId)
-{
-    $validated = $request->validate([
-        'mobile_no' => 'required|string|max:15',
-        'marital_status' => 'required|string|max:50',
-        'dob' => 'required|date',
-        'residence_address' => 'required|string|max:255',
-        'city' => 'required|integer|exists:cities,id',
-        'state' => 'required|integer|exists:states,id',
-        'pincode' => 'required|string|max:10',
-        'loan_category_id' => 'required|integer',
-        'bank_id' => 'required|integer',
-    ]);
-
-    // Update or insert into the 'profile' table
-    DB::table('profile')->updateOrInsert(
-        ['user_id' => $userId],
-        [
-            'mobile_no' => $validated['mobile_no'],
-            'marital_status' => $validated['marital_status'],
-            'dob' => $validated['dob'],
-            'residence_address' => $validated['residence_address'],
-            'city' => $validated['city'],
-            'state' => $validated['state'],
-            'pincode' => $validated['pincode']
-        ]
-    );
-
-    // Store loan_category_id and bank_id in session
-    Session::put('loan_category_id', $validated['loan_category_id']);
-    Session::put('bank_id', $validated['bank_id']);
-
-    // Check if a loan already exists for this user
-    $existingLoan = Loan::where('user_id', $userId)->first();
-
-    if (!$existingLoan) {
-        // Create new loan
-        $loan = new Loan();
-        $loan->user_id = $userId;
-        $loan->loan_reference_id = Str::upper(Str::random(8)); // Generate unique reference ID
-        $loan->loan_category_id = $validated['loan_category_id'];
-        $loan->bank_id = $validated['bank_id'];
-        $loan->status = 'in process'; // Default status
-        $loan->save();
-
-        Session::put('loan_id', $loan->loan_id);
-    } else {
-        // Update existing loan
-        $existingLoan->update([
-            'loan_category_id' => $validated['loan_category_id'],
-            'bank_id' => $validated['bank_id']
+    {
+        $validated = $request->validate([
+            'mobile_no' => 'required|string|max:15',
+            'marital_status' => 'required|string|max:50',
+            'dob' => 'required|date',
+            'residence_address' => 'required|string|max:255',
+            'city' => 'required|integer|exists:cities,id',
+            'state' => 'required|integer|exists:states,id',
+            'pincode' => 'required|string|max:10',
+            'loan_category_id' => 'required|integer',
+            'bank_id' => 'required|integer',
         ]);
 
-        Session::put('loan_id', $existingLoan->loan_id);
+        // Update or insert into the 'profile' table
+        DB::table('profile')->updateOrInsert(
+            ['user_id' => $userId],
+            [
+                'mobile_no' => $validated['mobile_no'],
+                'marital_status' => $validated['marital_status'],
+                'dob' => $validated['dob'],
+                'residence_address' => $validated['residence_address'],
+                'city' => $validated['city'],
+                'state' => $validated['state'],
+                'pincode' => $validated['pincode']
+            ]
+        );
+
+        // Store loan_category_id and bank_id in session
+        Session::put('loan_category_id', $validated['loan_category_id']);
+        Session::put('bank_id', $validated['bank_id']);
+
+        // Check if a loan already exists for this user
+        $existingLoan = Loan::where('user_id', $userId)->first();
+
+        if (!$existingLoan) {
+            // Create new loan
+            $loan = new Loan();
+            $loan->user_id = $userId;
+            $loan->loan_reference_id = Str::upper(Str::random(8)); // Generate unique reference ID
+            $loan->loan_category_id = $validated['loan_category_id'];
+            $loan->bank_id = $validated['bank_id'];
+            $loan->status = 'in process'; // Default status
+            $loan->save();
+
+            Session::put('loan_id', $loan->loan_id);
+        } else {
+            // Update existing loan
+            $existingLoan->update([
+                'loan_category_id' => $validated['loan_category_id'],
+                'bank_id' => $validated['bank_id']
+            ]);
+
+            Session::put('loan_id', $existingLoan->loan_id);
+        }
     }
-}
     
 
     protected function handleProfessionalDetails(Request $request, $userId)
@@ -505,49 +505,46 @@ public function getCities($state_id)
             'company_address' => 'required|string|max:255',
             'experience_year' => 'required|integer',
             'designation' => 'required|string|max:100',
-            'netsalary' => 'nullable|numeric',
-            'selfincome' => 'nullable|numeric',
-            'business_establish_date' => 'nullable|date',
-            'gross_salary' => 'nullable|numeric'
+            'netsalary' => $request->input('profession_type') === 'salaried' ? 'required|numeric' : 'nullable|numeric',
+            'gross_salary' => $request->input('profession_type') === 'salaried' ? 'required|numeric' : 'nullable|numeric',
+            'selfincome' => $request->input('profession_type') === 'self' ? 'required|numeric' : 'nullable|numeric',
+            'business_establish_date' => $request->input('profession_type') === 'self' ? 'required|date' : 'nullable|date',
         ]);
-
-        $is_loan = Session::get('is_loan');
-        $is_exist = DB::table('professional_details')->where('user_id', $userId)->first();
-
-        if($is_loan == 1 && empty($is_exist )){
-            $p = new Professional;
-            $p->user_id = $userId;
-            $p->profession_type = $validated['profession_type'];
-            $p->company_name = $validated['company_name'];
-            $p->industry = $validated['industry'];
-            $p->company_address = $validated['company_address'];
-            $p->experience_year = $validated['experience_year'];
-            $p->designation = $validated['designation'];
-            $p->netsalary = $validated['netsalary'];
-            $p->gross_salary = $validated['gross_salary'];
-            $p->business_establish_date = $validated['business_establish_date'];
-            $p->selfincome = $validated['selfincome'];
-            $p->save();
-
-        }else{
-                $updateLoan = array(
-                    'profession_type' => $validated['profession_type'],
-                    'company_name' => $validated['company_name'],
-                    'industry' => $validated['industry'],
-                    'company_address' => $validated['company_address'],
-                    'experience_year' => $validated['experience_year'],
-                    'designation' => $validated['designation'],
-                    'netsalary' => $validated['netsalary'],
-                    'gross_salary' => $validated['gross_salary'],
-                    'business_establish_date' => $validated['business_establish_date'],
-                    'selfincome' => $validated['selfincome']
-                );
-
-            $update_loan = DB::table('professional_details')->where('user_id',$userId)->update($updateLoan);
+    
+        $is_loan = Session::get('is_loan', 0);
+        $professional = Professional::where('user_id', $userId)->first();
+    
+        if (!$professional) {
+            // No record exists, create a new one
+            Professional::create([
+                'user_id' => $userId,
+                'profession_type' => $validated['profession_type'],
+                'company_name' => $validated['company_name'],
+                'industry' => $validated['industry'],
+                'company_address' => $validated['company_address'],
+                'experience_year' => $validated['experience_year'],
+                'designation' => $validated['designation'],
+                'netsalary' => $validated['netsalary'] ?? null,
+                'gross_salary' => $validated['gross_salary'] ?? null,
+                'business_establish_date' => $validated['business_establish_date'] ?? null,
+                'selfincome' => $validated['selfincome'] ?? null,
+            ]);
+        } else {
+            // Update existing record
+            $professional->update([
+                'profession_type' => $validated['profession_type'],
+                'company_name' => $validated['company_name'],
+                'industry' => $validated['industry'],
+                'company_address' => $validated['company_address'],
+                'experience_year' => $validated['experience_year'],
+                'designation' => $validated['designation'],
+                'netsalary' => $validated['netsalary'] ?? null,
+                'gross_salary' => $validated['gross_salary'] ?? null,
+                'business_establish_date' => $validated['business_establish_date'] ?? null,
+                'selfincome' => $validated['selfincome'] ?? null,
+            ]);
         }
     }
-
-
     protected function handleEducationDetails(Request $request, $userId)
     {
         $validated = $request->validate([
@@ -556,32 +553,32 @@ public function getCities($state_id)
             'college_name' => 'required|string|max:255',
             'college_address' => 'required|string|max:255'
         ]);
-
-        $is_loan = Session::get('is_loan');
-        $is_exist = DB::table('education_details')->where('user_id', $userId)->first();
-
-        if($is_loan == 1 && empty($is_exist )){
-            $p = new Education;
-            $p->user_id = $userId;
-            $p->qualification = $validated['qualification'];
-            $p->pass_year = $validated['pass_year'];
-            $p->college_name = $validated['college_name'];
-            $p->college_address = $validated['college_address'];
-            $p->save();
-
-        }else{
-                $updateEducation = array(
-                    'qualification' => $validated['qualification'],
-                    'pass_year' => $validated['pass_year'],
-                    'college_name' => $validated['college_name'],
-                    'college_address' => $validated['college_address']
-                );
-
-            $update_loan = DB::table('education_details')->where('user_id',$userId)->update($updateEducation);
+    
+        $is_loan = Session::get('is_loan', 0);
+    
+        // Check if education details already exist
+        $education = Education::where('user_id', $userId)->first();
+    
+        if (!$education) {
+            // Insert new record if not found
+            Education::create([
+                'user_id' => $userId,
+                'qualification' => $validated['qualification'],
+                'pass_year' => $validated['pass_year'],
+                'college_name' => $validated['college_name'],
+                'college_address' => $validated['college_address'],
+            ]);
+        } else {
+            // Update existing record
+            $education->update([
+                'qualification' => $validated['qualification'],
+                'pass_year' => $validated['pass_year'],
+                'college_name' => $validated['college_name'],
+                'college_address' => $validated['college_address'],
+            ]);
         }
-        
     }
-
+    
     protected function handleExistingLoanDetails(Request $request, $userId)
     {
         $existingLoanIds = $request->input('existing_loan_id', []);
@@ -792,7 +789,7 @@ public function assignedLoans()
         // Fetch loans assigned to the agent
         $loans = Loan::where('agent_id', $agent_id)
                      ->with(['user', 'loanCategory'])
-                     ->paginate(10); // Adjust the number of items per page as needed
+                     ->paginate(20); // Adjust the number of items per page as needed
     
         // Return view with loans data
         return view('agent.assigned_loans', compact('loans'));
@@ -867,23 +864,42 @@ public function rejectLoan(Request $request)
 
     return redirect()->route('agent.assignedLoans')->with('error', 'Loan not found.');
 }
-public function pendingLoans()
+   
+    // public function pendingLoans()
+    // {
+    //     $pendingLoans = DB::table('loans')
+    //         ->where(function ($query) {
+    //             $query->whereNull('agent_id') // Not assigned to any agent
+    //                 ->orWhere(function ($subQuery) {
+    //                     $subQuery->whereNotNull('agent_id') // Assigned but...
+    //                         ->whereIn('agent_action', ['Pending', 'Rejected', null]); // Action is pending, rejected, or null
+    //                 });
+    //         })
+    //         ->paginate(10); // Adjust pagination as needed
+    
+    //     $agents = DB::table('users')->where('role_id', 2)->get(); // Fetch agents from users table
+    
+    //     return view('frontend.pending_loans', compact('pendingLoans', 'agents'));
+    // }
+    public function pendingLoans()
 {
     $pendingLoans = DB::table('loans')
-        ->whereNotNull('loan_reference_id') // Ensure loan_reference_id is present
+        ->leftJoin('users', 'loans.user_id', '=', 'users.id') // Join with users table
+        ->leftJoin('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id') // Join with loan_category table
         ->where(function ($query) {
             $query->whereNull('agent_id')
-                ->orWhere('agent_action', 'Pending')
-                ->orWhereNull('agent_action')
-                ->orWhere('agent_action', 'rejected'); // Include rejected loans
+                ->orWhere(function ($subQuery) {
+                    $subQuery->whereNotNull('agent_id')
+                        ->whereIn('agent_action', ['Pending', 'Rejected', null]);
+                });
         })
+        ->select('loans.*', 'users.name as user_name', 'loan_category.category_name as category_name') // Select necessary fields
         ->paginate(10); // Adjust pagination as needed
 
-    $agents = DB::table('users')->where('role_id', 2)->get(); // Fetch agents from the users table
+    $agents = DB::table('users')->where('role_id', 2)->get(); // Fetch agents from users table
 
     return view('frontend.pending_loans', compact('pendingLoans', 'agents'));
 }
-
 public function agentInprocess()
 {
     $role_id = session()->get('role_id');
