@@ -18,7 +18,7 @@
                                 <a href="#" target="_blank" style="text-decoration: none;">
                                     <div class="text-center dash-card">
                                         <h6 class="card-title">Total Customers</h6>
-                                        <h3 class="">{{ $totalUsers }}</h3>
+                                        <h3 class="">{{ $totalCustomers }}</h3>
                                     </div>
                                 </a>
                             </div>
@@ -28,7 +28,7 @@
                                 <a href="#" target="_blank" style="text-decoration: none;">
                                     <div class="text-center dash-card">
                                         <h6 class="card-title">Total<br>Officers</h6>
-                                        <h3 class="">{{ $disbursedLoans }}</h3>
+                                        <h3 class="">{{ $totalOfficers }}</h3>
                                     </div>
                                 </a>
                             </div>
@@ -56,7 +56,7 @@
                                 <a href="#" target="_blank" style="text-decoration: none;">
                                     <div class="text-center dash-card">
                                         <h6 class="card-title">Total<br>Leads</h6>
-                                        <h3 class="">{{ $rejectedLoans }}</h3>
+                                        <h3 class="">{{ $leads }}</h3>
                                     </div>
                                 </a>
                             </div>
@@ -65,7 +65,7 @@
                                 <a href="#" target="_blank" style="text-decoration: none;">
                                     <div class="text-center dash-card">
                                         <h6 class="card-title">Total Enquiries</h6>
-                                        <h3 class="">{{ $rejectedLoans }}</h3>
+                                        <h3 class="">{{ $enquiries }}</h3>
                                     </div>
                                 </a>
                             </div>
@@ -92,7 +92,7 @@
                                 <a href="#" target="_blank" style="text-decoration: none;">
                                     <div class="text-center dash-card">
                                         <h6 class="card-title">Total Properties</h6>
-                                        <h3 class="">{{ $rejectedLoans }}</h3>
+                                        <h3 class="">{{ $properties }}</h3>
                                     </div>
                                 </a>
                             </div>

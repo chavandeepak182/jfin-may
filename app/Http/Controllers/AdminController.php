@@ -31,6 +31,11 @@ class AdminController extends Controller
         $disbursedLoans = DB::table('loans')->where('status', 'disbursed')->count();
         $rejectedLoans = DB::table('loans')->where('status', 'rejected')->count();
         $totalUsers = DB::table('users')->count();
+		$totalCustomers = DB::table('users')->where('role_id', 1)->count();
+		$totalOfficers = DB::table('users')->where('role_id', 2)->count();
+		$leads = DB::table('leads')->count();
+		$enquiries = DB::table('enquiries')->count();
+		$properties = DB::table('properties')->count();
         $recentLoans = $this->fetchRecentLoans();
 
         // Fetch monthly data for disbursed loans
@@ -60,7 +65,12 @@ class AdminController extends Controller
             'totalUsers',
             'disbursedLoans',
             'recentLoans',
-            'monthlyDisbursedData'
+            'monthlyDisbursedData',
+			'totalCustomers',
+			'totalOfficers',
+			'leads',
+			'enquiries',
+			'properties'
         ));
     } else {
         return redirect('/');

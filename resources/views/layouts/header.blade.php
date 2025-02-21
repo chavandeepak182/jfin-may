@@ -167,6 +167,7 @@
                         <a class="collapse-item" href="{{ route('pendingProperties') }}">Pending Property</a>
                         <a class="collapse-item" href="{{ route('allProperties') }}">List Property</a>
                         <a class="collapse-item" href="{{ route('addProperty') }}">Add Property</a>
+                        <a class="collapse-item" href="{{ route('property_takers.index') }}">Property Taker</a>
                     </div>
                 </div>
             </li>
@@ -202,7 +203,7 @@
                             <h6 class="collapse-header">Web Form & Leads:</h6>
                             <a class="collapse-item" href="{{ route('enquiries.enquiryLead') }}">Enquiry Leads</a>
                             <a class="collapse-item" href="#">Property Leads</a>
-                            <a class="collapse-item" href="#">Referral Tool</a>
+                            <a class="collapse-item" href="/admin/leads">Leads</a>
                         </div>
                     </div>
                 </li>
