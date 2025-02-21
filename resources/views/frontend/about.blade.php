@@ -285,7 +285,7 @@
                             </div>
                             <div class="team-title p-3">
                                 <h4 class="mb-0">Ajay Shrivastav</h4>
-                                <p class="mb-0">BDM</p>
+                                <p class="mb-0">BSM</p>
                             </div>
                         </div>
                     </div>
