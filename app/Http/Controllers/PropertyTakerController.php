@@ -36,20 +36,58 @@ class PropertyTakerController extends Controller
             'actual_agreement_cost' => 'required|numeric',
             'gst' => 'required|numeric',
             'extra_charges' => 'nullable|numeric',
-            'stamp_duty' => 'required|numeric',
+            'stamp_duty_percentage' => 'required|numeric', // Stamp Duty Percentage
             'registration_fees' => 'required|numeric',
             'any_other_charges' => 'nullable|numeric',
-            'total_charges' => 'required|numeric',
             'source_by' => 'required|string|max:255',
             'source_name' => 'nullable|string|max:255',
             'agreement_date' => 'required|date',
             'registration_number' => 'required|string|max:255',
         ]);
-
-        PropertyTaker::create($request->all());
-
+    
+        // Calculate After GST Agreement Cost
+        $actualAgreementCost = $request->actual_agreement_cost;
+        $gstPercentage = $request->gst;
+        $gstAmount = ($actualAgreementCost * $gstPercentage) / 100;
+        $afterGstAgreementCost = $actualAgreementCost + $gstAmount;
+    
+        // Calculate Stamp Duty Amount
+        $stampDutyPercentage = $request->stamp_duty_percentage;
+        $stampDutyAmount = ($actualAgreementCost * $stampDutyPercentage) / 100;
+    
+        // Calculate Total Charges
+        $totalCharges = $afterGstAgreementCost + 
+                        $stampDutyAmount + 
+                        $request->registration_fees + 
+                        ($request->extra_charges ?? 0) + 
+                        ($request->any_other_charges ?? 0);
+    
+        // Save to database
+        PropertyTaker::create([
+            'builder_name' => $request->builder_name,
+            'project_name' => $request->project_name,
+            'address' => $request->address,
+            'property_type' => $request->property_type,
+            'carpet_area' => $request->carpet_area,
+            'builtup_area' => $request->builtup_area,
+            'actual_agreement_cost' => $actualAgreementCost,
+            'gst' => $gstPercentage,
+            'after_gst_agreement_cost' => $afterGstAgreementCost,
+            'extra_charges' => $request->extra_charges,
+            'stamp_duty' => $stampDutyAmount, // Save calculated Stamp Duty
+            'registration_fees' => $request->registration_fees,
+            'any_other_charges' => $request->any_other_charges,
+            'total_charges' => $totalCharges, // Save updated Total Charges
+            'source_by' => $request->source_by,
+            'source_name' => $request->source_name,
+            'agreement_date' => $request->agreement_date,
+            'registration_number' => $request->registration_number,
+        ]);
+    
         return redirect()->back()->with('success', 'Property Taker record saved successfully.');
     }
+    
+    
     public function edit($id)
     {
         // Find the property taker by ID
@@ -70,21 +108,60 @@ class PropertyTakerController extends Controller
             'actual_agreement_cost' => 'required|numeric',
             'gst' => 'required|numeric',
             'extra_charges' => 'nullable|numeric',
-            'stamp_duty' => 'required|numeric',
+            'stamp_duty_percentage' => 'required|numeric', // Stamp Duty Percentage
             'registration_fees' => 'required|numeric',
             'any_other_charges' => 'nullable|numeric',
-            'total_charges' => 'required|numeric',
             'source_by' => 'required|string|max:255',
             'source_name' => 'nullable|string|max:255',
             'agreement_date' => 'required|date',
             'registration_number' => 'required|string|max:255',
         ]);
-
-        // Find the property taker by ID and update the record
+    
+        // Find the property taker by ID
         $propertyTaker = PropertyTaker::findOrFail($id);
-        $propertyTaker->update($request->all());
-
+    
+        // Calculate After GST Agreement Cost
+        $actualAgreementCost = $request->actual_agreement_cost;
+        $gstPercentage = $request->gst;
+        $gstAmount = ($actualAgreementCost * $gstPercentage) / 100;
+        $afterGstAgreementCost = $actualAgreementCost + $gstAmount;
+    
+        // Calculate Stamp Duty Amount
+        $stampDutyPercentage = $request->stamp_duty_percentage;
+        $stampDutyAmount = ($actualAgreementCost * $stampDutyPercentage) / 100;
+    
+        // Calculate Total Charges
+        $totalCharges = $afterGstAgreementCost + 
+                        $stampDutyAmount + 
+                        $request->registration_fees + 
+                        ($request->extra_charges ?? 0) + 
+                        ($request->any_other_charges ?? 0);
+    
+        // Update the record
+        $propertyTaker->update([
+            'builder_name' => $request->builder_name,
+            'project_name' => $request->project_name,
+            'address' => $request->address,
+            'property_type' => $request->property_type,
+            'carpet_area' => $request->carpet_area,
+            'builtup_area' => $request->builtup_area,
+            'actual_agreement_cost' => $actualAgreementCost,
+            'gst' => $gstPercentage,
+            'after_gst_agreement_cost' => $afterGstAgreementCost, // Save recalculated GST amount
+            'extra_charges' => $request->extra_charges,
+            'stamp_duty' => $stampDutyAmount, // Save recalculated Stamp Duty
+            'registration_fees' => $request->registration_fees,
+            'any_other_charges' => $request->any_other_charges,
+            'total_charges' => $totalCharges, // Save recalculated Total Charges
+            'source_by' => $request->source_by,
+            'source_name' => $request->source_name,
+            'agreement_date' => $request->agreement_date,
+            'registration_number' => $request->registration_number,
+        ]);
+    
         // Redirect back with success message
         return redirect()->route('property_takers.index')->with('success', 'Property Taker record updated successfully.');
     }
+    
+
 }
