@@ -21,7 +21,7 @@ JFS | Property Takers
             <!-- Breadcrumb -->
             <nav aria-label="breadcrumb" class="d-flex align-items-center">
                 <ol class="breadcrumb m-0 bg-transparent">
-                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Property Takers</li>
                 </ol>
             </nav>

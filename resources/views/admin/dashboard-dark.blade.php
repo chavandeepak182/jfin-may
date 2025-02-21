@@ -8,163 +8,112 @@
     <div id="content-wrapper" class="d-flex flex-column">
         <!-- Main Content -->
         <div id="content">
-            <div class="container-fluid mt-4">
+            <div class="container-fluid bg-white">
                 <!-- Content Row for Cards -->
-                <div class="row">
-                    <!-- Card 1: Total Loans -->
-                    <div class="col-md-2 mb-4">
-                        <div class="card classy-card total-loans">
-                            <div class="card-body-admin text-center">
-                                <h6 class="card-title">Total Loans</h6>
-                                <h3 class="card-count">{{ $totalLoans }}</h3>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 2: Disbursed Loans -->
-                    <div class="col-md-2 mb-4">
-                        <div class="card classy-card disbursed-loans">
-                            <div class="card-body-admin text-center">
-                                <h6 class="card-title">Disbursed Loans</h6>
-                                <h3 class="card-count">{{ $disbursedLoans }}</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card 3: Approved Loans -->
-                    <div class="col-md-2 mb-4">
-                        <div class="card classy-card approved-loans">
-                            <div class="card-body-admin text-center">
-                                <h6 class="card-title">Approved Loans</h6>
-                                <h3 class="card-count">{{ $approvedLoans }}</h3>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 4: Rejected Loans -->
-                    <div class="col-md-2 mb-4">
-                        <div class="card classy-card rejected-loans">
-                            <div class="card-body-admin text-center">
-                                <h6 class="card-title">Rejected Loans</h6>
-                                <h3 class="card-count">{{ $rejectedLoans }}</h3>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-2 mb-4">
-                        <div class="card classy-card total-users">
-                            <div class="card-body-admin text-center">
-                                <h6 class="card-title">Total Loans</h6>
-                                <h3 class="card-count">{{ $totalLoans }}</h3>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 2: Disbursed Loans -->
-                    <div class="col-md-2 mb-4">
-                        <div class="card classy-card total-agents">
-                            <div class="card-body-admin text-center">
-                                <h6 class="card-title">Disbursed Loans</h6>
-                                <h3 class="card-count">{{ $disbursedLoans }}</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Content Row with three charts in a single row -->
-                <div class="row">
-                    <!-- donut chart -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow h-100 py-2">
-                            <div class="card-body">
-                                <h5 class="text-center font-weight-bold text-dark">Loan Status Distribution</h5>
-                                <canvas id="loanStatusChart" height="200"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- graph Loan Status Distribution -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow h-100 py-2">
-                            <div class="card-body">
-                                <h5 class="text-center font-weight-bold text-dark">Monthly Disbursed Loans</h5>
-                                <canvas id="monthlyDisbursedChart" height="200"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- To-do tasks -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow h-100 py-2">
-                            <div class="card-body">
-                                <h5 class="text-center font-weight-bold text-dark">To-Do Tasks</h5>
-                                <!-- Task Input -->
-                                <div class="input-group mb-3">
-                                    <input 
-                                        type="text" 
-                                        id="taskInput" 
-                                        class="form-control" 
-                                        placeholder="Enter a new task" 
-                                        aria-label="New Task"
-                                    >
-                                    <button 
-                                        class="btn btn-primary" 
-                                        type="button" 
-                                        id="addTaskButton"
-                                    >
-                                        Add
-                                    </button>
+                <div class="row pt-5 pb-5">
+                    <div class="col-md-4 mb-3 bg-white rounded border shadow pt-4">
+                        <div class="row align-items-center justify-content-center">
+                        <!-- Card 1: Total Loans -->
+                            <div class="col-md-6 pt-5 pb-5">
+                                <div class="text-center">
+                                    <h6 class="card-title">Total Loans</h6>
+                                    <h3 class="">{{ $totalLoans }}</h3>
                                 </div>
-                                <!-- Task List -->
-                                <ul id="taskList" class="list-group">
-                                    <!-- Tasks will be dynamically added here -->
-                                </ul>
+                            </div>
+
+                            <!-- Card 2: Disbursed Loans -->
+                            <div class="col-md-6 pt-5 pb-5">
+                                <div class="text-center">
+                                    <h6 class="card-title">Disbursed Loans</h6>
+                                    <h3 class="">{{ $disbursedLoans }}</h3>
+                                </div>
+                            </div>
+                            <!-- Card 3: Approved Loans -->
+                            <div class="col-md-6 pt-5 pb-5">
+                                <div class="text-center">
+                                    <h6 class="card-title">Approved Loans</h6>
+                                    <h3 class="">{{ $approvedLoans }}</h3>
+                                </div>
+                            </div>
+
+                            <!-- Card 4: Rejected Loans -->
+                            <div class="col-md-6 pt-5 pb-5">
+                                <div class="text-center">
+                                    <h6 class="card-title">Rejected Loans</h6>
+                                    <h3 class="">{{ $rejectedLoans }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <div class="card-body bg-white rounded border shadow">
+                            <h5 class="text-center font-weight-bold text-dark">Loan Status Distribution</h5>
+                            <canvas id="loanStatusChart" height="200"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3 bg-white rounded border shadow">
+                        <div class="card-body">
+                            <h5 class="text-center font-weight-bold text-dark">Monthly Disbursed Loans</h5>
+                            <canvas id="monthlyDisbursedChart" height="200"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="col-8">
+                        <div class="card-body border rounded shadow">
+                            <h3 class="text-dark">Recent Loans</h3>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>                                                
+                                            <th> Reference ID </th>
+                                            <th> Name </th>
+                                            <th> Amount </th>
+                                            <th> Category </th>
+                                            <th> Status </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($recentLoans as $loan)
+                                            <tr>
+                                                
+                                                <td>{{ $loan->loan_reference_id }}</td>
+                                                <td>{{ $loan->user_name }}</td>
+                                                <td>{{ $loan->amount }}</td>
+                                                <td>{{ $loan->loan_category_name }}</td>
+                                                <td>
+                                                    <div class="status-box {{ strtolower(str_replace(' ', '-', $loan->status)) }}">
+                                                        {{ ucfirst($loan->status) }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="6" class="text-center">No recent loans available</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                     
-                </div>
-
-                <!-- Section: Recent Loans -->
-                <div class="row mt-4">
-                    <div class="col-12 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h3 class="text-dark">Recent Loans</h3>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                
-                                                <th> Reference ID </th>
-                                                <th> Name </th>
-                                                <th> Amount </th>
-                                                <th> Category </th>
-                                                <th> Status </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse ($recentLoans as $loan)
-                                                <tr>
-                                                    
-                                                    <td>{{ $loan->loan_reference_id }}</td>
-                                                    <td>{{ $loan->user_name }}</td>
-                                                    <td>{{ $loan->amount }}</td>
-                                                    <td>{{ $loan->loan_category_name }}</td>
-                                                    <td>
-                                                        <div class="status-box {{ strtolower(str_replace(' ', '-', $loan->status)) }}">
-                                                            {{ ucfirst($loan->status) }}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="6" class="text-center">No recent loans available</td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
+                    <!-- To-do tasks -->
+                    <div class="col-md-4 bg-white rounded border shadow">
+                        <div class="card-body">
+                            <h5 class="text-center font-weight-bold text-dark">To-Do Tasks</h5>
+                            <!-- Task Input -->
+                            <div class="input-group mb-3">
+                                <input type="text" id="taskInput" class="form-control" placeholder="Enter a new task" aria-label="New Task">
+                                <button class="btn btn-primary" type="button" id="addTaskButton">Add</button>
                             </div>
+                            <!-- Task List -->
+                            <ul id="taskList" class="list-group">
+                                <!-- Tasks will be dynamically added here -->
+                            </ul>
                         </div>
-                    </div>
+                    </div> 
                 </div>
             </div>
         </div>

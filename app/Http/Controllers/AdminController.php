@@ -52,7 +52,7 @@ class AdminController extends Controller
             'Rejected' => $rejectedLoans,
         ];
 
-        return view('admin.dashboard-dark', compact(
+        return view('admin.dashboard', compact(
             'totalLoans',
             'approvedLoans',
             'rejectedLoans',
