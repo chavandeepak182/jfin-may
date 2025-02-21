@@ -14,34 +14,87 @@
                     <div class="col-md-4 mb-3 bg-white rounded border shadow pt-4">
                         <div class="row align-items-center justify-content-center">
                         <!-- Card 1: Total Loans -->
-                            <div class="col-md-6 pt-5 pb-5">
-                                <div class="text-center">
-                                    <h6 class="card-title">Total Loans</h6>
-                                    <h3 class="">{{ $totalLoans }}</h3>
-                                </div>
+                            <div class="col-md-4">
+                                <a href="#" target="_blank" style="text-decoration: none;">
+                                    <div class="text-center dash-card">
+                                        <h6 class="card-title">Total Customers</h6>
+                                        <h3 class="">{{ $totalUsers }}</h3>
+                                    </div>
+                                </a>
                             </div>
 
                             <!-- Card 2: Disbursed Loans -->
-                            <div class="col-md-6 pt-5 pb-5">
-                                <div class="text-center">
-                                    <h6 class="card-title">Disbursed Loans</h6>
-                                    <h3 class="">{{ $disbursedLoans }}</h3>
-                                </div>
+                            <div class="col-md-4">
+                                <a href="#" target="_blank" style="text-decoration: none;">
+                                    <div class="text-center dash-card">
+                                        <h6 class="card-title">Total<br>Officers</h6>
+                                        <h3 class="">{{ $disbursedLoans }}</h3>
+                                    </div>
+                                </a>
                             </div>
                             <!-- Card 3: Approved Loans -->
-                            <div class="col-md-6 pt-5 pb-5">
-                                <div class="text-center">
-                                    <h6 class="card-title">Approved Loans</h6>
-                                    <h3 class="">{{ $approvedLoans }}</h3>
-                                </div>
+                            <div class="col-md-4">
+                                <a href="#" target="_blank" style="text-decoration: none;">
+                                    <div class="text-center dash-card">
+                                        <h6 class="card-title">Total<br>Loans</h6>
+                                        <h3 class="">{{ $totalLoans }}</h3>
+                                    </div>
+                                </a>
                             </div>
 
                             <!-- Card 4: Rejected Loans -->
-                            <div class="col-md-6 pt-5 pb-5">
-                                <div class="text-center">
-                                    <h6 class="card-title">Rejected Loans</h6>
-                                    <h3 class="">{{ $rejectedLoans }}</h3>
-                                </div>
+                            <div class="col-md-4">
+                                <a href="#" target="_blank" style="text-decoration: none;">
+                                    <div class="text-center dash-card">
+                                        <h6 class="card-title">Disbursed Loans</h6>
+                                        <h3 class="">{{ $disbursedLoans }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-md-4">
+                                <a href="#" target="_blank" style="text-decoration: none;">
+                                    <div class="text-center dash-card">
+                                        <h6 class="card-title">Total<br>Leads</h6>
+                                        <h3 class="">{{ $rejectedLoans }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-md-4">
+                                <a href="#" target="_blank" style="text-decoration: none;">
+                                    <div class="text-center dash-card">
+                                        <h6 class="card-title">Total Enquiries</h6>
+                                        <h3 class="">{{ $rejectedLoans }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-md-4">
+                                <a href="#" target="_blank" style="text-decoration: none;">
+                                    <div class="text-center dash-card">
+                                        <h6 class="card-title">Approved Loans</h6>
+                                        <h3 class="">{{ $approvedLoans }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-md-4">
+                                <a href="#" target="_blank" style="text-decoration: none;">
+                                    <div class="text-center dash-card">
+                                        <h6 class="card-title">Rejected Loans</h6>
+                                        <h3 class="">{{ $rejectedLoans }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-md-4">
+                                <a href="#" target="_blank" style="text-decoration: none;">
+                                    <div class="text-center dash-card">
+                                        <h6 class="card-title">Total Properties</h6>
+                                        <h3 class="">{{ $rejectedLoans }}</h3>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>

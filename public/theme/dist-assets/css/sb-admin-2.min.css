@@ -127,3 +127,20 @@
     color: #00aae9;
 }
 
+.dash-card {
+    box-shadow: 0px 0px 20px rgb(0 0 0 / 15%);
+    border-radius: 5px;
+    padding: 10px 5px 0px;
+    border: 1px solid #eaecf4;
+    margin-bottom: 25px;
+    transition: all .3s;
+}
+
+.dash-card h3{
+    font-weight: 700;
+}
+
+.dash-card:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgb(0 0 0 / 20%);
+}
