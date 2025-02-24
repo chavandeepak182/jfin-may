@@ -94,14 +94,34 @@
                                 <label for="total_charges" class="col-form-label text-md-end">{{ __('Total Charges') }}</label>
                                 <input type="number" step="0.01" id="total_charges" class="form-control" name="total_charges" required>
                             </div>
-                            <div class="col-md-3">
-                                <label for="source_by" class="col-form-label text-md-end">{{ __('Source By') }}</label>
-                                <input type="text" id="source_by" class="form-control" name="source_by" required>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="source_name" class="col-form-label text-md-end">{{ __('Source Name') }}</label>
-                                <input type="text" id="source_name" class="form-control" name="source_name">
-                            </div>
+                            <!-- test -->
+                                  <!-- Source By -->
+                        <div class="form-group">
+                            <label for="source_by">Source By</label>
+                            <select class="form-control" id="source_by" name="source_by" required>
+                                <option value="">Select Source</option>
+                                <option value="Agent">Agent</option>
+                                <option value="Builder">Builder</option>
+                            </select>
+                        </div>
+
+                        <!-- Agent Dropdown -->
+                        <div class="form-group" id="agent_list" style="display: none;">
+    <label for="source_name_agent">Select Agent</label>
+    <select class="form-control" id="source_name_agent" name="source_name_agent">
+        <option value="">Select Agent</option>
+        @foreach($agents as $agent)
+            <option value="{{ $agent->name }}">{{ $agent->name }}</option>
+        @endforeach
+    </select>
+</div>
+
+                        <!-- Builder Input -->
+                        <div class="form-group" id="builder_input" style="display: none;">
+                            <label for="source_name_builder">Enter Source Name</label>
+                            <input type="text" class="form-control" id="source_name_builder" name="source_name_builder">
+                        </div>
+                        <!-- test -->
                             <div class="col-md-3">
                                 <label for="agreement_date" class="col-form-label text-md-end">{{ __('Agreement Date') }}</label>
                                 <input type="date" id="agreement_date" class="form-control" name="agreement_date" required>
@@ -149,6 +169,27 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('extra_charges').addEventListener('input', calculateCharges);
     document.getElementById('registration_fees').addEventListener('input', calculateCharges);
     document.getElementById('any_other_charges').addEventListener('input', calculateCharges);
+});
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("source_by").addEventListener("change", function () {
+        let source = this.value;
+        if (source === "Agent") {
+            document.getElementById("agent_list").style.display = "block";
+            document.getElementById("builder_input").style.display = "none";
+            document.getElementById("source_name_builder").value = ""; // Clear builder input
+        } else if (source === "Builder") {
+            document.getElementById("builder_input").style.display = "block";
+            document.getElementById("agent_list").style.display = "none";
+            document.getElementById("source_name_agent").selectedIndex = 0; // Reset agent dropdown
+        } else {
+            document.getElementById("agent_list").style.display = "none";
+            document.getElementById("builder_input").style.display = "none";
+            document.getElementById("source_name_agent").selectedIndex = 0;
+            document.getElementById("source_name_builder").value = "";
+        }
+    });
 });
 </script>
 @endsection
