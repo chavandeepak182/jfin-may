@@ -1303,3 +1303,14 @@ ul.detail_features li strong {
     position: relative;
     background-color: #fff;
 }
+
+#prop_view .search_form {
+    position: absolute;
+    bottom: 175px;
+    background: #fff;
+    padding: 40px;
+    right: 110px;
+    left: auto;
+    border-radius: 10px;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, .2);
+}

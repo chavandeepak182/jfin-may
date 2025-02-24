@@ -230,7 +230,7 @@
             </li>
             <?php } ?>
             
-            <?php    if($role_id == 2) { ?>   
+            <!-- <?php    if($role_id == 2) { ?>   
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReferral"
                     aria-expanded="true" aria-controls="collapseReferral">
@@ -242,6 +242,23 @@
                         <h6 class="collapse-header">Referral Management:</h6>
                         <a class="collapse-item" href="{{ route('walletbalance') }}">Wallet</a>
                         <a class="collapse-item" href="{{ route('referral_earnings') }}">Referral Earnings</a>
+                    </div>
+                </div>
+            </li>
+            <?php } ?> -->
+
+            <?php    if($role_id == 2) { ?>   
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReferral"
+                    aria-expanded="true" aria-controls="collapseReferral">
+                    <i class="fas fa-fw fa-tasks custom-icon"></i>
+                    <span>Leads</span>
+                </a>
+                <div id="collapseReferral" class="collapse" aria-labelledby="headingLoan" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Lead Management:</h6>
+                        <a class="collapse-item" href="#">Add Lead</a>
+                        <a class="collapse-item" href="#">All Leads</a>
                     </div>
                 </div>
             </li>
