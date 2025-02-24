@@ -35,9 +35,10 @@
         <!-- Cutomized Scripts and CSS -->
         <script src="@yield('scripts')"></script>
         <script src="@yield('scripts2')"></script>
-        <link rel="stylesheet" href="@yield('links')"/>
+        <link rel="stylesheet" href="{{ asset('theme') }}/frontend/prop/@yield('links')"/>
+        <link rel="stylesheet" href="{{ asset('theme') }}/frontend/prop/@yield('links2')"/>
 
-        <link rel="icon" type="image/png" href="{{ asset('theme') }}/frontend//img/favicon.png">
+        <link rel="icon" type="image/png" href="{{ asset('theme') }}/frontend/img/favicon.png">
     </head>
 
     <body>

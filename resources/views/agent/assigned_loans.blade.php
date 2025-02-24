@@ -7,26 +7,25 @@ Assigned Loans
 
 @section('content')
 @parent
-<!-- Breadcrumbs -->
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb" style="margin-left: 20px;">
-        <li class="breadcrumb-item"><a href="{{ route('agentDashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Assigned Loans</li>
-    </ol>
-</nav>
-
 <!-- DataTables CSS -->
 <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
 
-<div style="padding: 1%">
-    <h1 class="text-white"><center>Assigned Loans</center></h1>
+<div style="">
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Loans List</h6>
+            <div class="d-flex justify-content-between align-items-center">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="d-flex align-items-center">
+                    <ol class="breadcrumb m-0 bg-transparent">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Assigned Loans</li>
+                    </ol>
+                </nav>
+            </div>
         </div>
 
         <div class="card-body">
