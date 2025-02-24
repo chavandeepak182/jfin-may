@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PropertyTaker;
+use App\Models\User;
 
 class PropertyTakerController extends Controller
 {
@@ -15,7 +16,8 @@ class PropertyTakerController extends Controller
     }
     public function create()
     {
-        return view('property_takers.create');
+        $agents = User::where('role_id', 2)->get(['id', 'name']); // Fetch users with role_id = 2 (Agents)
+        return view('property_takers.create', compact('agents'));
     }
     public function show($id)
     {
@@ -40,7 +42,8 @@ class PropertyTakerController extends Controller
             'registration_fees' => 'required|numeric',
             'any_other_charges' => 'nullable|numeric',
             'source_by' => 'required|string|max:255',
-            'source_name' => 'nullable|string|max:255',
+            'source_name_agent' => 'nullable|string|max:255',
+            'source_name_builder' => 'nullable|string|max:255',
             'agreement_date' => 'required|date',
             'registration_number' => 'required|string|max:255',
         ]);
@@ -61,7 +64,9 @@ class PropertyTakerController extends Controller
                         $request->registration_fees + 
                         ($request->extra_charges ?? 0) + 
                         ($request->any_other_charges ?? 0);
-    
+                        $sourceName = ($request->source_by == 'Agent') ? $request->source_name_agent : $request->source_name_builder;
+
+
         // Save to database
         PropertyTaker::create([
             'builder_name' => $request->builder_name,
@@ -79,15 +84,13 @@ class PropertyTakerController extends Controller
             'any_other_charges' => $request->any_other_charges,
             'total_charges' => $totalCharges, // Save updated Total Charges
             'source_by' => $request->source_by,
-            'source_name' => $request->source_name,
+            'source_name' => $sourceName,
             'agreement_date' => $request->agreement_date,
             'registration_number' => $request->registration_number,
         ]);
     
         return redirect()->back()->with('success', 'Property Taker record saved successfully.');
     }
-    
-    
     public function edit($id)
     {
         // Find the property taker by ID
