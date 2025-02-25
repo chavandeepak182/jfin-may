@@ -7,17 +7,16 @@
 @section('scripts', "https://cdn.jsdelivr.net/npm/@splidejs/splide@1.2.0/dist/js/splide.min.js")
 
 @section('content')
-<?php 
-    
-        foreach($data['propertie_details'] as $v) {  
-            $price_range = $v->from_price. " to ". $v->to_price;
-            $img = env('baseURL'). "/".$v->image; $boucher = env('baseURL'). "/".$v->boucher;  $address = $v->localities.", ".$v->city; $area = $v->area; $rera = $v->rera; $category = $v->category_name;  $latitude = $v->latitude; $longitude = $v->longitude; $s_price = $v->s_price; $category = $v->category_name;  $land_type = $v->land_type; $builder_name = $v->builder_name; $facilities = $v->facilities; $title = $v->title; $created_at = $v->created_at; $beds = $v->beds; $baths = $v->baths; $balconies = $v->balconies; $parking = $v->parking; $builtup_area =$v->builtup_area; $nearby_locations = json_decode($v->nearby_locations, true);
+<?php     
+    foreach($data['propertie_details'] as $v) {  
+        $price_range = $v->from_price. " to ". $v->to_price;
+        $img = env('baseURL'). "/".$v->image; $boucher = env('baseURL'). "/".$v->boucher;  $address = $v->localities.", ".$v->city; $area = $v->area; $rera = $v->rera; $category = $v->category_name;  $latitude = $v->latitude; $longitude = $v->longitude; $s_price = $v->s_price; $category = $v->category_name;  $land_type = $v->land_type; $builder_name = $v->builder_name; $facilities = $v->facilities; $title = $v->title; $created_at = $v->created_at; $beds = $v->beds; $baths = $v->baths; $balconies = $v->balconies; $parking = $v->parking; $builtup_area =$v->builtup_area; $nearby_locations = json_decode($v->nearby_locations, true); $property_details = $v->property_details;
 ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <!-- Details Start -->
-    <div class="container-fluid bg-light about">
-        <div class="container mb-5 pt-2 pb-5">
+    <div class="container-fluid about">
+        <div class="container mb-5 pt-3 pb-5">
             <div class="row text-display" style="font-family: 'DM Sans';">
                 <p class=""><a href="{{ url('/') }}">Home</a> > <a href="{{ url('properties')}}">Properties</a> > {{ $v->title }}</p>
                 <div class="col-xl-9 wow fadeInLeft" data-wow-delay="0.2s">
@@ -25,7 +24,7 @@
                         <!-- <p><small>Posted On: {{ \Carbon\Carbon::parse($v->created_at)->format('M d, Y') }}<span class="float-end">Rera No. : {{$rera}}</span> </small> -->
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="thumbnail_slider shadow">
+                                <div class="thumbnail_slider shadow-sm">
                                     <!-- Primary Slider Start-->
                                     <div id="primary_slider">
                                         @if($data['additional_images']->isNotEmpty())
@@ -59,23 +58,18 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <div class="property_block_wrap style-2 bg-white rounded-bottom p-4 shadow">
+                                <div class="property_block_wrap style-2 bg-white rounded-bottom p-4 shadow-sm">
                                     <div id="clOne" class="panel-collapse collapse show" aria-labelledby="clOne">
                                         <div class="block-body">
-                                            <!-- <p><span class="prop-type">{{ $category }}</span></p> -->
-                                            <h4 class="mb-0 text-capitalize"><i class="far fa-building fa-1x"></i> By {{ $builder_name }} <span class="rera"><i class="far fa-check-circle" style="color: #f74400;"></i> RERA</span></h4>
-                                            <h5 class="mb-0"><i class="fa-duotone fa-solid fa-location-dot fa-1x"></i> {{ $address }}</h5>
                                             <div class="row mt-3">
-                                                <div class="col-md-6">
-                                                    <h4 class="prt-price-fix">₹{{ number_format($s_price, 0, '.', ',') }}</h4> 
+                                                <div class="col-md-8">
+                                                    <!-- <p><span class="prop-type">{{ $category }}</span></p> -->
+                                                    <p class="h5 mb-0 text-capitalize"><i class="far fa-building fa-1x"></i> By {{ $builder_name }} <span class="rera"><i class="far fa-check-circle" style="color: #f74400;"></i> RERA</span></h4>
+                                                    <p class="mb-0"><i class="fa-duotone fa-solid fa-location-dot fa-1x"></i> {{ $address }}</p>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <ul class="d-inline-flex p-0 m-0 text-dark float-end" style="list-style: none;">
-                                                        <li class="px-2 border-end border-2 border-dark"><i class="fas fa-bed  text-muted"></i> <strong>{{ $beds}}</strong> Beds</li>
-                                                        <li class="px-2 border-end border-2 border-dark"><i class="fas fa-bath  text-muted"></i> <strong>{{ $baths}}</strong> Baths</li>
-                                                        <li class="px-2 border-end border-2 border-dark"><i class="fas fa-border-none  text-muted"></i> <strong>{{ $balconies}}</strong> Balconies</li>
-                                                        <li class="px-2"><i class="fas fa-car  text-muted"></i> <strong>{{ $parking }}</strong> Parkings</li>
-                                                    </ul>
+                                                <div class="col-md-4">
+                                                    <p class="float-end mb-1">Last Updated: {{ \Carbon\Carbon::parse($v->created_at)->format('M d, Y') }}</p>
+                                                    <h4 class="prt-price-fix float-end">₹{{ number_format($s_price, 0, '.', ',') }}* Onwards</h4> 
                                                 </div>
                                             </div>
                                         </div>
@@ -85,12 +79,12 @@
                         </div>
                     </div>
 
-                    <div class="about-item-content bg-white rounded p-4 mt-3 shadow">
+                    <div class="about-item-content bg-white rounded p-4 mt-3 shadow-sm">
                         <div class="row g-4">
                             <div class="col-md-12">
                                 <div class="property_block_wrap style-2">
                                     <div class="property_block_wrap_header">
-                                        <a data-bs-toggle="collapse" data-parent="#features" data-bs-target="#clOne" aria-controls="clOne" href="javascript:void(0);" aria-expanded="true">
+                                        <a data-bs-toggle="collapse" data-parent="#features" data-bs-target="#clTwo" aria-controls="clTwo" href="javascript:void(0);" aria-expanded="true">
                                             <h4 class="property_block_title">
                                                 Property Details
                                                 <span class="float-end">
@@ -99,17 +93,73 @@
                                             </h4>
                                         </a>
                                     </div>
-                                    <div id="clOne" class="panel-collapse collapse show" aria-labelledby="clOne">
+                                    <div id="clTwo" class="panel-collapse collapse show" aria-labelledby="clTwo">
                                         <div class="block-body">
-                                            <ul class="detail_features">
-                                                <li><strong>Carpet Area:</strong> {{$area}} sqft</li>
-                                                <li><strong>Builtup Area:</strong> {{$builtup_area}} /sqft</li>
-                                                <li><strong>Floor:</strong> 10/16</li>
-                                                <li><strong>Bedrooms:</strong> {{$beds}}</li>
-                                                <li><strong>Bathrooms:</strong> {{$baths}}</li>
-                                                <li><strong>Parking:</strong> {{$parking}}</li>
-                                                <li><strong>Property Type:</strong> {{$land_type}}</li>
-                                            </ul>
+                                            <div class="row g-3">  <!-- Added Bootstrap's gutter spacing -->
+                                                @if(!empty($area))
+                                                    <div class="col-md-4">
+                                                        <div class="card p-3 border rounded shadow-sm">
+                                                            <strong>Carpet Area:</strong> {{$area}} sqft
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+                                                @if(!empty($builtup_area))
+                                                    <div class="col-md-4">
+                                                        <div class="card p-3 border rounded shadow-sm">
+                                                            <strong>Builtup Area:</strong> {{$builtup_area}} sqft
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+                                                @if(!empty($floor))
+                                                    <div class="col-md-4">
+                                                        <div class="card p-3 border rounded shadow-sm">
+                                                            <strong>Floor:</strong> {{$floor}}
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+                                                @if(!empty($beds))
+                                                    <div class="col-md-4">
+                                                        <div class="card p-3 border rounded shadow-sm">
+                                                            <strong>Bedrooms:</strong> {{$beds}}
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+                                                @if(!empty($baths))
+                                                    <div class="col-md-4">
+                                                        <div class="card p-3 border rounded shadow-sm">
+                                                            <strong>Bathrooms:</strong> {{$baths}}
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+                                                @if(!empty($balconies))
+                                                    <div class="col-md-4">
+                                                        <div class="card p-3 border rounded shadow-sm">
+                                                            <strong>Balconies:</strong> {{$balconies}}
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+                                                @if(!empty($parking))
+                                                    <div class="col-md-4">
+                                                        <div class="card p-3 border rounded shadow-sm">
+                                                            <strong>Parking:</strong> {{$parking}}
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+                                                @if(!empty($land_type))
+                                                    <div class="col-md-4">
+                                                        <div class="card p-3 border rounded shadow-sm">
+                                                            <strong>Property Type:</strong> {{$land_type}}
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -117,7 +167,7 @@
                         </div>
                     </div>
 
-                    <div class="about-item-content bg-white rounded p-4 mt-3 shadow">
+                    <div class="about-item-content bg-white rounded p-4 mt-3 shadow-sm">
                         <div class="row g-4">
                             <div class="col-md-12">
                                 <div class="property_block_wrap style-2">
@@ -133,7 +183,7 @@
                                     </div>
                                     <div id="clOne2" class="panel-collapse collapse show" aria-labelledby="clOne2">
                                         <div class="block-body">
-                                            <p>Indulge in a lifestyle of unparalleled sophistication at The Emperor’s Club. With over 30 superlative amenities meticulously curated for your pleasure, revel in the spacious layouts boasting zero space wastage, ensuring every inch of your domain is adorned with magnificence. From the opulent interiors to the expansive windows inviting ample sunlight and refreshing cross ventilation, each residence is crafted to elevate your living experience to celestial heights.</p>
+                                            <p>{{ $property_details }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -141,7 +191,69 @@
                         </div>
                     </div>
 
-                    <div class="about-item-content bg-white rounded p-3 mt-3 shadow">
+                    <div class="about-item-content bg-white rounded p-4 mt-3 shadow-sm">
+                        <div class="row g-4">
+                            <div class="col-md-12">
+                                <div class="property_block_wrap style-2">
+                                    <div class="property_block_wrap_header">
+                                        <a data-bs-toggle="collapse" data-parent="#amenities" data-bs-target="#clOne5" aria-controls="clOne5" href="javascript:void(0);" aria-expanded="true">
+                                            <h4 class="property_block_title">
+                                                Amenities of {{ $v->title }}
+                                                <span class="float-end">
+                                                    <i class="bi bi-chevron-down collapse-icon" data-bs-toggle="collapse-icon" aria-expanded="true"></i>
+                                                </span>
+                                            </h4>
+                                        </a>
+                                    </div>
+                                    <div id="clOne5" class="panel-collapse collapse show" aria-labelledby="clOne5">
+                                        <div class="block-body">
+                                            @if(isset($facilities) && !empty($facilities))
+                                                @php
+                                                    $facilitiesArray = explode(',', $facilities); // Convert string to array
+
+                                                    // Define SVG icon paths for each facility
+                                                    $icons = [
+                                                        'WiFi' => 'theme/frontend/img/icons/wifi.svg',
+                                                        'Parking' => 'theme/frontend/img/icons/parking.svg',
+                                                        'Swimming Pool' => 'theme/frontend/img/icons/pool.svg',
+                                                        'Balcony' => 'theme/frontend/img/icons/balcony.svg',
+                                                        'Garden' => 'theme/frontend/img/icons/garden.svg',
+                                                        'Security' => 'theme/frontend/img/icons/security.svg',
+                                                        'Fitness Center' => 'theme/frontend/img/icons/gym.svg',
+                                                        'Air Conditioning' => 'theme/frontend/img/icons/ac.svg',
+                                                        'Central Heating' => 'theme/frontend/img/icons/central-heating.svg',
+                                                        'Laundry Room' => 'theme/frontend/img/icons/laundry.svg',
+                                                        'Pets Allowed' => 'theme/frontend/img/icons/pet.svg',
+                                                        'Spa & Massage' => 'theme/frontend/img/icons/spa.svg'
+                                                    ];
+                                                @endphp
+
+                                                <div class="row">
+                                                    @foreach($facilitiesArray as $facility)
+                                                        @php 
+                                                            $facility = trim($facility); // Remove extra spaces
+                                                            $iconPath = $icons[$facility] ?? 'theme/frontend/img/icons/default.svg'; // Default icon
+                                                        @endphp
+                                                        <div class="col-md-3 col-sm-6 mb-3">
+                                                            <div class="d-flex align-items-center border p-3 rounded">
+                                                                <img src="{{ asset($iconPath) }}" alt="{{ $facility }}" class="me-2" width="34" height="34"> 
+                                                                <span>{{ $facility }}</span>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @else
+                                                <p>No amenities available.</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="about-item-content bg-white rounded p-3 mt-3 shadow-sm">
                         <div class="row g-4">
                             <div class="col-md-12">
                                 <div class="property_block_wrap style-2">
@@ -161,7 +273,7 @@
                         </div>
                     </div>                    
 
-                    <div class="about-item-content bg-white rounded p-4 mt-3 shadow">
+                    <div class="about-item-content bg-white rounded p-4 mt-3 shadow-sm">
                         <div class="row g-4">
                             <div class="col-md-12">
                                 <div class="property_block_wrap style-2">
@@ -179,15 +291,16 @@
                                     <div id="clOne4" class="panel-collapse collapse show" aria-labelledby="clOne4">
                                         <div class="block-body">
                                             @if($nearby_locations && count($nearby_locations) > 0)
-                                                <ul class="detail_features">
+                                                <div class="row g-3">  <!-- Bootstrap Grid for Proper Spacing -->
                                                     @foreach($nearby_locations as $location)
                                                         @if(!empty($location))
-                                                            <li>
-                                                                <i class="fa-solid fa-square-check text-success me-2"></i> {{ $location }}
-                                                            </li>
+                                                            <div class="col-md-3">
+                                                                <i class="fas fa-location text-success me-2"></i>
+                                                                <span>{{ $location }}</span>
+                                                            </div>
                                                         @endif
                                                     @endforeach
-                                                </ul>
+                                                </div>
                                             @endif
                                         </div>
                                     </div>
@@ -198,7 +311,7 @@
                 </div>
                 
                 <div class="col-xl-3 wow fadeInRight" data-wow-delay="0.2s">
-                    <div class="bg-white rounded p-3 shadow">
+                    <div class="bg-white rounded border p-3 shadow-sm">
                         <div class="row g-4 justify-content-center">
                             <div class="sides-widget">
                                 <div class="sides-widget-header">
@@ -238,7 +351,7 @@
                             </div>                            
                         </div>
                     </div>
-                    <div class="bg-white rounded p-3 mt-3 shadow">
+                    <div class="bg-white rounded p-3 mt-3 shadow-sm">
                         <div class="row g-4 justify-content-center">
                             <div class="col-12 text-center">
                                     <!-- Brochure Box with Image -->
