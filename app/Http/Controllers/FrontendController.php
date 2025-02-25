@@ -264,16 +264,38 @@ class FrontendController extends Controller
         $data['allProperties'] = DB::table('properties')
             ->join('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
             ->join('property_category', 'properties.property_type_id', '=', 'property_category.pid')
-            ->where('properties.is_active',1)
-            ->select('properties.properties_id', 'properties.title', 'properties.image', 'properties.property_type_id', 'properties.builder_name','properties.select_bhk', 
-            'properties.address','properties.facilities', 'properties.beds',  'properties.baths', 'properties.balconies', 'properties.parking', 'properties.contact', 'price_range.from_price', 'price_range.to_price', 'property_category.category_name', 'properties.property_details', 'properties.localities', 'properties.city', 'properties.area')
-        ->paginate(700);
-
+            ->where('properties.is_active', 1)
+            ->select(
+                'properties.properties_id', 'properties.title', 'properties.property_type_id', 
+                'properties.builder_name', 'properties.select_bhk', 'properties.address', 
+                'properties.facilities', 'properties.beds', 'properties.baths', 'properties.balconies', 
+                'properties.parking', 'properties.contact', 'price_range.from_price', 'price_range.to_price', 
+                'property_category.category_name', 'properties.property_details', 
+                'properties.localities', 'properties.city', 'properties.area'
+            )
+            ->paginate(700);
+    
         $data['category'] = DB::table('property_category')->get();
         $data['range'] = DB::table('price_range')->get();
-
-        return view('frontend.properties',compact('data'));
+    
+        // Fetch first image for each property from property_images
+        $propertyImages = DB::table('property_images')
+            ->select('properties_id', 'image_url')
+            ->whereIn('properties_id', $data['allProperties']->pluck('properties_id')) // Fetch images only for listed properties
+            ->orderBy('is_featured', 'DESC') // Prefer featured images
+            ->get()
+            ->groupBy('properties_id');
+    
+        // Attach image to each property
+        foreach ($data['allProperties'] as $property) {
+            $property->image = isset($propertyImages[$property->properties_id]) 
+                ? $propertyImages[$property->properties_id]->first()->image_url 
+                : 'default.jpg'; // Fallback image
+        }
+    
+        return view('frontend.properties', compact('data'));
     }
+    
     
 
     public function search_properties(Request $request)
