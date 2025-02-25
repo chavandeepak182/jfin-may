@@ -71,7 +71,10 @@
                         </div>
                     </div>
                 </form>
-            </div>          
+            </div>
+
+
+          
         </div>
     </div>
 </div>
@@ -91,29 +94,33 @@
                 //$boucher = env('baseURL'). "/".$v->boucher;
                 $title = $v->title;
                 $category = $v->category_name;
+                $builder_name = $v->builder_name;
                 $description = $v->property_details;
                 $bhk = $v->select_bhk;
+                $beds = $v->beds;
                 $address = $v->localities.", ".$v->city;
                 $area = $v->area;
 
                 ?>
-                <div class="col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.2s">
-                    <div class="blog-item">
-                        <div class="blog-img">
-                            <img src="{{ $img }}" class="img-fluid rounded-top w-100" alt="" style="height: 250px">
-                            <div class="blog-categiry py-2 px-4">
-                                <span>{{ $category }}</span>
+                <div class="col-md-4 wow fadeInUp" data-wow-delay="0.2s">
+                    <a href="{{ url('property-details/'.$v->properties_id) }}">
+                        <div class="blog-item">
+                            <div class="blog-img">
+                                <img src="{{ $img }}" class="img-fluid rounded-top w-100" alt="" style="height: 250px">
+                                <div class="blog-categiry py-2 px-4">
+                                    <span>{{ $category }}</span>
+                                </div>
+                            </div>
+                            <div class="blog-content p-4">
+                                <p class="mb-0">{{ $beds }} BHK Flat</p>
+                                <p class="mb-3 h4 d-inline-block"><strong>₹ {{ $v->from_price }}<sup>*</sup></strong><span class="px-3">|</span><em>{{ $area }} sqft</em></p>
+                                <!-- <p class="h4 d-inline-block mb-3">{{ $title }}</p> -->
+                                <p class="mb-3">Developed By {{ $builder_name }}</p>
+                                <!-- <p class="mb-3">{{ $description }}</p> -->
+                                <p class="mb-3">{{ $address }}</p>
                             </div>
                         </div>
-                        <div class="blog-content p-4">
-                            <p class="mb-0">{{ $bhk }} BHK Flat</p>
-                            <p class="mb-3 h4 d-inline-block"><strong>₹ {{ $v->from_price }}<sup>*</sup></strong><span class="px-3">|</span><em>{{ $area }} sqft</em></p>
-                            <!-- <p class="h4 d-inline-block mb-3">{{ $title }}</p> -->
-                            <p class="mb-3">{{ $description }}</p>
-                            <p class="mb-3">{{ $address }}</p>
-                            <a href="{{ url('property-details/'.$v->properties_id) }}" class="btn p-0">Read More  <i class="fa fa-arrow-right"></i></a>
-                        </div>
-                    </div>
+                    </a>
                 </div>
            <?php 
            }
