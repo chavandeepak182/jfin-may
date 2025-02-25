@@ -95,33 +95,35 @@
                                 <input type="number" step="0.01" id="total_charges" class="form-control" name="total_charges" required>
                             </div>
                             <!-- test -->
-                                  <!-- Source By -->
-                        <div class="form-group">
-                            <label for="source_by">Source By</label>
-                            <select class="form-control" id="source_by" name="source_by" required>
-                                <option value="">Select Source</option>
-                                <option value="Agent">Agent</option>
-                                <option value="Builder">Builder</option>
-                            </select>
-                        </div>
-
-                        <!-- Agent Dropdown -->
-                        <div class="form-group" id="agent_list" style="display: none;">
-    <label for="source_name_agent">Select Agent</label>
-    <select class="form-control" id="source_name_agent" name="source_name_agent">
-        <option value="">Select Agent</option>
-        @foreach($agents as $agent)
-            <option value="{{ $agent->name }}">{{ $agent->name }}</option>
-        @endforeach
-    </select>
-</div>
-
-                        <!-- Builder Input -->
-                        <div class="form-group" id="builder_input" style="display: none;">
-                            <label for="source_name_builder">Enter Source Name</label>
-                            <input type="text" class="form-control" id="source_name_builder" name="source_name_builder">
-                        </div>
-                        <!-- test -->
+                            <div class="col-md-3">
+                                <!-- Source By -->
+                                <div class="form-group">
+                                    <label for="source_by" class="col-form-label text-md-end">Source By</label>
+                                    <select class="form-control" id="source_by" name="source_by" required>
+                                        <option value="">Select Source</option>
+                                        <option value="Agent">Agent</option>
+                                        <option value="Builder">Builder</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                            <!-- Agent Dropdown -->
+                                <div class="form-group" id="agent_list" style="display: none;">
+                                    <label for="source_name_agent" class="col-form-label text-md-end">Select Agent</label>
+                                    <select class="form-control" id="source_name_agent" name="source_name_agent">
+                                        <option value="">Select Agent</option>
+                                        @foreach($agents as $agent)
+                                            <option value="{{ $agent->name }}">{{ $agent->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <!-- Builder Input -->
+                                <div class="form-group" id="builder_input" style="display: none;">
+                                    <label for="source_name_builder" class="col-form-label text-md-end">Enter Source Name</label>
+                                    <input type="text" class="form-control" id="source_name_builder" name="source_name_builder">
+                                </div>
+                            </div>                            
+                            <!-- test -->
                             <div class="col-md-3">
                                 <label for="agreement_date" class="col-form-label text-md-end">{{ __('Agreement Date') }}</label>
                                 <input type="date" id="agreement_date" class="form-control" name="agreement_date" required>

@@ -1304,13 +1304,53 @@ ul.detail_features li strong {
     background-color: #fff;
 }
 
-#prop_view .search_form {
-    position: absolute;
-    bottom: 175px;
-    background: #fff;
-    padding: 40px;
-    right: 110px;
-    left: auto;
-    border-radius: 10px;
-    box-shadow: 5px 5px 30px rgba(0, 0, 0, .2);
+.additional-images ul li img.img-fluid{
+    height: 175px;
+}
+
+/* Slider CSS Start  */
+.thumbnail_slider {
+    max-width: 100%;
+}
+
+.splide__slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+    width: 580px;
+    overflow: hidden;
+    transition: .2s;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.splide--nav > .splide__track > .splide__list > .splide__slide.is-active {
+    box-shadow: 2px 3px 8px #000000a3;
+}
+
+.splide__slide img {
+    width: auto;
+    height: auto;
+    margin: auto;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#thumbnail_slider .splide__list{
+    display: none;
+}
+
+.splide__arrow {
+    top: -15pc !important;
+}
+/* Slider CSS End  */
+
+.block-body .rera {
+    padding: 3px 8px;
+    background-color: #f2f5f9;
+    font-size: 14px;
+    color: #000;
+    border-radius: 5px;
 }

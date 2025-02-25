@@ -3,6 +3,9 @@
 @section('description', "")
 @section('keywords', "")
 
+@section('link', "https://cdn.jsdelivr.net/npm/@splidejs/splide@1.2.0/dist/css/splide.min.css")
+@section('scripts', "https://cdn.jsdelivr.net/npm/@splidejs/splide@1.2.0/dist/js/splide.min.js")
+
 @section('content')
 <?php 
     
@@ -12,31 +15,61 @@
 ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-<div class="container-fluid bg-breadcrumb" style="background: url(../theme/frontend/img/prop-2.jpg);">
-    <div class="container text-center py-5" style="max-width: 900px;">
-        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">{{$title}}</h4>
-
-    </div>
-</div>
 <!-- Details Start -->
     <div class="container-fluid bg-light about">
-        <div class="container mt-5 mb-5 pb-5">
-            <div class="row g-5 text-display" style="font-family: 'DM Sans';">
+        <div class="container mb-5 pt-2 pb-5">
+            <div class="row text-display" style="font-family: 'DM Sans';">
+                <p class=""><a href="{{ url('/') }}">Home</a> > <a href="{{ url('properties')}}">Properties</a> > {{ $v->title }}</p>
                 <div class="col-xl-9 wow fadeInLeft" data-wow-delay="0.2s">
-                    <div class="about-item-content bg-white rounded p-4 mt-3">
-                        <div class="row g-4">
+                    <div class="about-item-content">
+                        <!-- <p><small>Posted On: {{ \Carbon\Carbon::parse($v->created_at)->format('M d, Y') }}<span class="float-end">Rera No. : {{$rera}}</span> </small> -->
+                        <div class="row">
                             <div class="col-md-12">
-                                <div class="property_block_wrap style-2">
+                                <div class="thumbnail_slider shadow">
+                                    <!-- Primary Slider Start-->
+                                    <div id="primary_slider">
+                                        @if($data['additional_images']->isNotEmpty())
+                                            <div class="splide__track">
+                                                <ul class="splide__list">
+                                                    @foreach($data['additional_images'] as $image)
+                                                        <li class="splide__slide">
+                                                            <img src="{{ asset($image->image_url) }}" class="img-fluid rounded w-100" alt="Additional Property Image">
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <!-- Primary Slider End-->
+                                    <!-- Thumbnal Slider Start-->
+                                    <div id="thumbnail_slider">
+                                        @if($data['additional_images']->isNotEmpty())
+                                            <div class="splide__track">
+                                                <ul class="splide__list">
+                                                    @foreach($data['additional_images'] as $image)
+                                                        <li class="splide__slide">
+                                                            <img src="{{ asset($image->image_url) }}" class="img-fluid rounded w-100" alt="Additional Property Image">
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <!-- Thumbnal Slider End-->
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="property_block_wrap style-2 bg-white rounded-bottom p-4 shadow">
                                     <div id="clOne" class="panel-collapse collapse show" aria-labelledby="clOne">
                                         <div class="block-body">
-                                            <p><span class="prop-type">{{ $category }}</span></p>
-                                            <h2><strong>{{ $v->select_bhk }} BHK Flat for Sale</strong></h2>
-                                            <p class="mb-0"><i class="fa-duotone fa-solid fa-location-dot"></i> {{ $address }}</p>
-                                            <div class="row align-items-center">
+                                            <!-- <p><span class="prop-type">{{ $category }}</span></p> -->
+                                            <h4 class="mb-0 text-capitalize"><i class="far fa-building fa-1x"></i> By {{ $builder_name }} <span class="rera"><i class="far fa-check-circle" style="color: #f74400;"></i> RERA</span></h4>
+                                            <h5 class="mb-0"><i class="fa-duotone fa-solid fa-location-dot fa-1x"></i> {{ $address }}</h5>
+                                            <div class="row mt-3">
                                                 <div class="col-md-6">
                                                     <h4 class="prt-price-fix">₹{{ number_format($s_price, 0, '.', ',') }}</h4> 
                                                 </div>
-                                                <div class="col-md-6 mt-5">
+                                                <div class="col-md-6">
                                                     <ul class="d-inline-flex p-0 m-0 text-dark float-end" style="list-style: none;">
                                                         <li class="px-2 border-end border-2 border-dark"><i class="fas fa-bed  text-muted"></i> <strong>{{ $beds}}</strong> Beds</li>
                                                         <li class="px-2 border-end border-2 border-dark"><i class="fas fa-bath  text-muted"></i> <strong>{{ $baths}}</strong> Baths</li>
@@ -51,23 +84,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="about-item-content bg-white rounded p-3 mt-3">
-                        <!-- <p><small>Posted On: {{ \Carbon\Carbon::parse($v->created_at)->format('M d, Y') }}<span class="float-end">Rera No. : {{$rera}}</span> </small> -->
-                        <div class="row g-4">
-                            <div class="col-md-12">
-                                <div class="rounded">
-                                    <img src="{{ $img }}" class="img-fluid rounded" alt="Property Image" style="width: 100%; height: 450px; object-fit: cover; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#imageModal">
-                                </div>
-                                <ul class="d-inline-flex p-0 mt-2" style="list-style: none;">
-                                    <li><img src="https://housing-images.n7net.in/4f2250e8/bf5048809763fdb490e4c4ad51134884/v0/large/f_premium-tathawade_chinchwad-pune-aishwaryam_group.jpeg" class="img-fluid rounded w-100" alt=""></li>
-                                    <li class="px-2"><img src="https://housing-images.n7net.in/4f2250e8/bf5048809763fdb490e4c4ad51134884/v0/large/f_premium-tathawade_chinchwad-pune-aishwaryam_group.jpeg" class="img-fluid rounded w-100" alt=""></li>
-                                    <li><img src="https://housing-images.n7net.in/4f2250e8/bf5048809763fdb490e4c4ad51134884/v0/large/f_premium-tathawade_chinchwad-pune-aishwaryam_group.jpeg" class="img-fluid rounded w-100" alt=""></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="about-item-content bg-white rounded p-4 mt-3">
+                    <div class="about-item-content bg-white rounded p-4 mt-3 shadow">
                         <div class="row g-4">
                             <div class="col-md-12">
                                 <div class="property_block_wrap style-2">
@@ -99,7 +117,7 @@
                         </div>
                     </div>
 
-                    <div class="about-item-content bg-white rounded p-4 mt-3">
+                    <div class="about-item-content bg-white rounded p-4 mt-3 shadow">
                         <div class="row g-4">
                             <div class="col-md-12">
                                 <div class="property_block_wrap style-2">
@@ -123,7 +141,7 @@
                         </div>
                     </div>
 
-                    <div class="about-item-content bg-white rounded p-3 mt-3">
+                    <div class="about-item-content bg-white rounded p-3 mt-3 shadow">
                         <div class="row g-4">
                             <div class="col-md-12">
                                 <div class="property_block_wrap style-2">
@@ -143,7 +161,7 @@
                         </div>
                     </div>                    
 
-                    <div class="about-item-content bg-white rounded p-4 mt-3">
+                    <div class="about-item-content bg-white rounded p-4 mt-3 shadow">
                         <div class="row g-4">
                             <div class="col-md-12">
                                 <div class="property_block_wrap style-2">
@@ -180,7 +198,7 @@
                 </div>
                 
                 <div class="col-xl-3 wow fadeInRight" data-wow-delay="0.2s">
-                    <div class="bg-white rounded p-3">
+                    <div class="bg-white rounded p-3 shadow">
                         <div class="row g-4 justify-content-center">
                             <div class="sides-widget">
                                 <div class="sides-widget-header">
@@ -220,17 +238,7 @@
                             </div>                            
                         </div>
                     </div>
-                    <div>
-                    @if($data['additional_images']->isNotEmpty())
-    <h3>Additional Images</h3>
-    <div class="additional-images">
-        @foreach($data['additional_images'] as $image)
-            <img src="{{ asset('property_photos/' . $image->image_url) }}" alt="Additional Property Image">
-        @endforeach
-    </div>
-@endif
-                    </div>
-                    <div class="bg-white rounded p-3 mt-3">
+                    <div class="bg-white rounded p-3 mt-3 shadow">
                         <div class="row g-4 justify-content-center">
                             <div class="col-12 text-center">
                                     <!-- Brochure Box with Image -->
@@ -293,6 +301,39 @@
             </div>
         <?php } ?> 
     </div>
+
+    <script type="text/javascript">
+    // Primary slider.
+        var primarySlider = new Splide('#primary_slider', {
+            type: 'fade',
+            heightRatio: 0.5,
+            pagination: false,
+            arrows: false,
+            cover: true,
+        });
+
+        // Thumbnails slider.
+        var thumbnailSlider = new Splide('#thumbnail_slider', {
+            rewind: true,
+            fixedWidth: 100,
+            fixedHeight: 64,
+            isNavigation: true,
+            gap: 10,
+            focus: 'left',
+            pagination: false,
+            cover: true,
+            breakpoints: {
+                '600': {
+                    fixedWidth: 66,
+                    fixedHeight: 40,
+                }
+            }
+        }).mount();
+
+        // sync the thumbnails slider as a target of primary slider.
+        primarySlider.sync(thumbnailSlider).mount();
+    </script>
+    
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
     <script>
