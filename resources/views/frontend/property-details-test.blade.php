@@ -64,8 +64,8 @@
                                             <div class="row mt-3">
                                                 <div class="col-md-8">
                                                     <!-- <p><span class="prop-type">{{ $category }}</span></p> -->
-                                                    <p class="h5 mb-0 text-capitalize"><i class="far fa-building fa-1x"></i> By {{ $builder_name }} <span class="rera"><i class="far fa-check-circle" style="color: #f74400;"></i> RERA</span></h4>
-                                                    <p class="mb-0"><i class="fa-duotone fa-solid fa-location-dot fa-1x"></i> {{ $address }}</p>
+                                                    <p class="h5 mb-0 text-capitalize"><i class="far fa-building"></i> By {{ $builder_name }} <span class="rera"><i class="far fa-check-circle" style="color: #f74400; font-size: 14px;"></i> RERA:  {{ $rera }}</span></h4>
+                                                    <p class="mb-0"><i class="fa-duotone fa-solid fa-location-dot"></i> {{ $address }}</p>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <p class="float-end mb-1">Last Updated: {{ \Carbon\Carbon::parse($v->created_at)->format('M d, Y') }}</p>
@@ -236,7 +236,7 @@
                                                         @endphp
                                                         <div class="col-md-3 col-sm-6 mb-3">
                                                             <div class="d-flex align-items-center border p-3 rounded">
-                                                                <img src="{{ asset($iconPath) }}" alt="{{ $facility }}" class="me-2" width="34" height="34"> 
+                                                                <img src="{{ asset($iconPath) }}" alt="{{ $facility }}" class="me-2" width="40" height="40"> 
                                                                 <span>{{ $facility }}</span>
                                                             </div>
                                                         </div>
@@ -280,7 +280,7 @@
                                     <div class="property_block_wrap_header">
                                         <a data-bs-toggle="collapse" data-parent="#features" data-bs-target="#clOne4" aria-controls="clOne4" href="javascript:void(0);" aria-expanded="{{ (is_array($nearby_locations) && count($nearby_locations) > 0) ? 'true' : 'false' }}">
                                             <h4 class="property_block_title">
-                                                Near By Locations
+                                                Nearby Locations
                                                 <span class="float-end">
                                                     <i class="bi bi-chevron-down collapse-icon" data-bs-toggle="collapse-icon" aria-expanded="{{ (is_array($nearby_locations) && count($nearby_locations) > 0) ? 'true' : 'false' }}"></i>
                                                 </span>
@@ -294,9 +294,11 @@
                                                 <div class="row g-3">  <!-- Bootstrap Grid for Proper Spacing -->
                                                     @foreach($nearby_locations as $location)
                                                         @if(!empty($location))
-                                                            <div class="col-md-4">
-                                                                <i class="fas fa-location text-success me-2"></i>
-                                                                <span>{{ $location }}</span>
+                                                            <div class="col-md-4 col-sm-6">
+                                                                <div class="d-flex align-items-center border p-3 rounded">
+                                                                    <i class="fas fa-location me-2"></i>
+                                                                    <span>{{ $location }}</span>
+                                                                </div>
                                                             </div>
                                                         @endif
                                                     @endforeach
@@ -315,12 +317,12 @@
                         <div class="row g-4 justify-content-center">
                             <div class="sides-widget">
                                 <div class="sides-widget-header">
-                                    <div class="agent-photo">
+                                    <!-- <div class="agent-photo">
                                         <img src="{{ asset('theme/frontend/img/contact-avatar.png') }}" alt="Jfinmate">
                                         
-                                    </div>
+                                    </div> -->
                                     <div class="sides-widget-details">
-                                        <h4>{{$builder_name}}</h4>
+                                        <h3>Are You Interested!</h3>
                                         <!-- <a href="tel:+17817548182"><span><i class="lni-phone-handset"></i> +17817548182</span></a> -->
                                     </div>
                                     <div class="clearfix"></div>
@@ -341,7 +343,7 @@
                                             <div class="form-group">
                                                 <textarea name="message" class="form-control" rows="5" placeholder="Message *" required></textarea>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group text-center">
                                                 <button class="btn btn-primary btn-md rounded full-width" type="submit">Send Message</button>
                                             </div>
                                         </div>
@@ -351,67 +353,103 @@
                             </div>                            
                         </div>
                     </div>
+                    
                     <div class="bg-white rounded p-3 mt-3 shadow-sm">
                         <div class="row g-4 justify-content-center">
                             <div class="col-12 text-center">
-                                    <!-- Brochure Box with Image -->
-                                    <div class="brochure-box bg-light rounded mb-3">
-                                        <img src="{{ asset('theme/frontend/img/broucher-img.png') }}" alt="Brochure Thumbnail" class="img-fluid w-100">
-                                    </div>
+                                <!-- Brochure Box with Image -->
+                                <div class="brochure-box bg-light rounded mb-3">
+                                    <img src="{{ asset('theme/frontend/img/broucher-img.png') }}" alt="Brochure Thumbnail" class="img-fluid w-100">
+                                </div>
 
-                                    <!-- Separate Download Button -->
-                                    <a href="javascript:void(0);" id="downloadBrochureBtn" class="btn btn-primary mt-2">
-                                        <i class="fas fa-download"></i> Download Brochure
-                                    </a>
-                             </div>
+                                <!-- Separate Download Button -->
+                                <button class="btn btn-primary btn-md rounded full-width" id="downloadBrochureBtn" type="submit"><i class="fas fa-download"></i> Download Brochure</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded p-3 mt-3 shadow-sm">
+                        <div class="row g-4 justify-content-center">
+                            <div class="col-12">
+                                <h4 class="mb-3">EMI Calculator</h4>
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <label class="form-label">Loan Amount</label>
+                                        <input type="number" id="loanAmount" class="form-control" value="2500000">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Interest Rate (%)</label>
+                                        <input type="number" id="interestRate" class="form-control" value="10.5">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Tenure (Years)</label>
+                                        <input type="number" id="loanTenure" class="form-control" value="30">
+                                    </div>
+                                </div>
+
+                                <div class="d-flex mt-4 p-2 border result-box align-items-center justify-content-between">
+                                    <p class="h6 m-0">EMI:</p>
+                                    <p class="emi-result m-0">₹ <span id="emiAmount">0.00</span></p>
+                                </div>
+
+                                <div class="d-flex mt-4 p-2 border result-box align-items-center justify-content-between">
+                                    <p class="h6 m-0">Interest to be Paid</hp>
+                                    <p class="fw-bold m-0">₹ <span id="totalInterest">0</span></p>
+                                </div>
+
+                                <div class="d-flex mt-4 p-2 border result-box align-items-center justify-content-between">
+                                    <p class="h6 m-0">Total Payment<br>(Principal + Interest)</p>
+                                    <p class="fw-bold m-0">₹ <span id="totalPayment">0</span></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-            <!-- Image Modal -->
-            <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-body p-0">
-                            <img src="{{ $img }}" class="img-fluid w-100" alt="Property Image">
+        <!-- Image Modal -->
+        <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body p-0">
+                        <img src="{{ $img }}" class="img-fluid w-100" alt="Property Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal for Enquiry -->
+        <div class="modal fade" id="enquiryModal" tabindex="-1" aria-labelledby="enquiryModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form id="enquiryForm">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="enquiryModalLabel">Enter Your Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                    </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contact" class="form-label">Contact</label>
+                                <input type="text" class="form-control" id="contact" name="contact" required>
+                            </div>
+                            <input type="hidden" name="enquiry_type" value="brochure">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit & Download</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <!-- Modal for Enquiry -->
-            <div class="modal fade" id="enquiryModal" tabindex="-1" aria-labelledby="enquiryModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <form id="enquiryForm">
-                            @csrf
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="enquiryModalLabel">Enter Your Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="contact" class="form-label">Contact</label>
-                                    <input type="text" class="form-control" id="contact" name="contact" required>
-                                </div>
-                                <input type="hidden" name="enquiry_type" value="brochure">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Submit & Download</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+        </div>
         <?php } ?> 
     </div>
 
@@ -543,6 +581,43 @@
             });
     });
 });
+</script>
+
+<!-- EMI Calculator -->
+<script>
+    function calculateEMI() {
+        let loanAmount = parseFloat(document.getElementById("loanAmount").value) || 0;
+        let annualInterestRate = parseFloat(document.getElementById("interestRate").value) || 0;
+        let loanTenure = parseFloat(document.getElementById("loanTenure").value) || 0;
+
+        if (loanAmount === 0 || annualInterestRate === 0 || loanTenure === 0) {
+            document.getElementById("emiAmount").innerText = "0.00";
+            document.getElementById("totalInterest").innerText = "0";
+            document.getElementById("totalPayment").innerText = "0";
+            return;
+        }
+
+        let monthlyInterestRate = (annualInterestRate / 100) / 12;
+        let numberOfMonths = loanTenure * 12;
+
+        let emi = (loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfMonths)) / 
+                (Math.pow(1 + monthlyInterestRate, numberOfMonths) - 1);
+
+        let totalPayment = emi * numberOfMonths;
+        let totalInterest = totalPayment - loanAmount;
+
+        document.getElementById("emiAmount").innerText = emi.toFixed(2);
+        document.getElementById("totalInterest").innerText = totalInterest.toFixed(0);
+        document.getElementById("totalPayment").innerText = totalPayment.toFixed(0);
+    }
+
+    // Automatically update EMI on input change
+    document.getElementById("loanAmount").addEventListener("input", calculateEMI);
+    document.getElementById("interestRate").addEventListener("input", calculateEMI);
+    document.getElementById("loanTenure").addEventListener("input", calculateEMI);
+
+    // Run once to set default values
+    calculateEMI();
 </script>
     
 @endsection
