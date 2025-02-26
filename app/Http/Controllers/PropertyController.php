@@ -25,6 +25,7 @@ class PropertyController extends Controller
     {
         $data['range'] = DB::table('price_range')->get();
         $data['category'] = DB::table('property_category')->get();
+        $data['localities'] = DB::table('localities')->get();
         return view('property.addProperty',compact('data'));
     }
 

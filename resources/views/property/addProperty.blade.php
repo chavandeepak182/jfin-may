@@ -67,24 +67,43 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="mb-3">
                             <label class="form-label">Starting Price</label><span class="text-danger">*</span>
                             <input type="text" name="s_price" class="form-control" placeholder="Starting Price" required />
                         </div>
                     </div>
 
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="mb-3">
                             <label class="form-label">Carpet area</label><span class="text-danger">*</span>
                             <input type="text" name="area" class="form-control" placeholder="Carpet Area" required />
                         </div>
                     </div>
 
-                    <div class="col-lg-4"> 
+                    <div class="col-lg-3"> 
                         <div class="mb-3">
                             <label class="form-label">Built-up Area</label><span class="text-danger">*</span>
                             <input type="text" name="builtup_area" class="form-control" placeholder="Built-up Area" required />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <div class="mb-3">
+                            <label class="form-label">Select BHK</label>
+                            <select class="form-control" name="select_bhk">
+                                <option>Select BHK</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="2 & 3">2 & 3</option>
+                                <option value="2,3 & 4">2,3 & 4</option>
+                                <option value="3 & 4">3 & 4</option>
+                                <option value="3,4 & 5">3,4 & 5</option>
+                            </select> 
                         </div>
                     </div>
 
@@ -164,10 +183,14 @@
                     <div class="col-lg-4">
                         <div class="mb-3">
                             <label class="form-label">Area in City</label>
-                            <input type="text" name="localitie" class="form-control" placeholder="Localities" required />
+                            <select name="localitie" class="form-control" required>
+                                <option value="">Select Locality</option>
+                                @foreach($data['localities'] as $locality)
+                                    <option value="{{ $locality->id }}">{{ $locality->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
-
                     <div class="col-lg-4">
                         <div class="mb-3">
                             <label class="form-label">City</label><span class="text-danger">*</span>
@@ -394,7 +417,8 @@ function deletePropertie(id)
         // Mapping property category IDs to land type options
         var landTypeOptions = {
             1: ['Plot', 'Flat', 'Bungalow', 'Villa'], // Example: Residential (pid = 1)
-            2: ['Office', 'Shop', 'Showroom'] // Example: Commercial (pid = 2)
+            2: ['Office', 'Shop', 'Showroom'], // Example: Commercial (pid = 2)
+            3: ['Plot', 'Flat']
         };
 
         if (landTypeOptions.hasOwnProperty(propertyTypeId)) {
