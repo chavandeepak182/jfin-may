@@ -1354,4 +1354,15 @@ ul.detail_features li strong {
     font-size: 14px;
     color: #000;
     border-radius: 5px;
+    font-weight: 600;
+}
+
+#clOne .block-body i{
+    color: #015fc9;
+}
+
+.prop-feature{
+    margin-top: -5%;
+    z-index: 9999;
+    position: relative;
 }

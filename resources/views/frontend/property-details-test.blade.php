@@ -18,7 +18,7 @@
     <div class="container-fluid about">
         <div class="container mb-5 pt-3 pb-5">
             <div class="row text-display" style="font-family: 'DM Sans';">
-                <p class=""><a href="{{ url('/') }}">Home</a> > <a href="{{ url('properties')}}">Properties</a> > {{ $v->title }}</p>
+                <p><a href="{{ url('/') }}">Home</a> > <a href="{{ url('properties')}}">Properties</a> > {{ $v->title }}</p>
                 <div class="col-xl-9 wow fadeInLeft" data-wow-delay="0.2s">
                     <div class="about-item-content">
                         <!-- <p><small>Posted On: {{ \Carbon\Carbon::parse($v->created_at)->format('M d, Y') }}<span class="float-end">Rera No. : {{$rera}}</span> </small> -->
@@ -294,7 +294,7 @@
                                                 <div class="row g-3">  <!-- Bootstrap Grid for Proper Spacing -->
                                                     @foreach($nearby_locations as $location)
                                                         @if(!empty($location))
-                                                            <div class="col-md-3">
+                                                            <div class="col-md-4">
                                                                 <i class="fas fa-location text-success me-2"></i>
                                                                 <span>{{ $location }}</span>
                                                             </div>
