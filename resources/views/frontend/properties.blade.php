@@ -25,66 +25,195 @@
     </div>
 </div>
 
-<div class="container-fluid feature pt-5">
+<div class="container-fluid prop-feature">
     <div class="container pb-5">
-        <div class="tab-content bg-light" id="pills-tabContent">
-            <div class="tab-pane box fade show active" id="pills-flat" role="tabpanel" aria-labelledby="pills-home-tab">
-                <form id="search_form" method="get">    
-                    <div class="row g-3">
-                        <div class="col-md-4"> 
-                            <div class="form-floating">
-                                <select class="form-control border-0" id="category_type" name="enquiry_type" >
-                                <option>Select Category</option>
-                                @foreach($data['category'] as $v)
-                                    <option value="{{ $v->pid }}">{{ $v->category_name }}</option>
-                                @endforeach     
-                                </select>
-                                <label for="enquiry_type">Select Category</label>
-                            </div>    
-                        </div>
-                      
-                        <div class="col-md-4">
-                            <div class="form-floating">
-                                <input type="text" class="form-control border-0" id="location_name" name="location_name" value="" placeholder="Location"  >
-                                <label for="Location">Location</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-floating">
-                                <select class="form-control border-0" id="range_id" name="enquiry_type">
-                                    <option>Select Price</option>
-                                    @foreach($data['range'] as $v)
-                                        <option value="{{ $v->range_id }}">{{ $v->from_price }} to {{ $v->to_price }}</option>
-                                    @endforeach    
-                                </select>    
-                                <label for="keywords">Your Range</label>
-                            </div>
-                        </div>
-                    </div>  
+        <div class="row justify-content-center">
+            <div class="col-md-9">
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane shadow p-3 bg-white rounded fade show active" id="pills-flat" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <!-- Bootstrap Tabs -->
+                        <ul class="nav nav-tabs border-0" id="propertyTabs">
+                            <li class="nav-item">
+                                <button class="nav-link active text-danger fw-bold" data-bs-toggle="tab" data-bs-target="#buyTab">Buy</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link text-muted" data-bs-toggle="tab" data-bs-target="#rentTab">Rent</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link text-muted" data-bs-toggle="tab" data-bs-target="#commercialTab">Commercial</button>
+                            </li>
+                        </ul>
 
-                    <div class="row g-3">
-                        <div class="col-md-2 pt-3">
-                            <button class="btn btn-danger w-100 py-2 rounded-1 uppercase" type="button" onclick="search()">Search</button>
+                        <!-- Tab Content -->
+                        <div class="tab-content p-3 border">
+                            <!-- Buy Tab -->
+                            <div class="tab-pane fade show active" id="buyTab">
+                                <form id="buyForm">
+                                    <div class="row align-items-center g-2">
+                                        <!-- Location Dropdown -->
+                                        <div class="col-md-3">
+                                            <div class="dropdown">
+                                                <button class="btn btn-light border w-100 text-start" type="button">
+                                                    Pune
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Search Input -->
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control border" placeholder="Search up to 3 localities or landmarks">
+                                        </div>
+
+                                        <!-- Search Button -->
+                                        <div class="col-md-3">
+                                            <button class="btn btn-danger w-100 py-2 rounded-1">
+                                                <i class="bi bi-search"></i> Search
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Filters Row -->
+                                    <div class="row align-items-center g-2 pt-3">
+                                        <!-- Property Type -->
+                                        <div class="col-md-4 d-flex">
+                                            <div class="form-check me-3">
+                                                <input class="form-check-input" type="radio" name="property_type_buy" id="full_house_buy" checked>
+                                                <label class="form-check-label" for="full_house_buy">Full House</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="property_type_buy" id="land_plot_buy">
+                                                <label class="form-check-label" for="land_plot_buy">Land/Plot</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- BHK Type -->
+                                        <div class="col-md-3 bhk-status">
+                                            <select class="form-select">
+                                                <option>Select BHK</option>
+                                                <option>1 BHK</option>
+                                                <option>2 BHK</option>
+                                                <option>3 BHK</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Property Status -->
+                                        <div class="col-md-3 bhk-status">
+                                            <select class="form-select">
+                                                <option>Property Status</option>
+                                                <option>Under Construction</option>
+                                                <option>Ready to Move</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Rent Tab -->
+                            <div class="tab-pane fade" id="rentTab">
+                                <form id="rentForm">
+                                    <div class="row align-items-center g-2">
+                                        <!-- Location Dropdown -->
+                                        <div class="col-md-3">
+                                            <div class="dropdown">
+                                                <button class="btn btn-light border w-100 text-start" type="button">
+                                                    Pune
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Search Input -->
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control border" placeholder="Search up to 3 localities or landmarks">
+                                        </div>
+
+                                        <!-- Search Button -->
+                                        <div class="col-md-3">
+                                            <button class="btn btn-danger w-100 py-2 rounded-1">
+                                                <i class="bi bi-search"></i> Search
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Filters Row -->
+                                    <div class="row align-items-center g-2 pt-3">
+                                        <!-- Property Type -->
+                                        <div class="col-md-4 d-flex">
+                                            <div class="form-check me-3">
+                                                <input class="form-check-input" type="radio" name="property_type_buy" id="full_house_buy" checked>
+                                                <label class="form-check-label" for="full_house_buy">Full House</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="property_type_buy" id="land_plot_buy">
+                                                <label class="form-check-label" for="land_plot_buy">Land/Plot</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Commercial Tab -->
+                            <div class="tab-pane fade" id="commercialTab">
+                                <form id="commercialForm">
+                                    <div class="row align-items-center g-2">
+                                        <!-- Location Dropdown -->
+                                        <div class="col-md-3">
+                                            <div class="dropdown">
+                                                <button class="btn btn-light border w-100 text-start" type="button">
+                                                    Pune
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Search Input -->
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control border" placeholder="Search up to 3 localities or landmarks">
+                                        </div>
+
+                                        <!-- Search Button -->
+                                        <div class="col-md-3">
+                                            <button class="btn btn-danger w-100 py-2 rounded-1">
+                                                <i class="bi bi-search"></i> Search
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Filters Row -->
+                                    <div class="row align-items-center g-2 pt-3">
+                                        <!-- Property Type -->
+                                        <div class="col-md-3 d-flex">
+                                            <div class="form-check me-3">
+                                                <input class="form-check-input" type="radio" name="property_type_buy" id="full_house_buy" checked>
+                                                <label class="form-check-label" for="rent">Rent</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="property_type_buy" id="land_plot_buy">
+                                                <label class="form-check-label" for="buy">Buy</label>
+                                            </div>
+                                        </div>
+                                        <!-- Property Status -->
+                                        <div class="col-md-3">
+                                            <select class="form-select">
+                                                <option>Property Type</option>
+                                                <option>Office Space</option>
+                                                <option>Co-Working</option>
+                                                <option>Shop</option>
+                                                <option>Showroom</option>
+                                                <option>Other Business</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div class="col-md-2 pt-3">
-                            <button class="btn btn-dark w-100 py-2 rounded-1 uppercase">Clear Filter</button>
-                        </div>
-                    </div>
-                </form>
+                    </div>          
+                </div>
             </div>
-
-
-          
         </div>
     </div>
 </div>
 
-<div class="container-fluid blog py-5" id="old_data">
+<div class="container-fluid blog mb-5" id="old_data">
     <div class="container py-5">
-        <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-            <h2 class="display-4 mb-4">All Properties</h2>
-            <p class="mb-0">Properties listed in our website.</p>
-        </div>
         <div class="row g-4 justify-content-center">
             
         <?php 
@@ -103,7 +232,7 @@
 
                 ?>
                 <div class="col-md-4 wow fadeInUp" data-wow-delay="0.2s">
-                    <a href="{{ url('property-details/'.$v->properties_id) }}">
+                    <a href="{{ url('property-details/'.$v->properties_id) }}" target="_blank">
                         <div class="blog-item">
                             <div class="blog-img">
                                 <img src="{{ $img }}" class="img-fluid rounded-top w-100" alt="" style="height: 250px">
@@ -161,6 +290,29 @@ function search(){
     });       
 }
 
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const fullHouseRadio = document.getElementById("full_house_buy");
+        const landPlotRadio = document.getElementById("land_plot_buy");
+        const bhkStatusFields = document.querySelectorAll(".bhk-status");
+
+        function toggleFields() {
+            if (landPlotRadio.checked) {
+                bhkStatusFields.forEach(field => field.style.display = "none");
+            } else {
+                bhkStatusFields.forEach(field => field.style.display = "block");
+            }
+        }
+
+        // Attach event listeners
+        fullHouseRadio.addEventListener("change", toggleFields);
+        landPlotRadio.addEventListener("change", toggleFields);
+
+        // Initial state check
+        toggleFields();
+    });
 </script>
 
 @endsection
