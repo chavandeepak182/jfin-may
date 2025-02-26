@@ -292,6 +292,17 @@
                 </select>    
                 <span class="text-danger error-text jixname2_err"></span>   
             </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Property Status</label>
+                <select name="property_status" class="form-control" required>
+                    <option value="">Select Status</option>
+                    @foreach($data['property_status'] as $status)
+                        <option value="{{ $status->id }}">{{ $status->status_name }}</option>
+                    @endforeach
+                </select>
+            </div>
+                  
             <div class="mb-4">
                 <label class="form-label"><strong>Rera No.</strong></label><span class="text-danger">*</span>
                 <input type="text" name="rera" class="form-control" placeholder="Ex: P5XXXXXXXX14" required />

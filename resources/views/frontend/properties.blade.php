@@ -34,13 +34,13 @@
                         <!-- Bootstrap Tabs -->
                         <ul class="nav nav-tabs border-0" id="propertyTabs">
                             <li class="nav-item">
-                                <button class="nav-link active text-danger fw-bold" data-bs-toggle="tab" data-bs-target="#buyTab">Buy</button>
+                                <button class="nav-link active text-danger fw-bold" data-bs-toggle="tab" data-bs-target="#buyTab" data-tab="buy">Buy</button>
                             </li>
                             <li class="nav-item">
-                                <button class="nav-link text-muted" data-bs-toggle="tab" data-bs-target="#rentTab">Rent</button>
+                                <button class="nav-link text-muted" data-bs-toggle="tab" data-bs-target="#rentTab" data-tab="rent">Rent</button>
                             </li>
                             <li class="nav-item">
-                                <button class="nav-link text-muted" data-bs-toggle="tab" data-bs-target="#commercialTab">Commercial</button>
+                                <button class="nav-link text-muted" data-bs-toggle="tab" data-bs-target="#commercialTab" data-tab="commercial">Commercial</button>
                             </li>
                         </ul>
 
@@ -66,7 +66,7 @@
 
                                         <!-- Search Button -->
                                         <div class="col-md-3">
-                                            <button class="btn btn-danger w-100 py-2 rounded-1">
+                                            <button id="searchButton" class="btn btn-danger w-100 py-2 rounded-1">
                                                 <i class="bi bi-search"></i> Search
                                             </button>
                                         </div>
@@ -266,30 +266,57 @@
 
 
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script>
+$(document).ready(function() {
+    $('#searchButton').click(function(event) {
+        event.preventDefault(); // ✅ Prevent page reload
 
-<script> 
+        // ✅ Detect active tab correctly
+        let activeTab = $('.nav-tabs .nav-link.active').data('tab'); 
+        let propertyType = 1; // Default to "Buy"
 
-function search(){
-    var category_type = $('#category_type').val();
-    var location_name = $('#location_name').val();
-    var range_id = $('#range_id').val();
-    
-    $.ajax({
-        type: "POST",
-        url: "{{url('search_properties')}}",
-        data: {
-            "_token": "{{ csrf_token() }}",               
-            "category_type": category_type,  
-            "location_name": location_name,               
-            "range_id": range_id,  
-        },
-        success: function(data) {
-            $('#old_data').hide();
-            $('#search_data').html(data);
+        if (activeTab === "rent") {
+            propertyType = 3; // Rent
+        } else if (activeTab === "commercial") {
+            propertyType = 2; // Commercial
         }
-    });       
-}
 
+        let range_id = $('#range_id').val();
+        let category_type = $('#category_type').val();
+        let location_name = $('#location_name').val();
+
+        $.ajax({
+            url: "{{ url('search_properties') }}",
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                property_type_id: propertyType, // ✅ Send the correct property type
+                range_id: range_id,
+                category_type: category_type,
+                location_name: location_name
+            },
+            success: function(response) {
+                $('#old_data').hide(); // ✅ Hide previous results
+                $('#search_data').html(response); // ✅ Show filtered properties
+                history.pushState(null, '', window.location.pathname); // ✅ Remove URL query params
+            },
+            error: function(xhr) {
+                console.log(xhr.responseText);
+            }
+        });
+    });
+
+    // ✅ Update active tab & ensure correct filtering
+    $('.nav-link').click(function() {
+        $('.nav-link').removeClass('text-danger fw-bold').addClass('text-muted'); // Reset styles
+        $(this).addClass('text-danger fw-bold').removeClass('text-muted'); // Highlight active tab
+    });
+
+    // ✅ Prevent form submission when pressing "Enter"
+    $('form').submit(function(event) {
+        event.preventDefault();
+    });
+});
 </script>
 
 <script>
