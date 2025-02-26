@@ -26,6 +26,7 @@ class PropertyController extends Controller
         $data['range'] = DB::table('price_range')->get();
         $data['category'] = DB::table('property_category')->get();
         $data['localities'] = DB::table('localities')->get();
+        $data['property_status'] = DB::table('property_status')->get();
         return view('property.addProperty',compact('data'));
     }
 
@@ -45,6 +46,8 @@ class PropertyController extends Controller
         $p->address = $request->property_address;
 
         // Handle Amenities
+        $locality = DB::table('localities')->where('id', $request->localitie)->value('name');
+        $proerty_status = DB::table('proerty_status')->where('id', $request->localitie)->value('status_name');
         $amenities = $request->input('amenities', []); // Default to an empty array if null
         $p->facilities = implode(', ', $amenities);
 
@@ -53,7 +56,8 @@ class PropertyController extends Controller
         $p->contact = $request->contact_number;
         $p->area = $request->area;
         $p->builtup_area = $request->builtup_area;
-        $p->localities = $request->localitie;
+        $p->localities = $locality;
+        $P->proerty_status = $proerty_status;
         $p->beds = $request->beds;
         $p->baths = $request->baths;
         $p->balconies = $request->balconies;
