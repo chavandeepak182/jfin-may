@@ -1,16 +1,15 @@
-@extends('layouts.header')
-@section('title')
-@parent
+<?php $__env->startSection('title'); ?>
+<?php echo \Illuminate\View\Factory::parentPlaceholder('title'); ?>
 MIS Dashboard
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
-@parent
+<?php $__env->startSection('content'); ?>
+<?php echo \Illuminate\View\Factory::parentPlaceholder('content'); ?>
 <div class="card-header py-3">
     <div class="d-flex justify-content-between align-items-center">
         <nav aria-label="breadcrumb" class="d-flex align-items-center">
             <ol class="breadcrumb m-0 bg-transparent">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="<?php echo e(route('dashboard')); ?>">Dashboard</a></li>
                 <li class="breadcrumb-item active" aria-current="page">MIS Dashboard</li>
             </ol>
         </nav>
@@ -30,7 +29,7 @@ MIS Dashboard
 </div>
 
 <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="{{ asset('theme') }}/dist-assets/css/sb-admin-2.min.css" rel="stylesheet">
+<link href="<?php echo e(asset('theme')); ?>/dist-assets/css/sb-admin-2.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <div class="row">
@@ -52,30 +51,31 @@ MIS Dashboard
                             </tr>
                         </thead>
                         <tbody id="mis_table_body">
-                            @foreach($misRecords as $mis)
+                            <?php $__currentLoopData = $misRecords; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $mis): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-                                <td>{{ $mis->id }}</td>
-                                <td>{{ $mis->name }}</td>
-                                <td>{{ $mis->email }}</td>
-                                <td>{{ $mis->contact }}</td>
-                                <td>{{ $mis->product_type }}</td>
-                                <td>{{ $mis->amount }}</td>
-                                <td>{{ $mis->city }}</td>
+                                <td><?php echo e($mis->id); ?></td>
+                                <td><?php echo e($mis->name); ?></td>
+                                <td><?php echo e($mis->email); ?></td>
+                                <td><?php echo e($mis->contact); ?></td>
+                                <td><?php echo e($mis->product_type); ?></td>
+                                <td><?php echo e($mis->amount); ?></td>
+                                <td><?php echo e($mis->city); ?></td>
                                 <td>
-                                    <a class="btn btn-primary btn-xs edit" title="Edit" href="{{ route('mis.edit', $mis->id) }}">
+                                    <a class="btn btn-primary btn-xs edit" title="Edit" href="<?php echo e(route('mis.edit', $mis->id)); ?>">
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <button class="btn btn-danger btn-xs delete" title="Delete" onclick="deleteRecord('{{ $mis->id }}')">
+                                    <button class="btn btn-danger btn-xs delete" title="Delete" onclick="deleteRecord('<?php echo e($mis->id); ?>')">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </td>
                             </tr>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
                     </table>
 
                     <div class="float-right">
-                        {{ $misRecords->links() }}
+                        <?php echo e($misRecords->links()); ?>
+
                     </div>
                 </div>
             </div>
@@ -93,7 +93,7 @@ MIS Dashboard
             </div>
             <div class="modal-body">
                 <form id="addMISRecord" method="post">
-                    @csrf
+                    <?php echo csrf_field(); ?>
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label for="name" class="col-form-label">Name:</label>
@@ -127,20 +127,20 @@ MIS Dashboard
                             <label for="occupation" class="col-form-label">Occupation:</label>
                             <select class="form-control" id="occupation" name="occupation" required>
                                 <option value="">Select Occupation</option>
-                                <option value="Salaried" {{ old('occupation', $misRecord->occupation ?? '') == 'Salaried' ? 'selected' : '' }}>Salaried</option>
-                                <option value="Self Employed" {{ old('occupation', $misRecord->occupation ?? '') == 'Self Employed' ? 'selected' : '' }}>Self Employed</option>
+                                <option value="Salaried" <?php echo e(old('occupation', $misRecord->occupation ?? '') == 'Salaried' ? 'selected' : ''); ?>>Salaried</option>
+                                <option value="Self Employed" <?php echo e(old('occupation', $misRecord->occupation ?? '') == 'Self Employed' ? 'selected' : ''); ?>>Self Employed</option>
                             </select>
                         </div>
                         <div class="form-group col-lg-6">
                             <label for="bank_name" class="col-form-label">Bank Name:</label>
                             <select class="form-control" id="bank_name" name="bank_name" required>
                                 <option value="">Select Bank Name</option>
-                                <option value="IDFC" {{ old('bank_name', $misRecord->bank_name ?? '') == 'IDFC' ? 'selected' : '' }}>IDFC</option>
-                                <option value="SBI" {{ old('bank_name', $misRecord->bank_name ?? '') == 'SBI' ? 'selected' : '' }}>SBI</option>
-                                <option value="KOTAK" {{ old('bank_name', $misRecord->bank_name ?? '') == 'KOTAK' ? 'selected' : '' }}>KOTAK</option>
-                                <option value="HDFC" {{ old('bank_name', $misRecord->bank_name ?? '') == 'HDFC' ? 'selected' : '' }}>HDFC</option>
-                                <option value="MAHARASHTRA" {{ old('bank_name', $misRecord->bank_name ?? '') == 'MAHARASHTRA' ? 'selected' : '' }}>MAHARASHTRA</option>
-                                <option value="AXIS" {{ old('bank_name', $misRecord->bank_name ?? '') == 'AXIS' ? 'selected' : '' }}>AXIS</option>
+                                <option value="IDFC" <?php echo e(old('bank_name', $misRecord->bank_name ?? '') == 'IDFC' ? 'selected' : ''); ?>>IDFC</option>
+                                <option value="SBI" <?php echo e(old('bank_name', $misRecord->bank_name ?? '') == 'SBI' ? 'selected' : ''); ?>>SBI</option>
+                                <option value="KOTAK" <?php echo e(old('bank_name', $misRecord->bank_name ?? '') == 'KOTAK' ? 'selected' : ''); ?>>KOTAK</option>
+                                <option value="HDFC" <?php echo e(old('bank_name', $misRecord->bank_name ?? '') == 'HDFC' ? 'selected' : ''); ?>>HDFC</option>
+                                <option value="MAHARASHTRA" <?php echo e(old('bank_name', $misRecord->bank_name ?? '') == 'MAHARASHTRA' ? 'selected' : ''); ?>>MAHARASHTRA</option>
+                                <option value="AXIS" <?php echo e(old('bank_name', $misRecord->bank_name ?? '') == 'AXIS' ? 'selected' : ''); ?>>AXIS</option>
                                 
                             </select>
                         </div>
@@ -182,10 +182,10 @@ MIS Dashboard
     </div>
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('script')
-@parent
+<?php $__env->startSection('script'); ?>
+<?php echo \Illuminate\View\Factory::parentPlaceholder('script'); ?>
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -210,7 +210,7 @@ function searchMIS() {
 $('#addMISRecord').on('submit', function (e) {
     e.preventDefault();
     $.ajax({
-        url: "{{ route('mis.store') }}",
+        url: "<?php echo e(route('mis.store')); ?>",
         method: "POST",
         data: new FormData(this),
         processData: false,
@@ -237,9 +237,9 @@ function deleteRecord(id) {
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "{{ route('mis.delete') }}",
+                url: "<?php echo e(route('mis.delete')); ?>",
                 method: "POST",
-                data: { _token: "{{ csrf_token() }}", id: id },
+                data: { _token: "<?php echo e(csrf_token()); ?>", id: id },
                 success: function (data) {
                     swal("Deleted", data.message, "success").then(() => location.reload());
                 },
@@ -252,12 +252,14 @@ function deleteRecord(id) {
 }
 
 $('#exportExcel').on('click', function() {
-    window.location.href = '{{ route('mis.exportExcel') }}';
+    window.location.href = '<?php echo e(route('mis.exportExcel')); ?>';
 });
 
 $('#exportPDF').on('click', function() {
-    window.location.href = '{{ route('mis.exportPDF') }}';
+    window.location.href = '<?php echo e(route('mis.exportPDF')); ?>';
 });
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\jfin-may\resources\views/mis/index.blade.php ENDPATH**/ ?>
