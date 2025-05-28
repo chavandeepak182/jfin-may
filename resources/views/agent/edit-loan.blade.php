@@ -326,7 +326,7 @@
 
     // Show or hide the Approved Amount input field
     const approvedAmountBox = document.getElementById('approvedAmountBox');
-    approvedAmountBox.style.display = (status === 'disbursed') ? 'block' : 'none';
+    approvedAmountBox.style.display = (status === 'disbursed' || status === 'approved') ? 'block' : 'none';
 
     // Add or remove the 'required' attribute dynamically for client-side validation
     const approvedAmountInput = document.getElementById('amount_approved');

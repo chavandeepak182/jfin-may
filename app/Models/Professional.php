@@ -10,7 +10,7 @@ class Professional extends Model
     public $incrementing = true;
     public $timestamps = true;
     protected $fillable = [
-        'user_id', 'company_name', 'industry', 'company_address', 'business_establish_date', 'experience_year', 'designation', 'netsalary', 'gross_salary', 'selfincome'
+        'user_id','profession_type', 'company_name', 'industry', 'company_address', 'business_establish_date', 'experience_year', 'designation', 'netsalary', 'gross_salary', 'selfincome'
     ];
     public function user()
     {

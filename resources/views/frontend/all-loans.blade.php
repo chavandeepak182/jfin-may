@@ -22,6 +22,7 @@ All Loans
                     <li class="breadcrumb-item active" aria-current="page">All Loans</li>
                 </ol>
             </nav>
+            <a href="../loan-application"><button class="btn btn-primary">Add Loans</button></a>
         </div>
 
         <form method="GET" action="{{ route('loans.index') }}" class="mt-4 mb-3">

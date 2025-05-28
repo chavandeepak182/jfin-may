@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
@@ -143,18 +145,48 @@ class LoanApplicationController extends Controller
 
         // Fetch all users with role_id 2 (agents) and loan categories
         $agents = User::join('role_user', 'users.id', '=', 'role_user.user_id')
-                    ->where('role_user.role_id', 2)
-                    ->select('users.id', 'users.name')
-                    ->get();
-        
+            ->where('role_user.role_id', 2)
+            ->select('users.id', 'users.name')
+            ->get();
+
         $applyingUser = User::find($loan->user_id);
         $loanCategories = LoanCategory::all();
 
         // Pass all data to the view
         return view('admin.edit-loan', compact('loan', 'loanCategories', 'profile', 'documents', 'professional', 'education', 'agents', 'applyingUser'));
     }
+
+    public function loanedit($id)
+    {
+        $loan = Loan::with(['user', 'loanCategory'])->where('loan_id', $id)->first();
+
+        if (!$loan) {
+            return redirect()->route('agent.allAgentLoans')->with('error', 'Loan not found');
+        }
+
+        // Fetch related data
+        $profile = Profile::where('user_id', $loan->user_id)->first();
+        $professional = Professional::where('user_id', $loan->user_id)->first();
+        $education = Education::where('user_id', $loan->user_id)->first();
+        $documents = \DB::table('documents')->where('user_id', $loan->user_id)->get();
+
+        // Fetch all users with role_id 2 (agents) and loan categories
+        $agents = User::join('role_user', 'users.id', '=', 'role_user.user_id')
+            ->where('role_user.role_id', 2)
+            ->select('users.id', 'users.name')
+            ->get();
+
+        $applyingUser = User::find($loan->user_id);
+        $loanCategories = LoanCategory::all();
+
+        // Pass all data to the view
+        return view('frontend.profile.loanedit', compact('loan', 'loanCategories', 'profile', 'documents', 'professional', 'education', 'agents', 'applyingUser'));
+    }
+
     public function update(Request $request)
     {
+
+
         try {
             // Validate the request
             $validated = $request->validate([
@@ -169,6 +201,8 @@ class LoanApplicationController extends Controller
                 'sanction_letter' => 'nullable|file|mimes:pdf,doc,docx',
                 'documents.*' => 'nullable|file|mimes:pdf,doc,docx',
             ]);
+
+
 
             \DB::transaction(function () use ($request) {
                 $loan = Loan::where('loan_id', $request->input('loan_id'))->firstOrFail();
@@ -189,6 +223,8 @@ class LoanApplicationController extends Controller
                 $loan->remarks = $request->input('remarks');
                 $loan->in_principle = $request->input('in_principle');
                 $loan->save();
+
+                // echo $loan;die;
 
                 // Save the remark in the loan_remarks table
                 if ($request->input('remarks')) {
@@ -226,7 +262,7 @@ class LoanApplicationController extends Controller
 
                 // Send email notification if the status has changed
                 if ($oldStatus !== $newStatus) {
-                    $customer = $loan->user; 
+                    $customer = $loan->user;
                     $customerEmail = $customer->email_id;
                     $customerName = $customer->name;
                     $status = $newStatus;
@@ -236,18 +272,20 @@ class LoanApplicationController extends Controller
                     app(UsersController::class)->temail($customerEmail, $customerName, $msg, $temp_id);
 
                     // Start MLM Insertion
-                    if($newStatus == 'disbursed'){
+                    if ($newStatus == 'disbursed') {
                         $name = $customerName;
                         $parent = $loan->referral_user_id;
                         $nodeInserted = app(CategoryController::class)->addNode($parent, $name);
                         $amount_approved = $loan->amount_approved;
-                        
+
                         $userId = $loan->user_id;
                         app(CategoryController::class)->commission_destribution($parent, $amount_approved, $userId);
                     }
                     // End MLM Insertion
                 }
             });
+
+
 
             return redirect()->back()->with('success', 'Loan updated successfully!');
         } catch (\Exception $e) {
@@ -258,69 +296,69 @@ class LoanApplicationController extends Controller
             return redirect()->back()->withErrors(['error' => 'An error occurred while updating: ' . $e->getMessage()])->withInput();
         }
     }
-   //admin
-   public function inprocess()
-   {
-       $data['loans'] = DB::table('loans')
-           ->join('users', 'loans.user_id', '=', 'users.id')
-           ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-           ->where('loans.status', 'in process')
-           ->whereNotNull('loans.loan_reference_id') // Ensure loan_reference_id is present
-           ->select('loans.*', 'users.name as user_name', 'loan_category.category_name as category_name')
-           ->paginate(10);
-   
-       $data['users'] = DB::table('users')->get();
-       $data['loanCategories'] = DB::table('loan_category')->get();
-       $data['agents'] = DB::table('users')->where('role_id', 2)->get();
-   
-       return view('frontend.in-process', compact('data'));
-   }
-   public function approved()
-   {
-       // Fetch approved loans with necessary joins and only include loans with a loan_reference_id
-       $data['loans'] = DB::table('loans')
-           ->join('users', 'loans.user_id', '=', 'users.id')
-           ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-           ->where('loans.status', 'approved')
-           ->whereNotNull('loans.loan_reference_id') // Ensure loan_reference_id is present
-           ->select('loans.*', 'users.name as user_name', 'loan_category.category_name')
-           ->paginate(10);
-   
-       // Fetch users, loan categories, and agents for other purposes
-       $data['users'] = DB::table('users')->get();
-       $data['loanCategories'] = DB::table('loan_category')->get();
-       $data['agents'] = DB::table('users')->where('role_id', 2)->get();
-   
-       // Pass data to the view
-       return view('frontend.approved_loans', compact('data'));
-   }
-//admin
-public function rejected()
-{
-    $data['loans'] = DB::table('loans')
-        ->join('users', 'loans.user_id', '=', 'users.id')
-        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-        ->select('loans.loan_id', 'loans.loan_reference_id', 'loans.amount', 'loans.tenure', 'users.name as user_name', 'loan_category.category_name')
-        ->where('loans.status', 'rejected')
-        ->whereNotNull('loans.loan_reference_id')
-        ->paginate(10);
+    //admin
+    public function inprocess()
+    {
+        $data['loans'] = DB::table('loans')
+            ->join('users', 'loans.user_id', '=', 'users.id')
+            ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+            ->where('loans.status', 'in process')
+            ->whereNotNull('loans.loan_reference_id') // Ensure loan_reference_id is present
+            ->select('loans.*', 'users.name as user_name', 'loan_category.category_name as category_name')
+            ->paginate(10);
 
-    return view('frontend.rejected_loans', compact('data'));
-}
-//admin
-public function disbursed()
-{
-    $data['loans'] = DB::table('loans')
-        ->join('users', 'loans.user_id', '=', 'users.id')
-        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-        ->select('loans.loan_id', 'loans.loan_reference_id', 'loans.amount', 'loans.tenure', 'users.name as user_name', 'loan_category.category_name')
-        ->where('loans.status', 'disbursed')
-        ->whereNotNull('loans.loan_reference_id')
-        ->paginate(10);
+        $data['users'] = DB::table('users')->get();
+        $data['loanCategories'] = DB::table('loan_category')->get();
+        $data['agents'] = DB::table('users')->where('role_id', 2)->get();
 
-    return view('frontend.disbursed_loans', compact('data'));
-}
-public function getCities($state_id)
+        return view('frontend.in-process', compact('data'));
+    }
+    public function approved()
+    {
+        // Fetch approved loans with necessary joins and only include loans with a loan_reference_id
+        $data['loans'] = DB::table('loans')
+            ->join('users', 'loans.user_id', '=', 'users.id')
+            ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+            ->where('loans.status', 'approved')
+            ->whereNotNull('loans.loan_reference_id') // Ensure loan_reference_id is present
+            ->select('loans.*', 'users.name as user_name', 'loan_category.category_name')
+            ->paginate(10);
+
+        // Fetch users, loan categories, and agents for other purposes
+        $data['users'] = DB::table('users')->get();
+        $data['loanCategories'] = DB::table('loan_category')->get();
+        $data['agents'] = DB::table('users')->where('role_id', 2)->get();
+
+        // Pass data to the view
+        return view('frontend.approved_loans', compact('data'));
+    }
+    //admin
+    public function rejected()
+    {
+        $data['loans'] = DB::table('loans')
+            ->join('users', 'loans.user_id', '=', 'users.id')
+            ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+            ->select('loans.loan_id', 'loans.loan_reference_id', 'loans.amount', 'loans.tenure', 'users.name as user_name', 'loan_category.category_name')
+            ->where('loans.status', 'rejected')
+            ->whereNotNull('loans.loan_reference_id')
+            ->paginate(10);
+
+        return view('frontend.rejected_loans', compact('data'));
+    }
+    //admin
+    public function disbursed()
+    {
+        $data['loans'] = DB::table('loans')
+            ->join('users', 'loans.user_id', '=', 'users.id')
+            ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+            ->select('loans.loan_id', 'loans.loan_reference_id', 'loans.amount', 'loans.tenure', 'users.name as user_name', 'loan_category.category_name')
+            ->where('loans.status', 'disbursed')
+            ->whereNotNull('loans.loan_reference_id')
+            ->paginate(10);
+
+        return view('frontend.disbursed_loans', compact('data'));
+    }
+    public function getCities($state_id)
     {
         $cities = DB::table('cities')->where('state_id', $state_id)->get();
         return response()->json($cities);
@@ -345,56 +383,177 @@ public function getCities($state_id)
         $existingLoans = DB::table('existing_loan')->where('user_id', $userId)->get();
         $documents = DB::table('documents')->where('user_id', $userId)->get();
         $loan = DB::table('loans')
-        ->select('loan_id', 'loan_reference_id', 'status', 'loan_category_id','bank_id') // Include loan_category_id
-        ->where('user_id', $userId)
-        ->first();
+            ->select('loan_id', 'loan_reference_id', 'status', 'loan_category_id', 'bank_id') // Include loan_category_id
+            ->where('user_id', $userId)
+            ->first();
         $hasExistingLoan = !is_null($existingLoans);
         $states = DB::table('states')->get();
         $user = DB::table('users')->where('id', $userId)->first();
         return view('frontend.professional-info', compact(
-            'currentStep', 'is_loan','loanCategories', 'states', 'hasExistingLoan','loanBanks', 'profile', 'professional', 'education', 'existingLoans', 'documents', 'loan'
+            'currentStep',
+            'is_loan',
+            'loanCategories',
+            'states',
+            'hasExistingLoan',
+            'loanBanks',
+            'profile',
+            'professional',
+            'education',
+            'existingLoans',
+            'documents',
+            'loan'
         ));
     }
 
 
     public function showForm(Request $request)
     {
+        
+        // echo "ssf";die;
         $currentStep = $request->input('current_step', 1);
+        // dd($currentStep);
         $loanCategories = DB::table('loan_category')->get();
         $loanBanks = DB::table('loan_bank_details')->get();
         $userId = session('user_id'); // Get user ID from session
 
-    if (!$userId) {
-        return redirect()->route('login')->withErrors('User session expired. Please log in again.');
-    }
+        // echo 'gfgg';die;
+
+        if (!$userId) {
+            return redirect()->route('login')->withErrors('User session expired. Please log in again.');
+        }
 
         // Fetch existing data
         $profile = DB::table('profile')->where('user_id', $userId)->first();
         $professional = DB::table('professional_details')->where('user_id', $userId)->first();
+        // dd($professional);die;
         $education = DB::table('education_details')->where('user_id', $userId)->first();
         $existingLoans = DB::table('existing_loan')->where('user_id', $userId)->get();
         $documents = DB::table('documents')->where('user_id', $userId)->get();
-        $loan = DB::table('loans')
-        ->select('loan_id', 'loan_reference_id', 'status', 'loan_category_id','bank_id') // Include loan_category_id
-        ->where('user_id', $userId)
-        ->first();
-        $hasExistingLoan = !is_null($existingLoans);
-        $user = DB::table('users')->where('id', $userId)->first();
-        $states = DB::table('states')->get();
-        $is_loan = Session::get('is_loan');
 
+        // echo $documents;die;
+        $loan = Loan::where('user_id', $userId)->first();
+        $hasExistingLoan = !is_null($existingLoans);
+        $user = User::with('loans')->where('id', $userId)->first();
+        $states = DB::table('states')->get();
+        // echo $states;die;
+        $is_loan = Session::get('is_loan');
         return view('frontend.professional-info', compact(
-            'currentStep', 'loanCategories', 'states', 'hasExistingLoan','loanBanks', 'profile', 'professional', 'education', 'existingLoans', 'documents', 'loan','is_loan'
+            'currentStep',
+            'loanCategories',
+            'states',
+            'hasExistingLoan',
+            'loanBanks',
+            'profile',
+            'professional',
+            'education',
+            'existingLoans',
+            'documents',
+            'loan',
+            'is_loan',
+            'user'
         ));
     }
-    
-   
+
+
+    //CreditReport
+
+    public function fetchReport(Request $request)
+    {
+        $apiUrl = 'https://sandbox.surepass.io/api/v1/credit-report-experian/fetch-report';
+
+        $apiToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0MjgwMDI2NCwianRpIjoiZDRlOWMxM2ItYjliYS00MTUzLWJkNDQtZTc0OWE2MGIzNGQ0IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2Lmpmc3RlY2hub2xvZ2llc0BzdXJlcGFzcy5pbyIsIm5iZiI6MTc0MjgwMDI2NCwiZXhwIjoxNzQ1MzkyMjY0LCJlbWFpbCI6Impmc3RlY2hub2xvZ2llc0BzdXJlcGFzcy5pbyIsInRlbmFudF9pZCI6Im1haW4iLCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.RAccsE0Rt3MNrWStW9i1LOflGeIAOWIvLGu9wrzghMw';
+
+        // Prepare request data
+        $postData = [
+            'name' => $request->input('name'),
+            'consent' => 'Y',
+            'mobile' => $request->input('mobile'),
+            'pan' => $request->input('pan'),
+        ];
+
+        // Initialize cURL
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $apiUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $apiToken,
+        ]);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
+
+        // Execute cURL request
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        // Return response to frontend
+        return response()->json([
+            'status' => $httpCode,
+            'data' => json_decode($response, true),
+        ]);
+    }
+
+
+    // public function handleStep(Request $request)
+    // {
+    //     $userId = session('user_id'); // Get user ID from session
+    //     if (!$userId) {
+    //         return redirect()->route('login')->withErrors('User session expired. Please log in again.');
+    //     }
+
+    //     $currentStep = $request->input('current_step');
+
+    //     try {
+    //         // Determine whether the "Previous" or "Next" button was clicked
+    //         if ($request->has('previous')) {
+    //             $currentStep = max(1, $currentStep - 1); // Ensure the step doesn't go below 1
+    //             return redirect()->route('loan.form', ['current_step' => $currentStep]);
+    //         } elseif ($request->has('next')) {
+    //             // Validate and handle the current step
+    //             switch ($currentStep) {
+    //                 case 1:
+    //                     $this->handlePersonalDetails($request, $userId);
+    //                     break;
+    //                 case 2:
+    //                     $this->handleProfessionalDetails($request, $userId);
+    //                     break;
+    //                 case 3:
+    //                     $this->handleEducationDetails($request, $userId);
+    //                     break;
+
+    //                 case 4:
+    //                     $this->handleDocumentUpload($request, $userId);
+    //                     break;
+    //                 case 5:
+    //                     $this->handleLoanDetails($request, $userId);
+
+    //                     return redirect()->route('loan.thankyou');
+    //                 default:
+    //                     return redirect()->route('loan.form', ['current_step' => 1])
+    //                         ->withErrors('Invalid step. Please restart the application process.');
+    //             }
+
+    //             // Move to the next step
+    //             return redirect()->route('loan.form', ['current_step' => $currentStep + 1]);
+    //         } else {
+    //             return redirect()->back()->withErrors('Invalid action. Please try again.');
+    //         }
+    //     } catch (\Exception $e) {
+    //         Log::error('Error handling step: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
+    //         return redirect()->back()->withErrors('Something went wrong. Please try again.');
+    //     }
+    // }
+
     public function handleStep(Request $request)
     {
         $userId = session('user_id'); // Get user ID from session
+        // echo "string".$userId;die;
         if (!$userId) {
             return redirect()->route('login')->withErrors('User session expired. Please log in again.');
         }
+
+
 
         $currentStep = $request->input('current_step');
 
@@ -415,19 +574,20 @@ public function getCities($state_id)
                     case 3:
                         $this->handleEducationDetails($request, $userId);
                         break;
-                    
                     case 4:
                         $this->handleDocumentUpload($request, $userId);
                         break;
                     case 5:
                         $this->handleLoanDetails($request, $userId);
+
+                        // Redirect to the thank you page after completing the loan details step
                         return redirect()->route('loan.thankyou');
                     default:
                         return redirect()->route('loan.form', ['current_step' => 1])
                             ->withErrors('Invalid step. Please restart the application process.');
                 }
 
-                // Move to the next step
+                // After successfully handling the current step, move to the next step
                 return redirect()->route('loan.form', ['current_step' => $currentStep + 1]);
             } else {
                 return redirect()->back()->withErrors('Invalid action. Please try again.');
@@ -437,6 +597,7 @@ public function getCities($state_id)
             return redirect()->back()->withErrors('Something went wrong. Please try again.');
         }
     }
+
 
     protected function handlePersonalDetails(Request $request, $userId)
     {
@@ -494,10 +655,13 @@ public function getCities($state_id)
             Session::put('loan_id', $existingLoan->loan_id);
         }
     }
-    
+
 
     protected function handleProfessionalDetails(Request $request, $userId)
     {
+
+        // dd($request->all());die;
+
         $validated = $request->validate([
             'profession_type' => 'required|string|in:salaried,self',
             'company_name' => 'required|string|max:255',
@@ -510,10 +674,11 @@ public function getCities($state_id)
             'selfincome' => $request->input('profession_type') === 'self' ? 'required|numeric' : 'nullable|numeric',
             'business_establish_date' => $request->input('profession_type') === 'self' ? 'required|date' : 'nullable|date',
         ]);
-    
+
+
         $is_loan = Session::get('is_loan', 0);
         $professional = Professional::where('user_id', $userId)->first();
-    
+
         if (!$professional) {
             // No record exists, create a new one
             Professional::create([
@@ -553,12 +718,12 @@ public function getCities($state_id)
             'college_name' => 'required|string|max:255',
             'college_address' => 'required|string|max:255'
         ]);
-    
+
         $is_loan = Session::get('is_loan', 0);
-    
+
         // Check if education details already exist
         $education = Education::where('user_id', $userId)->first();
-    
+
         if (!$education) {
             // Insert new record if not found
             Education::create([
@@ -578,7 +743,7 @@ public function getCities($state_id)
             ]);
         }
     }
-    
+
     protected function handleExistingLoanDetails(Request $request, $userId)
     {
         $existingLoanIds = $request->input('existing_loan_id', []);
@@ -615,81 +780,351 @@ public function getCities($state_id)
             if ($request->hasFile($docType)) {
                 $file = $request->file($docType);
                 $fileName = $docType . '_' . $userId . '.' . $file->extension();
-                $filePath = $file->storeAs('documents', $fileName);
+                $filePath = $file->storeAs('documents', $fileName, 'public');
 
-                    DB::table('documents')->updateOrInsert(
-                        [
-                            'user_id' => $userId,
-                            'document_name' => $docType
-                        ],
-                        [
-                            'file_path' => $filePath
-                        ]
-                    );
-                }
+                DB::table('documents')->updateOrInsert(
+                    [
+                        'user_id' => $userId,
+                        'document_name' => $docType
+                    ],
+                    [
+                        'file_path' => $filePath
+                    ]
+                );
             }
+        }
     }
+    // protected function handleLoanDetails(Request $request, $userId)
+    // {
+    //     // Retrieve stored loan category and bank from session
+    //     $loan_category_id = Session::get('loan_category_id');
+    //     $bank_id = Session::get('bank_id');
+
+    //     if (!$loan_category_id || !$bank_id) {
+    //         return redirect()->back()->withErrors(['error' => 'Loan category and bank ID are required.']);
+    //     }
+
+    //     $validated = $request->validate([
+    //         'amount' => 'required|numeric',
+    //         'tenure' => 'required|integer',
+    //         'referral_code' => 'nullable|string|max:50',
+    //     ]);
+
+    //     if (!empty($validated['referral_code'])) {
+    //         $referralUser = DB::table('users')->where('referral_code', $validated['referral_code'])->first();
+
+    //              if ($referralUser=="" || $referralUser==Null || $referralUser==null ) {
+    //                 // dd($referralUser);die;
+    //                 return redirect()->back()->withErrors(['error' => 'Referral code is incorrect. Please try again.']);
+    //               }
+
+    //          // If referral user not found, return an error
+
+
+    //         $referralUserId = $referralUser->id ?? null;
+    //     }
+
+    //     // dd($validated);die;
+
+    //     $loanReferenceId = Str::upper(Str::random(8));
+    //     $referralUserId = null;
+
+
+
+    //     $is_loan = Session::get('is_loan');
+    //     $loan_id = Session::get('loan_id', null);
+
+    //     if ($is_loan == 1) {
+    //         // Ensure the loan is created if not existing
+    //         $loan = Loan::updateOrCreate(
+    //             ['user_id' => $userId, 'loan_id' => $loan_id], // Find existing loan if any
+    //             [
+    //                 'user_id' => $userId,
+    //                 'loan_reference_id' => $loanReferenceId,
+    //                 'loan_category_id' => $loan_category_id,
+    //                 'bank_id' => $bank_id,
+    //                 'amount' => $validated['amount'],
+    //                 'tenure' => $validated['tenure'],
+    //                 'referral_user_id' => $referralUserId,
+    //                 'status' => 'in process',
+    //             ]
+    //         );
+
+    //         // Store loan ID in session for further steps
+    //         Session::put('loan_id', $loan->loan_id);
+    //     } else {
+    //         // If not a new loan, update the existing loan details
+    //         DB::table('loans')->where('user_id', $userId)->update([
+    //             'loan_category_id' => $loan_category_id,
+    //             'amount' => $validated['amount'],
+    //             'tenure' => $validated['tenure'],
+    //             'referral_user_id' => $referralUserId,
+    //         ]);
+    //     }
+    // }
+
+    //     protected function handleLoanDetails(Request $request)
+    // {
+
+    //     $loan_category_id = Session::get('loan_category_id');
+    //     $bank_id = Session::get('bank_id');
+
+
+
+    //     if (!$loan_category_id || !$bank_id) {
+    //         return redirect()->back()->withErrors(['error' => 'Loan category and bank ID are required.']);
+    //     }
+
+    //     $validated = $request->validate([
+    //         'amount' => 'required|numeric',
+    //         'tenure' => 'required|integer',
+    //         'referral_code' => 'nullable|string|max:50',
+    //     ]);
+
+
+    //     // Generate loan reference ID
+    //     $loanReferenceId = Str::upper(Str::random(8));
+    //     $referralUserId = null;
+
+
+
+
+    //     if (!empty($validated['referral_code'])) {
+    //         $referralUser = DB::table('users')->where('referral_code', $validated['referral_code'])->first();
+    //         if (!$referralUser) {
+    //             // echo $referralUser;die;
+    //             return redirect()->back()->withErrors(['referral_code' => 'Referral code is incorrect. Please try again.']);
+
+    //                 // dd($validated);die;
+
+    //         }
+    //         $referralUserId = $referralUser->id;
+    //     } 
+
+
+
+    //     // Check loan session and create or update loan data
+    //     $is_loan = Session::get('is_loan');
+    //     $loan_id = Session::get('loan_id', null);
+
+    //     if ($is_loan == 1) {
+    //         // Ensure the loan is created if not existing
+    //         $loan = Loan::updateOrCreate(
+    //             ['user_id' => $user->id, 'loan_id' => $loan_id], // Find existing loan if any
+    //             [
+    //                 'user_id' => $user->id,
+    //                 'loan_reference_id' => $loanReferenceId,
+    //                 'loan_category_id' => $loan_category_id,
+    //                 'bank_id' => $bank_id,
+    //                 'amount' => $validated['amount'],
+    //                 'tenure' => $validated['tenure'],
+    //                 'referral_user_id' => $referralUserId,
+    //                 'status' => 'in process',
+    //             ]
+    //         );
+
+    //         // Store loan ID in session for further steps
+    //         Session::put('loan_id', $loan->loan_id);
+    //     } else {
+    //         // If not a new loan, update the existing loan details
+    //         DB::table('loans')->where('user_id', $user->id)->update([
+    //             'loan_category_id' => $loan_category_id,
+    //             'amount' => $validated['amount'],
+    //             'tenure' => $validated['tenure'],
+    //             'referral_user_id' => $referralUserId,
+    //         ]);
+    //     }
+
+
+    //      return redirect()->route('loan.thankyou');
+
+
+
+    // }
+
     protected function handleLoanDetails(Request $request, $userId)
     {
         // Retrieve stored loan category and bank from session
         $loan_category_id = Session::get('loan_category_id');
         $bank_id = Session::get('bank_id');
-    
+
         if (!$loan_category_id || !$bank_id) {
             return redirect()->back()->withErrors(['error' => 'Loan category and bank ID are required.']);
         }
-    
+
         $validated = $request->validate([
             'amount' => 'required|numeric',
             'tenure' => 'required|integer',
             'referral_code' => 'nullable|string|max:50',
         ]);
-    
+
         $loanReferenceId = Str::upper(Str::random(8));
         $referralUserId = null;
-    
+
         if (!empty($validated['referral_code'])) {
             $referralUser = DB::table('users')->where('referral_code', $validated['referral_code'])->first();
             $referralUserId = $referralUser->id ?? null;
         }
-    
-        $is_loan = Session::get('is_loan');
-        $loan_id = Session::get('loan_id', null);
-    
-        if ($is_loan == 1) {
-            // Ensure the loan is created if not existing
-            $loan = Loan::updateOrCreate(
-                ['user_id' => $userId, 'loan_id' => $loan_id], // Find existing loan if any
-                [
-                    'user_id' => $userId,
-                    'loan_reference_id' => $loanReferenceId,
-                    'loan_category_id' => $loan_category_id,
-                    'bank_id' => $bank_id,
-                    'amount' => $validated['amount'],
-                    'tenure' => $validated['tenure'],
-                    'referral_user_id' => $referralUserId,
-                    'status' => 'in process',
-                ]
-            );
-    
-            // Store loan ID in session for further steps
+
+        $existingLoan = Loan::where('user_id', $userId)->first();
+
+        if (!$existingLoan) {
+            // First-time creation
+            $loan = Loan::create([
+                'user_id' => $userId,
+                'loan_reference_id' => Str::upper(Str::random(8)),
+                'loan_category_id' => $loan_category_id,
+                'bank_id' => $bank_id,
+                'amount' => $validated['amount'],
+                'tenure' => $validated['tenure'],
+                'referral_user_id' => $referralUserId,
+                'status' => 'in process',
+            ]);
             Session::put('loan_id', $loan->loan_id);
         } else {
-            // If not a new loan, update the existing loan details
-            DB::table('loans')->where('user_id', $userId)->update([
+            // Update existing
+            $existingLoan->update([
                 'loan_category_id' => $loan_category_id,
+                'bank_id' => $bank_id,
                 'amount' => $validated['amount'],
                 'tenure' => $validated['tenure'],
                 'referral_user_id' => $referralUserId,
             ]);
+            Session::put('loan_id', $existingLoan->loan_id);
+        }
+
+        Session::put('is_loan', true);
+    }
+
+
+
+    public function submitLoanApplication(Request $request)
+    {
+        $userId = session('user_id');
+
+        if (!$userId) {
+            return redirect()->route('login')->withErrors('User session expired. Please log in again.');
+        }
+
+        DB::beginTransaction();
+        try {
+            // Save Personal Details
+            DB::table('profile')->updateOrInsert(
+                ['user_id' => $userId],
+                $request->only([
+                    'mobile_no',
+                    'marital_status',
+                    'dob',
+                    'residence_address',
+                    'city',
+                    'state',
+                    'pincode',
+                    'loan_category_id',
+                    'bank_id'
+                ])
+            );
+
+            // Create or Update Loan
+            $loan = Loan::updateOrCreate(
+                ['user_id' => $userId],
+                [
+                    'loan_reference_id' => Str::upper(Str::random(8)),
+                    'loan_category_id' => $request->loan_category_id,
+                    'bank_id' => $request->bank_id,
+                    'status' => 'in process',
+                    'loan_amount' => $request->loan_amount,
+                    'loan_tenure' => $request->loan_tenure,
+                    'interest_rate' => $request->interest_rate,
+                    'purpose' => $request->purpose
+                ]
+            );
+
+            // Save Professional Details
+            Professional::updateOrCreate(
+                ['user_id' => $userId],
+                $request->only([
+                    'profession_type',
+                    'company_name',
+                    'industry',
+                    'company_address',
+                    'experience_year',
+                    'designation',
+                    'netsalary',
+                    'gross_salary',
+                    'selfincome',
+                    'business_establish_date'
+                ])
+            );
+
+            // Save Education Details
+            Education::updateOrCreate(
+                ['user_id' => $userId],
+                $request->only(['qualification', 'pass_year', 'college_name', 'college_address'])
+            );
+
+            // Save Existing Loan Details (If Any)
+            if ($request->has('existing_loans')) {
+                foreach ($request->existing_loans as $loanData) {
+                    DB::table('existing_loan')->updateOrInsert(
+                        ['user_id' => $userId, 'existing_loan_id' => $loanData['existing_loan_id'] ?? null],
+                        [
+                            'type_loan' => $loanData['type_loan'] ?? null,
+                            'loan_amount' => $loanData['loan_amount'] ?? null,
+                            'tenure_loan' => $loanData['tenure_loan'] ?? null,
+                            'emi_amount' => $loanData['emi_amount'] ?? null,
+                            'sanction_date' => $loanData['sanction_date'] ?? null,
+                            'emi_bounce_count' => $loanData['emi_bounce_count'] ?? null,
+                        ]
+                    );
+                }
+            }
+
+            // Save Uploaded Documents
+            if ($request->hasFile('documents')) {
+                foreach ($request->file('documents') as $document) {
+                    $documentPath = $document->store('documents/' . $userId, 'public');
+
+                    DB::table('document_uploads')->insert([
+                        'user_id' => $userId,
+                        'document_path' => $documentPath,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+
+            $role_id = session()->get('role_id');
+
+            if ($role_id == 4) {
+                return view('admin.thank-you', ['loanReferenceId' => $loan->loan_reference_id]);
+            }
+
+            // Return Thank You View with Loan Reference ID
+            return view('frontend.thank-loan', ['loanReferenceId' => $loan->loan_reference_id]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Loan application submission failed: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
+            return redirect()->back()->withErrors('Something went wrong. Please try again.');
         }
     }
-    
-    
+
+
+
 
     public function thankYou()
     {
+
+        $role_id = session()->get('role_id');
         $loanReferenceId = session('loan_reference_id');
+
+        if ($role_id == 4) {
+            return view('admin.thank-you', ['loanReferenceId' => $loanReferenceId]);
+        }
+
+
         return view('frontend.thank-loan', compact('loanReferenceId'));
     }
 
@@ -697,7 +1132,7 @@ public function getCities($state_id)
     {
         return view('frontend.error');
     }
-    
+
     public function getBack()
     {
         $loanReferenceId = session('loan_reference_id');
@@ -728,143 +1163,141 @@ public function getCities($state_id)
         }
     }
     public function allAgentLoans()
-{
-    $agent_id = session()->get('user_id'); // Assuming the agent's ID is stored as 'user_id'
+    {
+        $agent_id = session()->get('user_id'); // Assuming the agent's ID is stored as 'user_id'
 
-    $data['loans'] = DB::table('loans')
-        ->join('users', 'loans.user_id', '=', 'users.id')
-        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-        ->where('loans.agent_id', $agent_id) // Filter by the logged-in agent's ID
-        ->select(
-            'loans.loan_id',
-            'loans.amount',
-            'loans.tenure',
-            'loans.loan_reference_id',
-            'users.name as user_name',
-            'loan_category.category_name as loan_category_name',
-            'loans.agent_action'
-        )
-        ->paginate(10); // Adjust the pagination limit if necessary
+        $data['loans'] = DB::table('loans')
+            ->join('users', 'loans.user_id', '=', 'users.id')
+            ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+            ->where('loans.agent_id', $agent_id) // Filter by the logged-in agent's ID
+            ->select(
+                'loans.loan_id',
+                'loans.amount',
+                'loans.tenure',
+                'loans.loan_reference_id',
+                'users.name as user_name',
+                'loan_category.category_name as loan_category_name',
+                'loans.agent_action'
+            )
+            ->paginate(10); // Adjust the pagination limit if necessary
 
-    return view('agent.all-loans', compact('data'));
-}
+        return view('agent.all-loans', compact('data'));
+    }
     public function loanShow($id)
     {
         // Fetch the loan by ID
         $loan = Loan::findOrFail($id);
-    
+
         // Return the view with loan data
         return view('agent.loan-view', compact('loan'));
     }
     public function assignAgent(Request $request)
-{
-    $validated = $request->validate([
-        'loan_id' => 'required|exists:loans,loan_id',
-        'agent_id' => 'nullable|exists:users,id',
-    ]);
+    {
+        $validated = $request->validate([
+            'loan_id' => 'required|exists:loans,loan_id',
+            'agent_id' => 'nullable|exists:users,id',
+        ]);
 
-    $loan = Loan::find($validated['loan_id']);
-    if ($loan) {
-        $loan->agent_id = $validated['agent_id'];
-        $loan->agent_action = 'pending'; // Set initial action status to pending
-        $loan->save();
-        
-        return redirect()->route('loans.index')->with('success', 'Agent assigned successfully!');
+        $loan = Loan::find($validated['loan_id']);
+        if ($loan) {
+            $loan->agent_id = $validated['agent_id'];
+            $loan->agent_action = 'pending'; // Set initial action status to pending
+            $loan->save();
+
+            return redirect()->route('loans.index')->with('success', 'Agent assigned successfully!');
+        }
+
+        return redirect()->route('loans.index')->with('error', 'Failed to assign agent.');
     }
-
-    return redirect()->route('loans.index')->with('error', 'Failed to assign agent.');
-
-}
-public function assignedLoans()
+    public function assignedLoans()
     {
         // Get the role_id and agent_id from the session
         $role_id = session()->get('role_id');
         $agent_id = session()->get('user_id'); // Assuming the agent's ID is stored as 'user_id'
-    
+
         // Check if the role_id indicates an agent or admin
         if ($role_id != 2 && $role_id != 4) {
             return redirect('/');
         }
-    
+
         // Fetch loans assigned to the agent
         $loans = Loan::where('agent_id', $agent_id)
-                     ->with(['user', 'loanCategory'])
-                     ->paginate(20); // Adjust the number of items per page as needed
-    
+            ->with(['user', 'loanCategory'])
+            ->paginate(20); // Adjust the number of items per page as needed
+
         // Return view with loans data
         return view('agent.assigned_loans', compact('loans'));
     }
 
 
-public function acceptLoan(Request $request)
-{
-    // Start a database transaction
-    DB::beginTransaction();
+    public function acceptLoan(Request $request)
+    {
+        // Start a database transaction
+        DB::beginTransaction();
 
-    try {
-        // Validate the request to ensure loan_id exists
+        try {
+            // Validate the request to ensure loan_id exists
+            $validated = $request->validate([
+                'loan_id' => 'required|exists:loans,loan_id',
+            ]);
+
+            // Find the loan by loan_id
+            $loan = Loan::find($validated['loan_id']);
+            if ($loan) {
+                // Update the loan status and agent action
+                $loan->agent_action = 'accepted';
+                $loan->status = 'in process';
+                $loan->save();
+
+                // Get the customer details
+                $customer = $loan->user;
+                $customerEmail = $customer->email_id;
+                $customerName = $customer->name;
+
+                // Commit the transaction after loan update
+                DB::commit();
+
+                // Prepare email content
+                $msg = 'Your loan has been accepted and is now in process.';
+                $temp_id = 3;
+
+                // Call the temail function from UsersController to send an email
+                app(UsersController::class)->temail($customerEmail, $customerName, $msg, $temp_id);
+
+                // Redirect with success message
+                return redirect()->route('agent.assignedLoans')->with('success', 'Loan accepted successfully!');
+            }
+
+            // If loan is not found, rollback transaction and redirect with error
+            DB::rollBack();
+            return redirect()->route('agent.assignedLoans')->with('error', 'Loan not found.');
+        } catch (\Exception $e) {
+            // Rollback transaction in case of an exception
+            DB::rollBack();
+            return redirect()->route('agent.assignedLoans')->with('error', 'An error occurred: ' . $e->getMessage());
+        }
+    }
+
+    public function rejectLoan(Request $request)
+    {
         $validated = $request->validate([
             'loan_id' => 'required|exists:loans,loan_id',
+            'remarks' => 'required|string',
         ]);
 
-        // Find the loan by loan_id
         $loan = Loan::find($validated['loan_id']);
         if ($loan) {
-            // Update the loan status and agent action
-            $loan->agent_action = 'accepted';
-            $loan->status = 'in process';
+            $loan->agent_action = 'rejected';
+            $loan->remarks = $validated['remarks'];
+            $loan->status = 'document-pending';
             $loan->save();
 
-            // Get the customer details
-            $customer = $loan->user;
-            $customerEmail = $customer->email_id;
-            $customerName = $customer->name;
-
-            // Commit the transaction after loan update
-            DB::commit();
-
-            // Prepare email content
-            $msg = 'Your loan has been accepted and is now in process.';
-            $temp_id = 3;
-
-            // Call the temail function from UsersController to send an email
-            app(UsersController::class)->temail($customerEmail, $customerName, $msg, $temp_id);
-
-            // Redirect with success message
-            return redirect()->route('agent.assignedLoans')->with('success', 'Loan accepted successfully!');
+            return redirect()->route('agent.assignedLoans')->with('success', 'Loan rejected successfully!');
         }
 
-        // If loan is not found, rollback transaction and redirect with error
-        DB::rollBack();
         return redirect()->route('agent.assignedLoans')->with('error', 'Loan not found.');
-        
-    } catch (\Exception $e) {
-        // Rollback transaction in case of an exception
-        DB::rollBack();
-        return redirect()->route('agent.assignedLoans')->with('error', 'An error occurred: ' . $e->getMessage());
-    }
-}
-
-public function rejectLoan(Request $request)
-{
-    $validated = $request->validate([
-        'loan_id' => 'required|exists:loans,loan_id',
-        'remarks' => 'required|string',
-    ]);
-
-    $loan = Loan::find($validated['loan_id']);
-    if ($loan) {
-        $loan->agent_action = 'rejected';
-        $loan->remarks = $validated['remarks'];
-        $loan->status = 'document-pending';
-        $loan->save();
-
-        return redirect()->route('agent.assignedLoans')->with('success', 'Loan rejected successfully!');
     }
 
-    return redirect()->route('agent.assignedLoans')->with('error', 'Loan not found.');
-}
-   
     // public function pendingLoans()
     // {
     //     $pendingLoans = DB::table('loans')
@@ -876,160 +1309,164 @@ public function rejectLoan(Request $request)
     //                 });
     //         })
     //         ->paginate(10); // Adjust pagination as needed
-    
+
     //     $agents = DB::table('users')->where('role_id', 2)->get(); // Fetch agents from users table
-    
+
     //     return view('frontend.pending_loans', compact('pendingLoans', 'agents'));
     // }
     public function pendingLoans()
-{
-    $pendingLoans = DB::table('loans')
-        ->leftJoin('users', 'loans.user_id', '=', 'users.id') // Join with users table
-        ->leftJoin('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id') // Join with loan_category table
-        ->where(function ($query) {
-            $query->whereNull('agent_id')
-                ->orWhere(function ($subQuery) {
-                    $subQuery->whereNotNull('agent_id')
-                        ->whereIn('agent_action', ['Pending', 'Rejected', null]);
-                });
-        })
-        ->select('loans.*', 'users.name as user_name', 'loan_category.category_name as category_name') // Select necessary fields
-        ->paginate(10); // Adjust pagination as needed
+    {
+        $pendingLoans = DB::table('loans')
+            ->leftJoin('users', 'loans.user_id', '=', 'users.id') // Join with users table
+            ->leftJoin('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id') // Join with loan_category table
+            ->where(function ($query) {
+                $query->whereNull('agent_id')
+                    ->orWhere(function ($subQuery) {
+                        $subQuery->whereNotNull('agent_id')
+                            ->whereIn('agent_action', ['Pending', 'Rejected', null]);
+                    });
+            })
+            ->select('loans.*', 'users.name as user_name', 'loan_category.category_name as category_name') // Select necessary fields
+            ->paginate(10); // Adjust pagination as needed
 
-    $agents = DB::table('users')->where('role_id', 2)->get(); // Fetch agents from users table
+        $agents = DB::table('users')->where('role_id', 2)->get(); // Fetch agents from users table
 
-    return view('frontend.pending_loans', compact('pendingLoans', 'agents'));
-}
-public function agentInprocess()
-{
-    $role_id = session()->get('role_id');
-    $agent_id = session()->get('user_id'); // Assuming the agent's ID is stored as 'user_id'
-    
-    // Ensure that only agents and admins can access this
-    if ($role_id != 2 && $role_id != 4) {
-        return redirect('/');
+        return view('frontend.pending_loans', compact('pendingLoans', 'agents'));
+    }
+    public function agentInprocess()
+    {
+        $role_id = session()->get('role_id');
+        $agent_id = session()->get('user_id'); // Assuming the agent's ID is stored as 'user_id'
+
+        // Ensure that only agents and admins can access this
+        if ($role_id != 2 && $role_id != 4) {
+            return redirect('/');
+        }
+
+        $data['loans'] = DB::table('loans')
+            ->join('users', 'loans.user_id', '=', 'users.id')
+            ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+            ->where('loans.status', 'in process')
+            ->where('loans.agent_id', $agent_id)
+            ->select('loans.*', 'users.name as user_name', 'loan_category.category_name as category_name')
+            ->paginate(10);
+
+        $data['users'] = DB::table('users')->get();
+        $data['loanCategories'] = DB::table('loan_category')->get();
+        $data['agents'] = DB::table('users')->where('role_id', 2)->get();
+
+        return view('agent.in-process', compact('data'));
+    }
+    public function agentApproved()
+    {
+        $role_id = session()->get('role_id');
+        $agent_id = session()->get('user_id'); // Assuming the agent's ID is stored as 'user_id'
+
+        // Ensure that only agents and admins can access this
+        if ($role_id != 2 && $role_id != 4) {
+            return redirect('/');
+        }
+
+        $data['loans'] = DB::table('loans')
+            ->join('users', 'loans.user_id', '=', 'users.id')
+            ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+            ->select(
+                'loans.loan_id',
+                'loans.amount',
+                'loans.tenure',
+                'loans.loan_reference_id',
+                'users.name as user_name',
+                'loan_category.category_name as loan_category_name',
+                'loans.agent_action'
+            )
+            ->where('loans.status', 'approved')
+            ->where('loans.agent_id', $agent_id)
+            ->paginate(10); // Adjust the pagination limit if necessary
+
+        return view('agent.approved_loans', compact('data'));
+    }
+    public function agentRejected()
+    {
+        $role_id = session()->get('role_id');
+        $agent_id = session()->get('user_id'); // Assuming the agent's ID is stored as 'user_id'
+
+        // Ensure that only agents and admins can access this
+        if ($role_id != 2 && $role_id != 4) {
+            return redirect('/');
+        }
+
+        $data['loans'] = DB::table('loans')
+            ->join('users', 'loans.user_id', '=', 'users.id')
+            ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+            ->select(
+                'loans.loan_id',
+                'loans.amount',
+                'loans.tenure',
+                'loans.loan_reference_id',
+                'users.name as user_name',
+                'loan_category.category_name as loan_category_name',
+                'loans.agent_action'
+            )
+            ->where('loans.status', 'rejected')
+            ->where('loans.agent_id', $agent_id)
+            ->paginate(10); // Adjust the pagination limit if necessary
+
+        return view('agent.rejected_loans', compact('data'));
     }
 
-    $data['loans'] = DB::table('loans')
-        ->join('users', 'loans.user_id', '=', 'users.id')
-        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-        ->where('loans.status', 'in process')
-        ->where('loans.agent_id', $agent_id)
-        ->select('loans.*', 'users.name as user_name', 'loan_category.category_name as category_name')
-        ->paginate(10);
+    public function agentDocumentPending()
+    {
+        $role_id = session()->get('role_id');
+        $agent_id = session()->get('user_id'); // Assuming the agent's ID is stored as 'user_id'
 
-    $data['users'] = DB::table('users')->get();
-    $data['loanCategories'] = DB::table('loan_category')->get();
-    $data['agents'] = DB::table('users')->where('role_id', 2)->get();
+        // Ensure that only agents and admins can access this
+        if ($role_id != 2 && $role_id != 4) {
+            return redirect('/');
+        }
 
-    return view('agent.in-process', compact('data'));
-}
-public function agentApproved()
-{
-    $role_id = session()->get('role_id');
-    $agent_id = session()->get('user_id'); // Assuming the agent's ID is stored as 'user_id'
-    
-    // Ensure that only agents and admins can access this
-    if ($role_id != 2 && $role_id != 4) {
-        return redirect('/');
+        $data['loans'] = DB::table('loans')
+            ->join('users', 'loans.user_id', '=', 'users.id')
+            ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+            ->select(
+                'loans.loan_id',
+                'loans.amount',
+                'loans.tenure',
+                'loans.loan_reference_id',
+                'users.name as user_name',
+                'loan_category.category_name as loan_category_name',
+                'loans.agent_action'
+            )
+            ->where('loans.status', 'document pending')
+            ->where('loans.agent_id', $agent_id)
+            ->paginate(10); // Adjust the pagination limit if necessary
+
+        return view('agent.document-pending', compact('data'));
     }
 
-    $data['loans'] = DB::table('loans')
-        ->join('users', 'loans.user_id', '=', 'users.id')
-        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-        ->select(
-            'loans.loan_id',
-            'loans.amount',
-            'loans.tenure',
-            'loans.loan_reference_id',
-            'users.name as user_name',
-            'loan_category.category_name as loan_category_name',
-            'loans.agent_action'
-        )
-        ->where('loans.status', 'approved')
-        ->where('loans.agent_id', $agent_id)
-        ->paginate(10); // Adjust the pagination limit if necessary
 
-    return view('agent.approved_loans', compact('data'));
-}
-public function agentRejected()
-{
-    $role_id = session()->get('role_id');
-    $agent_id = session()->get('user_id'); // Assuming the agent's ID is stored as 'user_id'
-    
-    // Ensure that only agents and admins can access this
-    if ($role_id != 2 && $role_id != 4) {
-        return redirect('/');
-    }
+    public function applyNow()
+    {
 
-    $data['loans'] = DB::table('loans')
-        ->join('users', 'loans.user_id', '=', 'users.id')
-        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-        ->select(
-            'loans.loan_id',
-            'loans.amount',
-            'loans.tenure',
-            'loans.loan_reference_id',
-            'users.name as user_name',
-            'loan_category.category_name as loan_category_name',
-            'loans.agent_action'
-        )
-        ->where('loans.status', 'rejected')
-        ->where('loans.agent_id', $agent_id)
-        ->paginate(10); // Adjust the pagination limit if necessary
+        // $user=Auth::User();
+        // echo $user;die;
 
-    return view('agent.rejected_loans', compact('data'));
-}
-
-public function agentDocumentPending()
-{
-    $role_id = session()->get('role_id');
-    $agent_id = session()->get('user_id'); // Assuming the agent's ID is stored as 'user_id'
-    
-    // Ensure that only agents and admins can access this
-    if ($role_id != 2 && $role_id != 4) {
-        return redirect('/');
-    }
-
-    $data['loans'] = DB::table('loans')
-        ->join('users', 'loans.user_id', '=', 'users.id')
-        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-        ->select(
-            'loans.loan_id',
-            'loans.amount',
-            'loans.tenure',
-            'loans.loan_reference_id',
-            'users.name as user_name',
-            'loan_category.category_name as loan_category_name',
-            'loans.agent_action'
-        )
-        ->where('loans.status', 'document pending')
-        ->where('loans.agent_id', $agent_id)
-        ->paginate(10); // Adjust the pagination limit if necessary
-
-    return view('agent.document-pending', compact('data'));
-}
-
-
-    public function applyNow(){
         return view('frontend.firstloan');
     }
     //fetch recent loans
     public function fetchRecentLoans($limit = 5)
-{
-    $recentLoans = DB::table('loans')
-        ->join('users', 'loans.user_id', '=', 'users.id')
-        ->select(
-            'loans.loan_id',
-            'loans.amount',
-            'users.name as user_name',
-            'loans.status'
-        )
-        ->latest('loans.created_at')
-        ->take($limit)
-        ->get();
+    {
+        $recentLoans = DB::table('loans')
+            ->join('users', 'loans.user_id', '=', 'users.id')
+            ->select(
+                'loans.loan_id',
+                'loans.amount',
+                'users.name as user_name',
+                'loans.status'
+            )
+            ->latest('loans.created_at')
+            ->take($limit)
+            ->get();
 
-    return $recentLoans;
-}
-
+        return $recentLoans;
+    }
 }

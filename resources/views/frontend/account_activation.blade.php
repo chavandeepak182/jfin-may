@@ -14,7 +14,7 @@
             <img src="{{ asset('theme') }}/frontend/img/red-tick.png" alt="">
             <h4 class="text-danger mt-3"><?php echo $result['message']?></h4>
         @else
-            <img src="{{ asset('theme') }}/frontend/img/green-tick.png" alt="">
+            <img src="{{ asset('theme/frontend/img/green-tick.png') }}" alt="">
             <h4 class="text-success mt-3"><?php echo $result['message']?></h4>
             <a href="{{ route('login') }}" class="btn btn-dark mt-4 rounded-pill py-3 px-4 px-md-5 ms-2">Let's Start</a>
             <br>

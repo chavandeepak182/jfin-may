@@ -5,6 +5,8 @@ use App\Models\Mis;
 use Barryvdh\DomPDF\Facade as PDF;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MisExport;
+    use Carbon\Carbon;
+
 
 
 use Illuminate\Http\Request;
@@ -21,11 +23,33 @@ class MisController extends Controller
         $pdf = PDF::loadView('mis.export_pdf', compact('misRecords'));
         return $pdf->download('mis_records.pdf');
     }
-    public function index()
-    {
+    // public function index(Request $request)
+    // {
+    //     $misRecords = Mis::paginate(10);
+    //     return view('mis.index', compact('misRecords'));
+    // }
+
+
+public function index(Request $request)
+{
+    $start_date = $request->start_date;
+    $end_date = $request->end_date;
+
+    // Validate and format the dates if provided
+    if ($start_date && $end_date) {
+        // Ensure dates are in a valid format
+        $start_date = Carbon::parse($start_date)->startOfDay();
+        $end_date = Carbon::parse($end_date)->endOfDay();
+
+        $misRecords = Mis::whereBetween('created_at', [$start_date, $end_date])->paginate(10);
+    } else {
+        // No dates provided, return all records with pagination
         $misRecords = Mis::paginate(10);
-        return view('mis.index', compact('misRecords'));
     }
+
+    return view('mis.index', compact('misRecords'));
+}
+
 
     public function store(Request $request)
     {

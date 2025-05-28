@@ -48,6 +48,27 @@ private function buildTree($categories, $parentId = null)
     $childUserId = $request->input('user_id'); // New child's user_id
     $childName = $request->input('category'); // Name of the new node
 
+
+
+    $rootCategoryId = $parentUserId;
+    while (true) {
+        $category = \DB::table('categories')->where('id', $rootCategoryId)->first();
+        if (!$category || !$category->parent_id) {
+            break; 
+        }
+        $rootCategoryId = $category->parent_id;
+    }
+
+    
+    $totalNodes = \DB::table('categories')
+        ->whereRaw("id = ? OR parent_id = ?", [$rootCategoryId, $rootCategoryId])
+        ->count();
+
+   
+    if ($totalNodes >= 128) {
+        return response()->json(['error' => 'tree exceeded the limit of 128 nodes'], 400);
+    }
+
     // If no referral is provided, find the next available node
     if (!$parentUserId) {
         \Log::info("No referral provided. Searching for the next available empty node.");

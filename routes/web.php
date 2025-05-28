@@ -27,6 +27,9 @@ use Maatwebsite\Excel\Facades\Excel;
 
 require __DIR__.'/auth.php';
 
+
+
+
 //permission
     Route::prefix('admin')->group(function () {
     Route::resource('permissions', App\Http\Controllers\PermissionController::class);
@@ -89,9 +92,15 @@ Route::get('professional-detail', [FrontendController::class, 'ProfessionalDetai
 //user routes
 Route::get('login', [AdminController::class, 'loginView'])->name('login');
 Route::post('userLogin', [FrontendController::class, 'userLogin'])->name('userLogin');
+
+Route::get('verify-otp', [AdminController::class, 'verifyOtp'])->name('verify-otp');
+
+Route::post('submit-otp', [AdminController::class, 'postVerifyOtp'])->name('submit-otp');
+
+
 Route::get('logout', [FrontendController::class, 'logout'])->name('logout');
 Route::get('forgot', [FrontendController::class, 'forgot'])->name('forgot');
-Route::get('userAuth/{user_id}/{auth_code}', [FrontendController::class, 'activate'])->name('activate');
+Route::get('/activate', [FrontendController::class, 'activate'])->name('activate')->middleware('throttle:6,1');;
 
 //reset password
 Route::post('reset_password_link', [FrontendController::class, 'reset_password_link'])->name('reset_password_link');
@@ -110,9 +119,11 @@ Route::get('/cities/{state_id}', [LoanApplicationController::class, 'getCities']
 Route::get('/applyNow', [LoanApplicationController::class, 'applyNow'])->name('applyNow');
 Route::get('/start_loan/{id}', [LoanApplicationController::class, 'start_loan'])->name('start_loan');
 
-Route::middleware('isUser')->group(function () {
+Route::middleware(['isUserOrAdmin'])->group(function () {
    
     Route::get('/loan-application', [LoanApplicationController::class, 'showForm'])->name('loan.form');
+
+    Route::post('/fetch-credit-report', [LoanApplicationController::class, 'fetchReport']);
     Route::post('/loan-application/step', [LoanApplicationController::class, 'handleStep'])->name('loan.handle_step');
     Route::get('/thank-you', [LoanApplicationController::class, 'thankYou'])->name('loan.thankyou');
     Route::get('/error', [LoanApplicationController::class, 'Error'])->name('loan.error');
@@ -138,7 +149,14 @@ Route::middleware('isUser')->group(function () {
     //wallet
     Route::get('user/walletbalance', [ReferralController::class, 'userWalletbalance'])->name('user.walletbalance');
 
+    Route::get('loanedit/{id}', [LoanApplicationController::class, 'loanedit'])->name('loanedit');
+
+    Route::post('updateLoan', [LoanApplicationController::class, 'update'])->name('updateLoan');
+
 });
+
+
+Route::get('admin/loan-application', [LoanApplicationController::class, 'showForm'])->name('loan.form');
 
 
 //loan admin
@@ -169,6 +187,13 @@ Route::get('agent/mis/{id}', [AgentController::class, 'viewMis'])->name('agent.m
 //MIS ADMIN
 Route::get('admin/mis', [AdminController::class, 'adminMis'])->name('admin.mis');
 Route::get('admin/mis/{id}', [AdminController::class, 'viewMis'])->name('admin.mis.view');
+
+Route::get('admin/addloans', [AdminController::class, 'addLoans'])->name('addloans');
+Route::get('admin/create-loan', [AdminController::class, 'createLoans'])->name('admin.create-loan');
+    Route::post('/admin/loan-application/step', [LoanApplicationController::class, 'submitLoanApplication'])->name('admin.handle_step');
+
+
+
 //export
 Route::get('/export-eligibility', function () {
     $data = [
@@ -263,6 +288,10 @@ Route::get('admin/profile/edit', [ProfileController::class, 'editProfile'])->nam
 Route::post('admin/profile/update', [ProfileController::class, 'updateProfile'])->name('admin.profile.update');
 Route::get('admin/profile', [ProfileController::class, 'showProfile'])->name('admin.profile');
 //customer register
+Route::get('/register', function () {
+    return view('register'); // Make sure this points to your registration view
+})->name('registerPage');
+
 Route::post('/register', [UsersController::class, 'registerUser'])->name('registerUser');
 
 
@@ -360,10 +389,7 @@ Route::get('/mis/edit/{id}', [MISController::class, 'edit'])->name('mis.edit');
 Route::put('/mis/update/{id}', [MISController::class, 'update'])->name('mis.update');
 Route::get('mis/export/excel', [MisController::class, 'exportExcel'])->name('mis.exportExcel');
 Route::get('mis/export/pdf', [MisController::class, 'exportPDF'])->name('mis.exportPDF');
-
-Route::get('/activate', function () {
-    return view('frontend.account_activation');
-});
+    
 
 // Mail
 Route::get('/messages', [MessageController::class, 'index'])->name('messages.index'); // Inbox

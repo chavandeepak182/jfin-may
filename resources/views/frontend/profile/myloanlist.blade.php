@@ -29,6 +29,7 @@
                             <th class="d-none d-xl-table-cell">Amount</th>
                             <th>Status</th>
                             <th class="d-none d-md-table-cell">Created At</th>
+                            <th class="d-none d-md-table-cell">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,6 +40,8 @@
                                 <td>{{ number_format($loan->amount, 2) }}</td>
                                 <td>{{ ucfirst($loan->status) }}</td>
                                 <td>{{ \Carbon\Carbon::parse($loan->created_at)->format('d-m-Y') }}</td>
+
+                                <td><a href="loanedit/{{ $loan->loan_id }}">Edit</a></td>
                             </tr>
                         @endforeach
                     </tbody>

@@ -21,8 +21,16 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'mobile_no',
         'email_id',
         'password',
+        'referral_code',
+        'role_id',
+        'email_otp',
+        'email_verification_token',
+        'email_otp_expires_at',
+        'email_verified_at',
+        'is_email_verify',
     ];
     /**
      * The attributes that should be hidden for serialization.
@@ -41,7 +49,8 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime'
+            'email_verified_at' => 'datetime',
+            'email_otp_expires_at' => 'datetime'
         ];
     }
     public function roles()
