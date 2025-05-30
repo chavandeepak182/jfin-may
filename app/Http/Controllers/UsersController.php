@@ -30,13 +30,13 @@ class UsersController extends Controller
 
     public function allUsers()
     {
-        $query = DB::table('users')
-            ->join('profile', 'users.id', '=', 'profile.user_id')
-            ->select('users.id', 'users.name', 'users.email_id', 'profile.mobile_no', 'profile.dob', 'users.is_email_verify')
-            ->whereNull('users.deleted_at');
-        $data['allUsers'] = $query->paginate(10);
+        $users = User::with('profile') // Eager load profile relationship
+            ->select(['id', 'name', 'email_id', 'is_email_verify'])
+            ->whereNull('deleted_at')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
-        return view('admin.allUsers', compact('data'));
+        return view('admin.allUsers', compact('users'));
     }
     public function updateUserStatus(Request $request)
     {
@@ -858,6 +858,7 @@ class UsersController extends Controller
         // Fetch loans for the logged-in customer with optional status filter
         $query = DB::table('loans')->where('user_id', $userId);
 
+
         // Apply the status filter if provided and valid
         if ($statusFilter && in_array($statusFilter, $statuses)) {
             $query->where('status', $statusFilter);
@@ -865,7 +866,6 @@ class UsersController extends Controller
 
         // Optionally, paginate results (for example, 10 loans per page)
         $loans = $query->paginate(10); // Use paginate() for better performance with large datasets
-
         return view('frontend.profile.myloanlist', compact('loans', 'statuses', 'statusFilter'));
     }
     public function mydetails(Request $request)

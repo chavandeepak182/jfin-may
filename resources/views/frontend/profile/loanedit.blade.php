@@ -87,13 +87,13 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="city">City:</label>
-                                <input type="text" class="form-control" id="city" name="city" value="{{ old('city', $profile->city ?? '') }}">
+                                <input type="text" class="form-control" id="city" name="city" value="{{ old('city', $profile->cityRelation->city ?? '') }}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="state">State:</label>
-                                <input type="text" class="form-control" id="state" name="state" value="{{ old('state', $profile->state ?? '') }}">
+                                <input type="text" class="form-control" id="state" name="state" value="{{ old('state', $profile->stateRelation->name ?? '') }}">
                             </div>
                         </div>
                         <div class="col-md-4">

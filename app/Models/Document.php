@@ -14,7 +14,7 @@ class Document extends Model
     public $timestamps = true;
     // Specify which attributes should be mass-assignable
     protected $fillable = [
-        'user_id', 'aadhar_card', 'pancard', 'age_proof', 'residence_proof',
+        'loan_id', 'user_id', 'aadhar_card', 'pancard', 'age_proof', 'residence_proof',
         'qualification_proof', 'salary_slip', 'form_16', 'bank_statement'
     ];
 }

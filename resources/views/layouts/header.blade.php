@@ -123,9 +123,9 @@
                         <a class="collapse-item" href="{{ route('loans.index') }}">All</a>
                         <a class="collapse-item" href="{{ route('pendingLoans') }}">Pending Assign</a>                        
                         <a class="collapse-item" href="{{ route('inprocess.loans') }}">In Process Loans</a>
-                        <a class="collapse-item" href="{{ route('approvedLoans')}}">Approved Loans</a>
+                        {{-- <a class="collapse-item" href="{{ route('approvedLoans')}}">Approved Loans</a>
                         <a class="collapse-item" href="{{ route('disbursed.loans')}}">Disbursed Loans</a>
-                        <a class="collapse-item" href="{{ route('rejectedLoans')}}">Rejected Loans</a>
+                        <a class="collapse-item" href="{{ route('rejectedLoans')}}">Rejected Loans</a> --}}
                     </div>
                 </div>
             </li>
@@ -144,10 +144,10 @@
                             <h6 class="collapse-header">Loans Components:</h6>
                             <a class="collapse-item" href="{{ route('agent.allAgentLoans') }}">All </a>
                             <a class="collapse-item" href="{{ route('agent.assignedLoans') }}">Assign </a>
-                            <a class="collapse-item" href="{{ route('agent.inprocess.loans') }}">In Process</a>
+                            {{-- <a class="collapse-item" href="{{ route('agent.inprocess.loans') }}">In Process</a>
                             <a class="collapse-item" href="{{ route('agent.documentpending.loans') }}">Document Pending</a>                        
                             <a class="collapse-item" href="{{ route('agent.approved.loans')}}">Approved</a>
-                            <a class="collapse-item" href="{{ route('agent.rejected.loans')}}">Rejected</a>
+                            <a class="collapse-item" href="{{ route('agent.rejected.loans')}}">Rejected</a> --}}
                         </div>
                     </div>
                 </li>

@@ -122,7 +122,6 @@ Route::get('/start_loan/{id}', [LoanApplicationController::class, 'start_loan'])
 Route::middleware(['isUserOrAdmin'])->group(function () {
    
     Route::get('/loan-application', [LoanApplicationController::class, 'showForm'])->name('loan.form');
-
     Route::post('/fetch-credit-report', [LoanApplicationController::class, 'fetchReport']);
     Route::post('/loan-application/step', [LoanApplicationController::class, 'handleStep'])->name('loan.handle_step');
     Route::get('/thank-you', [LoanApplicationController::class, 'thankYou'])->name('loan.thankyou');

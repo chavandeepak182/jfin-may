@@ -4,17 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Session;
-use Validator;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use App\Models\PasswordResets;
 use App\Models\User;
-use Auth;
-
-
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class FrontendController extends Controller
 {
@@ -98,52 +95,50 @@ class FrontendController extends Controller
 
             $user = User::where('email_id', $request->email)->first();
 
-            $user_pssword = $user->password;
+            if (!$user) {
+                return back()->withErrors(['email' => 'The provided credentials do not match our records.'])
+                            ->withInput($request->only('email'));
+            }
 
-            if ($user_pssword == $request->password) {
-                return redirect()->back()->with('error', 'Incorrect password.');
+            if (!Hash::check($request->password, $user->password)) {
+                return back()->withErrors(['password' => 'Incorrect password.'])
+                            ->withInput($request->only('email'));
             }
 
             if (!$user->is_email_verify) {
-                return redirect()->back()->with('error', 'Email not verified.');
+                return redirect()->back()
+                                ->withErrors(['email' => 'Please verify your email address before logging in.'])
+                                ->withInput($request->only('email'));
             }
 
 
             Auth::login($user);
-            Session::put('username', $user->name);
-            Session::put('role_name', $user->role_name);
-            Session::put('user_id', $user->id);
-            Session::put('role_id', $user->role_id);
-            Session::put('email', $user->email_id);
+
+            $sessionData = [
+                'username' => $user->name,
+                'role_name' => $user->role_name,
+                'user_id' => $user->id,
+                'role_id' => $user->role_id,
+                'email' => $user->email_id,
+            ];
+
+            Session::put($sessionData);
 
 
 
 
-            if ($user->role_id == 5) {
-                return redirect('broker/allLoansApplications');
+            $redirectRoutes = [
+                5 => 'allLoansApplications',
+                4 => 'dashboard',
+                2 => 'agentDashboard',
+                3 => 'partnerDashboard',
+                1 => 'loan.form',
+            ];
+
+            if (array_key_exists($user->role_id, $redirectRoutes)) {
+                return redirect()->route($redirectRoutes[$user->role_id]);
             }
 
-            if ($user->role_id == 4) {
-                return redirect('admin/dashboard');
-            }
-            if ($user->role_id == 2) {
-                return redirect('agent/agentDashboard');
-            }
-            if ($user->role_id == 3) {
-                return redirect('partner/partnerDashboard');
-            }
-            if ($user->role_id == 1) {
-                return redirect(route('loan.form'));
-            }
-
-
-
-
-
-
-
-
-            return back()->withErrors(['email' => 'Invalid credentials']);
         } elseif ($login_type == 'mobile') {
             // Validation for mobile number login (OTP)
             $validated = $request->validate([
