@@ -21,8 +21,8 @@
                                 <span>3. Qualification Details</span>
                             </li>
                             <!-- <li class="list-group-item {{ $currentStep == 4 ? 'active' : '' }}">
-                                <span>4. Existing Loan Details</span>
-                            </li> -->
+                                        <span>4. Existing Loan Details</span>
+                                    </li> -->
                             <li class="list-group-item {{ $currentStep == 4 ? 'active' : '' }}">
                                 <span>4. Upload Documents</span>
                             </li>
@@ -64,6 +64,27 @@
                             @if ($currentStep == 1)
                                 <fieldset>
                                     <h4 class="text-primary mb-3">Personal Details</h4>
+                                    @if (session('role_id') == 4)
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <select name="user_id" id="user_id" class="form-control" required>
+                                                        <option value="">Select User</option>
+                                                        @foreach ($loanUsers as $user)
+                                                            <option value="{{ $user->id }}"
+                                                                {{ old('user_id', $loan->user_id ?? '') == $user->id ? 'selected' : '' }}>
+                                                                {{ $user->name }} ({{ $user->email_id }})
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    <label for="user_id">User <span class="text-danger">*</span></label>
+                                                    @error('user_id')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <div class="form-floating">
@@ -104,7 +125,8 @@
 
                                         <div class="col-md-4">
                                             <div class="form-floating">
-                                                <input type="text" name="full_name" value="{{ old('full_name') }}"
+                                                <input type="text" name="full_name"
+                                                    value="{{ old('full_name', $profile->full_name ?? '') }}"
                                                     class="form-control" id="full_name" placeholder="Full Name">
                                                 <label for="full_name">Full Name (As per PAN)</label>
                                                 @error('full_name')
@@ -117,7 +139,7 @@
                                         <div class="col-md-4">
                                             <div class="form-floating">
                                                 <input type="text" name="pan_number"
-                                                    value="{{ old('pan_number', $loan->pan_number ?? '') }}"
+                                                    value="{{ old('pan_number', $profile->pan_number ?? '') }}"
                                                     class="form-control" id="pan_number" placeholder="PAN Number">
                                                 <label for="pan_number">PAN Number</label>
                                                 @error('pan_number')
@@ -243,18 +265,6 @@
                                 <fieldset>
                                     <h4 class="text-primary mb-3">Professional Details</h4>
                                     <div class="row g-3">
-                                        <!--   <div class="col-md-12">
-                                            <div class="form-check form-check-inline me-5">
-                                                <input class="form-check-input profession_type" type="radio" name="profession_type" id="salariedTab" value="salaried" checked
-                                                    {{ old('profession_type', $professional->profession_type ?? '') == 'salaried' ? 'checked' : '' }}>
-                                                <label for="salariedTab">Salaried Employees</label>
-                                            </div>
-                                            <div class="form-check form-check-inline me-5">
-                                                <input class="form-check-input profession_type" type="radio" name="profession_type" id="selfTab" value="self"
-                                                    {{ old('profession_type', $professional->profession_type ?? '') == 'self' ? 'checked' : '' }}>
-                                                <label for="selfTab">Self Employed/ Business Professionals</label>
-                                            </div>
-                                        </div> -->
                                         <div class="col-md-12">
                                             @if ($professional)
                                                 @if ($professional->profession_type == 'salaried')
@@ -367,7 +377,7 @@
                                                 <input type="number" class="form-control" id="netsalary"
                                                     name="netsalary"
                                                     value="{{ old('netsalary', $professional->netsalary ?? '') }}"
-                                                    placeholder="Net Salary" required>
+                                                    placeholder="Net Salary">
                                                 <label for="netsalary">Net Salary <span
                                                         class="text-danger">*</span></label>
                                             </div>
@@ -381,7 +391,7 @@
                                                 <input type="number" class="form-control" id="gross_salary"
                                                     name="gross_salary"
                                                     value="{{ old('gross_salary', $professional->gross_salary ?? '') }}"
-                                                    placeholder="Gross Salary" required>
+                                                    placeholder="Gross Salary">
                                                 <label for="gross_salary">Gross Salary <span
                                                         class="text-danger">*</span></label>
                                             </div>
@@ -390,33 +400,54 @@
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-6">
-                                            <div class="form-floating" id="selfincome">
-                                                <input type="number" class="form-control" id="selfincome"
-                                                    name="selfincome"
-                                                    value="{{ old('selfincome', $professional->selfincome ?? '') }}"
-                                                    placeholder="Total Income">
-                                                <label for="selfincome">Total Income <span
-                                                        class="text-danger">*</span></label>
+                                        @if ($professional && $professional->profession_type !== 'salaried')
+                                            <div class="col-md-6">
+                                                <div class="form-floating" id="selfincome">
+                                                    <input type="number" class="form-control" id="selfincome"
+                                                        name="selfincome"
+                                                        value="{{ old('selfincome', $professional->selfincome ?? '') }}"
+                                                        placeholder="Total Income">
+                                                    <label for="selfincome">Total Income <span
+                                                            class="text-danger">*</span></label>
+                                                </div>
+                                                @error('selfincome')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
-                                            @error('selfincome')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
 
-                                        <div class="col-md-6">
-                                            <div class="form-floating" id="business_establish_date">
-                                                <input type="date" class="form-control" id="business_establish_date"
-                                                    name="business_establish_date"
-                                                    value="{{ old('business_establish_date', isset($professional->business_establish_date) ? \Carbon\Carbon::parse($professional->business_establish_date)->format('Y-m-d') : '') }}"
-                                                    placeholder="Business Establish Date">
-                                                <label for="business_establish_date">Business Establish Date <span
-                                                        class="text-danger">*</span></label>
+                                            <div class="col-md-6">
+                                                <div class="form-floating" id="business_establish_date">
+                                                    <input type="date" class="form-control"
+                                                        id="business_establish_date" name="business_establish_date"
+                                                        value="{{ old('business_establish_date', isset($professional->business_establish_date) ? \Carbon\Carbon::parse($professional->business_establish_date)->format('Y-m-d') : '') }}"
+                                                        placeholder="Business Establish Date">
+                                                    <label for="business_establish_date">Business Establish Date <span
+                                                            class="text-danger">*</span></label>
+                                                </div>
+                                                @error('business_establish_date')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
-                                            @error('business_establish_date')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
+                                        @else
+                                            <div class="col-md-6">
+                                                <div class="form-floating" id="selfincome">
+                                                    <input type="number" class="form-control" id="selfincome"
+                                                        name="selfincome" placeholder="Total Income">
+                                                    <label for="selfincome">Total Income <span
+                                                            class="text-danger">*</span></label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-floating" id="business_establish_date">
+                                                    <input type="date" class="form-control"
+                                                        id="business_establish_date" name="business_establish_date"
+                                                        placeholder="Business Establish Date">
+                                                    <label for="business_establish_date">Business Establish Date <span
+                                                            class="text-danger">*</span></label>
+                                                </div>
+                                            </div>
+                                        @endif
 
                                     </div>
                                 </fieldset>
@@ -424,35 +455,35 @@
                                 <!-- Qualification Details -->
                             @elseif ($currentStep == 3)
                                 <!--  <fieldset>
-                                    <h4 class="text-primary mb-3">Qualification Details</h4>
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control" id="qualification" name="qualification" value="{{ old('qualification', $education->qualification ?? '') }}" placeholder="Qualification" required>
-                                                <label for="qualification">Highest Degree</label>
+                                            <h4 class="text-primary mb-3">Qualification Details</h4>
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" id="qualification" name="qualification" value="{{ old('qualification', $education->qualification ?? '') }}" placeholder="Qualification" required>
+                                                        <label for="qualification">Highest Degree</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="number" class="form-control" id="pass_year" name="pass_year" value="{{ old('pass_year', $education->pass_year ?? '') }}" placeholder="pass_year" required>
+                                                        <label for="pass_year">Pass Year</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" id="college_name" name="college_name" value="{{ old('college_name', $education->college_name ?? '') }}" placeholder="College Name" required>
+                                                        <label for="college_name">College Name</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" id="college_address" name="college_address" value="{{ old('college_address', $education->college_address ?? '') }}" placeholder="College Address" required>
+                                                        <label for="college_address">College Address</label>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="number" class="form-control" id="pass_year" name="pass_year" value="{{ old('pass_year', $education->pass_year ?? '') }}" placeholder="pass_year" required>
-                                                <label for="pass_year">Pass Year</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control" id="college_name" name="college_name" value="{{ old('college_name', $education->college_name ?? '') }}" placeholder="College Name" required>
-                                                <label for="college_name">College Name</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control" id="college_address" name="college_address" value="{{ old('college_address', $education->college_address ?? '') }}" placeholder="College Address" required>
-                                                <label for="college_address">College Address</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
-     -->
+                                        </fieldset>
+             -->
 
                                 <fieldset>
                                     <h4 class="text-primary mb-3">Qualification Details</h4>
@@ -765,63 +796,68 @@
                                                 </div>
                                             @endif
                                             <div class="accordion-item">
-                                                <h2 class="accordion-header" id="headingFour">
+                                                <h2 class="accordion-header" id="headingFive">
                                                     <button class="accordion-button collapsed" type="button"
-                                                        data-bs-toggle="collapse" data-bs-target="#collapseFour"
-                                                        aria-expanded="false" aria-controls="collapseFour">
+                                                        data-bs-toggle="collapse" data-bs-target="#collapseFive"
+                                                        aria-expanded="false" aria-controls="collapseFive">
                                                         Other Documents
                                                     </button>
                                                 </h2>
-                                                <div id="collapseFour" class="accordion-collapse collapse"
-                                                    aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                                                <div id="collapseFive" class="accordion-collapse collapse"
+                                                    aria-labelledby="headingFive" data-bs-parent="#accordionExample">
                                                     <div class="accordion-body">
                                                         <div class="row g-3">
-                                                            <!-- @if ($professional->profession_type == 'salaried')
-
-                                                            @foreach (['bank_statement', 'qualification_proof'] as $docType)
-    <div class="col-md-6">
-                                                                    <div class="form-floating">
-                                                                        <input type="file" id="{{ $docType }}" name="{{ $docType }}" class="form-control" placeholder="{{ ucfirst(str_replace('_', ' ', $docType)) }}">
-                                                                        <label for="{{ $docType }}">{{ ucfirst(str_replace('_', ' ', $docType)) }}</label>
-                                                                        @php
-                                                                            $existingDoc = $documents->firstWhere(
-                                                                                'document_name',
-                                                                                $docType,
-                                                                            );
-                                                                        @endphp
-                                                                        @if ($existingDoc)
-    <a href="{{ Storage::url($existingDoc->file_path) }}" target="_blank">View Uploaded {{ ucfirst(str_replace('_', ' ', $docType)) }}</a>
-    @endif
+                                                            @if ($professional->profession_type == 'salaried')
+                                                                @foreach (['bank_statement', 'qualification_proof'] as $docType)
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-floating">
+                                                                            <input type="file"
+                                                                                id="{{ $docType }}"
+                                                                                name="{{ $docType }}"
+                                                                                class="form-control"
+                                                                                placeholder="{{ ucfirst(str_replace('_', ' ', $docType)) }}">
+                                                                            <label
+                                                                                for="{{ $docType }}">{{ ucfirst(str_replace('_', ' ', $docType)) }}</label>
+                                                                            @php
+                                                                                $existingDoc = $documents->firstWhere(
+                                                                                    'document_name',
+                                                                                    $docType,
+                                                                                );
+                                                                            @endphp
+                                                                            @if ($existingDoc)
+                                                                                <a href="{{ Storage::url($existingDoc->file_path) }}"
+                                                                                    target="_blank">View Uploaded
+                                                                                    {{ ucfirst(str_replace('_', ' ', $docType)) }}</a>
+                                                                            @endif
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-    @endforeach
-@else
-    -->
-                                                            @foreach (['closure_letter', 'degree_certificate', 'propert_document', 'existing_loan_statment', 'saction_letter'] as $docType)
-                                                                <div class="col-md-6">
-                                                                    <div class="form-floating">
-                                                                        <input type="file" id="{{ $docType }}"
-                                                                            name="{{ $docType }}"
-                                                                            class="form-control"
-                                                                            placeholder="{{ ucfirst(str_replace('_', ' ', $docType)) }}">
-                                                                        <label
-                                                                            for="{{ $docType }}">{{ ucfirst(str_replace('_', ' ', $docType)) }}</label>
-                                                                        @php
-                                                                            $existingDoc = $documents->firstWhere(
-                                                                                'document_name',
-                                                                                $docType,
-                                                                            );
-                                                                        @endphp
-                                                                        @if ($existingDoc)
-                                                                            <a href="{{ Storage::url($existingDoc->file_path) }}"
-                                                                                target="_blank">View Uploaded
-                                                                                {{ ucfirst(str_replace('_', ' ', $docType)) }}</a>
-                                                                        @endif
+                                                                @endforeach
+                                                            @else
+                                                                @foreach (['closure_letter', 'degree_certificate', 'propert_document', 'existing_loan_statment', 'saction_letter'] as $docType)
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-floating">
+                                                                            <input type="file"
+                                                                                id="{{ $docType }}"
+                                                                                name="{{ $docType }}"
+                                                                                class="form-control"
+                                                                                placeholder="{{ ucfirst(str_replace('_', ' ', $docType)) }}">
+                                                                            <label
+                                                                                for="{{ $docType }}">{{ ucfirst(str_replace('_', ' ', $docType)) }}</label>
+                                                                            @php
+                                                                                $existingDoc = $documents->firstWhere(
+                                                                                    'document_name',
+                                                                                    $docType,
+                                                                                );
+                                                                            @endphp
+                                                                            @if ($existingDoc)
+                                                                                <a href="{{ Storage::url($existingDoc->file_path) }}"
+                                                                                    target="_blank">View Uploaded
+                                                                                    {{ ucfirst(str_replace('_', ' ', $docType)) }}</a>
+                                                                            @endif
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            @endforeach
-                                                            <!--                                                     @endif
-     -->
+                                                                @endforeach
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>
@@ -833,52 +869,52 @@
                                 <!-- Loan Details -->
                             @elseif ($currentStep == 5)
                                 <!--  <fieldset>
-                                    <h4 class="text-primary mb-3">Loan Details</h4>
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="number" step="0.01" name="amount" value="{{ old('amount', $loan->amount ?? '') }}" class="form-control" id="amount" placeholder="Amount" required>
-                                                <label for="amount">Loan Amount</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <select name="tenure" id="tenure" class="form-control" required>
-                                               
-                                                    <option value="">Select Tenure</option>
-                                                    @for ($i = 1; $i <= 10; $i++)
+                                            <h4 class="text-primary mb-3">Loan Details</h4>
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="number" step="0.01" name="amount" value="{{ old('amount', $loan->amount ?? '') }}" class="form-control" id="amount" placeholder="Amount" required>
+                                                        <label for="amount">Loan Amount</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <select name="tenure" id="tenure" class="form-control" required>
+                                                       
+                                                            <option value="">Select Tenure</option>
+                                                            @for ($i = 1; $i <= 10; $i++)
     <option value="{{ $i }}" {{ old('tenure', $loan->tenure ?? '') == $i ? 'selected' : '' }}>{{ $i }} year{{ $i > 1 ? 's' : '' }}</option>
     @endfor
-                                                </select>
-                                                <label for="tenure">Tenure (in years)</label>
-                                            </div>
-                                        </div>
+                                                        </select>
+                                                        <label for="tenure">Tenure (in years)</label>
+                                                    </div>
+                                                </div>
 
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="text" name="referral_code" value="{{ old('referral_code') }}" class="form-control" id="referral_code" placeholder="Referral Code">
-                                                <label for="referral_code">Referral Code (Optional)</label>
-                                            </div>
-                                        </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="text" name="referral_code" value="{{ old('referral_code') }}" class="form-control" id="referral_code" placeholder="Referral Code">
+                                                        <label for="referral_code">Referral Code (Optional)</label>
+                                                    </div>
+                                                </div>
 
 
 
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="text" name="pan_number" value="{{ old('pan_number', $loan->pan_number ?? '') }}" class="form-control" id="pan_number" placeholder="PAN Number">
-                                                <label for="pan_number">PAN Number</label>
-                                            </div>
-                                        </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="text" name="pan_number" value="{{ old('pan_number', $loan->pan_number ?? '') }}" class="form-control" id="pan_number" placeholder="PAN Number">
+                                                        <label for="pan_number">PAN Number</label>
+                                                    </div>
+                                                </div>
 
-                                        
+                                                
 
-                                        <div class="row mt-2">
-                <div class="col-md-6">
-                    <button type="button" id="check-referral-code" class="btn btn-primary">Check Code</button>
-                </div>
-                <div id="referral-feedback" class="col-md-12 mt-3"></div>
-            </div>
-                                </fieldset> -->
+                                                <div class="row mt-2">
+                        <div class="col-md-6">
+                            <button type="button" id="check-referral-code" class="btn btn-primary">Check Code</button>
+                        </div>
+                        <div id="referral-feedback" class="col-md-12 mt-3"></div>
+                    </div>
+                                        </fieldset> -->
 
 
                                 <fieldset>
@@ -907,7 +943,7 @@
                                         </div>
 
                                         <!-- Referral Code Input -->
-                                        @if (!$user->loans()->whereNotNull('referral_user_id')->exists())
+                                        @if (!$user->loans()->exists())
                                             <div class="col-md-6">
                                                 <div class="form-floating">
                                                     <input type="text" name="referral_code"
@@ -920,7 +956,7 @@
 
 
 
-                                        <!-- Button and Feedback Section -->
+                                            <!-- Button and Feedback Section -->
                                             <div class="row mt-2">
                                                 <div class="col-md-6">
                                                     <button type="button" id="check-referral-code"

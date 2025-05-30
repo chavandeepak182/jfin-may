@@ -39,6 +39,7 @@ class LoanApplicationController extends Controller
             ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
             ->leftJoin('loan_bank_details', 'loans.bank_id', '=', 'loan_bank_details.bank_id')
             ->leftJoin('profile', 'users.id', '=', 'profile.user_id')
+            ->leftJoin('cities', 'profile.city', '=', 'cities.id')
             ->select(
                 'loans.loan_id',
                 'loans.amount',
@@ -46,7 +47,7 @@ class LoanApplicationController extends Controller
                 'loans.loan_reference_id',
                 'users.name as user_name',
                 'loans.status',
-                'profile.city as city',
+                'cities.city as city',
                 'loan_category.category_name as loan_category_name',
                 'loan_bank_details.bank_name as bank_name',
                 'loans.agent_action'
@@ -165,7 +166,7 @@ class LoanApplicationController extends Controller
         }
 
         // Fetch related data
-        $profile = Profile::where('user_id', $loan->user_id)->first();
+        $profile = Profile::with('cityRelation', 'stateRelation')->where('user_id', $loan->user_id)->first();
         $professional = Professional::where('user_id', $loan->user_id)->first();
         $education = Education::where('user_id', $loan->user_id)->first();
         $documents = \DB::table('documents')->where('user_id', $loan->user_id)->get();
@@ -408,7 +409,7 @@ class LoanApplicationController extends Controller
 
     public function showForm(Request $request)
     {
-        
+
         // echo "ssf";die;
         $currentStep = $request->input('current_step', 1);
         // dd($currentStep);
@@ -418,20 +419,45 @@ class LoanApplicationController extends Controller
 
         // echo 'gfgg';die;
 
+
         if (!$userId) {
             return redirect()->route('login')->withErrors('User session expired. Please log in again.');
         }
 
-        // Fetch existing data
-        $profile = DB::table('profile')->where('user_id', $userId)->first();
-        $professional = DB::table('professional_details')->where('user_id', $userId)->first();
-        // dd($professional);die;
-        $education = DB::table('education_details')->where('user_id', $userId)->first();
+        // Check if user already has a loan
+        // $hasActiveLoan  = Loan::where('user_id', $userId)
+        //                     ->whereNotIn('status', ['disbursed', 'rejected'])
+        //                     ->exists();
+        // if ($hasActiveLoan) {
+        //     return redirect()->route('loan.profile');
+        // }
+
+        $loanId = session('current_loan_id');
+
+        if (!$loanId) {
+            $loanId = Loan::where('user_id', $userId)->whereIn('status', ['in process', 'document pending'])->value('loan_id');
+        }
+
+        $loanUsers = collect();
+        if (session('role_id') == 4) {
+            $loanUsers = User::where('role_id', 1)
+                ->where('is_email_verify', 1)
+                ->select('id', 'name', 'email_id')
+                ->get();
+        }
+
+        $profile = DB::table('profile')->where('user_id', $userId)->where('loan_id', $loanId)->first() ?? null;
+
+        $professional = DB::table('professional_details')->where('user_id', $userId)->where('loan_id', $loanId)->first() ?? null;
+
+        $education = DB::table('education_details')->where('user_id', $userId)->where('loan_id', $loanId)->first() ?? null;
+
+        $documents = DB::table('documents')->where('user_id', $userId)->where('loan_id', $loanId)->get() ?? null;
+
         $existingLoans = DB::table('existing_loan')->where('user_id', $userId)->get();
-        $documents = DB::table('documents')->where('user_id', $userId)->get();
 
         // echo $documents;die;
-        $loan = Loan::where('user_id', $userId)->first();
+        $loan = Loan::where('user_id', $userId)->whereNotIn('status', ['disbursed', 'rejected'])->first();
         $hasExistingLoan = !is_null($existingLoans);
         $user = User::with('loans')->where('id', $userId)->first();
         $states = DB::table('states')->get();
@@ -450,7 +476,8 @@ class LoanApplicationController extends Controller
             'documents',
             'loan',
             'is_loan',
-            'user'
+            'user',
+            'loanUsers'
         ));
     }
 
@@ -547,23 +574,40 @@ class LoanApplicationController extends Controller
 
     public function handleStep(Request $request)
     {
-        $userId = session('user_id'); // Get user ID from session
-        // echo "string".$userId;die;
-        if (!$userId) {
+        $sessionUserId = session('user_id');
+        $sessionUserRole = session('role_id');
+
+        if (!$sessionUserId) {
             return redirect()->route('login')->withErrors('User session expired. Please log in again.');
         }
-
-
 
         $currentStep = $request->input('current_step');
 
         try {
-            // Determine whether the "Previous" or "Next" button was clicked
+            // Save user_id from step 1 dropdown to session if admin
+            if ($sessionUserRole == 4 && $currentStep == 1) {
+                $selectedUserId = $request->input('user_id');
+                if (!$selectedUserId) {
+                    return redirect()->back()->withErrors('Please select a user.');
+                }
+                session(['selected_user_id' => $selectedUserId]);
+            }
+
+            // Determine user_id to use
+            if ($sessionUserRole == 4) {
+                $userId = session('selected_user_id');
+                if (!$userId) {
+                    return redirect()->route('loan.form', ['current_step' => 1])
+                        ->withErrors('User not selected. Please select a user in Step 1.');
+                }
+            } else {
+                $userId = $sessionUserId;
+            }
+
             if ($request->has('previous')) {
-                $currentStep = max(1, $currentStep - 1); // Ensure the step doesn't go below 1
+                $currentStep = max(1, $currentStep - 1);
                 return redirect()->route('loan.form', ['current_step' => $currentStep]);
             } elseif ($request->has('next')) {
-                // Validate and handle the current step
                 switch ($currentStep) {
                     case 1:
                         $this->handlePersonalDetails($request, $userId);
@@ -579,15 +623,12 @@ class LoanApplicationController extends Controller
                         break;
                     case 5:
                         $this->handleLoanDetails($request, $userId);
-
-                        // Redirect to the thank you page after completing the loan details step
                         return redirect()->route('loan.thankyou');
                     default:
                         return redirect()->route('loan.form', ['current_step' => 1])
                             ->withErrors('Invalid step. Please restart the application process.');
                 }
 
-                // After successfully handling the current step, move to the next step
                 return redirect()->route('loan.form', ['current_step' => $currentStep + 1]);
             } else {
                 return redirect()->back()->withErrors('Invalid action. Please try again.');
@@ -599,10 +640,13 @@ class LoanApplicationController extends Controller
     }
 
 
+
     protected function handlePersonalDetails(Request $request, $userId)
     {
         $validated = $request->validate([
             'mobile_no' => 'required|string|max:15',
+            'full_name' => 'required|string',
+            'pan_number' => 'required|string',
             'marital_status' => 'required|string|max:50',
             'dob' => 'required|date',
             'residence_address' => 'required|string|max:255',
@@ -613,11 +657,37 @@ class LoanApplicationController extends Controller
             'bank_id' => 'required|integer',
         ]);
 
+        $loan = Loan::where('user_id', $userId)
+            ->whereNotIn('status', ['disbursed', 'rejected'])
+            ->first();
+
+        if (!$loan) {
+            // Create new loan
+            $loan = new Loan();
+            $loan->user_id = $userId;
+            $loan->loan_reference_id = Str::upper(Str::random(8)); // Generate unique reference ID
+            $loan->loan_category_id = $validated['loan_category_id'];
+            $loan->bank_id = $validated['bank_id'];
+            $loan->status = 'in process';
+            $loan->save();
+        } else {
+            // Update existing loan
+            $loan->update([
+                'loan_category_id' => $validated['loan_category_id'],
+                'bank_id' => $validated['bank_id']
+            ]);
+        }
+
         // Update or insert into the 'profile' table
         DB::table('profile')->updateOrInsert(
-            ['user_id' => $userId],
+            [
+                'user_id' => $userId,
+                'loan_id' => $loan->loan_id
+            ],
             [
                 'mobile_no' => $validated['mobile_no'],
+                'full_name' => $validated['full_name'],
+                'pan_number' => $validated['pan_number'],
                 'marital_status' => $validated['marital_status'],
                 'dob' => $validated['dob'],
                 'residence_address' => $validated['residence_address'],
@@ -632,28 +702,9 @@ class LoanApplicationController extends Controller
         Session::put('bank_id', $validated['bank_id']);
 
         // Check if a loan already exists for this user
-        $existingLoan = Loan::where('user_id', $userId)->first();
 
-        if (!$existingLoan) {
-            // Create new loan
-            $loan = new Loan();
-            $loan->user_id = $userId;
-            $loan->loan_reference_id = Str::upper(Str::random(8)); // Generate unique reference ID
-            $loan->loan_category_id = $validated['loan_category_id'];
-            $loan->bank_id = $validated['bank_id'];
-            $loan->status = 'in process'; // Default status
-            $loan->save();
 
-            Session::put('loan_id', $loan->loan_id);
-        } else {
-            // Update existing loan
-            $existingLoan->update([
-                'loan_category_id' => $validated['loan_category_id'],
-                'bank_id' => $validated['bank_id']
-            ]);
-
-            Session::put('loan_id', $existingLoan->loan_id);
-        }
+        Session::put('current_loan_id', $loan->loan_id);
     }
 
 
@@ -676,13 +727,16 @@ class LoanApplicationController extends Controller
         ]);
 
 
-        $is_loan = Session::get('is_loan', 0);
-        $professional = Professional::where('user_id', $userId)->first();
+        $loan_id = Session::get('current_loan_id') ?? Loan::where('user_id', $userId)
+            ->whereNotIn('status', ['disbursed', 'rejected'])
+            ->first();
+        $professional = Professional::where('user_id', $userId)->where('loan_id', $loan_id)->first();
 
         if (!$professional) {
             // No record exists, create a new one
             Professional::create([
                 'user_id' => $userId,
+                'loan_id' => $loan_id,
                 'profession_type' => $validated['profession_type'],
                 'company_name' => $validated['company_name'],
                 'industry' => $validated['industry'],
@@ -719,15 +773,18 @@ class LoanApplicationController extends Controller
             'college_address' => 'required|string|max:255'
         ]);
 
-        $is_loan = Session::get('is_loan', 0);
+        $loan_id = Session::get('current_loan_id') ?? Loan::where('user_id', $userId)
+            ->whereNotIn('status', ['disbursed', 'rejected'])
+            ->first();
 
         // Check if education details already exist
-        $education = Education::where('user_id', $userId)->first();
+        $education = Education::where('user_id', $userId)->where('loan_id', $loan_id)->first();
 
         if (!$education) {
             // Insert new record if not found
             Education::create([
                 'user_id' => $userId,
+                'loan_id' => $loan_id,
                 'qualification' => $validated['qualification'],
                 'pass_year' => $validated['pass_year'],
                 'college_name' => $validated['college_name'],
@@ -774,6 +831,11 @@ class LoanApplicationController extends Controller
     }
     protected function handleDocumentUpload(Request $request, $userId)
     {
+
+        $loan_id = Session::get('current_loan_id') ?? Loan::where('user_id', $userId)
+            ->whereNotIn('status', ['disbursed', 'rejected'])
+            ->first();
+
         $documents = ['aadhar_card', 'pancard', 'qualification_proof', 'salary_slip', 'form_16', 'bank_statement', 'passport', 'light_bill', 'dl', 'rent_agree']; // List of possible document types
 
         foreach ($documents as $docType) {
@@ -785,6 +847,7 @@ class LoanApplicationController extends Controller
                 DB::table('documents')->updateOrInsert(
                     [
                         'user_id' => $userId,
+                        'loan_id' => $loan_id,
                         'document_name' => $docType
                     ],
                     [
@@ -966,7 +1029,11 @@ class LoanApplicationController extends Controller
             $referralUserId = $referralUser->id ?? null;
         }
 
-        $existingLoan = Loan::where('user_id', $userId)->first();
+        $existingLoan = Session::get('current_loan_id');
+
+        if ($existingLoan && is_int($existingLoan)) {
+            $existingLoan = Loan::find($existingLoan); // Convert ID to model
+        }
 
         if (!$existingLoan) {
             // First-time creation
@@ -980,9 +1047,8 @@ class LoanApplicationController extends Controller
                 'referral_user_id' => $referralUserId,
                 'status' => 'in process',
             ]);
-            Session::put('loan_id', $loan->loan_id);
+            Session::put('current_loan_id', $loan->loan_id);
         } else {
-            // Update existing
             $existingLoan->update([
                 'loan_category_id' => $loan_category_id,
                 'bank_id' => $bank_id,
@@ -990,7 +1056,7 @@ class LoanApplicationController extends Controller
                 'tenure' => $validated['tenure'],
                 'referral_user_id' => $referralUserId,
             ]);
-            Session::put('loan_id', $existingLoan->loan_id);
+            Session::put('current_loan_id', $existingLoan->loan_id);
         }
 
         Session::put('is_loan', true);
@@ -1162,14 +1228,15 @@ class LoanApplicationController extends Controller
             ]);
         }
     }
-    public function allAgentLoans()
+    public function allAgentLoans(Request $request)
     {
-        $agent_id = session()->get('user_id'); // Assuming the agent's ID is stored as 'user_id'
+        $agent_id = session()->get('user_id');
+        $status = $request->input('status');
 
-        $data['loans'] = DB::table('loans')
+        $query = DB::table('loans')
             ->join('users', 'loans.user_id', '=', 'users.id')
             ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-            ->where('loans.agent_id', $agent_id) // Filter by the logged-in agent's ID
+            ->where('loans.agent_id', $agent_id)
             ->select(
                 'loans.loan_id',
                 'loans.amount',
@@ -1177,12 +1244,18 @@ class LoanApplicationController extends Controller
                 'loans.loan_reference_id',
                 'users.name as user_name',
                 'loan_category.category_name as loan_category_name',
-                'loans.agent_action'
-            )
-            ->paginate(10); // Adjust the pagination limit if necessary
+                'loans.agent_action',
+                'loans.status'
+            );
 
+        if (!empty($status)) {
+            $query->where('loans.status', $status);
+        }
+
+        $data['loans'] = $query->paginate(10)->withQueryString();
         return view('agent.all-loans', compact('data'));
     }
+
     public function loanShow($id)
     {
         // Fetch the loan by ID

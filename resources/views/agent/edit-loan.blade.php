@@ -167,13 +167,13 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="city">City:</label>
-                            <input type="text" class="form-control" id="city" name="city" value="{{ old('city', $profile->city ?? '') }}">
+                            <input type="text" class="form-control" id="city" name="city" value="{{ old('city', $profile->cityRelation->city ?? '') }}">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="state">State:</label>
-                            <input type="text" class="form-control" id="state" name="state" value="{{ old('state', $profile->state ?? '') }}">
+                            <input type="text" class="form-control" id="state" name="state" value="{{ old('state', $profile->stateRelation->name ?? '') }}">
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -241,7 +241,7 @@
                             @foreach($documents as $doc)
                             <div class="col-md-12 mb-3">
                                 <div class="document-wrapper">
-                                    <a href="{{ asset('storage/documents/' . $doc->document_name) }}" target="_blank">{{ $doc->document_name }}</a> 
+                                    <a href="{{  Storage::url($doc->file_path)  }}" target="_blank">{{ $doc->document_name }}</a> 
                                 </div>
                             </div>
                             @endforeach

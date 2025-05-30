@@ -67,7 +67,7 @@ class AdminController extends Controller
                 return redirect('partner/partnerDashboard');
             }
             if ($user->role_id == 1) {
-                return redirect('/my-profile');
+                return redirect('/admin/loan-application');
             }
         } else {
             return back()->withErrors(['otp' => 'OTP does not match, try again']);

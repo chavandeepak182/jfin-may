@@ -10,7 +10,7 @@ class Education extends Model
     public $incrementing = true;
     public $timestamps = true;
     protected $fillable = [
-        'user_id', 'qualification', 'pass_year', 'college_name', 'college_address'
+        'loan_id', 'user_id', 'qualification', 'pass_year', 'college_name', 'college_address'
     ];
     public function user()
     {

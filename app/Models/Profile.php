@@ -15,10 +15,20 @@ class Profile extends Model
     protected $primaryKey = 'user_id';
     protected $keyType = 'int';
     protected $fillable = [
-        'user_id', 'name', 'mobile_no', 'email_id', 'marital_status', 'dob', 'residence_address', 'city', 'state', 'pincode'
+       'loan_id', 'user_id', 'full_name', 'pan_number', 'mobile_no', 'email_id', 'marital_status', 'dob', 'residence_address', 'city', 'state', 'pincode'
     ];
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function cityRelation()
+    {
+        return $this->belongsTo(Cities::class, 'city');
+    }
+
+    public function stateRelation()
+    {
+        return $this->belongsTo(States::class, 'state');
     }
 }

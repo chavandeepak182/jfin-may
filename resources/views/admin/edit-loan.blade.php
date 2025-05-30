@@ -234,7 +234,7 @@ Edit Loan
                     @foreach($documents as $doc)
                     <div class="col-md-12 mb-3">
                         <div class="document-wrapper">
-                            <a href="{{ asset('storage/documents/' . $doc->document_name) }}" target="_blank">{{ $doc->document_name }}</a>
+                            <a href="{{ Storage::url($doc->file_path) }}" target="_blank">{{ $doc->document_name }}</a>
                             
                         </div>
                     </div>
