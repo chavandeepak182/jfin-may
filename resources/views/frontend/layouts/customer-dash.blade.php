@@ -4,7 +4,8 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<link href="{{ asset('theme') }}/user-dash/css/app.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="{{ asset('theme') }}/frontend/css/bootstrap.min.css" rel="stylesheet">
@@ -138,7 +139,7 @@
 	@yield('Pop-up Moda')
 
 	<script src="{{ asset('theme') }}/user-dash/js/app.js"></script>
-	<script>
+	{{-- <script>
 		document.addEventListener('DOMContentLoaded', function() {
 			// Function to fetch notifications
 			function fetchNotifications() {
@@ -208,7 +209,7 @@
 			// Fetch notifications every 10 seconds
 			setInterval(fetchNotifications, 10000); // 10000ms = 10 seconds
 		});
-	</script>
+	</script> --}}
 
     @yield('custom-script')
 

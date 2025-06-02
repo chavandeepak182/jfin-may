@@ -1,7 +1,6 @@
-@extends('frontend.layouts.header')
-@section('title', 'Apply for a Loan | Jfinserv')
+<?php $__env->startSection('title', 'Apply for a Loan | Jfinserv'); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
     <div class="container-fluid bg-white py-5">
         <div class="container">
@@ -11,22 +10,22 @@
                     <div class="progress-steps p-4">
                         <h5 class="text-primary mb-3">Application Steps</h5>
                         <ul class="list-group">
-                            <li class="list-group-item {{ $currentStep == 1 ? 'active' : '' }}">
+                            <li class="list-group-item <?php echo e($currentStep == 1 ? 'active' : ''); ?>">
                                 <span>1. Personal Details</span>
                             </li>
-                            <li class="list-group-item {{ $currentStep == 2 ? 'active' : '' }}">
+                            <li class="list-group-item <?php echo e($currentStep == 2 ? 'active' : ''); ?>">
                                 <span>2. Professional Details</span>
                             </li>
-                            <li class="list-group-item {{ $currentStep == 3 ? 'active' : '' }}">
+                            <li class="list-group-item <?php echo e($currentStep == 3 ? 'active' : ''); ?>">
                                 <span>3. Qualification Details</span>
                             </li>
-                            <!-- <li class="list-group-item {{ $currentStep == 4 ? 'active' : '' }}">
+                            <!-- <li class="list-group-item <?php echo e($currentStep == 4 ? 'active' : ''); ?>">
                                         <span>4. Existing Loan Details</span>
                                     </li> -->
-                            <li class="list-group-item {{ $currentStep == 4 ? 'active' : '' }}">
+                            <li class="list-group-item <?php echo e($currentStep == 4 ? 'active' : ''); ?>">
                                 <span>4. Upload Documents</span>
                             </li>
-                            <li class="list-group-item {{ $currentStep == 5 ? 'active' : '' }}">
+                            <li class="list-group-item <?php echo e($currentStep == 5 ? 'active' : ''); ?>">
                                 <span>5. Loan Details</span>
                             </li>
                         </ul>
@@ -36,67 +35,76 @@
                 <!-- Form Section -->
                 <div class="col-md-9">
                     <div class="form-container shadow rounded bg-white p-5">
-                        @if (session('success'))
+                        <?php if(session('success')): ?>
                             <div class="alert alert-success">
-                                {{ session('success') }}
-                            </div>
-                        @endif
+                                <?php echo e(session('success')); ?>
 
-                        @if ($errors->any())
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if($errors->any()): ?>
                             <div class="alert alert-danger">
                                 <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
+                                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <li><?php echo e($error); ?></li>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </ul>
                             </div>
-                        @endif
+                        <?php endif; ?>
 
-                        <form action="{{ route('loan.handle_step') }}" method="POST" enctype="multipart/form-data"
+                        <form action="<?php echo e(route('loan.handle_step')); ?>" method="POST" enctype="multipart/form-data"
                             role="form" autocomplete="off" class="form">
-                            @csrf
-                            <input type="hidden" name="current_step" value="{{ $currentStep }}">
-                            <input type="hidden" name="is_loan" value="{{ $is_loan }}">
-                            <input type="hidden" name="loan_category_id" value="{{ session('loan_category_id', '') }}">
-                            <input type="hidden" name="bank_id" value="{{ session('bank_id', '') }}">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="current_step" value="<?php echo e($currentStep); ?>">
+                            <input type="hidden" name="is_loan" value="<?php echo e($is_loan); ?>">
+                            <input type="hidden" name="loan_category_id" value="<?php echo e(session('loan_category_id', '')); ?>">
+                            <input type="hidden" name="bank_id" value="<?php echo e(session('bank_id', '')); ?>">
 
                             <!-- Personal Details -->
-                            @if ($currentStep == 1)
+                            <?php if($currentStep == 1): ?>
                                 <fieldset>
                                     <h4 class="text-primary mb-3">Personal Details</h4>
-                                    @if (session('role_id') == 4)
+                                    <?php if(session('role_id') == 4): ?>
                                         <div class="row g-3">
                                             <div class="col-md-6">
                                                 <div class="form-floating">
                                                     <select name="user_id" id="user_id" class="form-control" required>
                                                         <option value="">Select User</option>
-                                                        @foreach ($loanUsers as $user)
-                                                            <option value="{{ $user->id }}"
-                                                                {{ old('user_id', $loan->user_id ?? '') == $user->id ? 'selected' : '' }}>
-                                                                {{ $user->name }} ({{ $user->email_id }})
+                                                        <?php $__currentLoopData = $loanUsers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <option value="<?php echo e($user->id); ?>"
+                                                                <?php echo e(old('user_id', $loan->user_id ?? '') == $user->id ? 'selected' : ''); ?>>
+                                                                <?php echo e($user->name); ?> (<?php echo e($user->email_id); ?>)
                                                             </option>
-                                                        @endforeach
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </select>
                                                     <label for="user_id">User <span class="text-danger">*</span></label>
-                                                    @error('user_id')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
+                                                    <?php $__errorArgs = ['user_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                 </div>
                                             </div>
                                         </div>
-                                    @endif
+                                    <?php endif; ?>
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <div class="form-floating">
                                                 <select name="loan_category_id" id="loan_category" class="form-control"
                                                     required>
                                                     <option value="">Select Loan Category</option>
-                                                    @foreach ($loanCategories as $category)
-                                                        <option value="{{ $category->loan_category_id }}"
-                                                            {{ old('loan_category_id', $loan->loan_category_id ?? '') == $category->loan_category_id ? 'selected' : '' }}>
-                                                            {{ $category->category_name }}
+                                                    <?php $__currentLoopData = $loanCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <option value="<?php echo e($category->loan_category_id); ?>"
+                                                            <?php echo e(old('loan_category_id', $loan->loan_category_id ?? '') == $category->loan_category_id ? 'selected' : ''); ?>>
+                                                            <?php echo e($category->category_name); ?>
+
                                                         </option>
-                                                    @endforeach
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </select>
                                                 <label for="loan_category">Loan Category <span
                                                         class="text-danger">*</span></label>
@@ -107,17 +115,25 @@
                                             <div class="form-floating">
                                                 <select name="bank_id" id="bank_id" class="form-control" required>
                                                     <option value="">Select Bank</option>
-                                                    @foreach ($loanBanks as $bank)
-                                                        <option value="{{ $bank->bank_id }}"
-                                                            {{ old('bank_id', $loan->bank_id ?? '') == $bank->bank_id ? 'selected' : '' }}>
-                                                            {{ $bank->bank_name }}
+                                                    <?php $__currentLoopData = $loanBanks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $bank): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <option value="<?php echo e($bank->bank_id); ?>"
+                                                            <?php echo e(old('bank_id', $loan->bank_id ?? '') == $bank->bank_id ? 'selected' : ''); ?>>
+                                                            <?php echo e($bank->bank_name); ?>
+
                                                         </option>
-                                                    @endforeach
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </select>
                                                 <label for="bank_name">Bank Name <span class="text-danger">*</span></label>
-                                                @error('bank_id')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                                <?php $__errorArgs = ['bank_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                             </div>
                                         </div>
 
@@ -126,12 +142,19 @@
                                         <div class="col-md-4">
                                             <div class="form-floating">
                                                 <input type="text" name="full_name"
-                                                    value="{{ old('full_name', $profile->full_name ?? '') }}"
+                                                    value="<?php echo e(old('full_name', $profile->full_name ?? '')); ?>"
                                                     class="form-control" id="full_name" placeholder="Full Name">
                                                 <label for="full_name">Full Name (As per PAN)</label>
-                                                @error('full_name')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                                <?php $__errorArgs = ['full_name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                             </div>
                                         </div>
 
@@ -139,39 +162,60 @@
                                         <div class="col-md-4">
                                             <div class="form-floating">
                                                 <input type="text" name="pan_number"
-                                                    value="{{ old('pan_number', $profile->pan_number ?? '') }}"
+                                                    value="<?php echo e(old('pan_number', $profile->pan_number ?? '')); ?>"
                                                     class="form-control" id="pan_number" placeholder="PAN Number">
                                                 <label for="pan_number">PAN Number</label>
-                                                @error('pan_number')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                                <?php $__errorArgs = ['pan_number'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                             </div>
                                         </div>
 
                                         <div class="col-md-4">
                                             <div class="form-floating">
                                                 <input type="tel" class="form-control" id="phone" name="mobile_no"
-                                                    value="{{ old('mobile_no', $profile->mobile_no ?? $user->mobile_no) }}"
+                                                    value="<?php echo e(old('mobile_no', $profile->mobile_no ?? $user->mobile_no)); ?>"
                                                     placeholder="Phone" required>
                                                 <label for="phone">Phone <span class="text-danger">*</span></label>
-                                                @error('mobile_no')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                                <?php $__errorArgs = ['mobile_no'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                             </div>
                                         </div>
 
-                                        {{-- <button type="button" class="btn btn-primary" id="fetchReportBtn">Fetch Credit Report</button> --}}
+                                        
 
                                         <div class="col-md-4">
                                             <div class="form-floating">
                                                 <input type="date" class="form-control" id="dob" name="dob"
-                                                    value="{{ old('dob', $profile->dob ?? '') }}" placeholder="DOB"
+                                                    value="<?php echo e(old('dob', $profile->dob ?? '')); ?>" placeholder="DOB"
                                                     required>
                                                 <label for="dob">Date of Birth <span
                                                         class="text-danger">*</span></label>
-                                                @error('dob')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                                <?php $__errorArgs = ['dob'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                             </div>
                                         </div>
 
@@ -182,17 +226,24 @@
                                                     <option value="" selected disabled hidden>Select Marital Status
                                                     </option>
                                                     <option value="Single"
-                                                        {{ old('marital_status', $profile->marital_status ?? '') == 'Single' ? 'selected' : '' }}>
+                                                        <?php echo e(old('marital_status', $profile->marital_status ?? '') == 'Single' ? 'selected' : ''); ?>>
                                                         Single</option>
                                                     <option value="Married"
-                                                        {{ old('marital_status', $profile->marital_status ?? '') == 'Married' ? 'selected' : '' }}>
+                                                        <?php echo e(old('marital_status', $profile->marital_status ?? '') == 'Married' ? 'selected' : ''); ?>>
                                                         Married</option>
                                                 </select>
                                                 <label for="marital_status">Marital Status <span
                                                         class="text-danger">*</span></label>
-                                                @error('marital_status')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                                <?php $__errorArgs = ['marital_status'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                             </div>
                                         </div>
 
@@ -200,13 +251,20 @@
                                             <div class="form-floating">
                                                 <input type="text" class="form-control" id="residence_address"
                                                     name="residence_address"
-                                                    value="{{ old('residence_address', $profile->residence_address ?? '') }}"
+                                                    value="<?php echo e(old('residence_address', $profile->residence_address ?? '')); ?>"
                                                     placeholder="Address" required>
                                                 <label for="residence_address">Address <span
                                                         class="text-danger">*</span></label>
-                                                @error('residence_address')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                                <?php $__errorArgs = ['residence_address'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                             </div>
                                         </div>
 
@@ -215,17 +273,25 @@
                                                 <select class="form-control" id="state" name="state" required>
                                                     <option value="">Select State <span class="text-danger">*</span>
                                                     </option>
-                                                    @foreach ($states as $state)
-                                                        <option value="{{ $state->id }}"
-                                                            {{ old('state', $profile->state ?? '') == $state->id ? 'selected' : '' }}>
-                                                            {{ $state->name }}
+                                                    <?php $__currentLoopData = $states; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <option value="<?php echo e($state->id); ?>"
+                                                            <?php echo e(old('state', $profile->state ?? '') == $state->id ? 'selected' : ''); ?>>
+                                                            <?php echo e($state->name); ?>
+
                                                         </option>
-                                                    @endforeach
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </select>
                                                 <label for="state">State <span class="text-danger">*</span></label>
-                                                @error('state')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                                <?php $__errorArgs = ['state'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                             </div>
                                         </div>
 
@@ -233,27 +299,42 @@
                                             <div class="form-floating">
                                                 <select class="form-control" id="city" name="city" required>
                                                     <option value="">Select City</option>
-                                                    @if (isset($profile->city))
-                                                        <option value="{{ $profile->city }}" selected>
-                                                            {{ optional(DB::table('cities')->where('id', $profile->city)->first())->city }}
+                                                    <?php if(isset($profile->city)): ?>
+                                                        <option value="<?php echo e($profile->city); ?>" selected>
+                                                            <?php echo e(optional(DB::table('cities')->where('id', $profile->city)->first())->city); ?>
+
                                                         </option>
-                                                    @endif
+                                                    <?php endif; ?>
                                                 </select>
                                                 <label for="city">City</label>
-                                                @error('city')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                                <?php $__errorArgs = ['city'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-floating">
                                                 <input type="text" class="form-control" id="pincode" name="pincode"
-                                                    value="{{ old('pincode', $profile->pincode ?? '') }}"
+                                                    value="<?php echo e(old('pincode', $profile->pincode ?? '')); ?>"
                                                     placeholder="Pincode">
                                                 <label for="pincode">Pincode <span class="text-danger">*</span></label>
-                                                @error('pincode')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                                <?php $__errorArgs = ['pincode'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                             </div>
                                         </div>
 
@@ -261,42 +342,42 @@
                                 </fieldset>
 
                                 <!-- Professional Details -->
-                            @elseif ($currentStep == 2)
+                            <?php elseif($currentStep == 2): ?>
                                 <fieldset>
                                     <h4 class="text-primary mb-3">Professional Details</h4>
                                     <div class="row g-3">
                                         <div class="col-md-12">
-                                            @if ($professional)
-                                                @if ($professional->profession_type == 'salaried')
+                                            <?php if($professional): ?>
+                                                <?php if($professional->profession_type == 'salaried'): ?>
                                                     <div class="form-check form-check-inline me-5">
                                                         <input class="form-check-input profession_type" type="radio"
                                                             name="profession_type" id="salariedTab" value="salaried"
-                                                            {{ old('profession_type', $professional->profession_type ?? '') == 'salaried' ? 'checked' : '' }}>
+                                                            <?php echo e(old('profession_type', $professional->profession_type ?? '') == 'salaried' ? 'checked' : ''); ?>>
                                                         <label for="salariedTab">Salaried Employees</label>
                                                     </div>
-                                                @endif
-                                                @if ($professional->profession_type == 'self')
+                                                <?php endif; ?>
+                                                <?php if($professional->profession_type == 'self'): ?>
                                                     <div class="form-check form-check-inline me-5">
                                                         <input class="form-check-input profession_type" type="radio"
                                                             name="profession_type" id="selfTab" value="self"
-                                                            {{ old('profession_type', $professional->profession_type ?? '') == 'self' ? 'checked' : '' }}>
+                                                            <?php echo e(old('profession_type', $professional->profession_type ?? '') == 'self' ? 'checked' : ''); ?>>
                                                         <label for="selfTab">Self Employed/ Business Professionals</label>
                                                     </div>
-                                                @endif
-                                            @else
+                                                <?php endif; ?>
+                                            <?php else: ?>
                                                 <div class="form-check form-check-inline me-5">
                                                     <input class="form-check-input profession_type" type="radio"
                                                         name="profession_type" id="salariedTab" value="salaried"
-                                                        {{ old('profession_type', $professional->profession_type ?? '') == 'salaried' ? 'checked' : '' }}>
+                                                        <?php echo e(old('profession_type', $professional->profession_type ?? '') == 'salaried' ? 'checked' : ''); ?>>
                                                     <label for="salariedTab">Salaried Employees</label>
                                                 </div>
                                                 <div class="form-check form-check-inline me-5">
                                                     <input class="form-check-input profession_type" type="radio"
                                                         name="profession_type" id="selfTab" value="self"
-                                                        {{ old('profession_type', $professional->profession_type ?? '') == 'self' ? 'checked' : '' }}>
+                                                        <?php echo e(old('profession_type', $professional->profession_type ?? '') == 'self' ? 'checked' : ''); ?>>
                                                     <label for="selfTab">Self Employed/ Business Professionals</label>
                                                 </div>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
 
 
@@ -306,129 +387,192 @@
                                             <div class="form-floating">
                                                 <input type="text" class="form-control" id="company_name"
                                                     name="company_name"
-                                                    value="{{ old('company_name', $professional->company_name ?? '') }}"
+                                                    value="<?php echo e(old('company_name', $professional->company_name ?? '')); ?>"
                                                     placeholder="Company Name" required>
                                                 <label for="company_name">Company Name <span
                                                         class="text-danger">*</span></label>
                                             </div>
-                                            @error('company_name')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
+                                            <?php $__errorArgs = ['company_name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                <span class="text-danger"><?php echo e($message); ?></span>
+                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                         </div>
 
                                         <div class="col-md-6">
                                             <div class="form-floating">
                                                 <input type="text" class="form-control" id="industry"
                                                     name="industry"
-                                                    value="{{ old('industry', $professional->industry ?? '') }}"
+                                                    value="<?php echo e(old('industry', $professional->industry ?? '')); ?>"
                                                     placeholder="Industry" required>
                                                 <label for="industry">Nature of Business <span
                                                         class="text-danger">*</span></label>
                                             </div>
-                                            @error('industry')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
+                                            <?php $__errorArgs = ['industry'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                <span class="text-danger"><?php echo e($message); ?></span>
+                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                         </div>
 
                                         <div class="col-md-12">
                                             <div class="form-floating">
                                                 <input type="text" class="form-control" id="company_address"
                                                     name="company_address"
-                                                    value="{{ old('company_address', $professional->company_address ?? '') }}"
+                                                    value="<?php echo e(old('company_address', $professional->company_address ?? '')); ?>"
                                                     placeholder="Company Address" required>
                                                 <label for="company_address">Company Address <span
                                                         class="text-danger">*</span></label>
                                             </div>
-                                            @error('company_address')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
+                                            <?php $__errorArgs = ['company_address'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                <span class="text-danger"><?php echo e($message); ?></span>
+                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                         </div>
 
                                         <div class="col-md-6">
                                             <div class="form-floating">
                                                 <input type="number" class="form-control" id="experience_year"
                                                     name="experience_year"
-                                                    value="{{ old('experience_year', $professional->experience_year ?? '') }}"
+                                                    value="<?php echo e(old('experience_year', $professional->experience_year ?? '')); ?>"
                                                     placeholder="Experience Year" required>
                                                 <label for="experience_year">Experience Year <span
                                                         class="text-danger">*</span></label>
                                             </div>
-                                            @error('experience_year')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
+                                            <?php $__errorArgs = ['experience_year'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                <span class="text-danger"><?php echo e($message); ?></span>
+                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                         </div>
 
                                         <div class="col-md-6">
                                             <div class="form-floating">
                                                 <input type="text" class="form-control" id="designation"
                                                     name="designation"
-                                                    value="{{ old('designation', $professional->designation ?? '') }}"
+                                                    value="<?php echo e(old('designation', $professional->designation ?? '')); ?>"
                                                     placeholder="Designation" required>
                                                 <label for="designation">Designation <span
                                                         class="text-danger">*</span></label>
                                             </div>
-                                            @error('designation')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
+                                            <?php $__errorArgs = ['designation'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                <span class="text-danger"><?php echo e($message); ?></span>
+                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                         </div>
 
                                         <div class="col-md-6" id="netsalary">
                                             <div class="form-floating">
                                                 <input type="number" class="form-control" id="netsalary"
                                                     name="netsalary"
-                                                    value="{{ old('netsalary', $professional->netsalary ?? '') }}"
+                                                    value="<?php echo e(old('netsalary', $professional->netsalary ?? '')); ?>"
                                                     placeholder="Net Salary">
                                                 <label for="netsalary">Net Salary <span
                                                         class="text-danger">*</span></label>
                                             </div>
-                                            @error('netsalary')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
+                                            <?php $__errorArgs = ['netsalary'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                <span class="text-danger"><?php echo e($message); ?></span>
+                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                         </div>
 
                                         <div class="col-md-6" id="gross_salary">
                                             <div class="form-floating">
                                                 <input type="number" class="form-control" id="gross_salary"
                                                     name="gross_salary"
-                                                    value="{{ old('gross_salary', $professional->gross_salary ?? '') }}"
+                                                    value="<?php echo e(old('gross_salary', $professional->gross_salary ?? '')); ?>"
                                                     placeholder="Gross Salary">
                                                 <label for="gross_salary">Gross Salary <span
                                                         class="text-danger">*</span></label>
                                             </div>
-                                            @error('gross_salary')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
+                                            <?php $__errorArgs = ['gross_salary'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                <span class="text-danger"><?php echo e($message); ?></span>
+                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                         </div>
 
-                                        @if ($professional && $professional->profession_type !== 'salaried')
+                                        <?php if($professional && $professional->profession_type !== 'salaried'): ?>
                                             <div class="col-md-6">
                                                 <div class="form-floating" id="selfincome">
                                                     <input type="number" class="form-control" id="selfincome"
                                                         name="selfincome"
-                                                        value="{{ old('selfincome', $professional->selfincome ?? '') }}"
+                                                        value="<?php echo e(old('selfincome', $professional->selfincome ?? '')); ?>"
                                                         placeholder="Total Income">
                                                     <label for="selfincome">Total Income <span
                                                             class="text-danger">*</span></label>
                                                 </div>
-                                                @error('selfincome')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                                <?php $__errorArgs = ['selfincome'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <div class="form-floating" id="business_establish_date">
                                                     <input type="date" class="form-control"
                                                         id="business_establish_date" name="business_establish_date"
-                                                        value="{{ old('business_establish_date', isset($professional->business_establish_date) ? \Carbon\Carbon::parse($professional->business_establish_date)->format('Y-m-d') : '') }}"
+                                                        value="<?php echo e(old('business_establish_date', isset($professional->business_establish_date) ? \Carbon\Carbon::parse($professional->business_establish_date)->format('Y-m-d') : '')); ?>"
                                                         placeholder="Business Establish Date">
                                                     <label for="business_establish_date">Business Establish Date <span
                                                             class="text-danger">*</span></label>
                                                 </div>
-                                                @error('business_establish_date')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                                <?php $__errorArgs = ['business_establish_date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                             </div>
-                                        @else
+                                        <?php else: ?>
                                             <div class="col-md-6">
                                                 <div class="form-floating" id="selfincome">
                                                     <input type="number" class="form-control" id="selfincome"
@@ -447,37 +591,37 @@
                                                             class="text-danger">*</span></label>
                                                 </div>
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
 
                                     </div>
                                 </fieldset>
 
                                 <!-- Qualification Details -->
-                            @elseif ($currentStep == 3)
+                            <?php elseif($currentStep == 3): ?>
                                 <!--  <fieldset>
                                             <h4 class="text-primary mb-3">Qualification Details</h4>
                                             <div class="row g-3">
                                                 <div class="col-md-6">
                                                     <div class="form-floating">
-                                                        <input type="text" class="form-control" id="qualification" name="qualification" value="{{ old('qualification', $education->qualification ?? '') }}" placeholder="Qualification" required>
+                                                        <input type="text" class="form-control" id="qualification" name="qualification" value="<?php echo e(old('qualification', $education->qualification ?? '')); ?>" placeholder="Qualification" required>
                                                         <label for="qualification">Highest Degree</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-floating">
-                                                        <input type="number" class="form-control" id="pass_year" name="pass_year" value="{{ old('pass_year', $education->pass_year ?? '') }}" placeholder="pass_year" required>
+                                                        <input type="number" class="form-control" id="pass_year" name="pass_year" value="<?php echo e(old('pass_year', $education->pass_year ?? '')); ?>" placeholder="pass_year" required>
                                                         <label for="pass_year">Pass Year</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-floating">
-                                                        <input type="text" class="form-control" id="college_name" name="college_name" value="{{ old('college_name', $education->college_name ?? '') }}" placeholder="College Name" required>
+                                                        <input type="text" class="form-control" id="college_name" name="college_name" value="<?php echo e(old('college_name', $education->college_name ?? '')); ?>" placeholder="College Name" required>
                                                         <label for="college_name">College Name</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-floating">
-                                                        <input type="text" class="form-control" id="college_address" name="college_address" value="{{ old('college_address', $education->college_address ?? '') }}" placeholder="College Address" required>
+                                                        <input type="text" class="form-control" id="college_address" name="college_address" value="<?php echo e(old('college_address', $education->college_address ?? '')); ?>" placeholder="College Address" required>
                                                         <label for="college_address">College Address</label>
                                                     </div>
                                                 </div>
@@ -496,16 +640,16 @@
                                                     required>
                                                     <option value="">Select Degree</option>
                                                     <option value="Bachelors"
-                                                        {{ old('qualification', $education->qualification ?? '') == 'Bachelors' ? 'selected' : '' }}>
+                                                        <?php echo e(old('qualification', $education->qualification ?? '') == 'Bachelors' ? 'selected' : ''); ?>>
                                                         Bachelors</option>
                                                     <option value="Masters"
-                                                        {{ old('qualification', $education->qualification ?? '') == 'Masters' ? 'selected' : '' }}>
+                                                        <?php echo e(old('qualification', $education->qualification ?? '') == 'Masters' ? 'selected' : ''); ?>>
                                                         Masters</option>
                                                     <option value="PhD"
-                                                        {{ old('qualification', $education->qualification ?? '') == 'PhD' ? 'selected' : '' }}>
+                                                        <?php echo e(old('qualification', $education->qualification ?? '') == 'PhD' ? 'selected' : ''); ?>>
                                                         PhD</option>
                                                     <option value="Other"
-                                                        {{ old('qualification', $education->qualification ?? '') == 'Other' ? 'selected' : '' }}>
+                                                        <?php echo e(old('qualification', $education->qualification ?? '') == 'Other' ? 'selected' : ''); ?>>
                                                         Other</option>
                                                 </select>
                                                 <label for="qualification">Highest Degree</label>
@@ -517,7 +661,7 @@
                                             <div class="form-floating">
                                                 <input type="text" class="form-control" id="other_qualification"
                                                     name="other_qualification"
-                                                    value="{{ old('other_qualification', $education->other_qualification ?? '') }}"
+                                                    value="<?php echo e(old('other_qualification', $education->other_qualification ?? '')); ?>"
                                                     placeholder="Other Qualification">
                                                 <label for="other_qualification">Specify Other Degree</label>
                                             </div>
@@ -528,11 +672,11 @@
                                             <div class="form-floating">
                                                 <select class="form-control" id="pass_year" name="pass_year" required>
                                                     <option value="">Select Year</option>
-                                                    @for ($year = date('Y'); $year >= 1980; $year--)
-                                                        <option value="{{ $year }}"
-                                                            {{ old('pass_year', $education->pass_year ?? '') == $year ? 'selected' : '' }}>
-                                                            {{ $year }}</option>
-                                                    @endfor
+                                                    <?php for($year = date('Y'); $year >= 1980; $year--): ?>
+                                                        <option value="<?php echo e($year); ?>"
+                                                            <?php echo e(old('pass_year', $education->pass_year ?? '') == $year ? 'selected' : ''); ?>>
+                                                            <?php echo e($year); ?></option>
+                                                    <?php endfor; ?>
                                                 </select>
                                                 <label for="pass_year">Pass Year</label>
                                             </div>
@@ -543,7 +687,7 @@
                                             <div class="form-floating">
                                                 <input type="text" class="form-control" id="college_name"
                                                     name="college_name"
-                                                    value="{{ old('college_name', $education->college_name ?? '') }}"
+                                                    value="<?php echo e(old('college_name', $education->college_name ?? '')); ?>"
                                                     placeholder="College Name" required>
                                                 <label for="college_name">College Name</label>
                                             </div>
@@ -554,7 +698,7 @@
                                             <div class="form-floating">
                                                 <input type="text" class="form-control" id="college_address"
                                                     name="college_address"
-                                                    value="{{ old('college_address', $education->college_address ?? '') }}"
+                                                    value="<?php echo e(old('college_address', $education->college_address ?? '')); ?>"
                                                     placeholder="College Address" required>
                                                 <label for="college_address">College Address</label>
                                             </div>
@@ -564,7 +708,7 @@
                                 </fieldset>
 
                                 <!-- Upload Documents -->
-                            @elseif ($currentStep == 4)
+                            <?php elseif($currentStep == 4): ?>
                                 <fieldset>
                                     <h4 class="text-primary">Upload Documents</h4>
                                     <div class="row g-3">
@@ -581,105 +725,105 @@
                                                     aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                     <div class="accordion-body rounded">
                                                         <div class="row g-3">
-                                                            @foreach (['aadhar_card', 'pancard', 'passport', 'driving_license'] as $docType)
+                                                            <?php $__currentLoopData = ['aadhar_card', 'pancard', 'passport', 'driving_license']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $docType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                 <div class="col-md-6">
                                                                     <div class="form-floating">
-                                                                        <input type="file" id="{{ $docType }}"
-                                                                            name="{{ $docType }}"
+                                                                        <input type="file" id="<?php echo e($docType); ?>"
+                                                                            name="<?php echo e($docType); ?>"
                                                                             class="form-control"
-                                                                            placeholder="{{ ucfirst(str_replace('_', ' ', $docType)) }}">
+                                                                            placeholder="<?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?>">
                                                                         <label
-                                                                            for="{{ $docType }}">{{ ucfirst(str_replace('_', ' ', $docType)) }}</label>
-                                                                        @php
+                                                                            for="<?php echo e($docType); ?>"><?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></label>
+                                                                        <?php
                                                                             $existingDoc = $documents->firstWhere(
                                                                                 'document_name',
                                                                                 $docType,
                                                                             );
-                                                                        @endphp
-                                                                        @if ($existingDoc)
-                                                                            <a href="{{ Storage::url($existingDoc->file_path) }}"
+                                                                        ?>
+                                                                        <?php if($existingDoc): ?>
+                                                                            <a href="<?php echo e(Storage::url($existingDoc->file_path)); ?>"
                                                                                 target="_blank">View Uploaded
-                                                                                {{ ucfirst(str_replace('_', ' ', $docType)) }}</a>
-                                                                        @endif
+                                                                                <?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></a>
+                                                                        <?php endif; ?>
                                                                     </div>
                                                                 </div>
-                                                            @endforeach
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingTwo">
-                                                    @if ($professional->profession_type == 'salaried')
+                                                    <?php if($professional->profession_type == 'salaried'): ?>
                                                         <button class="accordion-button collapsed" type="button"
                                                             data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                                                             aria-expanded="false" aria-controls="collapseTwo">
                                                             Residence Proof
                                                         </button>
-                                                    @else
+                                                    <?php else: ?>
                                                         <button class="accordion-button collapsed" type="button"
                                                             data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                                                             aria-expanded="false" aria-controls="collapseTwo">
                                                             Business Proof
                                                         </button>
-                                                    @endif
+                                                    <?php endif; ?>
                                                 </h2>
                                                 <div id="collapseTwo" class="accordion-collapse collapse"
                                                     aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                                     <div class="accordion-body rounded">
                                                         <div class="row g-3">
-                                                            @if ($professional->profession_type == 'salaried')
+                                                            <?php if($professional->profession_type == 'salaried'): ?>
 
-                                                                @foreach (['light_bill', 'dl', 'rent_agree'] as $docType)
+                                                                <?php $__currentLoopData = ['light_bill', 'dl', 'rent_agree']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $docType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                     <div class="col-md-6">
                                                                         <div class="form-floating">
                                                                             <input type="file"
-                                                                                id="{{ $docType }}"
-                                                                                name="{{ $docType }}"
+                                                                                id="<?php echo e($docType); ?>"
+                                                                                name="<?php echo e($docType); ?>"
                                                                                 class="form-control"
-                                                                                placeholder="{{ ucfirst(str_replace('_', ' ', $docType)) }}">
+                                                                                placeholder="<?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?>">
                                                                             <label
-                                                                                for="{{ $docType }}">{{ ucfirst(str_replace('_', ' ', $docType)) }}</label>
-                                                                            @php
+                                                                                for="<?php echo e($docType); ?>"><?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></label>
+                                                                            <?php
                                                                                 $existingDoc = $documents->firstWhere(
                                                                                     'document_name',
                                                                                     $docType,
                                                                                 );
-                                                                            @endphp
-                                                                            @if ($existingDoc)
-                                                                                <a href="{{ Storage::url($existingDoc->file_path) }}"
+                                                                            ?>
+                                                                            <?php if($existingDoc): ?>
+                                                                                <a href="<?php echo e(Storage::url($existingDoc->file_path)); ?>"
                                                                                     target="_blank">View Uploaded
-                                                                                    {{ ucfirst(str_replace('_', ' ', $docType)) }}</a>
-                                                                            @endif
+                                                                                    <?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></a>
+                                                                            <?php endif; ?>
                                                                         </div>
                                                                     </div>
-                                                                @endforeach
-                                                            @else
-                                                                @foreach (['rent_agreement', 'light_bill', 'business_license'] as $docType)
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                            <?php else: ?>
+                                                                <?php $__currentLoopData = ['rent_agreement', 'light_bill', 'business_license']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $docType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                     <div class="col-md-6">
                                                                         <div class="form-floating">
                                                                             <input type="file"
-                                                                                id="{{ $docType }}"
-                                                                                name="{{ $docType }}"
+                                                                                id="<?php echo e($docType); ?>"
+                                                                                name="<?php echo e($docType); ?>"
                                                                                 class="form-control"
-                                                                                placeholder="{{ ucfirst(str_replace('_', ' ', $docType)) }}">
+                                                                                placeholder="<?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?>">
                                                                             <label
-                                                                                for="{{ $docType }}">{{ ucfirst(str_replace('_', ' ', $docType)) }}</label>
-                                                                            @php
+                                                                                for="<?php echo e($docType); ?>"><?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></label>
+                                                                            <?php
                                                                                 $existingDoc = $documents->firstWhere(
                                                                                     'document_name',
                                                                                     $docType,
                                                                                 );
-                                                                            @endphp
-                                                                            @if ($existingDoc)
-                                                                                <a href="{{ Storage::url($existingDoc->file_path) }}"
+                                                                            ?>
+                                                                            <?php if($existingDoc): ?>
+                                                                                <a href="<?php echo e(Storage::url($existingDoc->file_path)); ?>"
                                                                                     target="_blank">View Uploaded
-                                                                                    {{ ucfirst(str_replace('_', ' ', $docType)) }}</a>
-                                                                            @endif
+                                                                                    <?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></a>
+                                                                            <?php endif; ?>
                                                                         </div>
                                                                     </div>
-                                                                @endforeach
-                                                            @endif
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                            <?php endif; ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -696,63 +840,63 @@
                                                     aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                                     <div class="accordion-body">
                                                         <div class="row g-3">
-                                                            @if ($professional->profession_type == 'salaried')
+                                                            <?php if($professional->profession_type == 'salaried'): ?>
 
-                                                                @foreach (['salary_slip', 'form_16'] as $docType)
+                                                                <?php $__currentLoopData = ['salary_slip', 'form_16']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $docType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                     <div class="col-md-6">
                                                                         <div class="form-floating">
                                                                             <input type="file"
-                                                                                id="{{ $docType }}"
-                                                                                name="{{ $docType }}"
+                                                                                id="<?php echo e($docType); ?>"
+                                                                                name="<?php echo e($docType); ?>"
                                                                                 class="form-control"
-                                                                                placeholder="{{ ucfirst(str_replace('_', ' ', $docType)) }}">
+                                                                                placeholder="<?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?>">
                                                                             <label
-                                                                                for="{{ $docType }}">{{ ucfirst(str_replace('_', ' ', $docType)) }}</label>
-                                                                            @php
+                                                                                for="<?php echo e($docType); ?>"><?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></label>
+                                                                            <?php
                                                                                 $existingDoc = $documents->firstWhere(
                                                                                     'document_name',
                                                                                     $docType,
                                                                                 );
-                                                                            @endphp
-                                                                            @if ($existingDoc)
-                                                                                <a href="{{ Storage::url($existingDoc->file_path) }}"
+                                                                            ?>
+                                                                            <?php if($existingDoc): ?>
+                                                                                <a href="<?php echo e(Storage::url($existingDoc->file_path)); ?>"
                                                                                     target="_blank">View Uploaded
-                                                                                    {{ ucfirst(str_replace('_', ' ', $docType)) }}</a>
-                                                                            @endif
+                                                                                    <?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></a>
+                                                                            <?php endif; ?>
                                                                         </div>
                                                                     </div>
-                                                                @endforeach
-                                                            @else
-                                                                @foreach (['itr_with_tax_paid_challan', 'balance_sheet', 'bank_statement', 'bank_acount_statments'] as $docType)
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                            <?php else: ?>
+                                                                <?php $__currentLoopData = ['itr_with_tax_paid_challan', 'balance_sheet', 'bank_statement', 'bank_acount_statments']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $docType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                     <div class="col-md-6">
                                                                         <div class="form-floating">
                                                                             <input type="file"
-                                                                                id="{{ $docType }}"
-                                                                                name="{{ $docType }}"
+                                                                                id="<?php echo e($docType); ?>"
+                                                                                name="<?php echo e($docType); ?>"
                                                                                 class="form-control"
-                                                                                placeholder="{{ ucfirst(str_replace('_', ' ', $docType)) }}">
+                                                                                placeholder="<?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?>">
                                                                             <label
-                                                                                for="{{ $docType }}">{{ ucfirst(str_replace('_', ' ', $docType)) }}</label>
-                                                                            @php
+                                                                                for="<?php echo e($docType); ?>"><?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></label>
+                                                                            <?php
                                                                                 $existingDoc = $documents->firstWhere(
                                                                                     'document_name',
                                                                                     $docType,
                                                                                 );
-                                                                            @endphp
-                                                                            @if ($existingDoc)
-                                                                                <a href="{{ Storage::url($existingDoc->file_path) }}"
+                                                                            ?>
+                                                                            <?php if($existingDoc): ?>
+                                                                                <a href="<?php echo e(Storage::url($existingDoc->file_path)); ?>"
                                                                                     target="_blank">View Uploaded
-                                                                                    {{ ucfirst(str_replace('_', ' ', $docType)) }}</a>
-                                                                            @endif
+                                                                                    <?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></a>
+                                                                            <?php endif; ?>
                                                                         </div>
                                                                     </div>
-                                                                @endforeach
-                                                            @endif
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                            <?php endif; ?>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            @if ($professional->profession_type == 'salaried')
+                                            <?php if($professional->profession_type == 'salaried'): ?>
 
                                                 <div class="accordion-item">
                                                     <h2 class="accordion-header" id="headingFour">
@@ -766,35 +910,35 @@
                                                         aria-labelledby="headingFour" data-bs-parent="#accordionExample">
                                                         <div class="accordion-body">
                                                             <div class="row g-3">
-                                                                @foreach (['offer_letter', 'hr_verification_letter'] as $docType)
+                                                                <?php $__currentLoopData = ['offer_letter', 'hr_verification_letter']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $docType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                     <div class="col-md-6">
                                                                         <div class="form-floating">
                                                                             <input type="file"
-                                                                                id="{{ $docType }}"
-                                                                                name="{{ $docType }}"
+                                                                                id="<?php echo e($docType); ?>"
+                                                                                name="<?php echo e($docType); ?>"
                                                                                 class="form-control"
-                                                                                placeholder="{{ ucfirst(str_replace('_', ' ', $docType)) }}">
+                                                                                placeholder="<?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?>">
                                                                             <label
-                                                                                for="{{ $docType }}">{{ ucfirst(str_replace('_', ' ', $docType)) }}</label>
-                                                                            @php
+                                                                                for="<?php echo e($docType); ?>"><?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></label>
+                                                                            <?php
                                                                                 $existingDoc = $documents->firstWhere(
                                                                                     'document_name',
                                                                                     $docType,
                                                                                 );
-                                                                            @endphp
-                                                                            @if ($existingDoc)
-                                                                                <a href="{{ Storage::url($existingDoc->file_path) }}"
+                                                                            ?>
+                                                                            <?php if($existingDoc): ?>
+                                                                                <a href="<?php echo e(Storage::url($existingDoc->file_path)); ?>"
                                                                                     target="_blank">View Uploaded
-                                                                                    {{ ucfirst(str_replace('_', ' ', $docType)) }}</a>
-                                                                            @endif
+                                                                                    <?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></a>
+                                                                            <?php endif; ?>
                                                                         </div>
                                                                     </div>
-                                                                @endforeach
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @endif
+                                            <?php endif; ?>
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingFive">
                                                     <button class="accordion-button collapsed" type="button"
@@ -807,57 +951,57 @@
                                                     aria-labelledby="headingFive" data-bs-parent="#accordionExample">
                                                     <div class="accordion-body">
                                                         <div class="row g-3">
-                                                            @if ($professional->profession_type == 'salaried')
-                                                                @foreach (['bank_statement', 'qualification_proof'] as $docType)
+                                                            <?php if($professional->profession_type == 'salaried'): ?>
+                                                                <?php $__currentLoopData = ['bank_statement', 'qualification_proof']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $docType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                     <div class="col-md-6">
                                                                         <div class="form-floating">
                                                                             <input type="file"
-                                                                                id="{{ $docType }}"
-                                                                                name="{{ $docType }}"
+                                                                                id="<?php echo e($docType); ?>"
+                                                                                name="<?php echo e($docType); ?>"
                                                                                 class="form-control"
-                                                                                placeholder="{{ ucfirst(str_replace('_', ' ', $docType)) }}">
+                                                                                placeholder="<?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?>">
                                                                             <label
-                                                                                for="{{ $docType }}">{{ ucfirst(str_replace('_', ' ', $docType)) }}</label>
-                                                                            @php
+                                                                                for="<?php echo e($docType); ?>"><?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></label>
+                                                                            <?php
                                                                                 $existingDoc = $documents->firstWhere(
                                                                                     'document_name',
                                                                                     $docType,
                                                                                 );
-                                                                            @endphp
-                                                                            @if ($existingDoc)
-                                                                                <a href="{{ Storage::url($existingDoc->file_path) }}"
+                                                                            ?>
+                                                                            <?php if($existingDoc): ?>
+                                                                                <a href="<?php echo e(Storage::url($existingDoc->file_path)); ?>"
                                                                                     target="_blank">View Uploaded
-                                                                                    {{ ucfirst(str_replace('_', ' ', $docType)) }}</a>
-                                                                            @endif
+                                                                                    <?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></a>
+                                                                            <?php endif; ?>
                                                                         </div>
                                                                     </div>
-                                                                @endforeach
-                                                            @else
-                                                                @foreach (['closure_letter', 'degree_certificate', 'propert_document', 'existing_loan_statment', 'saction_letter'] as $docType)
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                            <?php else: ?>
+                                                                <?php $__currentLoopData = ['closure_letter', 'degree_certificate', 'propert_document', 'existing_loan_statment', 'saction_letter']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $docType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                     <div class="col-md-6">
                                                                         <div class="form-floating">
                                                                             <input type="file"
-                                                                                id="{{ $docType }}"
-                                                                                name="{{ $docType }}"
+                                                                                id="<?php echo e($docType); ?>"
+                                                                                name="<?php echo e($docType); ?>"
                                                                                 class="form-control"
-                                                                                placeholder="{{ ucfirst(str_replace('_', ' ', $docType)) }}">
+                                                                                placeholder="<?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?>">
                                                                             <label
-                                                                                for="{{ $docType }}">{{ ucfirst(str_replace('_', ' ', $docType)) }}</label>
-                                                                            @php
+                                                                                for="<?php echo e($docType); ?>"><?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></label>
+                                                                            <?php
                                                                                 $existingDoc = $documents->firstWhere(
                                                                                     'document_name',
                                                                                     $docType,
                                                                                 );
-                                                                            @endphp
-                                                                            @if ($existingDoc)
-                                                                                <a href="{{ Storage::url($existingDoc->file_path) }}"
+                                                                            ?>
+                                                                            <?php if($existingDoc): ?>
+                                                                                <a href="<?php echo e(Storage::url($existingDoc->file_path)); ?>"
                                                                                     target="_blank">View Uploaded
-                                                                                    {{ ucfirst(str_replace('_', ' ', $docType)) }}</a>
-                                                                            @endif
+                                                                                    <?php echo e(ucfirst(str_replace('_', ' ', $docType))); ?></a>
+                                                                            <?php endif; ?>
                                                                         </div>
                                                                     </div>
-                                                                @endforeach
-                                                            @endif
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                            <?php endif; ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -867,13 +1011,13 @@
                                 </fieldset>
 
                                 <!-- Loan Details -->
-                            @elseif ($currentStep == 5)
+                            <?php elseif($currentStep == 5): ?>
                                 <!--  <fieldset>
                                             <h4 class="text-primary mb-3">Loan Details</h4>
                                             <div class="row g-3">
                                                 <div class="col-md-6">
                                                     <div class="form-floating">
-                                                        <input type="number" step="0.01" name="amount" value="{{ old('amount', $loan->amount ?? '') }}" class="form-control" id="amount" placeholder="Amount" required>
+                                                        <input type="number" step="0.01" name="amount" value="<?php echo e(old('amount', $loan->amount ?? '')); ?>" class="form-control" id="amount" placeholder="Amount" required>
                                                         <label for="amount">Loan Amount</label>
                                                     </div>
                                                 </div>
@@ -882,9 +1026,9 @@
                                                         <select name="tenure" id="tenure" class="form-control" required>
                                                        
                                                             <option value="">Select Tenure</option>
-                                                            @for ($i = 1; $i <= 10; $i++)
-    <option value="{{ $i }}" {{ old('tenure', $loan->tenure ?? '') == $i ? 'selected' : '' }}>{{ $i }} year{{ $i > 1 ? 's' : '' }}</option>
-    @endfor
+                                                            <?php for($i = 1; $i <= 10; $i++): ?>
+    <option value="<?php echo e($i); ?>" <?php echo e(old('tenure', $loan->tenure ?? '') == $i ? 'selected' : ''); ?>><?php echo e($i); ?> year<?php echo e($i > 1 ? 's' : ''); ?></option>
+    <?php endfor; ?>
                                                         </select>
                                                         <label for="tenure">Tenure (in years)</label>
                                                     </div>
@@ -892,7 +1036,7 @@
 
                                                 <div class="col-md-6">
                                                     <div class="form-floating">
-                                                        <input type="text" name="referral_code" value="{{ old('referral_code') }}" class="form-control" id="referral_code" placeholder="Referral Code">
+                                                        <input type="text" name="referral_code" value="<?php echo e(old('referral_code')); ?>" class="form-control" id="referral_code" placeholder="Referral Code">
                                                         <label for="referral_code">Referral Code (Optional)</label>
                                                     </div>
                                                 </div>
@@ -901,7 +1045,7 @@
 
                                                 <div class="col-md-6">
                                                     <div class="form-floating">
-                                                        <input type="text" name="pan_number" value="{{ old('pan_number', $loan->pan_number ?? '') }}" class="form-control" id="pan_number" placeholder="PAN Number">
+                                                        <input type="text" name="pan_number" value="<?php echo e(old('pan_number', $loan->pan_number ?? '')); ?>" class="form-control" id="pan_number" placeholder="PAN Number">
                                                         <label for="pan_number">PAN Number</label>
                                                     </div>
                                                 </div>
@@ -923,7 +1067,7 @@
                                         <div class="col-md-6">
                                             <div class="form-floating">
                                                 <input type="number" step="0.01" name="amount"
-                                                    value="{{ old('amount', $loan->amount ?? '') }}"
+                                                    value="<?php echo e(old('amount', $loan->amount ?? '')); ?>"
                                                     class="form-control" id="amount" placeholder="Amount" required>
                                                 <label for="amount">Loan Amount</label>
                                             </div>
@@ -932,22 +1076,22 @@
                                             <div class="form-floating">
                                                 <select name="tenure" id="tenure" class="form-control" required>
                                                     <option value="">Select Tenure</option>
-                                                    @for ($i = 1; $i <= 30; $i++)
-                                                        <option value="{{ $i }}"
-                                                            {{ old('tenure', $loan->tenure ?? '') == $i ? 'selected' : '' }}>
-                                                            {{ $i }} year{{ $i > 1 ? 's' : '' }}</option>
-                                                    @endfor
+                                                    <?php for($i = 1; $i <= 30; $i++): ?>
+                                                        <option value="<?php echo e($i); ?>"
+                                                            <?php echo e(old('tenure', $loan->tenure ?? '') == $i ? 'selected' : ''); ?>>
+                                                            <?php echo e($i); ?> year<?php echo e($i > 1 ? 's' : ''); ?></option>
+                                                    <?php endfor; ?>
                                                 </select>
                                                 <label for="tenure">Tenure (in years)</label>
                                             </div>
                                         </div>
 
                                         <!-- Referral Code Input -->
-                                        @if ($user->loans()->count() <= 1)
+                                        <?php if($user->loans()->count() <= 1): ?>
                                             <div class="col-md-6">
                                                 <div class="form-floating">
                                                     <input type="text" name="referral_code"
-                                                        value="{{ old('referral_code') }}" class="form-control"
+                                                        value="<?php echo e(old('referral_code')); ?>" class="form-control"
                                                         id="referral_code" placeholder="Referral Code">
                                                     <label for="referral_code">Referral Code (Optional)</label>
                                                 </div>
@@ -964,23 +1108,23 @@
                                                 </div>
                                                 <div id="referral-feedback" class="col-md-12 mt-3"></div>
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </fieldset>
 
 
 
-                            @endif
+                            <?php endif; ?>
 
                             <!-- Navigation Buttons -->
                             <div class="row g-3 mt-4">
                                 <div class="col-md-6">
-                                    @if ($currentStep > 1)
+                                    <?php if($currentStep > 1): ?>
                                         <button name="previous" class="btn btn-outline-primary w-100 py-3"
                                             value="previous" type="submit">
                                             <i class="bi bi-arrow-left"></i> Previous
                                         </button>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                                 <!-- Submit Button -->
                                 <div class="col-md-6">
@@ -1109,7 +1253,7 @@
     </script>
     <script>
         // Initialize loan index based on the count of existing loans
-        let loanIndex = {{ count($existingLoans) ?? 0 }}; // Start from the number of existing loans
+        let loanIndex = <?php echo e(count($existingLoans) ?? 0); ?>; // Start from the number of existing loans
 
         // Function to add a new loan entry dynamically
         function addLoanEntry() {
@@ -1260,7 +1404,7 @@
                 return;
             }
 
-            fetch('{{ route('check.referral_code') }}', {
+            fetch('<?php echo e(route('check.referral_code')); ?>', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1308,7 +1452,7 @@
             }
 
             // Make an API call to validate the referral code if not empty
-            fetch('{{ route('check.referral_code') }}', {
+            fetch('<?php echo e(route('check.referral_code')); ?>', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1379,4 +1523,6 @@
         });
     </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('frontend.layouts.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\jfinserv letest\jfin-may\resources\views/frontend/professional-info.blade.php ENDPATH**/ ?>
