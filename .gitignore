@@ -20,3 +20,4 @@ yarn-error.log
 /.vscode
 /public/property_brochures
 /public/property_photos
+/storage/framework/views/*

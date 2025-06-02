@@ -151,7 +151,7 @@
                                         <div class="col-md-4">
                                             <div class="form-floating">
                                                 <input type="tel" class="form-control" id="phone" name="mobile_no"
-                                                    value="{{ old('mobile_no', $profile->mobile_no ?? '') }}"
+                                                    value="{{ old('mobile_no', $profile->mobile_no ?? $user->mobile_no) }}"
                                                     placeholder="Phone" required>
                                                 <label for="phone">Phone <span class="text-danger">*</span></label>
                                                 @error('mobile_no')
@@ -943,7 +943,7 @@
                                         </div>
 
                                         <!-- Referral Code Input -->
-                                        @if (!$user->loans()->exists())
+                                        @if ($user->loans()->count() <= 1)
                                             <div class="col-md-6">
                                                 <div class="form-floating">
                                                     <input type="text" name="referral_code"

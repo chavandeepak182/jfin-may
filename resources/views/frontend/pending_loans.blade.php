@@ -85,24 +85,20 @@ Pending Loans
                         </tr>
                     @endforeach
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <th>Loan ID</th>
-                        <th>User</th>
-                        <th>Loan Category</th>
-                        <th>Amount</th>
-                        <th>Tenure</th>
-                        <th>Assign To</th>
-                        <th>Agent Status</th>
-                        <th>Action</th>
-                    </tr>
-                </tfoot>
             </table>
 
-            <!-- Pagination -->
-            <div class="float-right mt-3">
-                {{ $pendingLoans->links() }}
-            </div>
+            <!-- Pagination Links -->
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div class="dataTables_info">
+                        Showing {{ $pendingLoans->firstItem() }} to {{ $pendingLoans->lastItem() }} of {{ $pendingLoans->total() }}
+                        entries
+                    </div>
+                    <div class="dataTables_paginate paging_simple_numbers">
+                        <nav>
+                            {{ $pendingLoans->onEachSide(1)->links('pagination::bootstrap-4') }}
+                        </nav>
+                    </div>
+                </div>
         </div>
     </div>
 </div>
@@ -133,11 +129,11 @@ Pending Loans
     $(document).ready(function () {
         // Initialize DataTable with no pagination
         $('#example').DataTable({
-            "paging": false, // Disable DataTables pagination
+            "paging": true, // Disable DataTables pagination
             "searching": true,
-            "info": true,
+            "info": false,
             "lengthChange": false,
-            "ordering": true,
+            // "ordering": true,
         });
 
         @if(session('success'))

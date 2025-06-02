@@ -63,6 +63,8 @@ class LoanApplicationController extends Controller
             $query->whereBetween('loans.created_at', [$request->input('start_date'), $request->input('end_date')]);
         }
 
+        $query->orderBy('loans.created_at', 'desc');
+
         $data['loans'] = $query->paginate(10);
 
         // Fetch recent 5 loans (optional, same as before)
@@ -1378,22 +1380,7 @@ class LoanApplicationController extends Controller
         return redirect()->route('agent.assignedLoans')->with('error', 'Loan not found.');
     }
 
-    // public function pendingLoans()
-    // {
-    //     $pendingLoans = DB::table('loans')
-    //         ->where(function ($query) {
-    //             $query->whereNull('agent_id') // Not assigned to any agent
-    //                 ->orWhere(function ($subQuery) {
-    //                     $subQuery->whereNotNull('agent_id') // Assigned but...
-    //                         ->whereIn('agent_action', ['Pending', 'Rejected', null]); // Action is pending, rejected, or null
-    //                 });
-    //         })
-    //         ->paginate(10); // Adjust pagination as needed
-
-    //     $agents = DB::table('users')->where('role_id', 2)->get(); // Fetch agents from users table
-
-    //     return view('frontend.pending_loans', compact('pendingLoans', 'agents'));
-    // }
+    
     public function pendingLoans()
     {
         $pendingLoans = DB::table('loans')
