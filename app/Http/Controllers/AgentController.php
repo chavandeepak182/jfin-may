@@ -286,7 +286,7 @@ class AgentController extends Controller
 
         // Fetch related educational details
         $education = DB::selectOne(
-            'SELECT * FROM education_details WHERE user_id = ?',
+            'SELECT * FROM education_details WHERE user_id = ?', 
             [$loan->user_id]
         );
 
@@ -308,6 +308,7 @@ class AgentController extends Controller
     }
     public function update(Request $request)
     {
+        // dd($request->all());
         try {
             $validated = $request->validate([
                 'loan_id' => 'required|integer',
@@ -341,6 +342,27 @@ class AgentController extends Controller
                     'remarks' => $request->input('remarks'),
                     'in_principle' => $request->input('in_principle'),
                 ]);
+
+               if ($request->hasFile('documents')) {
+                    $documents = $request->file('documents');
+                    $documentNames = $request->input('document_name');
+                    
+                    foreach ($documents as $index => $document) {
+                        // Ensure there's a corresponding name for each document
+                        $name = $documentNames[$index] ?? $document->getClientOriginalName();
+                        
+                        $path = $document->store('documents', 'public');
+                        
+                        Document::create([
+                            'user_id' => $loan->user_id,
+                            'loan_id' => $loan->loan_id,
+                            'document_name' => $name,
+                            'file_path' => $path,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+                }
 
                 Log::info('Loan details updated for loan ID: ' . $loan->loan_id);
 

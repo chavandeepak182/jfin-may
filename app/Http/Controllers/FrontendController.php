@@ -132,7 +132,7 @@ class FrontendController extends Controller
                 4 => 'dashboard',
                 2 => 'agentDashboard',
                 3 => 'partnerDashboard',
-                1 => 'loan.form',
+                1 => 'loans.loans-list',
             ];
 
             if (array_key_exists($user->role_id, $redirectRoutes)) {

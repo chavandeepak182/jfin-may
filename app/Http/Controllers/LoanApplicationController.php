@@ -186,7 +186,7 @@ class LoanApplicationController extends Controller
 
     public function update(Request $request)
     {
-
+        // dd($request->all());
 
         try {
             // Validate the request
@@ -248,13 +248,20 @@ class LoanApplicationController extends Controller
 
                 // Handle document uploads
                 if ($request->hasFile('documents')) {
-                    foreach ($request->file('documents') as $index => $document) {
-                        $filename = time() . '_' . $document->getClientOriginalName();
-                        $filePath = $document->storeAs('documents', $filename, 'public');
-                        \DB::table('documents')->insert([
+                    $documents = $request->file('documents');
+                    $documentNames = $request->input('document_name');
+                    
+                    foreach ($documents as $index => $document) {
+                        // Ensure there's a corresponding name for each document
+                        $name = $documentNames[$index] ?? $document->getClientOriginalName();
+                        
+                        $path = $document->store('documents', 'public');
+                        
+                        Document::create([
                             'user_id' => $loan->user_id,
-                            'document_name' => $request->input('document_names.' . $index, $filename),
-                            'file_path' => $filePath,
+                            'loan_id' => $loan->loan_id,
+                            'document_name' => $name,
+                            'file_path' => $path,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ]);

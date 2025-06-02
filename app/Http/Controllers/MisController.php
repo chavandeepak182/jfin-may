@@ -111,4 +111,3 @@ public function index(Request $request)
         return response()->json(['status' => 'error', 'message' => 'Record not found!']);
     }
 }
-//demo

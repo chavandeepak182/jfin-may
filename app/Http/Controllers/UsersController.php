@@ -602,6 +602,7 @@ class UsersController extends Controller
 
     public function updateDocuments(Request $request)
     {
+        dd($request->all());
         $userId = session('user_id'); // Retrieve user ID from session
 
         if (!$userId) {
@@ -622,7 +623,7 @@ class UsersController extends Controller
             // Check if the file is present in the request
             if ($request->hasFile("documents.$index.file")) {
                 $file = $request->file("documents.$index.file");
-                $filePath = $file->store('documents'); // Store the file and get its path
+                $filePath = $file->store('documents', 'public'); // Store the file and get its path
 
                 // Store or update document information in the database
                 DB::table('documents')->updateOrInsert(
