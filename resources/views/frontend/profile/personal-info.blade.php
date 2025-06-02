@@ -301,34 +301,70 @@
 		</div>
 
 		<div class="col-md-6">
-			<h3 class="mb-3">Documents' Details</h3>
-			<div class="w-100">
-				@if ($documents && count($documents) > 0)
-					<div class="row">
-						@foreach ($documents as $document)
-							<div class="col-md-2 pt-2 me-3 bg-white">
-								<h5>{{ucfirst($document->document_name) }}:</h5 >
-								<p><a href="{{ Storage::url($document->file_path) }}" target="_blank">View</a> <span class="px-2">|</span> <a href="#" class="text-dark text-end" target="_blank">Replace</a></p>
-							</div>
-						@endforeach
-					</div>
-				@else
-					<p>No documents available.</p>
-				@endif
+    <h3 class="mb-3">Documents</h3>
+    <div class="w-100">
+        @if ($documents && count($documents) > 0)
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Uploaded Documents</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        @foreach ($documents as $document)
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1 text-capitalize">{{ $document->document_name }}</h6>
+                                        <small class="text-muted">Uploaded: {{ \Carbon\Carbon::parse($document->created_at)->format('d M Y') }}</small>
+                                    </div>
+                                    <div class="btn-group">
+                                        <a href="{{ Storage::url($document->file_path) }}" 
+                                           target="_blank" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                        {{-- <button type="button" 
+                                                class="btn btn-sm btn-outline-secondary replace-document" 
+                                                data-doc-id="{{ $document->document_id }}">
+                                            <i class="fas fa-sync-alt"></i> Replace
+                                        </button> --}}
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @else
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i> No documents have been uploaded yet.
+            </div>
+        @endif
 
-				<form action="{{ route('loan.update_documents') }}" method="POST" enctype="multipart/form-data">
-					@csrf
-					<div id="document-fields">
-						<!-- Initially hidden document fields -->
-					</div>
-					<br>
-					<div class="form-group mb-3">
-						<button type="button" id="add-document" class="btn btn-primary">Add Missing Documents</button>
-						<button type="submit" class="btn btn-success">Save Documents</button>
-					</div>
-				</form>
-			</div>			
-		</div>
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Upload New Documents</h5>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('loan.update_documents') }}" method="POST" enctype="multipart/form-data" id="documents-form">
+                    @csrf
+                    <div id="document-fields">
+                        <!-- Document fields will be added here dynamically -->
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button" id="add-document" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i> Add Document
+                        </button>
+                        <button type="submit" class="btn btn-success" id="submit-documents" disabled>
+                            <i class="fas fa-save me-2"></i> Save Documents
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 	</div>
 </div>
 @endsection
@@ -337,6 +373,7 @@
 <script>
 	document.getElementById('add-document').addEventListener('click', function() {
 		var index = document.querySelectorAll('#document-fields .document-field').length;
+		const submitBtn = document.getElementById('submit-documents');
 		var newField = `
 			<div class="document-field mb-3">
 				<input type="text" name="documents[${index}][document_name]" class="form-control mb-2" placeholder="Document Name" required>
@@ -345,6 +382,7 @@
 			</div>
 		`;
 		document.getElementById('document-fields').insertAdjacentHTML('beforeend', newField);
+		submitBtn.disabled = false;
 	});
 
 	// Event delegation to handle removal of dynamically added fields
