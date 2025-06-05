@@ -342,7 +342,16 @@ class AgentController extends Controller
                     'status' => $newStatus,
                     'remarks' => $request->input('remarks'),
                     'in_principle' => $request->input('in_principle'),
+                    'amount_approved' => $request->input('amount_approved'),
                 ]);
+
+                if ($request->hasFile('sanction_letter')) {
+                    $sanctionPath = $request->file('sanction_letter')->store('sanction_letters', 'public');
+                    $loan->sanction_letter = $sanctionPath;
+                    $loan->save();
+                }
+
+                // Handle documents upload  
 
                if ($request->hasFile('documents')) {
                     $documents = $request->file('documents');

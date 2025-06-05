@@ -12,7 +12,9 @@
                     </div>
                     <div class="col-md-8 mx-auto mb-3">
                         <div class="d-flex justify-content-end">
+                            @if (!$hasActiveLoan)
                             <a href="{{ route('loan.form') }}" class="btn btn-primary me-2">Apply New Loan</a>
+                            @endif
                             <form method="GET" action="{{ route('loans.loans-list') }}">
                                 <select name="status" class="form-control" onchange="this.form.submit()">
                                     <option value="">-- Filter by Status --</option>

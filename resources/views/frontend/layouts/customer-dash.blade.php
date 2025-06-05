@@ -61,21 +61,9 @@
                     <!-- My Details Dropdown -->
                     <li
                         class="sidebar-item {{ Request::is('mypersonal*') || Request::is('mypersonal') || Request::is('myprofessional') || Request::is('myeducation') || Request::is('mydocuments') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#details-dropdown" aria-expanded="false">
-                            <i class="align-middle" data-feather="user"></i> <span class="align-middle">My Details <i
-                                    class="fas fa-angle-down"></i></span>
+                        <a class="sidebar-link" href="{{ route('loan.mypersonal') }}">
+                            <i class="align-middle" data-feather="user"></i> <span class="align-middle">My Details</span>
                         </a>
-                        <ul class="collapse" id="details-dropdown">
-                            <li><a class="sidebar-link" href="{{ route('loan.mypersonal') }}">Personal Information</a>
-                            </li>
-                            <li><a class="sidebar-link" href="{{ route('loan.myprofessional') }}">Professional
-                                    Information</a></li>
-                            <li><a class="sidebar-link" href="{{ route('loan.myeducation') }}">Educational
-                                    Information</a></li>
-                            <li><a class="sidebar-link" href="{{ route('loan.mydocuments') }}">Document Information</a>
-                            </li>
-                        </ul>
                     </li>
 
                     <li
