@@ -1,4 +1,4 @@
-@extends('frontend.layouts.customer-dash')
+@extends('layouts.header')
 
 @section('title', 'Notifications')
 
@@ -205,6 +205,10 @@
     </div>
 
 
+
+@endsection
+
+@section('script')
     <script>
         $(document).ready(function() {
             // Mark as read (single)
@@ -277,6 +281,3 @@
     </script>
 @endsection
 
-@section('script')
-
-@endsection

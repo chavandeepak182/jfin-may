@@ -23,8 +23,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
 use App\Services\CreditScoreService;
 
+
 class LoanApplicationController extends Controller
 {
+
     // protected $creditScoreService;
 
     // public function __construct(CreditScoreService $creditScoreService)
@@ -252,13 +254,13 @@ class LoanApplicationController extends Controller
                 if ($request->hasFile('documents')) {
                     $documents = $request->file('documents');
                     $documentNames = $request->input('document_name');
-                    
+
                     foreach ($documents as $index => $document) {
                         // Ensure there's a corresponding name for each document
                         $name = $documentNames[$index] ?? $document->getClientOriginalName();
-                        
+
                         $path = $document->store('documents', 'public');
-                        
+
                         Document::create([
                             'user_id' => $loan->user_id,
                             'loan_id' => $loan->loan_id,
@@ -1286,6 +1288,14 @@ class LoanApplicationController extends Controller
             $loan->agent_action = 'pending'; // Set initial action status to pending
             $loan->save();
 
+            // Notifications
+            $adminId = auth()->id(); // Assuming logged-in user is admin
+            $agentId = $validated['agent_id'];
+            $customerId = $loan->user_id;
+
+            // Send notifications
+            event(new \App\Events\AgentAssigned($adminId, $agentId, $customerId, $loan->loan_reference_id));
+            \Log::info('Event dispatched');
             return redirect()->route('loans.index')->with('success', 'Agent assigned successfully!');
         }
 
@@ -1380,7 +1390,7 @@ class LoanApplicationController extends Controller
         return redirect()->route('agent.assignedLoans')->with('error', 'Loan not found.');
     }
 
-    
+
     public function pendingLoans()
     {
         $pendingLoans = DB::table('loans')
