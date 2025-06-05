@@ -5,7 +5,8 @@ use App\Models\Mis;
 use Barryvdh\DomPDF\Facade as PDF;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MisExport;
-    use Carbon\Carbon;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -66,6 +67,15 @@ public function index(Request $request)
             'address' => 'required|string',
             'city' => 'required|string|max:255',
             'office_address' =>'nullable|string|max:255',
+            'bm_name' => 'nullable|string|max:255',
+            'login_date' => 'nullable|date',
+            'status' => 'nullable|string|in:open,processing,closed', // adjust options as needed
+            'in_principle' => 'nullable|in:yes,no',
+            'remark' => 'nullable|string',
+            'legal' => 'nullable|string',
+            'valuation' => 'nullable|string',
+            'leads' => 'nullable|string',
+            'file_work' => 'nullable|string',
         ]);
     
         MIS::create($validatedData);
@@ -79,8 +89,11 @@ public function index(Request $request)
         // Return the edit view with the record data
         return view('mis.edit', compact('misRecord'));
     }
-    public function update(Request $request, $id)
+public function update(Request $request, $id)
 {
+    // Log raw request data
+    Log::info('MIS Update Request Data:', $request->all());
+
     $validatedData = $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email|max:255',
@@ -94,10 +107,31 @@ public function index(Request $request)
         'address' => 'required|string',
         'office_address' => 'nullable|string|max:255',
         'city' => 'required|string|max:255',
+
+        // Additional fields
+        'bm_name' => 'nullable|string|max:255',
+        'login_date' => 'nullable|date',
+        'status' => 'nullable|string|max:255',
+        'in_principle' => 'nullable|string|max:255',
+        'remark' => 'nullable|string',
+        'legal' => 'nullable|string|max:255',
+        'valuation' => 'nullable|string|max:255',
+        'leads' => 'nullable|string|max:255',
+        'file_work' => 'nullable|string|max:255',
     ]);
 
+    // Log validated data
+    Log::info('Validated Data for MIS Update:', $validatedData);
+
     $misRecord = MIS::findOrFail($id);
+
+    // Log existing record before update
+    Log::info('Original MIS Record:', $misRecord->toArray());
+
     $misRecord->update($validatedData);
+
+    // Log updated record
+    Log::info('Updated MIS Record:', $misRecord->fresh()->toArray());
 
     return redirect()->route('mis.index')->with('success', 'Record updated successfully');
 }
