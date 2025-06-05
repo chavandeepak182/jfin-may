@@ -78,3 +78,56 @@
     display: block;
     margin-top: 7px;
 }
+
+/* Add to your existing CSS or create new style block */
+.indicator {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: #e74c3c;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropdown-menu-lg {
+    min-width: 350px;
+}
+
+.unread-notification {
+    background-color: #f8f9fa;
+    border-left: 3px solid #4e73df;
+}
+
+.dropdown-menu-header {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+    font-weight: 600;
+    color: #495057;
+}
+
+.dropdown-menu-footer {
+    padding: 10px 15px;
+    border-top: 1px solid #eee;
+    font-size: 0.85rem;
+}
+
+.list-group-item {
+    border-left: 0;
+    border-right: 0;
+    padding: 12px 15px;
+}
+
+.list-group-item:first-child {
+    border-top: 0;
+}
+
+.list-group-item:last-child {
+    border-bottom: 0;
+}

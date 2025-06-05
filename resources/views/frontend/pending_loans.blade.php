@@ -153,40 +153,40 @@ Pending Loans
         @endif
     });
 
-    $('.assign-agent').change(function() {
-        var agentId = $(this).val();
-        var loanId = $(this).data('loan-id');
+    // $('.assign-agent').change(function() {
+    //     var agentId = $(this).val();
+    //     var loanId = $(this).data('loan-id');
 
-        if(agentId) {
-            $.ajax({
-                url: "{{ route('assignAgent') }}",
-                method: "POST",
-                data: {
-                    '_token': '{{ csrf_token() }}',
-                    'loan_id': loanId,
-                    'agent_id': agentId,
-                },
-                success: function (response) {
-                    Swal.fire({
-                        title: response.msg,
-                        text: "",
-                        icon: "success",
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        location.reload();
-                    });
-                },
-                error: function (response) {
-                    Swal.fire({
-                        title: response.msg,
-                        text: "",
-                        icon: "error",
-                        confirmButtonText: 'OK'
-                    });
-                }
-            });
-        }
-    });
+    //     if(agentId) {
+    //         $.ajax({
+    //             url: "{{ route('assignAgent') }}",
+    //             method: "POST",
+    //             data: {
+    //                 '_token': '{{ csrf_token() }}',
+    //                 'loan_id': loanId,
+    //                 'agent_id': agentId,
+    //             },
+    //             success: function (response) {
+    //                 Swal.fire({
+    //                     title: response.msg,
+    //                     text: "",
+    //                     icon: "success",
+    //                     confirmButtonText: 'OK'
+    //                 }).then(function () {
+    //                     location.reload();
+    //                 });
+    //             },
+    //             error: function (response) {
+    //                 Swal.fire({
+    //                     title: response.msg,
+    //                     text: "",
+    //                     icon: "error",
+    //                     confirmButtonText: 'OK'
+    //                 });
+    //             }
+    //         });
+    //     }
+    // });
 
     // Define deleteLoan function
     function deleteLoan(loanId) {

@@ -23,6 +23,7 @@ use App\Http\Controllers\LeadController;
 use App\Http\Controllers\PropertyTakerController;
 use Illuminate\Support\Facades\Route;
 use App\Exports\EligibilityExport;
+use App\Http\Controllers\NotificationController;
 use Maatwebsite\Excel\Facades\Excel;
 
 require __DIR__.'/auth.php';
@@ -109,9 +110,13 @@ Route::post('update_password', [FrontendController::class, 'update_password'])->
 
 
 // notification routes
-Route::get('/notifications', [UsersController::class, 'showNotifications'])->name('notifications.index');
-Route::post('/notifications/read/{id}', [UsersController::class, 'markAsRead']);
-Route::get('/notifications', [UsersController::class, 'getNotifications']);
+Route::middleware(['auth'])->group(function () {
+Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+Route::post('/notifications/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('notifications.unreadCount');
+});
+
 Route::get('/cities/{state_id}', [LoanApplicationController::class, 'getCities'])->name('getCities');
 
 
@@ -155,15 +160,15 @@ Route::middleware(['isUserOrAdmin'])->group(function () {
 });
 
 
-Route::get('admin/loan-application', [LoanApplicationController::class, 'showForm'])->name('loan.form');
+// Route::get('admin/loan-application', [LoanApplicationController::class, 'showForm'])->name('loan.form');
 
 
 //loan admin
 Route::get('admin/loans', [LoanApplicationController::class, 'index'])->name('loans.index');
-Route::post('admin/insertLoan', [LoanApplicationController::class, 'store'])->name('insertLoan');
+Route::post('admin/insertLoan', [LoanApplicationController::class, 'store'])->name('admin.insertLoan');
 Route::post('admin/deleteLoan', [LoanApplicationController::class, 'destroy'])->name('deleteLoan');
 Route::get('admin/editLoan/{id}', [LoanApplicationController::class, 'edit'])->name('editLoan');
-Route::post('admin/updateLoan', [LoanApplicationController::class, 'update'])->name('updateLoan');
+Route::post('admin/updateLoan', [LoanApplicationController::class, 'update'])->name('admin.updateLoan');
 Route::get('admin/loan/{id}', [LoanApplicationController::class, 'view'])->name('loan.view');
 Route::get('admin/inprocess-loans', [LoanApplicationController::class, 'inprocess'])->name('inprocess.loans');
 Route::get('admin/disbursed-loans', [LoanApplicationController::class, 'disbursed'])->name('disbursed.loans');
@@ -232,7 +237,7 @@ Route::post('admin/insertUser',[UsersController::class,'insertUser'])->name('ins
   
     
     //referral
-    Route::get('admin/referral_earnings', [ReferralController::class, 'referral_earnings'])->name('referral_earnings');
+    Route::get('admin/referral_earnings', [ReferralController::class, 'referral_earnings'])->name('admin.referral_earnings');
     Route::get('/admin/refer-tool', [ReferralController::class, 'listUsers'])->name('admin.refer.tool');
 
 
@@ -344,7 +349,7 @@ Route::middleware('isPartner')->group(function () {
     Route::get('/editProperty/{property_id}', [PropertyController::class, 'editProperty'])->name('editProperty');
     Route::post('/updatePropertie', [PropertyController::class, 'updatePropertie'])->name('updatePropertie');
     Route::post('/deletePropertie', [PropertyController::class, 'deletePropertie'])->name('deletePropertie');
-    Route::post('/activate', [PropertyController::class, 'activate'])->name('activate');
+    // Route::post('/activate', [PropertyController::class, 'activate'])->name('activate');
 
     //profile
     Route::get('/partner/profile', [ProfileController::class, 'showPartnerProfile'])->name('partner.profile');
