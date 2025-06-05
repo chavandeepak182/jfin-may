@@ -40,6 +40,12 @@ Edit MIS Record
                         <option value="Home Loan" {{ $misRecord->product_type == 'Home Loan' ? 'selected' : '' }}>Home Loan</option>
                         <option value="Personal Loan" {{ $misRecord->product_type == 'Personal Loan' ? 'selected' : '' }}>Personal Loan</option>
                         <option value="MSME" {{ $misRecord->product_type == 'MSME' ? 'selected' : '' }}>MSME</option>
+                        <option value="Lap/Mortage" {{ $misRecord->product_type == 'Lap/Mortage' ? 'selected' : '' }}>Lap/Mortage</option>
+                        <option value="Project Funding" {{ $misRecord->product_type == 'Project Funding' ? 'selected' : '' }}>Project Funding</option>
+                        <option value="CGTMS" {{ $misRecord->product_type == 'CGTMS' ? 'selected' : '' }}>CGTMS</option>
+                        <option value="Term Loan" {{ $misRecord->product_type == 'Term Loan' ? 'selected' : '' }}>Term Loan</option>
+                        <option value="Machinary Loan" {{ $misRecord->product_type == 'Machinary Loan' ? 'selected' : '' }}>Machinary Loan</option>
+                        <option value="Working Capital" {{ $misRecord->product_type == 'Working Capital' ? 'selected' : '' }}>Working Capital</option>
                         <option value="Vehicle Loan" {{ $misRecord->product_type == 'Vehicle Loan' ? 'selected' : '' }}>Vehicle Loan</option>
                     </select>
                 </div>
