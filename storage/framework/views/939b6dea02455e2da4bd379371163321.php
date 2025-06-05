@@ -120,6 +120,12 @@ MIS Dashboard
                                 <option value="Home Loan">Home Loan</option>
                                 <option value="Personal Loan">Personal Loan</option>
                                 <option value="MSME">MSME</option>
+                                <option value="Lap/Mortage">Lap/Mortage</option>
+                                <option value="Project Funding">Project Funding</option>
+                                <option value="CGTMS">CGTMS</option>
+                                <option value="Term Loan">Term Loan</option>
+                                <option value="Working Capital">Working Capital</option>
+                                <option value="Machinary Loan">Machinary Loan</option>
                                 <option value="Vehicle Loan">Vehicle Loan</option>
                             </select>
                         </div>
