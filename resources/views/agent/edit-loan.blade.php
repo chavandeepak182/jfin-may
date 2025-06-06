@@ -95,7 +95,7 @@
                                 <label for="sanction_letter">Upload Sanction Letter:</label>
                                 <input type="file" class="form-control" id="sanction_letter" name="sanction_letter">
                                 @if($loan->sanction_letter)
-                                    <small>Current file: <a href="{{ asset('storage/sanction_letters/' . $loan->sanction_letter) }}" target="_blank">{{ $loan->sanction_letter }}</a></small>
+                                    <small>Current file: <a href="{{ asset('storage/' . $loan->sanction_letter) }}" target="_blank">{{ $loan->sanction_letter }}</a></small>
                                 @endif
                             </div>
                         </div>
@@ -344,8 +344,10 @@ function toggleSanctionLetterBox(status) {
 
 // Initialize the form based on current status
 document.addEventListener('DOMContentLoaded', function() {
+    const currentStatus = document.getElementById('status').value;
     var status = document.getElementById('status') ? document.getElementById('status').value : '';
     toggleSanctionLetterBox(status);
+    toggleRemarkBox(currentStatus);
 });
 
 // Listen for changes in the loan status

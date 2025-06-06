@@ -446,7 +446,7 @@ class LoanApplicationController extends Controller
         $loanId = session('current_loan_id');
 
         if (!$loanId) {
-            $loanId = Loan::where('user_id', $userId)->whereIn('status', ['in process', 'document pending'])->value('loan_id');
+            $loanId = Loan::where('user_id', $userId)->value('loan_id');
         }
 
         $loanUsers = collect();
@@ -457,15 +457,16 @@ class LoanApplicationController extends Controller
                 ->get();
         }
 
-        $profile = DB::table('profile')->where('user_id', $userId)->where('loan_id', $loanId)->first() ?? null;
+        $profile = DB::table('profile')->where('user_id', $userId)->latest('profile_id')->first() ?? null;
 
-        $professional = DB::table('professional_details')->where('user_id', $userId)->where('loan_id', $loanId)->first() ?? null;
 
-        $education = DB::table('education_details')->where('user_id', $userId)->where('loan_id', $loanId)->first() ?? null;
+        $professional = DB::table('professional_details')->where('user_id', $userId)->latest('professional_id')->first() ?? null;
+        // dd($professional);
+        $education = DB::table('education_details')->where('user_id', $userId)->latest('edu_id')->first() ?? null;
 
-        $documents = DB::table('documents')->where('user_id', $userId)->where('loan_id', $loanId)->get() ?? null;
+        $documents = DB::table('documents')->where('user_id', $userId)->latest('document_id')->get() ?? null;
 
-        $existingLoans = DB::table('existing_loan')->where('user_id', $userId)->get();
+        $existingLoans = DB::table('existing_loan')->where('user_id', $userId)->latest('existing_loan_id')->get();
 
         // echo $documents;die;
         $loan = Loan::where('user_id', $userId)->whereNotIn('status', ['disbursed', 'rejected'])->first();
@@ -1248,6 +1249,7 @@ class LoanApplicationController extends Controller
             ->join('users', 'loans.user_id', '=', 'users.id')
             ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
             ->where('loans.agent_id', $agent_id)
+            ->orderByDesc('loans.created_at')
             ->select(
                 'loans.loan_id',
                 'loans.amount',
@@ -1315,7 +1317,8 @@ class LoanApplicationController extends Controller
         // Fetch loans assigned to the agent
         $loans = Loan::where('agent_id', $agent_id)
             ->with(['user', 'loanCategory'])
-            ->paginate(20); // Adjust the number of items per page as needed
+            ->orderByDesc('created_at')
+            ->paginate(10); // Adjust the number of items per page as needed
 
         // Return view with loans data
         return view('agent.assigned_loans', compact('loans'));
@@ -1404,8 +1407,8 @@ class LoanApplicationController extends Controller
                     });
             })
             ->select('loans.*', 'users.name as user_name', 'loan_category.category_name as category_name') // Select necessary fields
-            ->paginate(10); // Adjust pagination as needed
-
+            ->orderByDesc('loans.created_at')
+            ->paginate(20); // Adjust pagination as needed
         $agents = DB::table('users')->where('role_id', 2)->get(); // Fetch agents from users table
 
         return view('frontend.pending_loans', compact('pendingLoans', 'agents'));

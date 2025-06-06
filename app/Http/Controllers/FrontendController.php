@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PasswordResetLinkMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -10,8 +11,11 @@ use Illuminate\Support\Facades\File;
 use App\Models\PasswordResets;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
 
 class FrontendController extends Controller
 {
@@ -97,18 +101,18 @@ class FrontendController extends Controller
 
             if (!$user) {
                 return back()->withErrors(['email' => 'The provided credentials do not match our records.'])
-                            ->withInput($request->only('email'));
+                    ->withInput($request->only('email'));
             }
 
             if (!Hash::check($request->password, $user->password)) {
                 return back()->withErrors(['password' => 'Incorrect password.'])
-                            ->withInput($request->only('email'));
+                    ->withInput($request->only('email'));
             }
 
             if (!$user->is_email_verify) {
                 return redirect()->back()
-                                ->withErrors(['email' => 'Please verify your email address before logging in.'])
-                                ->withInput($request->only('email'));
+                    ->withErrors(['email' => 'Please verify your email address before logging in.'])
+                    ->withInput($request->only('email'));
             }
 
 
@@ -138,7 +142,6 @@ class FrontendController extends Controller
             if (array_key_exists($user->role_id, $redirectRoutes)) {
                 return redirect()->route($redirectRoutes[$user->role_id]);
             }
-
         } elseif ($login_type == 'mobile') {
             // Validation for mobile number login (OTP)
             $validated = $request->validate([
@@ -173,7 +176,7 @@ class FrontendController extends Controller
                 CURLOPT_POSTFIELDS => [
                     "From" => "JFINSE",
                     "To" => $nowithcountrycode,
-                    "TemplateName" => "SMSOTP", 
+                    "TemplateName" => "SMSOTP",
                     "Message" => $message
                 ],
             ]);
@@ -199,8 +202,6 @@ class FrontendController extends Controller
             } else {
                 return back()->withErrors(['mobile_no' => 'Failed to send OTP: ' . $response->Details])->withInput();
             }
-
-           
         }
 
         return back()->withErrors(['error' => 'Invalid login type selected']);
@@ -252,97 +253,109 @@ class FrontendController extends Controller
     function reset_password_link(Request $request)
     {
 
-        $validator = Validator::make($request->all(), ['email' => 'required',]);
+        $request->validate([
+            'email' => 'required|email',
+        ], [
+            'email.required' => 'The Email Address field is required.',
+            'email.email' => 'Please enter a valid email address.',
+        ]);
 
-        if (!$validator->passes()) {
-            return redirect('forgot')->with('error', 'The Email Address field is empty.');
-        } else {
-            $user = DB::table('users')
-                ->where('email_id', $request->email)
-                ->first();
-            if ($user) {
+        // Check if the user exists with that email
+        $user = DB::table('users')->where('email_id', $request->email)->first();
 
-                $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
-                $auth_id = substr(str_shuffle($permitted_chars), 0, 10);
-                $expFormat = mktime(date("H"), date("i"), date("s"), date("m"), date("d") + 1, date("Y"));
-                $expDate = date("Y-m-d H:i:s", $expFormat);
-
-                $email = $request->email;
-                $name = $user->name;
-                $msg = env('baseURL') . "/reset_password/" . $auth_id;
-                $temp_id = 2;
-
-                $values = [
-                    'email' => $email,
-                    'token' => $auth_id,
-                    'exp_date' => $expDate,
-                    'user_id' => $user->id
-                ];
-
-                // die;
-                $addExp = PasswordResets::create($values);
-
-                //calling UsersController temail function from FrontendController
-                app(UsersController::class)->temail($email, $name, $msg, $temp_id);
-
-                return redirect('forgot')->with('status', 'We sent an email to your registered email-id to help you recover your account. Please login into your email account and click on the link we sent to reset your password');
-            } else {
-                return redirect('forgot')->with('error', 'Sorry, no user exists on our system with that email');
-            }
+        if (!$user) {
+            return redirect('forgot')->with('error', 'Sorry, no user exists on our system with that email.');
         }
+
+        // Generate token and expiration
+        $token = Str::random(32);
+        $expiration = Carbon::now()->addDay(); // Token valid for 24 hours
+
+        // Save or update the token in the password_resets table
+        PasswordResets::updateOrCreate(
+            ['email' => $request->email],
+            [
+                'token' => $token,
+                'exp_date' => $expiration,
+                'user_id' => $user->id,
+                'created_at' => now(),
+            ]
+        );
+
+        // Construct reset link
+        $resetLink = url("/reset_password/{$token}");
+        \Log::info("Reset link generated: {$resetLink} for user: {$user->email_id}");
+        // Send email (using existing controller method)
+        Mail::to($request->email)->send(new PasswordResetLinkMail($user->name, $resetLink));
+        \Log::info("Password reset link sent to: {$request->email}");
+        return redirect('forgot')->with('status', 'We sent an email to your registered email-id to help you recover your account. Please check your inbox for the reset link.');
     }
 
 
-    function reset_password($auth_id)
+    public function reset_password($auth_id)
     {
-        $curDate = date("Y-m-d H:i:s");
         $user = DB::table('password_resets')->where('token', $auth_id)->first();
-        if ($user) {
-            if ($user->exp_date >= $curDate) {
-                if ($user->is_verified == 1) {
-                    return redirect('forgot')->with('error', 'The link is expired. You have already used this link to reset your password. Please enter Email ID again to generate to reset link.');
-                } else {
-                    session()->put('email_id', $user->email);
-                    session()->put('user_id', $user->user_id);
-                    session()->put('auth_id', $auth_id);
-                    return view('frontend.reset_password');
-                }
-            } else {
-                return redirect('forgot')->with('error', 'The link is expired. You are trying to use the expired link which as valid only 24 hours (1 days after request).');
-            }
-        } else {
-            return redirect('forgot')->with('error', 'Authentication failed!');
+
+        if (!$user) {
+            return redirect('forgot')->with('error', 'Authentication failed! Invalid or tampered link.');
         }
+
+        $currentDateTime = Carbon::now();
+
+        if (Carbon::parse($user->exp_date)->lt($currentDateTime)) {
+            return redirect('forgot')->with('error', 'The link has expired. It was only valid for 24 hours.');
+        }
+
+        // if ($user->is_verified == 1) {
+        //     return redirect('forgot')->with('error', 'This link has already been used. Please request a new one.');
+        // }
+
+        // Store email, user_id, and token in session for use in the reset form
+        Session::put('email_id', $user->email);
+        Session::put('user_id', $user->user_id);
+        Session::put('auth_id', $auth_id);
+
+        return view('frontend.reset_password');
     }
 
     function update_password(Request $req)
     {
 
         $validator = Validator::make($req->all(), [
-            'password' => 'required',
+            'password'   => 'required|min:6',
+            'cpassword'  => 'required|same:password',
+            'email'      => 'required|email',
+            'user_id'    => 'required|integer',
+            'auth_id'    => 'required|string'
         ]);
 
-        if (!$validator->passes()) {
-            return redirect('reset_password/' . $req->auth_id)->with('error', 'The Password field is empty.');
-        } else {
-            $first_password = $req->input('password');
-            $second_password = $req->input('cpassword');
-            $email = $req->input('email');
-            $user_id = $req->input('user_id');
+        if ($validator->fails()) {
+        return redirect('reset_password/' . $req->auth_id)
+            ->withErrors($validator)
+            ->withInput();
+    }
 
-            $check = strcmp($first_password, $second_password);
-            if ($check == 0) {
-                // $pwd = Hash::make($second_password);
-                $users = DB::table('users')->where('email_id', $email)->where('id', $user_id)->first();
-                if ($users) {
-                    DB::table('users')->where('email_id', $email)->where('id', $user_id)->update(['password' => md5($first_password)]);
-                    $update = PasswordResets::where('token', $req->auth_id)->update(['is_verified' =>  1]);
-                    return redirect('/')->with('status', 'Password updated.');
-                }
-            } else {
-                return redirect('reset_password/' . $req->auth_id)->with('error', 'Password and Confirmed Password do not match');
-            }
+        // Verify user exists
+        $user = DB::table('users')
+            ->where('email_id', $req->email)
+            ->where('id', $req->user_id)
+            ->first();
+
+        if (!$user) {
+            return redirect('reset_password/' . $req->auth_id)->with('error', 'User not found.');
         }
+
+        // Update password
+        DB::table('users')
+            ->where('id', $req->user_id)
+            ->update(['password' => Hash::make($req->password)]);
+
+        // Mark reset token as used (if `is_verified` column exists)
+        // DB::table('password_resets')
+        //     ->where('token', $req->auth_id)
+        //     ->update(['is_verified' => 1]);
+
+        return redirect('/login')->with('status', 'Password updated successfully. Please log in.');
     }
 
 

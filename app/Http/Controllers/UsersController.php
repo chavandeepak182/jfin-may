@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\File;
 use App\Models\User;
 use App\Models\Profile;
 use App\Models\Activity;
-
+use App\Models\Loan;
 use Spatie\Permission\Models\Role;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Log;
@@ -865,9 +865,13 @@ class UsersController extends Controller
             $query->where('status', $statusFilter);
         }
 
+        $hasActiveLoan = Loan::where('user_id', $userId)
+            ->where('status', '!=', 'disbursed')
+            ->exists();
+
         // Optionally, paginate results (for example, 10 loans per page)
         $loans = $query->paginate(10); // Use paginate() for better performance with large datasets
-        return view('frontend.profile.myloanlist', compact('loans', 'statuses', 'statusFilter'));
+        return view('frontend.profile.myloanlist', compact('loans', 'statuses', 'statusFilter', 'hasActiveLoan'));
     }
     public function mydetails(Request $request)
     {

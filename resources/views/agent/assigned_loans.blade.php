@@ -73,19 +73,20 @@ Assigned Loans
                             </tr>
                         @endforeach
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>Loan ID</th>
-                            <th>User</th>
-                            <th>Loan Category</th>
-                            <th>Amount</th>
-                            <th>Tenure</th>
-                            <th>Agent Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </tfoot>
                 </table>
-                <!-- Pagination controls handled by DataTables -->
+                <!-- Pagination Links -->
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div class="dataTables_info">
+                        Showing {{ $loans->firstItem() }} to {{ $loans->lastItem() }} of
+                        {{ $loans->total() }}
+                        entries
+                    </div>
+                    <div class="dataTables_paginate paging_simple_numbers">
+                        <nav>
+                            {{ $loans->onEachSide(1)->links('pagination::bootstrap-4') }}
+                        </nav>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -98,31 +99,31 @@ Assigned Loans
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    $(document).ready(function () {
-        $('#example').DataTable({
-            "paging": true,
-            "searching": true,
-            "info": true,
-            "lengthChange": true,
-            "ordering": true,
-        });
+    // $(document).ready(function () {
+    //     $('#example').DataTable({
+    //         "paging": true,
+    //         "searching": true,
+    //         "info": true,
+    //         "lengthChange": true,
+    //         "ordering": true,
+    //     });
 
-        @if(session('success'))
-            Swal.fire({
-                title: 'Success!',
-                text: "{{ session('success') }}",
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
-        @elseif(session('error'))
-            Swal.fire({
-                title: 'Error!',
-                text: "{{ session('error') }}",
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        @endif
-    });
+    //     @if(session('success'))
+    //         Swal.fire({
+    //             title: 'Success!',
+    //             text: "{{ session('success') }}",
+    //             icon: 'success',
+    //             confirmButtonText: 'OK'
+    //         });
+    //     @elseif(session('error'))
+    //         Swal.fire({
+    //             title: 'Error!',
+    //             text: "{{ session('error') }}",
+    //             icon: 'error',
+    //             confirmButtonText: 'OK'
+    //         });
+    //     @endif
+    // });
 
     // Define deleteLoan function
     function deleteLoan(loanId) {

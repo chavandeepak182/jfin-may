@@ -266,24 +266,6 @@
                                     <h4 class="text-primary mb-3">Professional Details</h4>
                                     <div class="row g-3">
                                         <div class="col-md-12">
-                                            @if ($professional)
-                                                @if ($professional->profession_type == 'salaried')
-                                                    <div class="form-check form-check-inline me-5">
-                                                        <input class="form-check-input profession_type" type="radio"
-                                                            name="profession_type" id="salariedTab" value="salaried"
-                                                            {{ old('profession_type', $professional->profession_type ?? '') == 'salaried' ? 'checked' : '' }}>
-                                                        <label for="salariedTab">Salaried Employees</label>
-                                                    </div>
-                                                @endif
-                                                @if ($professional->profession_type == 'self')
-                                                    <div class="form-check form-check-inline me-5">
-                                                        <input class="form-check-input profession_type" type="radio"
-                                                            name="profession_type" id="selfTab" value="self"
-                                                            {{ old('profession_type', $professional->profession_type ?? '') == 'self' ? 'checked' : '' }}>
-                                                        <label for="selfTab">Self Employed/ Business Professionals</label>
-                                                    </div>
-                                                @endif
-                                            @else
                                                 <div class="form-check form-check-inline me-5">
                                                     <input class="form-check-input profession_type" type="radio"
                                                         name="profession_type" id="salariedTab" value="salaried"
@@ -296,7 +278,6 @@
                                                         {{ old('profession_type', $professional->profession_type ?? '') == 'self' ? 'checked' : '' }}>
                                                     <label for="selfTab">Self Employed/ Business Professionals</label>
                                                 </div>
-                                            @endif
                                         </div>
 
 
@@ -400,7 +381,7 @@
                                             @enderror
                                         </div>
 
-                                        @if ($professional && $professional->profession_type !== 'salaried')
+                                        @if ($professional && $professional->profession_type != 'salaried')
                                             <div class="col-md-6">
                                                 <div class="form-floating" id="selfincome">
                                                     <input type="number" class="form-control" id="selfincome"
