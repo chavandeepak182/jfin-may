@@ -6,32 +6,68 @@ MIS Dashboard
 
 @section('content')
 @parent
-<div class="card-header py-3">
-    <div class="d-flex justify-content-between align-items-center">
-        <nav aria-label="breadcrumb" class="d-flex align-items-center">
-            <ol class="breadcrumb m-0 bg-transparent">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">MIS Dashboard</li>
-            </ol>
-        </nav>
+<style>
+    .fixed-header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: white;
+        padding: 15px 0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .table-responsive {
+        overflow-x: auto;
+    }
+    .dataTables_filter {
+        display: none;
+    }
+</style>
+<div class="fixed-header">
+    <div class="card-header py-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <nav aria-label="breadcrumb" class="d-flex align-items-center">
+                <ol class="breadcrumb m-0 bg-transparent">
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">MIS Dashboard</li>
+                </ol>
+            </nav>
 
-        <div class="d-flex ms-auto">
-            <input type="text" id="search" class="form-control" placeholder="Search..." onkeyup="searchMIS()">
+            <div class="d-flex ms-auto">
+                <form method="GET" action="{{ route('mis.index') }}" class="d-flex align-items-center">
+                    <!-- Date Range Filter -->
+                    <div class="me-3">
+                        <input type="date" name="from_date" class="form-control" 
+                               value="{{ request('from_date') }}" placeholder="From Date">
+                    </div>
+                    <div class="me-3">
+                        <input type="date" name="to_date" class="form-control" 
+                               value="{{ request('to_date') }}" placeholder="To Date">
+                    </div>
+                    
+                    <!-- Search Field -->
+                    <div class="me-3">
+                        <input type="text" name="search" class="form-control" 
+                               placeholder="Search..." value="{{ request('search') }}" id="searchInput">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary me-3">Filter</button>
+                    <a href="{{ route('mis.index') }}" class="btn btn-secondary me-3">Reset</a>
+                </form>
+                
+                <button class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addMISView">
+                    <i class="fa fa-plus"></i> Add MIS
+                </button>
+                
+                <button class="btn btn-success" id="exportExcel">Export to Excel</button>
+            </div>
         </div>
-
-        <button class="btn btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#addMISView">
-            <i class="fa fa-plus"></i> Add Mis
-        </button>
     </div>
 </div>
-<div class="d-flex justify-content-end mb-3">
-    <button class="btn btn-success" id="exportExcel">Export to Excel</button>
-    <!-- <button class="btn btn-danger ms-3" id="exportPDF">Export to PDF</button> -->
-</div>
+
 
 <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="{{ asset('theme') }}/dist-assets/css/sb-admin-2.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{{-- <link href="{{ asset('theme') }}/dist-assets/css/sb-admin-2.min.css" rel="stylesheet"> --}}
+{{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
 
 <div class="row">
     <div class="col-12 grid-margin">
@@ -54,7 +90,7 @@ MIS Dashboard
                         <tbody id="mis_table_body">
                             @foreach($misRecords as $mis)
                             <tr>
-                                <td>{{ $mis->id }}</td>
+                                <td>{{ $loop->iteration + ($misRecords->currentPage() - 1) * $misRecords->perPage() }}</td>
                                 <td>{{ $mis->name }}</td>
                                 <td>{{ $mis->email }}</td>
                                 <td>{{ $mis->contact }}</td>
@@ -73,10 +109,21 @@ MIS Dashboard
                             @endforeach
                         </tbody>
                     </table>
-
-                    <div class="float-right">
-                        {{ $misRecords->links() }}
+                    <!-- Pagination Links -->
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <div class="dataTables_info">
+                            Showing {{ $misRecords->firstItem() }} to {{ $misRecords->lastItem() }} of {{ $misRecords->total() }}
+                            entries
+                        </div>
+                        <div class="dataTables_paginate paging_simple_numbers">
+                            <nav>
+                                {{ $misRecords->onEachSide(1)->links('pagination::bootstrap-4') }}
+                            </nav>
+                        </div>
                     </div>
+                    {{-- <div class="float-right">
+                        {{ $misRecords->links() }}
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -141,13 +188,9 @@ MIS Dashboard
                             <label for="bank_name" class="col-form-label">Bank Name:</label>
                             <select class="form-control" id="bank_name" name="bank_name" required>
                                 <option value="">Select Bank Name</option>
-                                <option value="IDFC" {{ old('bank_name', $misRecord->bank_name ?? '') == 'IDFC' ? 'selected' : '' }}>IDFC</option>
-                                <option value="SBI" {{ old('bank_name', $misRecord->bank_name ?? '') == 'SBI' ? 'selected' : '' }}>SBI</option>
-                                <option value="KOTAK" {{ old('bank_name', $misRecord->bank_name ?? '') == 'KOTAK' ? 'selected' : '' }}>KOTAK</option>
-                                <option value="HDFC" {{ old('bank_name', $misRecord->bank_name ?? '') == 'HDFC' ? 'selected' : '' }}>HDFC</option>
-                                <option value="MAHARASHTRA" {{ old('bank_name', $misRecord->bank_name ?? '') == 'MAHARASHTRA' ? 'selected' : '' }}>MAHARASHTRA</option>
-                                <option value="AXIS" {{ old('bank_name', $misRecord->bank_name ?? '') == 'AXIS' ? 'selected' : '' }}>AXIS</option>
-                                
+                                @foreach($banks as $bank)
+                                    <option value="{{ $bank->bank_name }}">{{ $bank->bank_name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group col-lg-6">
@@ -247,9 +290,9 @@ MIS Dashboard
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-$(document).ready(function () {
-    $('#misDataTable').DataTable();
-});
+// $(document).ready(function () {
+//     $('#misDataTable').DataTable();
+// });
 
 function searchMIS() {
     let input = document.getElementById('search').value.toLowerCase();

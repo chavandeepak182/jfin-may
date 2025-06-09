@@ -9,10 +9,18 @@ class Mis extends Model
 {
     use HasFactory;
 
-   protected $fillable = [
-    'name', 'email', 'contact', 'office_contact', 'product_type', 'bank_name',
-    'occupation', 'branch_name', 'amount', 'address', 'office_address', 'city',
-    'bm_name', 'login_date', 'status', 'in_principle', 'remark',
-    'legal', 'valuation', 'leads', 'file_work'
-];
+    protected $fillable = [
+        'name',
+        'email',
+        'contact',
+        'product_type',
+        'amount',
+        'address',
+        'city',
+        'office_address',
+        'office_contact',
+        'bank_name',
+        'branch_name',
+        'occupation'
+    ];
 }

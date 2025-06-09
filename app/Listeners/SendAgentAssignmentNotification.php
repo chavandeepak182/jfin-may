@@ -28,13 +28,14 @@ class SendAgentAssignmentNotification
     {
 
         $loanId = $event->loanId;
+        $agentName = $event->agentName;
         
-        $this->notifier->send($event->adminId, 'Agent Assigned', 'You assigned an agent to Loan #' . $loanId);
+        $this->notifier->send($event->adminId, 'Agent Assigned', 'You assigned ' . $agentName . ' to Loan #' . $loanId);
 
         if ($event->agentId) {
             $this->notifier->send($event->agentId, 'New Loan Assigned', 'You have been assigned a new loan application (#' . $loanId . ').');
         }
 
-        $this->notifier->send($event->customerId, 'Agent Assigned', 'An agent has been assigned to your loan application (#' . $loanId . ').');
+        $this->notifier->send($event->customerId, 'Agent Assigned', 'An agent (' . $agentName . ') has been assigned to your loan application (#' . $loanId . ').');
     }
 }

@@ -74,43 +74,30 @@
                     <tbody>
                         @foreach ($data['loans'] as $loan)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $loan->loan_reference_id }}</td>
-                                <td>{{ $loan->user_name ?? 'N/A' }}</td>
-                                <td>{{ $loan->loan_category_name ?? 'N/A' }}</td>
-                                <td>{{ $loan->amount }}</td>
-                                <td>{{ $loan->bank_name ?? 'N/A' }}</td>
-                                <td>{{ $loan->city ?? 'N/A' }}</td>
-                                <!-- <td>{{ ucfirst($loan->agent_action) ?? 'Pending' }}</td> -->
+                                <td>{{ $loop->iteration + ($data['loans']->currentPage() - 1) * $data['loans']->perPage() }}</td>
+                                <td>{{ $loan['loan_reference_id'] }}</td>
+                                <td>{{ $loan['user_name'] }}</td>
+                                <td>{{ $loan['loan_category_name'] }}</td>
+                                <td>{{ $loan['amount'] }}</td>
+                                <td>{{ $loan['bank_name'] }}</td>
+                                <td>{{ $loan['city'] }}</td>
                                 <td>
                                     <a class="btn btn-primary btn-xs view" title="View"
-                                        href="{{ route('loan.view', ['id' => $loan->loan_id]) }}">
+                                        href="{{ route('loan.view', ['id' => $loan['loan_id']]) }}">
                                         <i class="fa fa-eye"></i>
                                     </a>
                                     <a class="btn btn-primary btn-xs edit" title="Edit"
-                                        href="{{ route('editLoan', ['id' => $loan->loan_id]) }}">
+                                        href="{{ route('editLoan', ['id' => $loan['loan_id']]) }}">
                                         <i class="fa fa-edit"></i>
                                     </a>
                                     <button class="btn btn-danger btn-xs delete" title="Delete"
-                                        onclick="deleteLoan('{{ $loan->loan_id }}')">
+                                        onclick="deleteLoan('{{ $loan['loan_id'] }}')">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>Id</th>
-                            <th>Loan No.</th>
-                            <th>Name</th>
-                            <th>Product Type</th>
-                            <th>Amount</th>
-                            <th>Bank</th>
-                            <th>Location</th>
-                            <th>Action</th>
-                        </tr>
-                    </tfoot>
                 </table>
                 <!-- Pagination Links -->
                 <div class="d-flex justify-content-between align-items-center mt-4">

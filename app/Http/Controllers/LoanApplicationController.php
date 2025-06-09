@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\LoanStatusUpdated;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
@@ -36,40 +37,48 @@ class LoanApplicationController extends Controller
 
     public function index(Request $request)
     {
-        $query = DB::table('loans')
-            ->join('users', 'loans.user_id', '=', 'users.id')
-            ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-            ->leftJoin('loan_bank_details', 'loans.bank_id', '=', 'loan_bank_details.bank_id')
-            ->leftJoin('profile', 'users.id', '=', 'profile.user_id')
-            ->leftJoin('cities', 'profile.city', '=', 'cities.id')
-            ->select(
-                'loans.loan_id',
-                'loans.amount',
-                'loans.tenure',
-                'loans.loan_reference_id',
-                'users.name as user_name',
-                'loans.status',
-                'cities.city as city',
-                'loan_category.category_name as loan_category_name',
-                'loan_bank_details.bank_name as bank_name',
-                'loans.agent_action'
-            )
-            ->whereNotNull('loans.loan_reference_id'); // Add the condition to exclude loans without loan_reference_id
+        // Step 1: Build the base query
+        $query = \App\Models\Loan::with([
+            'user.profile.cityRelation',
+            'loanCategory',
+            'bankDetails'
+        ])
+            ->whereNotNull('loan_reference_id');
 
-        // Apply filters if present
+        // Step 2: Apply filters (before get or paginate)
         if ($request->filled('status')) {
-            $query->where('loans.status', $request->input('status'));
+            $query->where('status', $request->input('status'));
         }
 
         if ($request->filled('start_date') && $request->filled('end_date')) {
-            $query->whereBetween('loans.created_at', [$request->input('start_date'), $request->input('end_date')]);
+            $query->whereBetween('created_at', [
+                $request->input('start_date'),
+                $request->input('end_date'),
+            ]);
         }
 
-        $query->orderBy('loans.created_at', 'desc');
+        // Step 3: Order and Paginate
+        $paginated = $query->orderBy('created_at', 'desc')->paginate(10);
 
-        $data['loans'] = $query->paginate(10);
+        // Step 4: Transform paginated result (map the collection inside paginator)
+        $paginated->getCollection()->transform(function ($loan) {
+            return [
+                'loan_id' => $loan->loan_id,
+                'amount' => $loan->amount,
+                'tenure' => $loan->tenure,
+                'loan_reference_id' => $loan->loan_reference_id,
+                'user_name' => $loan->user->name ?? null,
+                'status' => $loan->status,
+                'city' => $loan->user->profile->cityRelation->city ?? null,
+                'loan_category_name' => $loan->loanCategory->category_name ?? null,
+                'bank_name' => $loan->bankDetails->bank_name ?? null,
+                'agent_action' => $loan->agent_action,
+            ];
+        });
 
-        // Fetch recent 5 loans (optional, same as before)
+        $data['loans'] = $paginated;
+
+        // Step 5: Recent 5 loans using Query Builder (optional)
         $recentLoans = DB::table('loans')
             ->join('users', 'loans.user_id', '=', 'users.id')
             ->select(
@@ -78,13 +87,14 @@ class LoanApplicationController extends Controller
                 'users.name as user_name',
                 'loans.status'
             )
-            ->whereNotNull('loans.loan_reference_id') // Add the condition here too
-            ->latest('loans.created_at')
+            ->whereNotNull('loans.loan_reference_id')
+            ->orderByDesc('loans.created_at')
             ->take(5)
             ->get();
 
         return view('frontend.all-loans', compact('data', 'recentLoans'));
     }
+
     public function view($id)
     {
         // Fetch loan details along with related user and category information
@@ -191,7 +201,6 @@ class LoanApplicationController extends Controller
     public function update(Request $request)
     {
         // dd($request->all());
-
         try {
             // Validate the request
             $validated = $request->validate([
@@ -227,6 +236,7 @@ class LoanApplicationController extends Controller
                 $loan->status = $newStatus;
                 $loan->remarks = $request->input('remarks');
                 $loan->in_principle = $request->input('in_principle');
+                $loan->amount_approved = $request->input('amount_approved');
                 $loan->save();
 
                 // echo $loan;die;
@@ -274,6 +284,19 @@ class LoanApplicationController extends Controller
 
                 // Send email notification if the status has changed
                 if ($oldStatus !== $newStatus) {
+                    log::info('Dispatching LoanStatusUpdated event for loan ID: ' . $loan->loan_reference_id, [
+                        'old_status' => $oldStatus,
+                        'new_status' => $newStatus,
+                        'loan_reference_id' => $loan->loan_reference_id,
+                        'user_id' => auth()->id(),
+                    ]);
+                    event(new LoanStatusUpdated(
+                        $loan->loan_reference_id,
+                        auth()->id(),
+                        auth()->user()->roles->name, // assuming you store role
+                        $loan->status,
+                        $loan->user_id
+                    ));
                     $customer = $loan->user;
                     $customerEmail = $customer->email_id;
                     $customerName = $customer->name;
@@ -282,18 +305,87 @@ class LoanApplicationController extends Controller
                     $msg = "Your loan status has been updated to: $status. Remarks: $remarks";
                     $temp_id = 4; // Example template ID, adjust accordingly
                     app(UsersController::class)->temail($customerEmail, $customerName, $msg, $temp_id);
+                }
 
-                    // Start MLM Insertion
-                    if ($newStatus == 'disbursed') {
-                        $name = $customerName;
-                        $parent = $loan->referral_user_id;
-                        $nodeInserted = app(CategoryController::class)->addNode($parent, $name);
-                        $amount_approved = $loan->amount_approved;
+                // Start MLM Insertion
+                // if ($newStatus == 'disbursed') {
+                //     $name = $customerName;
+                //     $parent = $loan->referral_user_id;
+                //     $nodeInserted = app(CategoryController::class)->addNode($parent, $name);
+                //     $amount_approved = $loan->amount_approved;
 
-                        $userId = $loan->user_id;
-                        app(CategoryController::class)->commission_destribution($parent, $amount_approved, $userId);
+                //     $userId = $loan->user_id;
+                //     app(CategoryController::class)->commission_destribution($parent, $amount_approved, $userId);
+                // }
+
+                if ($newStatus == 'disbursed') {
+                    $loan->amount_approved = $request->input('amount_approved');
+                    $loan->status = $newStatus; // Set status again, to be sure
+                    $loan->save(); // Explicitly save all changes
+
+                    Log::info('Loan approved amount set for loan ID: ' . $loan->loan_id);
+
+                    // Handle tree node addition
+                    $referralUser = User::find($loan->referral_user_id);
+
+                    if (!$referralUser) {
+                        Log::warning("Referral user not found for ID: {$loan->referral_user_id}. Searching for next available node.");
+                        $parentNode = app(CategoryController::class)->findNextAvailableNode();
+
+                        if (!$parentNode) {
+                            Log::error("No available position found in the tree.");
+                            return;
+                        }
+
+                        $parentUserId = $parentNode->user_id;
+                    } else {
+                        Log::info("Referral user found: " . json_encode($referralUser->toArray()));
+                        $parentUserId = $referralUser->id;
                     }
-                    // End MLM Insertion
+
+                    $childName = $loan->user->name;
+                    $childUserId = $loan->user->id;
+
+                    $existingCategory = DB::table('categories')->where('user_id', $childUserId)->first();
+
+                    if ($existingCategory) {
+                        Log::info("User already exists in the tree. Skipping node insertion for user ID: {$childUserId}");
+                    } else {
+                        if (app(CategoryController::class)->addNode($parentUserId, $childName, $childUserId)) {
+                            Log::info("Node successfully inserted into tree for loan applicant.");
+                        } else {
+                            Log::error("Failed to insert node into tree for loan applicant.");
+                            return;
+                        }
+                    }
+
+                    // Fetch ancestors for commission distribution
+                    $childCategory = DB::table('categories')->where('user_id', $childUserId)->first();
+
+                    if (!$childCategory) {
+                        Log::error("Category not found for Child User ID: {$childUserId}");
+                        return;
+                    }
+
+                    $ancestors = DB::table('categories')
+                        ->where('_lft', '<', $childCategory->_lft)
+                        ->where('_rgt', '>', $childCategory->_rgt)
+                        ->orderBy('_lft', 'asc')
+                        ->get();
+
+                    if ($ancestors->isEmpty()) {
+                        Log::info("No ancestors found for Child User ID: {$childUserId}. Skipping commission distribution.");
+                        return;
+                    }
+
+                    // Distribute commission
+                    app(CategoryController::class)->commissionDistribution($childUserId, $loan->amount_approved);
+
+                    if ($referralUser) {
+                        Log::info("Commission distribution executed for user: {$loan->user_id}, Parent: {$referralUser->name}");
+                    } else {
+                        Log::info("Commission distribution executed for user: {$loan->user_id}, No valid referral user found.");
+                    }
                 }
             });
 
@@ -1293,11 +1385,11 @@ class LoanApplicationController extends Controller
             // Notifications
             $adminId = auth()->id(); // Assuming logged-in user is admin
             $agentId = $validated['agent_id'];
+            $agentName = User::find($agentId)->name ?? 'Agent'; // Get agent name or default to 'Agent'
             $customerId = $loan->user_id;
 
             // Send notifications
-            event(new \App\Events\AgentAssigned($adminId, $agentId, $customerId, $loan->loan_reference_id));
-            \Log::info('Event dispatched');
+            event(new \App\Events\AgentAssigned($adminId, $agentId, $customerId, $loan->loan_reference_id, $agentName));
             return redirect()->route('loans.index')->with('success', 'Agent assigned successfully!');
         }
 

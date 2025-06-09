@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\LoanStatusUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Professional;
@@ -375,6 +376,33 @@ class AgentController extends Controller
                 }
 
                 Log::info('Loan details updated for loan ID: ' . $loan->loan_id);
+
+                if ($oldStatus !== $newStatus) {
+                    log::info('Dispatching LoanStatusUpdated event for loan ID: ' . $loan->loan_reference_id, [
+                        'old_status' => $oldStatus,
+                        'new_status' => $newStatus,
+                        'loan_reference_id' => $loan->loan_reference_id,
+                        'user_id' => auth()->id(),
+                    ]);    
+                    event(new LoanStatusUpdated(
+                        $loan->loan_reference_id,
+                        auth()->id(),
+                        auth()->user()->role, // assuming you store role
+                        $loan->status,
+                        $loan->user_id
+                    ));
+                    $customer = $loan->user;
+                    $customerEmail = $customer->email_id;
+                    $customerName = $customer->name;
+                    $status = $newStatus;
+                    $remarks = $request->input('remarks');
+                    $msg = "Your loan status has been updated to: $status. Remarks: $remarks";
+                    $temp_id = 4; // Example template ID, adjust accordingly
+                    app(UsersController::class)->temail($customerEmail, $customerName, $msg, $temp_id);
+                }
+
+                Log::info('Loan status updated event dispatched for loan ID: ' . $loan->loan_id);
+
 
                 if ($newStatus == 'disbursed') {
                     $loan->amount_approved = $request->input('amount_approved');

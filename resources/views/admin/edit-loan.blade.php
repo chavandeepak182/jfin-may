@@ -253,14 +253,21 @@
                             </div>
                     </div>
 
+                    <div class="form-group" id="approvedAmountBox" style="display: none;">
+                        <label for="amount_approved">Approved Amount:<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="amountApproved" name="amount_approved"
+                            value="{{ $loan->amount_approved ?? null }}">
+                    </div>
+
                     <div class="form-group" id="remark-box" style="display: none;">
                         <label for="remark">Remark:</label>
                         <textarea class="form-control" id="remark" name="remarks">{{ old('remarks') }}</textarea>
                     </div>
 
+
+
                     <div class="mt-4">
-                        <button type="submit" class="btn btn-success px-4 py-3 rounded"><strong>UPDATE
-                                LOAN</strong></button>
+                        <button type="submit" class="btn btn-success px-4 py-3 rounded"><strong>UPDATE LOAN</strong></button>
                     </div>
                 </div>
 
@@ -341,11 +348,17 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            
+
             $('#editLoanForm').submit(function(e) {
                 e.preventDefault(); // Prevent the default form submission
                 var form = this;
                 var formData = new FormData(form);
+
+                var submitButton = $(this).find('button[type="submit"]');
+                submitButton.prop('disabled', true);
+                
+                var originalText = submitButton.html();
+                submitButton.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Updating...');
 
                 $.ajax({
                     url: $(this).attr('action'),
@@ -353,18 +366,18 @@
                     data: formData,
                     processData: false,
                     contentType: false,
-                    
+
                     success: function(response) {
                         console.log(response); // Inspect the response object
                         Swal.fire({
                             title: response.msg ||
-                            'Success!', // Fallback to 'Success!' if msg is not present
+                                'Success!', // Fallback to 'Success!' if msg is not present
                             icon: 'success',
                             confirmButtonText: 'OK'
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 window.location.href =
-                                "{{ route('loans.index') }}"; // Redirect to the loans index
+                                    "{{ route('loans.index') }}"; // Redirect to the loans index
                             }
                         });
                     },
@@ -375,6 +388,10 @@
                             icon: 'error',
                             confirmButtonText: 'OK'
                         });
+                    },
+                    complete: function() {
+                        submitButton.prop('disabled', false);
+                        submitButton.html(originalText);
                     }
                 });
             });
@@ -383,11 +400,39 @@
     <script>
         function toggleRemarkBox(value) {
             var remarkBox = document.getElementById('remark-box');
-            if (value === 'rejected' || value === 'approved' || value === 'in process' || value === 'disbursed') {
+
+            var approvedAmountBox = document.getElementById('approvedAmountBox');
+            // approvedAmountBox.style.display = (status === 'disbursed' || status === 'approved') ? 'block' : 'none';
+
+            const approvedAmountInput = document.getElementById('amountApproved');
+
+            if (['rejected', 'approved', 'in process', 'disbursed'].includes(value)) {
                 remarkBox.style.display = 'block';
             } else {
                 remarkBox.style.display = 'none';
             }
+
+            if (['approved', 'disbursed'].includes(value)) {
+                approvedAmountBox.style.display = 'block';
+                approvedAmountInput.setAttribute('required', 'required');
+            } else {
+                approvedAmountBox.style.display = 'none';
+                approvedAmountInput.removeAttribute('required');
+            }
+            // return approvedAmountInput;
+            // if (value === 'disbursed') {
+            //     approvedAmountInput.setAttribute('required', 'required');
+            // } else {
+            //     approvedAmountInput.removeAttribute('required');
+            // }
+
+            // if (value === 'rejected' || value === 'approved' || value === 'in process' || value === 'disbursed') {
+            //     remarkBox.style.display = 'block';
+            //     approvedAmountBox.style.display = 'block';
+            // } else {
+            //     remarkBox.style.display = 'none';
+            //     approvedAmountBox.style.display = 'none';
+            // }
         }
 
         function addDocumentUploadRow() {
@@ -413,8 +458,15 @@
 
         // Initialize the form based on current status
         document.addEventListener('DOMContentLoaded', function() {
-            var status = document.getElementById('status') ? document.getElementById('status').value : '';
-            toggleSanctionLetterBox(status);
+
+
+            var statusElement = document.getElementById('status');
+
+            if (statusElement) {
+                const statusValue = statusElement.value;
+                toggleSanctionLetterBox(statusValue);
+                toggleRemarkBox(statusValue);
+            }
         });
 
         // Listen for changes in the loan status
