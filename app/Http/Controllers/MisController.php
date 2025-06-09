@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Mis;
 use Barryvdh\DomPDF\Facade as PDF;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MisExport;
-    use Carbon\Carbon;
+use App\Models\LoanBank;
+use Carbon\Carbon;
 
 
 
@@ -30,25 +32,31 @@ class MisController extends Controller
     // }
 
 
-public function index(Request $request)
-{
-    $start_date = $request->start_date;
-    $end_date = $request->end_date;
+    public function index(Request $request)
+    {
 
-    // Validate and format the dates if provided
-    if ($start_date && $end_date) {
-        // Ensure dates are in a valid format
-        $start_date = Carbon::parse($start_date)->startOfDay();
-        $end_date = Carbon::parse($end_date)->endOfDay();
+        $query  = MIS::query()->latest();
 
-        $misRecords = Mis::whereBetween('created_at', [$start_date, $end_date])->paginate(10);
-    } else {
-        // No dates provided, return all records with pagination
-        $misRecords = Mis::paginate(10);
+        if ($request->filled(['from_date', 'to_date'])) {
+            $query->whereBetween('created_at', [
+                $request->input('from_date') . ' 00:00:00',
+                $request->input('to_date') . ' 23:59:59'
+            ]);
+        }
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('contact', 'like', "%{$search}%");
+            });
+        }
+
+        $banks = LoanBank::all();
+
+        $misRecords = $query->paginate(10)->withQueryString();
+        return view('mis.index', compact('misRecords', 'banks'));
     }
-
-    return view('mis.index', compact('misRecords'));
-}
 
 
     public function store(Request $request)
@@ -65,42 +73,41 @@ public function index(Request $request)
             'amount' => 'required|numeric',
             'address' => 'required|string',
             'city' => 'required|string|max:255',
-            'office_address' =>'nullable|string|max:255',
+            'office_address' => 'nullable|string|max:255',
         ]);
-    
+
         MIS::create($validatedData);
-    
+
         return response()->json(['status' => 'success', 'message' => 'Record added successfully!']);
     }
     public function edit($id)
     {
-        $misRecord = MIS::findOrFail($id); // Find the record by ID or fail if not found
-    
-        // Return the edit view with the record data
-        return view('mis.edit', compact('misRecord'));
+        $misRecord = MIS::findOrFail($id);
+        $banks = LoanBank::all();
+        return view('mis.edit', compact('misRecord', 'banks'));
     }
     public function update(Request $request, $id)
-{
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255',
-        'contact' => 'required|string|max:255',
-        'office_contact' => 'required|string|max:255',
-        'product_type' => 'required|string|max:255',
-        'bank_name' => 'required|string|max:255',
-        'occupation' => 'required|string|max:255',
-        'branch_name' => 'required|string|max:255',
-        'amount' => 'required|numeric',
-        'address' => 'required|string',
-        'office_address' => 'nullable|string|max:255',
-        'city' => 'required|string|max:255',
-    ]);
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'contact' => 'required|string|max:255',
+            'office_contact' => 'required|string|max:255',
+            'product_type' => 'required|string|max:255',
+            'bank_name' => 'required|string|max:255',
+            'occupation' => 'required|string|max:255',
+            'branch_name' => 'required|string|max:255',
+            'amount' => 'required|numeric',
+            'address' => 'required|string',
+            'office_address' => 'nullable|string|max:255',
+            'city' => 'required|string|max:255',
+        ]);
 
-    $misRecord = MIS::findOrFail($id);
-    $misRecord->update($validatedData);
+        $misRecord = MIS::findOrFail($id);
+        $misRecord->update($validatedData);
 
-    return redirect()->route('mis.index')->with('success', 'Record updated successfully');
-}
+        return redirect()->route('mis.index')->with('success', 'Record updated successfully');
+    }
     public function destroy(Request $request)
     {
         $mis = Mis::find($request->id);

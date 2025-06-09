@@ -55,12 +55,9 @@ Edit MIS Record
                     <label for="bank_name" class="col-form-label">Bank Name:</label>
                     <select class="form-control" id="bank_name" name="bank_name" required>
                         <option value="">Select Bank Name</option>
-                        <option value="IDFC" {{ $misRecord->bank_name == 'IDFC' ? 'selected' : '' }}>IDFC</option>
-                        <option value="SBI" {{ $misRecord->bank_name == 'SBI' ? 'selected' : '' }}>SBI</option>
-                        <option value="KOTAK" {{ $misRecord->bank_name == 'KOTAK' ? 'selected' : '' }}>KOTAK</option>
-                        <option value="HDFC" {{ $misRecord->bank_name == 'HDFC' ? 'selected' : '' }}>HDFC</option>
-                        <option value="MAHARASHTRA" {{ $misRecord->bank_name == 'MAHARASHTRA' ? 'selected' : '' }}>MAHARASHTRA</option>
-                        <option value="AXIS" {{ $misRecord->bank_name == 'AXIS' ? 'selected' : '' }}>AXIS</option>
+                        @foreach($banks as $bank)
+                            <option value="{{ $bank->bank_name }}" {{ $misRecord->bank_name == $bank->bank_name ? 'selected' : '' }}>{{ $bank->bank_name }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group col-lg-6">

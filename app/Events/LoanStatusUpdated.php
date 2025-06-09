@@ -9,30 +9,29 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Loan;
+use Illuminate\Support\Facades\Log;
 
 
-class AgentAssigned
+class LoanStatusUpdated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $adminId;
-    public $agentId;
-    public $customerId;
     public $loanId;
-    public $agentName;
+    public $updatedById;
+    public $updatedByRole; // 'admin' or 'agent'
+    public $newStatus;
+    public $customerId;
 
     /**
      * Create a new event instance.
      */
-    
-    public function __construct($adminId, $agentId, $customerId, $loanId, $agentName)
+    public function __construct($loanId, $updatedById, $updatedByRole, $newStatus, $customerId)
     {
-        $this->adminId = $adminId;
-        $this->agentId = $agentId;
-        $this->customerId = $customerId;
         $this->loanId = $loanId;
-        $this->agentName = $agentName;
+        $this->updatedById = $updatedById;
+        $this->updatedByRole = $updatedByRole;
+        $this->newStatus = $newStatus;
+        $this->customerId = $customerId;
     }
 
     /**

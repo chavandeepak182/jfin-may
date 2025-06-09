@@ -559,7 +559,7 @@
                                         <span id="notification-header">No new notifications</span>
                                     @endif
                                 </div>
-                                <div class="notification-list">
+                                <div class="notification-list" id="notification-list">
                                     @forelse(\App\Models\NotificationLog::where('user_id', auth()->id())
                                         ->orderBy('created_at', 'desc')
                                         ->limit(5)
@@ -732,7 +732,7 @@
         <script>
             $(document).ready(function() {
                 // Mark notification as read when clicked
-                $(document).on('click', '#notification-list a.list-group-item', function(e) {
+                $(document).on('click', '#notification-list a.notification-item', function(e) {
                     e.preventDefault();
                     var notificationId = $(this).data('id');
                     var url = $(this).attr('href');

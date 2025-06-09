@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\Mail\GenericNotificationMail;
 use App\Models\NotificationLog;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 class NotificationService
 {
@@ -14,5 +17,10 @@ class NotificationService
             'description' => $description,
             'seen_by_user' => false,
         ]);
+
+        $user = User::find($userId);
+        if ($user && $user->email) {
+            Mail::to($user->email)->send(new GenericNotificationMail($title, $description));
+        }
     }
 }

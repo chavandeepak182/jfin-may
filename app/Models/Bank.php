@@ -9,7 +9,7 @@ class Bank extends Model
 {
     use HasFactory;
 
-    protected $table = 'company_bank_details'; 
+    protected $table = 'loan_bank_details'; 
 
 
     

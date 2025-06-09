@@ -13,7 +13,7 @@ class Loan extends Model
     protected $casts = [
         'amount_approved' => 'integer',
     ];
-    protected $fillable = ['loan_category_id', 'amount', 'tenure', 'status', 'referral_user_id', 'amount_approved', 'loan_reference_id'];
+    protected $fillable = ['loan_category_id', 'amount', 'tenure', 'status', 'referral_user_id', 'amount_approved', 'loan_reference_id', 'bank_id'];
     public function loanCategory()
     {
         return $this->belongsTo(LoanCategory::class, 'loan_category_id', 'loan_category_id');
@@ -29,5 +29,10 @@ class Loan extends Model
     public function agent()
     {
         return $this->belongsTo(User::class, 'agent_id');
+    }
+
+    public function bankDetails()
+    {
+        return $this->belongsTo(Bank::class, 'bank_id', 'bank_id');
     }
 }
