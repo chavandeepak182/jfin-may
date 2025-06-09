@@ -29,10 +29,10 @@ Edit MIS Record
                     <label for="contact" class="col-form-label">Contact:</label>
                     <input type="text" class="form-control" id="contact" name="contact" value="{{ $misRecord->contact }}" required>
                 </div>
-                <div class="form-group col-lg-6">
+                <!-- <div class="form-group col-lg-6">
                     <label for="office_contact" class="col-form-label">Office Contact:</label>
                     <input type="text" class="form-control" id="office_contact" name="office_contact" value="{{ $misRecord->office_contact }}" required>
-                </div>
+                </div> -->
                 <div class="form-group col-lg-6">
                     <label for="product_type" class="col-form-label">Product Type:</label>
                     <select class="form-control" id="product_type" name="product_type" required>
@@ -135,12 +135,12 @@ Edit MIS Record
                     <textarea class="form-control" id="address" name="address" rows="3" required>{{ $misRecord->address }}</textarea>
                 </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="form-group col-lg-12">
                     <label for="office_address" class="col-form-label">Office Address:</label>
                     <textarea class="form-control" id="office_address" name="office_address" rows="3" required>{{ $misRecord->office_address }}</textarea>
                 </div>
-            </div>
+            </div> -->
             <div class="modal-footer">
                 <a href="{{ route('mis.index') }}" class="btn btn-secondary">Cancel</a>
                 <button type="submit" class="btn btn-primary">Update</button>

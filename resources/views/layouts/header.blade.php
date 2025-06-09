@@ -357,7 +357,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Web Form & Leads:</h6>
                         <a class="collapse-item" href="{{ route('enquiries.enquiryLead') }}">Enquiry Leads</a>
-                        <a class="collapse-item" href="#">Property Leads</a>
+                        <!-- <a class="collapse-item" href="#">Property Leads</a> -->
                         <a class="collapse-item" href="/admin/leads">Leads</a>
                     </div>
                 </div>
@@ -433,7 +433,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Tools:</h6>
-                        <a class="collapse-item" href="{{ route('allbanks') }}">Tied Up Banks</a>
+                        <!-- <a class="collapse-item" href="{{ route('allbanks') }}">Tied Up Banks</a> -->
                         <a class="collapse-item" href="{{ route('loanbanks') }}">Loan Banks</a>
                         <!-- <a class="collapse-item" href="{{ route('sanctioncalculator') }}">Eligiblity Calculation</a> -->
                         <a class="collapse-item" href="{{ route('mis.index') }}">MIS</a>
