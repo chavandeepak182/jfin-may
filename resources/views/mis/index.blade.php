@@ -156,10 +156,10 @@ MIS Dashboard
                             <label for="contact" class="col-form-label">Contact:</label>
                             <input type="text" class="form-control" id="contact" name="contact" required>
                         </div>
-                        <div class="form-group col-lg-6">
+                        <!-- <div class="form-group col-lg-6">
                             <label for="office_contact" class="col-form-label">Office Contact:</label>
                             <input type="text" class="form-control" id="office_contact" name="office_contact" required>
-                        </div>
+                        </div> -->
                         <div class="form-group col-lg-6">
                             <label for="product_type" class="col-form-label">Product Type:</label>
                             <select class="form-control" id="product_type" name="product_type" required>
@@ -263,12 +263,12 @@ MIS Dashboard
                             <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
                         </div>
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="office_address" class="col-form-label">Office Address:</label>
                             <textarea class="form-control" id="office_address" name="office_address" rows="3" required></textarea>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Save</button>

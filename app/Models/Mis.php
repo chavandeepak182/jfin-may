@@ -21,6 +21,15 @@ class Mis extends Model
         'office_contact',
         'bank_name',
         'branch_name',
-        'occupation'
+        'occupation',
+        'bm_name',
+        'login_date',
+        'status',
+        'in_principle',
+        'remark',
+        'legal',
+        'valuation',
+        'leads',
+        'file_work',
     ];
 }
