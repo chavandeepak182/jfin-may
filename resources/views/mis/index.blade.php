@@ -167,6 +167,12 @@ MIS Dashboard
                                 <option value="Home Loan">Home Loan</option>
                                 <option value="Personal Loan">Personal Loan</option>
                                 <option value="MSME">MSME</option>
+                                <option value="Lap/Mortage">Lap/Mortage</option>
+                                <option value="Project Funding">Project Funding</option>
+                                <option value="CGTMS">CGTMS</option>
+                                <option value="Term Loan">Term Loan</option>
+                                <option value="Working Capital">Working Capital</option>
+                                <option value="Machinary Loan">Machinary Loan</option>
                                 <option value="Vehicle Loan">Vehicle Loan</option>
                             </select>
                         </div>
@@ -192,6 +198,54 @@ MIS Dashboard
                             <input type="text" class="form-control" id="branch_name" name="branch_name" required>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-lg-6">
+                            <label for="bm_name" class="col-form-label">BM Name:</label>
+                            <input type="text" class="form-control" id="bm_name" name="bm_name">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="login_date" class="col-form-label">Login Date:</label>
+                            <input type="date" class="form-control" id="login_date" name="login_date">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="status" class="col-form-label">Status:</label>
+                            <select class="form-control" id="status" name="status">
+                                <option value="">Select Status</option>
+                                <option value="open">Open</option>
+                                <option value="processing">Processing</option>
+                                <option value="closed">Closed</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="in_principle" class="col-form-label">In-Principle:</label>
+                            <select class="form-control" id="in_principle" name="in_principle">
+                                <option value="">Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label for="remark" class="col-form-label">Remark:</label>
+                            <textarea class="form-control" id="remark" name="remark" rows="2"></textarea>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="legal" class="col-form-label">Legal:</label>
+                            <input type="text" class="form-control" id="legal" name="legal">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="valuation" class="col-form-label">Valuation:</label>
+                            <input type="text" class="form-control" id="valuation" name="valuation">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="leads" class="col-form-label">Leads:</label>
+                            <input type="text" class="form-control" id="leads" name="leads">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="file_work" class="col-form-label">File Work:</label>
+                            <input type="text" class="form-control" id="file_work" name="file_work">
+                        </div>
+                    </div>
+
                     
                     <div class="row">
                         <div class="form-group col-lg-6">

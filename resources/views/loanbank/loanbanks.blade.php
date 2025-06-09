@@ -238,42 +238,43 @@ $(document).ready( function () {
         });
     }); 
 
-    function deleteBank(id)
-	{
-		$.ajax({
-            url:"{{Route('deleteBank')}}", 
-            type: 'post',
-            dataType: 'json',
-            data: {
-                'bank_id': id,               
-                '_token': '{{ csrf_token() }}',
-                },
-            success: function (response) {
-                // console.log(response);
-                if(response.status == 0){
-                    swal({
-                        title: response.error,
-                        text: "",
-                        type: "success",
-                        icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){ 
-                        location.reload();
-                    });
-                }else{
-                    swal({
-                        title: response.msg,
-                        text: "",
-                        type: "success",
-                        icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){ 
-                        location.reload();
-                    });
-                }                           
+ function deleteBank(id)
+{
+    $.ajax({
+        url: "{{ route('deleteLoanBank') }}", // ✅ Corrected route name
+        type: 'post',
+        dataType: 'json',
+        data: {
+            'bank_id': id,
+            '_token': '{{ csrf_token() }}',
+        },
+        success: function (response) {
+            if(response.status == 0){
+                swal({
+                    title: response.error,
+                    text: "",
+                    icon: "error",
+                    showConfirmButton: true
+                }).then(function(){ 
+                    location.reload();
+                });
+            } else {
+                swal({
+                    title: response.msg,
+                    text: "",
+                    icon: "success",
+                    showConfirmButton: true
+                }).then(function(){ 
+                    location.reload();
+                });
             }
-        });      
-	}
+        },
+        error: function(xhr) {
+            console.error(xhr.responseText);
+            swal("Error!", "Something went wrong.", "error");
+        }
+    });      
+}
 
 
 </script>
