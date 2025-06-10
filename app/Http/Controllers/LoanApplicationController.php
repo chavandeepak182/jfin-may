@@ -208,7 +208,7 @@ class LoanApplicationController extends Controller
                 'status' => 'required|string',
                 'loan_category_id' => 'required|integer',
                 'amount' => 'required|numeric',
-                'amount_approved' => 'required_if:status,disbursed|numeric',
+                'amount_approved' => ['required_if:status,disbursed','nullable','numeric'],
                 'tenure' => 'required|integer',
                 'in_principle' => 'nullable|string',
                 'remarks' => 'nullable|string',
