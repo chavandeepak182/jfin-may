@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendUserCredentials;
 use App\Mail\VerifyEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -75,10 +76,12 @@ class UsersController extends Controller
                 $user = new User;
                 $user->name = $request->full_name;
                 $user->email_id = $request->email_id;
-                $user->password = md5($request->password);
+                $user->mobile_no = $request->mobile_no;
+                $user->password = Hash::make($request->password);
                 $user->role_id = 1;  //role_id = 1 for the customer hardcoded
                 $user->email_otp = $six_digit_random_number;
                 $user->referral_code     = $randomString;
+                $user->is_email_verify = 1;
 
                 $user->save();
 
@@ -100,12 +103,24 @@ class UsersController extends Controller
                 //update the profile id in users table
                 $update_user = User::where('id', $user_id)->update(['profile_id' => $profile_id]);
 
-                $msg = "http://127.0.0.1:8000/userAuth/" . $user_id . "/" . $six_digit_random_number;
-                $temp_id = 3;
+                // $verificationToken = Str::random(60);
+                // $otp = random_int(100000, 999999);
+
+                // $expiresAt = now()->addHours(24); // 24-hour expiration
+
+
+                // $verificationUrl = URL::temporarySignedRoute(
+                //     'activate',
+                //     $expiresAt,
+                //     [
+                //         'id' => $user->id,
+                //         'token' => $verificationToken
+                //     ]
+                // );
 
                 if ($user && $profile) {
                     DB::commit();
-                    $this->temail($request->email_id, $request->full_name, $msg, $temp_id);
+                    Mail::to($user->email_id)->send(new SendUserCredentials($user, $request->password));
                     return response()->json(['status' => 1, 'msg' => 'User added successfully']);
                 }
             }

@@ -53,7 +53,7 @@
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email_id }}</td>
                                         <td>{{ $user->profile->mobile_no ?? '-' }}</td>
-                                        <td>{{ $user->profile->dob }}</td>
+                                        <td>{{ $user->profile->dob ?? ''}}</td>
                                         <td>
                                             <label>
                                                 <input type="radio" name="status_{{ $user->id }}" value="1"
