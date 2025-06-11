@@ -9,6 +9,7 @@ use App\Exports\MisExport;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Models\LoanBank;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -60,36 +61,83 @@ class MisController extends Controller
     }
 
 
-    public function store(Request $request)
+   public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'contact' => 'required|string|max:255',
-            'office_contact' => 'required|string|max:255',
-            'product_type' => 'required|string|max:255',
-            'bank_name' => 'required|string|max:255',
-            'occupation' => 'required|string|max:255',
-            'branch_name' => 'required|string|max:255',
-            'amount' => 'required|numeric',
-            'address' => 'required|string',
-            'city' => 'required|string|max:255',
-            'office_address' => 'nullable|string|max:255',
-            'bm_name' => 'nullable|string|max:255',
-            'login_date' => 'nullable|date',
-            'status' => 'nullable|string|in:open,processing,closed', // adjust options as needed
-            'in_principle' => 'nullable|in:yes,no',
-            'remark' => 'nullable|string',
-            'legal' => 'nullable|string',
-            'valuation' => 'nullable|string',
-            'leads' => 'nullable|string',
-            'file_work' => 'nullable|string',
-        ]);
+        // 1️⃣  Log the raw incoming payload.
+        Log::info('MIS::store – incoming request', $request->all());
 
-        MIS::create($validatedData);
+        try {
+            // 2️⃣  Validate – will throw ValidationException on failure.
+            $validatedData = $request->validate([
+                'name'            => 'required|string|max:255',
+                'email'           => 'required|email|max:255',
+                'contact'         => 'required|string|max:255',
+                'office_contact'  => 'nullable|string|max:255',
+                'product_type'    => 'required|string|max:255',
+                'bank_name'       => 'required|string|max:255',
+                'occupation'      => 'required|string|max:255',
+                'branch_name'     => 'required|string|max:255',
+                'amount'          => 'required|numeric',
+                'address'         => 'required|string',
+                'city'            => 'required|string|max:255',
+                'office_address'  => 'nullable|string|max:255',
+            ]);
 
-        return response()->json(['status' => 'success', 'message' => 'Record added successfully!']);
+            Log::info('MIS::store – validation passed', $validatedData);
+
+            // 3️⃣  Persist inside a transaction so both inserts succeed/fail together.
+            DB::beginTransaction();
+
+            // Insert into mis table.
+            $misId = DB::table('mis')->insertGetId($validatedData);
+            Log::info('MIS::store – inserted into mis table', ['id' => $misId]);
+
+            // Insert into company_bank_details table.
+            DB::table('company_bank_details')->insert([
+                'bank_name'  => $validatedData['bank_name'],
+                'id'     => $misId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            Log::info('MIS::store – inserted into company_bank_details', ['id' => $misId]);
+
+            DB::commit();
+
+            // 4️⃣  Return success JSON.
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Record added successfully!',
+                'id'  => $misId,
+            ], 201);
+
+        } catch (ValidationException $e) {
+
+            // 5️⃣  Log and return validation errors.
+            Log::warning('MIS::store – validation failed', ['errors' => $e->errors()]);
+
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Validation errors occurred.',
+                'errors'  => $e->errors(),
+            ], 422);
+
+        } catch (\Throwable $e) {
+
+            // 6️⃣  Roll back, log and return unexpected errors.
+            DB::rollBack();
+
+            Log::error('MIS::store – unexpected error', [
+                'message' => $e->getMessage(),
+                'trace'   => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Something went wrong while saving the record.',
+            ], 500);
+        }
     }
+
     public function edit($id)
     {
         $misRecord = MIS::findOrFail($id);
