@@ -36,7 +36,7 @@ All Users
                     <th>Name</th>
                     <th>Email</th>
                     <th>Contact</th>
-                    <th>Action</th>
+                    <th>Message</th>
                 </tr>
             </thead>
             <tbody>
@@ -46,9 +46,7 @@ All Users
                         <td>{{ $enquiry->name }}</td>
                         <td>{{ $enquiry->email }}</td>
                         <td>{{ $enquiry->contact }}</td>
-                        <td>
-                            <a href="#" class="btn btn-success">view</a>
-                        </td>
+                        <td>{{ $enquiry->message }}</td>
                     </tr>
                 @endforeach
             </tbody>

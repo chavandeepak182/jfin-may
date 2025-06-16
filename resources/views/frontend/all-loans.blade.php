@@ -170,7 +170,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         $(document).ready(function() {
@@ -222,45 +222,35 @@
         });
 
         // Delete loan function with confirmation
-        function deleteLoan(loanId) {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'You won\'t be able to revert this!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "{{ route('deleteLoan') }}", // Adjust the route for deletion
-                        method: "POST",
-                        data: {
-                            '_token': '{{ csrf_token() }}',
-                            'loan_id': loanId,
-                        },
-                        success: function(response) {
-                            Swal.fire(
-                                'Deleted!',
-                                'Your loan has been deleted.',
-                                'success'
-                            ).then(function() {
-                                // Optionally reload table after deletion
-                                reloadLoansTable();
-                            });
-                        },
-                        error: function(response) {
-                            Swal.fire(
-                                'Error!',
-                                'There was an issue deleting the loan.',
-                                'error'
-                            );
-                        }
-                    });
-                }
-            });
-        }
+       function deleteLoan(loanId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "{{ route('deleteLoan') }}",
+                    method: "POST",
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        'loan_id': loanId
+                    },
+                    success: function(response) {
+                        Swal.fire('Deleted!', 'Loan has been deleted.', 'success')
+                        .then(() => location.reload());
+                    },
+                    error: function() {
+                        Swal.fire('Error!', 'There was an error deleting the loan.', 'error');
+                    }
+                });
+            }
+        });
+    }
 
         // Function to reload DataTable (after AJAX updates)
         function reloadLoansTable() {

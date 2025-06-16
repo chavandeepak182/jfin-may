@@ -175,6 +175,8 @@ Route::get('admin/disbursed-loans', [LoanApplicationController::class, 'disburse
 Route::get('admin/pending-loans', [LoanApplicationController::class, 'pendingLoans'])->name('pendingLoans');
 Route::get('admin/approved-loans', [LoanApplicationController::class, 'approved'])->name('approvedLoans');
 Route::get('admin/rejected-loans', [LoanApplicationController::class, 'rejected'])->name('rejectedLoans');
+Route::get('/admin/trashed-loans', [LoanApplicationController::class, 'trashedLoans'])->name('trashed.loans');
+Route::post('/admin/restoreLoan', [LoanApplicationController::class, 'restore'])->name('restoreLoan');
 
 //loan agent
 Route::get('agent/inprocess-loans', [LoanApplicationController::class, 'agentInprocess'])->name('agent.inprocess.loans');
