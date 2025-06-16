@@ -652,7 +652,7 @@ class AdminController extends Controller
             }
 
             // Handle referral code (if any)
-            $loanReferenceId = Str::upper(Str::random(8));
+             $loanReferenceId = $this->generateLoanReferenceId();
             $referralUserId = null;
 
             if (!empty($validated['referral_code'])) {
