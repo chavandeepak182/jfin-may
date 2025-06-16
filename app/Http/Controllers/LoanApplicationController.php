@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
 use App\Services\CreditScoreService;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class LoanApplicationController extends Controller
@@ -769,7 +770,7 @@ class LoanApplicationController extends Controller
             // Create new loan
             $loan = new Loan();
             $loan->user_id = $userId;
-            $loan->loan_reference_id = Str::upper(Str::random(8)); // Generate unique reference ID
+            $loan->loan_reference_id = $this->generateLoanReferenceId(); // Generate unique reference ID
             $loan->loan_category_id = $validated['loan_category_id'];
             $loan->bank_id = $validated['bank_id'];
             $loan->status = 'in process';
@@ -1125,7 +1126,7 @@ class LoanApplicationController extends Controller
             'referral_code' => 'nullable|string|max:50',
         ]);
 
-        $loanReferenceId = Str::upper(Str::random(8));
+        $loanReferenceId = $this->generateLoanReferenceId();
         $referralUserId = null;
 
         if (!empty($validated['referral_code'])) {
@@ -1143,7 +1144,7 @@ class LoanApplicationController extends Controller
             // First-time creation
             $loan = Loan::create([
                 'user_id' => $userId,
-                'loan_reference_id' => Str::upper(Str::random(8)),
+                'loan_reference_id' => $loanReferenceId,
                 'loan_category_id' => $loan_category_id,
                 'bank_id' => $bank_id,
                 'amount' => $validated['amount'],
@@ -1151,6 +1152,7 @@ class LoanApplicationController extends Controller
                 'referral_user_id' => $referralUserId,
                 'status' => 'in process',
             ]);
+            Session::put('loan_reference_id', $loanReferenceId);
             Session::put('current_loan_id', $loan->loan_id);
         } else {
             $existingLoan->update([
@@ -1160,11 +1162,18 @@ class LoanApplicationController extends Controller
                 'tenure' => $validated['tenure'],
                 'referral_user_id' => $referralUserId,
             ]);
+            Session::put('loan_reference_id', $loanReferenceId);
             Session::put('current_loan_id', $existingLoan->loan_id);
         }
 
         Session::put('is_loan', true);
     }
+    protected function generateLoanReferenceId()
+{
+    $latestLoan = Loan::orderBy('loan_id', 'desc')->first();
+    $nextNumber = $latestLoan ? $latestLoan->loan_id + 1 : 1;
+    return 'JFIN' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+}
 
 
 
@@ -1198,7 +1207,7 @@ class LoanApplicationController extends Controller
             $loan = Loan::updateOrCreate(
                 ['user_id' => $userId],
                 [
-                    'loan_reference_id' => Str::upper(Str::random(8)),
+                    'loan_reference_id' => session('loan_reference_id') ?? $this->generateLoanReferenceId(),
                     'loan_category_id' => $request->loan_category_id,
                     'bank_id' => $request->bank_id,
                     'status' => 'in process',
@@ -1641,4 +1650,59 @@ class LoanApplicationController extends Controller
 
         return $recentLoans;
     }
+    public function destroy(Request $request)
+{
+    $loanId = $request->loan_id;
+    $loan = Loan::find($loanId);
+
+    if ($loan) {
+        $loan->delete(); // Soft delete
+        return response()->json(['message' => 'Loan soft deleted successfully.']);
+    } else {
+        return response()->json(['error' => 'Loan not found.'], 404);
+    }
+}
+public function trashedLoans(Request $request)
+{
+    $trashedLoans = \App\Models\Loan::onlyTrashed()
+        ->with([
+            'user.profile.cityRelation',
+            'loanCategory',
+            'bankDetails'
+        ])
+        ->whereNotNull('loan_reference_id')
+        ->orderBy('deleted_at', 'desc')
+        ->paginate(10);
+
+    $trashedLoans->getCollection()->transform(function ($loan) {
+        return [
+            'loan_id' => $loan->loan_id,
+            'amount' => $loan->amount,
+            'tenure' => $loan->tenure,
+            'loan_reference_id' => $loan->loan_reference_id,
+            'user_name' => $loan->user->name ?? null,
+            'status' => $loan->status,
+            'city' => $loan->user->profile->cityRelation->city ?? null,
+            'loan_category_name' => $loan->loanCategory->category_name ?? null,
+            'bank_name' => $loan->bankDetails->bank_name ?? null,
+            'agent_action' => $loan->agent_action,
+        ];
+    });
+
+    return view('frontend.trashed-loans', ['loans' => $trashedLoans]);
+}
+public function restore(Request $request)
+{
+    $loanId = $request->loan_id;
+
+    $loan = Loan::withTrashed()->find($loanId);
+
+    if (!$loan) {
+        return response()->json(['message' => 'Loan not found.'], 404);
+    }
+
+    $loan->restore();
+
+    return response()->json(['message' => 'Loan restored successfully.']);
+}
 }

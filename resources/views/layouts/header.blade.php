@@ -275,6 +275,7 @@
                         <a class="collapse-item" href="{{ route('loans.index') }}">All</a>
                         <a class="collapse-item" href="{{ route('pendingLoans') }}">Pending Assign</a>
                         <a class="collapse-item" href="{{ route('inprocess.loans') }}">In Process Loans</a>
+                        <a class="collapse-item" href="{{ route('trashed.loans') }}">Trashed Loans</a>
                         {{-- <a class="collapse-item" href="{{ route('approvedLoans')}}">Approved Loans</a>
                         <a class="collapse-item" href="{{ route('disbursed.loans')}}">Disbursed Loans</a>
                         <a class="collapse-item" href="{{ route('rejectedLoans')}}">Rejected Loans</a> --}}

@@ -107,7 +107,7 @@
                 </div>
             </div>
 
-            <a class="btn-search btn btn-danger rounded-1 py-2 px-4 mt-3" href="{{ route('loan.form') }}">APPLY NOW <i class="fa fa-arrow-right"></i></a>
+            <a class="btn-search btn btn-danger rounded-1 py-2 px-4 mt-3" href="{{ url('/login') }}">APPLY NOW <i class="fa fa-arrow-right"></i></a>
         </div>
     </div>
 </div>

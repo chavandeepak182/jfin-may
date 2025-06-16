@@ -23,7 +23,7 @@ class MisController extends Controller
     }
     public function exportPDF()
     {
-        $misRecords = MIS::all();
+        $misRecords = Mis::all();
         $pdf = PDF::loadView('mis.export_pdf', compact('misRecords'));
         return $pdf->download('mis_records.pdf');
     }
