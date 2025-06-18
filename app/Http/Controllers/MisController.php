@@ -81,6 +81,15 @@ class MisController extends Controller
                 'address'         => 'required|string',
                 'city'            => 'required|string|max:255',
                 'office_address'  => 'nullable|string|max:255',
+                'bm_name'         => 'nullable|string|max:255',
+                'login_date'      => 'nullable|date',
+                'status'          => 'nullable|string|max:255',
+                'in_principle'    => 'nullable|string|max:255',
+                'remark'          => 'nullable|string',
+                'legal'           => 'nullable|string|max:255',
+                'valuation'       => 'nullable|string|max:255',
+                'leads'           => 'nullable|string|max:255',
+                'file_work'       => 'nullable|string|max:255',
             ]);
 
             Log::info('MIS::store – validation passed', $validatedData);
