@@ -147,46 +147,46 @@ class MisController extends Controller
 public function update(Request $request, $id)
     {
         // Log raw request data
-    Log::info('MIS Update Request Data:', $request->all());
+        Log::info('MIS Update Request Data:', $request->all());
 
-    $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'contact' => 'required|string|max:255',
-            'office_contact' => 'required|string|max:255',
-            'product_type' => 'required|string|max:255',
-            'bank_name' => 'required|string|max:255',
-            'occupation' => 'required|string|max:255',
-            'branch_name' => 'required|string|max:255',
-            'amount' => 'required|numeric',
-            'address' => 'required|string',
-            'office_address' => 'nullable|string|max:255',
-            'city' => 'required|string|max:255',
-    
-        // Additional fields
-        'bm_name' => 'nullable|string|max:255',
-        'login_date' => 'nullable|date',
-        'status' => 'nullable|string|max:255',
-        'in_principle' => 'nullable|string|max:255',
-        'remark' => 'nullable|string',
-        'legal' => 'nullable|string|max:255',
-        'valuation' => 'nullable|string|max:255',
-        'leads' => 'nullable|string|max:255',
-        'file_work' => 'nullable|string|max:255',
-    ]);
+        $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'contact' => 'required|string|max:255',
+                'office_contact' => 'nullable|string|max:255',
+                'product_type' => 'required|string|max:255',
+                'bank_name' => 'required|string|max:255',
+                'occupation' => 'required|string|max:255',
+                'branch_name' => 'required|string|max:255',
+                'amount' => 'required|numeric',
+                'address' => 'required|string',
+                'office_address' => 'nullable|string|max:255',
+                'city' => 'required|string|max:255',
+        
+            // Additional fields
+            'bm_name' => 'nullable|string|max:255',
+            'login_date' => 'nullable|date',
+            'status' => 'nullable|string|max:255',
+            'in_principle' => 'nullable|string|max:255',
+            'remark' => 'nullable|string',
+            'legal' => 'nullable|string|max:255',
+            'valuation' => 'nullable|string|max:255',
+            'leads' => 'nullable|string|max:255',
+            'file_work' => 'nullable|string|max:255',
+        ]);
 
-    // Log validated data
-    Log::info('Validated Data for MIS Update:', $validatedData);
+        // Log validated data
+        Log::info('Validated Data for MIS Update:', $validatedData);
 
         $misRecord = MIS::findOrFail($id);
 
-    // Log existing record before update
-    Log::info('Original MIS Record:', $misRecord->toArray());
+        // Log existing record before update
+        Log::info('Original MIS Record:', $misRecord->toArray());
 
         $misRecord->update($validatedData);
 
-    // Log updated record
-    Log::info('Updated MIS Record:', $misRecord->fresh()->toArray());
+        // Log updated record
+        Log::info('Updated MIS Record:', $misRecord->fresh()->toArray());
 
         return redirect()->route('mis.index')->with('success', 'Record updated successfully');
     }
