@@ -47,7 +47,7 @@ class PropertyController extends Controller
 
         // Handle Amenities
         $locality = DB::table('localities')->where('id', $request->localitie)->value('name');
-        $proerty_status = DB::table('proerty_status')->where('id', $request->localitie)->value('status_name');
+        $property_status = DB::table('property_status')->where('id', $request->localitie)->value('status_name');
         $amenities = $request->input('amenities', []); // Default to an empty array if null
         $p->facilities = implode(', ', $amenities);
 
@@ -57,7 +57,7 @@ class PropertyController extends Controller
         $p->area = $request->area;
         $p->builtup_area = $request->builtup_area;
         $p->localities = $locality;
-        $P->proerty_status = $proerty_status;
+        $p->property_status = $property_status;
         $p->beds = $request->beds;
         $p->baths = $request->baths;
         $p->balconies = $request->balconies;
