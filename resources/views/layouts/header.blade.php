@@ -488,7 +488,7 @@
                         <h6 class="collapse-header">Eligibility:</h6>
                         <a class="collapse-item" href="{{ route('eligibilityCriteria') }}">Eligibility Criteria</a>
                         <a class="collapse-item" href="{{ route('standalone.self') }}">Self(for admin)</a>
-                        <a class="collapse-item" href="#">Salaried(for admin)</a>
+                        <a class="collapse-item" href="{{ route('standalone.salaried') }}">Salaried(for admin)</a>
                     </div>
                 </div>
             </li>

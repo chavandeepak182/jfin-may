@@ -284,6 +284,9 @@ Route::post('admin/insertUser',[UsersController::class,'insertUser'])->name('ins
     Route::post('/calculate-eligibility-standalone', [EligibilityCriteriaController::class, 'calculateStandaloneEligibility'])->name('calculateEligibilitystandalone');
     Route::get('/standalone-self', [EligibilityCriteriaController::class, 'showStandaloneForm'])
     ->name('standalone.self');
+
+    Route::get('/standalone-salaried', [EligibilityCriteriaController::class, 'showStandaloneSalariedForm'])
+    ->name('standalone.salaried');  
 });
 
 //admin user profile
@@ -349,7 +352,7 @@ Route::middleware('isPartner')->group(function () {
     Route::get('/editProperty/{property_id}', [PropertyController::class, 'editProperty'])->name('editProperty');
     Route::post('/updatePropertie', [PropertyController::class, 'updatePropertie'])->name('updatePropertie');
     Route::post('/deletePropertie', [PropertyController::class, 'deletePropertie'])->name('deletePropertie');
-    // Route::post('/activate', [PropertyController::class, 'activate'])->name('activate');
+    Route::post('/activate', [PropertyController::class, 'activate'])->name('activate');
 
     //profile
     Route::get('/partner/profile', [ProfileController::class, 'showPartnerProfile'])->name('partner.profile');
