@@ -617,7 +617,7 @@ class UsersController extends Controller
 
     public function updateDocuments(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $userId = session('user_id'); // Retrieve user ID from session
 
         if (!$userId) {

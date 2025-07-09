@@ -564,6 +564,18 @@ public function showStandaloneForm()
     
         return view('admin.calculator.standalone_self', compact('data'));
     }
+
+    public function showStandaloneSalariedForm()
+    {
+        $userSalary = 50000;  // Replace with actual logic to get user's salary
+
+        // Fetch eligible banks based on salary
+        $data['foirBanks'] = Foir::where('min_salary', '<=', $userSalary)
+                                ->where('max_salary', '>=', $userSalary)
+                                ->get();
+    
+        return view('admin.calculator.salaried-calculator', compact('data'));
+    }
 public function calculateStandaloneEligibility(Request $request)
 {
     $request->validate([
