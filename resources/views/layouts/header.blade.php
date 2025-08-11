@@ -243,13 +243,12 @@
                  if($role_id == 4) {
             ?>
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-users custom-icon"></i>
-                    <span>Users</span>
-                </a>
-                <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers" data-parent="#accordionSidebar">
+           <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.customers') }}">
+                        <i class="fas fa-users custom-icon"></i>
+                        <span>Users</span>
+                    </a>
+                <!-- <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Users Components:</h6>
                         <a class="collapse-item {{ Request::segment(1) == 'admin' && Request::segment(2) == 'allUsers' ? 'active' : '' }}"
@@ -259,18 +258,17 @@
                         <a class="collapse-item {{ Request::segment(1) == 'partner' && Request::segment(2) == 'allPartners' ? 'active' : '' }}"
                             href="{{ route('allPartners') }}">Channel Partner</a>
                     </div>
-                </div>
+                </div> -->
             </li>
 
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLoans"
-                    aria-expanded="true" aria-controls="collapseLoans">
-                    <i class="fas fa-fw fa-folder custom-icon"></i>
-                    <span>Loans</span>
-                </a>
+                    <a class="nav-link" href="{{ route('admin.loans') }}">
+                        <i class="fas fa-fw fa-folder custom-icon"></i>
+                        <span>Loans</span>
+                    </a>
                 <div id="collapseLoans" class="collapse" aria-labelledby="headingLoan" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                    <!-- <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Loans Components:</h6>
                         <a class="collapse-item" href="{{ route('loans.index') }}">All</a>
                         <a class="collapse-item" href="{{ route('pendingLoans') }}">Pending Assign</a>
@@ -279,7 +277,7 @@
                         {{-- <a class="collapse-item" href="{{ route('approvedLoans')}}">Approved Loans</a>
                         <a class="collapse-item" href="{{ route('disbursed.loans')}}">Disbursed Loans</a>
                         <a class="collapse-item" href="{{ route('rejectedLoans')}}">Rejected Loans</a> --}}
-                    </div>
+                    </div> -->
                 </div>
             </li>
             <?php } ?>
@@ -308,13 +306,13 @@
 
             <?php    if($role_id == 4) { ?>
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProperty"
-                    aria-expanded="true" aria-controls="collapseLeads">
-                    <i class="fas fa-fw fa-home custom-icon"></i>
-                    <span>Property</span>
-                </a>
-                <div id="collapseProperty" class="collapse" aria-labelledby="headingLoan"
+            
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.property') }}">
+                        <i class="fas fa-fw fa-home custom-icon"></i>
+                        <span>Property</span>
+                    </a>
+                <!-- <div id="collapseProperty" class="collapse" aria-labelledby="headingLoan"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Property:</h6>
@@ -323,7 +321,7 @@
                         <a class="collapse-item" href="{{ route('addProperty') }}">Add Property</a>
                         <a class="collapse-item" href="{{ route('property_takers.index') }}">Property Taker</a>
                     </div>
-                </div>
+                </div> -->
             </li>
             <?php } ?>
             <?php    if($role_id == env('partnerRole_id')) { ?>
@@ -348,20 +346,20 @@
             <?php    if($role_id == 4) { ?>
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLeads"
-                    aria-expanded="true" aria-controls="collapseLeads">
+                    <a class="nav-link" href="{{ route('admin.listlead') }}">
                     <i class="fas fa-fw fa-tasks custom-icon"></i>
                     <span>Web Form & Leads</span>
                 </a>
-                <div id="collapseLeads" class="collapse" aria-labelledby="headingLoan"
+                
+                <!-- <div id="collapseLeads" class="collapse" aria-labelledby="headingLoan"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Web Form & Leads:</h6>
                         <a class="collapse-item" href="{{ route('enquiries.enquiryLead') }}">Enquiry Leads</a>
-                        <!-- <a class="collapse-item" href="#">Property Leads</a> -->
+                        
                         <a class="collapse-item" href="/admin/leads">Leads</a>
                     </div>
-                </div>
+                </div> -->
             </li>
 
             <?php } ?>
@@ -370,19 +368,18 @@
             <!-- Nav Item - Pages Collapse Menu -->
             <?php    if($role_id == 4) { ?>
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReferral"
-                    aria-expanded="true" aria-controls="collapseReferral">
+                <a class="nav-link collapsed" href="{{ route('admin.allreferral') }}">
                     <i class="fas fa-rupee-sign custom-icon"></i>
                     <span>Referral</span>
                 </a>
                 <div id="collapseReferral" class="collapse" aria-labelledby="headingLoan"
                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                    <!-- <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Referral Management:</h6>
                         <a class="collapse-item" href="{{ route('admin.withdrawal.requests') }}">Reddem Requests</a>
                         <a class="collapse-item" href="{{ route('referral_earnings') }}">Referral Earnings</a>
                         <a class="collapse-item" href="{{ route('admin.transactions') }}">Transaction History</a>
-                    </div>
+                    </div> -->
                 </div>
             </li>
             <?php } ?>
@@ -425,22 +422,22 @@
             <?php    if($role_id == 4) { ?>
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTools"
-                    aria-expanded="true" aria-controls="collapseTools">
+                <a class="nav-link collapsed" href="{{ route('admin.bank') }}">
                     <i class="fas fa-fw fa-wrench custom-icon"></i>
                     <span>Tools</span>
+                    
                 </a>
-                <div id="collapseTools" class="collapse" aria-labelledby="headingLoan"
+                <!-- <div id="collapseTools" class="collapse" aria-labelledby="headingLoan"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Tools:</h6>
-                        <!-- <a class="collapse-item" href="{{ route('allbanks') }}">Tied Up Banks</a> -->
+                        
                         <a class="collapse-item" href="{{ route('loanbanks') }}">Loan Banks</a>
-                        <!-- <a class="collapse-item" href="{{ route('sanctioncalculator') }}">Eligiblity Calculation</a> -->
+                        
                         <a class="collapse-item" href="{{ route('mis.index') }}">MIS</a>
-                        <!-- <a class="collapse-item" href="buttons.html">Invoice</a> -->
+                        
                     </div>
-                </div>
+                </div> -->
             </li>
 
             <!-- Divider -->

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LeadController extends Controller {
 
@@ -23,6 +24,16 @@ class LeadController extends Controller {
         }
         
         return view('leads.index', compact('leads'));
+    }
+
+    // count dashboard
+
+    public function leadlist()
+    {
+        $enquiries = DB::table('enquiries')->count();
+         $leads = DB::table('leads')->count();
+
+        return view('admin.admin-leads', compact('enquiries','leads'));
     }
     public function create() {
         // Check if the user has role_id 4 (admin) or 2 (agent)

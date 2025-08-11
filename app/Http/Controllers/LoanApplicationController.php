@@ -36,6 +36,11 @@ class LoanApplicationController extends Controller
     //     $this->creditScoreService = $creditScoreService;
     // }
 
+
+    // admin loan link
+   
+
+
     public function index(Request $request)
     {
         // Step 1: Build the base query
@@ -145,6 +150,18 @@ class LoanApplicationController extends Controller
             'sanctionLetter' => $loan->sanction_letter,
         ]);
     }
+
+
+    // count dashboard
+
+    public function loanlist()
+{
+    $totalLoans = DB::table('loans')->count();
+     $inProcessLoans = DB::table('loans')->where('status', 'in process')->count();
+      $pendingLoans = DB::table('loans')->where('status', 'document pending')->count();
+      $trashedloans = DB::table('loans')->where('status', 'trashed')->count();
+    return view('admin.admin-loans', compact('totalLoans','inProcessLoans','pendingLoans','trashedloans'));
+}
     public function edit($id)
     {
         $loan = Loan::with(['user', 'loanCategory'])->where('loan_id', $id)->first();

@@ -29,6 +29,18 @@ class UsersController extends Controller
         return view('admin.addUser');
     }
 
+
+    // dshboard all user count
+    public function adminCustomer()
+    {
+        $totalCustomers = DB::table('users')->where('role_id', 1)->count();
+        $totalOfficers = DB::table('users')->where('role_id', 2)->count();
+        $totalCp = DB::table('users')->where('role_id', 3)->count();
+        return view('admin.admin-users', compact('totalCustomers','totalOfficers', 'totalCp'));
+    }
+    
+
+
     public function allUsers()
     {
         $users = User::with('profile') // Eager load profile relationship

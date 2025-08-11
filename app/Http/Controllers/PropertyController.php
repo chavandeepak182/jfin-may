@@ -108,6 +108,20 @@ class PropertyController extends Controller
     }
 }
 
+// count dashboard
+public function propertylist()
+{
+    $properties = DB::table('properties')->count();
+    $totalPendingProperties = DB::table('properties')
+    ->where('is_active', 0)
+    ->count();
+    $totalPropertyTakers = DB::table('property_takers')->count();
+
+
+     
+    return view('admin.admin-property', compact('properties','totalPendingProperties','totalPropertyTakers'));
+}
+
 /**
  * Handle file uploads for single files.
  * 

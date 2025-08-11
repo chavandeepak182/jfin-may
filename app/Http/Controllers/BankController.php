@@ -28,6 +28,25 @@ class BankController extends Controller
         return view('property.addProperty',compact('data'));
     }
 
+
+    // count dashboard
+    public function loanbankslist()
+{
+    $totalloanbank = DB::table('loan_bank_details')->count();
+    $totalmis = DB::table('mis')->count();
+    
+
+
+     
+    return view('admin.admin-tool', compact('totalloanbank','totalmis'));
+}
+
+    public function listreferral()
+{
+    return view('admin.admin-referral');
+}
+
+
     public function insertBank(Request $request)
     {  
         DB::beginTransaction();
