@@ -27,6 +27,13 @@ use App\Http\Controllers\NotificationController;
 use Maatwebsite\Excel\Facades\Excel;
 
 require __DIR__.'/auth.php';
+// dashbord path
+Route::get('/admin/customers', [UsersController::class, 'adminCustomer'])->name('admin.customers');
+Route::get('admin/loans-list', [LoanApplicationController::class, 'loanlist'])->name('admin.loans');
+Route::get('admin/property', [PropertyController::class, 'propertylist'])->name('admin.property');
+Route::get('admin/leadslist', [LeadController::class, 'leadlist'])->name('admin.listlead');
+Route::get('admin/banklist', [BankController::class, 'loanbankslist'])->name('admin.bank');
+Route::get('admin/referrallist', [BankController::class, 'listreferral'])->name('admin.allreferral');
 
 
 

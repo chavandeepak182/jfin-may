@@ -35,6 +35,8 @@ class PartnerController extends Controller
     return view('partner.allPartners', compact('data'));
 }
 
+// 
+
 
     public function insertPartner(Request $request)
     {   
