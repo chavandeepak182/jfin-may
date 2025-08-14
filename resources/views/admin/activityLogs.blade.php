@@ -7,6 +7,17 @@ JFS | Activity Logs
 
 @section('content')
 @parent
+<style>
+    #wrapper #content-wrapper #content{
+
+        background-color: #f8f9fc;
+        
+    }
+    .topbar {
+    height: 4.375rem;
+    background-color:#000;
+}
+</style>
 <!-- Breadcrumbs -->
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -22,7 +33,7 @@ JFS | Activity Logs
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
 
          <div style="padding: 1%"> 
-            <h1><center>All Activity Logs</center></h1> 
+            <!-- <h1><center>All Activity Logs</center></h1>  -->
                  <!-- DataTales Example -->
                  <div class="card shadow mb-4">
                         <div class="card-header py-3">

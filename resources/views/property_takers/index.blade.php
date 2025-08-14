@@ -17,23 +17,60 @@ JFS | Property Takers
 <div class="card shadow mb-4">
     <!-- Breadcrumbs -->
     <div class="card-header py-3">
-        <div class="d-flex justify-content-between align-items-center">
-            <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb" class="d-flex align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <!-- Left side: Breadcrumb -->
+            <nav aria-label="breadcrumb" class="d-flex align-items-center mb-2 mb-md-0">
                 <ol class="breadcrumb m-0 bg-transparent">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Property Takers</li>
                 </ol>
             </nav>
-            <a href="{{ route('property_takers.create') }}" class="btn btn-primary float-right"><i class="fa fa-plus"></i> Add Taker</a>
+
+            <!-- Middle: Two custom buttons -->
+            <div class="d-flex align-items-center gap-2 mb-2 mb-md-0">
+                <!-- All Employee -->
+                <a href="{{ route('pendingProperties') }}" style="text-decoration: none;">
+                    <div class="custom-btn" style="height:40px; width:150px; 
+                                background: linear-gradient(135deg, #6a11cb, #2575fc); 
+                                border-radius:12px; 
+                                display:flex; align-items:center; justify-content:center;
+                                color:white; font-weight:bold; 
+                                box-shadow:0 4px 15px rgba(0,0,0,0.2);
+                                transition:transform 0.2s ease, box-shadow 0.2s ease;">
+                        <span>Pending Property </span>
+                    </div>
+                </a>
+
+                <!-- All Channel Partner -->
+                <a href="{{ route('allProperties') }}"  style="text-decoration: none;">
+                    <div class="custom-btn" style="height:40px; width:160px; 
+                                background: linear-gradient(135deg, #ff512f, #dd2476); 
+                                border-radius:12px; 
+                                display:flex; align-items:center; justify-content:center;
+                                color:white; font-weight:bold; 
+                                box-shadow:0 4px 15px rgba(0,0,0,0.2);
+                                transition:transform 0.2s ease, box-shadow 0.2s ease;">
+                        <span>All Property</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Right side: Add Taker button -->
+            <a href="{{ route('property_takers.create') }}" class="btn btn-primary">
+                <i class="fa fa-plus"></i> Add Taker
+            </a>
         </div>
     </div>
+
+    <!-- Hover Effect -->
+    
+
     <div class="card-body">
         <div class="table-responsive" id="property_takers_table">
             <table id="example" class="table" style="width:100%">
                 <thead>
                     <tr>
-                        <th>#</th> <!-- Index Column -->
+                        <th>#</th>
                         <th>Builder Name</th>
                         <th>Project Name</th>
                         <th>Property Type</th>
@@ -46,7 +83,7 @@ JFS | Property Takers
                 <tbody>
                     @foreach($propertyTakers as $index => $propertyTaker)
                     <tr>
-                        <td>{{ $propertyTakers->firstItem() + $index }}</td> <!-- Serial Number -->
+                        <td>{{ $propertyTakers->firstItem() + $index }}</td>
                         <td>{{ $propertyTaker->builder_name }}</td>
                         <td>{{ $propertyTaker->project_name }}</td>
                         <td>{{ $propertyTaker->property_type }}</td>
@@ -73,7 +110,7 @@ JFS | Property Takers
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>#</th> <!-- Index Column -->
+                        <th>#</th>
                         <th>Builder Name</th>
                         <th>Project Name</th>
                         <th>Property Type</th>
@@ -90,6 +127,7 @@ JFS | Property Takers
         </div>
     </div>
 </div>
+
 
 @endsection
 

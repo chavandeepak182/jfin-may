@@ -25,12 +25,22 @@ MIS Dashboard
 <div class="fixed-header">
     <div class="card-header py-3">
         <div class="d-flex justify-content-between align-items-center">
-            <nav aria-label="breadcrumb" class="d-flex align-items-center">
+            <!-- <nav aria-label="breadcrumb" class="d-flex align-items-center">
                 <ol class="breadcrumb m-0 bg-transparent">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active" aria-current="page">MIS Dashboard</li>
                 </ol>
-            </nav>
+            </nav> -->
+            <a href="{{ route('loanbanks') }}"  class="text-decoration-none">
+                        <div class="custom-btn" style="height:50px; width:190px; 
+                            background: linear-gradient(135deg, #ff512f, #dd2476); 
+                            border-radius:12px; display:flex; align-items:center; 
+                            justify-content:center; color:white; font-weight:bold; 
+                            box-shadow:0 4px 15px rgba(0,0,0,0.2);
+                            transition:transform 0.2s ease, box-shadow 0.2s ease;">
+                            <span>All LOAN BANK </span>
+                        </div>
+                    </a>
 
             <div class="d-flex ms-auto">
                 <form method="GET" action="{{ route('mis.index') }}" class="d-flex align-items-center">

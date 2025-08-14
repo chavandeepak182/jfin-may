@@ -7,159 +7,147 @@ JFS | Company tied up bank details
 
 @section('content')
 @parent
+<style>
+    #wrapper #content-wrapper #content{
+
+        background-color: #f8f9fc;
+        
+    }
+    .topbar {
+    height: 4.375rem;
+    background-color:#000;
+}
+</style>
+
 <!-- Breadcrumbs -->
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('partnerDashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Loan tied up Banks</li>
-    </ol>
-</nav>
+<div class="card shadow mb-4">
+    <!-- Header with Breadcrumb + Button -->
+    <div class="card-header py-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="d-flex align-items-center">
+                <ol class="breadcrumb m-0 bg-transparent">
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('partnerDashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Loan tied up Banks</li>
+                </ol>
+            </nav>
 
-<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
-<link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet"/>
-
-<!-- export button -->
-<link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
-
-         <div style="padding: 1%"> 
-            <h1><center>All Loan Tied Up Banks</center></h1> 
-                 <!-- DataTales Example -->
-                 <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Bank List</h6>
-                            <div class="d-flex justify-content-end">
-                                <a class="btn btn-primary" data-bs-toggle="modal" href="#addBankView" ><i class="fa fa-plus"></i>  Add Bank</a>
-                            </div>
-                        </div>
-                
-
-                        <div class="card-body">
-                            <div class="table-responsive" id="user_table">
-                         
-                            <table id="example" class="table table-striped" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Bank Name</th>
-                                        <th>IFSC</th>
-                                        <th>Branch Name</th>
-                                        <th>Manager Name</th>
-                                        <th>Manager Number</th>
-                                        <th>Bank Address</th>
-                                        <th>Action</th> 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                        @foreach($data['loanbanks'] as $p)
-
-                                        <tr>
-                                            <td>
-                                                {{$p->bank_name}}
-                                            </td>   
-                                            <td>
-                                                {{ $p->ifsc_code }}
-                                            </td>  
-                                           
-                                            <td>
-                                                 {{$p->branch_name}}
-                                            </td> 
-
-                                            <td>
-                                                 {{$p->manager_name}}
-                                            </td> 
-
-                                           
-                                            <td>
-                                                 {{$p->manager_number}} 
-                                            </td> 
-
-                                            <td>
-                                                 {{$p->bank_address}} 
-                                            </td> 
-                                           
-                                            <td>
-                                                <a class="btn btn-primary btn-xs edit" title="Edit"href="{{ url('editBank/'.$p->bank_id) }}"><i class="fa fa-edit"></i></a> 
-                                                <button class="btn btn-danger btn-xs delete" title="Delete" data-userid="" onclick="deleteBank('{{$p->bank_id}}')"><i class="fa fa-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                </tbody>
-                                  
-                                <tfoot>
-                                    <tr>
-                                        <th>Bank Name</th>
-                                        <th>IFSC</th>
-                                        <th>Branch Name</th>
-                                        <th>Manager Name</th>
-                                        <th>Manager Number</th>
-                                        <th>Bank Address</th>
-                                        <th>Action</th> 
-                                    </tr>
-                                </tfoot>
-                            </table>
-                            <div class="float-right"> 
-                                {{ $data['loanbanks']->links() }}
-                            </div>
-                        </div>
-                </div>
+            <!-- Right side buttons -->
+            <div class="d-flex" style="gap: 500px;">
+                <a href="{{ route('mis.index') }}"class="text-decoration-none">
+                    <div class="custom-btn" style="height:50px; width:150px; 
+                        background: linear-gradient(135deg, #6a11cb, #2575fc); 
+                        border-radius:12px; display:flex; align-items:center; 
+                        justify-content:center; color:white; font-weight:bold; 
+                        box-shadow:0 4px 15px rgba(0,0,0,0.2);
+                        transition:transform 0.2s ease, box-shadow 0.2s ease;">
+                        <span>All MIS</span>
+                    </div>
+                </a>
+                    <a class="btn btn-primary" data-bs-toggle="modal" href="#addBankView">
+                <i class="fa fa-plus"></i> Add Bank
+            </a>
+        </div>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="addBankView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add New Bank</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <form class="user" id="addBank" method="post">
-                    @csrf   
+    <!-- Title -->
+    
+
+    <!-- Table Section -->
+    <div class="card-body">
+        <div class="d-flex justify-content-end mb-3">
+        
+
+        <div class="table-responsive" id="user_table">
+            <table id="example" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Bank Name</th>
+                        <th>IFSC</th>
+                        <th>Branch Name</th>
+                        <th>Manager Name</th>
+                        <th>Manager Number</th>
+                        <th>Bank Address</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($data['loanbanks'] as $p)
+                    <tr>
+                        <td>{{ $p->bank_name }}</td>
+                        <td>{{ $p->ifsc_code }}</td>
+                        <td>{{ $p->branch_name }}</td>
+                        <td>{{ $p->manager_name }}</td>
+                        <td>{{ $p->manager_number }}</td>
+                        <td>{{ $p->bank_address }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-xs edit" title="Edit" href="{{ url('editBank/'.$p->bank_id) }}">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <button class="btn btn-danger btn-xs delete" title="Delete" onclick="deleteBank('{{ $p->bank_id }}')">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Bank Name</th>
+                        <th>IFSC</th>
+                        <th>Branch Name</th>
+                        <th>Manager Name</th>
+                        <th>Manager Number</th>
+                        <th>Bank Address</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="float-right">
+                {{ $data['loanbanks']->links() }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Bank Modal -->
+<div class="modal fade" id="addBankView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Bank</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addBank" method="post">
+                    @csrf
                     <div class="row">
                         <div class="form-group col-lg-4">
-                            <label for="recipient-name" class="col-form-label">Bank Name:</label>
+                            <label>Bank Name:</label>
                             <input type="text" class="form-control" name="bank_name" required>
                         </div>
                         <div class="form-group col-lg-4">
-                            <label for="recipient-name" class="col-form-label">IFSC Code:</label>
+                            <label>IFSC Code:</label>
                             <input type="text" class="form-control" name="ifsc_code" required>
                         </div>
                         <div class="form-group col-lg-4">
-                            <label for="recipient-name" class="col-form-label">Branch Name:</label>
-                            <input type="text" class="form-control"  name="branch_name" required>
+                            <label>Branch Name:</label>
+                            <input type="text" class="form-control" name="branch_name" required>
                         </div>
-                    </div>    
-
-                    <div class="row">
-                        
-
-                        <div class="form-group col-lg-4">
-                            <label for="recipient-name" class="col-form-label">Manager Name:</label>
-                            <input type="text" class="form-control"  name="manager_name">
-                        </div>
-
-                        <div class="form-group col-lg-4">
-                            <label for="recipient-name" class="col-form-label">Bank Address:</label>
-                            <input type="text" class="form-control" id="address" name="bank_address">
-                        </div>
-                        <div class="form-group col-lg-4">
-                            <label for="recipient-name" class="col-form-label">Manager Number:</label>
-                            <input type="text" class="form-control" id="address" name="manager_number">
-                        </div>
-                       
                     </div>
 
-
-           
-                        <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                    <div class="row mt-2">
+                        <div class="form-group col-lg-4">
+                            <label>Manager Name:</label>
+                            <input type="text" class="form-control" name="manager_name">
                         </div>
-               
+                        <div class="for
 
-                </form>
-                </div>
-            </div>
-        </div>
             
 
 

@@ -20,5 +20,15 @@ class EligibilityExport implements FromCollection
     {
         return collect($this->data);
     }
+
+//     public function Eligiblelist()
+// {
+//     // Example queries if needed:
+//     // $leads = DB::table('leads')->count();
+//     // $totalmis = DB::table('mis')->count();
+
+//     return view('admin.allEligiblel'); // loads admin/Eligible.blade.php
+// }
+
     
 }

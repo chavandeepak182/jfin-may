@@ -45,6 +45,11 @@ class BankController extends Controller
 {
     return view('admin.admin-referral');
 }
+public function eligiblelist()
+{
+    $totaleligible = DB::table('eligiblity_criteria')->count();
+    return view('admin.admin-eligible' ,compact('totaleligible'));
+}
 
 
     public function insertBank(Request $request)

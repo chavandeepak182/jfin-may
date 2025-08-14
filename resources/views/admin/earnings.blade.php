@@ -7,13 +7,59 @@ JFS | Referral
 
 @section('content')
 @parent
+
+<style>
+    #wrapper #content-wrapper #content{
+
+        background-color: #f8f9fc;
+        
+    }
+    .topbar {
+    height: 4.375rem;
+    background-color:#000;
+}
+</style>
+
 <!-- Breadcrumbs -->
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Referral Earnings</li>
-    </ol>
-</nav>
+
+
+<div class="d-flex justify-content-between align-items-center">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="m-0 p-0">
+        <ol class="breadcrumb m-0 bg-transparent">
+            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Referral Earnings</li>
+        </ol>
+    </nav>
+
+    <!-- Buttons -->
+    <div class="d-flex" style="gap: 10px;margin-right:500px;">
+    <!-- All Referral Earning -->
+    <a href="{{ route('admin.withdrawal.requests') }}"  class="text-decoration-none">
+        <div class="custom-btn" style="height:50px; width:160px; 
+            background: linear-gradient(135deg, #6a11cb, #2575fc); 
+            border-radius:12px; display:flex; align-items:center; 
+            justify-content:center; color:white; font-weight:bold; 
+            box-shadow:0 4px 15px rgba(0,0,0,0.2);
+            transition:transform 0.2s ease, box-shadow 0.2s ease;">
+            <span>All Redeem Request</span>
+        </div>
+    </a>
+
+    <!-- All Transaction History -->
+    <a href="{{ route('admin.transactions') }}"  class="text-decoration-none">
+        <div class="custom-btn" style="height:50px; width:190px; 
+            background: linear-gradient(135deg, #ff512f, #dd2476); 
+            border-radius:12px; display:flex; align-items:center; 
+            justify-content:center; color:white; font-weight:bold; 
+            box-shadow:0 4px 15px rgba(0,0,0,0.2);
+            transition:transform 0.2s ease, box-shadow 0.2s ease;">
+            <span>All Transaction History</span>
+        </div>
+    </a>
+</div>
+
+</div>
 
 <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet"/>
@@ -22,7 +68,7 @@ JFS | Referral
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
 
          <div style="padding: 1%"> 
-            <h1><center>All Users Referral Earnings</center></h1> 
+            <!-- <h1><center>All Users Referral Earnings</center></h1>  -->
                  <!-- DataTales Example -->
                  <div class="card shadow mb-4">
                         <div class="card-header py-3">

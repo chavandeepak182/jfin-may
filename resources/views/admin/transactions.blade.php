@@ -21,21 +21,58 @@ JFS | Wallet Balance
             width: 100%;
         }
     }
+   
+    #wrapper #content-wrapper #content{
+
+        background-color: #f8f9fc;
+        
+    }
+    .topbar {
+    height: 4.375rem;
+    background-color:#000;
+}
+
 </style>
 <!-- Breadcrumbs -->
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Wallet Balance</li>
-    </ol>
-</nav>
+<div class="d-flex justify-content-between align-items-center">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Wallet Balance</li>
+            </ol>
+        </nav>
+                <div class="d-flex" style="gap: 10px;margin-right:500px">
+                    <!-- All Referral Earning -->
+                    <a href="{{ route('admin.withdrawal.requests') }}" class="text-decoration-none">
+                        <div class="custom-btn" style="height:50px; width:160px; 
+                            background: linear-gradient(135deg, #6a11cb, #2575fc); 
+                            border-radius:12px; display:flex; align-items:center; 
+                            justify-content:center; color:white; font-weight:bold; 
+                            box-shadow:0 4px 15px rgba(0,0,0,0.2);
+                            transition:transform 0.2s ease, box-shadow 0.2s ease;">
+                            <span>All Redeem Request</span>
+                        </div>
+                    </a>
 
+                    <!-- All Transaction History -->
+                    <a href="{{ route('referral_earnings') }}" " class="text-decoration-none">
+                        <div class="custom-btn" style="height:50px; width:190px; 
+                            background: linear-gradient(135deg, #ff512f, #dd2476); 
+                            border-radius:12px; display:flex; align-items:center; 
+                            justify-content:center; color:white; font-weight:bold; 
+                            box-shadow:0 4px 15px rgba(0,0,0,0.2);
+                            transition:transform 0.2s ease, box-shadow 0.2s ease;">
+                            <span>All Refferal Earning </span>
+                        </div>
+                    </a>
+                </div>
+</div>
 <!-- DataTables CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
 <div style="padding: 1%"> 
-    <h1 class="text-white"><center>All Transactions</center></h1> 
+    <!-- <h1 class="text-white"><center>All Transactions</center></h1>  -->
     <!-- Search Form -->
     <form method="GET" action="{{ route('admin.transactions') }}" class="mb-4">
         <div class="input-group">

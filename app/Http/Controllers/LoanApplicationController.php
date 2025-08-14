@@ -155,13 +155,18 @@ class LoanApplicationController extends Controller
     // count dashboard
 
     public function loanlist()
-{
-    $totalLoans = DB::table('loans')->count();
-     $inProcessLoans = DB::table('loans')->where('status', 'in process')->count();
-      $pendingLoans = DB::table('loans')->where('status', 'document pending')->count();
-      $trashedloans = DB::table('loans')->where('status', 'trashed')->count();
-    return view('admin.admin-loans', compact('totalLoans','inProcessLoans','pendingLoans','trashedloans'));
-}
+    {
+        $totalLoans = DB::table('loans')->count();
+        $inProcessLoans = DB::table('loans')->where('status', 'in process')->count();
+        $trashedloans = DB::table('loans')
+        ->whereNotNull('deleted_at')
+        ->count();
+         $approvedLoan = DB::table('loans')->where('status', 'approved')->count();
+         $disbursedLoans = DB::table('loans')->where('status', 'disbursed')->count();
+         $rejectedLoans = DB::table('loans')->where('status', 'rejected')->count();
+
+        return view('admin.admin-loans', compact('totalLoans','inProcessLoans','trashedloans','approvedLoan','disbursedLoans','rejectedLoans'));
+    }
     public function edit($id)
     {
         $loan = Loan::with(['user', 'loanCategory'])->where('loan_id', $id)->first();

@@ -7,13 +7,11 @@
     @parent
 
 
-
-
-
  <style>
           .stat-card {
         background: #fff;
         border-radius: 16px;
+         border: 2px solid #ccc;
         overflow: hidden;
         box-shadow: 0 2px 6px rgba(0,0,0,0.08);
         transition: transform 0.2s ease;
@@ -23,7 +21,6 @@
         flex-direction: column;
         justify-content: space-between;
         margin: 10px auto;
-         border: 2px solid #ccc;
     }
     .stat-card:hover {
         transform: translateY(-3px);
@@ -90,14 +87,14 @@ footer {
             <div class="row pt-5 pb-5 justify-content-center card-row">
                 <!-- Card 1 -->
                 <div class="col-md-3 col-sm-6">
-                    <a href="{{ route('enquiries.enquiryLead') }}" style="text-decoration: none;">
+                    <a href="{{ route('eligibilityCriteria') }}" style="text-decoration: none;">
                         <div class=" stat-card">
                             <div class="stat-header blue-bg">
-                        <i class="fab fa-twitter"></i>
+                       <i class="fas fa-clock"></i>
                     </div>
                     <div class="stat-body">
-                       <h6>All Enquiry Leads</h6>
-                            <h4>{{ $enquiries }}</h4>
+                       <h6>Eligiblity Criteria</h6>
+                            <h4>{{ $totaleligible }}</h4>
                     </div>
                     <div class="stat-footer">Tracked from Records</div>
                         </div>
@@ -107,23 +104,41 @@ footer {
 
                 <!-- Card 2 -->
                 <div class="col-md-3 col-sm-6">
-                    <a href="/admin/leads" style="text-decoration: none;">
+                    <a href="{{ route('standalone.self') }}" style="text-decoration: none;">
                         <div class="stat-card">
                             <div class="stat-header pink-bg">
-                        <i class="fas fa-chart-bar"></i>
+                      <i class="fas fa-building"></i>  
                     </div>
 
                             <div class="stat-body">
-                              <h6>All Leads</h6>
-                            <h4>{{ $leads }}</h4>
-                            </div>
+                    <h6>Self for admin</h6>
+                            
+                    </div>
                     <div class="stat-footer">Tracked from Records</div>                       
                         </div>
                     </a>
                 </div>
 
                 <!-- Card 3 -->
-                
+                <div class="col-md-3 col-sm-6">
+                    <a href="{{ route('standalone.salaried') }}"style="text-decoration: none;">
+                        <div class="stat-card">
+                            <div class="stat-header green-bg">
+                                <span class="fa-stack fa-sm">
+                                <i class="fas fa-home fa-stack-1x"></i>
+                                <i class="fas fa-user fa-stack-2x" style="opacity:0.4"></i>
+                                </span>
+
+                            </div>
+
+                            <div class="stat-body">
+                                <h6>Salaried(for admin)</h6>
+                            
+                            </div>
+                             <div class="stat-footer">Last 24 Hours</div>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

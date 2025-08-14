@@ -24,6 +24,22 @@ JFS | Leads
                     <li class="breadcrumb-item active" aria-current="page">Leads</li>
                 </ol>
             </nav>
+            <div class="d-flex" style="gap: 10px;">
+    <!-- All Employee -->
+    <a href="{{ route('enquiries.enquiryLead') }}"  class="text-decoration-none">
+        <div class="custom-btn" style="height:50px; width:150px; 
+            background: linear-gradient(135deg, #6a11cb, #2575fc); 
+            border-radius:12px; display:flex; align-items:center; 
+            justify-content:center; color:white; font-weight:bold; 
+            box-shadow:0 4px 15px rgba(0,0,0,0.2);
+            transition:transform 0.2s ease, box-shadow 0.2s ease;">
+            <span>All Enquiry Lead</span>
+        </div>
+    </a>
+
+    
+</div>
+
             <a href="{{ route('leads.create') }}" class="btn btn-primary float-right"><i class="fa fa-plus"></i> Add Lead</a>
             <!-- Search Bar -->
             <!-- <div class="d-flex ms-auto">

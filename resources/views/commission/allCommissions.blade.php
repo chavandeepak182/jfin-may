@@ -7,6 +7,18 @@ JFS | Commission
 
 @section('content')
 @parent
+
+<style>
+    #wrapper #content-wrapper #content{
+
+        background-color: #f8f9fc;
+        
+    }
+    .topbar {
+    height: 4.375rem;
+    background-color:#000;
+}
+</style>
 <!-- Breadcrumbs -->
 <div class="card-header py-3">
     <div class="d-flex justify-content-between align-items-center">
