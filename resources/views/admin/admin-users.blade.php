@@ -5,6 +5,74 @@
 @endsection
 @section('content')
     @parent
+
+    <style>
+          .stat-card {
+        background: #fff;
+        border-radius: 16px;
+         border: 2px solid #ccc;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        transition: transform 0.2s ease;
+        width: 260px;
+        height: 160px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin: 10px auto;
+    }
+    .stat-card:hover {
+        transform: translateY(-3px);
+    }
+    .stat-header {
+        padding: 8px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        height: 50px;
+    }
+    .stat-body {
+        flex: 1;
+        padding: 5px;
+        text-align: center;
+    }
+    .stat-body h4 {
+        margin: 0;
+        font-weight: bold;
+        font-size: 28px;
+        color: #333;
+    }
+    .stat-body h6 {
+        margin: 0;
+        font-size: 18px;
+        color: #555;
+    }
+    .stat-footer {
+        font-size: 11px;
+        color: #999;
+        padding: 4px;
+        border-top: 1px solid #f0f0f0;
+        text-align: center;
+    }
+    #content-wrapper,
+#content {
+    background-color: white !important;
+}
+
+.topbar {
+    height: 4.375rem;
+    background-color: black;
+}
+
+    /* Colors */
+    .blue-bg { background-color: #1DA1F2; }
+    .pink-bg { background-color: #e91e63; }
+    .green-bg { background-color: #4caf50; }
+    .orange-bg { background-color: #ff9800; }
+    .yellow-bg { background-color: #fbc02d; }
+    </style>
  
 
 <div id="content-wrapper" class="d-flex flex-column">
@@ -16,9 +84,15 @@
                 <!-- Card 1 -->
                 <div class="col-md-3 col-sm-6">
                     <a href="{{ route('allUsers') }}" style="text-decoration: none;">
-                        <div class="text-center dash-card">
-                            <h6>All Customers</h6>
-                            <h4>{{ $totalCustomers }}</h4>
+                        <div class=" stat-card">
+                            <div class="stat-header blue-bg">
+                       <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-body">
+                        <h6>All Customers</h6>
+                        <h4>{{ $totalCustomers }}</h4>
+                    </div>
+                    <div class="stat-footer">Tracked from Records</div>
                         </div>
                     </a>
                 </div>
@@ -27,9 +101,16 @@
                 <!-- Card 2 -->
                 <div class="col-md-3 col-sm-6">
                     <a href="{{ route('allAgents') }}" style="text-decoration: none;">
-                        <div class="text-center dash-card">
-                            <h6>All Employee</h6>
-                            <h4>{{ $totalOfficers }} </h4>                        
+                        <div class="stat-card">
+                            <div class="stat-header pink-bg">
+                       <i class="fas fa-user-friends"></i>
+                    </div>
+
+                            <div class="stat-body">
+                        <h6>All Employee</h6>
+                        <h4>{{ $totalOfficers }}</h4>
+                    </div>
+                    <div class="stat-footer">Tracked from Records</div>                       
                         </div>
                     </a>
                 </div>
@@ -37,9 +118,16 @@
                 <!-- Card 3 -->
                 <div class="col-md-3 col-sm-6">
                     <a href="{{ route('allPartners') }}"style="text-decoration: none;">
-                        <div class="text-center dash-card">
-                            <h6>All Channel Partner</h6>
-                            <h4>{{$totalCp}} </h4> 
+                        <div class="stat-card">
+                            <div class="stat-header green-bg">
+                             <i class="fas fa-handshake"></i> 
+                            </div>
+
+                            <div class="stat-body">
+                                <h6>All Channel Partner</h6>
+                                <h4>{{ $totalCp }}</h4>
+                            </div>
+                             <div class="stat-footer">Last 24 Hours</div>
                         </div>
                     </a>
                 </div>

@@ -7,6 +7,17 @@ JFS | Agents
 
 @section('content')
 @parent
+<style>
+    #wrapper #content-wrapper #content{
+
+        background-color: #f8f9fc;
+        
+    }
+    .topbar {
+    height: 4.375rem;
+    background-color:#000;
+}
+</style>
 <!-- Breadcrumbs and Search Bar -->
 <div class="card-header py-3">
     <div class="d-flex justify-content-between align-items-center">
@@ -17,6 +28,46 @@ JFS | Agents
                 <li class="breadcrumb-item active" aria-current="page">All Agents</li>
             </ol>
         </nav>
+<div class="row no-gutters" style="gap:10px;margin-left:200px;"> 
+    <!-- All Customer -->
+    <div class="col-auto">
+        <a href="{{ route('allUsers') }}"  style="text-decoration: none;">
+            <div style="height:50px; width:150px; 
+                        background: linear-gradient(135deg, #6a11cb, #2575fc); 
+                        border-radius:12px; 
+                        display:flex; align-items:center; justify-content:center;
+                        color:white; font-weight:bold; 
+                        box-shadow:0 4px 15px rgba(0,0,0,0.2);
+                        transition:transform 0.2s ease, box-shadow 0.2s ease;">
+                <span>All Customer</span>
+            </div>
+        </a>
+    </div>
+
+    <!-- All Channel Partner -->
+    <div class="col-auto">
+        <a href="{{ route('allPartners') }}" style="text-decoration: none;">
+            <div style="height:50px; width:160px; 
+                        background: linear-gradient(135deg, #ff512f, #dd2476); 
+                        border-radius:12px; 
+                        display:flex; align-items:center; justify-content:center;
+                        color:white; font-weight:bold; 
+                        box-shadow:0 4px 15px rgba(0,0,0,0.2);
+                        transition:transform 0.2s ease, box-shadow 0.2s ease;">
+                <span>All Channel Partner</span>
+            </div>
+        </a>
+    </div>
+</div>
+
+
+<!-- Hover Effect -->
+<style>
+    a div:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+</style>
 
         <!-- Search Bar -->
         <div class="d-flex ms-auto">

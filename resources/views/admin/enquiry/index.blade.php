@@ -6,18 +6,49 @@ All Users
 
 @section('content')
 
-<!-- Breadcrumbs -->
+<!-- Card Header with Breadcrumbs and Buttons -->
 <div class="card-header py-3">
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+
         <!-- Breadcrumb -->
-        <nav aria-label="breadcrumb" class="d-flex align-items-center">
+        <nav aria-label="breadcrumb" class="mb-2 mb-md-0">
             <ol class="breadcrumb m-0 bg-transparent">
-                <li class="breadcrumb-item"><a href="{{ route('partnerDashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('partnerDashboard') }}">Dashboard</a>
+                </li>
                 <li class="breadcrumb-item active" aria-current="page">Enquiry Leads</li>
             </ol>
         </nav>
+
+        <!-- Buttons Section -->
+       <div class="d-flex" style="gap: 10px;">
+    <!-- All Employee -->
+    <a href="/admin/leads" class="text-decoration-none">
+        <div class="custom-btn" style="height:50px; width:150px; 
+            background: linear-gradient(135deg, #6a11cb, #2575fc); 
+            border-radius:12px; display:flex; align-items:center; 
+            justify-content:center; color:white; font-weight:bold; 
+            box-shadow:0 4px 15px rgba(0,0,0,0.2);
+            transition:transform 0.2s ease, box-shadow 0.2s ease;">
+            <span>All Leads</span>
+        </div>
+    </a>
+
+    <!-- All Channel Partner -->
+    
+</div>
+
     </div>
 </div>
+
+<!-- Hover Effect -->
+<style>
+    .custom-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+</style>
+
 
 <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet"/>

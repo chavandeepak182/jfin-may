@@ -7,6 +7,19 @@ JFS | Wallet Balance
 
 @section('content')
 @parent
+
+<style>
+    #wrapper #content-wrapper #content{
+
+        background-color: #f8f9fc;
+        
+    }
+    .topbar {
+    height: 4.375rem;
+    background-color:#000;
+}
+</style>
+
 <!-- Breadcrumbs -->
 <div class="card-header py-3">
     <div class="d-flex justify-content-between align-items-center">
@@ -17,6 +30,34 @@ JFS | Wallet Balance
                 <li class="breadcrumb-item active" aria-current="page">Wallet Balance</li>
             </ol>
         </nav>
+         <div class="d-flex gap-2" style="margin-right:500px;gap:10px;">
+            <!-- All Employee -->
+            <a href="{{ route('referral_earnings') }}"  class="text-decoration-none">
+                <div class="custom-btn" style="height:50px; width:160px; 
+                    background: linear-gradient(135deg, #6a11cb, #2575fc); 
+                    border-radius:12px; display:flex; align-items:center; 
+                    justify-content:center; color:white; font-weight:bold; 
+                    box-shadow:0 4px 15px rgba(0,0,0,0.2);
+                    transition:transform 0.2s ease, box-shadow 0.2s ease;">
+                    <span>All Refferal Earning </span>
+                </div>
+            </a>
+
+            <!-- All Channel Partner -->
+            <a href="{{ route('admin.transactions') }}" class="text-decoration-none">
+                <div class="custom-btn" style="height:50px; width:190px; 
+                    background: linear-gradient(135deg, #ff512f, #dd2476); 
+                    border-radius:12px; display:flex; align-items:center; 
+                    justify-content:center; color:white; font-weight:bold; 
+                    box-shadow:0 4px 15px rgba(0,0,0,0.2);
+                    transition:transform 0.2s ease, box-shadow 0.2s ease;">
+                    <span>All Transction  History</span>
+                </div>
+            </a>
+
+            
+        </div>
+
     </div>
 </div>
 

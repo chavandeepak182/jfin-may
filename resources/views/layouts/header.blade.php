@@ -436,7 +436,7 @@
                         
                         <a class="collapse-item" href="{{ route('mis.index') }}">MIS</a>
                         
-                    </div>
+                    </div>loanbanks
                 </div> -->
             </li>
 
@@ -475,19 +475,18 @@
             <!-- Nav Item - Elgiblity criteria -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse"
-                    data-target="#collapseEligibility" aria-expanded="true" aria-controls="collapseEligibility">
+                <a class="nav-link collapsed" href="{{ route('admin.eligible') }}" >
                     <i class="fas fa-clipboard-list custom-icon"></i>
                     <span>Eligibility Calculation</span>
                 </a>
                 <div id="collapseEligibility" class="collapse" aria-labelledby="headingEligibility"
                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                    <!-- <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Eligibility:</h6>
                         <a class="collapse-item" href="{{ route('eligibilityCriteria') }}">Eligibility Criteria</a>
                         <a class="collapse-item" href="{{ route('standalone.self') }}">Self(for admin)</a>
                         <a class="collapse-item" href="{{ route('standalone.salaried') }}">Salaried(for admin)</a>
-                    </div>
+                    </div> -->
                 </div>
             </li>
 

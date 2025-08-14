@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container text-center">
-        <h1 class="text-light">MLM Users by Nodes</h1>
+        <h1 class="text-dark" style="color:#000">MLM Users by Nodes</h1>
         <div class="tree">
             <ul>
                 @foreach ($tree as $node)
@@ -111,6 +111,17 @@
         .tree li a:hover+ul ul::before {
             border-color: #94a0b4;
         }
+       
+    #wrapper #content-wrapper #content{
+
+        background-color: #f8f9fc;
+        
+    }
+    .topbar {
+    height: 4.375rem;
+    background-color:#000;
+}
+
     </style>
 
     <script>

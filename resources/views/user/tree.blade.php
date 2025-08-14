@@ -1,6 +1,7 @@
 @extends('frontend.layouts.customer-dash')
 @section('title', "LegDown")
 
+
 @section('content')
 <div class="container-fluid p-0">
 	<h2 class="mb-3 text-center">Your Downline & Their Loans</h2>
