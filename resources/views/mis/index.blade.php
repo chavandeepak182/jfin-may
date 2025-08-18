@@ -101,7 +101,26 @@ MIS Dashboard
                             @foreach($misRecords as $mis)
                             <tr>
                                 <td>{{ $loop->iteration + ($misRecords->currentPage() - 1) * $misRecords->perPage() }}</td>
-                                <td>{{ $mis->name }}</td>
+                                <td> <a href="javascript:void(0)"
+     class="mis-details-link text-decoration-none"
+     data-id="{{ $mis->id }}"
+     data-name="{{ $mis->name }}"
+     data-email="{{ $mis->email }}"
+     data-contact="{{ $mis->contact }}"
+     data-office_contact="{{ $mis->office_contact }}"
+     data-product_type="{{ $mis->product_type }}"
+     data-occupation="{{ $mis->occupation }}"
+     data-bank_name="{{ $mis->bank_name }}"
+     data-branch_name="{{ $mis->branch_name }}"
+     data-login_date="{{ optional($mis->login_date)->format('d M Y') ?? optional($mis->created_at)->format('d M Y') }}"
+     data-status="{{ $mis->status ?? '' }}"
+     data-leads="{{ $mis->leads ?? '' }}"
+     data-amount="{{ $mis->amount }}"
+     data-city="{{ $mis->city }}"
+     data-address="{{ $mis->address }}"
+  >
+    {{ $mis->name }}
+  </a></td>
                                 <td>{{ $mis->email }}</td>
                                 <td>{{ $mis->contact }}</td>
                                 <td>{{ $mis->product_type }}</td>
@@ -288,6 +307,77 @@ MIS Dashboard
         </div>
     </div>
 </div>
+<!-- MIS Details Modal -->
+<div class="modal fade" id="misDetailsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg rounded-4 border-0">
+      
+      <!-- Header -->
+      <div class="modal-header bg-primary text-white rounded-top-4">
+        <h5 class="modal-title fw-bold">📋 MIS Record Details</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <!-- Body -->
+      <div class="modal-body p-4">
+
+        <!-- Name & Contact on top -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="fw-bold text-dark mb-0" id="detail_name">-</h4>
+          <div class="text-muted">
+            <i class="bi bi-envelope"></i> <span id="detail_email">-</span> &nbsp; | &nbsp;
+            <i class="bi bi-phone"></i> <span id="detail_contact">-</span>
+          </div>
+        </div>
+        <hr>
+
+        <div class="row gy-2">
+          <div class="col-md-6">
+            <strong>ID:</strong> <span id="detail_id">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Product Type:</strong> <span id="detail_product">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Occupation:</strong> <span id="detail_occupation">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Bank:</strong> <span id="detail_bank">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Branch:</strong> <span id="detail_branch">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Login Date:</strong> <span id="detail_login">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Status:</strong> <span id="detail_status" class="badge bg-success">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Leads:</strong> <span id="detail_leads">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Amount:</strong> ₹<span id="detail_amount">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>City:</strong> <span id="detail_city">-</span>
+          </div>
+          <div class="col-12">
+            <strong>Address:</strong> <span id="detail_address" style="white-space:pre-wrap;">-</span>
+          </div>
+        </div>
+
+      </div>
+      
+      <!-- Footer -->
+      <div class="modal-footer border-0">
+        <button class="btn btn-secondary px-4" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 @endsection
 
@@ -298,6 +388,7 @@ MIS Dashboard
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
 <script>
 // $(document).ready(function () {
@@ -366,5 +457,53 @@ $('#exportPDF').on('click', function() {
     window.location.href = '{{ route('mis.exportPDF') }}';
 });
 </script>
+<script>
+ 
+  $(document).on('click', '.mis-details-link', function(e) {
+    e.preventDefault();
+    var $el = $(this);
+
+ 
+    var data = {
+      id: $el.data('id'),
+      name: $el.data('name'),
+      email: $el.data('email'),
+      contact: $el.data('contact'),
+      office_contact: $el.data('office_contact'),
+      product_type: $el.data('product_type'),
+      occupation: $el.data('occupation'),
+      bank_name: $el.data('bank_name'),
+      branch_name: $el.data('branch_name'),
+      login_date: $el.data('login_date'),
+      status: $el.data('status'),
+      leads: $el.data('leads'),
+      amount: $el.data('amount'),
+      city: $el.data('city'),
+      address: $el.data('address')
+    };
+
+   
+    $('#detail_id').text(data.id ?? '-');
+    $('#detail_name').text(data.name ?? '-');
+    $('#detail_email').text(data.email ?? '-');
+    $('#detail_contact').text(data.contact ?? '-');
+    $('#detail_product').text(data.product_type ?? '-');
+    $('#detail_occupation').text(data.occupation ?? '-');
+    $('#detail_bank').text(data.bank_name ?? '-');
+    $('#detail_branch').text(data.branch_name ?? '-');
+    $('#detail_login').text(data.login_date ?? '-');
+    $('#detail_status').text(data.status ?? '-');
+    $('#detail_leads').text(data.leads ?? '-');
+    $('#detail_amount').text(data.amount ?? '-');
+    $('#detail_city').text(data.city ?? '-');
+    $('#detail_address').text(data.address ?? '-');
+
+    // Bootstrap 5 way to show modal (works reliably)
+    var modalEl = document.getElementById('misDetailsModal');
+    var modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+    modal.show();
+  });
+</script>
+
 
 @endsection
