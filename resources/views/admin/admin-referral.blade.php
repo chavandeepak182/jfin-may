@@ -92,7 +92,7 @@ footer {
                     <a href="{{ route('admin.withdrawal.requests') }}" style="text-decoration: none;">
                         <div class=" stat-card">
                             <div class="stat-header blue-bg">
-                       <i class="fas fa-arrow-circle-down"></i>
+                       <i class="fa-solid fa-clock"></i> Pending Request
                     </div>
                     <div class="stat-body">
                         <h6>All Reddem Requests</h6>

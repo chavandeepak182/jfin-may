@@ -101,6 +101,7 @@ JFS | Channel Partners
                                 <th> Email ID </th>
                                 <th> Mobile Number </th>
                                 <th> DOB </th>
+                                  <th> Status </th>
                                 <th> Action </th>
                             </tr>
                         </thead>
@@ -112,6 +113,20 @@ JFS | Channel Partners
                                 <td>{{ $user->email_id }}</td>
                                 <td>{{ $user->mobile_no }}</td>
                                 <td>{{ $user->dob }}</td>
+                                <td>
+                                            <label>
+                                                <input type="radio" name="status_{{ $user->id }}" value="1"
+                                                    onclick="updateStatus({{ $user->id }}, 1)"
+                                                    {{ $user->is_email_verify == 1 ? 'checked' : '' }}>
+                                                Active
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="status_{{ $user->id }}" value="0"
+                                                    onclick="updateStatus({{ $user->id }}, 0)"
+                                                    {{ $user->is_email_verify == 0 ? 'checked' : '' }}>
+                                                Inactive
+                                            </label>
+                                </td>
                                 <td>
                                     <a class="btn btn-primary btn-xs edit" title="Edit" href="{{ url('editUser/'.$user->id) }}">
                                         <i class="fa fa-edit"></i>

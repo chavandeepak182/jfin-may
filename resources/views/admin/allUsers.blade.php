@@ -95,7 +95,16 @@
                                 @foreach ($users as $user)
                                     <tr>
                                         <td>{{ $user->id }}</td>
-                                        <td>{{ $user->name }}</td>
+                                        <td><a href="javascript:void(0);" 
+                                        class="user-link" 
+                                        data-name="{{ $user->name }}" 
+                                        data-email="{{ $user->email_id }}" 
+                                        data-mobile="{{ $user->profile->mobile_no ?? '-' }}" 
+                                        data-dob="{{ $user->profile->dob ?? '-' }}" 
+                                        data-status="{{ $user->is_email_verify == 1 ? 'Active' : 'Inactive' }}"> {{ $user->name }}
+                                        </a>
+
+                                        </td>
                                         <td>{{ $user->email_id }}</td>
                                         <td>{{ $user->profile->mobile_no ?? '-' }}</td>
                                         <td>{{ $user->profile->dob ?? ''}}</td>
@@ -215,6 +224,29 @@
             </div>
         </div>
     </div>
+    <!-- User Details Modal -->
+<div class="modal fade" id="userDetailsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">User Details</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Name:</strong> <span id="detail_name">-</span></p>
+        <p><strong>Email:</strong> <span id="detail_email">-</span></p>
+        <p><strong>Mobile:</strong> <span id="detail_mobile">-</span></p>
+        <p><strong>DOB:</strong> <span id="detail_dob">-</span></p>
+        <p><strong>Status:</strong> <span id="detail_status">-</span></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 @endsection
 @section('script')
     @parent
@@ -355,4 +387,20 @@
             };
         });
     </script>
+    <script>
+document.querySelectorAll('.user-link').forEach(link => {
+    link.addEventListener('click', function() {
+        document.getElementById('detail_name').innerText   = this.dataset.name || '-';
+        document.getElementById('detail_email').innerText  = this.dataset.email || '-';
+        document.getElementById('detail_mobile').innerText = this.dataset.mobile || '-';
+        document.getElementById('detail_dob').innerText    = this.dataset.dob || '-';
+        document.getElementById('detail_status').innerText = this.dataset.status || '-';
+
+        var modal = new bootstrap.Modal(document.getElementById('userDetailsModal'));
+        modal.show();
+    });
+});
+
+</script>
+
 @endsection
