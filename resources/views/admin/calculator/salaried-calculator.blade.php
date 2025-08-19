@@ -49,11 +49,21 @@
         </div> --}}
         <!-- Salary input (Fixed) -->
         <div class="form-group">
-            <label>Select which months to include in the calculation</label><br>
-            <input type="checkbox" id="first_salary_checkbox" checked onclick="toggleSalaryFields()"> First Salary<br>
-            <input type="checkbox" id="second_salary_checkbox" onclick="toggleSalaryFields()"> Second Salary<br>
-            <input type="checkbox" id="third_salary_checkbox" onclick="toggleSalaryFields()"> Third Salary<br>
-        </div>
+  <label>Select which months to include in the calculation</label><br>
+  <div class="form-check form-check-inline">
+    <input type="checkbox" class="form-check-input" id="first_salary_checkbox" checked onclick="toggleSalaryFields()">
+    <label class="form-check-label" for="first_salary_checkbox">First Salary</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input type="checkbox" class="form-check-input" id="second_salary_checkbox" onclick="toggleSalaryFields()">
+    <label class="form-check-label" for="second_salary_checkbox">Second Salary</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input type="checkbox" class="form-check-input" id="third_salary_checkbox" onclick="toggleSalaryFields()">
+    <label class="form-check-label" for="third_salary_checkbox">Third Salary</label>
+  </div>
+</div>
+
 
         <!-- First Salary Input (Always Visible) -->
         <div class="form-group">
