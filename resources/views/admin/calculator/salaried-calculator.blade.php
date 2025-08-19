@@ -2,7 +2,7 @@
 @section('content')
 <style>
     body{
-        color: #fff !important;
+        color: #000 !important;
     }
     @media print {
         /* General body styling for printing */
@@ -35,7 +35,7 @@
 </style>
 <div id="export-area">
 <div class="container">
-    <h2>Calculator Salaried</h2>
+    <h2>For Salaried</h2>
     <form id="eligibilityForm" action="{{ route('calculate.eligibility.salaried') }}" method="POST">
         @csrf
 

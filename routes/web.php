@@ -35,7 +35,7 @@ Route::get('admin/leadslist', [LeadController::class, 'leadlist'])->name('admin.
 Route::get('admin/banklist', [BankController::class, 'loanbankslist'])->name('admin.bank');
 Route::get('admin/referrallist', [BankController::class, 'listreferral'])->name('admin.allreferral');
 Route::get('admin/eligible', [BankController::class, 'eligiblelist'])->name('admin.eligible');
-// Route::get('admin/Eligiblelist', [EligibilityExport::class, 'Eligiblelist'])->name('admin.allEligiblel');
+
 
 
 

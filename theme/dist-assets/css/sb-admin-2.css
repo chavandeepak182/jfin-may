@@ -11283,6 +11283,10 @@ footer.sticky-footer .copyright {
   line-height: 1;
   font-size: 0.8rem;
 }
+.topbar {
+    height: 4.375rem;
+    background-color:#fff;
+}
 
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;

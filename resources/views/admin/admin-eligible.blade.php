@@ -62,10 +62,7 @@
     background-color: white !important;
 }
 
-.topbar {
-    height: 4.375rem;
-    background-color: black;
-}
+
 
 footer {
     background-color: black; /* तुझा footer black राहील */
@@ -111,7 +108,7 @@ footer {
                     </div>
 
                             <div class="stat-body">
-                    <h6>Self for admin</h6>
+                    <h6>For Business</h6>
                             
                     </div>
                     <div class="stat-footer">Tracked from Records</div>                       
@@ -132,7 +129,7 @@ footer {
                             </div>
 
                             <div class="stat-body">
-                                <h6>Salaried(for admin)</h6>
+                                <h6>For Salaried</h6>
                             
                             </div>
                              <div class="stat-footer">Last 24 Hours</div>

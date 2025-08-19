@@ -64,7 +64,7 @@
 
 .topbar {
     height: 4.375rem;
-    background-color: black;
+    /* background-color: black; */
 }
 
 footer {

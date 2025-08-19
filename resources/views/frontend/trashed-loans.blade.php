@@ -12,10 +12,7 @@
         background-color: #f8f9fc;
         
     }
-    .topbar {
-    height: 4.375rem;
-    background-color:#000;
-}
+    
 </style>
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
