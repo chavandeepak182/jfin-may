@@ -38,10 +38,18 @@ class AgentController extends Controller
             ->join('profile', 'users.id', '=', 'profile.user_id')
             ->where('users.role_id', 2)
             ->whereNull('users.deleted_at') // Exclude soft deleted users
-            ->select('users.id', 'users.name', 'users.email_id', 'profile.mobile_no', 'profile.dob')
+            ->select('users.id', 'users.name', 'users.email_id', 'profile.mobile_no', 'profile.dob','is_email_verify')
             ->paginate(10);
 
         return view('agent.allAgents', compact('data'));
+    }
+    public function updateUserStatus(Request $request)
+    {
+        DB::table('users')
+            ->where('id', $request->user_id)
+            ->update(['is_email_verify' => $request->is_email_verify]);
+
+        return response()->json(['message' => 'User status updated successfully']);
     }
 
 

@@ -362,7 +362,7 @@
                     <div class="col-md-3 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="team-item">
                             <div class="team-img">
-                                <img src="{{ asset('theme') }}/frontend/img/team/rushi.png" class="img-fluid rounded-top w-100" alt="">
+                                <img src="{{ asset('theme') }}/frontend/img/team/rushi-2.png" class="img-fluid rounded-top w-100" alt="">
                                 <div class="team-icon">
                                     <a class="btn btn-primary btn-sm-square rounded-pill" href=""><i class="fab fa-linkedin-in"></i></a>
                                 </div>

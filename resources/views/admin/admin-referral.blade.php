@@ -64,10 +64,7 @@
     background-color: white !important;
 }
 
-.topbar {
-    height: 4.375rem;
-    background-color: black;
-}
+
 
 footer {
     background-color: black; /* तुझा footer black राहील */
@@ -92,7 +89,7 @@ footer {
                     <a href="{{ route('admin.withdrawal.requests') }}" style="text-decoration: none;">
                         <div class=" stat-card">
                             <div class="stat-header blue-bg">
-                       <i class="fas fa-arrow-circle-down"></i>
+                       <i class="fas fa-clock"></i> 
                     </div>
                     <div class="stat-body">
                         <h6>All Reddem Requests</h6>

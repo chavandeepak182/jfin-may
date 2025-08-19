@@ -63,10 +63,7 @@
     background-color: white !important;
 }
 
-.topbar {
-    height: 4.375rem;
-    background-color: black;
-}
+
 
 footer {
     background-color: black; /* तुझा footer black राहील */

@@ -71,10 +71,6 @@
     background-color: white !important;
 }
 
-.topbar {
-    height: 4.375rem;
-    background-color: black;
-}
 
 
     /* Colors */
@@ -188,7 +184,7 @@
 
     <!-- Card 7 -->
     <div class="col-md-3 col-sm-6 mb-4">
-        <a href="{{ route('agent.rejected.loans')}}" style="text-decoration: none;">  
+        <a href="{{ route('rejectedLoans')}}" style="text-decoration: none;">  
             <div class="stat-card">
                 <div class="stat-header yellow-bg">
                     <i class="fas fa-building-columns text-danger"></i> <i class="fas fa-times-circle text-danger"></i>

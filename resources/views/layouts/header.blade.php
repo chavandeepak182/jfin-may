@@ -168,6 +168,16 @@
         .topbar .nav-item.dropdown .dropdown-toggle::after {
             display: none !important;
         }
+
+
+        .sidebar-dark .nav-item .nav-link i {
+    color: #fff;
+        }
+
+        .bg-gradient-primary {
+    background-color: #293c74;
+    background-size: cover;
+}
     </style>
 </head>
 
@@ -514,7 +524,14 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand topbar mb-4 static-top">
-                    <!-- <h2><b>Dashboard</b></h2> -->
+                   <h2 style="font-weight:600; font-size:40px; color:#293c74; margin-top:25px; 
+                        font-family: Nunito, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
+                        'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 
+                        'Segoe UI Symbol', 'Noto Color Emoji';">
+                        WELCOME TO JFINSERVE
+                    </h2>
+
+
 
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">

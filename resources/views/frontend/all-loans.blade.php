@@ -16,10 +16,7 @@
         background-color: #f8f9fc;
         
     }
-    .topbar {
-    height: 4.375rem;
-    background-color:#000;
-}
+    
 </style>
 
     <!-- DataTables Example -->
@@ -45,6 +42,8 @@
                             <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved
                             </option>
                             <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected
+                            </option>
+                            <option value="in process" {{ request('status') == 'disbursed' ? 'selected' : '' }}>In process
                             </option>
                             <option value="disbursed" {{ request('status') == 'disbursed' ? 'selected' : '' }}>Disbursed
                             </option>
