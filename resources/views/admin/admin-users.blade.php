@@ -61,10 +61,8 @@
     background-color: white !important;
 }
 
-.topbar {
-    height: 4.375rem;
-    background-color: black;
-}
+
+
 
     /* Colors */
     .blue-bg { background-color: #1DA1F2; }

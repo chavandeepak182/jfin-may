@@ -14,10 +14,7 @@ JFS | Commission
         background-color: #f8f9fc;
         
     }
-    .topbar {
-    height: 4.375rem;
-    background-color:#000;
-}
+    
 </style>
 <!-- Breadcrumbs -->
 <div class="card-header py-3">

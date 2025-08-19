@@ -5,6 +5,8 @@
 @endsection
 @section('content')
     @parent
+
+   
     <!-- Breadcrumbs and Search Bar -->
     <div class="card-header py-3">
         <div class="d-flex justify-content-between align-items-center">
@@ -48,12 +50,7 @@
 </div>
 
 <!-- Hover Effect -->
-<style>
-    .custom-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-    }
-</style>
+
 
 
 
