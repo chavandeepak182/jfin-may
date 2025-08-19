@@ -101,6 +101,7 @@ JFS | Agents
                                 <th> Email ID </th>
                                 <th> Mobile Number </th>
                                 <th> DOB </th>
+                                  <th> Status </th>
                                 <th> Action </th>
                             </tr>
                         </thead>
@@ -108,10 +109,35 @@ JFS | Agents
                             @foreach($data['allAgents'] as $user)
                             <tr>
                                 <td>{{ $user->id }}</td>
-                                <td>{{ $user->name }}</td>
+                                <td>
+                                    <a href="javascript:void(0);" 
+                                        class="user-link" 
+                                        data-name="{{ $user->name }}" 
+                                        data-email="{{ $user->email_id }}" 
+                                        data-mobile="{{ $user->mobile_no }}" 
+                                        data-dob="{{ $user->dob }}" 
+                                        data-status="{{ $user->is_email_verify == 1 ? 'Active' : 'Inactive' }}">
+                                        {{ $user->name }}
+                                    </a>
+                                    </td>
+
                                 <td>{{ $user->email_id }}</td>
                                 <td>{{ $user->mobile_no }}</td>
                                 <td>{{ $user->dob }}</td>
+                                <td>
+                                            <label>
+                                                <input type="radio" name="status_{{ $user->id }}" value="1"
+                                                    onclick="updateStatus({{ $user->id }}, 1)"
+                                                    {{ $user->is_email_verify == 1 ? 'checked' : '' }}>
+                                                Active
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="status_{{ $user->id }}" value="0"
+                                                    onclick="updateStatus({{ $user->id }}, 0)"
+                                                    {{ $user->is_email_verify == 0 ? 'checked' : '' }}>
+                                                Inactive
+                                            </label>
+                                        </td>
                                 <td>
                                     <a class="btn btn-primary btn-xs edit" title="Edit" href="{{ url('editUser/'.$user->id) }}">
                                         <i class="fa fa-edit"></i>
@@ -203,7 +229,32 @@ JFS | Agents
             </div>
         </div>
     </div> 
-</div>  
+</div> 
+
+<!-- User Details Modal -->
+<div class="modal fade" id="userDetailsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">User Details</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><strong>Name:</strong> <span id="detail_name">-</span></li>
+          <li class="list-group-item"><strong>Email:</strong> <span id="detail_email">-</span></li>
+          <li class="list-group-item"><strong>Mobile:</strong> <span id="detail_mobile">-</span></li>
+          <li class="list-group-item"><strong>DOB:</strong> <span id="detail_dob">-</span></li>
+          <li class="list-group-item"><strong>Status:</strong> <span id="detail_status">-</span></li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 @endsection
 
@@ -327,6 +378,46 @@ function deleteAgent(id) {
             });
         }
     });
+
+
+    
 }
+
+
+</script>
+<script>
+    // Update User Status
+           window.updateStatus = function(userId, status) {
+                $.ajax({
+                    url: "{{ route('updateUserStatus') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        user_id: userId,
+                        is_email_verify: status
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        alert("Error updating status");
+                    }
+                });
+            };
+</script>
+<script>
+    document.querySelectorAll('.user-link').forEach(link => {
+    link.addEventListener('click', function() {
+        document.getElementById('detail_name').textContent   = this.dataset.name;
+        document.getElementById('detail_email').textContent  = this.dataset.email;
+        document.getElementById('detail_mobile').textContent = this.dataset.mobile;
+        document.getElementById('detail_dob').textContent    = this.dataset.dob;
+        document.getElementById('detail_status').textContent = this.dataset.status;
+
+        new bootstrap.Modal(document.getElementById('userDetailsModal')).show();
+    });
+});
+
 </script>
 @endsection

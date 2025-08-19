@@ -5,6 +5,19 @@
 @endsection
 @section('content')
     @parent
+
+    <style>
+
+        .topbar {
+    height: 4.375rem;
+    background-color:#f7f7f7;
+    }
+
+    #wrapper #content-wrapper #content {
+    flex: 1 0 auto;
+    background-color: #fff;
+}
+    </style>
     <div id="content-wrapper" class="d-flex flex-column">
         <!-- Main Content -->
         <div id="content">

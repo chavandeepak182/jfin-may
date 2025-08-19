@@ -3,12 +3,12 @@
 
 <style>
     body{
-        color: #fff !important;
+        color: #000 !important;
     }
 </style>
 
 <div class="container">
-    <h2>Eligibility Calculator Self</h2>
+    <h2>For Business</h2>
 <!-- kdkkd -->
     <form id="eligibilityForm" action="{{ route('calculateEligibilitystandalone') }}" method="POST">
         @csrf
