@@ -978,14 +978,16 @@ function calculateAverageMonthlyIncome() {
 </script>
 <script>
     function calculateTotalIncome() {
+
+        // alert("dfs");
         // Get the co-applicant's yearly income value
-        let yearlySalary = document.getElementById('coapplicant_salary').value;
+        let yearlySalary = document.getElementById('salary').value;
         
         // Calculate the monthly average salary (divide by 12 months)
         let monthlyAvgSalary = (yearlySalary / 12).toFixed(2);
-        
+        // alert(monthlyAvgSalary);
         // Update the read-only monthly average field
-        document.getElementById('coapplicant_monthly_avg').value = monthlyAvgSalary;
+        document.getElementById('avg_salary').value = monthlyAvgSalary;
     }
 </script>
 @endsection
