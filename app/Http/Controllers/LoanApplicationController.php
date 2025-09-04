@@ -533,80 +533,73 @@ class LoanApplicationController extends Controller
     }
 
 
-    public function showForm(Request $request)
-    {
+  public function showForm(Request $request)
+{
+    $currentStep = $request->input('current_step', 1);
 
-        // echo "ssf";die;
-        $currentStep = $request->input('current_step', 1);
-        // dd($currentStep);
-        $loanCategories = DB::table('loan_category')->get();
-        $loanBanks = DB::table('loan_bank_details')->get();
-        $userId = session('user_id'); // Get user ID from session
+    $loanCategories = DB::table('loan_category')->get();
+    $loanBanks = DB::table('loan_bank_details')->get();
+    $userId = session('user_id'); // Get user ID from session
 
-        // echo 'gfgg';die;
-
-
-        if (!$userId) {
-            return redirect()->route('login')->withErrors('User session expired. Please log in again.');
-        }
-
-        // Check if user already has a loan
-        // $hasActiveLoan  = Loan::where('user_id', $userId)
-        //                     ->whereNotIn('status', ['disbursed', 'rejected'])
-        //                     ->exists();
-        // if ($hasActiveLoan) {
-        //     return redirect()->route('loan.profile');
-        // }
-
-        $loanId = session('current_loan_id');
-
-        if (!$loanId) {
-            $loanId = Loan::where('user_id', $userId)->value('loan_id');
-        }
-
-        $loanUsers = collect();
-        if (session('role_id') == 4) {
-            $loanUsers = User::where('role_id', 1)
-                ->where('is_email_verify', 1)
-                ->select('id', 'name', 'email_id')
-                ->get();
-        }
-
-        $profile = DB::table('profile')->where('user_id', $userId)->latest('profile_id')->first() ?? null;
-
-
-        $professional = DB::table('professional_details')->where('user_id', $userId)->latest('professional_id')->first() ?? null;
-        // dd($professional);
-        $education = DB::table('education_details')->where('user_id', $userId)->latest('edu_id')->first() ?? null;
-
-        $documents = DB::table('documents')->where('user_id', $userId)->latest('document_id')->get() ?? null;
-
-        $existingLoans = DB::table('existing_loan')->where('user_id', $userId)->latest('existing_loan_id')->get();
-
-        // echo $documents;die;
-        $loan = Loan::where('user_id', $userId)->whereNotIn('status', ['disbursed', 'rejected'])->first();
-        $hasExistingLoan = !is_null($existingLoans);
-        $user = User::with('loans')->where('id', $userId)->first();
-        $states = DB::table('states')->get();
-        // echo $states;die;
-        $is_loan = Session::get('is_loan');
-        return view('frontend.professional-info', compact(
-            'currentStep',
-            'loanCategories',
-            'states',
-            'hasExistingLoan',
-            'loanBanks',
-            'profile',
-            'professional',
-            'education',
-            'existingLoans',
-            'documents',
-            'loan',
-            'is_loan',
-            'user',
-            'loanUsers'
-        ));
+    if (!$userId) {
+        return redirect()->route('login')->withErrors('User session expired. Please log in again.');
     }
+
+    $loanId = session('current_loan_id');
+    if (!$loanId) {
+        $loanId = Loan::where('user_id', $userId)->value('loan_id');
+    }
+
+    $loanUsers = collect();
+    if (session('role_id') == 4) {
+        $loanUsers = User::where('role_id', 1)
+            ->where('is_email_verify', 1)
+            ->select('id', 'name', 'email_id')
+            ->get();
+    }
+
+    $profile       = DB::table('profile')->where('user_id', $userId)->latest('profile_id')->first();
+    $professional  = DB::table('professional_details')->where('user_id', $userId)->latest('professional_id')->first();
+    $education     = DB::table('education_details')->where('user_id', $userId)->latest('edu_id')->first();
+    $documents     = DB::table('documents')->where('user_id', $userId)->latest('document_id')->get();
+    $existingLoans = DB::table('existing_loan')->where('user_id', $userId)->latest('existing_loan_id')->get();
+
+    $loan = Loan::where('user_id', $userId)
+        ->whereNotIn('status', ['disbursed', 'rejected'])
+        ->first();
+
+    $hasExistingLoan = !is_null($existingLoans);
+    $user  = User::with('loans')->where('id', $userId)->first();
+    $states = DB::table('states')->get();
+    $is_loan = Session::get('is_loan');
+
+    // ✅ Completed steps logic: only show after user moves past that step
+    $completedSteps = [];
+    if ($profile && $currentStep > 1)       $completedSteps[] = 1; // Personal
+    if ($professional && $currentStep > 2)  $completedSteps[] = 2; // Professional
+    if ($education && $currentStep > 3)     $completedSteps[] = 3; // Qualification
+    if ($documents->count() > 0 && $currentStep > 4) $completedSteps[] = 4; // Documents
+    if ($loan && $currentStep > 5)          $completedSteps[] = 5; // Loan
+
+    return view('frontend.professional-info', compact(
+        'currentStep',
+        'loanCategories',
+        'states',
+        'hasExistingLoan',
+        'loanBanks',
+        'profile',
+        'professional',
+        'education',
+        'existingLoans',
+        'documents',
+        'loan',
+        'is_loan',
+        'user',
+        'loanUsers',
+        'completedSteps'
+    ));
+}
+
 
 
     //CreditReport
