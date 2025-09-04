@@ -132,7 +132,11 @@
                             </div>
                             <a href="{{ url('properties')}}" class="nav-item {{ Request::is('properties') ? 'active' : '' }}">PROPERTIES</a>
                             <a href="{{ url('referral-program')}}" class="nav-item {{ Request::is('referral-program') ? 'active' : '' }}">REFERRALS</a>
-                            <a href="https://jfinserv.com/blog/" class="nav-item {{ Request::is('blog') ? 'active' : '' }}">BLOGS</a>
+                           <a href="{{ route('blog') }}" class="nav-item {{ Request::is('blog') ? 'active' : '' }}">Blogs</a>
+>
+
+
+
                             <div class="nav-btn px-3">
                                 <a href="{{ url('contact')}}" class="btn btn-primary rounded-1 py-2 px-4 ms-3 flex-shrink-0 nav-item {{ Request::is('contact') ? 'active' : '' }}">CONTACT</a>
                             </div>

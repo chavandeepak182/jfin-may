@@ -7,31 +7,43 @@
         <div class="container">
             <div class="row g-5 align-items-start mb-5 pb-5">
                 <!-- Progress Bar Section -->
-                <div class="col-md-3">
-                    <div class="progress-steps p-4">
-                        <h5 class="text-primary mb-3">Application Steps</h5>
-                        <ul class="list-group">
-                            <li class="list-group-item {{ $currentStep == 1 ? 'active' : '' }}">
-                                <span>1. Personal Details</span>
-                            </li>
-                            <li class="list-group-item {{ $currentStep == 2 ? 'active' : '' }}">
-                                <span>2. Professional Details</span>
-                            </li>
-                            <li class="list-group-item {{ $currentStep == 3 ? 'active' : '' }}">
-                                <span>3. Qualification Details</span>
-                            </li>
-                            <!-- <li class="list-group-item {{ $currentStep == 4 ? 'active' : '' }}">
-                                        <span>4. Existing Loan Details</span>
-                                    </li> -->
-                            <li class="list-group-item {{ $currentStep == 4 ? 'active' : '' }}">
-                                <span>4. Upload Documents</span>
-                            </li>
-                            <li class="list-group-item {{ $currentStep == 5 ? 'active' : '' }}">
-                                <span>5. Loan Details</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+              <div class="col-md-3">
+    <div class="progress-steps p-4">
+        <h5 class="text-primary mb-3">Application Steps</h5>
+        <ul class="list-group">
+            <li class="list-group-item {{ $currentStep == 1 ? 'active' : '' }}">
+                @if(in_array(1, $completedSteps))
+                    <i class="bi bi-check-circle-fill step-icon me-2"></i>
+                @endif
+                1. Personal Details
+            </li>
+            <li class="list-group-item {{ $currentStep == 2 ? 'active' : '' }}">
+                @if(in_array(2, $completedSteps))
+                    <i class="bi bi-check-circle-fill step-icon me-2"></i>
+                @endif
+                2. Professional Details
+            </li>
+            <li class="list-group-item {{ $currentStep == 3 ? 'active' : '' }}">
+                @if(in_array(3, $completedSteps))
+                    <i class="bi bi-check-circle-fill step-icon me-2"></i>
+                @endif
+                3. Qualification Details
+            </li>
+            <li class="list-group-item {{ $currentStep == 4 ? 'active' : '' }}">
+                @if(in_array(4, $completedSteps))
+                    <i class="bi bi-check-circle-fill step-icon me-2"></i>
+                @endif
+                4. Upload Documents
+            </li>
+            <li class="list-group-item {{ $currentStep == 5 ? 'active' : '' }}">
+                @if(in_array(5, $completedSteps))
+                    <i class="bi bi-check-circle-fill step-icon me-2"></i>
+                @endif
+                5. Loan Details
+            </li>
+        </ul>
+    </div>
+</div>
 
                 <!-- Form Section -->
                 <div class="col-md-9">
@@ -435,36 +447,7 @@
 
                                 <!-- Qualification Details -->
                             @elseif ($currentStep == 3)
-                                <!--  <fieldset>
-                                            <h4 class="text-primary mb-3">Qualification Details</h4>
-                                            <div class="row g-3">
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" id="qualification" name="qualification" value="{{ old('qualification', $education->qualification ?? '') }}" placeholder="Qualification" required>
-                                                        <label for="qualification">Highest Degree</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input type="number" class="form-control" id="pass_year" name="pass_year" value="{{ old('pass_year', $education->pass_year ?? '') }}" placeholder="pass_year" required>
-                                                        <label for="pass_year">Pass Year</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" id="college_name" name="college_name" value="{{ old('college_name', $education->college_name ?? '') }}" placeholder="College Name" required>
-                                                        <label for="college_name">College Name</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" id="college_address" name="college_address" value="{{ old('college_address', $education->college_address ?? '') }}" placeholder="College Address" required>
-                                                        <label for="college_address">College Address</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-             -->
+                              
 
                                 <fieldset>
                                     <h4 class="text-primary mb-3">Qualification Details</h4>
@@ -849,7 +832,7 @@
 
                                 <!-- Loan Details -->
                             @elseif ($currentStep == 5)
-                                <!--  <fieldset>
+                            
                                             <h4 class="text-primary mb-3">Loan Details</h4>
                                             <div class="row g-3">
                                                 <div class="col-md-6">
@@ -859,7 +842,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div class="form-floating">
+                                                 <div class="form-floating">
                                                         <select name="tenure" id="tenure" class="form-control" required>
                                                        
                                                             <option value="">Select Tenure</option>
@@ -895,7 +878,7 @@
                         </div>
                         <div id="referral-feedback" class="col-md-12 mt-3"></div>
                     </div>
-                                        </fieldset> -->
+                                        </fieldset>
 
 
                                 <fieldset>
@@ -988,6 +971,12 @@
             color: #333;
             margin-bottom: 15px;
         }
+        .step-icon {
+    font-size: 1.3rem;      /* slightly bigger than text */
+    color: #0d6efd;         /* bootstrap primary blue */
+    vertical-align: middle; /* align with text */
+}
+
 
         .progress-steps .list-group-item.active {
             background-color: #007bff;
@@ -1232,7 +1221,7 @@
 
 
 
-    <!-- <script>
+<script>
         document.getElementById('check-referral-code').addEventListener('click', function() {
             const referralCode = document.getElementById('referral_code').value;
 
@@ -1270,7 +1259,7 @@
                         '<div class="alert alert-danger">An error occurred while checking the referral code.</div>';
                 });
         });
-    </script> -->
+    </script> 
 
     <script>
         let referralCodeChecked = false; // Flag to track if referral code has been checked

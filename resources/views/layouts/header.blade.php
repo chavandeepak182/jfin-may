@@ -14,6 +14,11 @@
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
+        <!-- Summernote CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs4.min.css" rel="stylesheet">
+
+
+        
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('theme') }}/dist-assets/css/sb-admin-2.min.css" rel="stylesheet">
@@ -449,6 +454,27 @@
                     </div>loanbanks
                 </div> -->
             </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('admin.blogs') }}">
+                    <i class="fas fa-fw fa-wrench custom-icon"></i>
+                    <span>Blogs</span>
+                    
+                </a>
+                <!-- <div id="collapseTools" class="collapse" aria-labelledby="headingLoan"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Tools:</h6>
+                        
+                        <a class="collapse-item" href="{{ route('loanbanks') }}">Loan Banks</a>
+                        
+                        <a class="collapse-item" href="{{ route('mis.index') }}">MIS</a>
+                        
+                    </div>loanbanks
+                </div> -->
+            </li>
+
+            <!-- blog -->
+             
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -734,6 +760,19 @@
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.14/moment-timezone.min.js"></script>
+        <!-- Summernote CSS -->
+        <!-- Include CSS -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+
+<!-- Include JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script><!-- Summernote CSS -->
+        <!-- Include CSS -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+
+<!-- Include JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
         <script>
             $("document").ready(function() {
 

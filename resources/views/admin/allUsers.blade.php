@@ -83,7 +83,7 @@
                                     <th> Name </th>
                                     <th> Email ID </th>
                                     <th> Mobile Number </th>
-                                    <th> DOB </th>
+                                    <th> Pan No. </th>
                                     <th> Status </th>
                                     <th> Action </th>
                                 </tr>
@@ -97,14 +97,14 @@
                                         data-name="{{ $user->name }}" 
                                         data-email="{{ $user->email_id }}" 
                                         data-mobile="{{ $user->profile->mobile_no ?? '-' }}" 
-                                        data-dob="{{ $user->profile->dob ?? '-' }}" 
+                                        data-dob="{{ $user->profile->pan_no ?? '-' }}" 
                                         data-status="{{ $user->is_email_verify == 1 ? 'Active' : 'Inactive' }}"> {{ $user->name }}
                                         </a>
 
                                         </td>
                                         <td>{{ $user->email_id }}</td>
                                         <td>{{ $user->profile->mobile_no ?? '-' }}</td>
-                                        <td>{{ $user->profile->dob ?? ''}}</td>
+                                        <td>{{ $user->profile->pan_no ?? ''}}</td>
                                         <td>
                                             <label>
                                                 <input type="radio" name="status_{{ $user->id }}" value="1"
