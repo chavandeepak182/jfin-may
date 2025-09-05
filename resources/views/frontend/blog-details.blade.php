@@ -55,11 +55,11 @@
                 <h5 class="mb-3 fw-bold">Latest Blogs</h5>
                 @foreach($latestBlogs as $latest)
                     <div class="d-flex mb-3">
-                        <a href="{{ route('blog.show', $latest->id) }}" class="me-2 flex-shrink-0">
+                        <a href="{{ route('blogs.show', $latest->id) }}" class="me-2 flex-shrink-0">
                             <img src="{{ asset($latest->image) }}" alt="{{ $latest->blog_name }}" class="rounded" style="width:80px; height:60px; object-fit:cover;">
                         </a>
                         <div class="flex-grow-1">
-                            <a href="{{ route('blog.show', $latest->id) }}" class="text-dark text-decoration-none fw-semibold">
+                            <a href="{{ route('blogs.show', $latest->id) }}" class="text-dark text-decoration-none fw-semibold">
                                 {{ Str::limit($latest->blog_name, 50) }}
                             </a>
                             <p class="small text-muted mb-1">
@@ -82,16 +82,16 @@
             @foreach($relatedBlogs as $related)
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm border-0">
-                        <a href="{{ route('blog.show', $related->id) }}">
+                        <a href="{{ route('blogs.show', $related->id) }}">
                             <img src="{{ asset($related->image) }}" class="card-img-top" alt="{{ $related->blog_name }}" style="height:180px; object-fit:cover;">
                         </a>
                         <div class="card-body p-3">
-                            <a href="{{ route('blog.show', $related->id) }}" class="text-dark text-decoration-none">
+                            <a href="{{ route('blogs.show', $related->id) }}" class="text-dark text-decoration-none">
                                 <h6 class="card-title fw-bold">{{ Str::limit($related->blog_name, 60) }}</h6>
                             </a>
                             <p class="card-text text-muted small mb-2">{{ Str::limit(strip_tags($related->description), 80) }}</p>
                             <p class="text-muted small mb-0">{{ \Carbon\Carbon::parse($related->created_at)->format('M d, Y') }}</p>
-                            <a href="{{ route('blog.show', $related->id) }}" class="btn btn-sm btn-primary mt-2">Read More</a>
+                            <a href="{{ route('blogs.show', $related->id) }}" class="btn btn-sm btn-primary mt-2">Read More</a>
                         </div>
                     </div>
                 </div>
