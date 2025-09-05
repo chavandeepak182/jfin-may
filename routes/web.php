@@ -41,16 +41,16 @@ Route::get('admin/eligible', [BankController::class, 'eligiblelist'])->name('adm
 
 // blog
 
-Route::get('/admin/blog-page', [BlogController::class, 'adminBlog'])->name('admin.blogs');
-Route::get('/blog/{id}', [FrontendController::class, 'showBlog'])->name('blog.show');
-Route::get('/blog', [FrontendController::class, 'blog'])->name('blog');
+Route::get('/admin/blog', [BlogController::class, 'adminBlog'])->name('admin.blogs');
+Route::get('/blogs/{id}', [FrontendController::class, 'showBlog'])->name('blogs.show');
+Route::get('/blogs', [FrontendController::class, 'blog'])->name('blosg');
 
-Route::get('admin/blog', [BlogController::class, 'index'])->name('blog.index');          // List blogs
-   Route::get('admin/blog/create', [BlogController::class, 'create'])->name('blog.create'); // Add blog form
-    Route::post('blog/store', [BlogController::class, 'storeService'])->name('blog.store'); // Save blog
-    Route::get('blog/edit/{id}', [BlogController::class, 'edit'])->name('blog.edit');  // Edit blog form
-    Route::put('blog/update/{id}', [BlogController::class, 'update'])->name('blog.update'); // Update blog
-    Route::post('blog/delete/{id}', [BlogController::class, 'deleteService'])->name('blog.delete'); // Delete blog
+Route::get('admin/blogs', [BlogController::class, 'index'])->name('blogs.index');          // List blogs
+   Route::get('admin/blog/create', [BlogController::class, 'create'])->name('blogs.create'); // Add blog form
+    Route::post('blogs/store', [BlogController::class, 'storeService'])->name('blogs.store'); // Save blog
+    Route::get('blogs/edit/{id}', [BlogController::class, 'edit'])->name('blogs.edit');  // Edit blog form
+    Route::put('blogs/update/{id}', [BlogController::class, 'update'])->name('blogs.update'); // Update blog
+    Route::post('blogs/delete/{id}', [BlogController::class, 'deleteService'])->name('blogs.delete'); // Delete blog
 
 
     // blog category

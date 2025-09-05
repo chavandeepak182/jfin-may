@@ -20,7 +20,7 @@
             </nav>
 
             <!-- Add Blog Button -->
-            <a href="{{ route('blog.create') }}" class="btn btn-primary">
+            <a href="{{ route('blogs.create') }}" class="btn btn-primary">
                 <i class="fa fa-plus"></i> Add Blog
             </a>
         </div>
@@ -67,12 +67,12 @@
                         </td>
                         <td class="text-center">
                             <!-- Edit Button -->
-                            <a href="{{ route('blog.edit', $blog->id) }}" 
+                            <a href="{{ route('blogs.edit', $blog->id) }}" 
                                class="btn btn-warning btn-sm me-1">
                                 <i class="far fa-edit"></i>
                             </a>
                             <!-- Delete Button -->
-                            <form action="{{ route('blog.delete', $blog->id) }}" 
+                            <form action="{{ route('blogs.delete', $blog->id) }}" 
                                   method="POST" class="d-inline">
                                 @csrf
                                 <button type="submit" 

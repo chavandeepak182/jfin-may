@@ -121,7 +121,7 @@ class BlogController extends Controller
             return redirect()->back()->with('error', 'blog could not be added. Please check logs.');
         }
 
-        return redirect()->route('blog.index')->with('success', 'Blog added successfully.');
+        return redirect()->route('blogs.index')->with('success', 'Blog added successfully.');
     }
 
 
@@ -134,7 +134,7 @@ class BlogController extends Controller
         $blog = DB::table('blog')->where('id', $id)->first();
 
         if (!$blog) {
-            return redirect()->route('blog.index')->with('error', 'Blog not found.');
+            return redirect()->route('blogs.index')->with('error', 'Blog not found.');
         }
 
         $categories = DB::table('blog_category')->get();
@@ -162,7 +162,7 @@ class BlogController extends Controller
         $blog = DB::table('blog')->where('id', $id)->first();
 
         if (!$blog) {
-            return redirect()->route('blog.index')->with('error', 'Blog not found.');
+            return redirect()->route('blogs.index')->with('error', 'Blog not found.');
         }
 
         $imagePath = $blog->image;
@@ -195,7 +195,7 @@ class BlogController extends Controller
             'updated_at' => now(),
         ]);
 
-        return redirect()->route('blog.index')->with('success', 'Blog updated successfully.');
+        return redirect()->route('blogs.index')->with('success', 'Blog updated successfully.');
     }
 
     // Delete blog
@@ -204,7 +204,7 @@ class BlogController extends Controller
         $blog = DB::table('blog')->where('id', $id)->first();
 
         if (!$blog) {
-            return redirect()->route('blog.index')->with('error', 'Blog not found.');
+            return redirect()->route('blogs.index')->with('error', 'Blog not found.');
         }
 
         if ($blog->image && File::exists(public_path($blog->image))) {
@@ -213,7 +213,7 @@ class BlogController extends Controller
 
         DB::table('blog')->where('id', $id)->delete();
 
-        return redirect()->route('blog.index')->with('success', 'Blog deleted successfully.');
+        return redirect()->route('blogs.index')->with('success', 'Blog deleted successfully.');
     }
 }
 
