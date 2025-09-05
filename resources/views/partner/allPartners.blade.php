@@ -115,7 +115,7 @@ JFS | Channel Partners
                                         data-name="{{ $user->name }}" 
                                         data-email="{{ $user->email_id }}" 
                                         data-mobile="{{ $user->mobile_no }}" 
-                                        data-dob="{{ $user->profile->pan_no }}" 
+                                        data-dob="{{ $user->pan_no }}" 
                                         data-status="{{ $user->is_email_verify == 1 ? 'Active' : 'Inactive' }}">
                                         {{ $user->name }}
                                     </a>
@@ -123,7 +123,7 @@ JFS | Channel Partners
 
                                 <td>{{ $user->email_id }}</td>
                                 <td>{{ $user->mobile_no }}</td>
-                                <td>{{ $user->profile->pan_no}}</td>
+                                <td>{{ $user->pan_no}}</td>
                                 <td>
                                             <label>
                                                 <input type="radio" name="status_{{ $user->id }}" value="1"
