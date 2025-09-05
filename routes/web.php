@@ -43,7 +43,7 @@ Route::get('admin/eligible', [BankController::class, 'eligiblelist'])->name('adm
 
 Route::get('/admin/blog', [BlogController::class, 'adminBlog'])->name('admin.blogs');
 Route::get('/blogs/{id}', [FrontendController::class, 'showBlog'])->name('blogs.show');
-Route::get('/blogs', [FrontendController::class, 'blog'])->name('blosg');
+Route::get('/blogs', [FrontendController::class, 'blog'])->name('blogs');
 
 Route::get('admin/blogs', [BlogController::class, 'index'])->name('blogs.index');          // List blogs
    Route::get('admin/blog/create', [BlogController::class, 'create'])->name('blogs.create'); // Add blog form

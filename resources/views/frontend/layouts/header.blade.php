@@ -132,7 +132,7 @@
                             </div>
                             <a href="{{ url('properties')}}" class="nav-item {{ Request::is('properties') ? 'active' : '' }}">PROPERTIES</a>
                             <a href="{{ url('referral-program')}}" class="nav-item {{ Request::is('referral-program') ? 'active' : '' }}">REFERRALS</a>
-                           <a href="{{ route('blog') }}" class="nav-item {{ Request::is('blog') ? 'active' : '' }}">Blogs</a>
+                           <a href="{{ route('blogs') }}" class="nav-item {{ Request::is('blogs') ? 'active' : '' }}">Blogs</a>
 >
 
 
