@@ -303,7 +303,7 @@ private function handleFileUpload(Request $request, $inputName, $folder)
             'contact' => $request->contact_number,
             'price_range_id' => $request->price_range,
             'creator_id' => $request->creator_id,
-            'image' => $property_image,
+            // 'image' => $property_image,
             'boucher' => $property_voucher,
             'facilities' => $request->amenities,
             'area' => $request->area,
