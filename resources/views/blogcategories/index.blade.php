@@ -12,7 +12,7 @@
                 </ol>
             </nav>
         </div>
-        <a href="{{ route('blog.index') }}" class="btn btn-secondary">
+        <a href="{{ route('blogs.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back
         </a>
     </div>
