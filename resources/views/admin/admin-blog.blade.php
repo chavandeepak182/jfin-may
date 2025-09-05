@@ -80,7 +80,7 @@
 
                     <!-- Card 1: Customers -->
                     <div class="col-md-3 col-sm-6">
-    <a href="{{ route('blog.index') }}" style="text-decoration: none;">
+    <a href="{{ route('blogs.index') }}" style="text-decoration: none;">
         <div class="stat-card">
             <div class="stat-header blue-bg">
                 <i class="fas fa-users"></i>
