@@ -19,7 +19,7 @@
                 </ol>
             </nav>
         </div>
-        <a href="{{ route('blog.index') }}" class="btn btn-secondary d-flex align-items-center">
+        <a href="{{ route('blogs.index') }}" class="btn btn-secondary d-flex align-items-center">
             <i class="fas fa-arrow-left me-2"></i> Back
         </a>
     </div>

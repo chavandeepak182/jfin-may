@@ -6,7 +6,7 @@
 
     <!-- Breadcrumb -->
     <div class="breadcrumb-with-buttons mb-4 d-flex justify-content-between align-items-center flex-wrap">
-        <div class="breadcrumb">
+        <div class="breadcrumb" style="background-color:#f8f9fc;">
             <nav aria-label="breadcrumb" class="d-flex align-items-center">
                 <ol class="breadcrumb m-0 bg-transparent">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
@@ -14,7 +14,7 @@
                 </ol>
             </nav>
         </div>
-        <a href="{{ route('blog.index') }}" class="btn btn-secondary">
+        <a href="{{ route('blogs.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back
         </a>
     </div>
@@ -32,7 +32,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('blog.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('blogs.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row g-4">
                     <!-- Left Section -->

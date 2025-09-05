@@ -15,7 +15,7 @@
         </ol>
     </nav>
 
-    <a href="{{ route('blog.index') }}" class="btn btn-primary rounded d-flex align-items-center">
+    <a href="{{ route('blogs.index') }}" class="btn btn-primary rounded d-flex align-items-center">
         <i class="fa fa-arrow-left me-2"></i> Back
     </a>
 </div>
@@ -36,7 +36,7 @@
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
-            <form action="{{ route('blog.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('blogs.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
