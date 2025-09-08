@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\BlogCategoryController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\LoanApplicationController;
@@ -37,7 +39,30 @@ Route::get('admin/referrallist', [BankController::class, 'listreferral'])->name(
 Route::get('admin/eligible', [BankController::class, 'eligiblelist'])->name('admin.eligible');
 
 
+// blog
 
+Route::get('/admin/blog', [BlogController::class, 'adminBlog'])->name('admin.blogs');
+Route::get('/blogs/{id}', [FrontendController::class, 'showBlog'])->name('blogs.show');
+Route::get('/blogs', [FrontendController::class, 'blog'])->name('blogs');
+
+Route::get('admin/blogs', [BlogController::class, 'index'])->name('blogs.index');          // List blogs
+   Route::get('admin/blog/create', [BlogController::class, 'create'])->name('blogs.create'); // Add blog form
+    Route::post('blogs/store', [BlogController::class, 'storeService'])->name('blogs.store'); // Save blog
+    Route::get('blogs/edit/{id}', [BlogController::class, 'edit'])->name('blogs.edit');  // Edit blog form
+    Route::put('blogs/update/{id}', [BlogController::class, 'update'])->name('blogs.update'); // Update blog
+    Route::post('blogs/delete/{id}', [BlogController::class, 'deleteService'])->name('blogs.delete'); // Delete blog
+
+
+    // blog category
+    Route::get('/blog-categories', [BlogCategoryController::class, 'index'])->name('blog.categories.index');
+Route::post('/blog-categories/store', [BlogCategoryController::class, 'store'])->name('blog.categories.store');
+Route::get('/blog-categories/edit/{pid}', [BlogCategoryController::class, 'edit'])->name('blog.categories.edit');
+Route::post('/blog-categories/update/{pid}', [BlogCategoryController::class, 'update'])->name('blog.categories.update');
+
+Route::middleware('isAdmin')->group(function () {
+    Route::post('/blog-categories/delete/{pid}', [BlogCategoryController::class, 'destroy'])
+        ->name('blog.categories.delete');
+});
 
 
 //permission

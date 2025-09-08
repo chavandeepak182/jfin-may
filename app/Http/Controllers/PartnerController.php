@@ -29,7 +29,7 @@ class PartnerController extends Controller
         ->join('profile', 'users.id', '=', 'profile.user_id')
         ->where('users.role_id', 3)
         ->whereNull('users.deleted_at') // Exclude soft-deleted users
-        ->select('users.id', 'users.name', 'users.email_id', 'profile.mobile_no', 'profile.dob','is_email_verify')
+        ->select('users.id', 'users.name', 'users.email_id', 'profile.mobile_no', 'users.pan_no','profile.dob','is_email_verify')
         ->paginate(10);
 
     return view('partner.allPartners', compact('data'));
