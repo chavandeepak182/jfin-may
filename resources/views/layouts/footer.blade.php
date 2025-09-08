@@ -6,4 +6,24 @@
             </div>
         </div>
     </footer>
-<!-- End of Footer -->
+
+
+   
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Summernote CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
+
+<!-- Summernote JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
+
+<!-- Summernote Initialization -->
+<script>
+$(document).ready(function() {
+    $('#summernote').summernote({
+        placeholder: 'Write something here...',
+        tabsize: 2,
+        height: 200
+    });
+});
+</script>
