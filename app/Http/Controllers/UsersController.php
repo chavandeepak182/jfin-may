@@ -101,6 +101,7 @@ class UsersController extends Controller
                 $profile->user_id = $user->id;
                 $profile->mobile_no = $request->mobile_no;
                 $profile->dob = $request->dob;
+                 $profile->pan_number = $request->pan_number;
                 $profile->residence_address = $request->address;
                 $profile->city = $request->city;
                 $profile->state = $request->state;

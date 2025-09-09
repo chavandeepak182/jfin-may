@@ -167,9 +167,9 @@
                     </div>
 
                     <div class="col-lg-12">
-                        <div class="mb-3">
-                            <label class="form-label">Property Description</label>
-                            <textarea name="property_description" class="form-control" rows="5" placeholder="Property Description" required></textarea>
+                        <div class="position-relative pb-15 form-group">
+                            <label for="description">Description</label>
+                            <textarea name="description" id="summernote" class="form-control"></textarea>
                         </div>
                     </div>
 
