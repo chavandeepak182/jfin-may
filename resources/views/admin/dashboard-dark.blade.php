@@ -28,7 +28,7 @@
                         <div class="row align-items-center justify-content-center">
                         <!-- Card 1: Total Loans -->
                             <div class="col-md-4">
-                                <a href="{{ route('allUsers') }}" target="_blank" style="text-decoration: none;">
+                                <a href="{{ route('allUsers') }}"  style="text-decoration: none;">
                                     <div class="text-center dash-card">
                                         <h6 class="card-title">Total Customers</h6>
                                         <h3 class="">{{ $totalCustomers }}</h3>
@@ -38,7 +38,7 @@
 
                             <!-- Card 2: Disbursed Loans -->
                             <div class="col-md-4">
-                                <a href="{{ route('allAgents') }}" target="_blank" style="text-decoration: none;">
+                                <a href="{{ route('allAgents') }}"  style="text-decoration: none;">
                                     <div class="text-center dash-card">
                                         <h6 class="card-title">Total<br>Officers</h6>
                                         <h3 class="">{{ $totalOfficers }}</h3>
@@ -47,7 +47,7 @@
                             </div>
                             <!-- Card 3: Approved Loans -->
                             <div class="col-md-4">
-                                <a href="{{ route('loans.index') }}" target="_blank" style="text-decoration: none;">
+                                <a href="{{ route('loans.index') }}"  style="text-decoration: none;">
                                     <div class="text-center dash-card">
                                         <h6 class="card-title">Total<br>Loans</h6>
                                         <h3 class="">{{ $totalLoans }}</h3>
@@ -57,7 +57,7 @@
 
                             <!-- Card 4: Rejected Loans -->
                             <div class="col-md-4">
-                                <a href="{{ route('disbursed.loans')}}" target="_blank" style="text-decoration: none;">
+                                <a href="{{ route('disbursed.loans')}}"  style="text-decoration: none;">
                                     <div class="text-center dash-card">
                                         <h6 class="card-title">Disbursed Loans</h6>
                                         <h3 class="">{{ $disbursedLoans }}</h3>
@@ -66,7 +66,7 @@
                             </div>
 
                             <div class="col-md-4">
-                                <a href="/admin/leads" target="_blank" style="text-decoration: none;">
+                                <a href="/admin/leads" style="text-decoration: none;">
                                     <div class="text-center dash-card">
                                         <h6 class="card-title">Total<br>Leads</h6>
                                         <h3 class="">{{ $leads }}</h3>
@@ -75,7 +75,7 @@
                             </div>
 
                             <div class="col-md-4">
-                                <a href="{{ route('enquiries.enquiryLead') }}" target="_blank" style="text-decoration: none;">
+                                <a href="{{ route('enquiries.enquiryLead') }}"  style="text-decoration: none;">
                                     <div class="text-center dash-card">
                                         <h6 class="card-title">Total Enquiries</h6>
                                         <h3 class="">{{ $enquiries }}</h3>
@@ -84,7 +84,7 @@
                             </div>
 
                             <div class="col-md-4">
-                                <a href="{{ route('agent.approved.loans')}}" target="_blank" style="text-decoration: none;">
+                                <a href="{{ route('agent.approved.loans')}}"  style="text-decoration: none;">
                                     <div class="text-center dash-card">
                                         <h6 class="card-title">Approved Loans</h6>
                                         <h3 class="">{{ $approvedLoans }}</h3>
@@ -93,7 +93,7 @@
                             </div>
 
                             <div class="col-md-4">
-                                <a href="{{ route('agent.rejected.loans')}}" target="_blank" style="text-decoration: none;">
+                                <a href="{{ route('agent.rejected.loans')}}"  style="text-decoration: none;">
                                     <div class="text-center dash-card">
                                         <h6 class="card-title">Rejected Loans</h6>
                                         <h3 class="">{{ $rejectedLoans }}</h3>
@@ -102,7 +102,7 @@
                             </div>
 
                             <div class="col-md-4">
-                                <a href="{{ route('allProperties') }}" target="_blank" style="text-decoration: none;">
+                                <a href="{{ route('allProperties') }}"  style="text-decoration: none;">
                                     <div class="text-center dash-card">
                                         <h6 class="card-title">Total Properties</h6>
                                         <h3 class="">{{ $properties }}</h3>

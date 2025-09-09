@@ -97,14 +97,14 @@
                                         data-name="{{ $user->name }}" 
                                         data-email="{{ $user->email_id }}" 
                                         data-mobile="{{ $user->profile->mobile_no ?? '-' }}" 
-                                        data-dob="{{ $user->profile->pan_no ?? '-' }}" 
+                                        data-dob="{{ $user->profile->pan_number ?? '-' }}" 
                                         data-status="{{ $user->is_email_verify == 1 ? 'Active' : 'Inactive' }}"> {{ $user->name }}
                                         </a>
 
                                         </td>
                                         <td>{{ $user->email_id }}</td>
                                         <td>{{ $user->profile->mobile_no ?? '-' }}</td>
-                                        <td>{{ $user->profile->pan_no ?? ''}}</td>
+                                        <td>{{ $user->profile->pan_number ?? ''}}</td>
                                         <td>
                                             <label>
                                                 <input type="radio" name="status_{{ $user->id }}" value="1"
@@ -233,7 +233,7 @@
         <p><strong>Name:</strong> <span id="detail_name">-</span></p>
         <p><strong>Email:</strong> <span id="detail_email">-</span></p>
         <p><strong>Mobile:</strong> <span id="detail_mobile">-</span></p>
-        <p><strong>DOB:</strong> <span id="detail_dob">-</span></p>
+        <p><strong>Pan Number</strong> <span id="detail_dob">-</span></p>
         <p><strong>Status:</strong> <span id="detail_status">-</span></p>
       </div>
       <div class="modal-footer">
@@ -390,7 +390,7 @@ document.querySelectorAll('.user-link').forEach(link => {
         document.getElementById('detail_name').innerText   = this.dataset.name || '-';
         document.getElementById('detail_email').innerText  = this.dataset.email || '-';
         document.getElementById('detail_mobile').innerText = this.dataset.mobile || '-';
-        document.getElementById('detail_dob').innerText    = this.dataset.dob || '-';
+        document.getElementById('detail_dob').innerText    = this.dataset.pan_number || '-';
         document.getElementById('detail_status').innerText = this.dataset.status || '-';
 
         var modal = new bootstrap.Modal(document.getElementById('userDetailsModal'));
