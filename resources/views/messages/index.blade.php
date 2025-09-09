@@ -273,7 +273,7 @@
                                                 <td class="action"><i class="fa fa-bookmark-o"></i></td>
                                                 <td class="name">
                                                     <a href="{{ route('messages.show', $message->id) }}">
-                                                        {{ $message->sender->name }}
+                                                       {{ $message->sender->name ?? 'Unknown User' }}
                                                     </a>
                                                 </td>
                                                 <td class="subject">

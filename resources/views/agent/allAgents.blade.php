@@ -17,6 +17,13 @@ JFS | Agents
     height: 4.375rem;
     background-color:#000;
 }
+
+.dataTables_filter {
+    margin-right: 60px;
+    text-align: right;
+}
+
+
 </style>
 <!-- Breadcrumbs and Search Bar -->
 <div class="card-header py-3">
@@ -70,10 +77,7 @@ JFS | Agents
 </style>
 
         <!-- Search Bar -->
-        <div class="d-flex ms-auto">
-            <input type="text" id="search" class="form-control" placeholder="Search..." onkeyup="searchUser()">
-        </div>
-
+        
         <!-- Add User Button -->
         <button class="btn btn-primary ms-3" data-bs-toggle="modal" href="#addAgentView">
             <i class="fa fa-plus"></i> Add Agent
