@@ -279,11 +279,15 @@
                             <h6>Uploaded:</h6>
                             @foreach ($documents as $doc)
                                 <div class="col-md-12 mb-3">
-                                    <div class="document-wrapper">
-                                        <a href="{{ Storage::url($doc->file_path) }}"
-                                            target="_blank">{{ $doc->document_name }}</a>
+                                 <div class="document-wrapper">
+    <a href="{{ Storage::url($doc->file_path) }}" target="_blank" style="display: flex; align-items: center; gap: 10px;">
+        <img src="{{ Storage::url($doc->file_path) }}" 
+             alt="{{ $doc->document_name }}" 
+             style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd;">
+        <span>{{ $doc->document_name }}</span>
+    </a>
+</div>
 
-                                    </div>
                                 </div>
                             @endforeach
                             <!-- Document Upload -->
