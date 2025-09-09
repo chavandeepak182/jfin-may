@@ -30,7 +30,7 @@ class PropertyController extends Controller
         return view('property.addProperty',compact('data'));
     }
 
-    public function insertProperty(Request $request)
+public function insertProperty(Request $request)
 {
     $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 
@@ -45,10 +45,15 @@ class PropertyController extends Controller
         $p->property_details = $request->property_description;
         $p->address = $request->property_address;
 
-        // Handle Amenities
+        // Handle Locality
         $locality = DB::table('localities')->where('id', $request->localitie)->value('name');
-        $property_status = DB::table('property_status')->where('id', $request->localitie)->value('status_name');
-        $amenities = $request->input('amenities', []); // Default to an empty array if null
+        $p->localities = $locality;
+
+        // Handle Property Status (save selected ID, not NULL)
+        $p->property_status = $request->property_status;
+
+        // Handle Amenities
+        $amenities = $request->input('amenities', []); // Default to empty array if null
         $p->facilities = implode(', ', $amenities);
 
         $p->creator_id = $request->creator_id;
@@ -56,8 +61,6 @@ class PropertyController extends Controller
         $p->contact = $request->contact_number;
         $p->area = $request->area;
         $p->builtup_area = $request->builtup_area;
-        $p->localities = $locality;
-        $p->property_status = $property_status;
         $p->beds = $request->beds;
         $p->baths = $request->baths;
         $p->balconies = $request->balconies;
@@ -85,11 +88,11 @@ class PropertyController extends Controller
             foreach ($request->file('property_images') as $property_image) {
                 $image_name = substr(str_shuffle($permitted_chars), 0, 8) . time() . '.' . $property_image->extension();
                 $image_path = "property_photos/" . $image_name;
-                $property_image->move(public_path('property_photos'), $image_path);
+                $property_image->move(public_path('property_photos'), $image_name); // ✅ Fixed move path
 
                 // Insert into `property_images` table
                 DB::table('property_images')->insert([
-                    'properties_id' => $p->id, // Use the correct property ID
+                    'properties_id' => $p->id,
                     'image_url' => $image_path,
                     'is_featured' => 0, // Default to non-featured
                     'created_at' => now(),
@@ -143,17 +146,16 @@ private function handleFileUpload(Request $request, $inputName, $folder)
 }
 
 
-    public function allProperties()
+public function allProperties()
 {
     // Get the logged-in user's role and ID from the session
-    $role_id = Session::get('role_id'); // Assuming role_id is stored in the session
-    $user_id = Session::get('user_id'); // Assuming user_id is stored in the session
+    $role_id = Session::get('role_id'); 
+    $user_id = Session::get('user_id'); 
 
-    // Base query for fetching properties
+    // Base query for fetching properties with LEFT JOINs so no property is excluded
     $query = DB::table('properties')
-        ->join('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
-        ->join('property_category', 'properties.property_type_id', '=', 'property_category.pid')
-        ->where('properties.is_active', 1)
+        ->leftJoin('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
+        ->leftJoin('property_category', 'properties.property_type_id', '=', 'property_category.pid')
         ->select(
             'properties.properties_id',
             'properties.title',
@@ -181,12 +183,17 @@ private function handleFileUpload(Request $request, $inputName, $folder)
         $query->where('properties.creator_id', $user_id);
     }
 
+    // ✅ Optional: Show only active properties
+    // $query->where('properties.is_active', 1);
+
     // Paginate the results
     $data['allProperties'] = $query->paginate(50);
 
     // Return the view with the data
     return view('property.allProperties', compact('data'));
 }
+
+
 
     public function pendingProperties()
     {
