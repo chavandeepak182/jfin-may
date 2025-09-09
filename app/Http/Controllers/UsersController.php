@@ -42,15 +42,15 @@ class UsersController extends Controller
 
 
     public function allUsers()
-    {
-        $users = User::with('profile') // Eager load profile relationship
-            ->select(['id', 'name', 'email_id', 'is_email_verify'])
-            ->whereNull('deleted_at')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+{
+    $users = User::with('profile')
+        ->select(['id', 'name', 'email_id', 'is_email_verify'])
+        ->where('role_id', 1) // Filter users with role_id = 1
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
 
-        return view('admin.allUsers', compact('users'));
-    }
+    return view('admin.allUsers', compact('users'));
+}
     public function updateUserStatus(Request $request)
     {
         DB::table('users')
