@@ -881,7 +881,7 @@
                                         </fieldset>
 
 
-                                <fieldset>
+                                <!-- <fieldset>
                                     <h4 class="text-primary mb-3">Loan Details</h4>
                                     <div class="row g-3">
                                         <div class="col-md-6">
@@ -906,7 +906,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Referral Code Input -->
+                                     
                                         @if ($user->loans()->count() <= 1)
                                             <div class="col-md-6">
                                                 <div class="form-floating">
@@ -920,7 +920,7 @@
 
 
 
-                                            <!-- Button and Feedback Section -->
+                                         
                                             <div class="row mt-2">
                                                 <div class="col-md-6">
                                                     <button type="button" id="check-referral-code"
@@ -930,7 +930,7 @@
                                             </div>
                                         @endif
                                     </div>
-                                </fieldset>
+                                </fieldset> -->
 
 
 
