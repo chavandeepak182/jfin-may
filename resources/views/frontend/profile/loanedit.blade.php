@@ -48,7 +48,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="user_id">User:</label>
+                                        <label for="user_id">Name :</label>
                                         <input type="text" class="form-control" id="user_id" name="user_id"
                                             value="{{ $applyingUser->name ?? '' }}" readonly>
                                     </div>
@@ -209,14 +209,15 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="amount">Amount:</label>
+                                        <label for="amount">Amount:<span class="text-danger">*</span></label>
+                                         
                                         <input type="number" class="form-control" id="amount" name="amount"
                                             value="{{ old('amount', $loan->amount ?? '') }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="tenure">Tenure:</label>
+                                        <label for="tenure">Tenure:<span class="text-danger">*</span></label>
                                         <input type="number" class="form-control" id="tenure" name="tenure"
                                             value="{{ old('tenure', $loan->tenure ?? '') }}" required>
                                     </div>
@@ -265,7 +266,10 @@
                 <!-- Right Section: Documents -->
                 <div class="col-md-4 bg-light p-5">
                     <div class="section mb-4">
-                        <h3 class="h4 mb-2"><strong>Documents</strong></h4>
+                     <h3 class="h4 mb-2">
+                        <strong>Documents</strong> 
+                        <small class="text-muted" style="font-size: 70%;">(Max size: 2MB)</small>
+                    </h3>
                             <!-- Documents -->
                             <h6>Uploaded:</h6>
                             @foreach ($documents as $doc)
