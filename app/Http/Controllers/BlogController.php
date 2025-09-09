@@ -76,7 +76,7 @@ public function storeService(Request $request)
     $imagePath = null;
 
     if ($request->hasFile('image')) {
-        // Image थेट storage/app/public/blogs मध्ये जाईल
+        
         $imagePath = $request->file('image')->store('blogs', 'public');
     }
 

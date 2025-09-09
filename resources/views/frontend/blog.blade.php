@@ -100,6 +100,8 @@
         <a href="{{ route('blogs.show', $blog->id) }}" class="text-decoration-none text-dark">
           <div class="card h-100 shadow-sm border-0 blog-box">
             <img src="{{ asset('storage/' . $blog->image) }}" class="card-img-top" alt="{{ $blog->blog_name }}">
+            <!-- <img src="{{ asset('images/sample.png') }}" class="card-img-top" alt="Sample Image"> -->
+
             <div class="card-body">
               <h5 class="card-title">{{ $blog->blog_name }}</h5>
               <p class="card-text text-muted">
