@@ -16,15 +16,21 @@ JFS | In-Process Loans
 <div class="card shadow mb-4">
     <!-- Breadcrumbs -->
     <div class="card-header py-3">
-        <div class="d-flex justify-content-between align-items-center">
-            <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb" class="d-flex align-items-center">
-                <ol class="breadcrumb m-0 bg-transparent">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">In-Process Loans</li>
-                </ol>
-            </nav>
-        </div>
+        <<div class="d-flex justify-content-between align-items-center mb-3">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="d-flex align-items-center">
+        <ol class="breadcrumb m-0 bg-transparent">
+            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Pending Loans</li>
+        </ol>
+    </nav>
+
+    <!-- Back Button -->
+    <a href="{{ url()->previous() }}" class="btn btn-secondary">
+        <i class="fa fa-arrow-left me-1"></i> Back
+    </a>
+</div>
+
     </div>
 
     <div class="card-body">
