@@ -527,7 +527,7 @@
             </li>
 
             <?php } ?>
-            <?php    if($role_id == 2) { ?>
+            <?php    if($role_id == 4) { ?>
             <hr class="sidebar-divider">
 
             <!-- Nav Item - Agent MIS -->
