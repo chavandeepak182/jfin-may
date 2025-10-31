@@ -312,8 +312,6 @@ public function showBlog($id)
         return back()->withErrors(['error' => 'Invalid login type selected']);
     }
 
-
-
     public function activate(Request $request)
     {
         if (!$request->has(['expires', 'id', 'token', 'signature'])) {
