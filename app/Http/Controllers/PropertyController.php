@@ -103,7 +103,9 @@ public function insertProperty(Request $request)
 
         // Commit transaction if successful
         DB::commit();
+        
         return response()->json(['status' => 1, 'msg' => 'Property added successfully']);
+        
 
     } catch (\Exception $e) {
         DB::rollback();

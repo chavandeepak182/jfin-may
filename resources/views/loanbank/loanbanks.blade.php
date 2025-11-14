@@ -116,16 +116,18 @@ JFS | Company tied up bank details
 </div>
 
 <!-- Add Bank Modal -->
-<div class="modal fade" id="addBankView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addBankView" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Add New Bank</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+
             <div class="modal-body">
                 <form id="addBank" method="post">
                     @csrf
+
                     <div class="row">
                         <div class="form-group col-lg-4">
                             <label>Bank Name:</label>
@@ -146,13 +148,32 @@ JFS | Company tied up bank details
                             <label>Manager Name:</label>
                             <input type="text" class="form-control" name="manager_name">
                         </div>
-                        <div class="for
+                        <div class="form-group col-lg-4">
+                            <label>Bank Address:</label>
+                            <input type="text" class="form-control" name="bank_address">
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>Manager Number:</label>
+                            <input type="text" class="form-control" name="manager_number">
+                        </div>
+                    </div>
 
-            
+                    <!-- Missing footer added here -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Add Bank
+                        </button>
+                    </div>
 
+                </form>
+            </div>
 
-   
-   
+        </div>
+    </div>
+</div>
 
 @endsection
 

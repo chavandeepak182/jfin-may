@@ -149,28 +149,53 @@
 
 
                                         <div class="col-md-4">
-                                            <div class="form-floating">
-                                                <input type="text" name="pan_number"
-                                                    value="{{ old('pan_number', $profile->pan_number ?? '') }}"
-                                                    class="form-control" id="pan_number" placeholder="PAN Number">
-                                                <label for="pan_number">PAN Number</label>
-                                                @error('pan_number')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
+                                           <div class="form-floating">
+                                            <input type="text" name="pan_number"
+                                                value="{{ old('pan_number', $profile->pan_number ?? '') }}"
+                                                class="form-control" id="pan_number"
+                                                placeholder="PAN Number"
+                                                pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" 
+                                                maxlength="10"
+                                                title="Enter valid 10-character PAN (e.g., ABCDE1234F)">
+                                            <label for="pan_number">PAN Number</label>
+                                            @error('pan_number')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
 
-                                        <div class="col-md-4">
-                                            <div class="form-floating">
-                                                <input type="tel" class="form-control" id="phone" name="mobile_no"
-                                                    value="{{ old('mobile_no', $profile->mobile_no ?? $user->mobile_no) }}"
-                                                    placeholder="Phone" required>
-                                                <label for="phone">Phone <span class="text-danger">*</span></label>
-                                                @error('mobile_no')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
                                         </div>
+
+                                           <div class="col-md-4">
+    <div class="form-floating">
+        <input type="text"
+            class="form-control"
+            id="phone"
+            name="mobile_no"
+            value="{{ old('mobile_no', $profile->mobile_no ?? $user->mobile_no) }}"
+            placeholder="Phone"
+            maxlength="10"
+            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
+            required>
+        <label for="phone">Phone <span class="text-danger">*</span></label>
+        <span id="phone-error" class="text-danger" style="font-size: 13px;"></span>
+        @error('mobile_no')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
+</div>
+
+<script>
+document.getElementById('phone').addEventListener('input', function() {
+    const phone = this.value;
+    const errorSpan = document.getElementById('phone-error');
+    
+    if (phone.length > 0 && phone.length < 10) {
+        errorSpan.textContent = 'Phone number must be 10 digits.';
+    } else {
+        errorSpan.textContent = '';
+    }
+});
+</script>
 
                                         {{-- <button type="button" class="btn btn-primary" id="fetchReportBtn">Fetch Credit Report</button> --}}
 
@@ -259,14 +284,26 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control" id="pincode" name="pincode"
+                                                <input type="text" 
+                                                    class="form-control" 
+                                                    id="pincode" 
+                                                    name="pincode"
                                                     value="{{ old('pincode', $profile->pincode ?? '') }}"
-                                                    placeholder="Pincode">
+                                                    placeholder="Pincode"
+                                                    maxlength="6"
+                                                    required
+                                                    inputmode="numeric"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6)">
                                                 <label for="pincode">Pincode <span class="text-danger">*</span></label>
+
+                                                <span id="pincode-error" class="text-danger" style="font-size: 13px;"></span>
+
                                                 @error('pincode')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
+
+
                                         </div>
 
                                     </div>
@@ -1348,5 +1385,22 @@
             }
         });
     </script>
+    
+<script>
+document.getElementById('pincode').addEventListener('input', function() {
+    const val = this.value;
+    const errorSpan = document.getElementById('pincode-error');
+
+    // Allow only digits
+    this.value = val.replace(/[^0-9]/g, '');
+
+    // Show inline error if not 6 digits yet
+    if (val.length > 0 && val.length < 6) {
+        errorSpan.textContent = 'Please enter a 6-digit pincode.';
+    } else {
+        errorSpan.textContent = '';
+    }
+});
+</script>
 
 @endsection
