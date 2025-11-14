@@ -17,9 +17,12 @@
                 </ol>
             </nav>
 
-            <div class="hstack gap-3">
-                <button class="btn btn-light border btn-icon-text"><i class="bi bi-x"></i> <span class="text">Cancel</span></button>
-                {{-- <button type="submit" class="btn btn-primary btn-icon-text"><i class="bi bi-save"></i> <span class="text">Save</span></button> --}}
+            <div class="hstack gap-3"><button class="btn btn-light border btn-icon-text"
+        onclick="window.location.href='{{ route('allProperties') }}'">
+    <i class="bi bi-x"></i>
+    <span class="text">Cancel</span>
+</button>
+{{-- <button type="submit" class="btn btn-primary btn-icon-text"><i class="bi bi-save"></i> <span class="text">Save</span></button> --}}
                 <input type="submit" class="btn btn-primary btn-icon-text" value="Save">
             </div>
         </div>
@@ -66,27 +69,61 @@
                             </select>
                         </div>
                     </div>
+                            <div class="col-lg-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Starting Price</label><span class="text-danger">*</span>
+                                            <input type="text" 
+                                                name="s_price" 
+                                                class="form-control" 
+                                                placeholder="Starting Price" 
+                                                required
+                                                inputmode="numeric"
+                                                pattern="^[0-9]+$"
+                                                title="Please enter numeric values only" />
+                                        </div>
+                            </div>
 
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label">Starting Price</label><span class="text-danger">*</span>
-                            <input type="text" name="s_price" class="form-control" placeholder="Starting Price" required />
-                        </div>
+
+
+
+                                        <div class="col-lg-3">
+                                            <div class="mb-3">
+                        <label class="form-label">Carpet area <span class="text-danger">*</span></label>
+                        <input 
+                            type="text" 
+                            name="area" 
+                            value="{{ old('area') }}" 
+                            class="form-control @error('area') is-invalid @enderror" 
+                            placeholder="Carpet Area" 
+                            required
+                        />
+                        @error('area')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label">Carpet area</label><span class="text-danger">*</span>
-                            <input type="text" name="area" class="form-control" placeholder="Carpet Area" required />
-                        </div>
+
+
                     </div>
 
                     <div class="col-lg-3"> 
-                        <div class="mb-3">
-                            <label class="form-label">Built-up Area</label><span class="text-danger">*</span>
-                            <input type="text" name="builtup_area" class="form-control" placeholder="Built-up Area" required />
-                        </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Built-up Area <span class="text-danger">*</span></label>
+                                    <input 
+                                        type="text" 
+                                        name="builtup_area" 
+                                        value="{{ old('builtup_area') }}" 
+                                        class="form-control @error('builtup_area') is-invalid @enderror" 
+                                        placeholder="Enter Built-up Area" 
+                                        required
+                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '');"
+                                    />
+                                    @error('builtup_area')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                     </div>
+
 
                     <div class="col-lg-3">
                         <div class="mb-3">
@@ -265,17 +302,44 @@
 
         <!-- Right side -->
         <div class="col-lg-3 bg-light p-4">
-            <div class=" mb-4">
-                <!-- Multiple Property Images Upload -->
-                <h3 class="h6"><strong>Property Images<span class="text-danger">*</span></strong></h3>
-                <input class="form-control" type="file" accept=".jpg,.jpeg,.png,.webp" name="property_images[]" multiple required />
-                <small class="text-muted">You can upload multiple images (JPG, JPEG, PNG, WEBP).</small>
+           <div class="mb-4">
+    <!-- Multiple Property Images Upload -->
+    <h3 class="h6"><strong>Property Images<span class="text-danger">*</span></strong></h3>
+    <input class="form-control" type="file" accept=".jpg,.jpeg,.png,.webp" name="property_images[]" id="property_images" multiple required />
+    <small class="text-muted">You can upload multiple images (JPG, JPEG, PNG, WEBP).</small>
 
-                <!-- Property Boucher Upload -->
-                <h3 class="h6 mt-2"><strong>Property Brochure<span class="text-danger">*</span></strong></h3>
-                <input class="form-control" type="file" accept=".pdf" name="property_voucher" />
-                <small class="text-muted">Upload the property brochure in PDF format.</small>
-            </div>
+    <!-- Preview Container -->
+    <div id="imagePreview" class="mt-3 d-flex flex-wrap gap-2"></div>
+
+    <!-- Property Brochure Upload -->
+    <h3 class="h6 mt-3"><strong>Property Brochure<span class="text-danger">*</span></strong></h3>
+    <input class="form-control" type="file" accept=".pdf" name="property_voucher" />
+    <small class="text-muted">Upload the property brochure in PDF format.</small>
+</div>
+
+<script>
+document.getElementById("property_images").addEventListener("change", function(event) {
+    let previewContainer = document.getElementById("imagePreview");
+    previewContainer.innerHTML = ""; // clear old previews
+
+    Array.from(event.target.files).forEach(file => {
+        if (!file.type.startsWith("image/")) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            let img = document.createElement("img");
+            img.src = e.target.result;
+            img.className = "rounded border";
+            img.style.width = "100px";
+            img.style.height = "100px";
+            img.style.objectFit = "cover";
+            previewContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
+});
+</script>
+
             <!-- Notes -->
 
             <div class="mb-4">
@@ -438,5 +502,17 @@ function deletePropertie(id)
             });
         }
     });
+</script>
+
+
+<!-- all points validation -->
+ <script>
+document.querySelector('input[name="area"]').addEventListener('input', function(e) {
+    this.value = this.value.replace(/[^0-9.]/g, '');
+});
+document.querySelector('input[name="s_price"]').addEventListener('input', function () {
+    this.value = this.value.replace(/[^0-9]/g, '');
+});
+
 </script>
 @endsection

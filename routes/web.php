@@ -42,7 +42,7 @@ Route::get('admin/eligible', [BankController::class, 'eligiblelist'])->name('adm
 // blog
 
 Route::get('/admin/blog', [BlogController::class, 'adminBlog'])->name('admin.blogs');
-Route::get('/blogs/{id}', [FrontendController::class, 'showBlog'])->name('blogs.show');
+Route::get('/blogs/{slug}', [FrontendController::class, 'showBlog'])->name('blogs.show');
 Route::get('/blogs', [FrontendController::class, 'blog'])->name('blogs');
 
 Route::get('admin/blogs', [BlogController::class, 'index'])->name('blogs.index');          // List blogs
@@ -343,9 +343,13 @@ Route::post('/register', [UsersController::class, 'registerUser'])->name('regist
 
 //agent
 Route::middleware('isAgent')->group(function () {
-    Route::get('agent/agentDashboard', [AgentController::class, 'agentDashboard'])->name('agentDashboard');
+    Route::get('agent/agentDashboard', action: [AgentController::class, 'agentDashboard'])->name('agentDashboard');
     Route::get('agent/allAgents', [AgentController::class, 'allAgents'])->name('allAgents');
-    Route::post('agent/insertAgent',[AgentController::class,'insertAgent'])->name('insertAgent');
+    // Route::post('agent/insertAgent', action: [AgentController::class, 'insertAgent'])->name('insertAgent');
+    Route::post('agent/insertAgent', [AgentController::class, 'insertAgent'])->name('insertAgent');
+
+    
+
     Route::get('/editAgent/{user_id}', [AgentController::class, 'editAgent'])->name('editAgent');
     Route::post('/updateAgent', [AgentController::class, 'updateAgent'])->name('updateAgent');
     Route::post('/deleteAgent', [AgentController::class, 'deleteAgent'])->name('deleteAgent');
@@ -451,3 +455,5 @@ Route::get('admin/property-takers', [PropertyTakerController::class, 'index'])->
 Route::get('admin/property-takers/{id}/edit', [PropertyTakerController::class, 'edit'])->name('property_takers.edit');
 Route::put('admin/property-takers/{id}', [PropertyTakerController::class, 'update'])->name('property_takers.update');
 Route::get('admin/property-takers/{id}', [PropertyTakerController::class, 'show'])->name('property_takers.view');
+Route::delete('admin/property-takers/{id}', [PropertyTakerController::class, 'destroy'])
+    ->name('property_takers.destroy');

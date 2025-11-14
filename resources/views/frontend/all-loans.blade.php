@@ -43,7 +43,7 @@
                             </option>
                             <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected
                             </option>
-                            <option value="in process" {{ request('status') == 'disbursed' ? 'selected' : '' }}>In process
+                            <option value="in process" {{ request('status') == 'in process' ? 'selected' : '' }}>In process
                             </option>
                             <option value="disbursed" {{ request('status') == 'disbursed' ? 'selected' : '' }}>Disbursed
                             </option>
@@ -181,6 +181,19 @@
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    /* Reduce width of search bar input */
+    .form-control.form-control-sm {
+        width: 600px !important; /* adjust as per your layout */
+        display: inline-block;
+        margin-left:40px;
+
+    }
+    label {
+        margin-left:40px; /* adjust value: -5px to -15px as per look */
+    }
+</style>
+
 
     <script>
         $(document).ready(function() {

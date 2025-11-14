@@ -23,7 +23,10 @@
                     <p>{{ $user->email_id }}</p>
                     <p class="m-0">Mobile No.: <strong>{{ $profile->mobile_no }}</strong></p>
                     <p>Gender: <strong>{{ $profile->gender }}</strong> <span class="px-2">|</span> DOB: <strong>{{ $profile->dob }}</strong></p>
-                    <p>City: <strong>{{ $profile->city }}</strong> <span class="px-2">|</span> State: <strong>{{ $profile->state }}</strong> <span class="px-2">|</span> Pincode: <strong>{{ $profile->pincode }}</strong></p>
+                    City: <strong>{{ $profile->city_name ?? 'N/A' }}</strong>
+<span class="px-2">|</span>
+State: <strong>{{ $profile->state_name ?? 'N/A' }}</strong>
+Pincode: <strong>{{ $profile->pincode }}</strong></p>
                     <p class="mt-5"><a class="btn btn-primary rounded-pill py-2 px-2 px-md-4" data-bs-toggle="modal" data-bs-target="#editProfile"><i class="far fa-edit me-2"></i> Update</a></p>
                 </div>
                 <!-- <table class="table px-5">
@@ -77,19 +80,45 @@
                         @csrf
                         <div class="mb-3">
                             <label for="name">Name</label>
-                            <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $user->name) }}" required />
+                            <input type="text"
+       name="name"
+       id="name"
+       class="form-control"
+       value="{{ old('name', $user->name) }}"
+       placeholder="Enter your full name"
+       pattern="[A-Za-z\s]+"
+       title="Numbers not allowed. Please enter only letters."
+       required>
+
                         </div>
                         <div class="mb-3">
                             <label for="email">Email</label>
                             <input type="email" name="email_id" id="email" class="form-control" value="{{ old('email_id', $user->email_id) }}" required />
                         </div>
                         <div class="mb-3">
-                            <label for="mobile_no">Mobile No.</label>
-                            <input type="tel" name="mobile_no" id="mobile_no" class="form-control" value="{{ old('mobile_no', $profile->mobile_no) }}" required />
-                        </div>
+    <label for="mobile_no">Mobile No.</label>
+    <input type="text"
+        name="mobile_no"
+        id="mobile_no"
+        class="form-control"
+        value="{{ old('mobile_no', $profile->mobile_no) }}"
+        inputmode="numeric"
+        pattern="[0-9]{10}"
+        maxlength="10"
+        oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+        title="Please enter a valid 10-digit mobile number"
+        required />
+</div>
+
                         <div class="mb-3">
                             <label for="dob">DOB</label>
-                            <input type="date" name="dob" id="dob" class="form-control" value="{{ old('dob', $profile->dob) }}" required />
+                            <input type="date"
+           name="dob"
+           id="dob"
+           class="form-control"
+           value="{{ old('dob', $profile->dob) }}"
+           required />
+           <small id="dob-error" class="text-danger"></small>
                         </div>
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary">Update</button>
@@ -136,4 +165,37 @@
         });
     });
 </script>
+<script>
+document.getElementById('updateProfileForm').addEventListener('submit', function(e) {
+    const name = document.getElementById('name').value.trim();
+    const namePattern = /^[A-Za-z\s]+$/;
+
+    if (!namePattern.test(name)) {
+        e.preventDefault(); // stop form submission
+        alert('❌ Numbers not allowed. Please use only letters.');
+        document.getElementById('name').focus();
+        return false;
+    }
+});
+</script>
+
+<script>
+document.getElementById('dob').addEventListener('change', function() {
+    const dobInput = this;
+    const errorMsg = document.getElementById('dob-error');
+    const today = new Date();
+    const selectedDate = new Date(dobInput.value);
+
+    // Reset error message
+    errorMsg.textContent = "";
+
+    // Validation: DOB cannot be today or in the future
+    if (selectedDate >= today.setHours(0, 0, 0, 0)) {
+        errorMsg.textContent = "⚠️ Date of Birth cannot be today or a future date.";
+        dobInput.value = ""; // clear invalid date
+    }
+});
+</script>
+
+
 @endsection

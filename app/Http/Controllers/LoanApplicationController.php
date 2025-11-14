@@ -533,13 +533,46 @@ class LoanApplicationController extends Controller
     }
 
 
-  public function showForm(Request $request)
+public function showForm(Request $request)
 {
     $currentStep = $request->input('current_step', 1);
 
+    // ✅ Validation rules (only when form is submitted)
+    if ($request->isMethod('post')) {
+
+        $rules = [
+            'mobile_no' => ['required', 'digits:10', 'regex:/^[6-9]\d{9}$/'],
+            'otp'       => ['required', 'digits:6'],
+            'pincode'   => ['required', 'digits:6', 'regex:/^[1-9][0-9]{5}$/'],
+            'email'     => ['required', 'email'],
+            'name'      => ['required', 'string', 'max:255'],
+            'state_id'  => ['required', 'integer', 'exists:states,id'],
+            // Add more if needed
+        ];
+
+        $messages = [
+            'mobile_no.required' => 'Please enter your mobile number.',
+            'mobile_no.digits'   => 'Mobile number must be 10 digits.',
+            'mobile_no.regex'    => 'Please enter a valid mobile number.',
+            'otp.required'       => 'Please enter OTP.',
+            'otp.digits'         => 'OTP must be exactly 6 digits.',
+            'pincode.required'   => 'Please enter your pincode.',
+            'pincode.digits'     => 'Pincode must be exactly 6 digits.',
+            'pincode.regex'      => 'Please enter a valid pincode.',
+            'email.required'     => 'Please enter your email.',
+            'email.email'        => 'Please enter a valid email address.',
+            'name.required'      => 'Please enter your full name.',
+            'state_id.required'  => 'Please select your state.',
+        ];
+
+        $validatedData = $request->validate($rules, $messages);
+    }
+
+    // --- Your existing code below ---
+
     $loanCategories = DB::table('loan_category')->get();
     $loanBanks = DB::table('loan_bank_details')->get();
-    $userId = session('user_id'); // Get user ID from session
+    $userId = session('user_id');
 
     if (!$userId) {
         return redirect()->route('login')->withErrors('User session expired. Please log in again.');
@@ -573,13 +606,15 @@ class LoanApplicationController extends Controller
     $states = DB::table('states')->get();
     $is_loan = Session::get('is_loan');
 
-    // ✅ Completed steps logic: only show after user moves past that step
+    // ✅ Completed steps logic
     $completedSteps = [];
-    if ($profile && $currentStep > 1)       $completedSteps[] = 1; // Personal
-    if ($professional && $currentStep > 2)  $completedSteps[] = 2; // Professional
-    if ($education && $currentStep > 3)     $completedSteps[] = 3; // Qualification
-    if ($documents->count() > 0 && $currentStep > 4) $completedSteps[] = 4; // Documents
-    if ($loan && $currentStep > 5)          $completedSteps[] = 5; // Loan
+
+if ($profile && $currentStep > 1)        $completedSteps[] = 1;
+if ($professional && $currentStep > 2)   $completedSteps[] = 2;
+if ($education && $currentStep > 3)      $completedSteps[] = 3;
+if ($documents->count() > 0 && $currentStep > 4) $completedSteps[] = 4;
+if ($loan && $currentStep > 5)           $completedSteps[] = 5;
+
 
     return view('frontend.professional-info', compact(
         'currentStep',
@@ -599,6 +634,7 @@ class LoanApplicationController extends Controller
         'completedSteps'
     ));
 }
+
 
 
 

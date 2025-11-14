@@ -194,7 +194,7 @@ JFS | Agents
                     <div class="row">
                         <div class="form-group col-lg-4">
                             <label for="recipient-name" class="col-form-label">Mobile Number:</label>
-                            <input type="tel" class="form-control" id="mobile_no" name="mobile_no" required>
+                            <input type="tel" class="form-control" id="v" name="mobile_no" required>
                         </div>
 
                         <div class="form-group col-lg-4">
@@ -288,63 +288,74 @@ JFS | Agents
 
 <script>
 $(document).ready(function () {
-    // Initialize DataTable
-    $('#example').DataTable({
-        dom: 'Bfrtip',
-        buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
-    });
+    // ✅ Initialize DataTable (only if table exists)
+    if ($('#example').length) {
+        $('#example').DataTable({
+            dom: 'Bfrtip',
+            buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+        });
+    }
 
-    // Attach click event to delete buttons dynamically
-    $(document).on('click', '.delete', function () {
-        var userId = $(this).data('id'); // Get user ID from button
-        deleteAgent(userId);
-    });
-
-    // AJAX Setup to ensure CSRF Token is included
+    // ✅ Setup CSRF for all AJAX requests
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
-    // Handle Add Agent Form Submission
-    $('#addAgent').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "{{ route('insertAgent') }}",
-            method: "POST",
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            dataType: 'json',
-            beforeSend: function () {
-                $(document).find('span.error-text').text('');
-            },
-            success: function (data) {
-                if (data.status === 0) {
-                    $.each(data.error, function (prefix, val) {
-                        $('span.' + prefix + '_error').text(val[0]);
-                        swal("Error!", val[0], "error");
-                    });
-                } else {
-                    $('#addAgent')[0].reset();
-                    swal({
-                        title: data.msg,
-                        icon: "success",
-                        button: "OK"
-                    }).then(function () {
-                        location.reload();
-                    });
-                }
-            },
-            error: function (xhr, status, error) {
-                swal("Error!", "Something went wrong. Please try again.", "error");
+    // ✅ Add Agent Form Submission
+   $('#addAgent').on('submit', function (e) {
+    e.preventDefault();
+
+    $.ajax({
+        url: "{{ route('insertAgent') }}",  // Laravel route
+        type: "POST",
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        dataType: 'json', // ✅ comma added here
+        beforeSend: function () {
+            $('span.error-text').text(''); // Clear old errors
+        },
+        success: function (data) {
+            if (data.status === 0) {
+                // Validation failed
+                $.each(data.error, function (prefix, val) {
+                    $('span.' + prefix + '_error').text(val[0]);
+                    swal("Error!", val[0], "error");
+                });
+            } else if (data.status === 1) {
+                // Success
+                $('#addAgent')[0].reset();
+                $('#addAgentView').modal('hide');
+                swal({
+                    title: "Success!",
+                    text: data.msg,
+                    icon: "success",
+                    button: "OK"
+                }).then(function () {
+                    location.reload();
+                });
+            } else {
+                // Unknown response
+                swal("Error!", "Unexpected response from server.", "error");
             }
-        });
+        },
+        error: function (xhr) {
+            console.error(xhr.responseText);
+            swal("Error!", "Something went wrong. Please try again.", "error");
+        }
     });
 });
 
-// Delete Agent Function
+    // ✅ Delete Agent Handler (attached dynamically)
+    $(document).on('click', '.delete', function () {
+        var userId = $(this).data('id');
+        deleteAgent(userId);
+    });
+});
+
+// ✅ Delete Agent Function
 function deleteAgent(id) {
     swal({
         title: "Are you sure?",
@@ -355,40 +366,35 @@ function deleteAgent(id) {
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "{{ route('deleteAgent') }}",
+                url: "{{ route('deleteAgent') }}", // Laravel route
                 type: 'POST',
                 dataType: 'json',
                 data: {
-                    'user_id': id,
-                    '_token': '{{ csrf_token() }}'
+                    user_id: id,
+                    _token: '{{ csrf_token() }}'
                 },
                 success: function (response) {
-                    if (response.status === 0) {
-                        swal("Error!", response.error, "error");
-                    } else {
+                    if (response.status === 1) {
                         swal({
                             title: "Deleted!",
                             text: response.msg,
                             icon: "success",
                             button: "OK"
-                        }).then(() => {
-                            location.reload();
-                        });
+                        }).then(() => location.reload());
+                    } else {
+                        swal("Error!", response.error || "Delete failed.", "error");
                     }
                 },
-                error: function (xhr, status, error) {
+                error: function (xhr) {
+                    console.error(xhr.responseText);
                     swal("Error!", "Failed to delete. Please try again.", "error");
                 }
             });
         }
     });
-
-
-    
 }
-
-
 </script>
+
 <script>
     // Update User Status
            window.updateStatus = function(userId, status) {
