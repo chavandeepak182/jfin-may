@@ -152,44 +152,50 @@ class FrontendController extends Controller
 
 
 
-public function showBlog($id)
+
+
+
+public function showBlog($slug)
 {
-    // Get blog with category
+    // Main blog
     $blog = DB::table('blog')
         ->join('blog_category', 'blog.category_id', '=', 'blog_category.pid')
         ->select('blog.*', 'blog_category.category_name as category_name')
-        ->where('blog.id', $id)
+        ->where('blog.slug', $slug)
         ->first();
 
     if (!$blog) {
         abort(404);
     }
 
-    // Related blogs: same category
+    // Related blogs
     $relatedBlogs = DB::table('blog')
-        ->where('id', '!=', $id)
+        ->select('id','blog_name','slug','image','description','created_at','category_id')
+        ->where('slug', '!=', $slug)
         ->where('category_id', $blog->category_id)
         ->latest()
         ->take(3)
-        ->get();
-
-    if ($relatedBlogs->isEmpty()) {
-        $relatedBlogs = DB::table('blog')
-            ->where('id', '!=', $id)
-            ->latest()
-            ->take(3)
-            ->get();
-    }
+        ->get()
+        ->map(function($item) {
+            $item->slug = (string) $item->slug; // ✅ Cast slug as string
+            return $item;
+        });
 
     // Latest blogs
     $latestBlogs = DB::table('blog')
-        ->where('id', '!=', $id)
+        ->select('id','blog_name','slug','image','description','created_at','category_id')
+        ->where('slug', '!=', $slug)
         ->latest()
         ->take(3)
-        ->get();
+        ->get()
+        ->map(function($item) {
+            $item->slug = (string) $item->slug; // ✅ Cast slug as string
+            return $item;
+        });
 
     return view('frontend.blog-details', compact('blog', 'relatedBlogs', 'latestBlogs'));
 }
+
 
     public function userLogin(Request $request)
     {

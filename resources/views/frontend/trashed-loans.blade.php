@@ -16,9 +16,14 @@
 </style>
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
-            <h6 class="m-0 font-weight-bold text-primary">Trashed Loans</h6>
-           
-        </div>
+    <h6 class="m-0 font-weight-bold text-primary">Trashed Loans</h6>
+    
+    <!-- Back Button -->
+    <a href="{{ url()->previous() }}" class="btn btn-secondary btn-sm">
+        <i class="fa fa-arrow-left me-1"></i> Back
+    </a>
+</div>
+
         <div class="card-body">
             <table class="table table-bordered" id="trashedLoansTable">
                 <thead>

@@ -53,84 +53,85 @@ class AgentController extends Controller
     }
 
 
-    public function insertAgent(Request $request)
-    {
-        DB::beginTransaction();
+ public function insertAgent(Request $request)
+{
+    DB::beginTransaction();
 
-        try {
+    try {
+        // Validation
+        $validator = Validator::make($request->all(), [
+            'full_name'  => 'required|string|max:255',
+            'email_id'   => 'required|email|unique:users,email_id',
+            'password'   => 'required|min:6',
+            'mobile_no'  => 'required|numeric',
+        ]);
 
-            $validator = Validator::make($request->all(), [
-                'email_id' => 'required|unique:users,email_id'
+        if (!$validator->passes()) {
+            return response()->json([
+                'status' => 0,
+                'error'  => $validator->errors()->toArray()
             ]);
-
-            if (!$validator->passes()) {
-                return response()->json(['status' => 0, 'error' => $validator->errors()->toArray()]);
-            } else {
-
-                $six_digit_random_number = random_int(100000, 999999);
-
-                //generating the referal code
-                $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                $charactersLength = strlen($characters);
-                $randomString = '';
-                for ($i = 0; $i < 10; $i++) {
-                    $randomString .= $characters[random_int(0, $charactersLength - 1)];
-                }
-
-
-                $user = new User;
-                $user->name = $request->full_name;
-                $user->email_id = $request->email_id;
-                $user->password = md5($request->password);
-                $user->role_id = 2;  //role_id = 2 for the agent standard user
-                $user->email_otp = $six_digit_random_number;
-                $user->referral_code     = $randomString;
-
-                $user->save();
-
-                $profile = new Profile;
-                $profile->user_id = $user->id;
-                $profile->mobile_no = $request->mobile_no;
-                $profile->dob = $request->dob;
-                $profile->residence_address = $request->address;
-                $profile->city = $request->city;
-                $profile->state = $request->state;
-                $profile->pincode = $request->pincode;
-
-                $profile->save();
-
-                //fetching data after insertion in user and profile table
-                $user_id = $user->id;
-                $profile_id = $profile->profile_id;
-
-                //update the profile id in users table
-                $update_user = User::where('id', $user_id)->update(['profile_id' => $profile_id]);
-
-                $msg = "http://127.0.0.1:8000/userAuth/" . $user_id . "/" . $six_digit_random_number;
-                $temp_id = 1;
-
-                if ($user && $profile) {
-                    DB::commit();
-
-                    //calling UsersController temail function from FrontendController
-                    app(UsersController::class)->temail($request->email_id, $request->full_name, $msg, $temp_id);
-
-                    //activity logs
-                    $username = Session::get('username');
-                    $user_id = Session::get('user_id');
-                    $details = "Agent is created successfully by " . $username;
-                    app(UsersController::class)->insertActivityLogs($user_id, $details);
-                    //end of activity logs   
-
-                    return response()->json(['status' => 1, 'msg' => 'User added successfully']);
-                }
-            }
-        } catch (\Exception $e) {
-            DB::rollback();
-            return response()->json(['status' => 0, 'msg' => $e->getMessage()]);
-            // dd($e->getMessage());
         }
+
+        // Generate OTP
+        $six_digit_random_number = random_int(100000, 999999);
+
+        // Generate Referral Code
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+        for ($i = 0; $i < 10; $i++) {
+            $randomString .= $characters[random_int(0, strlen($characters) - 1)];
+        }
+
+        // ✅ Save in users table
+        $user = new User;
+        $user->name          = $request->full_name;
+        $user->email_id      = $request->email_id;
+        $user->mobile_no     = $request->mobile_no; // ✅ Added this line
+        $user->password      = md5($request->password);
+        $user->role_id       = 2; // role_id = 2 for agent
+        $user->email_otp     = $six_digit_random_number;
+        $user->referral_code = $randomString;
+        $user->save();
+
+        // ✅ Save in profiles table
+        $profile = new Profile;
+        $profile->user_id           = $user->id;
+        $profile->mobile_no         = $request->mobile_no;
+        $profile->dob               = $request->dob;
+        $profile->residence_address = $request->address;
+        $profile->city              = $request->city;
+        $profile->state             = $request->state;
+        $profile->pincode           = $request->pincode;
+        $profile->save();
+
+        // ✅ Update user profile_id after profile creation
+        $user->profile_id = $profile->profile_id;
+        $user->save();
+
+        // ✅ Send email
+        $msg = url("/userAuth/{$user->id}/{$six_digit_random_number}");
+        $temp_id = 1;
+        app(UsersController::class)->temail($request->email_id, $request->full_name, $msg, $temp_id);
+
+        // ✅ Insert activity log
+        $username = Session::get('username');
+        $user_id  = Session::get('user_id');
+        $details  = "Agent created successfully by {$username}";
+        app(UsersController::class)->insertActivityLogs($user_id, $details);
+
+        DB::commit();
+
+        return response()->json(['status' => 1, 'msg' => 'Agent added successfully']);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json([
+            'status' => 0,
+            'msg'    => $e->getMessage(),
+        ]);
     }
+}
 
     public function editAgent($id)
     {

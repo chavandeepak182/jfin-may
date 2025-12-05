@@ -33,7 +33,12 @@ class UsersController extends Controller
     // dshboard all user count
     public function adminCustomer()
     {
-        $totalCustomers = DB::table('users')->where('role_id', 1)->count();
+        // $totalCustomers = DB::table('users')->where('role_id', 1)->count();
+        $totalCustomers = DB::table('users')
+    ->where('role_id', 1)
+    ->whereNull('deleted_at') 
+    ->count();
+
         $totalOfficers = DB::table('users')->where('role_id', 2)->count();
         $totalCp = DB::table('users')->where('role_id', 3)->count();
         return view('admin.admin-users', compact('totalCustomers','totalOfficers', 'totalCp'));
@@ -60,88 +65,83 @@ class UsersController extends Controller
         return response()->json(['message' => 'User status updated successfully']);
     }
 
-    public function insertUser(Request $request)
-    {
-        DB::beginTransaction();
+  public function insertUser(Request $request)
+{
+    DB::beginTransaction();
 
-        try {
+    try {
+        // ✅ Validate inputs
+        $validator = Validator::make($request->all(), [
+            'full_name' => 'required|string|max:255',
+            'email_id' => 'required|email|unique:users,email_id',
+            'mobile_no' => 'required|string|max:15',
+            'password' => 'required|string|min:6',
+        ]);
 
-            $validator = Validator::make($request->all(), [
-                'email_id' => 'required|unique:users,email_id'
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 0,
+                'error' => $validator->errors()->toArray()
             ]);
-
-            if (!$validator->passes()) {
-                return response()->json(['status' => 0, 'error' => $validator->errors()->toArray()]);
-            } else {
-
-                $six_digit_random_number = random_int(100000, 999999);
-
-                //generating the referal code
-                $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                $charactersLength = strlen($characters);
-                $randomString = '';
-                for ($i = 0; $i < 10; $i++) {
-                    $randomString .= $characters[random_int(0, $charactersLength - 1)];
-                }
-
-
-                $user = new User;
-                $user->name = $request->full_name;
-                $user->email_id = $request->email_id;
-                $user->mobile_no = $request->mobile_no;
-                $user->password = Hash::make($request->password);
-                $user->role_id = 1;  //role_id = 1 for the customer hardcoded
-                $user->email_otp = $six_digit_random_number;
-                $user->referral_code     = $randomString;
-                $user->is_email_verify = 1;
-
-                $user->save();
-
-                $profile = new Profile;
-                $profile->user_id = $user->id;
-                $profile->mobile_no = $request->mobile_no;
-                $profile->dob = $request->dob;
-                 $profile->pan_number = $request->pan_number;
-                $profile->residence_address = $request->address;
-                $profile->city = $request->city;
-                $profile->state = $request->state;
-                $profile->pincode = $request->pincode;
-
-                $profile->save();
-
-                //fetching data after insertion in user and profile table
-                $user_id = $user->id;
-                $profile_id = $profile->profile_id;
-
-                //update the profile id in users table
-                $update_user = User::where('id', $user_id)->update(['profile_id' => $profile_id]);
-
-                // $verificationToken = Str::random(60);
-                // $otp = random_int(100000, 999999);
-
-                // $expiresAt = now()->addHours(24); // 24-hour expiration
-
-
-                // $verificationUrl = URL::temporarySignedRoute(
-                //     'activate',
-                //     $expiresAt,
-                //     [
-                //         'id' => $user->id,
-                //         'token' => $verificationToken
-                //     ]
-                // );
-
-                if ($user && $profile) {
-                    DB::commit();
-                    Mail::to($user->email_id)->send(new SendUserCredentials($user, $request->password));
-                    return response()->json(['status' => 1, 'msg' => 'User added successfully']);
-                }
-            }
-        } catch (\Exception $e) {
-            DB::rollback();
-            dd($e->getMessage());
         }
+
+        // ✅ Generate random values
+        $six_digit_random_number = random_int(100000, 999999);
+        $randomString = Str::random(10);
+
+        // ✅ Create user
+        $user = new User();
+        $user->name = $request->full_name;
+        $user->email_id = $request->email_id;
+        $user->mobile_no = $request->mobile_no;
+        $user->password = Hash::make($request->password);
+        $user->role_id = 1;  // Default customer role
+        $user->email_otp = $six_digit_random_number;
+        $user->referral_code = $randomString;
+        $user->is_email_verify = 1;
+        $user->save();
+
+        // ✅ Create profile
+        $profile = new Profile();
+        $profile->user_id = $user->id;
+        $profile->mobile_no = $request->mobile_no;
+        $profile->dob = $request->dob;
+        $profile->pan_number = $request->pan_number;
+        $profile->residence_address = $request->address;
+        $profile->city = $request->city;
+        $profile->state = $request->state;
+        $profile->pincode = $request->pincode;
+        $profile->save();
+
+        // ✅ Update user's profile_id
+        $user->update(['profile_id' => $profile->profile_id]);
+
+        // ✅ Send mail (only if mail configured)
+        try {
+            Mail::to($user->email_id)->send(new SendUserCredentials($user, $request->password));
+        } catch (\Throwable $mailError) {
+            // Mail failure should not rollback DB
+            \Log::error('Mail sending failed: ' . $mailError->getMessage());
+        }
+
+        DB::commit();
+
+        // ✅ Return success JSON (for SweetAlert)
+        return response()->json([
+            'status' => 1,
+            'msg' => 'User added successfully!',
+        ]);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        \Log::error('User insert error: ' . $e->getMessage());
+        return response()->json([
+            'status' => 0,
+            'msg' => 'Something went wrong. Please try again.'
+        ]);
     }
+}
+
     //customer registration
     //     public function registerUser(Request $request)
     // {

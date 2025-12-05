@@ -554,7 +554,7 @@
                         font-family: Nunito, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
                         'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 
                         'Segoe UI Symbol', 'Noto Color Emoji';">
-                        WELCOME TO JFINSERVE
+                        WELCOME TO JFINSERV
                     </h2>
 
 
