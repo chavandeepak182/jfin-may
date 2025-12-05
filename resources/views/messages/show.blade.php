@@ -253,7 +253,8 @@
                                     <small>{{ $message->created_at->format('Y-m-d H:i') }}</small>
                                 </div>
                                 
-                                <p><strong>From:</strong> {{ $message->sender->name }}</p>
+                                <p><strong>From:</strong> {{ $message->sender->name ?? 'Unknown User' }}</p>
+
                                 
                                 <div class="message-body">
                                     <p>{{ $message->message_body }}</p>

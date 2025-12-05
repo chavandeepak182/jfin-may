@@ -97,13 +97,15 @@ JFS | Property Takers
                             <a class="btn btn-warning btn-xs edit" title="Edit" href="{{ route('property_takers.edit', $propertyTaker->id) }}">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            <form action="#" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-xs delete" title="Delete" onclick="return confirm('Are you sure?')">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </form>
+    <form action="{{ route('property_takers.destroy', $propertyTaker->id) }}" method="POST" style="display:inline-block;">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete this record?')">
+        <i class="fa fa-trash"></i>
+    </button>
+</form>
+
+
                         </td>
                     </tr>
                     @endforeach
