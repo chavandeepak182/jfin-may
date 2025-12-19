@@ -20,157 +20,559 @@
     </div>
 </div> -->
 
-<div class="container-fluid bg-breadcrumb" style="background-image: url(../theme/frontend/img/la-bnr.jpg);">
-    <div class="container py-5">
-        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Loan Against Property</h4>
+<!-- HOME EXTENSION HERO -->
+<div class="hl-hero-wrapper" style="background-image: url('../theme/frontend/img/lap.webp');">
+    <div class="container">
+        <div class="row align-items-center hl-hero-height">
+
+            <div class="col-lg-7 col-md-8">
+                <h1 class="hl-hero-heading">
+                    Loan Against Property: Access the Value of<br>
+                    Your Assets Effortlessly
+                </h1>
+
+                <ul class="hl-hero-list">
+                    <li>Apply online for a mortgage loan and avail funding based on a high percentage of your property’s worth</li>
+                    <li>Enjoy attractive interest rates starting from 9.75%*</li>
+                    <li>Experience a smooth, fully digital loan application from start to finish</li>
+                    <li>Quick and convenient processing with minimal paperwork required**</li>
+                </ul>
+
+                <a href="#" class="hl-hero-button">
+                    Apply for Loan Against Property
+                </a>
+            </div>
+
+        </div>
     </div>
 </div>
+
+<!-- HOME LOAN OVERVIEW -->
+<div class="lap-wrapper" style="margin-top:40px;">
+    <div class="container">
+
+        <!-- Breadcrumb -->
+        <div class="lap-breadcrumb">
+            <a href="#">Home</a> &gt;
+            <a href="#">Products</a> &gt;
+            <span>Loan Against Property</span>
+        </div>
+
+        <div class="row align-items-center">
+
+            <!-- Left Content -->
+            <div class="col-lg-6">
+                <h1 class="lap-heading">
+                    Turn Your Property into a Powerful Financial Advantage
+                </h1>
+
+                <p class="lap-description">
+                    Your property can do more than just stand still—it can help you move ahead.
+                    With Sammaan Capital’s Loan Against Property, you can unlock substantial
+                    funding to support business expansion or personal financial goals. Our
+                    transparent processes, quick turnaround, and customer-first approach
+                    make borrowing simple, reliable, and stress-free.
+                </p>
+
+                <p class="lap-rate-label">Loan Against Property Starting From</p>
+                <h2 class="lap-rate">9.75%* Interest Onwards</h2>
+
+                <p class="lap-note">✔ MSMEs eligible under Priority Sector Lending norms</p>
+
+                <p class="lap-disclaimer">
+                    *The applicable interest rate is determined based on applicant profile,
+                    loan value, repayment tenure, property type, and overall risk evaluation.
+                </p>
+
+                <a href="#" class="lap-cta-btn">Get a Loan Against Property</a>
+            </div>
+
+            <!-- Right Feature Cards -->
+            <div class="col-lg-6">
+                <div class="lap-features">
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">📈</span>
+                        <h4>Increase Your Loan Eligibility</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">💰</span>
+                        <h4>Best-in-Class Interest Rates</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">📄</span>
+                        <h4>Hassle-Free Documentation</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">📅</span>
+                        <h4>Flexible Repayment Tenure</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">⚡</span>
+                        <h4>Fast & Transparent Approvals</h4>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<br>
+
+
 <!-- Header End -->
 
-<!-- Service Start -->
-<div class="container-fluid mt-5">
-    <div class="container">
-        <div class="wow fadeInUp text-dark" data-wow-delay="0.2s">
-            <h2 class="display-6 mb-4">Overview</h2>
-            <p>In need of quick funds? Look no further than Loan Against Property, commonly referred to simply as Contracts. They stand out as one of the most straightforward and popular financing choices on the market. Typically, Contracts boast rapid approval and favorable interest rates.</p>
-            <p>A Loan Against Property can essentially be labeled as a Contract Loan, as it entails mortgaging your property to mitigate the risk of non-payment or default in repaying the borrowed funds. To secure approval for such a loan, lenders typically scrutinize your personal and financial background, assessing factors such as nationality, age, occupation, income, and the market value of the collateral being offered.</p>
-        </div>    
 
-        <div class="wow fadeInUp pt-5" data-wow-delay="0.2s">
-            <h2 class="display-6 mb-4">Loan Against Property Features</h2>
+  <!-- feature -->
+
+<style>
+   
+    .section {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 80px 20px;
+        text-align: center;
+    }
+    .section h2 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 50px;
+        color: #333;
+    }
+    .cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+    .card {
+        background-color: #f3f4ff;
+        padding: 30px 20px;
+        border-radius: 12px;
+        width: 280px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        text-align: left;
+        position: relative;
+        transition: transform 0.3s;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    .card h3 {
+        font-size: 20px;
+        margin-bottom: 15px;
+        color: #2c2c2c;
+    }
+    .card p {
+        font-size: 15px;
+        line-height: 1.6;
+        color: #666;
+    }
+    .card::after {
+        content: '';
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        right: 20px;
+        bottom: 20px;
+        background: url('data:image/svg+xml;utf8,<svg fill="none" stroke="%23ddd" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 6v6l4 2"/></svg>') no-repeat center center;
+        background-size: contain;
+        opacity: 0.1;
+    }
+</style>
+
+<div class="section">
+    <h2 style="font-size:40px">Key Features & Benefits</h2>
+    <div class="cards">
+        <div class="card">
+            <h3>Lightning-Fast Approvals</h3>
+            <p>Get your loan processed without delays. Our streamlined approval system ensures you receive funds quickly and efficiently.</p>
         </div>
-        <div class="row g-2 pb-4" data-wow-delay="0.2s">
-            <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                <div class="p-3">
-                    <img src="{{ asset('theme') }}/frontend/img/interest-rate.png" class="w-25 pb-3">
-                    <p class="m-0 text-dark">Competitive Interest Rates</p>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                <div class="p-3">
-                    <img src="{{ asset('theme') }}/frontend/img/process.png" class="w-25 pb-3">
-                    <p class="m-0 text-dark">Streamlined Documentation</p>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                <div class="p-3">
-                    <img src="{{ asset('theme') }}/frontend/img/computer.png" class="w-25 pb-3">
-                    <p class="m-0 text-dark">Online Application Process</p>
-                </div>
-            </div>
-        </div>    
+        <div class="card">
+            <h3>Simplified Documentation</h3>
+            <p>No more tedious paperwork. We have designed a minimal and user-friendly documentation process to save your time and effort.</p>
+        </div>
+        <div class="card">
+            <h3>Flexible Tenure & Repayment</h3>
+            <p>Choose repayment schedules that suit your lifestyle. Our flexible tenures and installment options are designed for your convenience.</p>
+        </div>
+        <div class="card">
+            <h3>Competitive Interest Rates</h3>
+            <p>Benefit from attractive interest rates that make your home loan more affordable while keeping your finances stress-free.</p>
+        </div>
+        <div class="card">
+            <h3>Transparent Process</h3>
+            <p>We believe in full transparency. No hidden charges or surprises—just clear terms and a smooth loan experience.</p>
+        </div>
+        <div class="card">
+            <h3>Expert Support</h3>
+            <p>Our team of financial experts is always ready to guide you through every step, ensuring your loan journey is seamless and informed.</p>
+        </div>
+    </div>
+</div>
 
-    <!-- Features and Benefits of our Loan Against Property -->
-        <div class="wow fadeInUp py-5 text-dark loan-features" data-wow-delay="0.2s">
-            <h2 class="display-6 mb-4">Benefits of Our Loan Against Property</h2>
-            <ul class="fa-ul">
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    You maintain legal ownership of the property you offer as collateral.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    Due to its secured nature, a Loan Against Property generally garners quicker approval.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    Loan Against Property interest rates tend to be lower than those of personal loans.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Loan Amount:</strong> The loan amount is determined by the value of the property you use as collateral. Typically, this allows you to borrow a larger sum compared to personal loans or other unsecured loans.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Secured Loan:</strong> This type of loan is backed by your property, which serves as collateral. By using the property as security, the lender's risk is reduced, often resulting in lower interest rates compared to unsecured loans.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Multipurpose:</strong> The loan amount can be utilized for a variety of purposes, providing you with the flexibility to meet different financial needs without any limitations.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Flexible Tenure:</strong> The repayment period for a Loan Against Property is typically longer than for other types of loans, usually ranging from 5 to 20 years. This extended tenure results in lower monthly installments.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Improves Credit Scores:</strong> Successfully repaying a Loan Against Property can boost your credit score, as it reflects responsible borrowing habits.
-                </li>
+
+
+<!-- eligibilty -->
+ <div class="container py-5 eligibility-section">
+
+    <!-- TOP BANNER -->
+    <div class="eligibility-banner">
+        <div>
+            <h4>Eligibility Criteria for Loan Against Property (LAP)</h4>
+            <p>Read on to know the criteria required to apply for a Loan Against Property.</p>
+        </div>
+        <a href="#" class="know-more-btn">Know More</a>
+    </div>
+
+    <!-- ELIGIBILITY CONTENT -->
+    <h2 class="text-center mb-5" style="font-size:40px">Eligibility Criteria for Loan Against Property</h2>
+
+    <h5>Nationality</h5>
+    <ul>
+        <li>You need to be a Citizen of India with documents to prove your claim.</li>
+    </ul>
+
+    <h5>Occupation and Income</h5>
+    <ul>
+        <li>Your lender will require you to furnish details regarding your occupation and income to prove your professional and financial stability to determine your creditworthiness.</li>
+    </ul>
+
+    <h5>Credit History</h5>
+    <ul>
+        <li>Your three-digit Credit Score, indicative of your track record in respect of repayment of loans and other forms of credit, will be a deciding factor for LAP eligibility.</li>
+    </ul>
+
+    <h5>Banking Relationship</h5>
+    <ul>
+        <li>Having a healthy relationship with your lender improves approval chances and may offer better loan terms, interest rates, tenure, processing fees, and fewer hidden charges.</li>
+    </ul>
+
+    <h5>Market Value of Property</h5>
+    <ul>
+        <li>Your lender decides the loan amount and terms based on the current market value of your collateral property.</li>
+        <li>The market value of the mortgaged property must be higher than the loan amount requested.</li>
+    </ul>
+
+    <h5>Title of Property</h5>
+    <ul>
+        <li>You must be the current owner of the property.</li>
+        <li>In case of co-ownership, clear multiple ownership title must be proven.</li>
+        <li>The property must not be mortgaged with any other financial institution.</li>
+    </ul>
+
+</div>
+
+
+
+
+<!-- document  -->
+ <div class="container my-5">
+
+    <h2 class="text-center mb-5" style="font-size:40px">
+        <strong>Documents Required for  Loan Against Property</strong>
+    </h2>
+
+    <!-- Tabs -->
+    <div class="doc-tabs">
+        <button class="tab-btn active" data-tab="all">For All Applicants</button>
+        <button class="tab-btn" data-tab="salaried">Salaried Applicants</button>
+        <button class="tab-btn" data-tab="self-professional">Self-Employed Professional</button>
+        <button class="tab-btn" data-tab="self-non">Self-Employed Non-Professional</button>
+        <button class="tab-btn" data-tab="other">Other Related Documents</button>
+    </div>
+
+    <!-- Content -->
+    <div class="tab-content">
+
+        <!-- For All Applicants -->
+        <div class="tab-pane active" id="all">
+            <ul class="two-column-list">
+                <li>Current Passport size photograph of all Applicants</li>
+                <li>Property documents: True Copies</li>
+                <li>Duly filled & signed Application Form</li>
+                <li>A Sale Deed, Khata, Transfer of Ownership</li>
+                <li>Proof of Identity: Aadhaar card/Passport/Driving License/Voter ID/PAN Card Copy</li>
+                <li>No Objection Certificate (NOC) from the builder / Housing Society (Original Copy)</li>
+                <li>Aadhar Card or other OVDs containing identity & address</li>
+                <li>Land Tax Paid Receipt</li>
+                <li>Processing fee cheque</li>
+                <li>Possession Certificate</li>
             </ul>
         </div>
 
-    <!-- Loan Against Property Eligibility and Documents -->
-        <div class="row g-5 py-2 px-5 justify-content-center align-items-center">
-            <div class="col-xl-12 wow fadeInRight" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInRight;">
-                <div class="rounded p-3 h-100">
-                    <div class="row g-4 justify-content-center align-items-center bg-light rounded p-3 mx-auto" style="background-image: url({{ asset('theme') }}/frontend/img/cta_banner.webp);">
-                        <div class="col-md-9">
-                            <div class="counter-item h-100">
-                                <h3 class="text-light">Loan Against Property Eligibility & Documents</h3>
-                                <p class="text-light pb-2">Your eligibility for a Loan Against Property application is usually determined by your age, work status, credit score, and income.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-3 m-0">
-                            <a href="/loan-application" target="_blank" class="btn btn-light rounded py-3 px-5 flex-shrink-0 float-end">Apply Now!!</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-    <!-- Loan Against Property Eligibility Criteria -->
-        <div class="wow fadeInUp py-5 text-dark" data-wow-delay="0.2s">
-            <div class="row py-3 align-items-center">
-                <div class="col-md-5 text-center">
-                    <img src="{{ asset('theme') }}/frontend/img/criteria.jpg" alt="" class="w-100 rounded shadow">
-                </div>
-                <div class="col-md-7">
-                    <h2 class="display-6 mb-4">Loan Against Property Eligibility Criteria</h2>
-                    <p>The basic criteria for home loan eligibility are as follows:</p>
-                    <ul class="fa-ul">
-                        <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                            <strong>Nationality:</strong> You need to be a Citizen of India with documents to prove your claim.
-                        </li>
-                        <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                            <strong>Occupation and Income:</strong> Your lender will request your occupation and income details to assess your creditworthiness.
-                        </li>
-                        <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                            <strong>Credit History:</strong> Your three-digit Credit Score, reflecting your history of loan repayments and other credit activities, will significantly influence your eligibility for a LAP.
-                        </li>
-                        <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                            <strong>Banking Relationship:</strong> If your relationship with your lender is good, you're less likely to face LAP rejection and may receive improved terms on loan amount, interest rates, and fees.
-                        </li>
-                        <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                            <strong>Market Value of Property:</strong> Your lender decides the loan amount and terms based on your property's market value, which must exceed the calculated loan amount.
-                        </li>
-                        <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                            <strong>Title of Property:</strong> Your lender requires you to be the property's current owner and provide clear title for co-ownership. Also, the property shouldn't be Contractd elsewhere.
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        <!-- Salaried Applicants -->
+        <div class="tab-pane" id="salaried">
+            <ul class="two-column-list">
+                <li>Income Documents: Duly attested</li>
+                <li>Form 16</li>
+                <li>Form 26AS</li>
+                <li>Bank statement of last 6 months</li>
+                <li>Offer letter</li>
+            </ul>
         </div>
 
-    <!-- Documentation for Loan Against Property -->
-        <div class="wow fadeInUp py-3 text-dark" data-wow-delay="0.2s">
-            <div class="row py-3 align-items-center">
-                <div class="col-md-7">
-                    <h2 class="display-6 mb-4">Documentation for Loan Against Property</h2>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Proof of income <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Proof of identity/residence</span></p>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>6 months Bank Statements <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Property-related documents</span></p>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Latest 3 years Income Tax Returns <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Proof of Business (for self-employed)</span></p>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Account statement for the last 6 months <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Latest 3 years company certified form No 16</span></p>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Latest 3 months company certified Salary Slips <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Copy a Partnership deed (Applicable for a partnership Firm)</span></p>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Copy of MOA and AA(Applicable for a Private Limited Company)</span></p>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>All legal and title/Property Documents to be offered as collateral</p>
-                </div>
-                <div class="col-md-5 text-center">
-                    <img src="{{ asset('theme') }}/frontend/img/checklist.jpg" alt="" class="w-75 shadow rounded">
-                </div>
-            </div>
+        <!-- Self-Employed Professional -->
+        <div class="tab-pane" id="self-professional">
+            <ul class="two-column-list">
+                <li>2 years IT return with computation</li>
+                <li>Balance sheet of last 2 years</li>
+                <li>Profit and loss of last 2 years</li>
+                <li>Bank statement of last 12 months</li>
+            </ul>
         </div>
-            
-    <!-- EMI Calculator for Loan Against Property -->
-        <div class="wow fadeInUp py-5 mb-5 text-dark" data-wow-delay="0.2s">
-            <h2 class="display-6 mb-4">EMI Calculator for Loan Against Property</h2>
-            <p>The monthly payments you make towards repaying your Loan Against Property are called Equated Monthly Instalments (EMIs). These payments cover both the principal loan amount, spread over the loan tenure, and the interest on the remaining loan balance.</p>
-            <p>The Ruloans online Loan Against Property EMI Calculator is a helpful tool to guide you in making informed decisions for managing your Loan Against Property efficiently. This easy-to-use calculator quickly and accurately computes your EMIs, helping you plan your finances with ease.</p>
-            <a href="/emi-calculator" traget="_blank" class="btn bg-white btn-link rounded border border-2 border-dark px-5 mt-3 flex-shrink-0"><img src="{{ asset('theme') }}/frontend/img/accounting.gif" width="65px"><span class="px-3" style="font-size:20px;">Calculate Now</span></a>                    
+
+        <!-- Self-Employed Non-Professional -->
+        <div class="tab-pane" id="self-non">
+            <ul class="two-column-list">
+                <li>2 years IT Return with computation</li>
+                <li>Balance sheet of last 2 years</li>
+                <li>Profit and loss of last 2 years</li>
+                <li>Bank statement of last 12 months</li>
+                <li>Qualification proof</li>
+                <li>Gumasta license</li>
+            </ul>
         </div>
+
+        <!-- Other Related Documents -->
+        <div class="tab-pane" id="other">
+            <ul class="two-column-list">
+                <li>Sanction Letter / Account Statement of running loans and bank statements reflecting loan repayments</li>
+                <li>In case of recent employment, submit Form 16</li>
+                <li>Bank statement for payment made to the builder (Own Contribution)</li>
+                <li>If the property is decided then submit a photocopy of property title documents</li>
+            </ul>
+        </div>
+
     </div>
 </div>
+
+
+
+<script>
+const tabs = document.querySelectorAll('.tab-btn');
+const panes = document.querySelectorAll('.tab-pane');
+
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        panes.forEach(p => p.classList.remove('active'));
+
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+});
+</script>
+
+<!-- calculator start -->
+
+
+<style>
+
+.calc-wrapper{
+    max-width:1100px;
+    margin:40px auto;
+    background:#fff;
+    padding:30px;
+    border-radius:12px;
+}
+.calc-tabs{
+    display:flex;
+    gap:12px;
+    margin-bottom:25px;
+}
+.calc-tabs button{
+    padding:10px 24px;
+    border-radius:10px;
+    border:none;
+    background:#295cab;
+    font-weight:600;
+    cursor:pointer;
+    color: #fff;
+}
+.calc-tabs button.active{
+    background:#295cab;
+    color:#fff;
+}
+.calc-content{display:none;}
+.calc-content.active{display:block;}
+.calc-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+}
+.calc-left label{
+    display:block;
+    margin-top:15px;
+    font-weight:600;
+}
+.calc-left input{
+    width:100%;
+    padding:10px;
+    margin-top:6px;
+}
+.calc-right{
+    background:#f3f6ff;
+    padding:30px;
+    border-radius:12px;
+}
+.calc-right h1{
+    font-size:36px;
+    color:#295cab;
+}
+.lap-heading{
+    font-size: 40px;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.apply-btn{
+    margin-top:20px;
+    width:100%;
+    padding:14px;
+    background:#295cab;
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+@media(max-width:768px){
+    .calc-grid{grid-template-columns:1fr;}
+}
+</style>
+<h1 class="lap-heading">
+                   Loan Planning Made Simple with Our Calculators
+                </h1>
+
+<div class="calc-wrapper">
+
+    <div class="calc-tabs">
+        <button id="emiTab" class="active">EMI</button>
+        <button id="eligTab">Eligibility</button>
+    </div>
+
+    <!-- EMI -->
+    <div id="emi" class="calc-content active">
+        <h3>Estimate monthly payments easily for your planned loan amount.</h3>
+
+        <div class="calc-grid">
+            <div class="calc-left">
+                <label>Loan Amount (₹)</label>
+                <input type="number" id="loanAmount" value="1000000">
+
+                <label>Tenure (Years)</label>
+                <input type="number" id="tenure" value="15">
+
+                <label>Interest Rate (%)</label>
+                <input type="number" id="rate" value="9.75" step="0.1">
+            </div>
+
+            <div class="calc-right">
+                <h4>Your EMI</h4>
+                <h1 id="emiResult">₹ 0</h1>
+                <p>Total Payment: <strong id="totalPayment">₹ 0</strong></p>
+                <p>Interest Payable: <strong id="totalInterest">₹ 0</strong></p>
+                <button class="apply-btn">Apply Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ELIGIBILITY -->
+    <div id="eligibility" class="calc-content">
+        <h3>Check how much loan you are eligible for.</h3>
+
+        <div class="calc-grid">
+            <div class="calc-left">
+                <label>Monthly Income (₹)</label>
+                <input type="number" id="income" value="50000">
+
+                <label>Existing EMI (₹)</label>
+                <input type="number" id="existingEmi" value="5000">
+
+                <label>Interest Rate (%)</label>
+                <input type="number" id="eligRate" value="9.75">
+
+                <label>Tenure (Years)</label>
+                <input type="number" id="eligTenure" value="20">
+
+                <button class="apply-btn" id="calcEligibility">Calculate Eligibility</button>
+            </div>
+
+            <div class="calc-right">
+                <h4>Eligible Loan Amount</h4>
+                <h1 id="eligResult">₹ 0</h1>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+/* TAB SWITCH */
+document.getElementById("emiTab").onclick = function(){
+    document.getElementById("emi").classList.add("active");
+    document.getElementById("eligibility").classList.remove("active");
+    this.classList.add("active");
+    document.getElementById("eligTab").classList.remove("active");
+};
+document.getElementById("eligTab").onclick = function(){
+    document.getElementById("eligibility").classList.add("active");
+    document.getElementById("emi").classList.remove("active");
+    this.classList.add("active");
+    document.getElementById("emiTab").classList.remove("active");
+};
+
+/* EMI CALCULATION */
+function calculateEMI(){
+    let P = Number(document.getElementById("loanAmount").value);
+    let R = Number(document.getElementById("rate").value) / 12 / 100;
+    let N = Number(document.getElementById("tenure").value) * 12;
+
+    let emi = (P * R * Math.pow(1+R, N)) / (Math.pow(1+R, N) - 1);
+    let total = emi * N;
+    let interest = total - P;
+
+    document.getElementById("emiResult").innerText = "₹ " + Math.round(emi).toLocaleString();
+    document.getElementById("totalPayment").innerText = "₹ " + Math.round(total).toLocaleString();
+    document.getElementById("totalInterest").innerText = "₹ " + Math.round(interest).toLocaleString();
+}
+document.querySelectorAll("#emi input").forEach(i=>{
+    i.addEventListener("input", calculateEMI);
+});
+calculateEMI();
+
+/* ELIGIBILITY CALCULATION */
+document.getElementById("calcEligibility").onclick = function(){
+    let income = Number(document.getElementById("income").value);
+    let existing = Number(document.getElementById("existingEmi").value);
+    let rate = Number(document.getElementById("eligRate").value) / 12 / 100;
+    let tenure = Number(document.getElementById("eligTenure").value) * 12;
+
+    let maxEmi = (income * 0.6) - existing;
+    if(maxEmi <= 0){
+        document.getElementById("eligResult").innerText = "₹ 0";
+        return;
+    }
+
+    let loan = (maxEmi * (Math.pow(1+rate, tenure) - 1)) / (rate * Math.pow(1+rate, tenure));
+    document.getElementById("eligResult").innerText = "₹ " + Math.round(loan).toLocaleString();
+};
+</script>
+
+
+
+ <!-- calcultor end -->
+
+<!-- Service Start -->
+
 <!-- Service End -->
 
 <!-- FAQs Start -->
