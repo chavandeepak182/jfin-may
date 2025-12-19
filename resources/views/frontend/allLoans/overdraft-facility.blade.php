@@ -4,211 +4,490 @@
 @section('keywords', "Overdraft facility, Financial Consultant in Pune, Credit Line, Flexible Financing, Revolving Credit, Emergency Fund, Financial Flexibility, Credit Facility")
 
 @section('content')
-<!-- Header Start -->
-    <!-- <div class="details-hero d-flex justify-content-center align-items-center" style="background-image: url({{ asset('theme') }}/frontend/img/loan-background.webp);">
-        <div class="container d-flex align-items-center justify-content-between py-5">
-            <div class="row">
-                <div class="col-md-6 py-5">
-                    <h2 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Get Instant Access to Funds with an Overdraft Facility Loan</h2>
-                    <p class="mt-4 text-white"><strong>An Overdraft (OD) is a credit option provided by banks, enabling borrowers to cover business expenditures.</strong></p>
-                    <a href="/loan-application" class="btn btn-light rounded py-3 px-5 mt-5 flex-shrink-0">Apply Now</a>
-                </div>
-                <div class="col-md-6 px-5">
-                    <img src="{{ asset('theme') }}/frontend/img/personal-loan.png" width="528px">
-                </div>
-            </div>
-        </div>
-    </div> -->
 
-<div class="container-fluid bg-breadcrumb" style="background-image: url(../theme/frontend/img/of-bnr.jpg);">
-    <div class="container py-5">
-        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Overdraft Facility</h4>
+<div class="hl-hero-wrapper"style="background-image: url('../theme/frontend/img/overdraft_loan.webp');height:600px;">
+    <div class="container">
+        <div class="row align-items-center hl-hero-height">
+
+            <div class="col-lg-7 col-md-8">
+                <h1 class="hl-hero-heading">
+                    Enjoy Instant Access <br>to Funds with a Smart <br>Overdraft Facility
+                </h1>
+
+                <ul class="hl-hero-list">
+                    <li>Stay financially flexible with an overdraft facility that<br> allows withdrawals anytime within your approved limit</li>
+                    <li>Pay interest only on the amount you actually use, <br>starting from attractive rates of 9.75%*</li>
+                    <li>Manage your funds effortlessly through a seamless, <br>fully digital setup and account management process</li>
+                    <li>Benefit from quick activation, easy renewals, <br>and minimal documentation for uninterrupted cash flow**</li>
+                </ul>
+
+                <a href="#" class="hl-hero-button">
+                    Apply for Overdraft Facility
+                </a>
+            </div>
+
+        </div>
     </div>
 </div>
-    <!-- Header End -->
+>
 
-        <!-- Service Start -->
-        <div class="container-fluid mt-5">
-            <div class="container">
-                <div class="wow fadeInUp text-dark" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">Overview</h2>
-                    <p>
-                    Business proprietors often face scenarios necessitating extra funds to maintain seamless business operations. Such obstacles can momentarily pause business activities, proving detrimental irrespective of the business's scale. Any disruption in operations leads to financial setbacks. Should you encounter a shortfall in funds as a business owner, you can depend on JFinserv's Overdraft Facility. Tailored to address your urgent capital requirements, this service shields your business from adverse repercussions.</p>
-                    <p>An Overdraft (OD) is a credit option provided by banks, enabling borrowers to cover business expenditures. It enables borrowing funds even when account balances are minimal. This facility offers a pre-established fund limit, which differs depending on the bank and customer connection. Banks levy interest solely on the amount utilized from the approved limit.</p>
-                </div>
-                <div class="wow fadeInUp pt-5" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">Overdraft Facility Loan Features</h2>
-                </div>
-                <div class="row g-2 pb-4">
-                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                        <div class="p-3">
-                            <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">Banks offer business borrowers a variable credit limit through an Overdraft Facility.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                        <div class="p-3">
-                            <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">Interest on an Overdraft loan is calculated only on the amount used by the borrower.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                        <div class="p-3">
-                            <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">Offers for New Customers</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                        <div class="p-3">
-                            <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">Offers for New Customers</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-6 col-sm-12 border">
-                        <div class="p-3">
-                            <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">Offers for New Customers</p>
-                        </div>
-                    </div>
-                </div>
 
-            <!-- Features and Benefits of our Overdraft Facility Loan -->
-                <div class="wow fadeInUp py-5 text-dark" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">Features & Benefits of our Overdraft Facility Loan</h2>
-                    <p>We acknowledge that buying a home is one of life's most significant financial decisions. With our array of customizable home loan options, we're here to assist you at every turn, ensuring a seamless and stress-free process. The followings are the ways a Overdraft Facility Loan can be useful:</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Competitive Interest Rates:</strong> Take advantage of our competitive interest rates, guaranteeing that you can comfortably afford your dream home while safeguarding your financial stability.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Flexible Repayment Options:</strong> Customize your repayment schedule to align with your financial capacity, whether you opt for a shorter duration to minimize interest costs or a longer duration for more manageable monthly payments.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Simple Application Process:</strong> Easily apply for a home loan from the convenience of your own home through our intuitive online application process, saving you valuable time and effort.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Transparent Terms & Conditions</strong> Transparency is our cornerstone. From the outset, you'll have complete clarity with no hidden fees or surprises along the way. You'll be fully informed about all terms and conditions from the start.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Quick Approval and Disbursal:</strong> We comprehend the importance of achieving your dream home promptly. With our swift approval and disbursement process, you'll find yourself stepping into your new home sooner than you expect.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>No Foreclosure Charges:</strong> Acquire a Overdraft Facility Loan hassle-free, devoid of collateral requirements, streamlining the borrowing process while minimizing risks. Embrace worry-free pursuit of your dreams with no foreclosure charges.</p>
-                </div>
+<!-- HOME LOAN OVERVIEW -->
+<div class="lap-wrapper" style="margin-top:40px;">
+    <div class="container">
 
-            <!-- Overdraft Facility Loan Eligibility and Documents -->
-                <div class="row g-5 py-2 px-5 justify-content-center align-items-center">
-                    <div class="col-xl-12 wow fadeInRight" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInRight;">
-                        <div class="rounded p-3 h-100">
-                            <div class="row g-4 justify-content-center align-items-center bg-light rounded p-3 mx-auto" style="background-image: url({{ asset('theme') }}/frontend/img/cta_banner.webp);">
-                                <div class="col-md-9">
-                                    <div class="counter-item h-100">
-                                        <h3 class="text-light">Overdraft Facility Loan Eligibility & Documents</h3>
-                                        <p class="text-light pb-2">Your eligibility for a Overdraft Facility Loan application is usually determined by your age, work status, credit score, and income.</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 m-0">
-                                    <a href="/loan-application" target="_blank" class="btn btn-light rounded py-3 px-5 flex-shrink-0 float-end">Apply Now!!</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-            <!-- Overdraft Facility Loan Eligibility Criteria -->
-                <div class="wow fadeInUp py-5 text-dark" data-wow-delay="0.2s">
-                    <div class="row py-3 align-items-center">
-                        <div class="col-md-5 text-center">
-                            <img src="{{ asset('theme') }}/frontend/img/criteria.jpg" alt="" class="w-75 rounded shadow">
-                        </div>
-                        <div class="col-md-7">
-                            <h2 class="display-6 mb-4">Overdraft Facility Loan Eligibility Criteria</h2>
-                            <p>The basic criteria for home loan eligibility are as follows:</p>
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="age-tab" data-bs-toggle="tab" data-bs-target="#age" type="button" role="tab" aria-controls="age" aria-selected="true">Age</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="income-tab" data-bs-toggle="tab" data-bs-target="#income" type="button" role="tab" aria-controls="income" aria-selected="false">Income</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="employee-tab" data-bs-toggle="tab" data-bs-target="#employee" type="button" role="tab" aria-controls="employee" aria-selected="false">Employment</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="credit-tab" data-bs-toggle="tab" data-bs-target="#credit" type="button" role="tab" aria-controls="credit" aria-selected="false">Credit Score</button>
-                                </li>
-                            </ul>
-                            <div class="tab-content py-3" id="myTabContent">
-                                <div class="tab-pane fade show active" id="age" role="tabpanel" aria-labelledby="age-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>You must be above 21 years of age at the time of the commencing of your loan, and up to 65 years or less at loan maturity</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Salaried Person - 21 years to 58 years</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Self-Employed Person - 25 years to 65 years</p>
-                                </div>
-                                <div class="tab-pane fade" id="income" role="tabpanel" aria-labelledby="income-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Salaried Person - Minimum Rs. 10,000 per month</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Self-Employed Person - Minimum Rs. 2,00,000 per year</p>
-                                </div>
-                                <div class="tab-pane fade" id="employee" role="tabpanel" aria-labelledby="employee-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Salaried Person - Minimum 2 to 3 years of Experience in MNC, or a Private or Public Limited Company</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Self-Employed Person - Minimum 3 years of Experience in the current field</p>
-                                </div>
-                                <div class="tab-pane fade" id="credit" role="tabpanel" aria-labelledby="credit-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>A credit score of 750 is considered a good score for approval.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- Breadcrumb -->
+        <div class="lap-breadcrumb">
+            <a href="#">Home</a> &gt;
+            <a href="#">Products</a> &gt;
+            <span>Overdraft Facility</span>
+        </div>
 
-            <!-- Documentation for Overdraft Facility Loan -->
-                <div class="wow fadeInUp py-3 text-dark" data-wow-delay="0.2s">
-                    <div class="row py-3 align-items-center">
-                        <div class="col-md-7">
-                            <h2 class="display-6 mb-4">Documentation for Overdraft Facility Loan</h2>
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="salaried-tab" data-bs-toggle="tab" data-bs-target="#salaried" type="button" role="tab" aria-controls="salaried" aria-selected="true">Salaried Individuals</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="self-tab" data-bs-toggle="tab" data-bs-target="#self" type="button" role="tab" aria-controls="self" aria-selected="false">Self-Employed Individuals</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="nri-tab" data-bs-toggle="tab" data-bs-target="#nri" type="button" role="tab" aria-controls="nri" aria-selected="false">NRI Applicants</button>
-                                </li>
-                            </ul>
-                            <div class="tab-content py-3" id="myTabContent">
-                                <div class="tab-pane fade show active" id="salaried" role="tabpanel" aria-labelledby="salaried-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Form 16</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Employee Identity Card</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>3 Months Salary Slip</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>6 Month Bank Account Statement</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Duration of Employment Evidence</p>
-                                </div>
-                                <div class="tab-pane fade" id="self" role="tabpanel" aria-labelledby="self-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>PAN <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Trade License</span> <span><i class="fa fa-check text-primary me-3"></i>Article of Association</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Partnership Deed <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Import Export Code</span> <span><i class="fa fa-check text-primary me-3"></i>Memorandum of Association</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>SEBI Registration Certificate <span class="px-3"><i class="fa fa-check text-primary me-3"></i>ROC Registration Certificate</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Financial Statement Audited by CA <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Profit & Loss Account Statement</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Balance Sheet <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Professional Practice License for Doctors, Consultants, etc</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>6 Months Bank Account Statement <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Business Address Proof</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Registration Certificate of Establishment for Shops, Factories, and Other Establishments</p>
-                                </div>
-                                <div class="tab-pane fade" id="nri" role="tabpanel" aria-labelledby="nri-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Income Proof Documents for NRI <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Property Papers</span> <span><i class="fa fa-check text-primary me-3"></i>Property Documents</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Partnership Deed <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Sale Deed</span> <span><i class="fa fa-check text-primary me-3"></i>Stamped Agreement of Sale</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Incase of resale property share certificate is required <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Allotment Letter</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Allotment Letter <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Payment Receipt of Payment Made to Seller or Builder</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>No Objection Certificate or NOC <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Possession Certificate</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Land Tax Receipt <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Construction Cost Estimate</span> <span><i class="fa fa-check text-primary me-3"></i>Occupancy Certificate</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Bank Account Statement of Payment Made to Seller or Builder <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Housing Society</span></p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-5 text-center">
-                            <img src="{{ asset('theme') }}/frontend/img/checklist.jpg" alt="" class="w-75 rounded shadow">
-                        </div>
+        <div class="row align-items-center">
+
+            <!-- Left Content -->
+            <div class="col-lg-6">
+                <h1 class="lap-heading">
+                    Maintain Cash Flow with a Smart Overdraft Facility
+                </h1>
+
+                <p class="lap-description">
+                    Running a business often requires instant access to funds. With <strong>JFinserv Consultant Pvt. Ltd.</strong>, our Overdraft Facility gives you the financial flexibility to manage day-to-day expenses, bridge short-term gaps, and handle unexpected requirements with ease. Enjoy convenient access to funds supported by transparent terms and quick activation.
+                </p>
+
+                <p class="lap-rate-label">Overdraft Facility Starting From</p>
+                <h2 class="lap-rate">9.75%* Interest Onwards</h2>
+
+                <p class="lap-note">
+                    ✔ Available for MSMEs, professionals, and eligible businesses as per lending norms
+                </p>
+
+                <p class="lap-disclaimer">
+                    *The applicable interest rate is determined based on applicant profile, approved limit, account usage, tenure, and overall credit assessment.
+                </p>
+
+                <a href="#" class="lap-cta-btn">Apply for Overdraft Facility</a>
+            </div>
+
+            <!-- Right Feature Cards -->
+            <div class="col-lg-6">
+                <div class="lap-features">
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">📈</span>
+                        <h4>Improve Working Capital Flexibility</h4>
                     </div>
-                </div>
-                    
-            <!-- EMI Calculator for Overdraft Facility Loan -->
-                <div class="wow fadeInUp py-5 mb-5 text-dark" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">EMI Calculator for Overdraft Facility Loan</h2>
-                    <p>The monthly payments you make towards repaying your Overdraft Facility Loan are called Equated Monthly Instalments (EMIs). These payments cover both the principal loan amount, spread over the loan tenure, and the interest on the remaining loan balance.</p>
-                    <p>The Ruloans online Overdraft Facility Loan EMI Calculator is a helpful tool to guide you in making informed decisions for managing your Overdraft Facility Loan efficiently. This easy-to-use calculator quickly and accurately computes your EMIs, helping you plan your finances with ease.</p>
-                    <a href="/emi-calculator" traget="_blank" class="btn bg-white btn-link rounded border border-2 border-dark px-5 mt-3 flex-shrink-0"><img src="{{ asset('theme') }}/frontend/img/accounting.gif" width="65px"><span class="px-3" style="font-size:20px;">Calculate Now</span></a>                    
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">💰</span>
+                        <h4>Interest Charged Only on Utilized Amount</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">📄</span>
+                        <h4>Minimal & Hassle-Free Documentation</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">📅</span>
+                        <h4>Easy Renewal & Flexible Usage</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">⚡</span>
+                        <h4>Quick Activation with Transparent Process</h4>
+                    </div>
+
                 </div>
             </div>
-        </div>
-        <!-- Service End -->
 
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid features-section py-5">
+    <div class="container">
+
+        <h2>Key Features & Benefits of Overdraft Facility</h2>
+
+        <div class="row g-4">
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Attractive Interest Rates</h5>
+                    <p>
+                        Benefit from competitive interest rates where interest is charged only on the amount you actually utilize, helping you manage borrowing costs efficiently.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-percent"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Flexible Usage of Funds</h5>
+                    <p>
+                        Withdraw and repay funds anytime within the approved limit, giving you complete flexibility to manage cash flow and working capital needs.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Easy & Quick Setup</h5>
+                    <p>
+                        Activate your overdraft facility through a simple and streamlined application process with minimal documentation and quick turnaround time.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-gears"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Transparent Terms & Conditions</h5>
+                    <p>
+                        Enjoy complete clarity with clearly defined limits, applicable charges, and renewal terms—no hidden fees or unexpected costs.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-regular fa-clipboard"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Fast Activation & Fund Access</h5>
+                    <p>
+                        Get quick approval and instant access to funds, ensuring uninterrupted business operations and timely financial support.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>No Fixed EMI Pressure</h5>
+                    <p>
+                        Repay at your convenience with no fixed monthly EMI, as interest is charged only on the utilized amount for stress-free financial management.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-ban"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<!-- eligibility -->
+ <!-- eligibility -->
+>
+
+<div class="container py-5 eligibility-section">
+
+    <!-- TOP BANNER -->
+    <div class="eligibility-banner">
+        <div>
+            <h4>Overdraft Facility Eligibility & Documents</h4>
+            <p>Check the basic criteria required to apply for an Overdraft Facility.</p>
+        </div>
+        <a href="#" class="know-more-btn">Know More</a>
+    </div>
+
+    <!-- ELIGIBILITY CONTENT -->
+    <h2 class="text-center mb-5" style="font-size:40px">Overdraft Facility Eligibility</h2>
+
+    <h5>Applicant Type:</h5>
+    <ul>
+        <li>MSMEs, proprietorships, partnership firms, LLPs, private limited companies, and professionals are eligible</li>
+        <li>Salaried individuals with stable income may be eligible under select schemes</li>
+    </ul>
+
+    <h5>Business Continuity & Experience:</h5>
+    <ul>
+        <li>Minimum 1 to 3 years of business or professional experience is generally required</li>
+        <li>Established operations with consistent transaction history are preferred</li>
+    </ul>
+
+    <h5>Income & Cash Flow:</h5>
+    <ul>
+        <li>Regular cash inflows through current account or business operations</li>
+        <li>Bank statements reflecting healthy turnover and account conduct</li>
+    </ul>
+
+    <h5>Credit Profile:</h5>
+    <ul>
+        <li>A credit score of 700 or above is preferred for higher overdraft limits</li>
+        <li>Good repayment history improves approval chances</li>
+    </ul>
+
+    <h5>Overdraft Assessment Criteria:</h5>
+    <ul>
+        <li>Approved limit is based on income, turnover, banking pattern, and credit assessment</li>
+        <li>Collateral may be required depending on limit and lender policy</li>
+    </ul>
+
+</div>
+
+<!-- documents -->
+<!-- Overdraft Facility Documents -->
+<div class="container my-5">
+
+    <h2 class="text-center mb-5" style="font-size:40px">
+        <strong>Documents Required for Overdraft Facility</strong>
+    </h2>
+
+    <!-- Tabs -->
+    <div class="doc-tabs">
+        <button class="tab-btn active" data-tab="all">For All Applicants</button>
+        <button class="tab-btn" data-tab="salaried">Salaried Individuals</button>
+        <button class="tab-btn" data-tab="self-employed">Self-Employed / Business</button>
+        <button class="tab-btn" data-tab="business">Business Documents</button>
+        <button class="tab-btn" data-tab="other">Other Supporting Documents</button>
+    </div>
+
+    <!-- Content -->
+    <div class="tab-content">
+
+        <!-- For All Applicants -->
+        <div class="tab-pane active" id="all">
+            <ul class="two-column-list">
+                <li>Duly filled and signed overdraft application form</li>
+                <li>Recent passport-size photographs</li>
+                <li>PAN Card of applicant</li>
+                <li>Identity proof (Aadhaar / Passport / Driving License)</li>
+                <li>Address proof of residence / office</li>
+                <li>Bank statements of last 6–12 months</li>
+                <li>Processing fee cheque</li>
+            </ul>
+        </div>
+
+        <!-- Salaried Individuals -->
+        <div class="tab-pane" id="salaried">
+            <ul class="two-column-list">
+                <li>Latest salary slips (last 3–6 months)</li>
+                <li>Form 16 / Form 26AS</li>
+                <li>Employment ID card or appointment letter</li>
+                <li>Salary account bank statement</li>
+            </ul>
+        </div>
+
+        <!-- Self-Employed / Business -->
+        <div class="tab-pane" id="self-employed">
+            <ul class="two-column-list">
+                <li>Income Tax Returns for last 2–3 years</li>
+                <li>Audited balance sheet and P&L statements</li>
+                <li>Business bank statements for last 12 months</li>
+                <li>Net worth statement of promoters</li>
+            </ul>
+        </div>
+
+        <!-- Business Documents -->
+        <div class="tab-pane" id="business">
+            <ul class="two-column-list">
+                <li>GST registration certificate</li>
+                <li>Shop Act / Udyam / MSME registration</li>
+                <li>Partnership deed / MOA & AOA (if applicable)</li>
+                <li>Board resolution for overdraft facility</li>
+                <li>Business address proof</li>
+            </ul>
+        </div>
+
+        <!-- Other Supporting Documents -->
+        <div class="tab-pane" id="other">
+            <ul class="two-column-list">
+                <li>Sanction letters of existing loans</li>
+                <li>Statement of existing overdraft / CC limits</li>
+                <li>Collateral documents (if overdraft is secured)</li>
+                <li>Any additional documents as required by lender</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+>
+
+<script>
+const tabs = document.querySelectorAll('.tab-btn');
+const panes = document.querySelectorAll('.tab-pane');
+
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        panes.forEach(p => p.classList.remove('active'));
+
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+});
+</script>
+
+<!-- calculator -->
+
+
+<style>
+
+
+.od-wrapper {
+    max-width: 900px;
+    margin: 50px auto;
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.od-wrapper h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 32px;
+}
+
+.calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.calc-box label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.calc-box input,
+.calc-box select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.calc-btn {
+    margin-top: 25px;
+    background: #295cab;
+    color: #fff;
+    border: none;
+    padding: 14px;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.calc-btn:hover {
+    background: #295cab;
+}
+
+.result-box {
+    margin-top: 30px;
+    background: #eef2ff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.result-box p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+@media (max-width: 768px) {
+    .calc-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+
+<div class="od-wrapper">
+
+    <h2>Overdraft Facility Eligibility & Interest Calculator</h2>
+
+    <div class="calc-grid">
+
+        <div class="calc-box">
+            <label>Average Monthly Income (₹)</label>
+            <input type="number" id="income" placeholder="e.g. 150000">
+        </div>
+
+        <div class="calc-box">
+            <label>Expected Monthly Utilization (₹)</label>
+            <input type="number" id="utilization" placeholder="e.g. 500000">
+        </div>
+
+        <div class="calc-box">
+            <label>Interest Rate (% per annum)</label>
+            <input type="number" id="rate" value="9.75">
+        </div>
+
+        <div class="calc-box">
+            <label>Eligibility Multiplier</label>
+            <select id="multiplier">
+                <option value="4">4× Monthly Income</option>
+                <option value="5">5× Monthly Income</option>
+                <option value="6">6× Monthly Income</option>
+            </select>
+        </div>
+
+    </div>
+
+    <button class="calc-btn" onclick="calculateOD()">Calculate Eligibility</button>
+
+    <div class="result-box" id="result" style="display:none;">
+        <p><strong>Eligible Overdraft Limit:</strong> ₹ <span id="eligible"></span></p>
+        <p><strong>Monthly Interest Payable:</strong> ₹ <span id="interest"></span></p>
+        <p><strong>Note:</strong> Interest is charged only on the utilized amount.</p>
+    </div>
+
+</div>
+
+<script>
+function calculateOD() {
+
+    let income = parseFloat(document.getElementById("income").value);
+    let utilization = parseFloat(document.getElementById("utilization").value);
+    let rate = parseFloat(document.getElementById("rate").value);
+    let multiplier = parseFloat(document.getElementById("multiplier").value);
+
+    if (!income || !utilization || !rate) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    // Eligibility Calculation
+    let eligibleLimit = income * multiplier;
+
+    // Monthly Interest Calculation
+    let monthlyRate = rate / 12 / 100;
+    let interest = utilization * monthlyRate;
+
+    document.getElementById("eligible").innerText = eligibleLimit.toLocaleString();
+    document.getElementById("interest").innerText = Math.round(interest).toLocaleString();
+
+    document.getElementById("result").style.display = "block";
+}
+</script>
+
+
+    <!-- Header End -->
+
+        
         <!-- FAQs Start -->
         <div class="container-fluid faq-section bg-light py-5 mb-5">
             <div class="container py-5">

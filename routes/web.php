@@ -40,6 +40,10 @@ Route::get('admin/banklist', [BankController::class, 'loanbankslist'])->name('ad
 Route::get('admin/referrallist', [BankController::class, 'listreferral'])->name('admin.allreferral');
 Route::get('admin/eligible', [BankController::class, 'eligiblelist'])->name('admin.eligible');
 
+ Route::get('admin/dashboard_test', [AdminController::class, 'dashboard_test'])->name('dashboard_test');
+
+
+
 
 // blog
 
@@ -99,6 +103,11 @@ Route::middleware('isAdmin')->group(function () {
 Route::get('/', function () {
     return view('frontend.index');
 });
+
+
+Route::get('/eligibility-calculator', function () {
+    return view('frontend.eligibility_calcultor');
+})->name('eligibility.calculator');
 
 Route::get('contact', [FrontendController::class, 'ContactView']);
 Route::get('test', [FrontendController::class, 'TestView']);

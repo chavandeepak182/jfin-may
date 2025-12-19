@@ -4,236 +4,443 @@
 @section('keywords', "financial services in pune, Home loan services in Pune, business loan provider in pune, Business loan services in Pune, Business loan in Pune")
 
 @section('content')
-<!-- Header Start -->
-    <!-- <div class="details-hero d-flex justify-content-center align-items-center" style="background-image: url({{ asset('theme') }}/frontend/img/loan-background.webp);">
-        <div class="container d-flex align-items-center justify-content-between py-5">
-            <div class="row">
-                <div class="col-md-6 py-5">
-                    <h2 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Secure Your Dream Home with Easy Home Loans</h2>
-                    <p class="mt-4 text-white"><strong>We're dedicated to being your trusted companion on the journey to realizing your dream home.</strong></p>
-                    <a href="/loan-application" class="btn btn-light rounded py-3 px-5 mt-5 flex-shrink-0">Apply Now</a>
-                </div>
-                <div class="col-md-6 px-5">
-                    <img src="{{ asset('theme') }}/frontend/img/personal-loan.png" width="528px">
+
+<!-- HOME EXTENSION HERO -->
+<section class="hl-hero-wrapper" style="background-image: url('../theme/frontend/img/home_loans.webp');">
+    <div class="hl-hero-overlay"></div>
+
+    <div class="container">
+        <div class="row align-items-center hl-hero-height">
+
+            <div class="col-lg-7 col-md-8">
+                <h1 class="hl-hero-heading">
+                    Simple Home Loan Solutions<br> for
+                    Turning Your Dream <br>
+                    Home into Reality
+                </h1>
+
+                <ul class="hl-hero-list">
+                    <li>Apply for a Home Loan Online – Up to 90% of Property Value*</li>
+                    <li>Attractive Interest Rates Starting at 8.75%*</li>
+                    <li>Entirely Online Application Process</li>
+                    <li>Minimal Documentation for Quick Approvals**</li>
+                </ul>
+
+                <a href="#" class="hl-hero-button">
+                    Apply for Home Loan
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- HOME LOAN OVERVIEW -->
+<div class="hl-overview-wrapper">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <!-- LEFT CONTENT -->
+            <div class="col-lg-6">
+                <h2 class="hl-overview-title">Home Loan</h2>
+
+                <p class="hl-overview-text">
+                    A home loan is a secured financial product designed to help individuals achieve their dream of owning a home.
+                    Whether it’s purchasing a new house, constructing one, or renovating an existing property, home loans provide
+                    the necessary funding with flexible repayment options.
+                </p>
+
+                <p class="hl-overview-text">
+                    With increasing real estate prices, home loans make homeownership accessible by offering competitive
+                    interest rates and long repayment tenures.
+                </p>
+
+                <p class="hl-overview-text">
+                    The financed property acts as collateral, enabling lower interest rates, tax benefits, and a smooth
+                    digital application process.
+                </p>
+
+                <a href="#" class="hl-overview-btn">
+                    Apply For Home Loan
+                </a>
+            </div>
+
+            <!-- RIGHT FEATURES -->
+            <div class="col-lg-6 mt-5 mt-lg-0">
+                <div class="row g-4">
+
+                    <div class="col-md-6">
+                        <div class="hl-feature-box">
+                            <i class="bi bi-percent"></i>
+                            <h6>Competitive Interest Rates</h6>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="hl-feature-box">
+                            <i class="bi bi-file-earmark-text"></i>
+                            <h6>Streamlined Documentation</h6>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="hl-feature-box">
+                            <i class="bi bi-laptop"></i>
+                            <h6>Online Application Process</h6>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-        </div>
-    </div> -->
 
-<div class="container-fluid bg-breadcrumb" style="background-image: url(../theme/frontend/img/hl-bnr.jpg);">
-    <div class="container py-5">
-        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Home Loan</h4>
+        </div>
     </div>
 </div>
-    <!-- Header End -->
 
-<!-- Service Start -->
-<div class="container-fluid mt-5">
+
+
+
+
+
+
+
+
+ <div class="container-fluid features-section py-5">
     <div class="container">
-        <div class="wow fadeInUp text-dark" data-wow-delay="0.2s">
-            <h2 class="display-6 mb-4">Overview</h2>
-            <p>A home loan is a secured financial product designed to help individuals achieve their dream of owning a home. Whether it’s purchasing a new house, constructing one, or renovating an existing property, home loans provide the necessary funding with flexible repayment options. Given the rising costs of real estate, home loans have become an essential tool for making homeownership more accessible and affordable. Lenders offer home loans with competitive interest rates and long repayment tenures, ensuring borrowers can comfortably manage their finances while securing a valuable asset.</p>
-            <p>The property being financed serves as collateral, making home loans a safer option for lenders and a more affordable choice for borrowers. Home loans not only offer financial support but also come with tax benefits, making them a preferred choice for buyers and investors looking to build long-term wealth through real estate. With advancements in digital banking, the loan application process has become faster and more transparent, providing a seamless experience for borrowers.</p>
-        </div>
 
-        <div class="wow fadeInUp pt-5" data-wow-delay="0.2s">
-            <h2 class="display-6 mb-4">Home Loan Features</h2>
-        </div>
-        <div class="row g-2 pb-4">
-            <div class="col-lg-2 col-md-6 col-sm-12 border me-3 wow fadeInUp" data-wow-delay="0.3s">
-                <div class="p-3">
-                    <img src="{{ asset('theme') }}/frontend/img/interest-rate.png" class="w-25 pb-3">
-                    <p class="m-0 text-dark">Competitive Interest Rates</p>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-6 col-sm-12 border me-3 wow fadeInUp" data-wow-delay="0.4s">
-                <div class="p-3">
-                    <img src="{{ asset('theme') }}/frontend/img/process.png" class="w-25 pb-3">
-                    <p class="m-0 text-dark">Streamlined Documentation</p>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-6 col-sm-12 border me-3 wow fadeInUp" data-wow-delay="0.5s">
-                <div class="p-3">
-                    <img src="{{ asset('theme') }}/frontend/img/computer.png" class="w-25 pb-3">
-                    <p class="m-0 text-dark">Online Application Process</p>
-                </div>
-            </div>
-        </div>            
+        <h2>Key Features & Benefits</h2>
 
-    <!-- Features and Benefits of our Home Loan -->
-        <div class="wow fadeInUp py-5 text-dark" data-wow-delay="0.2s">
-            <h2 class="display-6 mb-4">Features & Benefits of our Home Loan</h2>
-            <p>We acknowledge that buying a home is one of life's most significant financial decisions. With our array of customizable home loan options, we're here to assist you at every turn, ensuring a seamless and stress-free process. The followings are the ways a Home Loan can be useful:</p>
-            <ul class="fa-ul">
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Competitive Interest Rates:</strong> Take advantage of our competitive interest rates, guaranteeing that you can comfortably afford your dream home while safeguarding your financial stability.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Flexible Repayment Options:</strong> Customize your repayment schedule to align with your financial capacity, whether you opt for a shorter duration to minimize interest costs or a longer duration for more manageable monthly payments.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Simple Application Process:</strong> Easily apply for a home loan from the convenience of your own home through our intuitive online application process, saving you valuable time and effort.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Transparent Terms & Conditions:</strong> Transparency is our cornerstone. From the outset, you'll have complete clarity with no hidden fees or surprises along the way. You'll be fully informed about all terms and conditions from the start.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Quick Approval and Disbursal:</strong> We comprehend the importance of achieving your dream home promptly. With our swift approval and disbursement process, you'll find yourself stepping into your new home sooner than you expect.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>No Foreclosure Charges:</strong> Acquire a Home Loan hassle-free, devoid of collateral requirements, streamlining the borrowing process while minimizing risks. Embrace worry-free pursuit of your dreams with no foreclosure charges.
-                </li>
+        <div class="row g-4">
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Competitive Interest Rates</h5>
+                    <p>
+                        Take advantage of our competitive interest rates, guaranteeing that
+                        you can comfortably afford your dream home while safeguarding your
+                        financial stability.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-regular fa-file-lines"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Flexible Repayment Options</h5>
+                    <p>
+                        Customize your repayment schedule to align with your financial
+                        capacity, whether you opt for a shorter duration to minimize interest
+                        costs or a longer duration for more manageable monthly payments.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-regular fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Simple Application Process</h5>
+                    <p>
+                        Easily apply for a home loan from the convenience of your own home
+                        through our intuitive online application process, saving you valuable
+                        time and effort.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-gears"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Transparent Terms & Conditions</h5>
+                    <p>
+                        Transparency is our cornerstone. From the outset, you'll have
+                        complete clarity with no hidden fees or surprises along the way.
+                        You'll be fully informed about all terms and conditions from the start.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-regular fa-clipboard"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Quick Approval and Disbursal</h5>
+                    <p>
+                        We comprehend the importance of achieving your dream home promptly.
+                        With our swift approval and disbursement process, you'll find yourself
+                        stepping into your new home sooner than you expect.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-regular fa-circle-check"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>No Foreclosure Charges</h5>
+                    <p>
+                        Acquire a Home Loan hassle-free, devoid of collateral requirements,
+                        streamlining the borrowing process while minimizing risks. Embrace
+                        worry-free pursuit of your dreams with no foreclosure charges.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-ban"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- eligible creteria -->
+
+
+<div class="container py-5 eligibility-section">
+
+    <!-- TOP BANNER -->
+    <div class="eligibility-banner">
+        <div>
+            <h4>Home Loan Eligibility and Documents</h4>
+            <p>Read on to know the criteria required to apply for our Home Loan.</p>
+        </div>
+        <a href="#" class="know-more-btn">Know More</a>
+    </div>
+
+    <!-- ELIGIBILITY CONTENT -->
+    <h2 class="text-center mb-5" style="font-size:40px">Home Loan Eligibility</h2>
+
+    <h5>Age:</h5>
+    <ul>
+        <li>You must be above 21 years of age at the time of the commencing of your loan, and up to 65 years or less at loan maturity</li>
+        <li>Salaried Person - 21 years to 58 years</li>
+        <li>Self-Employed Person - 25 years to 65 years</li>
+    </ul>
+
+    <h5>Income</h5>
+    <ul>
+        <li>Salaried Person - Minimum Rs. 10,000 per month</li>
+        <li>Self-Employed Person - Minimum Rs. 2,00,000 per year</li>
+    </ul>
+
+    <h5>Employment</h5>
+    <ul>
+        <li>Salaried Person - Minimum 2 to 3 years of Experience in MNC, or a Private or Public Limited Company</li>
+        <li>Self-Employed Person - Minimum 3 years of Experience in the current field</li>
+    </ul>
+
+    <h5>Credit Score</h5>
+    <ul>
+        <li>A credit score of 750 is considered a good score for approval.</li>
+    </ul>
+
+</div>
+<!-- documentattion verification -->
+
+
+
+<div class="container my-5">
+
+    <h2 class="text-center mb-5" style="font-size:40px">
+        <strong>Documents Required for Home Extension Loan</strong>
+    </h2>
+
+    <!-- Tabs -->
+    <div class="doc-tabs">
+        <button class="tab-btn active" data-tab="salaried">Salaried Individuals</button>
+        <button class="tab-btn" data-tab="self">Self-Employed Individuals</button>
+        <button class="tab-btn" data-tab="nri">NRI Applicants</button>
+    </div>
+
+    <!-- Content -->
+    <div class="tab-content">
+
+        <!-- Salaried -->
+        <div class="tab-pane active" id="salaried">
+            <ul class="two-column-list">
+                <li>Form 16</li>
+                <li>Employee Identity Card</li>
+                <li>Last 3 Months Salary Slips</li>
+                <li>Last 6 Months Bank Account Statement</li>
+                <li>Duration of Employment Evidence</li>
             </ul>
         </div>
 
-    <!-- Home Loan Eligibility and Documents -->
-        <div class="row g-5 py-2 px-5 justify-content-center align-items-center">
-            <div class="col-xl-12 wow fadeInRight" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInRight;">
-                <div class="rounded p-3 h-100">
-                    <div class="row g-4 justify-content-center align-items-center bg-light rounded p-3 mx-auto" style="background-image: url({{ asset('theme') }}/frontend/img/cta_banner.webp);">
-                        <div class="col-md-9">
-                            <div class="counter-item h-100">
-                                <h3 class="text-light">Home Loan Eligibility & Documents</h3>
-                                <p class="text-light pb-2">Your eligibility for a Home Loan application is usually determined by your age, work status, credit score, and income.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-3 m-0">
-                            <a href="/loan-application" target="_blank" class="btn btn-light rounded py-3 px-5 flex-shrink-0 float-end">Apply Now!!</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Self Employed -->
+        <div class="tab-pane" id="self">
+            <ul class="two-column-list">
+                <li>PAN Card</li>
+                <li>Trade License</li>
+                <li>Partnership Deed (if applicable)</li>
+                <li>Article of Association (AOA)</li>
+                <li>Memorandum of Association (MOA)</li>
+                <li>Import Export Code (IEC)</li>
+                <li>SEBI Registration Certificate</li>
+                <li>ROC Registration Certificate</li>
+                <li>Financial Statements Audited by a Chartered Accountant</li>
+                <li>Profit & Loss Account Statement</li>
+                <li>Balance Sheet</li>
+                <li>Last 6 Months Bank Account Statement</li>
+                <li>Professional Practice License (Doctors, Consultants, etc.)</li>
+                <li>Registration Certificate of Establishment (Shops, Factories, etc.)</li>
+                <li>Business Address Proof</li>
+            </ul>
         </div>
-        
-    <!-- Home Loan Eligibility Criteria -->
-        <div class="wow fadeInUp py-5 text-dark" data-wow-delay="0.2s">
-            <div class="row py-3 align-items-center">
-                <div class="col-md-5 text-center">
-                    <img src="{{ asset('theme') }}/frontend/img/criteria.jpg" alt="" class="w-75 shadow rounded">
-                </div>
-                <div class="col-md-7">
-                    <h2 class="display-6 mb-4">Home Loan Eligibility Criteria</h2>
-                    <p>The basic criteria for home loan eligibility are as follows:</p>
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="age-tab" data-bs-toggle="tab" data-bs-target="#age" type="button" role="tab" aria-controls="age" aria-selected="true">Age</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="income-tab" data-bs-toggle="tab" data-bs-target="#income" type="button" role="tab" aria-controls="income" aria-selected="false">Income</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="employee-tab" data-bs-toggle="tab" data-bs-target="#employee" type="button" role="tab" aria-controls="employee" aria-selected="false">Employment</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="credit-tab" data-bs-toggle="tab" data-bs-target="#credit" type="button" role="tab" aria-controls="credit" aria-selected="false">Credit Score</button>
-                        </li>
-                    </ul>
-                    <div class="tab-content py-3" id="myTabContent">
-                        <div class="tab-pane fade show active" id="age" role="tabpanel" aria-labelledby="age-tab">
-                            <ul class="fa-ul">
-                                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                                    You must be above 21 years of age at the time of the commencing of your loan, and up to 65 years or less at loan maturity
-                                </li>
-                                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                                    Salaried Person - 21 years to 58 years
-                                </li>
-                                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                                    Self-Employed Person - 25 years to 65 years
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="tab-pane fade" id="income" role="tabpanel" aria-labelledby="income-tab">
-                            <ul class="fa-ul">
-                                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                                    Salaried Person - Minimum Rs. 10,000 per month
-                                </li>
-                                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                                    Self-Employed Person - Minimum Rs. 2,00,000 per year
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="tab-pane fade" id="employee" role="tabpanel" aria-labelledby="employee-tab">
-                            <ul class="fa-ul">
-                                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                                    Salaried Person - Minimum 2 to 3 years of Experience in MNC, or a Private or Public Limited Company
-                                </li>
-                                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                                    Self-Employed Person - Minimum 3 years of Experience in the current field
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="tab-pane fade" id="credit" role="tabpanel" aria-labelledby="credit-tab">
-                            <ul class="fa-ul">
-                                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                                    A credit score of 750 is considered a good score for approval.
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+
+        <!-- NRI -->
+        <div class="tab-pane" id="nri">
+            <ul class="two-column-list">
+                <li>Income Proof Documents for NRI</li>
+
+                <li><strong>Property Papers</strong></li>
+                <li>Sale Deed</li>
+                <li>Stamped Agreement of Sale</li>
+                <li>Allotment Letter</li>
+                <li>No Objection Certificate (NOC)</li>
+                <li>NOC from Housing Society / Builder</li>
+                <li>Possession Certificate</li>
+                <li>Occupancy Certificate</li>
+                <li>Land Tax Receipt</li>
+                <li>Construction Cost Estimate</li>
+                <li>Bank Account Statement showing payment made to Seller / Builder</li>
+                <li>Payment Receipts made to Seller / Builder</li>
+                <li>In case of resale property, Share Certificate is required</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+>
+
+<script>
+const tabs = document.querySelectorAll('.tab-btn');
+const panes = document.querySelectorAll('.tab-pane');
+
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        panes.forEach(p => p.classList.remove('active'));
+
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+});
+</script>
+
+
+<!-- calculator -->
+<!-- Font Awesome (keep if not already included in layout) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+  
+
+</style>
+
+<div class="emi-wrapper">
+
+    <div class="emi-header">
+        <i class="fas fa-calculator"></i>
+        <h1  style="color:#fff;">Home Loan EMI Calculator</h1>
+        <p>Calculate your monthly EMI easily and plan your home loan smartly.</p>
+    </div>
+
+    <div class="emi-container">
+
+        <!-- LEFT -->
+        <div class="emi-card">
+            <div class="emi-title">Loan Details</div>
+
+            <label>Loan Amount (₹)</label>
+            <div class="input-box">
+                <i class="fas fa-rupee-sign"></i>
+                <input type="number" id="loanAmount" value="5000000">
+            </div>
+            <input type="range" id="loanAmountSlider" min="100000" max="50000000" step="100000" value="5000000">
+
+            <label>Interest Rate (% p.a.)</label>
+            <div class="input-box">
+                <i class="fas fa-percent"></i>
+                <input type="number" id="interestRate" value="8.5" step="0.1">
+            </div>
+            <input type="range" id="interestRateSlider" min="1" max="20" step="0.1" value="8.5">
+
+            <label>Loan Tenure (Years)</label>
+            <div class="input-box">
+                <i class="fas fa-clock"></i>
+                <input type="number" id="loanTenure" value="20">
+            </div>
+            <input type="range" id="loanTenureSlider" min="1" max="30" value="20">
+
+            <button class="btn-calc" onclick="calculateEMI()">Calculate EMI</button>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="emi-card">
+            <div class="emi-title">Loan Summary</div>
+
+            <div class="emi-result">
+                <h3>Your Monthly EMI</h3>
+                <h2 id="emi">₹0</h2>
+            </div>
+
+            <div class="result-row">
+                <span>Principal</span>
+                <span id="principal">₹0</span>
+            </div>
+
+            <div class="result-row">
+                <span>Total Interest</span>
+                <span id="interest">₹0</span>
+            </div>
+
+            <div class="result-row">
+                <span>Total Payment</span>
+                <span id="total">₹0</span>
             </div>
         </div>
 
-    <!-- Documentation for Home Loan -->
-        <div class="wow fadeInUp py-3 text-dark" data-wow-delay="0.2s">
-            <div class="row py-3 align-items-center">
-                <div class="col-md-7">
-                    <h2 class="display-6 mb-4">Documentation for Home Loan</h2>
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="salaried-tab" data-bs-toggle="tab" data-bs-target="#salaried" type="button" role="tab" aria-controls="salaried" aria-selected="true">Salaried Individuals</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="self-tab" data-bs-toggle="tab" data-bs-target="#self" type="button" role="tab" aria-controls="self" aria-selected="false">Self-Employed Individuals</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="nri-tab" data-bs-toggle="tab" data-bs-target="#nri" type="button" role="tab" aria-controls="nri" aria-selected="false">NRI Applicants</button>
-                        </li>
-                    </ul>
-                    <div class="tab-content py-3" id="myTabContent">
-                        <div class="tab-pane fade show active" id="salaried" role="tabpanel" aria-labelledby="salaried-tab">
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Form 16</p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Employee Identity Card</p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>3 Months Salary Slip</p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>6 Month Bank Account Statement</p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Duration of Employment Evidence</p>
-                        </div>
-                        <div class="tab-pane fade" id="self" role="tabpanel" aria-labelledby="self-tab">
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>PAN <span class="px-3"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Trade License</span> <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Article of Association</span></p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Partnership Deed <span class="px-3"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Import Export Code</span> <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Memorandum of Association</span></p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>SEBI Registration Certificate <span class="px-3"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>ROC Registration Certificate</span></p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Financial Statement Audited by CA <span class="px-3"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Profit & Loss Account Statement</span></p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Balance Sheet <span class="px-3"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Professional Practice License for Doctors, Consultants, etc</span></p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>6 Months Bank Account Statement <span class="px-3"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Business Address Proof</span></p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Registration Certificate of Establishment for Shops, Factories, and Other Establishments</p>
-                        </div>
-                        <div class="tab-pane fade" id="nri" role="tabpanel" aria-labelledby="nri-tab">
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Income Proof Documents for NRI <span class="px-3"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Property Papers</span> <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Property Documents</span></p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Partnership Deed <span class="px-3"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Sale Deed</span> <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Stamped Agreement of Sale</span></p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Incase of resale property share certificate is required <span class="px-3"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Allotment Letter</span></p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Allotment Letter <span class="px-3"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Payment Receipt of Payment Made to Seller or Builder</span></p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>No Objection Certificate or NOC <span class="px-3"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Possession Certificate</span></p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Land Tax Receipt <span class="px-3"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Construction Cost Estimate</span> <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Occupancy Certificate</span></p>
-                            <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Bank Account Statement of Payment Made to Seller or Builder <span class="px-3"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Housing Society</span></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-5 text-center">
-                    <img src="{{ asset('theme') }}/frontend/img/checklist.jpg" alt="" class="w-75 shadow rounded">
-                </div>
-            </div>
-        </div>
-            
-    <!-- EMI Calculator for Home Loan -->
-        <div class="wow fadeInUp py-5 mb-5 text-dark" data-wow-delay="0.2s">
-            <h2 class="display-6 mb-4">EMI Calculator for Home Loan</h2>
-            <p>The monthly payments you make towards repaying your Home Loan are called Equated Monthly Instalments (EMIs). These payments cover both the principal loan amount, spread over the loan tenure, and the interest on the remaining loan balance.</p>
-            <p>The Ruloans online Home Loan EMI Calculator is a helpful tool to guide you in making informed decisions for managing your Home Loan efficiently. This easy-to-use calculator quickly and accurately computes your EMIs, helping you plan your finances with ease.</p>
-            <a href="/emi-calculator" traget="_blank" class="btn bg-white btn-link rounded border border-2 border-dark px-5 mt-3 flex-shrink-0"><img src="{{ asset('theme') }}/frontend/img/accounting.gif" width="65px"><span class="px-3" style="font-size:20px;">Calculate Now</span></a>                    
-        </div>
     </div>
 </div>
-<!-- Service End -->
+
+<script>
+    function formatINR(amount) {
+        return new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            maximumFractionDigits: 0
+        }).format(amount);
+    }
+
+    function calculateEMI() {
+        let P = +loanAmount.value;
+        let R = +interestRate.value / 12 / 100;
+        let N = +loanTenure.value * 12;
+
+        let EMI = P * R * Math.pow(1 + R, N) / (Math.pow(1 + R, N) - 1);
+        let totalPay = EMI * N;
+        let totalInt = totalPay - P;
+
+        emi.innerText = formatINR(EMI);
+        principal.innerText = formatINR(P);
+        interest.innerText = formatINR(totalInt);
+        total.innerText = formatINR(totalPay);
+    }
+
+    loanAmountSlider.oninput = () => loanAmount.value = loanAmountSlider.value;
+    interestRateSlider.oninput = () => interestRate.value = interestRateSlider.value;
+    loanTenureSlider.oninput = () => loanTenure.value = loanTenureSlider.value;
+
+    document.addEventListener("DOMContentLoaded", calculateEMI);
+</script>
+
+
 
 <!-- FAQs Start -->
 <div class="container-fluid faq-section bg-light py-5">
