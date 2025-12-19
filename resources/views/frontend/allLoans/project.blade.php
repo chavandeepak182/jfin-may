@@ -4,151 +4,509 @@
 @section('keywords', "Project loan services in Punem, Project Loans in Pune, Construction Loan in Pune , Business Funding, Commercial Loans in Pune, Small Business Loans for PCMC, Start-up Funding")
 
 @section('content')
-<!-- Header Start -->
-    <!-- <div class="details-hero d-flex justify-content-center align-items-center" style="background-image: url({{ asset('theme') }}/frontend/img/loan-background.webp);">
-        <div class="container d-flex align-items-center justify-content-between py-5">
-            <div class="row">
-                <div class="col-md-6 py-5">
-                    <h2 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">We Provide Project Finance Solutions Worldwide</h2>
-                    <p class="mt-4 text-white"><strong>With a steadfast commitment to maximizing the profitability of every client transaction.</strong></p>
-                    <a href="/loan-application" class="btn btn-light rounded py-3 px-5 mt-5 flex-shrink-0">Apply Now</a>
-                </div>
-                <div class="col-md-6 px-5">
-                    <img src="{{ asset('theme') }}/frontend/img/personal-loan.png" width="528px">
+
+
+<!-- header start  -->
+<section class="hl-hero-wrapper" style="background-image: url('../theme/frontend/img/pro_loans.webp');">
+    
+
+    <div class="container">
+        <div class="row align-items-center hl-hero-height">
+
+            <div class="col-lg-7 col-md-8">
+                <h1 class="hl-hero-heading">
+                    Unlock the Potential<br> of Your Property with Ease
+                </h1>
+
+                <ul class="hl-hero-list">
+                    <li>Secure a mortgage against your property and access substantial funding <br> tailored to its value</li>
+                    <li>Benefit from competitive interest rates beginning at just 9.75%*</li>
+                    <li>Enjoy a completely digital application process, designed for <br>simplicity and speed</li>
+                    <li>Experience fast approvals with minimal documentation, making your<br> loan journey effortless**</li>
+                </ul>
+
+                <a href="#" class="hl-hero-button">
+                    Apply for Home Loan
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+<!-- HOME LOAN OVERVIEW -->
+<div class="lap-wrapper">
+    <div class="container">
+
+        <!-- Breadcrumb -->
+        <div class="lap-breadcrumb" style="margin-top:40px">
+            <a href="#">Home</a> &gt;
+            <a href="#">Products</a> &gt;
+            <span>Project Loan</span>
+        </div>
+
+        <div class="row align-items-center">
+
+            <!-- Left Content -->
+            <div class="col-lg-6">
+                <h1 class="lap-heading">
+                    Turn Your Project Vision into Reality with Smart Financing
+                </h1>
+
+                <p class="lap-description">
+                    Your project deserves the right financial support to thrive. With <strong>JFinserv Consultant Pvt. Ltd.</strong>, our Project Loan helps you access the funding needed to kickstart, expand, or complete your project efficiently. Enjoy a seamless borrowing experience with transparent processes, quick approvals, and customer-focused solutions.
+                </p>
+
+                <p class="lap-rate-label">Project Loan Starting From</p>
+                <h2 class="lap-rate">9.75%* Interest Onwards</h2>
+
+                <p class="lap-note">✔ MSMEs and individuals eligible under applicable lending norms</p>
+
+                <p class="lap-disclaimer">
+                    *The final interest rate depends on applicant profile, loan amount, repayment tenure, project type, and overall risk assessment.
+                </p>
+
+                <a href="#" class="lap-cta-btn">Get a Project Loan</a>
+            </div>
+
+            <!-- Right Feature Cards -->
+            <div class="col-lg-6">
+                <div class="lap-features">
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">📈</span>
+                        <h4>Increase Your Funding Potential</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">💰</span>
+                        <h4>Competitive Interest Rates</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">📄</span>
+                        <h4>Minimal & Hassle-Free Documentation</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">📅</span>
+                        <h4>Flexible Repayment Tenure</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">⚡</span>
+                        <h4>Fast, Transparent, and Reliable Process</h4>
+                    </div>
+
                 </div>
             </div>
-        </div>
-    </div> -->
 
-<div class="container-fluid bg-breadcrumb" style="background-image: url(../theme/frontend/img/pl-bnr.jpg);">
-    <div class="container py-5">
-        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Loan Against Property</h4>
+        </div>
     </div>
 </div>
+
+
+
     <!-- Header End -->
 
-<!-- Service Start -->
-<div class="container-fluid mt-5">
+    <!-- feature -->
+
+
+<div class="container-fluid features-section py-5">
     <div class="container">
-        <div class="wow fadeInUp text-dark" data-wow-delay="0.2s">
-            <h2 class="display-6 mb-4">Overview</h2>
-            <p>We offer project finance solutions globally, with a strong focus on maximizing the profitability of each client transaction. At Global Trade Funding, we provide the international project financing you need, along with advisory services for deal structuring to minimize risk and safeguard your interests.</p>
-            <p>Our expertise in structuring successful project financing packages, combined with our ability to connect the right project with the ideal lenders, architects, engineers, consultants, builders, and developers, is truly exceptional. By executing with seamless coordination and perfect timing, we are equipped with all the necessary tools to deliver outstanding financial solutions for challenging and hard-to-place loans and projects.</p>
-        </div>    
 
-        <div class="wow fadeInUp pt-5" data-wow-delay="0.2s">
-            <h2 class="display-6 mb-4">Project Loan Features</h2>
-        </div>
-        <div class="row g-2 pb-4" data-wow-delay="0.2s">
-            <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                <div class="p-3">
-                    <img src="{{ asset('theme') }}/frontend/img/interest-rate.png" class="w-25 pb-3">
-                    <p class="m-0 text-dark">Competitive Interest Rates</p>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                <div class="p-3">
-                    <img src="{{ asset('theme') }}/frontend/img/process.png" class="w-25 pb-3">
-                    <p class="m-0 text-dark">Streamlined Documentation</p>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                <div class="p-3">
-                    <img src="{{ asset('theme') }}/frontend/img/computer.png" class="w-25 pb-3">
-                    <p class="m-0 text-dark">Online Application Process</p>
-                </div>
-            </div>
-        </div>
+        <h2>Key Features & Benefits of Project Loan</h2>
 
-    <!-- Features and Benefits of our Project Loan -->
-        <div class="wow fadeInUp py-5 text-dark loan-features" data-wow-delay="0.2s">
-            <h2 class="display-6 mb-4">Benefits of Our Project Loan</h2>
-            <ul class="fa-ul">
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Flexible Financing Solutions:</strong> Customizable loan options designed to suit the unique needs of your project, with adaptable terms and conditions.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Attractive Interest Rates:</strong> Benefit from competitive rates that help boost the profitability of your project.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Extended Repayment Terms:</strong> Longer loan tenures provide manageable monthly payments, reducing pressure on your cash flow.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Expert Advisory Services:</strong> The Access comprehensive guidance on risk management, financial structuring, and deal negotiations to ensure your project’s success.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Large Loan Amounts:</strong> Secure substantial financing to fund large-scale projects or developments effortlessly.
-                </li>
-                <li class="mb-3"><span class="fa-li"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i></span>
-                    <strong>Fast Approval Process:</strong> Enjoy a streamlined and efficient loan approval process for quick access to funds when they’re needed.
-                </li>
-            </ul>
-        </div>
+        <div class="row g-4">
 
-    <!-- Project Loan Eligibility and Documents -->
-        <div class="row g-5 py-2 px-5 justify-content-center align-items-center">
-            <div class="col-xl-12 wow fadeInRight" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInRight;">
-                <div class="rounded p-3 h-100">
-                    <div class="row g-4 justify-content-center align-items-center bg-light rounded p-3 mx-auto" style="background-image: url({{ asset('theme') }}/frontend/img/cta_banner.webp);">
-                        <div class="col-md-9">
-                            <div class="counter-item h-100">
-                                <h3 class="text-light">Project Loan Eligibility & Documents</h3>
-                                <p class="text-light pb-2">Your eligibility for a Project Loan application is usually determined by your age, work status, credit score, and income.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-3 m-0">
-                            <a href="/loan-application" target="_blank" class="btn btn-light rounded py-3 px-5 flex-shrink-0 float-end">Apply Now!!</a>
-                        </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Flexible Financing Solutions</h5>
+                    <p>
+                        Tailor your Project Loan to meet your specific requirements with adaptable terms and conditions that suit your project’s unique needs.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-sliders"></i>
                     </div>
                 </div>
             </div>
-        </div>
-        
-    <!-- Project Loan Eligibility Criteria -->
-        <div class="wow fadeInUp py-5 text-dark" data-wow-delay="0.2s">
-            <div class="row py-3 align-items-center">
-                <div class="col-md-4 text-center">
-                    <img src="{{ asset('theme') }}/frontend/img/criteria.jpg" alt="" class="w-100 shadow rounded">
-                </div>
-                <div class="col-md-8">
-                    <h2 class="display-6 mb-4">Project Loan Eligibility Criteria</h2>
-                    <p>The basic criteria for project loan eligibility are as follows:</p>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>ID proof <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Address Proof</span> <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Company profile including existing product range</span></p>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Promoter profile including KYC details <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Copy of MOA/AOA/partnership deed (as applicable)</span></p>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Latest list of director & shareholding pattern on letter head attested by CA</p>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Last 6-month bank statement of all running bank accounts of company including director, partner & proprietor</p>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Latest statement of account of all running loans <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Audited balance sheets of the last 3 years</span></p>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Copy of detailed project report <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Purpose of the loan</span> <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Security offered</span></p>
-                    
-                </div>
-            </div>
-        </div>
 
-    <!-- Documentation for Project Loan -->
-        <div class="wow fadeInUp py-3 text-dark" data-wow-delay="0.2s">
-            <div class="row py-3 align-items-center">
-                <div class="col-md-8">
-                    <h2 class="display-6 mb-4">Documentation for Project Loan</h2>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Business Plan <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Financial Statements</span> <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Project Feasibility Study</span></p>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Project Contracts <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Collateral Documentation</span> <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Legal Documentation</span></p>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Insurance Documents <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Personal Financial Statements</span> <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Credit History</span></p>
-                    <p class="text-dark"><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Tax Returns <span><i class="fa-regular fa-circle-check me-2" style="color: #4DA9EA;"></i>Environmental Clearances</span></p>
-                </div>
-                <div class="col-md-4 text-center">
-                    <img src="{{ asset('theme') }}/frontend/img/checklist.jpg" class="w-100 shadow rounded" alt="">
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Attractive Interest Rates</h5>
+                    <p>
+                        Leverage competitive interest rates designed to optimize your project’s financial efficiency and profitability.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-percent"></i>
+                    </div>
                 </div>
             </div>
-        </div>
-            
-    <!-- EMI Calculator for Project Loan -->
-        <div class="wow fadeInUp py-5 mb-5 text-dark" data-wow-delay="0.2s">
-            <h2 class="display-6 mb-4">EMI Calculator for Project Loan</h2>
-            <p>The monthly payments you make towards repaying your Project Loan are called Equated Monthly Instalments (EMIs). These payments cover both the principal loan amount, spread over the loan tenure, and the interest on the remaining loan balance.</p>
-            <p>The Ruloans online Project Loan EMI Calculator is a helpful tool to guide you in making informed decisions for managing your Project Loan efficiently. This easy-to-use calculator quickly and accurately computes your EMIs, helping you plan your finances with ease.</p>
-            <a href="/emi-calculator" traget="_blank" class="btn bg-white btn-link rounded border border-2 border-dark px-5 mt-3 flex-shrink-0"><img src="{{ asset('theme') }}/frontend/img/accounting.gif" width="65px"><span class="px-3" style="font-size:20px;">Calculate Now</span></a>                    
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Extended Repayment Terms</h5>
+                    <p>
+                        Opt for longer loan tenures to enjoy manageable monthly payments, easing pressure on your cash flow while completing your project smoothly.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-regular fa-calendar-days"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Expert Advisory Services</h5>
+                    <p>
+                        Access professional guidance on risk management, financial structuring, and project planning to ensure the successful execution of your project.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Large Loan Amounts</h5>
+                    <p>
+                        Secure substantial funding to support large-scale projects or expansions, enabling smooth execution without financial constraints.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-money-bill-trend-up"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Fast Approval Process</h5>
+                    <p>
+                        Benefit from a quick and streamlined loan approval process, giving you timely access to funds when your project needs them most.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+
+
+
+
+<div class="container py-5 eligibility-section">
+
+    <!-- TOP BANNER -->
+    <div class="eligibility-banner">
+        <div>
+            <h4>Project Loan Eligibility & Documents</h4>
+            <p>Check the basic criteria required to apply for a Project Loan.</p>
+        </div>
+        <a href="#" class="know-more-btn">Know More</a>
+    </div>
+
+    <!-- ELIGIBILITY CONTENT -->
+    <h2 class="text-center mb-5" style="font-size:40px">Project Loan Eligibility</h2>
+
+    <h5>Applicant Type:</h5>
+    <ul>
+        <li>Individuals, Partnership Firms, LLPs, Private Limited Companies, and MSMEs are eligible</li>
+        <li>Startups and established businesses with viable project plans can apply</li>
+    </ul>
+
+    <h5>Business & Project Experience:</h5>
+    <ul>
+        <li>Minimum 2 to 3 years of experience in the relevant industry or business segment</li>
+        <li>Proven track record or strong project feasibility is preferred</li>
+    </ul>
+
+    <h5>Income & Cash Flow:</h5>
+    <ul>
+        <li>Stable income source or projected cash flows sufficient to service the loan</li>
+        <li>Audited financials or projected financial statements may be required</li>
+    </ul>
+
+    <h5>Credit Profile:</h5>
+    <ul>
+        <li>A credit score of 700 or above is generally preferred for approval</li>
+    </ul>
+
+    <h5>Project Feasibility:</h5>
+    <ul>
+        <li>Clear project report, cost estimation, and repayment plan</li>
+        <li>Project viability and risk assessment play a key role in approval</li>
+    </ul>
+
+</div>
+
+<!-- document -->
+ <!-- Project Loan Documents Section -->
+<div class="container my-5">
+
+    <h2 class="text-center mb-5" style="font-size:40px">
+        <strong>Documents Required for Project Loan</strong>
+    </h2>
+
+    <!-- Tabs -->
+    <div class="doc-tabs">
+        <button class="tab-btn active" data-tab="all">For All Applicants</button>
+        <button class="tab-btn" data-tab="company">Company / Firm Documents</button>
+        <button class="tab-btn" data-tab="financial">Financial Documents</button>
+        <button class="tab-btn" data-tab="project">Project-Specific Documents</button>
+        <button class="tab-btn" data-tab="other">Other Supporting Documents</button>
+    </div>
+
+    <!-- Content -->
+    <div class="tab-content">
+
+        <!-- For All Applicants -->
+        <div class="tab-pane active" id="all">
+            <ul class="two-column-list">
+                <li>Completed and signed Project Loan application form</li>
+                <li>Passport-size photographs of promoters / directors</li>
+                <li>Identity proof (Aadhaar Card / PAN Card / Passport)</li>
+                <li>Address proof of promoters and business location</li>
+                <li>PAN Card of company / firm</li>
+                <li>Bank statements of last 6–12 months</li>
+                <li>Existing loan sanction letters (if any)</li>
+                <li>Processing fee cheque</li>
+            </ul>
+        </div>
+
+        <!-- Company / Firm Documents -->
+        <div class="tab-pane" id="company">
+            <ul class="two-column-list">
+                <li>Certificate of Incorporation / Partnership Deed</li>
+                <li>Memorandum & Articles of Association (MOA & AOA)</li>
+                <li>GST Registration Certificate</li>
+                <li>Udyam (MSME) Registration Certificate</li>
+                <li>Board Resolution / Partner Authorization Letter</li>
+                <li>Shop Act / Trade License</li>
+            </ul>
+        </div>
+
+        <!-- Financial Documents -->
+        <div class="tab-pane" id="financial">
+            <ul class="two-column-list">
+                <li>Audited Balance Sheet for last 2–3 years</li>
+                <li>Profit & Loss Account for last 2–3 years</li>
+                <li>Income Tax Returns with computation</li>
+                <li>Cash flow statements</li>
+                <li>Net worth statement of promoters</li>
+            </ul>
+        </div>
+
+        <!-- Project-Specific Documents -->
+        <div class="tab-pane" id="project">
+            <ul class="two-column-list">
+                <li>Detailed Project Report (DPR)</li>
+                <li>Cost of project and means of finance statement</li>
+                <li>Estimated revenue & expense projections</li>
+                <li>Construction schedule / execution timeline</li>
+                <li>Land ownership / lease documents (if applicable)</li>
+                <li>Statutory approvals & licenses related to project</li>
+            </ul>
+        </div>
+
+        <!-- Other Supporting Documents -->
+        <div class="tab-pane" id="other">
+            <ul class="two-column-list">
+                <li>Details of existing loans and liabilities</li>
+                <li>Credit facility statements from banks</li>
+                <li>Collateral documents (if applicable)</li>
+                <li>CA certificate for financial validation</li>
+                <li>Any additional documents requested by lender</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script>
+const tabs = document.querySelectorAll('.tab-btn');
+const panes = document.querySelectorAll('.tab-pane');
+
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        panes.forEach(p => p.classList.remove('active'));
+
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+});
+</script>
+
+
+<!-- calculator -->
+ 
+
+<style>
+
+
+.calculator-wrapper {
+    max-width: 900px;
+    margin: 50px auto;
+    background: #fff;
+    border-radius: 12px;
+    padding: 35px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.calculator-wrapper h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 34px;
+}
+
+.calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.calc-box label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.calc-box input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.calc-btn {
+    margin-top: 25px;
+    background: #295cab;
+    color: #fff;
+    border: none;
+    padding: 14px;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.calc-btn:hover {
+    background: #091fb0;
+}
+
+.result-box {
+    margin-top: 30px;
+    background: #eef2ff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.result-box p {
+    font-size: 18px;
+    margin: 8px 0;
+}
+
+@media(max-width:768px){
+    .calc-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+
+
+<div class="calculator-wrapper">
+
+    <h2>Project Loan EMI & Eligibility Calculator</h2>
+
+    <div class="calc-grid">
+
+        <div class="calc-box">
+            <label>Monthly Income (₹)</label>
+            <input type="number" id="income" placeholder="e.g. 100000">
+        </div>
+
+        <div class="calc-box">
+            <label>Desired Loan Amount (₹)</label>
+            <input type="number" id="loanAmount" placeholder="e.g. 3000000">
+        </div>
+
+        <div class="calc-box">
+            <label>Interest Rate (% per annum)</label>
+            <input type="number" id="interestRate" value="9.75">
+        </div>
+
+        <div class="calc-box">
+            <label>Loan Tenure (Years)</label>
+            <input type="number" id="tenure" placeholder="e.g. 10">
+        </div>
+
+    </div>
+
+    <button class="calc-btn" onclick="calculateLoan()">Calculate EMI & Eligibility</button>
+
+    <div class="result-box" id="result" style="display:none;">
+        <p><strong>Estimated EMI:</strong> ₹ <span id="emi"></span></p>
+        <p><strong>Eligible Loan Amount:</strong> ₹ <span id="eligible"></span></p>
+        <p><strong>Status:</strong> <span id="status"></span></p>
+    </div>
+
+</div>
+
+<script>
+function calculateLoan() {
+
+    let income = parseFloat(document.getElementById("income").value);
+    let loanAmount = parseFloat(document.getElementById("loanAmount").value);
+    let interestRate = parseFloat(document.getElementById("interestRate").value);
+    let tenureYears = parseFloat(document.getElementById("tenure").value);
+
+    if(!income || !loanAmount || !interestRate || !tenureYears){
+        alert("Please fill all fields");
+        return;
+    }
+
+    let monthlyRate = interestRate / 12 / 100;
+    let tenureMonths = tenureYears * 12;
+
+    let emi = (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, tenureMonths)) /
+              (Math.pow(1 + monthlyRate, tenureMonths) - 1);
+
+    emi = Math.round(emi);
+
+    // Eligibility Calculation (40% of monthly income rule)
+    let maxEligibleEmi = income * 0.4;
+    let eligibleLoan = (maxEligibleEmi * (Math.pow(1 + monthlyRate, tenureMonths) - 1)) /
+                        (monthlyRate * Math.pow(1 + monthlyRate, tenureMonths));
+
+    eligibleLoan = Math.round(eligibleLoan);
+
+    let status = emi <= maxEligibleEmi 
+        ? "Eligible for this Project Loan"
+        : "Loan amount exceeds eligibility";
+
+    document.getElementById("emi").innerText = emi.toLocaleString();
+    document.getElementById("eligible").innerText = eligibleLoan.toLocaleString();
+    document.getElementById("status").innerText = status;
+
+    document.getElementById("result").style.display = "block";
+}
+</script>
+
+
+
+
+<!-- Service Start -->
+
 <!-- Service End -->
 
 <!-- FAQs Start -->

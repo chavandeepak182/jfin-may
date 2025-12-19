@@ -114,7 +114,7 @@
         </nav>
 
         <!-- Modal Search Start -->
-        <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content rounded-0">
                     <div class="modal-header">
@@ -123,8 +123,7 @@
                     </div>
                     <div class="modal-body d-flex align-items-center bg-primary">
                         <div class="input-group w-100 mx-auto d-flex">
-                            <!-- <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                            <span id="search-icon-1" class="btn bg-light border nput-group-text p-3"><i class="fa fa-search"></i></span> -->
+                            
                             <form action="{{ route('enquiry.store') }}" method="POST">
                                 @csrf
                                 <div class="row g-3">
@@ -175,7 +174,8 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
+         <!-- Enquiry Modal -->
 
         <!-- Login Modal Start -->
         <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">

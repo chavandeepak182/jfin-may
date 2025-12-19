@@ -4,196 +4,615 @@
 @section('keywords', "financial services in pune, MSME Loan services in Pune, business loan provider in pune, Business loan services in Pune, Business loan in Pune")
 
 @section('content')
-<!-- Header Start -->
-    <!-- <div class="details-hero d-flex justify-content-center align-items-center" style="background-image: url({{ asset('theme') }}/frontend/img/loan-background.webp);">
-        <div class="container d-flex align-items-center justify-content-between py-5">
-            <div class="row">
-                <div class="col-md-6 py-5">
-                    <h2 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Grow with Jfinserv MSME Business Loans</h2>
-                    <p class="mt-4 text-white"><strong>MSME loans, or Micro, Small, and Medium Enterprises loans, are financial products that help small businesses grow and develop.</strong></p>
-                    <a href="/loan-application" class="btn btn-light rounded py-3 px-5 mt-5 flex-shrink-0">Apply Now</a>
-                </div>
-                <div class="col-md-6 px-5">
-                    <img src="{{ asset('theme') }}/frontend/img/personal-loan.png" width="528px">
-                </div>
-            </div>
-        </div>
-    </div> -->
 
-<div class="container-fluid bg-breadcrumb" style="background-image: url(../theme/frontend/img/msme-bnr.jpg);">
-    <div class="container py-5">
-        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">MSME Loan</h4>
+<!-- header start  -->
+<div class="hl-hero-wrapper" style="background-image: url('../theme/frontend/img/msme_loan.webp');">
+    <div class="container">
+        <div class="row align-items-center hl-hero-height">
+
+            <div class="col-lg-7 col-md-8">
+                <h1 class="hl-hero-heading">
+                    Empower Your Business Growth with Flexible MSME Financing
+                </h1>
+
+                <ul class="hl-hero-list">
+                    <li>Unlock the full potential of your enterprise with JFinserv Consultant Pvt. Ltd.’s MSME Loan. Access working capital or expansion funds tailored to your business needs and growth plans.</li>
+                    <li>Avail financing solutions at competitive interest rates starting from 9.75%*</li>
+                    <li>Apply effortlessly through a fully digital process designed for speed and convenience</li>
+                    <li>Enjoy quick approvals with minimal documentation, so you can focus on scaling your business</li>
+                    <li>Flexible repayment options aligned with your cash flow for stress-free financial management</li>
+                </ul>
+
+                <a href="#" class="hl-hero-button">
+                    Apply for an MSME Loan
+                </a>
+            </div>
+
+        </div>
     </div>
 </div>
-    <!-- Header End -->
 
-        <!-- Service Start -->
-        <div class="container-fluid mt-5">
-            <div class="container">
-                <div class="wow fadeInUp text-dark" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">Overview</h2>
-                    <p>MSME Loans are specialized financial products designed to support Micro, Small, and Medium Enterprises (MSMEs) in meeting their business needs. These loans provide much-needed funding for working capital, business expansion, equipment purchases, and infrastructure development. Tailored to boost entrepreneurship and economic growth, MSME loans come with flexible repayment options, competitive interest rates, and minimal documentation. They empower small businesses to scale operations, improve productivity, and seize growth opportunities without compromising cash flow. With government-backed initiatives and schemes like MUDRA Loans, CGTMSE, and PMEGP, MSME loans have become more accessible, enabling businesses to thrive in today’s competitive landscape.</p>
-                </div>
-                <div class="wow fadeInUp pt-5" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">MSME Loan Features</h2>
-                </div>
-                <div class="row g-2 pb-4">
-                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                        <div class="p-3">
-                            <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">Offers for New Customers</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                        <div class="p-3">
-                            <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">Swift Loan Processing</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                        <div class="p-3">
-                            <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">Digital Loan Management</p>
-                        </div>
-                    </div>
-                </div>
 
-            <!-- Features and Benefits of our MSME Loan -->
-                <div class="wow fadeInUp py-5 text-dark" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">Features & Benefits of our MSME Loan</h2>
-                    <p>We acknowledge that buying a home is one of life's most significant financial decisions. With our array of customizable MSME Loan options, we're here to assist you at every turn, ensuring a seamless and stress-free process. The followings are the ways a MSME Loan can be useful:</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Competitive Interest Rates:</strong> Take advantage of our competitive interest rates, guaranteeing that you can comfortably afford your dream home while safeguarding your financial stability.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Flexible Repayment Options:</strong> Customize your repayment schedule to align with your financial capacity, whether you opt for a shorter duration to minimize interest costs or a longer duration for more manageable monthly payments.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Simple Application Process:</strong> Easily apply for a MSME Loan from the convenience of your own home through our intuitive online application process, saving you valuable time and effort.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Transparent Terms & Conditions</strong> Transparency is our cornerstone. From the outset, you'll have complete clarity with no hidden fees or surprises along the way. You'll be fully informed about all terms and conditions from the start.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Quick Approval and Disbursal:</strong> We comprehend the importance of achieving your dream home promptly. With our swift approval and disbursement process, you'll find yourself stepping into your new home sooner than you expect.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>No Foreclosure Charges:</strong> Acquire a MSME Loan hassle-free, devoid of collateral requirements, streamlining the borrowing process while minimizing risks. Embrace worry-free pursuit of your dreams with no foreclosure charges.</p>
-                </div>
 
-            <!-- MSME Loan Eligibility and Documents -->
-                <div class="row g-5 py-2 px-5 justify-content-center align-items-center">
-                    <div class="col-xl-12 wow fadeInRight" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInRight;">
-                        <div class="rounded p-3 h-100">
-                            <div class="row g-4 justify-content-center align-items-center bg-light rounded p-3 mx-auto" style="background-image: url({{ asset('theme') }}/frontend/img/cta_banner.webp);">
-                                <div class="col-md-9">
-                                    <div class="counter-item h-100">
-                                        <h3 class="text-light">MSME Loan Eligibility & Documents</h3>
-                                        <p class="text-light pb-2">Your eligibility for a MSME Loan application is usually determined by your age, work status, credit score, and income.</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 m-0">
-                                    <a href="/loan-application" target="_blank" class="btn btn-light rounded py-3 px-5 flex-shrink-0 float-end">Apply Now!!</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-            <!-- MSME Loan Eligibility Criteria -->
-                <div class="wow fadeInUp py-5 text-dark" data-wow-delay="0.2s">
-                    <div class="row py-3 align-items-center">
-                        <div class="col-md-5">
-                            <img src="{{ asset('theme') }}/frontend/img/criteria.jpg" alt="" class="w-75 shadow rounded">
-                        </div>
-                        <div class="col-md-7">
-                            <h2 class="display-6 mb-4">MSME Loan Eligibility Criteria</h2>
-                            <p>The basic criteria for MSME Loan eligibility are as follows:</p>
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="age-tab" data-bs-toggle="tab" data-bs-target="#age" type="button" role="tab" aria-controls="age" aria-selected="true">Age</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="income-tab" data-bs-toggle="tab" data-bs-target="#income" type="button" role="tab" aria-controls="income" aria-selected="false">Income</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="employee-tab" data-bs-toggle="tab" data-bs-target="#employee" type="button" role="tab" aria-controls="employee" aria-selected="false">Employment</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="credit-tab" data-bs-toggle="tab" data-bs-target="#credit" type="button" role="tab" aria-controls="credit" aria-selected="false">Credit Score</button>
-                                </li>
-                            </ul>
-                            <div class="tab-content py-3" id="myTabContent">
-                                <div class="tab-pane fade show active" id="age" role="tabpanel" aria-labelledby="age-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>You must be above 21 years of age at the time of the commencing of your loan, and up to 65 years or less at loan maturity</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Salaried Person - 21 years to 58 years</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Self-Employed Person - 25 years to 65 years</p>
-                                </div>
-                                <div class="tab-pane fade" id="income" role="tabpanel" aria-labelledby="income-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Salaried Person - Minimum Rs. 10,000 per month</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Self-Employed Person - Minimum Rs. 2,00,000 per year</p>
-                                </div>
-                                <div class="tab-pane fade" id="employee" role="tabpanel" aria-labelledby="employee-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Salaried Person - Minimum 2 to 3 years of Experience in MNC, or a Private or Public Limited Company</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Self-Employed Person - Minimum 3 years of Experience in the current field</p>
-                                </div>
-                                <div class="tab-pane fade" id="credit" role="tabpanel" aria-labelledby="credit-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>A credit score of 750 is considered a good score for approval.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<!-- HOME LOAN OVERVIEW -->
+<div class="lap-wrapper">
+    <div class="container">
 
-            <!-- Documentation for MSME Loan -->
-                <div class="wow fadeInUp py-3 text-dark" data-wow-delay="0.2s">
-                    <div class="row py-3 align-items-center">
-                        <div class="col-md-7">
-                            <h2 class="display-6 mb-4">Documentation for MSME Loan</h2>
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="salaried-tab" data-bs-toggle="tab" data-bs-target="#salaried" type="button" role="tab" aria-controls="salaried" aria-selected="true">Salaried Individuals</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="self-tab" data-bs-toggle="tab" data-bs-target="#self" type="button" role="tab" aria-controls="self" aria-selected="false">Self-Employed Individuals</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="nri-tab" data-bs-toggle="tab" data-bs-target="#nri" type="button" role="tab" aria-controls="nri" aria-selected="false">NRI Applicants</button>
-                                </li>
-                            </ul>
-                            <div class="tab-content py-3" id="myTabContent">
-                                <div class="tab-pane fade show active" id="salaried" role="tabpanel" aria-labelledby="salaried-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Form 16</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Employee Identity Card</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>3 Months Salary Slip</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>6 Month Bank Account Statement</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Duration of Employment Evidence</p>
-                                </div>
-                                <div class="tab-pane fade" id="self" role="tabpanel" aria-labelledby="self-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>PAN <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Trade License</span> <span><i class="fa fa-check text-primary me-3"></i>Article of Association</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Partnership Deed <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Import Export Code</span> <span><i class="fa fa-check text-primary me-3"></i>Memorandum of Association</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>SEBI Registration Certificate <span class="px-3"><i class="fa fa-check text-primary me-3"></i>ROC Registration Certificate</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Financial Statement Audited by CA <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Profit & Loss Account Statement</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Balance Sheet <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Professional Practice License for Doctors, Consultants, etc</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>6 Months Bank Account Statement <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Business Address Proof</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Registration Certificate of Establishment for Shops, Factories, and Other Establishments</p>
-                                </div>
-                                <div class="tab-pane fade" id="nri" role="tabpanel" aria-labelledby="nri-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Income Proof Documents for NRI <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Property Papers</span> <span><i class="fa fa-check text-primary me-3"></i>Property Documents</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Partnership Deed <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Sale Deed</span> <span><i class="fa fa-check text-primary me-3"></i>Stamped Agreement of Sale</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Incase of resale property share certificate is required <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Allotment Letter</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Allotment Letter <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Payment Receipt of Payment Made to Seller or Builder</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>No Objection Certificate or NOC <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Possession Certificate</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Land Tax Receipt <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Construction Cost Estimate</span> <span><i class="fa fa-check text-primary me-3"></i>Occupancy Certificate</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Bank Account Statement of Payment Made to Seller or Builder <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Housing Society</span></p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <img src="{{ asset('theme') }}/frontend/img/checklist.jpg" alt="" class="w-75 shadow rounded">
-                        </div>
+        <!-- Breadcrumb -->
+        <div class="lap-breadcrumb">
+            <a href="#">Home</a> &gt;
+            <a href="#">Products</a> &gt;
+            <span>MSME Loan</span>
+        </div>
+
+        <div class="row align-items-center">
+
+            <!-- Left Content -->
+            <div class="col-lg-6">
+                <h1 class="lap-heading">
+                    Empower Your Business with the Right Financing
+                </h1>
+
+                <p class="lap-description">
+                    Your business has immense potential, and the right financial support can help it soar. With <strong>Sammaan Capital</strong>, our MSME Loan offers tailored funding solutions to boost working capital, support expansion, or manage operational needs. Experience a smooth borrowing process with transparent procedures, quick approvals, and customer-focused solutions.
+                </p>
+
+                <p class="lap-rate-label">MSME Loan Starting From</p>
+                <h2 class="lap-rate">10.00%* Interest Onwards</h2>
+
+                <p class="lap-note">✔ Eligible for small and medium enterprises under Priority Sector Lending guidelines</p>
+
+                <p class="lap-disclaimer">
+                    *Interest rates are determined based on your business profile, loan amount, repayment tenure, and overall risk assessment.
+                </p>
+
+                <a href="#" class="lap-cta-btn">Apply for an MSME Loan</a>
+            </div>
+
+            <!-- Right Feature Cards -->
+            <div class="col-lg-6">
+                <div class="lap-features">
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">📈</span>
+                        <h4>Maximize Your Funding Potential</h4>
                     </div>
-                </div>
-                    
-            <!-- EMI Calculator for MSME Loan -->
-                <div class="wow fadeInUp py-5 mb-5 text-dark" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">EMI Calculator for MSME Loan</h2>
-                    <p>The monthly payments you make towards repaying your MSME Loan are called Equated Monthly Instalments (EMIs). These payments cover both the principal loan amount, spread over the loan tenure, and the interest on the remaining loan balance.</p>
-                    <p>The Ruloans online MSME Loan EMI Calculator is a helpful tool to guide you in making informed decisions for managing your MSME Loan efficiently. This easy-to-use calculator quickly and accurately computes your EMIs, helping you plan your finances with ease.</p>
-                    <a href="/emi-calculator" traget="_blank" class="btn bg-white btn-link rounded border border-2 border-dark px-5 mt-3 flex-shrink-0"><img src="{{ asset('theme') }}/frontend/img/accounting.gif" width="65px"><span class="px-3" style="font-size:20px;">Calculate Now</span></a>                    
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">💰</span>
+                        <h4>Competitive Interest Rates for SMEs</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">📄</span>
+                        <h4>Simplified Documentation Process</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">📅</span>
+                        <h4>Flexible Repayment Options</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">⚡</span>
+                        <h4>Quick, Transparent Loan Approvals</h4>
+                    </div>
+
                 </div>
             </div>
+
         </div>
-        <!-- Service End -->
+    </div>
+</div>
+
+
+
+
+
+<!-- feature -->
+    <!-- feature -->
+ 
+<div class="container-fluid features-section py-5">
+    <div class="container">
+
+        <h2>Key Features & Benefits of MSME Loan</h2>
+
+        <div class="row g-4">
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Flexible Financing for Business Needs</h5>
+                    <p>
+                        Customize your MSME Loan to suit your business requirements, whether it’s for working capital, expansion, or operational growth, with terms tailored to your cash flow and objectives.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Competitive Interest Rates</h5>
+                    <p>
+                        Access financing at attractive interest rates starting from 9.75%, helping you manage costs efficiently while boosting your business potential.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-percent"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Manageable Repayment Options</h5>
+                    <p>
+                        Choose repayment schedules that align with your revenue cycles, ensuring smooth loan servicing without straining your finances.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-regular fa-calendar-days"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Professional Business Advisory Support</h5>
+                    <p>
+                        Receive guidance on financial planning, risk management, and business strategy to maximize the effectiveness of your loan and growth initiatives.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Substantial Loan Amounts</h5>
+                    <p>
+                        Obtain sufficient funds to scale operations, invest in infrastructure, or explore new opportunities, empowering your business without financial constraints.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-money-bill-trend-up"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Quick & Transparent Approvals</h5>
+                    <p>
+                        Benefit from a streamlined approval process with minimal documentation, ensuring fast access to funds so you can seize growth opportunities without delays.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- eligibility -->
+
+<!-- eligibility for MSME Loan -->
+
+<div class="container py-5 eligibility-section">
+
+    <!-- TOP BANNER -->
+    <div class="eligibility-banner">
+        <div>
+            <h4>MSME Loan Eligibility & Documents</h4>
+            <p>Explore the key requirements to apply for an MSME Loan and accelerate your business growth.</p>
+        </div>
+        <a href="#" class="know-more-btn">Know More</a>
+    </div>
+
+    <!-- ELIGIBILITY CONTENT -->
+    <h2 class="text-center mb-5" style="font-size:40px">MSME Loan Eligibility</h2>
+
+    <h5>Eligible Businesses:</h5>
+    <ul>
+        <li>Micro, Small, and Medium Enterprises registered under relevant government norms</li>
+        <li>Startups or established businesses seeking working capital or expansion funding</li>
+    </ul>
+
+    <h5>Business Experience & Track Record:</h5>
+    <ul>
+        <li>Minimum 1 to 3 years of operational experience in the relevant sector</li>
+        <li>Consistent revenue generation and operational stability preferred</li>
+    </ul>
+
+    <h5>Financial Health & Cash Flow:</h5>
+    <ul>
+        <li>Stable income from business operations sufficient to service the loan</li>
+        <li>Audited financial statements or business projections may be required</li>
+    </ul>
+
+    <h5>Creditworthiness:</h5>
+    <ul>
+        <li>Good credit history with a score of 700 or above is generally preferred</li>
+    </ul>
+
+    <h5>Business Viability:</h5>
+    <ul>
+        <li>Clear business plan, financial forecasts, and repayment strategy</li>
+        <li>Risk assessment and operational feasibility play an important role in approval</li>
+    </ul>
+
+</div>
+
+<!-- documents -->
+ <!-- Lease Rental Discounting Documents -->
+<div class="doc-wrap">
+
+    <h2 class="doc-title">
+        Documents Required for Loan Application
+    </h2>
+
+    <!-- Tabs -->
+    <div class="doc-tabs-row">
+        <button class="doc-tab active" data-tab="salaried">Salaried Individuals</button>
+        <button class="doc-tab" data-tab="self">Self-Employed Individuals</button>
+        <button class="doc-tab" data-tab="nri">NRI Applicants</button>
+    </div>
+
+    <!-- Content -->
+    <div class="doc-content">
+
+        <!-- Salaried -->
+        <div class="doc-panel active" id="salaried">
+            <ul class="doc-list">
+                <li>
+                    <strong>Form 16</strong>
+                    <span>Proof of income issued by the employer for tax purposes.</span>
+                </li>
+                <li>
+                    <strong>Last 3 Months Salary Slips</strong>
+                    <span>To verify current monthly income and salary consistency.</span>
+                </li>
+                <li>
+                    <strong>Employment Proof / Experience Letter</strong>
+                    <span>Confirms job stability and duration of employment.</span>
+                </li>
+                <li>
+                    <strong>Employee Identity Card</strong>
+                    <span>Official ID provided by the employer for verification.</span>
+                </li>
+                <li>
+                    <strong>Last 6 Months Bank Statement</strong>
+                    <span>Shows salary credits, expenses, and financial discipline.</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Self Employed -->
+        <div class="doc-panel" id="self">
+            <ul class="doc-list">
+                <li>
+                    <strong>Business Registration Certificate</strong>
+                    <span>Proof of business existence (GST, Shop Act, MSME, etc.).</span>
+                </li>
+                <li>
+                    <strong>Income Tax Returns (Last 2–3 Years)</strong>
+                    <span>Demonstrates income stability and repayment capacity.</span>
+                </li>
+                <li>
+                    <strong>Audited Financial Statements</strong>
+                    <span>Includes Profit & Loss account and Balance Sheet.</span>
+                </li>
+                <li>
+                    <strong>Current Account Bank Statements (Last 6 Months)</strong>
+                    <span>Reflects business cash flow and transactions.</span>
+                </li>
+                <li>
+                    <strong>Business Address Proof</strong>
+                    <span>Utility bill, rent agreement, or ownership proof.</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- NRI -->
+        <div class="doc-panel" id="nri">
+            <ul class="doc-list">
+                <li>
+                    <strong>Valid Passport & Visa Copy</strong>
+                    <span>Confirms identity and legal residence abroad.</span>
+                </li>
+                <li>
+                    <strong>Overseas Employment Contract / Offer Letter</strong>
+                    <span>Proof of current employment outside India.</span>
+                </li>
+                <li>
+                    <strong>NRE / NRO Bank Account Statements</strong>
+                    <span>Shows income remittance and savings in India.</span>
+                </li>
+                <li>
+                    <strong>Salary Slips / Income Proof</strong>
+                    <span>Verifies earning capacity overseas.</span>
+                </li>
+                <li>
+                    <strong>Power of Attorney (If Applicable)</strong>
+                    <span>Required when a representative manages the loan in India.</span>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+<style>.doc-wrap {
+    max-width: 1100px;
+    margin: 70px auto;
+}
+
+.doc-title {
+    text-align: center;
+    font-size: 38px;
+    margin-bottom: 35px;
+}
+
+/* Tabs Row */
+.doc-tabs-row {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.doc-tab {
+    padding: 14px 28px;
+    border-radius: 14px;
+    border: 2px solid transparent;
+    background: #f4f6ff;
+    font-size: 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: 0.3s ease;
+    color:#000
+}
+
+.doc-tab.active {
+    background: #eef1ff;
+    border-color: #2f49ff;
+    color: #2f49ff;
+}
+
+/* Content */
+.doc-content {
+    margin-top: 30px;
+    border-top: 1px solid #ddd;
+    padding-top: 30px;
+}
+
+.doc-panel {
+    display: none;
+}
+
+.doc-panel.active {
+    display: block;
+}
+
+/* List Style */
+.doc-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px 50px;
+    padding-left: 0;
+    list-style: none;
+}
+
+.doc-list li strong {
+    display: block;
+    font-size: 16px;
+    color: #111;
+}
+
+.doc-list li span {
+    font-size: 14px;
+    color: #555;
+}
+</style>
+<script>
+document.querySelectorAll('.doc-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+
+        document.querySelectorAll('.doc-tab')
+            .forEach(t => t.classList.remove('active'));
+
+        document.querySelectorAll('.doc-panel')
+            .forEach(p => p.classList.remove('active'));
+
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+});
+</script>
+
+
+
+
+<!-- calculator -->
+ 
+    <style>
+      
+        .calculator-wrapper {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        .calculator-wrapper h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 32px;
+            color: #0b2bd7;
+        }
+
+        .calculator-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .calculator-section > div {
+            flex: 1 1 45%;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        button {
+            background: #295cab;
+            color: #fff;
+            font-weight: 600;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button:hover {
+            /* background: #081a9f; */
+        }
+
+        .results {
+            margin-top: 20px;
+            background: #eef5ff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .results h4 {
+            margin-bottom: 15px;
+        }
+
+        .results p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        @media (max-width:768px){
+            .calculator-section > div {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+<h2 class="text-center mb-5" style="font-size:40px">MSME Loan Calculator & Eligibility</h2>
+<div class="calculator-wrapper">
+    
+
+    <div class="calculator-section">
+        <!-- EMI Calculator -->
+        <div>
+            <h4>EMI Calculator</h4>
+            <label for="loanAmount">Loan Amount (₹)</label>
+            <input type="number" id="loanAmount" placeholder="Enter loan amount">
+
+            <label for="interestRate">Interest Rate (%) per annum</label>
+            <input type="number" id="interestRate" placeholder="e.g., 9.75">
+
+            <label for="loanTenure">Loan Tenure (Months)</label>
+            <input type="number" id="loanTenure" placeholder="e.g., 24">
+
+            <button onclick="calculateEMI()">Calculate EMI</button>
+
+            <div class="results" id="emiResults" style="display:none;">
+                <h4>EMI Details</h4>
+                <p id="emiAmount"></p>
+                <p id="totalPayment"></p>
+                <p id="totalInterest"></p>
+            </div>
+        </div>
+
+        <!-- Eligibility Calculator -->
+        <div>
+            <h4>Eligibility Calculator</h4>
+            <label for="monthlyIncome">Monthly Income (₹)</label>
+            <input type="number" id="monthlyIncome" placeholder="Enter your monthly income">
+
+            <label for="existingEMI">Existing EMIs (₹)</label>
+            <input type="number" id="existingEMI" placeholder="Existing EMIs per month">
+
+            <label for="repaymentRatio">Eligible Repayment % of Income</label>
+            <select id="repaymentRatio">
+                <option value="40">40%</option>
+                <option value="50">50%</option>
+                <option value="60">60%</option>
+            </select>
+
+            <button onclick="calculateEligibility()">Check Eligibility</button>
+
+            <div class="results" id="eligibilityResults" style="display:none;">
+                <h4>Eligibility Result</h4>
+                <p id="eligibleAmount"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function calculateEMI() {
+        let principal = parseFloat(document.getElementById("loanAmount").value);
+        let annualRate = parseFloat(document.getElementById("interestRate").value);
+        let tenureMonths = parseInt(document.getElementById("loanTenure").value);
+
+        if(principal > 0 && annualRate > 0 && tenureMonths > 0){
+            let monthlyRate = annualRate / 12 / 100;
+            let emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, tenureMonths)) / (Math.pow(1 + monthlyRate, tenureMonths) - 1);
+            let totalPayment = emi * tenureMonths;
+            let totalInterest = totalPayment - principal;
+
+            document.getElementById("emiAmount").innerText = "Monthly EMI: ₹" + emi.toFixed(2);
+            document.getElementById("totalPayment").innerText = "Total Payment: ₹" + totalPayment.toFixed(2);
+            document.getElementById("totalInterest").innerText = "Total Interest: ₹" + totalInterest.toFixed(2);
+            document.getElementById("emiResults").style.display = "block";
+        } else {
+            alert("Please enter valid loan details");
+        }
+    }
+
+    function calculateEligibility() {
+        let income = parseFloat(document.getElementById("monthlyIncome").value);
+        let existingEMI = parseFloat(document.getElementById("existingEMI").value);
+        let repaymentPercent = parseFloat(document.getElementById("repaymentRatio").value);
+
+        if(income > 0){
+            let eligibleEMI = (income * repaymentPercent / 100) - (isNaN(existingEMI) ? 0 : existingEMI);
+            let eligibleLoan = eligibleEMI * 12 * 5; // assuming 5-year eligibility
+            if(eligibleLoan < 0) eligibleLoan = 0;
+
+            document.getElementById("eligibleAmount").innerText = "Approx. Eligible Loan Amount: ₹" + eligibleLoan.toFixed(2);
+            document.getElementById("eligibilityResults").style.display = "block";
+        } else {
+            alert("Please enter valid income details");
+        }
+    }
+</script>
+
+
+    <!-- Header End -->
+
+       
 
         <!-- FAQs Start -->
         <div class="container-fluid faq-section bg-light py-5 mb-5">

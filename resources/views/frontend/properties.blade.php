@@ -8,22 +8,17 @@
 
 
 @section('content')
-<!-- Header Start -->
-<!-- <div class="container-fluid bg-breadcrumb">
-    <div class="container text-center py-5" style="max-width: 900px;">
-        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Find Your Dream Home</h4>
-        <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
-            <li class="breadcrumb-item"><a href="">Home</a></li>
-            <li class="breadcrumb-item active text-primary">Properties</li>
-        </ol>    
-    </div>
-</div> -->
 
-<div class="container-fluid bg-breadcrumb" style="background-image: url(../theme/frontend/img/prop-bnr.jpg);">
-    <div class="container py-5">
-        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Find Your Dream Home</h4>
+
+<section class="page-banner" style="background-image: url('../theme/frontend/img/prop-bnr.webp');">
+    <div class="page-banner-overlay"></div>
+
+    <div class="page-banner-container">
+        <!-- <h1 class="page-banner-title">About Jfinserv</h1> -->
     </div>
-</div>
+</section>
+
+
 
 <div class="container-fluid prop-feature">
     <div class="container pb-5">
