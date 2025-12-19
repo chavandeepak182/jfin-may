@@ -26,6 +26,8 @@ use App\Http\Controllers\PropertyTakerController;
 use Illuminate\Support\Facades\Route;
 use App\Exports\EligibilityExport;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\EstimatedFileController;
+use App\Http\Controllers\MonthlyPLController;
 use Maatwebsite\Excel\Facades\Excel;
 
 require __DIR__.'/auth.php';
@@ -457,3 +459,87 @@ Route::put('admin/property-takers/{id}', [PropertyTakerController::class, 'updat
 Route::get('admin/property-takers/{id}', [PropertyTakerController::class, 'show'])->name('property_takers.view');
 Route::delete('admin/property-takers/{id}', [PropertyTakerController::class, 'destroy'])
     ->name('property_takers.destroy');
+
+//  P & L
+Route::middleware('isAdmin')->group(function () {
+
+    // List
+    Route::get(
+        'admin/estimated-file',
+        [EstimatedFileController::class, 'index']
+    )->name('estimatedFile.index');
+
+    // Create
+    Route::get(
+        'admin/estimated-file/create',
+        [EstimatedFileController::class, 'create']
+    )->name('estimatedFile.create');
+
+    // Store
+    Route::post(
+        'admin/estimated-file/store',
+        [EstimatedFileController::class, 'store']
+    )->name('estimatedFile.store');
+
+    // Edit
+    Route::get(
+        'admin/estimated-file/{id}/edit',
+        [EstimatedFileController::class, 'edit']
+    )->name('estimatedFile.edit');
+
+    // Update
+    Route::post(
+        'admin/estimated-file/{id}/update',
+        [EstimatedFileController::class, 'update']
+    )->name('estimatedFile.update');
+
+    // Delete
+    Route::delete(
+        'admin/estimated-file/{id}',
+        [EstimatedFileController::class, 'destroy']
+    )->name('estimatedFile.delete');
+     Route::get(
+        'admin/monthly-pl',
+        [EstimatedFileController::class, 'indexPL']
+    )->name('monthlyPL.index');
+
+    Route::get(
+        'admin/monthly-pl/gross-revenue',
+        [EstimatedFileController::class, 'getGrossRevenue']
+    )->name('monthlyPL.grossRevenue');
+
+
+});
+Route::middleware('isAdmin')->group(function () {
+
+    Route::post(
+        'admin/monthly-pl/save',
+        [MonthlyPLController::class, 'store']
+    )->name('monthlyPL.store');
+
+    Route::get(
+        'admin/monthly-pl/export-excel/{id}',
+        [MonthlyPLController::class, 'exportExcel']
+    )->name('monthlyPL.exportExcel');
+
+    Route::get(
+        'admin/monthly-pl/export-pdf/{id}',
+        [MonthlyPLController::class, 'exportPdf']
+    )->name('monthlyPL.exportPdf');
+});
+Route::middleware('isAdmin')->group(function () {
+
+    Route::get(
+        'admin/monthly-pl-list',
+        [MonthlyPLController::class, 'list']
+    )->name('monthlyPL.list');
+
+    Route::get(
+        'admin/monthly-pl/export-formatted/{id}',
+        [MonthlyPLController::class, 'exportFormattedExcel']
+    )->name('monthlyPL.exportFormatted');
+});
+Route::get(
+    'admin/monthly-pl/export-with-estimated/{id}',
+    [MonthlyPLController::class, 'exportWithEstimated']
+)->name('monthlyPL.exportWithEstimated');

@@ -844,4 +844,5 @@
         </script>
 
         @yield('script')
+          @stack('scripts')
 </body>
