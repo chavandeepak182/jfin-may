@@ -4,202 +4,471 @@
 @section('keywords', "financial services in pune, Lease Rental Discounting Loan services in Pune, business loan provider in pune, Business loan services in Pune, Business loan in Pune")
 
 @section('content')
-<!-- Header Start -->
-    <!-- <div class="details-hero d-flex justify-content-center align-items-center" style="background-image: url({{ asset('theme') }}/frontend/img/loan-background.webp);">
-        <div class="container d-flex align-items-center justify-content-between py-5">
-            <div class="row">
-                <div class="col-md-6 py-5">
-                    <h2 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Breaking Down the Concept of Lease Rental Discounting</h2>
-                    <p class="mt-4 text-white"><strong>A Lease Rental Loan is a secured loan offered against rental income from leased properties. It helps property owners unlock liquidity for personal or business needs while retaining ownership of the asset.</strong></p>
-                    <a href="/loan-application" class="btn btn-light rounded py-3 px-5 mt-5 flex-shrink-0">Apply Now</a>
-                </div>
-                <div class="col-md-6 px-5">
-                    <img src="{{ asset('theme') }}/frontend/img/personal-loan.png" width="528px">
-                </div>
-            </div>
-        </div>
-    </div> -->
 
-<div class="container-fluid bg-breadcrumb" style="background-image: url(../theme/frontend/img/lrd-bnr.jpg);">
-    <div class="container py-5">
-        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Lease Rental Discounting</h4>
+
+<div class="hl-hero-wrapper" style="background-image: url('../theme/frontend/img/lrd_loan.webp');">
+    <div class="container">
+        <div class="row align-items-center hl-hero-height">
+
+            <div class="col-lg-7 col-md-8">
+                <h1 class="hl-hero-heading">
+                    Lease Rental Discounting: Unlock the Power of Your Rental Income
+                </h1>
+
+                <ul class="hl-hero-list">
+                    <li>
+                        Monetize your leased commercial property by converting future rental income into immediate capital
+                    </li>
+                    <li>
+                        Secure financing based on stable and predictable rental cash flows from leased assets
+                    </li>
+                    <li>
+                        Enjoy competitive interest rates starting from 9.75%*
+                    </li>
+                    <li>
+                        Experience a seamless, end-to-end digital application process with quick approvals and minimal documentation backed by strong tenant profiles**
+                    </li>
+                </ul>
+
+                <a href="#" class="hl-hero-button">
+                    Apply for Lease Rental Discounting
+                </a>
+            </div>
+
+        </div>
     </div>
 </div>
-    <!-- Header End -->
+<div class="lap-wrapper" style="margin-top:40px;">
+    <div class="container">
 
-        <!-- Service Start -->
-        <div class="container-fluid mt-5">
-            <div class="container">
-                <div class="wow fadeInUp text-dark" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">Overview</h2>
-                    <p>Many individuals own commercial properties and lease them out, benefiting from consistent rental income. One significant advantage of leasing is the ability to secure a Term Loan against the rental income received. Lease Rental Discounting (LRD) is a type of Term Loan offered against income-generating commercial properties. This loan is structured on the premise that the fixed rental income from your leased property can be used as **collateral** to instantly access funds.</p>
-                    <p>Lease Rental Discounting (LRD) loans are based on the concept of utilizing rental income from leased properties as collateral. In this arrangement, tenants sign a lease agreement with the property owner, committing to regular rental payments. The property owner can leverage these rental receipts, structured for the lease term, as collateral to secure a loan.</p>
-                </div>
-                <div class="wow fadeInUp pt-5" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">Lease Rental Discounting Loan Features</h2>
-                </div>
-                <div class="row g-2 pb-4">
-                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                        <div class="p-3">
-                            <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">High-value Financing</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                        <div class="p-3">
-                            <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">Comfortable Repayment Plans</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                        <div class="p-3">
-                            <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">Flexi Loan Facility</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-6 col-sm-12 border me-3">
-                        <div class="p-3">
-                            <img src="https://www.ruloans.com/assets/icons/percentageTag.png">
-                            <p class="m-0 text-dark">Foreclosure Benefits</p>
-                        </div>
-                    </div>
-                </div>
+        <!-- Breadcrumb -->
+        <div class="lap-breadcrumb">
+            <a href="#">Home</a> &gt;
+            <a href="#">Products</a> &gt;
+            <span>Lease Rental Discounting</span>
+        </div>
 
-            <!-- Features and Benefits of our Lease Rental Discounting Loan -->
-                <div class="wow fadeInUp py-5 text-dark" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">Features & Benefits of our Lease Rental Discounting Loan</h2>
-                    <p>We acknowledge that buying a home is one of life's most significant financial decisions. With our array of customizable Lease Rental Discounting Loan options, we're here to assist you at every turn, ensuring a seamless and stress-free process. The followings are the ways a Lease Rental Discounting Loan can be useful:</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Competitive Interest Rates:</strong> Take advantage of our competitive interest rates, guaranteeing that you can comfortably afford your dream home while safeguarding your financial stability.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Flexible Repayment Options:</strong> Customize your repayment schedule to align with your financial capacity, whether you opt for a shorter duration to minimize interest costs or a longer duration for more manageable monthly payments.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Simple Application Process:</strong> Easily apply for a Lease Rental Discounting Loan from the convenience of your own home through our intuitive online application process, saving you valuable time and effort.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Transparent Terms & Conditions</strong> Transparency is our cornerstone. From the outset, you'll have complete clarity with no hidden fees or surprises along the way. You'll be fully informed about all terms and conditions from the start.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>Quick Approval and Disbursal:</strong> We comprehend the importance of achieving your dream home promptly. With our swift approval and disbursement process, you'll find yourself stepping into your new home sooner than you expect.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i><strong>No Foreclosure Charges:</strong> Acquire a Lease Rental Discounting Loan hassle-free, devoid of collateral requirements, streamlining the borrowing process while minimizing risks. Embrace worry-free pursuit of your dreams with no foreclosure charges.</p>
-                </div>
+        <div class="row align-items-center">
 
-            <!-- Lease Rental Discounting Loan Eligibility and Documents -->
-                <div class="row g-5 py-2 px-5 justify-content-center align-items-center">
-                    <div class="col-xl-12 wow fadeInRight" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInRight;">
-                        <div class="rounded p-3 h-100">
-                            <div class="row g-4 justify-content-center align-items-center bg-light rounded p-3 mx-auto" style="background-image: url({{ asset('theme') }}/frontend/img/cta_banner.webp);">
-                                <div class="col-md-9">
-                                    <div class="counter-item h-100">
-                                        <h3 class="text-light">Lease Rental Discounting Loan Eligibility & Documents</h3>
-                                        <p class="text-light pb-2">Your eligibility for a Lease Rental Discounting Loan application is usually determined by your age, work status, credit score, and income.</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 m-0">
-                                    <a href="/loan-application" target="_blank" class="btn btn-light rounded py-3 px-5 flex-shrink-0 float-end">Apply Now!!</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-            <!-- Lease Rental Discounting Loan Eligibility Criteria -->
-                <div class="wow fadeInUp py-5 text-dark" data-wow-delay="0.2s">
-                    <div class="row py-3 align-items-center">
-                        <div class="col-md-5">
-                            <img src="{{ asset('theme') }}/frontend/img/criteria.jpg" alt="" class="w-75 rounded shadow">
-                        </div>
-                        <div class="col-md-7">
-                            <h2 class="display-6 mb-4">Lease Rental Discounting Loan Eligibility Criteria</h2>
-                            <p>The basic criteria for Lease Rental Discounting Loan eligibility are as follows:</p>
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="age-tab" data-bs-toggle="tab" data-bs-target="#age" type="button" role="tab" aria-controls="age" aria-selected="true">Age</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="income-tab" data-bs-toggle="tab" data-bs-target="#income" type="button" role="tab" aria-controls="income" aria-selected="false">Income</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="employee-tab" data-bs-toggle="tab" data-bs-target="#employee" type="button" role="tab" aria-controls="employee" aria-selected="false">Employment</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="credit-tab" data-bs-toggle="tab" data-bs-target="#credit" type="button" role="tab" aria-controls="credit" aria-selected="false">Credit Score</button>
-                                </li>
-                            </ul>
-                            <div class="tab-content py-3" id="myTabContent">
-                                <div class="tab-pane fade show active" id="age" role="tabpanel" aria-labelledby="age-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>You must be above 21 years of age at the time of the commencing of your loan, and up to 65 years or less at loan maturity</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Salaried Person - 21 years to 58 years</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Self-Employed Person - 25 years to 65 years</p>
-                                </div>
-                                <div class="tab-pane fade" id="income" role="tabpanel" aria-labelledby="income-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Salaried Person - Minimum Rs. 10,000 per month</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Self-Employed Person - Minimum Rs. 2,00,000 per year</p>
-                                </div>
-                                <div class="tab-pane fade" id="employee" role="tabpanel" aria-labelledby="employee-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Salaried Person - Minimum 2 to 3 years of Experience in MNC, or a Private or Public Limited Company</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Self-Employed Person - Minimum 3 years of Experience in the current field</p>
-                                </div>
-                                <div class="tab-pane fade" id="credit" role="tabpanel" aria-labelledby="credit-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>A credit score of 750 is considered a good score for approval.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Left Content -->
+            <div class="col-lg-6">
+                <h1 class="lap-heading">
+                    Turn Your Rental Income into Immediate Capital
+                </h1>
 
-            <!-- Documentation for Lease Rental Discounting Loan -->
-                <div class="wow fadeInUp py-3 text-dark" data-wow-delay="0.2s">
-                    <div class="row py-3 align-items-center">
-                        <div class="col-md-7">
-                            <h2 class="display-6 mb-4">Documentation for Lease Rental Discounting Loan</h2>
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="salaried-tab" data-bs-toggle="tab" data-bs-target="#salaried" type="button" role="tab" aria-controls="salaried" aria-selected="true">Salaried Individuals</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="self-tab" data-bs-toggle="tab" data-bs-target="#self" type="button" role="tab" aria-controls="self" aria-selected="false">Self-Employed Individuals</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="nri-tab" data-bs-toggle="tab" data-bs-target="#nri" type="button" role="tab" aria-controls="nri" aria-selected="false">NRI Applicants</button>
-                                </li>
-                            </ul>
-                            <div class="tab-content py-3" id="myTabContent">
-                                <div class="tab-pane fade show active" id="salaried" role="tabpanel" aria-labelledby="salaried-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Form 16</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Employee Identity Card</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>3 Months Salary Slip</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>6 Month Bank Account Statement</p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Duration of Employment Evidence</p>
-                                </div>
-                                <div class="tab-pane fade" id="self" role="tabpanel" aria-labelledby="self-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>PAN <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Trade License</span> <span><i class="fa fa-check text-primary me-3"></i>Article of Association</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Partnership Deed <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Import Export Code</span> <span><i class="fa fa-check text-primary me-3"></i>Memorandum of Association</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>SEBI Registration Certificate <span class="px-3"><i class="fa fa-check text-primary me-3"></i>ROC Registration Certificate</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Financial Statement Audited by CA <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Profit & Loss Account Statement</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Balance Sheet <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Professional Practice License for Doctors, Consultants, etc</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>6 Months Bank Account Statement <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Business Address Proof</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Registration Certificate of Establishment for Shops, Factories, and Other Establishments</p>
-                                </div>
-                                <div class="tab-pane fade" id="nri" role="tabpanel" aria-labelledby="nri-tab">
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Income Proof Documents for NRI <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Property Papers</span> <span><i class="fa fa-check text-primary me-3"></i>Property Documents</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Partnership Deed <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Sale Deed</span> <span><i class="fa fa-check text-primary me-3"></i>Stamped Agreement of Sale</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Incase of resale property share certificate is required <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Allotment Letter</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Allotment Letter <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Payment Receipt of Payment Made to Seller or Builder</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>No Objection Certificate or NOC <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Possession Certificate</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Land Tax Receipt <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Construction Cost Estimate</span> <span><i class="fa fa-check text-primary me-3"></i>Occupancy Certificate</span></p>
-                                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Bank Account Statement of Payment Made to Seller or Builder <span class="px-3"><i class="fa fa-check text-primary me-3"></i>Housing Society</span></p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-5 text-center">
-                            <img src="{{ asset('theme') }}/frontend/img/checklist.jpg" alt="" class="w-75 rounded shadow">
-                        </div>
+                <p class="lap-description">
+                    Your leased commercial property can generate more than just monthly rent—it can unlock powerful funding for your next move. With <strong>JFinserv Consultant Pvt. Ltd.</strong>, our Lease Rental Discounting solution allows you to raise funds against future rental receivables while continuing to own and operate your property. Enjoy structured financing, faster approvals, and transparent processes that support your business growth with confidence.
+                </p>
+
+                <p class="lap-rate-label">Lease Rental Discounting Starting From</p>
+                <h2 class="lap-rate">9.75%* Interest Onwards</h2>
+
+                <p class="lap-note">
+                    ✔ Available for owners of leased commercial properties with stable rental income
+                </p>
+
+                <p class="lap-disclaimer">
+                    *The final interest rate is based on tenant profile, rental agreement tenure,
+                    rental cash flow stability, loan amount, property type, and overall credit assessment.
+                </p>
+
+                <a href="#" class="lap-cta-btn">Apply for Lease Rental Discounting</a>
+            </div>
+
+            <!-- Right Feature Cards -->
+            <div class="col-lg-6">
+                <div class="lap-features">
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">📈</span>
+                        <h4>Maximize Value of Rental Cash Flows</h4>
                     </div>
-                </div>
-                    
-            <!-- EMI Calculator for Lease Rental Discounting Loan -->
-                <div class="wow fadeInUp py-5 mb-5 text-dark" data-wow-delay="0.2s">
-                    <h2 class="display-6 mb-4">EMI Calculator for Lease Rental Discounting Loan</h2>
-                    <p>The monthly payments you make towards repaying your Lease Rental Discounting Loan are called Equated Monthly Instalments (EMIs). These payments cover both the principal loan amount, spread over the loan tenure, and the interest on the remaining loan balance.</p>
-                    <p>The Ruloans online Lease Rental Discounting Loan EMI Calculator is a helpful tool to guide you in making informed decisions for managing your Lease Rental Discounting Loan efficiently. This easy-to-use calculator quickly and accurately computes your EMIs, helping you plan your finances with ease.</p>
-                    <a href="/emi-calculator" traget="_blank" class="btn bg-white btn-link rounded border border-2 border-dark px-5 mt-3 flex-shrink-0"><img src="{{ asset('theme') }}/frontend/img/accounting.gif" width="65px"><span class="px-3" style="font-size:20px;">Calculate Now</span></a>                    
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">💰</span>
+                        <h4>Attractive, Market-Linked Interest Rates</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">📄</span>
+                        <h4>Minimal & Simplified Documentation</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">📅</span>
+                        <h4>Flexible Repayment Linked to Rental Income</h4>
+                    </div>
+
+                    <div class="lap-feature-card">
+                        <span class="lap-icon">⚡</span>
+                        <h4>Fast, Transparent & Structured Approval Process</h4>
+                    </div>
+
                 </div>
             </div>
+
         </div>
+    </div>
+</div>
+
+
+
+<!-- feature -->
+ <!-- feature -->
+ 
+<div class="container-fluid features-section py-5">
+    <div class="container">
+
+        <h2>Key Features & Benefits of Lease Rental Discounting</h2>
+
+        <div class="row g-4">
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Attractive, Market-Linked Interest Rates</h5>
+                    <p>
+                        Avail competitive interest rates structured around the strength of your tenant profile and rental cash flows, helping you unlock funding without straining your finances.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-percent"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Rental-Aligned Repayment Structure</h5>
+                    <p>
+                        Repayment schedules are designed to align with your rental inflows, ensuring smooth servicing of the loan while maintaining healthy cash flow.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-regular fa-calendar-days"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Quick & Simplified Application Process</h5>
+                    <p>
+                        Apply for Lease Rental Discounting through a streamlined process that minimizes paperwork and accelerates approvals, saving both time and effort.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-gears"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Complete Transparency & Clear Terms</h5>
+                    <p>
+                        From loan structure to charges and tenure, everything is disclosed upfront—no hidden costs, no surprises, just clear and honest lending.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-regular fa-clipboard"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>Fast Approval & Timely Disbursal</h5>
+                    <p>
+                        Benefit from faster sanction and disbursal timelines backed by stable rental income and strong lease agreements, enabling you to access funds when you need them.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <h5>No Impact on Property Ownership</h5>
+                    <p>
+                        Raise funds against future rentals while retaining full ownership and control of your commercial property, without disrupting existing lease arrangements.
+                    </p>
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-building"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- eligibility -->
+ <!-- eligibility for Lease Rental Discounting -->
+>
+
+<div class="container py-5 eligibility-section">
+
+    <!-- TOP BANNER -->
+    <div class="eligibility-banner">
+        <div>
+            <h4>Lease Rental Discounting Eligibility & Documents</h4>
+            <p>Check the basic criteria required to apply for an LRD Loan.</p>
+        </div>
+        <a href="#" class="know-more-btn">Know More</a>
+    </div>
+
+    <!-- ELIGIBILITY CONTENT -->
+    <h2 class="text-center mb-5" style="font-size:40px">Lease Rental Discounting (LRD) Eligibility</h2>
+
+    <h5>Applicant Type:</h5>
+    <ul>
+        <li>Individuals, HNIs, and corporate entities who own commercial or residential rental property</li>
+        <li>Tenanted properties with long-term lease agreements are preferred</li>
+    </ul>
+
+    <h5>Property & Lease Details:</h5>
+    <ul>
+        <li>Property must be free from legal disputes and encumbrances</li>
+        <li>Registered lease agreement with reliable tenants, preferably with a minimum tenure of 1-3 years</li>
+    </ul>
+
+    <h5>Income & Cash Flow:</h5>
+    <ul>
+        <li>Rental income from the property should be stable and sufficient to service the loan</li>
+        <li>Bank statements and rent receipts may be required as proof of income</li>
+    </ul>
+
+    <h5>Credit Profile:</h5>
+    <ul>
+        <li>A good credit history with a score of 700 or above is generally preferred</li>
+    </ul>
+
+    <h5>Property Valuation & Loan Feasibility:</h5>
+    <ul>
+        <li>Professional property valuation is required to determine the loan amount</li>
+        <li>Loan amount is typically a percentage of the present value of rental income (Discounted Rental Value)</li>
+    </ul>
+
+</div>
+
+<!-- documents -->
+<!-- Lease Rental Discounting Documents Section -->
+<div class="container my-5">
+
+    <h2 class="text-center mb-5" style="font-size:40px">
+        <strong>Documents Required for Lease Rental Discounting</strong>
+    </h2>
+
+    <!-- Tabs -->
+    <div class="doc-tabs">
+        <button class="tab-btn active" data-tab="all">For All Applicants</button>
+        <button class="tab-btn" data-tab="owner">Property Owner Documents</button>
+        <button class="tab-btn" data-tab="tenant">Tenant & Lease Documents</button>
+        <button class="tab-btn" data-tab="financial">Financial Documents</button>
+        <button class="tab-btn" data-tab="other">Other Supporting Documents</button>
+    </div>
+
+    <!-- Content -->
+    <div class="tab-content">
+
+        <!-- For All Applicants -->
+        <div class="tab-pane active" id="all">
+            <ul class="two-column-list">
+                <li>Duly filled and signed Lease Rental Discounting application form</li>
+                <li>Passport-size photographs of applicant / directors</li>
+                <li>Identity proof (Aadhaar Card / PAN Card / Passport)</li>
+                <li>Address proof of applicant and registered office</li>
+                <li>PAN Card of individual / company / firm</li>
+                <li>Bank statements for last 6–12 months</li>
+                <li>Processing fee cheque</li>
+            </ul>
+        </div>
+
+        <!-- Property Owner Documents -->
+        <div class="tab-pane" id="owner">
+            <ul class="two-column-list">
+                <li>Property ownership documents (Sale Deed / Conveyance Deed)</li>
+                <li>Latest property tax paid receipts</li>
+                <li>Approved building plan and occupancy certificate</li>
+                <li>No Objection Certificate (NOC) from society / authority</li>
+                <li>Property insurance copy (if available)</li>
+            </ul>
+        </div>
+
+        <!-- Tenant & Lease Documents -->
+        <div class="tab-pane" id="tenant">
+            <ul class="two-column-list">
+                <li>Registered lease agreement with tenant</li>
+                <li>Tenant KYC documents</li>
+                <li>Tenant profile including company details</li>
+                <li>Rent receipt or rental credit proof</li>
+                <li>Lease tenure and escalation clause details</li>
+            </ul>
+        </div>
+
+        <!-- Financial Documents -->
+        <div class="tab-pane" id="financial">
+            <ul class="two-column-list">
+                <li>Audited financial statements for last 2–3 years</li>
+                <li>Income Tax Returns with computation</li>
+                <li>Cash flow statements</li>
+                <li>Net worth statement of applicant / promoters</li>
+                <li>Details of existing loans and liabilities</li>
+            </ul>
+        </div>
+
+        <!-- Other Supporting Documents -->
+        <div class="tab-pane" id="other">
+            <ul class="two-column-list">
+                <li>Sanction letters of existing loans (if any)</li>
+                <li>Bank account statements reflecting rental income</li>
+                <li>Collateral documents (if required)</li>
+                <li>CA certificate confirming rental income</li>
+                <li>Any additional documents requested by lender</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script>
+const tabs = document.querySelectorAll('.tab-btn');
+const panes = document.querySelectorAll('.tab-pane');
+
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        panes.forEach(p => p.classList.remove('active'));
+
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+});
+</script>
+
+ 
+<!-- calculator -->
+ <!-- LRD Calculator -->
+<style>
+.lrd-calculator {
+    max-width: 600px;
+    margin: 50px auto;
+    background: #f5f7ff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    font-family: Arial, sans-serif;
+}
+
+.lrd-calculator h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: #295cab;
+}
+
+.lrd-calculator label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #333;
+}
+
+.lrd-calculator input, .lrd-calculator select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.lrd-calculator button {
+    background: #295cab;
+    color: #fff;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.lrd-calculator button:hover {
+    background: #d83241;
+}
+
+.lrd-calculator .result {
+    margin-top: 25px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.lrd-calculator .result p {
+    font-size: 18px;
+    margin: 8px 0;
+    font-weight: 600;
+    color: #000;
+}
+</style>
+
+<div class="lrd-calculator">
+    <h2>Lease Rental Discounting Calculator</h2>
+
+    <label for="rentalIncome">Monthly Rental Income (₹)</label>
+    <input type="number" id="rentalIncome" placeholder="Enter monthly rental income">
+
+    <label for="loanTenure">Loan Tenure (Years)</label>
+    <input type="number" id="loanTenure" placeholder="Enter loan tenure in years">
+
+    <label for="interestRate">Interest Rate (% per annum)</label>
+    <input type="number" id="interestRate" placeholder="Enter interest rate" value="9.75">
+
+    <label for="discountFactor">Discount Factor (%)</label>
+    <input type="number" id="discountFactor" placeholder="Enter discount factor" value="80">
+
+    <button onclick="calculateLRD()">Calculate LRD</button>
+
+    <div class="result" id="lrdResult" style="display:none;">
+        <p id="loanAmount"></p>
+        <p id="emiAmount"></p>
+    </div>
+</div>
+
+<script>
+function calculateLRD() {
+    // Get values
+    const rentalIncome = parseFloat(document.getElementById('rentalIncome').value);
+    const tenureYears = parseFloat(document.getElementById('loanTenure').value);
+    const interestRate = parseFloat(document.getElementById('interestRate').value);
+    const discountFactor = parseFloat(document.getElementById('discountFactor').value);
+
+    if(isNaN(rentalIncome) || isNaN(tenureYears) || isNaN(interestRate) || isNaN(discountFactor)) {
+        alert("Please enter valid numbers in all fields.");
+        return;
+    }
+
+    // Calculate Loan Amount
+    const annualRentalIncome = rentalIncome * 12;
+    const loanAmount = (annualRentalIncome * discountFactor / 100).toFixed(2);
+
+    // Calculate EMI using simple interest
+    const totalInterest = loanAmount * (interestRate/100) * tenureYears;
+    const totalPayment = parseFloat(loanAmount) + totalInterest;
+    const emi = (totalPayment / (tenureYears*12)).toFixed(2);
+
+    // Display results
+    document.getElementById('loanAmount').innerHTML = `Estimated Loan Amount: ₹ ${loanAmount}`;
+    document.getElementById('emiAmount').innerHTML = `Estimated EMI (Monthly): ₹ ${emi}`;
+    document.getElementById('lrdResult').style.display = 'block';
+}
+</script>
+
+    <!-- Header End -->
+
         <!-- Service End -->
 
         <!-- FAQs Start -->

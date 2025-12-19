@@ -2,54 +2,48 @@
 @section('title', "Financial Services in Pune | Lowest Loan Interest in PCMC - Jfinserv")
 @section('description', "Jfinserv provides financial services in Pune engaged in business, personal and MSME financing with lowest loan interest rates in Pune and PCMC and no hidden charges.")
 @section('keywords', "financial services in pune, lowest loan interest in PCMC, business loan with low roi, financial consultants in Pune, Loan services in PCMC, Loan in Pune")
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 
 @section('content')
         <!-- Carousel Start -->
         <div class="header-carousel owl-carousel">
-            <div class="header-carousel-item hero-bg" style="background-image: url(../theme/frontend/img/banner-1.png);">
+            <div class="header-carousel-item hero-bg" style="background-image: url(../theme/frontend/img/home-bannner.webp);">
                 <div class="carousel-caption">
                     <div class="container">
                         <div class="row g-4 align-items-center">
                             <div class="col-lg-6 animated fadeInLeft">
                                 <div class="text-sm-center text-md-start">
-                                    <h4 class="text-white text-uppercase fw-bold mb-2">Welcome To Jfinserv</h4>
-                                    <h1 class="display-4 text-white mb-4">Unique Reward & Earning Opportunity</h1>
-                                    <p class="mb-5 fs-5">We offer a unique earning opportunity through our referral program, rewarding both your referrals and those made by your friends.</p>
+                                    <h4 class=" text-uppercase fw-bold mb-2" style="color:#000;">Welcome To Jfinserv</h4>
+                                    <h1 class="display-4  mb-4" style="color:#000;">Unique Reward & Earning Opportunity</h1>
+                                    <p class="mb-5 fs-5" style="color:#000;">We offer a unique earning opportunity through our referral program, rewarding both your referrals and those made by your friends.</p>
                                     <div class="d-flex justify-content-center justify-content-md-start flex-shrink-0 mb-4">
-                                        <a class="btn-search btn btn-light rounded-1 py-3 px-4 px-md-5 me-2 flex-shrink-0" data-bs-toggle="modal" data-bs-target="#searchModal" href="#">ENQUIRE NOW</a>
+                                        <a class="btn-search btn  rounded-1 py-3 px-4 px-md-5 me-2 flex-shrink-0" data-bs-toggle="modal" data-bs-target="#searchModal" href="#" style="background-color:#295cab;color:#fff">ENQUIRE NOW</a>
                                         <a class="btn-search btn btn-danger rounded-1 py-3 px-4 px-md-5 ms-2" href="{{ url('/applyNow') }}">APPLY NOW</a>
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="col-lg-6 animated fadeInRight">
-                                <div class="calrousel-img" style="object-fit: cover;">
-                                    <img src="{{ asset('theme') }}/frontend/img/referral.png" class="img-fluid" alt="Fast Loan Process">
-                                </div>
-                            </div> -->
+                           
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="header-carousel-item hero-bg" style="background-image: url(../theme/frontend/img/banner-2.png);">
+            <div class="header-carousel-item hero-bg" style="background-image: url(../theme/frontend/img/home-banner-2.webp);">
                 <div class="carousel-caption">
                     <div class="container">
                         <div class="row g-4 align-items-center">
                             <div class="col-lg-6 animated fadeInLeft">
                                 <div class="text-sm-center text-md-start">
-                                    <h4 class="text-white text-uppercase fw-bold mb-2">Welcome To Jfinserv</h4>
-                                    <h1 class="display-4 text-white mb-4">Fastest, Secure & Easy Loan Process</h1>
-                                    <p class="mb-5 fs-5">Experience fast, secure loans with competitive rates and personalized support in Pune. Enjoy seamless service and exceptional rewards.</p>
+                                    <h4 class=" text-uppercase fw-bold mb-2" style="color:#000;">Welcome To Jfinserv</h4>
+                                    <h1 class="display-4  mb-4" style="color:#000;">Fastest, Secure & Easy Loan Process</h1>
+                                    <p class="mb-5 fs-5" style="color:#000;">Experience fast, secure loans with competitive rates and personalized support in Pune. Enjoy seamless service and exceptional rewards.</p>
                                     <div class="d-flex justify-content-center justify-content-md-start flex-shrink-0 mb-4">
-                                    <a class="btn-search btn btn-light rounded-1 py-3 px-4 px-md-5 me-2 flex-shrink-0" data-bs-toggle="modal" data-bs-target="#searchModal" href="#">ENQUIRE NOW</a>
+                                    <a class="btn-search btn btn-light rounded-1 py-3 px-4 px-md-5 me-2 flex-shrink-0" data-bs-toggle="modal" data-bs-target="#searchModal" href="#" style="background-color: #295cab;color:#fff">ENQUIRE NOW</a>
                                     <a class="btn-search btn btn-danger rounded-1 py-3 px-4 px-md-5 ms-2" href="{{ url('/applyNow') }}">APPLY NOW</a>
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="col-lg-6 animated fadeInRight">
-                                <div class="calrousel-img" style="object-fit: cover;">
-                                    <img src="{{ asset('theme') }}/frontend/img/fast-process.png" class="img-fluid" alt="Fast Loan Process">
-                                </div>
-                            </div> -->
+                           
                         </div>
                     </div>
                 </div>
@@ -79,10 +73,84 @@
                 </div>
             </div> -->
         </div>
+  
+<!-- CUSTOM DOT PAGINATION -->
+
+<style>.hero-pagination {
+    position: absolute;
+        bottom:-1px;
+
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+}
+
+.hero-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: none;
+    background: #ccc;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hero-dot:hover {
+    background: #295cab;
+}
+
+.hero-dot.active {
+    background: #295cab;
+    transform: scale(1.2);
+}
+</style>
+
+
+
+        <!-- css -->
+         <script>
+$(document).ready(function () {
+
+    var heroCarousel = $('.header-carousel');
+
+    heroCarousel.owlCarousel({
+        items: 1,
+        loop: true,
+        autoplay: true,
+        autoplayTimeout: 5000,
+        smartSpeed: 800,
+        dots: false,   // ❌ disable owl dots
+        nav: false
+    });
+
+    // DOT CLICK
+    $('.hero-dot').on('click', function () {
+        let index = $(this).data('slide');
+        heroCarousel.trigger('to.owl.carousel', [index, 800]);
+    });
+
+    // UPDATE ACTIVE DOT ON SLIDE CHANGE
+    heroCarousel.on('changed.owl.carousel', function (event) {
+        let currentIndex = event.item.index - event.relatedTarget._clones.length / 2;
+        let slideCount = event.item.count;
+
+        currentIndex = ((currentIndex % slideCount) + slideCount) % slideCount;
+
+        $('.hero-dot').removeClass('active');
+        $('.hero-dot').eq(currentIndex).addClass('active');
+    });
+
+});
+</script>
+
+ 
+
         <!-- Carousel End -->
 
         <!-- Feature Start -->
-        <div class="container-fluid feature bg-light py-5">
+        <!-- <div class="container-fluid feature bg-light py-5">
             <div class="container py-5">
                 <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
                     <h4 class="text-primary">Our Features</h4>
@@ -128,8 +196,253 @@
                     </div>
                 </div>
             </div>
+        </div> -->
+        
+   <section class="finserv-wrapper">
+    <div class="financial-services">
+
+        <!-- Background Decorations -->
+        <div class="bg-decoration bg-1"></div>
+        <div class="bg-decoration bg-2"></div>
+
+        <!-- Section Title -->
+          <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+                    <h4 style="color: #295cab;">Our Features</h4>
+                    <h1 class="display-4 mb-4" style="color:#295cab;">Trusted <strong style="color:#00abeb">Financial</strong> Consultants</h1>
+                    <p class="mb-0">We understand that navigating the complexities of the financial landscape can be daunting. That's why our team of experienced professionals is here to guide you every step of the way. With our comprehensive loan services, you can trust us to help you secure the financing you need to achieve your dreams.</p>
+                </div>
+
+        <!-- Services Grid -->
+        <div class="services-grid">
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <div class="service-content">
+                    <h3>Trusted Company</h3>
+                    <p>
+                        Trust is our foundation. We guide clients confidently through
+                        their financial journey with transparency.
+                    </p>
+                    <a href="#" class="service-btn">Learn More</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-gift"></i>
+                </div>
+                <div class="service-content">
+                    <h3>Unlimited Rewards</h3>
+                    <p>
+                        Earn rewards and referral income with performance-based bonuses
+                        that grow with your success.
+                    </p>
+                    <a href="#" class="service-btn">Learn More</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="service-content">
+                    <h3>Fast & Easy Process</h3>
+                    <p>
+                        Minimal paperwork, quick approvals, and funds disbursed within
+                        7 working days.
+                    </p>
+                    <a href="#" class="service-btn">Learn More</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="service-content">
+                    <h3>High Range Loan</h3>
+                    <p>
+                        Get loans up to ₹100 Cr with flexible terms, competitive rates,
+                        and expert guidance.
+                    </p>
+                    <a href="#" class="service-btn">Learn More</a>
+                </div>
+            </div>
+
         </div>
+    </div>
+</section>
+
+
+   <style>/* OUTER WRAPPER */
+.finserv-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+/* MAIN SECTION */
+.financial-services {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 80px 60px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+
+/* SECTION TITLE */
+.section-title {
+    text-align: center;
+    margin-bottom: 70px;
+}
+
+.section-title h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #295cab, #295cab);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section-title p {
+    font-size: 1.2rem;
+    color: #555;
+    max-width: 700px;
+    margin: 15px auto 0;
+}
+
+/* GRID */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+/* CARD */
+.service-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    transition: all 0.4s ease;
+    text-align: center;
+    padding-bottom: 40px;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.service-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+
+/* ICON */
+.service-icon {
+    width: 90px;
+    height: 90px;
+    margin: 40px auto 30px;
+    background: linear-gradient(135deg, #1a3c8b, #2a56c9);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 2.4rem;
+    transform: rotate(45deg);
+    transition: 0.4s;
+}
+
+.service-icon i {
+    transform: rotate(-45deg);
+}
+
+.service-card:hover .service-icon {
+    transform: rotate(0deg) scale(1.1);
+    background: linear-gradient(135deg, #00abeb, #00abeb);
+}
+
+/* CONTENT */
+.service-content h3 {
+    font-size: 1.5rem;
+    color: #1a3c8b;
+    margin-bottom: 15px;
+}
+
+.service-content p {
+    color: #666;
+    padding: 0 25px;
+    line-height: 1.7;
+}
+
+/* BUTTON */
+.service-btn {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 14px 32px;
+    border-radius: 50px;
+    background: linear-gradient(to right, #1a3c8b, #2a56c9);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.service-btn:hover {
+    /* background: linear-gradient(to right, #ee1c25, #ffb74d); */
+    color:#fff;
+}
+
+/* BACKGROUND CIRCLES */
+.bg-decoration {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(26,60,139,0.05), rgba(255,152,0,0.05));
+}
+
+.bg-1 {
+    top: -300px;
+    right: -300px;
+}
+
+.bg-2 {
+    bottom: -300px;
+    left: -300px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1200px) {
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .financial-services {
+        padding: 60px 30px;
+    }
+}
+</style>
+   <script>
+document.querySelectorAll('.service-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+        e.preventDefault();
+        console.log(btn.closest('.service-card').querySelector('h3').innerText);
+    });
+});
+</script>
+
+  
         <!-- Feature End -->
+
+
 
         <!-- Video Section Start -->
         <section class="video aos-init aos-animate" data-aos="zoom-in-right" data-aos-duration="700">
@@ -148,15 +461,15 @@
                 <div class="row g-5">
                     <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.1s">
                         <div class="about-item-content bg-white rounded p-5 h-100">
-                            <h4 class="text-primary">About Our Company</h4>
-                            <h2 class="display-4 mb-4">Your Security. Our Priority.</h2>
+                            <h4 class="text-primary" style="color:#295cab">About Our Company</h4>
+                            <h2 class="display-4 mb-4"  style="color:#295cab">Your <strong  style="color:#00abeb">Security</strong>. Our Priority.</h2>
                             <p>JFinserv Consultant India Private Limited offers a range of financial services in Pune, including Home Loans, Project Loans, and MSME Loans, through multiple bank partnerships. We ensure low interest rates, minimal documentation, and flexible terms for a smooth loan process. Our experienced team is dedicated to guiding you through every step to help you achieve your financial goals.</p>
                             <h3 class="text-primary">Why Choose Us?</h3>
                             <p class="text-dark"><i class="fas fa-check text-primary me-3 fa-lg"></i>No limit of loan amount</p>
                             <p class="text-dark"><i class="fas fa-check text-primary me-3 fa-lg"></i>Fast Disbursal Procedure</p>
                             <p class="text-dark"><i class="fas fa-check text-primary me-3 fa-lg"></i>Lowest rate of Interest</p>
                             <p class="text-dark mb-4"><i class="fas fa-check text-primary me-3 fa-lg"></i>Endless earning potential through referrals</p>
-                            <a class="btn btn-primary rounded-1 py-2 px-4 uppercase" href="/about" target="_blank">Know More</a>
+                            <a class="btn btn-primary rounded-1 py-2 px-4 uppercase" href="/about" target="_blank"  style="background-color:#295cab">Know More</a>
                         </div>
                     </div>
                     <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.1s">
@@ -215,8 +528,8 @@
         <div class="container-fluid service py-5">
             <div class="container py-5">
                 <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                    <h4 class="text-primary">Our Services</h4>
-                    <h1 class="display-4 mb-4">We Provide Best Services</h1>
+                    <h4 class="text-primary" style="color:#295cab">Our Services</h4>
+                    <h1 class="display-4 mb-4"  style="color:#295cab">We Provide Best <strong style="color:#00abeb">Services</strong></h1>
                     <p class="mb-0">Choose your loan amount, answer a few questions, and receive an instant loan offer. Share the necessary documents with our representative effortlessly, and select the final loan offer with terms that suit you best.</p>
                 </div>
                 <div class="row g-4 justify-content-center">
@@ -289,7 +602,7 @@
                         </div>
                     </div>
                     <div class="col-12 text-center wow fadeInUp mt-5" data-wow-delay="0.2s">
-                        <a class="btn btn-dark uppercase rounded-1 py-3 px-5" href="/services">More Services</a>
+                        <a class="btn btn-dark uppercase rounded-1 py-3 px-5" href="/services" style="background-color:#295cab">More Services</a>
                     </div>
                 </div>
             </div>
@@ -300,8 +613,8 @@
         <div class="container-fluid testimonial bg-light py-5">
             <div class="container pb-5">
                 <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                    <h4 class="text-primary">Testimonial</h4>
-                    <h2 class="display-4 mb-4">Hear from Our Customers</h2>
+                    <h4 class="text-primary" style="color:#295cab">Testimonial</h4>
+                    <h2 class="display-4 mb-4" style="color:#295cab">Hear from Our <strong style="color:#00abeb">Customers</strong></h2>
                 </div>
                 <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.2s">
                     <div class="testimonial-item bg-white rounded">
@@ -369,8 +682,8 @@
                     <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.2s">
                         <div class="h-100">
                             <div class="mb-5">
-                                <h4 class="text-primary">Some Important FAQ's</h4>
-                                <h1 class="display-4 mb-0">Common Frequently Asked Questions</h1>
+                                <h4 class="text-primary" style="color:#295cab">Some Important FAQ's</h4>
+                                <h1 class="display-4 mb-0" style="color:#295cab">Common Frequently Asked <strong style="color:#00abeb">Questions</strong></h1>
                             </div>
                             <div class="accordion" id="accordionExample">
                                 <div class="accordion-item">
@@ -449,7 +762,7 @@
                         </div>
                     </div>
                     <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.4s">
-                        <img src="{{ asset('theme') }}/frontend/img/faq.jpg" class="img-fluid w-100" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/faq_img.webp" class="img-fluid w-100" alt="">
                     </div>
                 </div>
             </div>
@@ -459,8 +772,8 @@
         <!-- Bank Partner Start -->
         <div class="container-fluid testimonial py-5">
             <div class="text-center mx-auto pb-3 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                <h4 class="text-primary">Partnered Banks</h4>
-                <h1 class="display-4 mb-4">Our Bank Network</h1>
+                <h4 class="text-primary"style="color:#295cab">Partnered Banks</h4>
+                <h1 class="display-4 mb-4" style="color:#295cab">Our <strong style="color:#00abeb">Bank </strong>Network</h1>
                 <!-- <p class="mb-0">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur adipisci facilis cupiditate recusandae aperiam temporibus corporis itaque quis facere, numquam, ad culpa deserunt sint dolorem autem obcaecati, ipsam mollitia hic.</p> -->
             </div>
 

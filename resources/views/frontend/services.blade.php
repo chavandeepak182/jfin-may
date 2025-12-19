@@ -5,11 +5,15 @@
 
 @section('content')
 <!-- Header Start -->
-<div class="container-fluid bg-breadcrumb" style="background-image: url(../theme/frontend/img/services.jpg);">
-    <div class="container py-5">
-        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Our Services</h4>
+<!-- Page Banner Section -->
+<section class="page-banner" style="background-image: url('../theme/frontend/img/services.jpg');">
+    <div class="page-banner-overlay"></div>
+
+    <div class="page-banner-container">
+        <!-- <h1 class="page-banner-title">About Jfinserv</h1> -->
     </div>
-</div>
+</section>
+
 <!-- Header End -->
 
 <!-- Service Start -->

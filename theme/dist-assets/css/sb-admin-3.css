@@ -1,0 +1,103 @@
+/* ============================
+   DASHBOARD CARDS
+============================ */
+
+.dashboard-card {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-card h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #4a4a4a;
+    font-weight: 600;
+}
+
+.dashboard-card .value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #293c74;
+}
+
+/* ============================
+   HEADER
+============================ */
+
+.top-header {
+    margin-bottom: 30px;
+}
+
+.top-header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #293c74;
+}
+
+.top-header p {
+    color: #666;
+    margin-top: -6px;
+}
+
+/* ============================
+   SEARCH BOX
+============================ */
+
+.search-box {
+    position: relative;
+}
+
+.search-box input {
+    width: 260px;
+    padding: 8px 12px 8px 30px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.search-box i {
+    position: absolute;
+    top: 9px;
+    left: 10px;
+    color: #555;
+}
+
+/* ============================
+   SECTION TITLES
+============================ */
+
+.section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #293c74;
+    margin-bottom: 10px;
+}
+
+/* ============================
+   CHART CARD
+============================ */
+
+.chart-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 25px;
+    margin-top: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.filter-btn {
+    padding: 5px 12px;
+    border: 1px solid #293c74;
+    background: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.filter-btn:hover {
+    background: #293c74;
+    color: #fff;
+}

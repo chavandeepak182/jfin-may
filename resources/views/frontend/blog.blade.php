@@ -7,22 +7,12 @@
 @section('content')
 
 <!-- ===== Hero Slider ===== -->
-<section class="hero-slider position-relative">
-  <div id="blogCarousel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
+<section class="page-banner" style="background-image: url('../theme/frontend/img/blog.webp');">
+    <div class="page-banner-overlay"></div>
 
-      <!-- Single Slide -->
-      <div class="carousel-item active">
-        <img src="{{ asset('theme/frontend/img/about-1.jpg') }}" class="d-block w-100 hero-img" alt="About 1">
-
-        <div class="carousel-caption text-start">
-          <h2 class="fw-bold display-4">Explore Blogs</h2>
-          <p class="lead">Insights, tutorials, and stories from our team — AI, Technology, Travel & more.</p>
-        </div>
-      </div>
-
+    <div class="page-banner-container">
+        <!-- <h1 class="page-banner-title">About Jfinserv</h1> -->
     </div>
-  </div>
 </section>
 
 <style>

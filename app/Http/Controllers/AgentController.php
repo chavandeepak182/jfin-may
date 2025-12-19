@@ -133,6 +133,68 @@ class AgentController extends Controller
     }
 }
 
+
+
+
+
+// dashboard
+
+  public function dashboard_test()
+    {
+        if (!empty(Session::get('role_id'))) {
+            $totalLoans = DB::table('loans')->count();
+            $inProcessLoans = DB::table('loans')->where('status', 'in process')->count();
+            $approvedLoans = DB::table('loans')->where('status', 'approved')->count();
+            $disbursedLoans = DB::table('loans')->where('status', 'disbursed')->count();
+            $rejectedLoans = DB::table('loans')->where('status', 'rejected')->count();
+            $totalUsers = DB::table('users')->count();
+            $totalCustomers = DB::table('users')->where('role_id', 1)->count();
+            $totalOfficers = DB::table('users')->where('role_id', 2)->count();
+            $leads = DB::table('leads')->count();
+            $enquiries = DB::table('enquiries')->count();
+            $properties = DB::table('properties')->count();
+            $recentLoans = $this->fetchRecentLoans();
+
+            // Fetch monthly data for disbursed loans
+            $monthlyDisbursedData = DB::table('loans')
+                ->select(
+                    DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
+                    DB::raw("COUNT(*) as total_loans"),
+                    DB::raw("SUM(amount) as total_amount")
+                )
+                ->where('status', 'disbursed')
+                ->groupBy('month')
+                ->orderBy('month', 'ASC')
+                ->get();
+
+            $loanStatuses = [
+                'In Process' => $inProcessLoans,
+                'Approved' => $approvedLoans,
+                'Disbursed' => $disbursedLoans,
+                'Rejected' => $rejectedLoans,
+            ];
+
+            return view('admin.dashboard-dark_test', compact(
+                'totalLoans',
+                'approvedLoans',
+                'rejectedLoans',
+                'loanStatuses',
+                'totalUsers',
+                'disbursedLoans',
+                'recentLoans',
+                'monthlyDisbursedData',
+                'totalCustomers',
+                'totalOfficers',
+                'leads',
+                'enquiries',
+                'properties'
+            ));
+        } else {
+            return redirect('/');
+        }
+    }
+
+
     public function editAgent($id)
     {
         $id = '"' . $id . '"';

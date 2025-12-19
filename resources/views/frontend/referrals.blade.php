@@ -5,12 +5,13 @@
 
 @section('content')
 <!-- Header Start -->
-<div class="container-fluid bg-breadcrumb" style="background-image: url(../theme/frontend/img/ref-bnr.jpg);">
-    <div class="container py-5">
-        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Jfinserv Referral Program</h4>
-    </div>
-</div>
+<section class="page-banner" style="background-image: url('../theme/frontend/img/ref-bnr.webp');">
+    <div class="page-banner-overlay"></div>
 
+    <div class="page-banner-container">
+        <!-- <h1 class="page-banner-title">About Jfinserv</h1> -->
+    </div>
+</section>
 <!-- Header End -->
     <div class="container-fluid bg-light about py-5">
         <div class="container py-5">
