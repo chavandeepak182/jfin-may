@@ -14,42 +14,42 @@
             <div class="row g-5 align-items-start mb-5 pb-5">
                 <!-- Progress Bar Section -->
               <div class="col-md-3">
-    <div class="progress-steps p-4">
-        <h5 class="text-primary mb-3">Application Steps</h5>
-        <ul class="list-group">
-            <li class="list-group-item {{ $currentStep == 1 ? 'active' : '' }}">
-                @if(in_array(1, $completedSteps))
-                    <i class="bi bi-check-circle-fill step-icon me-2"></i>
-                @endif
-                1. Personal Details
-            </li>
-            <li class="list-group-item {{ $currentStep == 2 ? 'active' : '' }}">
-                @if(in_array(2, $completedSteps))
-                    <i class="bi bi-check-circle-fill step-icon me-2"></i>
-                @endif
-                2. Professional Details
-            </li>
-            <li class="list-group-item {{ $currentStep == 3 ? 'active' : '' }}">
-                @if(in_array(3, $completedSteps))
-                    <i class="bi bi-check-circle-fill step-icon me-2"></i>
-                @endif
-                3. Qualification Details
-            </li>
-            <li class="list-group-item {{ $currentStep == 4 ? 'active' : '' }}">
-                @if(in_array(4, $completedSteps))
-                    <i class="bi bi-check-circle-fill step-icon me-2"></i>
-                @endif
-                4. Upload Documents
-            </li>
-            <li class="list-group-item {{ $currentStep == 5 ? 'active' : '' }}">
-                @if(in_array(5, $completedSteps))
-                    <i class="bi bi-check-circle-fill step-icon me-2"></i>
-                @endif
-                5. Loan Details
-            </li>
-        </ul>
-    </div>
-</div>
+                <div class="progress-steps p-4">
+                    <h5 class="text-primary mb-3">Application Steps</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item {{ $currentStep == 1 ? 'active' : '' }}">
+                            @if(in_array(1, $completedSteps))
+                                <i class="bi bi-check-circle-fill step-icon me-2"></i>
+                            @endif
+                            1. Personal Details
+                        </li>
+                        <li class="list-group-item {{ $currentStep == 2 ? 'active' : '' }}">
+                            @if(in_array(2, $completedSteps))
+                                <i class="bi bi-check-circle-fill step-icon me-2"></i>
+                            @endif
+                            2. Professional Details
+                        </li>
+                        <li class="list-group-item {{ $currentStep == 3 ? 'active' : '' }}">
+                            @if(in_array(3, $completedSteps))
+                                <i class="bi bi-check-circle-fill step-icon me-2"></i>
+                            @endif
+                            3. Qualification Details
+                        </li>
+                        <li class="list-group-item {{ $currentStep == 4 ? 'active' : '' }}">
+                            @if(in_array(4, $completedSteps))
+                                <i class="bi bi-check-circle-fill step-icon me-2"></i>
+                            @endif
+                            4. Upload Documents
+                        </li>
+                        <li class="list-group-item {{ $currentStep == 5 ? 'active' : '' }}">
+                            @if(in_array(5, $completedSteps))
+                                <i class="bi bi-check-circle-fill step-icon me-2"></i>
+                            @endif
+                            5. Loan Details
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
                 <!-- Form Section -->
                 <div class="col-md-9">
