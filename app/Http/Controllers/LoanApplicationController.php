@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
 use App\Services\CreditScoreService;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cookie;
+
 
 
 class LoanApplicationController extends Controller
@@ -41,65 +43,164 @@ class LoanApplicationController extends Controller
    
 
 
-    public function index(Request $request)
-    {
-        // Step 1: Build the base query
-        $query = \App\Models\Loan::with([
-            'user.profile.cityRelation',
-            'loanCategory',
-            'bankDetails'
-        ])
-            ->whereNotNull('loan_reference_id');
+//    public function index(Request $request)
+// {
+   
+//     $totalLoans      = DB::table('loans')->count();
 
-        // Step 2: Apply filters (before get or paginate)
-        if ($request->filled('status')) {
-            $query->where('status', $request->input('status'));
+//     $inProcessLoans  = DB::table('loans')
+//         ->where('status', 'in process')
+//         ->count();
+
+//     $trashedLoans    = DB::table('loans')
+//         ->whereNotNull('deleted_at')
+//         ->count();
+
+//     $approvedLoans   = DB::table('loans')
+//         ->where('status', 'approved')
+//         ->count();
+
+//     $disbursedLoans  = DB::table('loans')
+//         ->where('status', 'disbursed')
+//         ->count();
+
+//     $rejectedLoans   = DB::table('loans')
+//         ->where('status', 'rejected')
+//         ->count();
+
+
+   
+//     $query = \App\Models\Loan::with([
+//         'user.profile.cityRelation',
+//         'loanCategory',
+//         'bankDetails'
+//     ])
+//     ->whereNotNull('loan_reference_id');
+
+
+   
+//     if ($request->filled('status')) {
+//         $query->where('status', $request->input('status'));
+//     }
+
+//     if ($request->filled('start_date') && $request->filled('end_date')) {
+//         $query->whereBetween('created_at', [
+//             $request->input('start_date'),
+//             $request->input('end_date'),
+//         ]);
+//     }
+
+
+ 
+//     $paginated = $query
+//         ->orderBy('created_at', 'desc')
+//         ->paginate(10);
+
+
+//     $paginated->getCollection()->transform(function ($loan) {
+//         return [
+//             'loan_id'             => $loan->loan_id,
+//             'amount'              => $loan->amount,
+//             'tenure'              => $loan->tenure,
+//             'loan_reference_id'   => $loan->loan_reference_id,
+//             'user_name'           => $loan->user->name ?? null,
+//             'status'              => $loan->status,
+//             'city'                => $loan->user->profile->cityRelation->city ?? null,
+//             'loan_category_name'  => $loan->loanCategory->category_name ?? null,
+//             'bank_name'           => $loan->bankDetails->bank_name ?? null,
+//             'agent_action'        => $loan->agent_action,
+//         ];
+//     });
+
+//     $data['loans'] = $paginated;
+
+
+   
+//     $recentLoans = DB::table('loans')
+//         ->join('users', 'loans.user_id', '=', 'users.id')
+//         ->select(
+//             'loans.loan_id',
+//             'loans.amount',
+//             'users.name as user_name',
+//             'loans.status'
+//         )
+//         ->whereNotNull('loans.loan_reference_id')
+//         ->orderByDesc('loans.created_at')
+//         ->take(5)
+//         ->get();
+
+
+    
+//     return view('frontend.all-loans', compact(
+//         'data',
+//         'recentLoans',
+//         'totalLoans',
+//         'inProcessLoans',
+//         'trashedLoans',
+//         'approvedLoans',
+//         'disbursedLoans',
+//         'rejectedLoans'
+//     ));
+// }
+public function index(Request $request)
+{
+    // base query (AS IT IS)
+    $query = \App\Models\Loan::with([
+        'user.profile.cityRelation',
+        'loanCategory',
+        'bankDetails'
+    ])->whereNotNull('loan_reference_id');
+
+    // 🔹 CARD STATUS FILTER (NEW)
+    if ($request->filled('card')) {
+        switch ($request->card) {
+            case 'inprocess':
+                $query->where('status', 'inprocess');
+                break;
+
+            case 'approved':
+                $query->where('status', 'approved');
+                break;
+
+            case 'rejected':
+                $query->where('status', 'rejected');
+                break;
+
+            case 'disbursed':
+                $query->where('status', 'disbursed');
+                break;
+
+            case 'trashed':
+                $query->onlyTrashed();
+                break;
         }
-
-        if ($request->filled('start_date') && $request->filled('end_date')) {
-            $query->whereBetween('created_at', [
-                $request->input('start_date'),
-                $request->input('end_date'),
-            ]);
-        }
-
-        // Step 3: Order and Paginate
-        $paginated = $query->orderBy('created_at', 'desc')->paginate(10);
-
-        // Step 4: Transform paginated result (map the collection inside paginator)
-        $paginated->getCollection()->transform(function ($loan) {
-            return [
-                'loan_id' => $loan->loan_id,
-                'amount' => $loan->amount,
-                'tenure' => $loan->tenure,
-                'loan_reference_id' => $loan->loan_reference_id,
-                'user_name' => $loan->user->name ?? null,
-                'status' => $loan->status,
-                'city' => $loan->user->profile->cityRelation->city ?? null,
-                'loan_category_name' => $loan->loanCategory->category_name ?? null,
-                'bank_name' => $loan->bankDetails->bank_name ?? null,
-                'agent_action' => $loan->agent_action,
-            ];
-        });
-
-        $data['loans'] = $paginated;
-
-        // Step 5: Recent 5 loans using Query Builder (optional)
-        $recentLoans = DB::table('loans')
-            ->join('users', 'loans.user_id', '=', 'users.id')
-            ->select(
-                'loans.loan_id',
-                'loans.amount',
-                'users.name as user_name',
-                'loans.status'
-            )
-            ->whereNotNull('loans.loan_reference_id')
-            ->orderByDesc('loans.created_at')
-            ->take(5)
-            ->get();
-
-        return view('frontend.all-loans', compact('data', 'recentLoans'));
     }
+
+    // paginate
+    $loans = $query->orderBy('created_at', 'desc')->paginate(10);
+
+    // COUNTS (as it is)
+    $totalLoans      = \App\Models\Loan::count();
+    $inProcessLoans  = \App\Models\Loan::where('status','inprocess')->count();
+    $approvedLoans   = \App\Models\Loan::where('status','approved')->count();
+    $disbursedLoans  = \App\Models\Loan::where('status','disbursed')->count();
+    $rejectedLoans   = \App\Models\Loan::where('status','rejected')->count();
+    $trashedLoans    = \App\Models\Loan::onlyTrashed()->count();
+
+    $data['loans'] = $loans;
+
+    return view('frontend.all-loans', compact(
+        'data',
+        'totalLoans',
+        'inProcessLoans',
+        'approvedLoans',
+        'disbursedLoans',
+        'rejectedLoans',
+        'trashedLoans'
+    ));
+}
+
+
 
     public function view($id)
     {
@@ -236,7 +337,8 @@ class LoanApplicationController extends Controller
                 'in_principle' => 'nullable|string',
                 'remarks' => 'nullable|string',
                 'sanction_letter' => 'nullable|file|mimes:pdf,doc,docx',
-                'documents.*' => 'nullable|file|mimes:pdf,doc,docx',
+                'documents.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120'
+
             ]);
 
 
@@ -490,48 +592,123 @@ class LoanApplicationController extends Controller
         $cities = DB::table('cities')->where('state_id', $state_id)->get();
         return response()->json($cities);
     }
+    // public function start_loan($id)
+    // {
+    //     $currentStep = 1;
+    //     Session::put('is_loan', $id);
+    //     $is_loan = $id;
+    //     $loanCategories = DB::table('loan_category')->get();
+    //     $loanBanks = DB::table('loan_bank_details')->get();
+    //     $userId = session('user_id'); // Get user ID from session
+
+    //     if (!$userId) {
+    //         return redirect()->route('login')->withErrors('User session expired. Please log in again.');
+    //     }
+
+    //     // Fetch existing data
+    //     $profile = DB::table('profile')->where('user_id', $userId)->first();
+    //     $professional = DB::table('professional_details')->where('user_id', $userId)->first();
+    //     $education = DB::table('education_details')->where('user_id', $userId)->first();
+    //     $existingLoans = DB::table('existing_loan')->where('user_id', $userId)->get();
+    //     $documents = DB::table('documents')->where('user_id', $userId)->get();
+    //     $loan = DB::table('loans')
+    //         ->select('loan_id', 'loan_reference_id', 'status', 'loan_category_id', 'bank_id') // Include loan_category_id
+    //         ->where('user_id', $userId)
+    //         ->first();
+    //     $hasExistingLoan = !is_null($existingLoans);
+    //     $states = DB::table('states')->get();
+    //     $user = DB::table('users')->where('id', $userId)->first();
+    //     return view('frontend.professional-info', compact(
+    //         'currentStep',
+    //         'is_loan',
+    //         'loanCategories',
+    //         'states',
+    //         'hasExistingLoan',
+    //         'loanBanks',
+    //         'profile',
+    //         'professional',
+    //         'education',
+    //         'existingLoans',
+    //         'documents',
+    //         'loan'
+    //     ));
+    // }
+
+
+
+
     public function start_loan($id)
-    {
-        $currentStep = 1;
-        Session::put('is_loan', $id);
-        $is_loan = $id;
-        $loanCategories = DB::table('loan_category')->get();
-        $loanBanks = DB::table('loan_bank_details')->get();
-        $userId = session('user_id'); // Get user ID from session
+{
+    Session::put('is_loan', $id);
+    $is_loan = $id;
 
-        if (!$userId) {
-            return redirect()->route('login')->withErrors('User session expired. Please log in again.');
-        }
-
-        // Fetch existing data
-        $profile = DB::table('profile')->where('user_id', $userId)->first();
-        $professional = DB::table('professional_details')->where('user_id', $userId)->first();
-        $education = DB::table('education_details')->where('user_id', $userId)->first();
-        $existingLoans = DB::table('existing_loan')->where('user_id', $userId)->get();
-        $documents = DB::table('documents')->where('user_id', $userId)->get();
-        $loan = DB::table('loans')
-            ->select('loan_id', 'loan_reference_id', 'status', 'loan_category_id', 'bank_id') // Include loan_category_id
-            ->where('user_id', $userId)
-            ->first();
-        $hasExistingLoan = !is_null($existingLoans);
-        $states = DB::table('states')->get();
-        $user = DB::table('users')->where('id', $userId)->first();
-        return view('frontend.professional-info', compact(
-            'currentStep',
-            'is_loan',
-            'loanCategories',
-            'states',
-            'hasExistingLoan',
-            'loanBanks',
-            'profile',
-            'professional',
-            'education',
-            'existingLoans',
-            'documents',
-            'loan'
-        ));
+    $userId = session('user_id');
+    if (!$userId) {
+        return redirect()->route('login')
+            ->withErrors('User session expired. Please log in again.');
     }
 
+    // ===============================
+    // STEP TRACKING LOGIC ⭐⭐⭐
+    // ===============================
+    $currentStep = 1;
+    $completedSteps = [];
+
+    // Step 1: Personal profile
+    $profile = DB::table('profile')->where('user_id', $userId)->first();
+    if ($profile) {
+        $completedSteps[] = 1;
+        $currentStep = 2;
+    }
+
+    // Step 2: Professional details
+    $professional = DB::table('professional_details')->where('user_id', $userId)->first();
+    if ($professional) {
+        $completedSteps[] = 2;
+        $currentStep = 3;
+    }
+
+    // Step 3: Education details
+    $education = DB::table('education_details')->where('user_id', $userId)->first();
+    if ($education) {
+        $completedSteps[] = 3;
+        $currentStep = 4;
+    }
+
+    // ===============================
+    // OTHER DATA
+    // ===============================
+    $loanCategories = DB::table('loan_category')->get();
+    $loanBanks = DB::table('loan_bank_details')->get();
+    $existingLoans = DB::table('existing_loan')->where('user_id', $userId)->get();
+    $documents = DB::table('documents')->where('user_id', $userId)->get();
+
+    $loan = DB::table('loans')
+        ->select('loan_id', 'loan_reference_id', 'status', 'loan_category_id', 'bank_id')
+        ->where('user_id', $userId)
+        ->first();
+
+    $hasExistingLoan = $existingLoans->count() > 0;
+    $states = DB::table('states')->get();
+    $user = DB::table('users')->where('id', $userId)->first();
+
+    return view('frontend.professional-info', compact(
+        'currentStep',
+        'completedSteps',   // ⭐⭐ IMPORTANT
+        'is_loan',
+        'loanCategories',
+        'states',
+        'hasExistingLoan',
+        'loanBanks',
+        'profile',
+        'professional',
+        'education',
+        'existingLoans',
+        'documents',
+        'loan',
+        'user'
+    ));
+}
 
 public function showForm(Request $request)
 {
@@ -1676,14 +1853,39 @@ if ($loan && $currentStep > 5)           $completedSteps[] = 5;
     }
 
 
-    public function applyNow()
-    {
+    // public function applyNow()
+    // {
 
-        // $user=Auth::User();
-        // echo $user;die;
+        
+    //     return view('frontend.firstloan');
+    // }
 
-        return view('frontend.firstloan');
+
+
+    
+public function applyNow()
+{
+    // If user is already logged in
+    if (Auth::check() || Session::has('username')) {
+        return redirect('/start_loan/1');
     }
+
+    // New customer (not logged in)
+    return view('frontend.firstloan');
+}
+
+
+// public function applyNow()
+// {
+//     if (Auth::check()) {
+//         // user already logged in
+//         return redirect('/start_loan/1');
+//     }
+
+//     // user not logged in → go to login/signup
+//     return redirect()->route('authv3.login.form');
+// }
+
     //fetch recent loans
     public function fetchRecentLoans($limit = 5)
     {

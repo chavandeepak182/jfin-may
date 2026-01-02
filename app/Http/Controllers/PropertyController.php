@@ -16,7 +16,7 @@ use App\Models\Range;
 use App\Models\Activity;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Log;
-
+use App\Models\PropertyTaker;
 
 
 class PropertyController extends Controller
@@ -148,55 +148,106 @@ private function handleFileUpload(Request $request, $inputName, $folder)
 }
 
 
+// public function allProperties()
+// {
+//     // Get the logged-in user's role and ID from the session
+//     $role_id = Session::get('role_id'); 
+//     $user_id = Session::get('user_id'); 
+
+//     // Base query for fetching properties with LEFT JOINs so no property is excluded
+//     $query = DB::table('properties')
+//         ->leftJoin('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
+//         ->leftJoin('property_category', 'properties.property_type_id', '=', 'property_category.pid')
+//         ->select(
+//             'properties.properties_id',
+//             'properties.title',
+//             'properties.property_type_id',
+//             'properties.builder_name',
+//             'properties.select_bhk',
+//             'properties.land_type',
+//             'properties.address',
+//             'properties.rera',
+//             'properties.facilities',
+//             'properties.s_price',
+//             'properties.beds',
+//             'properties.baths',
+//             'properties.balconies',
+//             'properties.parking',
+//             'properties.builtup_area',
+//             'properties.contact',
+//             'price_range.from_price',
+//             'price_range.to_price',
+//             'property_category.category_name'
+//         );
+
+//     // If the user is an agent (role_id == 3), show only their properties
+//     if ($role_id == 3) {
+//         $query->where('properties.creator_id', $user_id);
+//     }
+
+//     // ✅ Optional: Show only active properties
+//     // $query->where('properties.is_active', 1);
+
+//     // Paginate the results
+//     $data['allProperties'] = $query->paginate(50);
+
+//     // Return the view with the data
+//     return view('property.allProperties', compact('data'));
+// }
+
+
 public function allProperties()
 {
-    // Get the logged-in user's role and ID from the session
-    $role_id = Session::get('role_id'); 
-    $user_id = Session::get('user_id'); 
+    /* ================= SESSION ================= */
+    $role_id = Session::get('role_id');
+    $user_id = Session::get('user_id');
 
-    // Base query for fetching properties with LEFT JOINs so no property is excluded
+    /* ================= COUNTS ================= */
+
+    // Total Properties
+    $properties = DB::table('properties')->count();
+
+    // Pending Properties
+    $totalPendingProperties = DB::table('properties')
+        ->where('is_active', 0)
+        ->count();
+
+    // ✅ Total Property Takers
+    $totalPropertyTakers = PropertyTaker::count();
+
+    /* ================= PROPERTIES LIST ================= */
+
     $query = DB::table('properties')
         ->leftJoin('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
         ->leftJoin('property_category', 'properties.property_type_id', '=', 'property_category.pid')
         ->select(
-            'properties.properties_id',
-            'properties.title',
-            'properties.property_type_id',
-            'properties.builder_name',
-            'properties.select_bhk',
-            'properties.land_type',
-            'properties.address',
-            'properties.rera',
-            'properties.facilities',
-            'properties.s_price',
-            'properties.beds',
-            'properties.baths',
-            'properties.balconies',
-            'properties.parking',
-            'properties.builtup_area',
-            'properties.contact',
+            'properties.*',
             'price_range.from_price',
             'price_range.to_price',
             'property_category.category_name'
         );
 
-    // If the user is an agent (role_id == 3), show only their properties
+    // ✅ Agent ला फक्त त्याच्याच properties
     if ($role_id == 3) {
         $query->where('properties.creator_id', $user_id);
     }
 
-    // ✅ Optional: Show only active properties
-    // $query->where('properties.is_active', 1);
+    $data['allProperties'] = $query->paginate(10);
 
-    // Paginate the results
-    $data['allProperties'] = $query->paginate(50);
+    /* ================= PROPERTY TAKERS LIST ================= */
 
-    // Return the view with the data
-    return view('property.allProperties', compact('data'));
+    $propertyTakers = PropertyTaker::orderBy('id', 'desc')->paginate(10);
+
+    /* ================= VIEW ================= */
+
+    return view('property.allProperties', compact(
+        'data',
+        'properties',
+        'totalPendingProperties',
+        'totalPropertyTakers',
+        'propertyTakers'
+    ));
 }
-
-
-
     public function pendingProperties()
     {
             $data['allProperties'] = DB::table('properties')

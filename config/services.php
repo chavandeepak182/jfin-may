@@ -35,4 +35,17 @@ return [
         ],
     ],
 
+    'twofactor' => [
+    'key'     => env('TWO_FACTOR_API_KEY'),
+    'country' => env('TWO_FACTOR_COUNTRY_CODE', '91'),
+],
+
+'google' => [
+    'client_id' => env('GOOGLE_CLIENT_ID'),
+    'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+    'redirect' => env('GOOGLE_REDIRECT_URI'),
+],
+
+
+
 ];

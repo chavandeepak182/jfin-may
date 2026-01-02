@@ -197,6 +197,7 @@
                                     <a class="btn-search btn btn-dark mt-3 px-md-5 ms-2" href="{{ url('/applyNow') }}"> For Property</a>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
