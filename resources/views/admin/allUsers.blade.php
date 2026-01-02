@@ -7,10 +7,153 @@
     @parent
 
    
-    <!-- Breadcrumbs and Search Bar -->
-    <div class="card-header py-3">
+ <style>/* ===== Overlay ===== */
+.modal-overlay {
+    background: rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===== Container ===== */
+.modal-container,
+.modal-dialog.modal-container {
+    max-width: 900px;
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+    padding: 24px 28px 30px;
+}
+
+/* ===== Header ===== */
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: none;
+    padding: 0 0 16px;
+}
+
+.modal-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.modal-header p {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 4px 0 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: #2563eb;
+    cursor: pointer;
+}
+
+/* ===== Section Titles ===== */
+.personal-details-form h4,
+.section-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 22px 0 10px;
+}
+
+/* ===== Form Layout ===== */
+.personal-details-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 20px;
+}
+
+.personal-details-form .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.personal-details-form .form-row {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 20px;
+}
+
+/* ===== Labels ===== */
+.personal-details-form label {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #111827;
+}
+
+/* ===== Inputs ===== */
+.personal-details-form input {
+    height: 42px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.personal-details-form input::placeholder {
+    color: #9ca3af;
+}
+
+.personal-details-form input:focus {
+    border-color: #3b82f6;
+}
+
+/* Full width fields */
+.personal-details-form .form-group:nth-child(3),
+.personal-details-form .form-group:nth-child(4),
+.personal-details-form .form-group:nth-child(6),
+.personal-details-form .form-group:nth-child(9) {
+    grid-column: span 2;
+}
+
+/* ===== Footer ===== */
+.modal-footer {
+    grid-column: span 2;
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* ===== Buttons ===== */
+.btn-back {
+    background: transparent;
+    border: none;
+    color: #6b7280;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-submit {
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn-submit:hover {
+    background: #2563eb;
+}
+</style>  
+    <!-- <div class="card-header py-3">
         <div class="d-flex justify-content-between align-items-center">
-            <!-- Breadcrumb -->
+           
             <nav aria-label="breadcrumb" class="d-flex align-items-center">
                 <ol class="breadcrumb m-0 bg-transparent">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
@@ -18,7 +161,7 @@
                 </ol>
             </nav>
       <div class="row no-gutters" style="gap:10px;"> 
-    <!-- All Employee -->
+ 
     <div class="col-auto">
         <a href="{{ route('allAgents') }}"  style="text-decoration: none;">
             <div class="custom-btn" style="height:50px; width:150px; 
@@ -33,7 +176,7 @@
         </a>
     </div>
 
-    <!-- All Channel Partner -->
+  
     <div class="col-auto">
         <a href="{{ route('allPartners') }}"  style="text-decoration: none;">
             <div class="custom-btn" style="height:50px; width:160px; 
@@ -49,7 +192,7 @@
     </div>
 </div>
 
-<!-- Hover Effect -->
+
 
 
 
@@ -58,12 +201,80 @@
           
 
 
-            <!-- Add User Button -->
+           
             <button class="btn btn-primary ms-3" data-bs-toggle="modal" href="#addUserView">
                 <i class="fa fa-plus"></i> Add User
             </button>
         </div>
+    </div> -->
+     <!-- <button class="btn btn-primary ms-3" data-bs-toggle="modal" href="#addUserView">
+                <i class="fa fa-plus"></i> Add User
+    </button> -->
+    <div class="page-header">
+    <div>
+      <h1 id="pageTitle">All Customers</h1>
+      <p id="pageSubtitle">Manage and view all customers information.</p>
     </div>
+    <div class="header-actions">
+      <button class="btn-export" onclick="refreshUsers()">
+        <i class="fas fa-sync-alt"></i> Refresh
+      </button>
+      <button class="btn-new-application">
+        <i class="fas fa-user-plus"></i>
+        <span id="addButtonText" data-bs-toggle="modal" href="#addUserView">Add Customer</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MESSAGE -->
+  <div id="messageBox"></div>
+    <div class="card-header py-3">
+         <div class="row pt-5 pb-4">
+                <div class="col-12">
+                    <div class="customer-overview-grid">
+
+    <!-- Total Customers -->
+    <a href="{{ route('allUsers') }}" class="overview-link">
+        <div class="overview-card blue active">
+            <i class="fas fa-users"></i>
+            <h3>Total Customers</h3>
+            <p id="totalCustomers">30</p>
+        </div>
+    </a>
+
+    <!-- Total Employees -->
+    <a href="{{ route('allAgents') }}" class="overview-link">
+        <div class="overview-card green">
+            <i class="fas fa-user-tie"></i>
+            <h3>Total Employees</h3>
+            <p id="totalEmployees">21</p>
+        </div>
+    </a>
+
+    <!-- Channel Partners -->
+    <a href="{{ route('allPartners') }}" class="overview-link">
+        <div class="overview-card purple">
+            <i class="fas fa-handshake"></i>
+            <h3>Channel Partners</h3>
+            <p id="totalPartners">10</p>
+        </div>
+    </a>
+
+    <!-- Active Now -->
+    <a href="#" class="overview-link">
+        <div class="overview-card white">
+            <i class="fas fa-circle"></i>
+            <h3>Active Now</h3>
+            <p id="totalActive">5</p>
+        </div>
+    </a>
+
+</div>
+
+                </div>
+            </div>
+    </div>
+    
 
     <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet" />
@@ -71,7 +282,7 @@
     <!-- export button -->
     <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet" />
     <link href="{{ asset('theme') }}/dist-assets/css/sb-admin-2.min.css" rel="stylesheet">
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-12 grid-margin">
             <div class="card pt-3">
                 <div class="card-body">
@@ -133,7 +344,7 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        <!-- Pagination Links -->
+                      
                         <div class="d-flex justify-content-between align-items-center mt-4">
                             <div class="dataTables_info">
                                 Showing {{ $users->firstItem() }} to {{ $users->lastItem() }} of {{ $users->total() }}
@@ -149,7 +360,247 @@
                 </div>
             </div>
         </div>
+    </div> -->
+
+<body>
+
+<div class="users-page">
+
+ 
+ 
+
+  <!-- MESSAGE -->
+  <div id="messageBox"></div>
+
+  
+
+  <!-- SEARCH & FILTER -->
+  <div class="search-filters-section">
+    <div class="search-box-large">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Search users..." onkeyup="searchUsers(this.value)">
     </div>
+    <div class="filter-buttons">
+      <button onclick="setStatus('all')" class="filter-btn active">All</button>
+      <button onclick="setStatus('active')" class="filter-btn">Active</button>
+      <button onclick="setStatus('inactive')" class="filter-btn">Inactive</button>
+    </div>
+  </div>
+
+<!-- TABLE -->
+<div class="row mb-4">
+
+    <div class="col-12 ">
+        <div class="table-card-large">
+
+            <!-- HEADER -->
+            <div class="table-header-large d-flex align-items-center justify-content-between">
+                <h3 class="mb-0">All Users</h3>
+            </div>
+
+            <!-- TABLE -->
+            <div class="table-responsive table-container-large">
+                <table class="table loans-table mb-0">
+                    <thead>
+                        <tr>
+                            <th width="40">
+                                <input type="checkbox" class="table-checkbox">
+                            </th>
+                            <th>USER</th>
+                            <th>Email</th>
+                            <th>CONTACT</th>
+                            <th>PAN NO.</th>
+                            <th>STATUS</th>
+                            <th width="120">ACTIONS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="usersTable">
+                        @forelse ($users as $user)
+                        <tr>
+
+                            <!-- CHECKBOX -->
+                            <td>
+                                <input type="checkbox" class="table-checkbox">
+                            </td>
+
+                            <!-- USER -->
+                            <td>
+                                <div class="customer-cell">
+                                    <div class="customer-avatar">
+                                        {{ strtoupper(substr($user->name, 0, 2)) }}
+                                    </div>
+
+                                    <div class="customer-info">
+                                        <div class="customer-name">
+                                            <a href="javascript:void(0);"
+                                               class="user-link"
+                                               data-name="{{ $user->name }}"
+                                               data-email="{{ $user->email_id }}"
+                                               data-mobile="{{ $user->profile->mobile_no ?? '-' }}"
+                                               data-pan="{{ $user->profile->pan_number ?? '-' }}"
+                                               data-status="{{ $user->is_email_verify ? 'Active' : 'Inactive' }}">
+                                                {{ $user->name }}
+                                            </a>
+                                        </div>
+                                        <div class="customer-id">
+                                            #{{ $user->id }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- EMAIL -->
+                            <td>{{ $user->email_id }}</td>
+
+                            <!-- CONTACT -->
+                            <td>{{ $user->profile->mobile_no ?? '-' }}</td>
+
+                            <!-- PAN -->
+                            <td>{{ $user->profile->pan_number ?? '-' }}</td>
+
+                            <!-- STATUS -->
+                            <td>
+                                <span class="status-badge {{ $user->is_email_verify ? 'active' : 'inactive' }}">
+                                    {{ $user->is_email_verify ? 'Active' : 'Inactive' }}
+                                </span>
+
+                                <div class="status-radio mt-1">
+                                    <label class="me-2">
+                                        <input type="radio"
+                                            name="status_{{ $user->id }}"
+                                            {{ $user->is_email_verify ? 'checked' : '' }}
+                                            onclick="updateStatus({{ $user->id }},1)">
+                                        Active
+                                    </label>
+
+                                    <label>
+                                        <input type="radio"
+                                            name="status_{{ $user->id }}"
+                                            {{ !$user->is_email_verify ? 'checked' : '' }}
+                                            onclick="updateStatus({{ $user->id }},0)">
+                                        Inactive
+                                    </label>
+                                </div>
+                            </td>
+
+                            <!-- ACTIONS -->
+                            <td>
+                                <div class="action-buttons d-flex align-items-center gap-2">
+                                    <a href="javascript:void(0);"
+   class="action-icon text-primary edit-user-btn"
+   data-id="{{ $user->id }}"
+   data-name="{{ $user->name }}"
+   data-email="{{ $user->email_id }}"
+   data-mobile="{{ $user->profile->mobile_no ?? '' }}"
+   data-dob="{{ $user->profile->dob ?? '' }}"
+   data-address="{{ $user->profile->address ?? '' }}"
+   data-city="{{ $user->profile->city ?? '' }}"
+   data-state="{{ $user->profile->state ?? '' }}"
+   data-pincode="{{ $user->profile->pincode ?? '' }}"
+   title="Edit">
+   <i class="fas fa-edit"></i>
+</a>
+
+
+                                    <a href="javascript:void(0);"
+                                       class="action-icon text-danger"
+                                       title="Delete"
+                                       onclick="deleteUser({{ $user->id }})">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+
+                                    <span class="action-icon text-muted">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </span>
+                                </div>
+                            </td>
+
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="7" class="text-center py-4">
+                                No users available
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</div>
+<!-- search js -->
+ <script>
+let currentStatus = 'all';
+
+/* ================= SEARCH ================= */
+function searchUsers(keyword) {
+    keyword = keyword.toLowerCase();
+    const rows = document.querySelectorAll('#usersTable tr');
+
+    rows.forEach(row => {
+        const name = row.querySelector('.customer-name')?.innerText.toLowerCase() || '';
+        const email = row.children[2]?.innerText.toLowerCase() || '';
+
+        const matchSearch = name.includes(keyword) || email.includes(keyword);
+        const matchStatus = checkStatus(row);
+
+        row.style.display = (matchSearch && matchStatus) ? '' : 'none';
+    });
+}
+
+/* ================= STATUS FILTER ================= */
+function setStatus(status) {
+    currentStatus = status;
+
+    // active button highlight
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    const rows = document.querySelectorAll('#usersTable tr');
+
+    rows.forEach(row => {
+        const matchStatus = checkStatus(row);
+        row.style.display = matchStatus ? '' : 'none';
+    });
+}
+
+/* ================= HELPER ================= */
+function checkStatus(row) {
+    if (currentStatus === 'all') return true;
+
+    const badge = row.querySelector('.status-badge');
+    if (!badge) return true;
+
+    return badge.classList.contains(currentStatus);
+}
+</script>
+
+<!-- ADD / EDIT MODAL -->
+<div id="userModal" class="modal">
+  <div class="modal-content">
+    <h3 id="modalTitle">Add User</h3>
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="email" id="email" placeholder="Email">
+    <input type="text" id="phone" placeholder="Phone">
+    <select id="status">
+      <option value="active">Active</option>
+      <option value="inactive">Inactive</option>
+    </select>
+    <button onclick="saveUser()">Save</button>
+    <button onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<script src="users.js"></script>
+</body>
+</html>
 
     <!-- Add User Modal -->
     <div class="modal fade" id="addUserView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -163,6 +614,8 @@
                     <form class="user" id="addUser" method="post">
                         @csrf
                         <div class="row">
+                            <input type="hidden" name="user_id" id="user_id">
+
                             <div class="form-group col-lg-4">
                                 <label for="recipient-name" class="col-form-label">Name:</label>
                                 <input type="text" class="form-control" id="full_name" name="full_name" required>
@@ -214,7 +667,7 @@
 
                         <div class="modal-footer">
                             <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary" id="submitBtn"> Add Customer</button>
                         </div>
                     </form>
                 </div>
@@ -299,35 +752,60 @@
             });
 
             // Add User Form Submission
-            $('#addUser').on('submit', function(e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{ route('insertUser') }}",
-                    method: "POST",
-                    data: new FormData(this),
-                    processData: false,
-                    contentType: false,
-                    dataType: 'json',
-                    beforeSend: function() {
-                        $('span.error-text').text('');
-                    },
-                    success: function(data) {
-                        if (data.status == 0) {
-                            $.each(data.error, function(prefix, val) {
-                                $('span.' + prefix + '_error').text(val[0]);
-                            });
-                        } else if (data.status == 2) {
-                            $("#skill_title_error[" + data.id + "]").text(data.msg);
-                        } else {
-                            $('#addUser')[0].reset();
-                            swal({
-                                title: data.msg,
-                                icon: "success",
-                            }).then(() => location.reload());
-                        }
-                    }
-                });
-            });
+           $('#addUser').on('submit', function (e) {
+    e.preventDefault();
+
+    let userId = $('#user_id').val();
+    let url = userId 
+        ? "{{ route('updateUser') }}" 
+        : "{{ route('insertUser') }}";
+
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        success: function (res) {
+            swal({
+                title: res.msg,
+                icon: "success"
+            }).then(() => location.reload());
+        },
+        error: function (xhr) {
+            swal("Error", "Something went wrong", "error");
+        }
+    });
+});
+
+
+// edit
+$(document).on('click', '.edit-user-btn', function () {
+
+    // modal title change (optional)
+    $('.modal-header h2').text('Edit Customer');
+
+    // 🔴 IMPORTANT: button text change
+    $('#submitBtn').text('Update Customer');
+
+    // hidden user id
+    $('#user_id').val($(this).data('id'));
+
+    // form fill (already working)
+    $('#full_name').val($(this).data('name'));
+    $('#email_id').val($(this).data('email'));
+    $('#mobile_no').val($(this).data('mobile'));
+    $('#dob').val($(this).data('dob'));
+    $('#address').val($(this).data('address'));
+    $('#city').val($(this).data('city'));
+    $('#state').val($(this).data('state'));
+    $('#pincode').val($(this).data('pincode'));
+
+    // open modal
+    $('#addUserView').modal('show');
+});
+
+
 
             // Delete User Function
             window.deleteUser = function(id) {

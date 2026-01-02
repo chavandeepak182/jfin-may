@@ -31,6 +31,7 @@
         <!-- Template Stylesheet -->
         <link href="{{ asset('theme') }}/frontend/css/style.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+        
 
 
 
@@ -203,169 +204,206 @@ body {
             <!-- Navigation -->
             <nav class="main-nav">
                 <ul>
-<li><a href="{{ url('about') }}" class="nav-item {{ Request::is('about') ? 'active' : '' }}">About Us</a></li>
+
+                    <li>
+                        <a href="{{ url('about') }}" class="nav-item {{ Request::is('about') ? 'active' : '' }}">
+                            About Us
+                        </a>
+                    </li>
+
                     <!-- PRODUCTS -->
                     <li class="mega-dropdown">
-                        <a href="javascript:void(0)" id="productsToggle">
-                            Products 
-                        </a>
+                        <a href="javascript:void(0)" id="productsToggle">Products</a>
 
-                        <!-- MEGA MENU -->
                         <div class="mega-menu" id="productsMenu">
 
-                            <!-- LEFT CONTENT -->
+                            <!-- LEFT -->
                             <div class="mega-left">
-
                                 <a href="{{ url('home-loan') }}" class="mega-item">
                                     <i class="bi bi-house-door icon"></i>
-                                    <div>
-                                        <h4> Home Loan</h4>
-                                        <!-- <p>Begin your home ownership journey with us.</p> -->
-                                    </div>
+                                    <div><h4>Home Loan</h4></div>
                                 </a>
 
-                                <a href="{{ url('loan-against-property')}}" class="mega-item">
-                                   <i class="bi bi-building icon"></i>
-                                    <div>
-                                        <h4>Loan Against Property</h4>
-                                        <!-- <p>Leverage your property’s value for financial flexibility.</p> -->
-                                    </div>
+                                <a href="{{ url('loan-against-property') }}" class="mega-item">
+                                    <i class="bi bi-building icon"></i>
+                                    <div><h4>Loan Against Property</h4></div>
                                 </a>
 
-                                <a href="{{ url('project-loan')}}" class="mega-item">
-                                   <i class="bi bi-diagram-3 icon"></i>
-
-                                    <div>
-                                        <h4>Project Loan</h4>
-                                        <!-- <p>Amplify your home’s space with easy financing.</p> -->
-                                    </div>
+                                <a href="{{ url('project-loan') }}" class="mega-item">
+                                    <i class="bi bi-diagram-3 icon"></i>
+                                    <div><h4>Project Loan</h4></div>
                                 </a>
 
-                                <a href="{{ url('overdraft-facility')}}" class="mega-item">
-                                      <i class="bi bi-credit-card-2-front icon"></i>
-                                    <div>
-                                        <h4>Overdraft Facility</h4>
-                                        <!-- <p>Reinvent your home’s ambience with ease.</p> -->
-                                    </div>
+                                <a href="{{ url('overdraft-facility') }}" class="mega-item">
+                                    <i class="bi bi-credit-card-2-front icon"></i>
+                                    <div><h4>Overdraft Facility</h4></div>
                                 </a>
-                                 <a href="{{ url('lease-rental-discounting')}}" class="mega-item">
-                                      <i class="bi bi-receipt icon"></i>
-                                    <div>
-                                        <h4>Lease Rental Discounting</h4>
-                                        <!-- <p>Reinvent your home’s ambience with ease.</p> -->
-                                    </div>
-                                </a>
-                                 <a href="{{ url('msme-loan')}}" class="mega-item">
-                                       <i class="bi bi-shop icon"></i>
-                                    <div>
-                                        <h4>MSME Loan</h4>
-                                        <!-- <p>Reinvent your home’s ambience with ease.</p> -->
-                                    </div>
-                                </a>
-                                
-                                
 
+                                <a href="{{ url('lease-rental-discounting') }}" class="mega-item">
+                                    <i class="bi bi-receipt icon"></i>
+                                    <div><h4>Lease Rental Discounting</h4></div>
+                                </a>
+
+                                <a href="{{ url('msme-loan') }}" class="mega-item">
+                                    <i class="bi bi-shop icon"></i>
+                                    <div><h4>MSME Loan</h4></div>
+                                </a>
                             </div>
 
-                            <!-- RIGHT BANNER -->
+                            <!-- RIGHT -->
                             <div class="mega-right">
-                                <h3 style="color:#fff">Find the Right Loan</h3>
-                                <p>Smart financial solutions for your personal and business needs.</p>
+                                <h3>Find the Right Loan</h3>
+                                <p>Smart financial solutions for your needs.</p>
                                 <a href="{{ url('/applyNow') }}" class="cta-primary">Apply Now</a>
-
                             </div>
-
                         </div>
                     </li>
-                    <!-- <li class="mega-dropdown calculator-dropdown">
-    <a href="javascript:void(0)" class="dropdown-toggle">
-        Calculators 
-    </a>
 
-    <div class="mega-menu">
-        
-        <div class="mega-left">
-            <a href="{{ route('eligibility.calculator') }}" class="mega-item">
-                <i class="bi bi-calculator icon"></i>
-                <div>
-                    <h4>EMI Calculator</h4>
-                  
-                </div>
-            </a>
+                    <!-- Calculator -->
+                    <li>
+                        <a href="{{ route('eligibility.calculator') }}" class="nav-item">
+                            Calculator
+                        </a>
+                    </li>
 
-            <a href="{{ route('eligibility.calculator') }}" class="mega-item">
-                <i class="bi bi-graph-up-arrow icon"></i>
-                <div>
-                    <h4>Eligibility Calculator</h4>
-                   
-                </div>
-            </a>
-        </div>
+                    <li>
+                        <a href="{{ url('services') }}" class="nav-item">
+                            Services
+                        </a>
+                    </li>
 
-       
-        <div class="mega-right">
-            <h3 >Loan Calculators</h3>
-            <p>Plan better before applying for a loan</p>
-            <a href="#" class="cta-primary">Start Now</a>
-        </div>
-    </div>
-</li> -->
-<li>
-    <a href="{{ route('eligibility.calculator') }}" class="nav-item">
-        Calculator
-    </a>
-</li>
+                    <li>
+                        <a href="{{ url('properties') }}" class="nav-item {{ Request::is('properties') ? 'active' : '' }}">
+                            Properties
+                        </a>
+                    </li>
 
-
-                    <!-- <li><a href="#">Calculator</a></li> -->
-                     
-                
-                                    <li><a href="{{ url('services') }}" class="nav-item {{ Request::is('properties') ? 'active' : '' }}">Services</a></li>
-                                </a>
-                    <li><a href="{{ url('properties')}}" class="nav-item {{ Request::is('properties') ? 'active' : '' }}">Properties</a></li>
-                    
+                    <!-- RESOURCES -->
                     <li class="mega-dropdown calculator-dropdown">
-    <a href="javascript:void(0)" class="dropdown-toggle">
-        Resources 
-    </a>
+                        <a href="javascript:void(0)" class="dropdown-toggle">Resources</a>
 
-    <div class="mega-menu" style=" width: 320px;">
-        <!-- LEFT -->
-        <div class="mega-left">
-            <a href="{{ route('blogs') }}" class="mega-item">
-                <i class="bi bi-calculator icon"></i>
-                <div>
-                    <h4>Blog</h4>
-                    <!-- <p>Calculate monthly EMI easily</p> -->
-                </div>
-            </a>
+                        <div class="mega-menu" style="width:320px;">
+                            <div class="mega-left">
+                                <a href="{{ route('blogs') }}" class="mega-item">
+                                    <i class="bi bi-journal-text icon"></i>
+                                    <div><h4>Blog</h4></div>
+                                </a>
 
-            <a href="{{ url('referral-program')}}" class="mega-item">
-                <i class="bi bi-graph-up-arrow icon"></i>
-                <div>
-                    <h4>Referral</h4>
-                    <!-- <p>Check loan eligibility</p> -->
-                </div>
-            </a>
-        </div>
-
-      
-        
-    </div>
-</li>
-                  
+                                <a href="{{ url('referral-program') }}" class="mega-item">
+                                    <i class="bi bi-graph-up-arrow icon"></i>
+                                    <div><h4>Referral</h4></div>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
 
                 </ul>
             </nav>
 
-            <div class="header-cta">
-                <a href="{{ url('/applyNow') }}" class="btn-apply">Apply Now</a>
-            </div>
+<div class="header-cta d-flex align-items-center">
+
+    {{-- APPLY NOW BUTTON --}}
+    @if(Session::has('role_id'))
+        {{-- Existing user → open loan form --}}
+        <a href="{{ route('loans.loans-list') }}" class="btn-apply me-4">
+            Apply Now
+        </a>
+    @else
+        {{-- New user → open apply now --}}
+        <a href="{{ route('applyNow') }}" class="btn-apply me-4">
+            Apply Now
+        </a>
+    @endif
+
+
+    {{-- USER ICON --}}
+    <div class="dropdown user-icon-wrapper">
+        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="fas fa-user-circle user-icon"></i>
+        </a>
+
+        <div class="dropdown-menu dropdown-menu-end">
+
+            {{-- FINANCE OPTION --}}
+            @if(Session::has('role_id'))
+                {{-- Existing user --}}
+                <a href="{{ route('authv3.login.form') }}" class="dropdown-item" style="color:#295cab">
+                    <i class="fas fa-rupee-sign me-2"></i> Finance
+                </a>
+            @else
+                {{-- New user --}}
+                <a href="{{ route('authv3.signup.form') }}" class="dropdown-item" style="color:#295cab">
+                    <i class="fas fa-rupee-sign me-2"></i> Finance
+                </a>
+            @endif
+
+
+            {{-- PROPERTY OPTION --}}
+            <a href="/property" class="dropdown-item" style="color:#295cab">
+                <i class="fas fa-building me-2"></i> Property
+            </a>
+
+
+            {{-- DASHBOARD + LOGOUT (ONLY FOR LOGGED IN) --}}
+            @if(Session::has('role_id'))
+                <div class="dropdown-divider"></div>
+
+                <a href="/my-profile" class="dropdown-item" style="color:#295cab">
+                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                </a>
+
+                <a href="/logout" class="dropdown-item text-danger" style="color:#295cab">
+                    <i class="fas fa-power-off me-2"></i> Logout
+                </a>
+            @endif
+
+        </div>
+    </div>
+
+</div>
+<style>.btn-primary {
+    background-color: #295cab;
+    border-color: #295cab;
+    color: #fff;
+}
+
+.header {
+    background: #295cab;
+}
+</style>
+
 
         </div>
     </div>
 </header>
+
 <style>
+
+    /* Wrapper to push icon slightly right */
+.user-icon-wrapper {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+/* Bigger user icon */
+.user-icon {
+    font-size: 45px;   /* 👈 icon size */
+    color: #295cab;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+/* Hover effect */
+.user-icon:hover {
+    color: #295cab;
+}
+
+/* Ensure header right spacing */
+.header-cta {
+    margin-left: auto;
+}
+
 
 .cta-primary {
     display: inline-block;
@@ -934,11 +972,11 @@ menuToggle.addEventListener("click", ()=>{
                             <div class="row text-center pt-3">
                                 <div class="col-lg-6 border-end">
                                     <img src="{{ asset('theme') }}/frontend/img/loan.png" alt="Logo" class="w-50">
-                                    <a class="btn-search btn btn-dark mt-3 px-md-5 ms-2" href="{{ url('/login') }}"> For Finance</a>
+                                    <a class="btn-search btn btn-dark mt-3 px-md-5 ms-2" href="{{ url('/login-mobile') }}"> For Finance</a>
                                 </div>
                                 <div class="col-lg-6">
                                     <img src="{{ asset('theme') }}/frontend/img/housing.png" alt="Logo" class="w-50">
-                                    <a class="btn-search btn btn-dark mt-3 px-md-5 ms-2" href="{{ url('/login') }}"> For Property</a>
+                                    <a class="btn-search btn btn-dark mt-3 px-md-5 ms-2" href="{{ url('/login-mobile') }}"> For Property</a>
                                 </div>
                             </div>
                         </div>
