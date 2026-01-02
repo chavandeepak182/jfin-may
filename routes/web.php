@@ -19,6 +19,7 @@ use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\EligibilityCriteriaController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CibilController;
+use App\Http\Controllers\AuthV2Controller;
 use App\Http\Controllers\MisController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\LeadController;
@@ -26,13 +27,15 @@ use App\Http\Controllers\PropertyTakerController;
 use Illuminate\Support\Facades\Route;
 use App\Exports\EligibilityExport;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AuthV3\AuthV3Controller;
 use App\Http\Controllers\EstimatedFileController;
 use App\Http\Controllers\MonthlyPLController;
 use Maatwebsite\Excel\Facades\Excel;
 
+
 require __DIR__.'/auth.php';
 // dashbord path
-Route::get('/admin/customers', [UsersController::class, 'adminCustomer'])->name('admin.customers');
+Route::get('/admin/customers', action: [UsersController::class, 'adminCustomer'])->name('admin.customers');
 Route::get('admin/loans-list', [LoanApplicationController::class, 'loanlist'])->name('admin.loans');
 Route::get('admin/property', [PropertyController::class, 'propertylist'])->name('admin.property');
 Route::get('admin/leadslist', [LeadController::class, 'leadlist'])->name('admin.listlead');
@@ -43,6 +46,120 @@ Route::get('admin/eligible', [BankController::class, 'eligiblelist'])->name('adm
  Route::get('admin/dashboard_test', [AdminController::class, 'dashboard_test'])->name('dashboard_test');
 
 
+//  demo login
+
+
+
+/* ================= AUTH V3 ================= */
+
+// Route::get('/authv3/signup', [AuthV3Controller::class, 'signupForm'])
+//     ->name('authv3.signup.form');
+
+// Route::post('/authv3/signup', [AuthV3Controller::class, 'signupSubmit'])
+//     ->name('authv3.signup.submit');
+
+// Route::get('/authv3/login', [AuthV3Controller::class, 'loginForm'])
+//     ->name('authv3.login.form');
+
+// Route::post('/authv3/login', [AuthV3Controller::class, 'loginSubmit'])
+//     ->name('authv3.login.submit');
+
+// Route::get('/authv3/verify-otp', [AuthV3Controller::class, 'otpForm'])
+//     ->name('authv3.otp.form');
+
+// Route::post('/authv3/verify-otp', [AuthV3Controller::class, 'verifyOtp'])
+//     ->name('authv3.otp.verify');
+
+// Route::get('/authv3/resend-otp', [App\Http\Controllers\AuthV3\AuthV3Controller::class, 'resendOtp'])
+//     ->name('authv3.otp.resend');
+
+
+/* ================= AUTH V3 ================= */
+
+// Signup
+Route::get('/authv3/signup', [AuthV3Controller::class, 'signupForm'])
+    ->name('authv3.signup.form');
+
+Route::post('/authv3/signup', [AuthV3Controller::class, 'signupSubmit'])
+    ->name('authv3.signup.submit');
+
+// Login form
+Route::get('/authv3/login', [AuthV3Controller::class, 'loginForm'])
+    ->name('authv3.login.form');
+
+// ✅ Email + Password Login
+Route::post('/authv3/login/email', [AuthV3Controller::class, 'loginWithEmail'])
+    ->name('authv3.login.email');
+
+// ✅ Mobile OTP Login (Send OTP)
+Route::post('/authv3/login/otp', [AuthV3Controller::class, 'loginWithOtp'])
+    ->name('authv3.login.otp');
+
+// OTP Verify
+Route::get('/authv3/verify-otp', [AuthV3Controller::class, 'otpForm'])
+    ->name('authv3.otp.form');
+
+Route::post('/authv3/verify-otp', [AuthV3Controller::class, 'verifyOtp'])
+    ->name('authv3.otp.verify');
+
+// Resend OTP
+Route::get('/authv3/resend-otp', [AuthV3Controller::class, 'resendOtp'])
+    ->name('authv3.otp.resend');
+
+Route::get('/authv3/google', [AuthV3Controller::class, 'redirectToGoogle'])
+    ->name('authv3.google.login');
+
+Route::get('/authv3/google/callback', [AuthV3Controller::class, 'handleGoogleCallback'])
+    ->name('authv3.google.callback');
+
+
+
+//  login
+
+// Route::get('/signup-v2', function () {
+//     return view('auth-v2.signup_v2');
+// });
+
+// Route::get('/login-mobile', function () {
+//     return view('auth-v2.mobile_login');
+// });
+
+
+// Route::post('/register-v2', [AuthV2Controller::class, 'registerUserV2']);
+// Route::post('/send-otp-v2', [AuthV2Controller::class, 'sendOtpV2']);
+// Route::post('/verify-otp-v2', [AuthV2Controller::class, 'verifyOtpV2']);
+
+// Route::get('/verify-otp', function () {
+//     return view('auth-v2.verify_otp');
+// });
+
+
+// demo
+
+// Email + Password login
+//  login
+// pages
+Route::get('/signup-v2', function () {
+    return view('auth-v2.signup_v2');
+});
+
+Route::get('/login-mobile', function () {
+    return view('auth-v2.mobile_login');
+});
+
+// form submit
+Route::post('/register-v2', [AuthV2Controller::class, 'registerUserV2']);
+Route::post('/send-otp-v2', [AuthV2Controller::class, 'sendOtpV2']);
+Route::post('/verify-otp-v2', [AuthV2Controller::class, 'verifyOtpV2']);
+/* OTP Pages */
+Route::get('/verify-otp', function () {
+    return view('auth-v2.verify_otp');
+});
+
+Route::post('/login-email-v2', [AuthV2Controller::class, 'loginWithEmail'])
+    ->name('login.email.v2');
+
+    Route::get('/logout', [AuthV2Controller::class, 'logout']);
 
 
 // blog
@@ -139,9 +256,9 @@ Route::get('professional-detail', [FrontendController::class, 'ProfessionalDetai
 Route::get('login', [AdminController::class, 'loginView'])->name('login');
 Route::post('userLogin', [FrontendController::class, 'userLogin'])->name('userLogin');
 
-Route::get('verify-otp', [AdminController::class, 'verifyOtp'])->name('verify-otp');
+// Route::get('verify-otp', [AdminController::class, 'verifyOtp'])->name('verify-otp');
 
-Route::post('submit-otp', [AdminController::class, 'postVerifyOtp'])->name('submit-otp');
+// Route::post('submit-otp', [AdminController::class, 'postVerifyOtp'])->name('submit-otp');
 
 
 Route::get('logout', [FrontendController::class, 'logout'])->name('logout');
@@ -166,7 +283,10 @@ Route::get('/cities/{state_id}', [LoanApplicationController::class, 'getCities']
 
 
 //loan
-Route::get('/applyNow', [LoanApplicationController::class, 'applyNow'])->name('applyNow');
+// Route::get('/applyNow', [LoanApplicationController::class, 'applyNow'])->name('applyNow');
+// Apply Now
+Route::get('/applyNow', [LoanApplicationController::class, 'applyNow'])
+    ->name('applyNow');
 Route::get('/start_loan/{id}', [LoanApplicationController::class, 'start_loan'])->name('start_loan');
 
 Route::middleware(['isUserOrAdmin'])->group(function () {
@@ -271,6 +391,7 @@ Route::post('admin/insertUser',[UsersController::class,'insertUser'])->name('ins
     Route::get('/editUser/{user_id}', [UsersController::class, 'editUser'])->name('editUser');
     Route::post('/updateUser', [UsersController::class, 'updateUser'])->name('updateUser');
     Route::post('/deleteUser', [UsersController::class, 'deleteUser'])->name('deleteUser');
+
     Route::get('/updateProfile', [UsersController::class, 'updateProfile'])->name('updateProfile');
     Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('admin/admindashboard', [AdminController::class, 'adminDashboard'])->name('adminDashboard');

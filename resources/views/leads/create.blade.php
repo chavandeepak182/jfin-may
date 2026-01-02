@@ -24,7 +24,7 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
-                    <label>Full Name *</label>
+                    <label>Full  *</label>
                     <input type="text" name="name" class="form-control" required>
                 </div>
             </div>

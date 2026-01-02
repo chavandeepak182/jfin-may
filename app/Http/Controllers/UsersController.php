@@ -29,20 +29,68 @@ class UsersController extends Controller
         return view('admin.addUser');
     }
 
+public function adminCustomer(Request $request)
+{
+    // Counts
+    $totalCustomers = DB::table('users')
+        
+        ->whereNull('deleted_at')
+        ->count();
 
-    // dshboard all user count
-    public function adminCustomer()
-    {
-        // $totalCustomers = DB::table('users')->where('role_id', 1)->count();
-        $totalCustomers = DB::table('users')
-    ->where('role_id', 1)
-    ->whereNull('deleted_at') 
-    ->count();
+    $totalOfficers = DB::table('users')
+        ->where('role_id', 2)
+        ->whereNull('deleted_at')
+        ->count();
 
-        $totalOfficers = DB::table('users')->where('role_id', 2)->count();
-        $totalCp = DB::table('users')->where('role_id', 3)->count();
-        return view('admin.admin-users', compact('totalCustomers','totalOfficers', 'totalCp'));
+    $totalCp = DB::table('users')
+        ->where('role_id', 3)
+        ->whereNull('deleted_at')
+        ->count();
+
+    // Filters from AJAX
+    $search = $request->search;
+    $status = $request->status;
+
+    $users = User::with('profile')
+        ->where('role_id', 1)
+        ->whereNull('deleted_at')
+
+        // 🔍 SEARCH FILTER
+        ->when($search, function ($q) use ($search) {
+            $q->where(function ($qq) use ($search) {
+                $qq->where('name', 'like', "%$search%")
+                   ->orWhere('email_id', 'like', "%$search%")
+                   ->orWhere('id', 'like', "%$search%");
+            });
+        })
+
+        // 🟢 ACTIVE / 🔴 INACTIVE FILTER
+        ->when($status, function ($q) use ($status) {
+            if ($status == 'active') {
+                $q->where('is_email_verify', 1);
+            }
+            if ($status == 'inactive') {
+                $q->where('is_email_verify', 0);
+            }
+        })
+
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
+
+    // AJAX response (important)
+    if ($request->ajax()) {
+        return view('admin.partials.users-table', compact('users'))->render();
     }
+
+    return view('admin.admin-users', compact(
+        'totalCustomers',
+        'totalOfficers',
+        'totalCp',
+        'users'
+    ));
+}
+
+
     
 
 
@@ -65,83 +113,53 @@ class UsersController extends Controller
         return response()->json(['message' => 'User status updated successfully']);
     }
 
-  public function insertUser(Request $request)
+
+public function insertUser(Request $request)
 {
-    DB::beginTransaction();
+    // ✅ Validation
+    $validator = Validator::make($request->all(), [
+        'full_name' => 'required|string|max:255',
+        'email_id'  => 'required|email|unique:users,email_id',
+        'mobile_no' => 'required|digits:10',
+        'dob'       => 'required|date',
+        'address'   => 'required|string',
+        'city'      => 'required|string',
+        'state'     => 'required|string',
+        'pincode'   => 'required|digits:6',
+    ]);
 
-    try {
-        // ✅ Validate inputs
-        $validator = Validator::make($request->all(), [
-            'full_name' => 'required|string|max:255',
-            'email_id' => 'required|email|unique:users,email_id',
-            'mobile_no' => 'required|string|max:15',
-            'password' => 'required|string|min:6',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 0,
-                'error' => $validator->errors()->toArray()
-            ]);
-        }
-
-        // ✅ Generate random values
-        $six_digit_random_number = random_int(100000, 999999);
-        $randomString = Str::random(10);
-
-        // ✅ Create user
-        $user = new User();
-        $user->name = $request->full_name;
-        $user->email_id = $request->email_id;
-        $user->mobile_no = $request->mobile_no;
-        $user->password = Hash::make($request->password);
-        $user->role_id = 1;  // Default customer role
-        $user->email_otp = $six_digit_random_number;
-        $user->referral_code = $randomString;
-        $user->is_email_verify = 1;
-        $user->save();
-
-        // ✅ Create profile
-        $profile = new Profile();
-        $profile->user_id = $user->id;
-        $profile->mobile_no = $request->mobile_no;
-        $profile->dob = $request->dob;
-        $profile->pan_number = $request->pan_number;
-        $profile->residence_address = $request->address;
-        $profile->city = $request->city;
-        $profile->state = $request->state;
-        $profile->pincode = $request->pincode;
-        $profile->save();
-
-        // ✅ Update user's profile_id
-        $user->update(['profile_id' => $profile->profile_id]);
-
-        // ✅ Send mail (only if mail configured)
-        try {
-            Mail::to($user->email_id)->send(new SendUserCredentials($user, $request->password));
-        } catch (\Throwable $mailError) {
-            // Mail failure should not rollback DB
-            \Log::error('Mail sending failed: ' . $mailError->getMessage());
-        }
-
-        DB::commit();
-
-        // ✅ Return success JSON (for SweetAlert)
-        return response()->json([
-            'status' => 1,
-            'msg' => 'User added successfully!',
-        ]);
-
-    } catch (\Exception $e) {
-        DB::rollBack();
-        \Log::error('User insert error: ' . $e->getMessage());
+    if ($validator->fails()) {
         return response()->json([
             'status' => 0,
-            'msg' => 'Something went wrong. Please try again.'
-        ]);
+            'errors' => $validator->errors()
+        ], 422);
     }
-}
 
+    // ✅ Create User
+    $user = User::create([
+        'name'            => $request->full_name,
+        'email_id'        => $request->email_id,
+        'password'        => bcrypt('123456'), // default password
+        'role_id'         => 1,
+        'is_email_verify' => 1,
+    ]);
+
+    // ✅ Create Profile
+    Profile::create([
+        'user_id'   => $user->id,
+        'mobile_no' => $request->mobile_no,
+        'dob'       => $request->dob,
+        'address'   => $request->address,
+        'city'      => $request->city,
+        'state'     => $request->state,
+        'pincode'   => $request->pincode,
+    ]);
+
+    return response()->json([
+        'status' => 1,
+        'msg'    => 'Customer added successfully'
+    ]);
+}
     //customer registration
     //     public function registerUser(Request $request)
     // {
@@ -307,42 +325,82 @@ class UsersController extends Controller
 
 
 
-    public function editUser($id)
-    {
-        $id = '"' . $id . '"';
-        $data['user'] = DB::select('SELECT u.id,u.name, u.email_id, u.password, p.mobile_no, p.dob, p.residence_address,p.city, p.state, 
-        p.pincode FROM users as u, profile p WHERE u.id = p.user_id and u.id = ' . $id);
-        return view('admin.editUser', compact('data'));
-    }
+  public function editUser($id)
+{
+    $id = '"' . $id . '"';
+    $data['user'] = DB::select("
+        SELECT u.id,u.name,u.email_id,
+               p.mobile_no,p.dob,p.residence_address,
+               p.city,p.state,p.pincode
+        FROM users u
+        JOIN profile p ON u.id = p.user_id
+        WHERE u.id = $id
+    ");
 
-    public function updateUser(Request $request)
-    {
-        $user_id = $request->user_id;
+    return view('admin.editUser', compact('data'));
+}
 
-        $updateUser = array(
-            'name' => $request->full_name,
-            'email_id' => $request->email_id,
+  public function updateUser(Request $request)
+{
+    // ✅ Validation
+    $request->validate([
+        'user_id'    => 'required|exists:users,id',
+        'full_name'  => 'required|string|max:255',
+        'email_id'   => 'required|email|max:255',
+        'mobile_no'  => 'nullable|string|max:15',
+        'dob'        => 'nullable|date',
+        'address'    => 'nullable|string|max:255',
+        'city'       => 'nullable|string|max:100',
+        'state'      => 'nullable|string|max:100',
+        'pincode'    => 'nullable|string|max:10',
+    ]);
+
+    try {
+        DB::beginTransaction();
+
+        // ✅ Update users table
+        DB::table('users')
+            ->where('id', $request->user_id)
+            ->update([
+                'name'       => $request->full_name,
+                'email_id'   => $request->email_id,
+                'updated_at' => now(),
+            ]);
+
+        // ✅ Update OR Insert profile
+        DB::table('profile')->updateOrInsert(
+            ['user_id' => $request->user_id],
+            [
+                'mobile_no'          => $request->mobile_no,
+                'dob'                => $request->dob,
+                'residence_address'  => $request->address,
+                'city'               => $request->city,
+                'state'              => $request->state,
+                'pincode'            => $request->pincode,
+                'updated_at'         => now(),
+            ]
         );
 
-        $updateProfile = array(
-            'mobile_no' => $request->mobile_no,
-            'dob' => $request->dob,
-            'residence_address' => $request->address,
-            'city' => $request->city,
-            'state' => $request->state,
-            'pincode' => $request->pincode
-        );
+        DB::commit();
 
-        try {
-            $update_user = DB::table('users')->where('id', $user_id)->update($updateUser);
-            $update_profile = DB::table('profile')->where('user_id', $user_id)->update($updateProfile);
-            return response()->json(['status' => 1, 'msg' => 'User information updated successfully !']);
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
+        return response()->json([
+            'status' => 1,
+            'msg'    => 'User information updated successfully!'
+        ]);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+
+        return response()->json([
+            'status' => 0,
+            'msg'    => 'Something went wrong',
+            'error'  => $e->getMessage()
+        ], 500);
     }
+}
 
-    public function deleteUser(Request $request)
+
+   public function deleteUser(Request $request)
     {
         try {
             $user = User::find($request->user_id);

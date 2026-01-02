@@ -3,6 +3,12 @@
 
 @section('content')
 
+@php
+    $completedSteps = $completedSteps ?? [];
+    $currentStep = $currentStep ?? 1;
+@endphp
+
+
     <div class="container-fluid bg-white py-5">
         <div class="container">
             <div class="row g-5 align-items-start mb-5 pb-5">
@@ -110,7 +116,7 @@
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                                <label for="loan_category">Loan Category <span
+                                                <label for="loan_category">Loan  <span
                                                         class="text-danger">*</span></label>
                                             </div>
                                         </div>
@@ -878,18 +884,17 @@ document.getElementById('phone').addEventListener('input', function() {
                                                         <label for="amount">Loan Amount</label>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                 <div class="form-floating">
-                                                        <select name="tenure" id="tenure" class="form-control" required>
-                                                       
-                                                            <option value="">Select Tenure</option>
-                                                            @for ($i = 1; $i <= 10; $i++)
-    <option value="{{ $i }}" {{ old('tenure', $loan->tenure ?? '') == $i ? 'selected' : '' }}>{{ $i }} year{{ $i > 1 ? 's' : '' }}</option>
-    @endfor
-                                                        </select>
-                                                        <label for="tenure">Tenure (in years)</label>
-                                                    </div>
-                                                </div>
+                                             <select name="tenure" id="tenure" class="form-control" required>
+                                                <option value="">Select Tenure</option>
+
+                                                @for ($i = 1; $i <= 30; $i++)
+                                                    <option value="{{ $i }}"
+                                                        {{ old('tenure', $loan->tenure ?? '') == $i ? 'selected' : '' }}>
+                                                        {{ $i }} year{{ $i > 1 ? 's' : '' }}
+                                                    </option>
+                                                @endfor
+                                            </select>
+
 
                                                 <div class="col-md-6">
                                                     <div class="form-floating">
@@ -901,10 +906,10 @@ document.getElementById('phone').addEventListener('input', function() {
 
 
                                                 <div class="col-md-6">
-                                                    <div class="form-floating">
+                                                    <!-- <div class="form-floating">
                                                         <input type="text" name="pan_number" value="{{ old('pan_number', $loan->pan_number ?? '') }}" class="form-control" id="pan_number" placeholder="PAN Number">
-                                                        <label for="pan_number">PAN Number</label>
-                                                    </div>
+                                                        <label for="pan_number"></label>
+                                                    </div> -->
                                                 </div>
 
                                                 
