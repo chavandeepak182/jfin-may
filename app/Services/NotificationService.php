@@ -9,18 +9,16 @@ use Illuminate\Support\Facades\Mail;
 
 class NotificationService
 {
-    public function send($userId, $title, $description)
-    {
-        NotificationLog::create([
-            'user_id' => $userId,
-            'title' => $title,
-            'description' => $description,
-            'seen_by_user' => false,
-        ]);
+public function send($userId, $title, $description, $url = null)
+{
+    NotificationLog::create([
+        'user_id' => $userId,
+        'title' => $title,
+        'description' => $description,
+        'url' => $url,
+        'seen_by_user' => 0,
+    ]);
+}
 
-        $user = User::find($userId);
-        if ($user && $user->email) {
-            Mail::to($user->email)->send(new GenericNotificationMail($title, $description));
-        }
-    }
+
 }

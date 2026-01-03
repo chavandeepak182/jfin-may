@@ -31,6 +31,8 @@ class User extends Authenticatable
         'email_otp_expires_at',
         'email_verified_at',
         'is_email_verify',
+        'is_property_applied'
+,
     ];
     /**
      * The attributes that should be hidden for serialization.

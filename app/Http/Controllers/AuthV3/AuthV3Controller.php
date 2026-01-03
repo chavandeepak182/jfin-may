@@ -22,33 +22,82 @@ class AuthV3Controller extends Controller
         return view('authv3.signup');
     }
 
-  public function signupSubmit(Request $request)
+//   public function signupSubmit(Request $request)
+// {
+//     $request->validate([
+//         'name'      => 'required|string|max:255',
+//         'mobile_no' => 'required|digits:10|unique:users,mobile_no',
+//         'email_id'  => 'required|email|unique:users,email_id',
+//         'password'  => 'required|min:6',
+//     ]);
+
+//     $user = User::create([
+//         'name'      => $request->name,
+//         'email_id'  => $request->email_id,
+//         'mobile_no' => $request->mobile_no,
+//         'password'  => Hash::make($request->password), // ✅ REAL PASSWORD
+//         'role_id'   => 1,
+//     ]);
+
+//     // OTP flow stays SAME
+//     $this->generateOtp($user->id);
+//     session()->put('otp_user_id', $user->id);
+
+//     return redirect()->route('authv3.otp.form')
+//         ->with('success', 'OTP sent to your mobile');
+// }
+
+
+    /* ================= LOGIN ================= */
+
+
+    public function signupSubmit(Request $request)
 {
     $request->validate([
         'name'      => 'required|string|max:255',
-        'mobile_no' => 'required|digits:10|unique:users,mobile_no',
-        'email_id'  => 'required|email|unique:users,email_id',
+        'mobile_no' => 'required|digits:10',
+        'email_id'  => 'required|email',
         'password'  => 'required|min:6',
     ]);
 
-    $user = User::create([
-        'name'      => $request->name,
-        'email_id'  => $request->email_id,
-        'mobile_no' => $request->mobile_no,
-        'password'  => Hash::make($request->password), // ✅ REAL PASSWORD
-        'role_id'   => 1,
-    ]);
+    // 🔍 Check if user already exists (mobile OR email)
+    $user = User::where('mobile_no', $request->mobile_no)
+                ->orWhere('email_id', $request->email_id)
+                ->first();
 
-    // OTP flow stays SAME
+    if ($user) {
+
+        // ❌ Already FINANCE user?
+        if ($user->role_id == 1) {
+            return back()->withErrors([
+                'mobile_no' => 'You already have a Finance account'
+            ]);
+        }
+
+        // ✅ User exists but not Finance → assign Finance role
+        $user->update([
+            'role_id' => 1   // FINANCE ROLE
+        ]);
+
+    } else {
+
+        // ✅ New user creation
+        $user = User::create([
+            'name'      => $request->name,
+            'email_id'  => $request->email_id,
+            'mobile_no' => $request->mobile_no,
+            'password'  => Hash::make($request->password),
+            'role_id'   => 1, // FINANCE ROLE
+        ]);
+    }
+
+    // 🔐 OTP flow (same)
     $this->generateOtp($user->id);
     session()->put('otp_user_id', $user->id);
 
     return redirect()->route('authv3.otp.form')
         ->with('success', 'OTP sent to your mobile');
 }
-
-
-    /* ================= LOGIN ================= */
 
     public function loginForm()
     {

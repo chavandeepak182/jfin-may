@@ -14,8 +14,6 @@
 
     <!-- SB Admin CSS -->
     <link href="{{ asset('theme/dist-assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
-
-    <!-- Custom CSS -->
     <link href="{{ asset('theme/dist-assets/css/sb-admin-3.css') }}" rel="stylesheet">
 
     <!-- Summernote -->
@@ -26,27 +24,21 @@
 
     @yield('style')
 
-    <!-- ================= SCROLL FIX (IMPORTANT) ================= -->
     <style>
         html, body {
             height: 100%;
             margin: 0;
             overflow: hidden;
         }
-
         #wrapper {
             display: flex;
             height: 100vh;
             overflow: hidden;
         }
-
-        /* Sidebar */
         .sidebar {
             height: 100vh;
             overflow: hidden;
         }
-
-        /* ✅ MAIN SCROLL AREA */
         #content-wrapper {
             flex: 1;
             height: 100vh;
@@ -54,22 +46,16 @@
             overflow-x: hidden;
             background-color: #f8f9fc;
         }
-
         #content {
             padding: 20px;
             min-height: 100%;
         }
-
-        /* Fix when sidebar toggled */
         body.sidebar-toggled #content-wrapper {
             overflow-y: auto !important;
         }
-
-        /* Sidebar Color */
         .bg-gradient-primary {
             background-color: #293c74 !important;
         }
-
         .sidebar-dark .nav-item .nav-link i {
             color: #fff;
         }
@@ -85,8 +71,6 @@
 
     {{-- CONTENT WRAPPER --}}
     <div id="content-wrapper" class="d-flex flex-column">
-
-        {{-- MAIN CONTENT --}}
         <div id="content">
 
             {{-- TOPBAR --}}
@@ -101,37 +85,41 @@
 
                 <ul class="navbar-nav ml-auto">
 
-                    {{-- Notifications --}}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" data-toggle="dropdown">
-                            <i class="fas fa-bell fa-fw"></i>
-                            <span class="badge badge-danger badge-counter">
-                                {{ \App\Models\NotificationLog::where('user_id', auth()->id())->where('seen_by_user', false)->count() }}
-                            </span>
-                        </a>
+                 {{-- 🔔 Notifications --}}
+<li class="nav-item dropdown">
 
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
-                            <h6 class="dropdown-header">Notifications</h6>
+    <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" data-toggle="dropdown">
+        <i class="fas fa-bell"></i>
+        <span class="badge badge-danger" id="notification-count">
+            {{ isset($notifications) ? $notifications->where('seen_by_user', 0)->count() : 0 }}
+        </span>
+    </a>
 
-                            @forelse(\App\Models\NotificationLog::where('user_id', auth()->id())->latest()->limit(5)->get() as $n)
-                                <a class="dropdown-item d-flex align-items-center" href="{{ $n->url ?? '#' }}">
-                                    <div class="mr-3">
-                                        <i class="fas fa-bell text-primary"></i>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">{{ $n->created_at->diffForHumans() }}</div>
-                                        <span>{{ $n->title }}</span>
-                                    </div>
-                                </a>
-                            @empty
-                                <div class="dropdown-item text-center text-muted">
-                                    No notifications
-                                </div>
-                            @endforelse
-                        </div>
-                    </li>
+    <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="notificationDropdown">
+        <h6 class="dropdown-header">Notifications</h6>
 
-                    {{-- USER --}}
+        <div id="notification-list">
+            @if(isset($notifications) && $notifications->count())
+                @foreach($notifications as $n)
+                    <a href="{{ $n->url ?? '#' }}"
+                       class="dropdown-item notification-item {{ $n->seen_by_user ? '' : 'font-weight-bold' }}"
+                       data-id="{{ $n->id }}"
+                       data-url="{{ $n->url ?? '' }}">
+                        {{ $n->title }}
+                    </a>
+                @endforeach
+            @else
+                <div class="dropdown-item text-muted text-center">
+                    No notifications
+                </div>
+            @endif
+        </div>
+    </div>
+
+</li>
+
+
+                    {{-- 👤 USER --}}
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-toggle="dropdown">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">
@@ -147,7 +135,7 @@
                                 Profile
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/logout">
+                            <a class="dropdown-item" href="{{ route('logout') }}">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Logout
                             </a>
@@ -164,9 +152,9 @@
     </div>
 </div>
 
-{{-- SCRIPTS --}}
+{{-- JS --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ asset('theme/dist-assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('theme/dist-assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></cript>
 <script src="{{ asset('theme/dist-assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 <script src="{{ asset('theme/dist-assets/js/sb-admin-2.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs4.min.js"></script>

@@ -299,61 +299,62 @@ body {
 
                 </ul>
             </nav>
+{{-- HEADER ACTION AREA --}}
+<div class="header-actions d-flex align-items-center gap-3">
 
-<div class="header-cta d-flex align-items-center">
-
-    {{-- APPLY NOW BUTTON --}}
+    {{-- APPLY NOW --}}
     @if(Session::has('role_id'))
-        {{-- Existing user → open loan form --}}
-        <a href="{{ route('loans.loans-list') }}" class="btn-apply me-4">
+        <a href="{{ route('loans.loans-list') }}" class="btn-primary-cta">
             Apply Now
         </a>
     @else
-        {{-- New user → open apply now --}}
-        <a href="{{ route('applyNow') }}" class="btn-apply me-4">
+        <a href="{{ route('applyNow') }}" class="btn-primary-cta">
             Apply Now
         </a>
     @endif
 
 
-    {{-- USER ICON --}}
-    <div class="dropdown user-icon-wrapper">
-        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
-            <i class="fas fa-user-circle user-icon"></i>
+    {{-- USER DROPDOWN --}}
+    <div class="user-menu dropdown">
+        <a href="#" class="user-avatar dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="fas fa-user"></i>
         </a>
 
-        <div class="dropdown-menu dropdown-menu-end">
+        <div class="dropdown-menu dropdown-menu-end user-dropdown">
 
-            {{-- FINANCE OPTION --}}
+            {{-- FINANCE --}}
             @if(Session::has('role_id'))
-                {{-- Existing user --}}
-                <a href="{{ route('authv3.login.form') }}" class="dropdown-item" style="color:#295cab">
-                    <i class="fas fa-rupee-sign me-2"></i> Finance
+                {{-- logged in → loans list --}}
+                <a href="{{ route('loans.loans-list') }}" class="dropdown-link">
+                    <i class="fas fa-wallet"></i>
+                    <span>Finance</span>
                 </a>
             @else
-                {{-- New user --}}
-                <a href="{{ route('authv3.signup.form') }}" class="dropdown-item" style="color:#295cab">
-                    <i class="fas fa-rupee-sign me-2"></i> Finance
+                {{-- not logged in → finance signup/login --}}
+                <a href="{{ route('authv3.login.form') }}" class="dropdown-link">
+                    <i class="fas fa-wallet"></i>
+                    <span>Finance</span>
                 </a>
             @endif
 
-
-            {{-- PROPERTY OPTION --}}
-            <a href="/property" class="dropdown-item" style="color:#295cab">
-                <i class="fas fa-building me-2"></i> Property
+            {{-- PROPERTY (same for all) --}}
+            <a href="{{ route('properties') }}" class="dropdown-link">
+                <i class="fas fa-building"></i>
+                <span>Property</span>
             </a>
 
-
-            {{-- DASHBOARD + LOGOUT (ONLY FOR LOGGED IN) --}}
+            {{-- LOGGED IN OPTIONS --}}
             @if(Session::has('role_id'))
                 <div class="dropdown-divider"></div>
 
-                <a href="/my-profile" class="dropdown-item" style="color:#295cab">
-                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                <a href="/my-profile" class="dropdown-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
                 </a>
 
-                <a href="/logout" class="dropdown-item text-danger" style="color:#295cab">
-                    <i class="fas fa-power-off me-2"></i> Logout
+                <a href="/logout" class="dropdown-link logout-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
                 </a>
             @endif
 
@@ -361,16 +362,8 @@ body {
     </div>
 
 </div>
-<style>.btn-primary {
-    background-color: #295cab;
-    border-color: #295cab;
-    color: #fff;
-}
 
-.header {
-    background: #295cab;
-}
-</style>
+
 
 
         </div>
@@ -378,6 +371,101 @@ body {
 </header>
 
 <style>
+/* HEADER ACTIONS */
+.header-actions {
+    display: flex;
+    align-items: center;
+}
+
+/* APPLY NOW BUTTON */
+.btn-primary-cta {
+    background: linear-gradient(135deg, #295cab, #1d4ed8);
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-cta:hover {
+    background: linear-gradient(135deg, #1e40af, #1d4ed8);
+    transform: translateY(-1px);
+    color: #fff;
+}
+
+/* USER ICON */
+.user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #295cab;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.user-avatar:hover {
+    background: #e0e7ff;
+}
+
+/* DROPDOWN */
+.user-dropdown {
+    min-width: 220px;
+    border-radius: 12px;
+    padding: 8px 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border: none;
+}
+
+/* DROPDOWN LINKS */
+.dropdown-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #334155;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.dropdown-link i {
+    font-size: 15px;
+    color: #295cab;
+}
+
+.dropdown-link:hover {
+    background: #f1f5ff;
+    color: #1e3a8a;
+}
+
+/* LOGOUT */
+.logout-link {
+    color: #dc2626;
+}
+
+.logout-link i {
+    color: #dc2626;
+}
+
+.logout-link:hover {
+    background: #fee2e2;
+}
+
+/* MOBILE */
+@media (max-width: 576px) {
+    .btn-primary-cta {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+}
 
     /* Wrapper to push icon slightly right */
 .user-icon-wrapper {

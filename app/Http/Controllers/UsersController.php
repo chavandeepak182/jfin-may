@@ -94,17 +94,64 @@ public function adminCustomer(Request $request)
     
 
 
-    public function allUsers()
+// public function allUsers()
+// {
+//     $users = User::with('profile')
+//         ->select(['id', 'name', 'email_id', 'is_email_verify'])
+//         ->where('role_id', 1)
+//         ->orderBy('created_at', 'desc')
+//         ->paginate(10);
+
+//     $totalOfficers = DB::table('users')
+//         ->where('role_id', 2)
+//         ->whereNull('deleted_at')
+//         ->count();
+
+//     $totalCustomers = DB::table('users')
+//         ->whereNull('deleted_at')
+//         ->count();
+
+//     $totalCp = DB::table('users')
+//         ->where('role_id', 3)
+//         ->whereNull('deleted_at')
+//         ->count();
+
+//     return view(
+//         'admin.allUsers',
+//         compact('users', 'totalOfficers', 'totalCustomers', 'totalCp')
+//     );
+// }
+
+    
+public function allUsers(Request $request)
 {
+    $type = $request->get('type', 'customers');
+
+    $roleMap = [
+        'customers' => 1,
+        'employees' => 2,
+        'partners'  => 3,
+    ];
+
     $users = User::with('profile')
-        ->select(['id', 'name', 'email_id', 'is_email_verify'])
-        ->where('role_id', 1) // Filter users with role_id = 1
+        ->where('role_id', $roleMap[$type])
         ->orderBy('created_at', 'desc')
         ->paginate(10);
 
-    return view('admin.allUsers', compact('users'));
+    $totalCustomers = User::where('role_id', 1)->count();
+    $totalOfficers  = User::where('role_id', 2)->count();
+    $totalCp        = User::where('role_id', 3)->count();
+
+    return view('admin.allUsers', compact(
+        'users',
+        'type',
+        'totalCustomers',
+        'totalOfficers',
+        'totalCp'
+    ));
 }
-    public function updateUserStatus(Request $request)
+
+public function updateUserStatus(Request $request)
     {
         DB::table('users')
             ->where('id', $request->user_id)

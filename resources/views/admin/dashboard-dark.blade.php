@@ -68,7 +68,7 @@
                         </a>
 
                         <!-- Total Employees -->
-                        <a href="{{ route('allAgents') }}" class="metric-link">
+                        <a href="{{ route('allUsers') }}" class="metric-link">
                             <div class="metric-card">
                                 <div class="metric-icon green"><i class="fas fa-user-tie"></i></div>
                                 <div class="metric-content">
