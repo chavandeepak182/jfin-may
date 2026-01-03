@@ -8,6 +8,8 @@ use App\Http\Middleware\IsUserOrAdminMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Middleware\Authenticate;
+
 
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -17,14 +19,18 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-       $middleware->alias([
-            'isAdmin' => IsAdminMiddleware::class,
-            'isAgent' => IsAgentMiddleware::class,
-            'isPartner' => IsPartnerMiddleware::class,
-            'isUser' => IsUserMiddleware::class,
-            'isUserOrAdmin' => IsUserOrAdminMiddleware::class,
-       ]);
-    })
+    $middleware->alias([
+        'auth' => Authenticate::class, // 🔥 THIS NOW WORKS
+
+        'isAdmin' => IsAdminMiddleware::class,
+        'isAgent' => IsAgentMiddleware::class,
+        'isPartner' => IsPartnerMiddleware::class,
+        'isUser' => IsUserMiddleware::class,
+        'isUserOrAdmin' => IsUserOrAdminMiddleware::class,
+    ]);
+})
+
+
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

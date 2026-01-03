@@ -112,6 +112,33 @@ Route::get('/authv3/google', [AuthV3Controller::class, 'redirectToGoogle'])
 Route::get('/authv3/google/callback', [AuthV3Controller::class, 'handleGoogleCallback'])
     ->name('authv3.google.callback');
 
+// property
+
+
+use App\Http\Controllers\AuthV3\PropertyAuthController;
+
+/* ===== PROPERTY AUTH ===== */
+Route::get('/property/login', [PropertyAuthController::class, 'loginForm'])
+    ->name('property.login');
+
+Route::get('/property/signup', [PropertyAuthController::class, 'signupForm'])
+    ->name('property.signup');
+
+Route::post('/property/signup', [PropertyAuthController::class, 'signupSubmit'])
+    ->name('property.signup.submit');
+
+Route::post('/property/login/otp', [PropertyAuthController::class, 'loginWithOtp'])
+    ->name('property.login.otp');
+
+Route::get('/property/verify-otp', [PropertyAuthController::class, 'otpForm'])
+    ->name('property.otp.form');
+
+Route::post('/property/verify-otp', [PropertyAuthController::class, 'verifyOtp'])
+    ->name('property.otp.verify');
+
+Route::get('/properties', [FrontendController::class, 'properties'])
+    ->middleware('auth')
+    ->name('properties');
 
 
 //  login
@@ -235,7 +262,7 @@ Route::get('privacy-policy', [FrontendController::class, 'PrivacyView']);
 Route::get('terms-and-conditions', [FrontendController::class, 'TermCondView']);
 Route::get('myprofile', [FrontendController::class, 'ProfileView']);
 Route::get('emi-calculator', [FrontendController::class, 'CalculatorView']);
-Route::get('properties', [FrontendController::class, 'properties'])->name('properties');
+// Route::get('properties', [FrontendController::class, 'properties'])->name('properties');
 Route::get('property-details/{property_id}', [FrontendController::class, 'PropDetailsView']);
 Route::get('referral-program', [FrontendController::class, 'ReferralsView']);
 Route::get('home-loan', [FrontendController::class, 'HomeLoanView']);
@@ -536,7 +563,7 @@ Route::middleware('isPartner')->group(function () {
 
 
 //Frontend propertie 
-Route::get('properties', [FrontendController::class, 'properties'])->name('properties');
+// Route::get('properties', [FrontendController::class, 'properties'])->name('properties');
 
 
 
@@ -568,7 +595,7 @@ Route::get('/mis/edit/{id}', [MISController::class, 'edit'])->name('mis.edit');
 Route::put('/mis/update/{id}', [MISController::class, 'update'])->name('mis.update');
 Route::get('mis/export/excel', [MisController::class, 'exportExcel'])->name('mis.exportExcel');
 Route::get('mis/export/pdf', [MisController::class, 'exportPDF'])->name('mis.exportPDF');
-    
+
 
 // Mail
 Route::get('/messages', [MessageController::class, 'index'])->name('messages.index'); // Inbox

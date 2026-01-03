@@ -89,9 +89,10 @@ JFS | Add Property
         </div>
 
         <div class="header-actions" id="takerAddBtn" style="display:none">
-            <button class="btn-new-application" data-bs-toggle="modal" data-bs-target="#addPartnerView">
-                <i class="fas fa-plus"></i> Add Taker
-            </button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPropertyTakerView">
+    + Add Property Taker
+</button>
+
         </div>
     </div>
 
@@ -377,71 +378,144 @@ function applyFilters(){
 }
 </script>
 
-<div class="modal fade" id="addPartnerView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="addPropertyTakerView" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-scrollable">
         <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Add New Channel Partner</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form class="user" id="addPartner" method="post">
-                @csrf   
-                <div class="row">
-                    <div class="form-group col-lg-4">
-                        <label for="recipient-name" class="col-form-label">Name:</label>
-                        <input type="text" class="form-control" id="full_name" name="full_name" required>
-                    </div>
-                    <div class="form-group col-lg-4">
-                        <label for="recipient-name" class="col-form-label">Email ID:</label>
-                        <input type="email" class="form-control" id="email_id" name="email_id" required>
+
+            <!-- MODAL HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title">Add Property Taker</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- MODAL BODY -->
+            <div class="modal-body">
+                <form method="POST" action="{{ route('property_takers.store') }}">
+                    @csrf
+
+                    <div class="row g-3">
+
+                        <!-- BASIC DETAILS -->
+                        <div class="col-md-4">
+                            <label>Builder Name *</label>
+                            <input type="text" name="builder_name" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Project Name *</label>
+                            <input type="text" name="project_name" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Property Type *</label>
+                            <input type="text" name="property_type" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Carpet Area (sqft) *</label>
+                            <input type="number" step="0.01" name="carpet_area" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Built-up Area (sqft) *</label>
+                            <input type="number" step="0.01" name="builtup_area" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Registration Number *</label>
+                            <input type="text" name="registration_number" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label>Property Address *</label>
+                            <input type="text" name="address" class="form-control" required>
+                        </div>
+
+                        <!-- COST DETAILS -->
+                        <div class="col-md-3">
+                            <label>Agreement Cost *</label>
+                            <input type="number" step="0.01" name="actual_agreement_cost" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>GST % *</label>
+                            <input type="number" step="0.01" name="gst" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Extra Charges</label>
+                            <input type="number" step="0.01" name="extra_charges" class="form-control">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Registration Fees *</label>
+                            <input type="number" step="0.01" name="registration_fees" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Stamp Duty % *</label>
+                            <input type="number" step="0.01" name="stamp_duty_percentage" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Other Charges</label>
+                            <input type="number" step="0.01" name="any_other_charges" class="form-control">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Total Charges *</label>
+                            <input type="number" step="0.01" name="total_charges" class="form-control" required>
+                        </div>
+
+                        <!-- SOURCE DETAILS -->
+                        <div class="col-md-3">
+                            <label>Source By *</label>
+                            <select name="source_by" id="source_by" class="form-control" required>
+                                <option value="">Select</option>
+                                <option value="Agent">Agent</option>
+                                <option value="Builder">Builder</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3" id="agent_list" style="display:none;">
+                            <label>Select Agent</label>
+                            <select name="source_name_agent" class="form-control">
+                                <option value="">Select Agent</option>
+                                @foreach($agents as $agent)
+                                    <option value="{{ $agent->name }}">{{ $agent->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-3" id="builder_input" style="display:none;">
+                            <label>Source Name</label>
+                            <input type="text" name="source_name_builder" class="form-control">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Agreement Date *</label>
+                            <input type="date" name="agreement_date" class="form-control" required>
+                        </div>
+
                     </div>
 
-                    <div class="form-group col-lg-4">
-                        <label for="recipient-name" class="col-form-label">Password:</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
-                </div>    
-                <div class="row">
-                    <div class="form-group col-lg-4">
-                        <label for="recipient-name" class="col-form-label">Mobile Number:</label>
-                        <input type="tel" class="form-control" id="mobile_no" name="mobile_no" required>
-                    </div>
-
-                    <div class="form-group col-lg-4">
-                        <label for="recipient-name" class="col-form-label">Date of Birth:</label>
-                        <input type="date" class="form-control" id="dob" name="dob">
+                    <!-- MODAL FOOTER -->
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            SAVE DETAILS
+                        </button>
                     </div>
 
-                    <div class="form-group col-lg-4">
-                        <label for="recipient-name" class="col-form-label">Address:</label>
-                        <input type="tel" class="form-control" id="address" name="address">
-                    </div>
-                </div>            
-                <div class="row">
-                    <div class="form-group col-lg-4">
-                        <label for="recipient-name" class="col-form-label">City:</label>
-                        <input type="text" class="form-control" id="city" name="city">
-                    </div>
+                </form>
+            </div>
 
-                    <div class="form-group col-lg-4">
-                        <label for="recipient-name" class="col-form-label">State:</label>
-                        <input type="text" class="form-control" id="state" name="state" >
-                    </div>
-
-                    <div class="form-group col-lg-4">
-                        <label for="recipient-name" class="col-form-label">Pincode:</label>
-                        <input type="text" class="form-control" id="pincode" name="pincode">
-                    </div>
-                </div>    
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </form>
         </div>
     </div>
-</div>          
+</div>
+>          
 @endsection
 
 @section('script')
@@ -466,82 +540,14 @@ function applyFilters(){
 
 
 
-<script>   
-    $('#addPartner').on('submit',function(e){
-        e.preventDefault();
-        $.ajax({               
-            url:"{{Route('insertPartner')}}", 
-            method:"POST",                             
-            data:new FormData(this) ,
-            processData:false,
-            dataType:'json',
-            contentType:false,
-            beforeSend:function(){
-                $(document).find('span.error-text').text('');
-            },
-            success:function(data){   
-                if(data.status == 0){
-                    
-                    $.each(data.error,function(prefix,val){
-                        $('span.'+prefix+'_error').text(val[0]);
-                        swal("Oh noes!", val[0], "error");
-                    });                      
-                }else if(data.status == 2){
-                    document.getElementById("skill_title_error["+data.id+"]").innerHTML =data.msg;
-                    // console.log(data); console.log('skill_title_error['+data.id+']');
-                    // return false;
-                }else{
-                    $('#addPartner').get(0).reset();   
-                    swal({
-                        title: data.msg,
-                        text: "",
-                        type: "success",
-                        icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){
-                        location.reload();
-                    });
-                        
-                }
-            }
-        });
-    }); 
+<script>
+document.getElementById('source_by').addEventListener('change', function () {
+    document.getElementById('agent_list').style.display =
+        this.value === 'Agent' ? 'block' : 'none';
 
-    function deletePropertie(id)
-	{
-		$.ajax({
-            url:"{{Route('deletePropertie')}}", 
-            type: 'post',
-            dataType: 'json',
-            data: {
-                'propertie_id': id,               
-                '_token': '{{ csrf_token() }}',
-                },
-            success: function (response) {
-                // console.log(response);
-                if(response.status == 0){
-                    swal({
-                        title: response.error,
-                        text: "",
-                        type: "success",
-                        icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){ 
-                        location.reload();
-                    });
-                }else{
-                    swal({
-                        title: response.msg,
-                        text: "",
-                        type: "success",
-                        icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){ 
-                        location.reload();
-                    });
-                }                           
-            }
-        });      
-	}
+    document.getElementById('builder_input').style.display =
+        this.value === 'Builder' ? 'block' : 'none';
+});
 </script>
+
 @endsection
