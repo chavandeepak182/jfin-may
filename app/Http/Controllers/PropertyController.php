@@ -214,6 +214,7 @@ public function allProperties()
 
     // ✅ Total Property Takers
     $totalPropertyTakers = PropertyTaker::count();
+     $agents = $agents = User::all();
 
     /* ================= PROPERTIES LIST ================= */
 
@@ -245,7 +246,8 @@ public function allProperties()
         'properties',
         'totalPendingProperties',
         'totalPropertyTakers',
-        'propertyTakers'
+        'propertyTakers',
+        'agents'
     ));
 }
     public function pendingProperties()

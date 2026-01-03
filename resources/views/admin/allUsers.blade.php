@@ -233,41 +233,82 @@
                 <div class="col-12">
                     <div class="customer-overview-grid">
 
-    <!-- Total Customers -->
-    <a href="{{ route('allUsers') }}" class="overview-link">
-        <div class="overview-card blue active">
-            <i class="fas fa-users"></i>
-            <h3>Total Customers</h3>
-            <p id="totalCustomers">30</p>
-        </div>
-    </a>
+ <!-- Total Customers -->
+<a href="{{ route('allUsers') }}" class="overview-link">
+  <div class="overview-card blue active">
 
-    <!-- Total Employees -->
-    <a href="{{ route('allAgents') }}" class="overview-link">
-        <div class="overview-card green">
-            <i class="fas fa-user-tie"></i>
-            <h3>Total Employees</h3>
-            <p id="totalEmployees">21</p>
-        </div>
-    </a>
+    <div class="overview-icon">
+      <i class="fas fa-users"></i>
+    </div>
 
-    <!-- Channel Partners -->
-    <a href="{{ route('allPartners') }}" class="overview-link">
-        <div class="overview-card purple">
-            <i class="fas fa-handshake"></i>
-            <h3>Channel Partners</h3>
-            <p id="totalPartners">10</p>
-        </div>
-    </a>
+    <div class="overview-content">
+      <h3 style="font-size:28px;">Total Customers</h3>
+      <p id="totalCustomers">{{ $totalCustomers }}</p>
+      <span class="overview-status">Tracked from Records</span>
+    </div>
 
-    <!-- Active Now -->
-    <a href="#" class="overview-link">
-        <div class="overview-card white">
-            <i class="fas fa-circle"></i>
-            <h3>Active Now</h3>
-            <p id="totalActive">5</p>
-        </div>
-    </a>
+  </div>
+</a>
+
+<!-- Total Employees -->
+<a href="{{ route('allAgents') }}" class="overview-link">
+  <div class="overview-card green">
+
+    <div class="overview-icon">
+      <i class="fas fa-user-tie"></i>
+    </div>
+
+    <div class="overview-content">
+      <h3 style="font-size:28px;">Total Employees</h3>
+      <p id="totalEmployees" style="font-size:20px;">
+        {{ $totalOfficers }}
+      </p>
+      <span class="overview-status">System Users</span>
+    </div>
+
+  </div>
+</a>
+
+
+<!-- Channel Partners -->
+<a href="{{ route('allPartners') }}" class="overview-link">
+  <div class="overview-card purple">
+
+    <div class="overview-icon">
+      <i class="fas fa-handshake"></i>
+    </div>
+
+    <div class="overview-content">
+      <h3 style="font-size:25px;">Channel Partners</h3>
+      <p id="totalPartners" style="font-size:20px;">
+        {{ $totalCp }}
+      </p>
+      <span class="overview-status">Active Partners</span>
+    </div>
+
+  </div>
+</a>
+
+
+<!-- Active Now -->
+
+
+<a href="#" class="overview-link">
+  <div class="overview-card purple">
+
+    <div class="overview-icon">
+      <i class="fas fa-circle"></i>
+    </div>
+
+    <div class="overview-content">
+      <h3  style="font-size:28px;">Active  customer</h3>
+      <p id="totalPartners" style="font-size:20px;">10</p>
+      <span class="overview-status">Live Users</span>
+    </div>
+
+  </div>
+</a>
+
 
 </div>
 
@@ -275,7 +316,23 @@
             </div>
     </div>
     
+<style>
+/* Remove underline & blue color from clickable cards */
 
+
+.overview-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.overview-link:hover,
+.overview-link:focus,
+.overview-link:active {
+  text-decoration: none;
+  color: inherit;
+}
+</style>
     <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">

@@ -87,8 +87,10 @@ class PropertyTakerController extends Controller
             'agreement_date' => $request->agreement_date,
             'registration_number' => $request->registration_number,
         ]);
+        return redirect()
+    ->route('allProperties')
+    ->with('success', 'Property Taker record saved successfully.');
 
-        return redirect()->back()->with('success', 'Property Taker record saved successfully.');
     }
 
     public function edit($id)
@@ -158,7 +160,7 @@ class PropertyTakerController extends Controller
             'registration_number' => $request->registration_number,
         ]);
 
-        return redirect()->route('property_takers.index')->with('success', 'Property Taker record updated successfully.');
+        return redirect()->route('allProperties')->with('success', 'Property Taker record updated successfully.');
     }
 
     public function destroy($id)

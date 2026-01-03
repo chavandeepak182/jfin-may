@@ -10,6 +10,24 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ asset('theme/dist-assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('theme/dist-assets/js/sb-admin-2.min.js') }}"></script>
+
+<script>
+$(document).on('click', '.notification-item', function(e){
+    e.preventDefault();
+
+    let id  = $(this).data('id');
+    let url = $(this).attr('href');
+
+    $.post('/notifications/mark-as-read/' + id, {
+        _token: '{{ csrf_token() }}'
+    }, function(){
+        if(url !== '#') window.location.href = url;
+    });
+});
+</script>
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
