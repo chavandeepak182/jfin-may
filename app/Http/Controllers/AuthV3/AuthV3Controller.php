@@ -198,15 +198,63 @@ class AuthV3Controller extends Controller
 
     /* ================= HELPER ================= */
 
+    // private function generateOtp($userId)
+    // {
+    //     Otp::create([
+    //         'user_id'    => $userId,
+    //         'otp'        => rand(1000, 9999),
+    //         'is_verify'  => 0,
+    //         'expires_at'=> now()->addMinutes(5),
+    //     ]);
+    // }
     private function generateOtp($userId)
-    {
-        Otp::create([
-            'user_id'    => $userId,
-            'otp'        => rand(1000, 9999),
-            'is_verify'  => 0,
-            'expires_at'=> now()->addMinutes(5),
-        ]);
+{
+    // 🔹 get user
+    $user = User::find($userId);
+    if (!$user) {
+        return;
     }
+
+    // 🔹 generate OTP
+    $otp = rand(1000, 9999);
+
+    // 🔹 save OTP in DB (same as before)
+    Otp::create([
+        'user_id'     => $userId,
+        'otp'         => $otp,
+        'is_verify'   => 0,
+        'expires_at'  => now()->addMinutes(5),
+    ]);
+
+    // 🔹 send OTP SMS via TwoFactor
+    try {
+
+        $apiKey = env('TWO_FACTOR_API_KEY');
+        $sender = env('TWO_FACTOR_SENDER');
+        $countryCode = env('TWO_FACTOR_COUNTRY_CODE');
+
+        $mobile = $countryCode . $user->mobile_no;
+
+        // TwoFactor API URL
+        $url = "https://2factor.in/API/V1/{$apiKey}/SMS/{$mobile}/{$otp}/{$sender}";
+
+        // CURL request
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        // Optional: log response (debug)
+        // \Log::info('TwoFactor OTP Response', ['response' => $response]);
+
+    } catch (\Exception $e) {
+        \Log::error('OTP SMS Failed', ['error' => $e->getMessage()]);
+    }
+}
+
 
 public function loginWithEmail(Request $request)
 {
