@@ -125,6 +125,7 @@ public function adminCustomer(Request $request)
     
 public function allUsers(Request $request)
 {
+    // 🔹 type = customers | employees | partners
     $type = $request->get('type', 'customers');
 
     $roleMap = [
@@ -133,15 +134,29 @@ public function allUsers(Request $request)
         'partners'  => 3,
     ];
 
+    // Safety fallback
+    if (!array_key_exists($type, $roleMap)) {
+        $type = 'customers';
+    }
+
+    // 🔹 MAIN USERS QUERY (USED BY ALL)
     $users = User::with('profile')
         ->where('role_id', $roleMap[$type])
+        ->whereNull('deleted_at')
         ->orderBy('created_at', 'desc')
         ->paginate(10);
 
+    // 🔹 COUNTS FOR CARDS
     $totalCustomers = User::where('role_id', 1)->count();
     $totalOfficers  = User::where('role_id', 2)->count();
     $totalCp        = User::where('role_id', 3)->count();
 
+    // 🔹 AJAX REQUEST → return ONLY table
+    if ($request->ajax()) {
+        return view('admin.partials.users-table', compact('users', 'type'))->render();
+    }
+
+    // 🔹 NORMAL PAGE LOAD
     return view('admin.allUsers', compact(
         'users',
         'type',

@@ -11,69 +11,67 @@ use Illuminate\Support\Facades\Hash;
 
 class PropertyAuthController extends Controller
 {
-    /* ========== PROPERTY LOGIN PAGE ========== */
+    /* ================= PROPERTY LOGIN PAGE ================= */
     public function loginForm()
     {
         return view('authv3.property-login');
     }
 
-    /* ========== PROPERTY SIGNUP PAGE ========== */
+    /* ================= PROPERTY SIGNUP PAGE ================= */
     public function signupForm()
     {
         return view('authv3.property-signup');
     }
 
-    /* ========== PROPERTY SIGNUP SUBMIT ========== */
-  public function signupSubmit(Request $request)
-{
-    $request->validate([
-        'name'      => 'required|string|max:255',
-        'mobile_no' => 'required|digits:10',
-        'email_id'  => 'required|email',
-        'password'  => 'required|min:6',
-    ]);
+    /* ================= PROPERTY SIGNUP SUBMIT ================= */
+    public function signupSubmit(Request $request)
+    {
+        $request->validate([
+            'name'      => 'required|string|max:255',
+            'mobile_no' => 'required|digits:10',
+            'email_id'  => 'required|email',
+            'password'  => 'required|min:6',
+        ]);
 
-    // 🔍 Check if user already exists (by mobile OR email)
-    $user = User::where('mobile_no', $request->mobile_no)
-                ->orWhere('email_id', $request->email_id)
-                ->first();
+        // Check existing user (mobile OR email)
+        $user = User::where('mobile_no', $request->mobile_no)
+                    ->orWhere('email_id', $request->email_id)
+                    ->first();
 
-    if ($user) {
+        if ($user) {
 
-        // ❌ Already Property user
-        if ($user->role_id == 2) {
-            return back()->withErrors([
-                'mobile_no' => 'You already have a Property account'
+            // Already property user
+            if ($user->role_id == 2) {
+                return back()->withErrors([
+                    'mobile_no' => 'You already have a Property account'
+                ]);
+            }
+
+            // Upgrade finance → property
+            $user->update(['role_id' => 2]);
+
+        } else {
+
+            // New property user
+            $user = User::create([
+                'name'      => $request->name,
+                'mobile_no' => $request->mobile_no,
+                'email_id'  => $request->email_id,
+                'password'  => Hash::make($request->password),
+                'role_id'   => 2,
             ]);
         }
 
-        // ✅ Existing Finance user → upgrade to Property
-        $user->update([
-            'role_id' => 2 // PROPERTY ROLE
-        ]);
+        // Send OTP
+        $this->generateAndSendOtp($user);
 
-    } else {
+        session(['property_otp_user_id' => $user->id]);
 
-        // ✅ Fresh user
-        $user = User::create([
-            'name'      => $request->name,
-            'mobile_no' => $request->mobile_no,
-            'email_id'  => $request->email_id,
-            'password'  => Hash::make($request->password),
-            'role_id'   => 2, // PROPERTY ROLE
-        ]);
+        return redirect()->route('property.otp.form')
+            ->with('success', 'OTP sent successfully');
     }
 
-    // 🔐 OTP
-    $this->generateOtp($user->id);
-    session(['property_otp_user_id' => $user->id]);
-
-    return redirect()->route('property.otp.form')
-        ->with('success', 'OTP sent successfully');
-}
-
-
-    /* ========== SEND OTP (LOGIN) ========== */
+    /* ================= LOGIN WITH OTP ================= */
     public function loginWithOtp(Request $request)
     {
         $request->validate([
@@ -86,13 +84,15 @@ class PropertyAuthController extends Controller
             return back()->withErrors(['mobile_no' => 'Mobile not registered']);
         }
 
-        $this->generateOtp($user->id);
+        $this->generateAndSendOtp($user);
+
         session(['property_otp_user_id' => $user->id]);
 
-        return redirect()->route('property.otp.form');
+        return redirect()->route('property.otp.form')
+            ->with('success', 'OTP sent successfully');
     }
 
-    /* ========== OTP FORM ========== */
+    /* ================= OTP FORM ================= */
     public function otpForm()
     {
         if (!session()->has('property_otp_user_id')) {
@@ -102,7 +102,7 @@ class PropertyAuthController extends Controller
         return view('authv3.property-verify-otp');
     }
 
-    /* ========== VERIFY OTP ========== */
+    /* ================= VERIFY OTP ================= */
     public function verifyOtp(Request $request)
     {
         $request->validate([
@@ -112,13 +112,14 @@ class PropertyAuthController extends Controller
         $userId = session('property_otp_user_id');
 
         $otp = Otp::where('user_id', $userId)
-            ->where('otp', $request->otp)
-            ->where('is_verify', 0)
-            ->where('expires_at', '>=', now())
-            ->first();
+                  ->where('otp', $request->otp)
+                  ->where('is_verify', 0)
+                  ->where('expires_at', '>=', now())
+                  ->latest()
+                  ->first();
 
         if (!$otp) {
-            return back()->withErrors(['otp' => 'Invalid OTP']);
+            return back()->withErrors(['otp' => 'Invalid or expired OTP']);
         }
 
         $otp->update(['is_verify' => 1]);
@@ -127,18 +128,40 @@ class PropertyAuthController extends Controller
 
         session()->forget('property_otp_user_id');
 
-        // 🔥 FINAL REDIRECT
-        return redirect('/properties');
+        return redirect('/properties')
+            ->with('success', 'Login successful');
     }
 
-    /* ========== OTP GENERATE ========== */
-    private function generateOtp($userId)
+    /* ================= GENERATE + SEND OTP ================= */
+    private function generateAndSendOtp(User $user)
     {
+        // Invalidate old OTPs
+        Otp::where('user_id', $user->id)->update(['is_verify' => 1]);
+
+        $otpCode = rand(1000, 9999);
+
+        // Save OTP
         Otp::create([
-            'user_id'    => $userId,
-            'otp'        => rand(1000, 9999),
+            'user_id'    => $user->id,
+            'otp'        => $otpCode,
             'is_verify'  => 0,
             'expires_at'=> now()->addMinutes(5),
         ]);
+
+        // Send OTP via 2Factor
+        $mobile = env('TWO_FACTOR_COUNTRY_CODE') . $user->mobile_no;
+
+        $url = "https://2factor.in/API/V1/"
+             . env('TWO_FACTOR_API_KEY')
+             . "/SMS/{$mobile}/{$otpCode}/"
+             . env('TWO_FACTOR_SENDER');
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+
+        curl_exec($ch);
+        curl_close($ch);
     }
 }
