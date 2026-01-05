@@ -51,7 +51,7 @@ class AuthV3Controller extends Controller
     /* ================= LOGIN ================= */
 
 
-    public function signupSubmit(Request $request)
+public function signupSubmit(Request $request)
 {
     $request->validate([
         'name'      => 'required|string|max:255',
@@ -60,38 +60,39 @@ class AuthV3Controller extends Controller
         'password'  => 'required|min:6',
     ]);
 
-    // 🔍 Check if user already exists (mobile OR email)
     $user = User::where('mobile_no', $request->mobile_no)
                 ->orWhere('email_id', $request->email_id)
                 ->first();
 
     if ($user) {
 
-        // ❌ Already FINANCE user?
         if ($user->role_id == 1) {
             return back()->withErrors([
                 'mobile_no' => 'You already have a Finance account'
             ]);
         }
 
-        // ✅ User exists but not Finance → assign Finance role
         $user->update([
-            'role_id' => 1   // FINANCE ROLE
+            'role_id' => 1
         ]);
 
     } else {
 
-        // ✅ New user creation
+        // 🔑 Generate referral code
+        do {
+            $referralCode = Str::upper(Str::random(8));
+        } while (User::where('referral_code', $referralCode)->exists());
+
         $user = User::create([
-            'name'      => $request->name,
-            'email_id'  => $request->email_id,
-            'mobile_no' => $request->mobile_no,
-            'password'  => Hash::make($request->password),
-            'role_id'   => 1, // FINANCE ROLE
+            'name'          => $request->name,
+            'email_id'      => $request->email_id,
+            'mobile_no'     => $request->mobile_no,
+            'password'      => Hash::make($request->password),
+            'role_id'       => 1,
+            'referral_code' => $referralCode,
         ]);
     }
 
-    // 🔐 OTP flow (same)
     $this->generateOtp($user->id);
     session()->put('otp_user_id', $user->id);
 
@@ -176,7 +177,9 @@ class AuthV3Controller extends Controller
         // 🔐 clear otp session
         session()->forget('otp_user_id');
 
-        return redirect('/loans-list');
+        // return redirect('/loans-list');
+        return $this->redirectByRole(Auth::user());
+
     }
 
     /* ================= RESEND OTP ================= */
@@ -285,7 +288,8 @@ public function loginWithEmail(Request $request)
         'role_id'  => $user->role_id,
     ]);
 
-    return redirect('/loans-list');
+    // return redirect('/loans-list');
+    return $this->redirectByRole($user);
 }
 
 
@@ -347,6 +351,23 @@ public function handleGoogleCallback()
     // ✅ SAME redirect as OTP & Email login
     return redirect('/loans-list');
 }
+
+private function redirectByRole($user)
+{
+    // ✅ ADMIN
+    if ($user->role_id == 4) {
+        return redirect('/admin/dashboard');
+    }
+
+    // ✅ FINANCE / CUSTOMER
+    if ($user->role_id == 1) {
+        return redirect('/loans-list');
+    }
+
+    // fallback
+    return redirect('/');
+}
+
 
 
 

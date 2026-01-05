@@ -22,6 +22,20 @@
     $role_id = session()->get('role_id');
 @endphp
 
+<style>
+.card-link,
+.card-link:hover,
+.card-link:focus,
+.card-link:active {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+</style>
+
+@php
+    $role_id = session()->get('role_id');
+@endphp
+
 <aside class="sidebar">
 
     <div class="sidebar-header">
@@ -33,20 +47,25 @@
 
     <nav class="sidebar-nav">
 
+        {{-- ================= DASHBOARD ================= --}}
         @if($role_id == 4)
             <a href="{{ route('dashboard') }}" class="nav-item">
-                <i class="fas fa-home"></i><span>Dashboard</span>
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
             </a>
         @elseif($role_id == 2)
             <a href="{{ route('agentDashboard') }}" class="nav-item">
-                <i class="fas fa-home"></i><span>Agent Dashboard</span>
+                <i class="fas fa-home"></i>
+                <span>Agent Dashboard</span>
             </a>
         @elseif($role_id == env('partnerRole_id'))
             <a href="{{ route('partnerDashboard') }}" class="nav-item">
-                <i class="fas fa-home"></i><span>CP Dashboard</span>
+                <i class="fas fa-home"></i>
+                <span>CP Dashboard</span>
             </a>
         @endif
 
+        {{-- ================= LOANS ================= --}}
         @if($role_id == 4 || $role_id == 2 || $role_id == env('brokerRole_id'))
             <a href="{{ route('loans.index') }}" class="nav-item">
                 <i class="fas fa-file-invoice-dollar"></i>
@@ -54,15 +73,43 @@
             </a>
         @endif
 
-        @if($role_id == 4)
-            <a href="{{ route('allUsers') }}" class="nav-item">
-                <i class="fas fa-users"></i><span>Users</span>
+        {{-- ================= PROPERTY ================= --}}
+        @if($role_id == 4 || $role_id == 2 || $role_id == env('partnerRole_id'))
+            <a href="{{ route('allProperties') }}" class="nav-item">
+                <i class="fas fa-building"></i>
+                <span>Property</span>
             </a>
         @endif
 
+        {{-- ================= USERS ================= --}}
         @if($role_id == 4)
-            <a href="{{ route('activities') }}" class="nav-item">
-                <i class="fas fa-history"></i><span>Activity Logs</span>
+            <a href="{{ route('allUsers') }}" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+            </a>
+        @endif
+
+        {{-- ================= WEB FORM & LEADS (ADDED) ================= --}}
+        @if($role_id == 4)
+            <a href="{{ route('admin.listlead') }}" class="nav-item">
+                <i class="fas fa-tasks"></i>
+                <span>Web Form & Leads</span>
+            </a>
+        @endif
+
+        {{-- ================= TOOLS (ADDED) ================= --}}
+        @if($role_id == 4)
+            <a href="{{ route('admin.bank') }}" class="nav-item">
+                <i class="fas fa-wrench"></i>
+                <span>Tools</span>
+            </a>
+        @endif
+
+        {{-- ================= MLM (ADDED) ================= --}}
+        @if($role_id == 4)
+            <a href="{{ route('admin.tree.show') }}" class="nav-item">
+                <i class="fas fa-project-diagram"></i>
+                <span>MLM</span>
             </a>
         @endif
 
@@ -70,7 +117,9 @@
 
     <div class="sidebar-footer">
         <div class="user-profile">
-            <div class="user-avatar"><i class="fas fa-user"></i></div>
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
             <div class="user-info">
                 <div class="user-name">{{ session('username') }}</div>
                 <div class="user-role">
@@ -81,6 +130,7 @@
     </div>
 
 </aside>
+
 
 <!-- Bootstrap core JavaScript-->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
