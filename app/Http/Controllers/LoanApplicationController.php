@@ -905,72 +905,161 @@ if ($loan && $currentStep > 5)           $completedSteps[] = 5;
     //     }
     // }
 
+    // public function handleStep(Request $request)
+    // {
+    //     $sessionUserId = session('user_id');
+    //     $sessionUserRole = session('role_id');
+
+    //     if (!$sessionUserId) {
+    //         return redirect()->route('login')->withErrors('User session expired. Please log in again.');
+    //     }
+
+    //     $currentStep = $request->input('current_step');
+
+    //     try {
+    //         // Save user_id from step 1 dropdown to session if admin
+    //         if ($sessionUserRole == 4 && $currentStep == 1) {
+    //             $selectedUserId = $request->input('user_id');
+    //             if (!$selectedUserId) {
+    //                 return redirect()->back()->withErrors('Please select a user.');
+    //             }
+    //             session(['selected_user_id' => $selectedUserId]);
+    //         }
+
+          
+    //         if ($sessionUserRole == 4) {
+    //             $userId = session('selected_user_id');
+    //             if (!$userId) {
+    //                 return redirect()->route('loan.form', ['current_step' => 1])
+    //                     ->withErrors('User not selected. Please select a user in Step 1.');
+    //             }
+    //         } else {
+    //             $userId = $sessionUserId;
+    //         }
+
+    //         if ($request->has('previous')) {
+    //             $currentStep = max(1, $currentStep - 1);
+    //             return redirect()->route('loan.form', ['current_step' => $currentStep]);
+    //         } elseif ($request->has('next')) {
+    //             switch ($currentStep) {
+    //                 case 1:
+    //                     $this->handlePersonalDetails($request, $userId);
+    //                     break;
+    //                 case 2:
+    //                     $this->handleProfessionalDetails($request, $userId);
+    //                     break;
+    //                 case 3:
+    //                     $this->handleEducationDetails($request, $userId);
+    //                     break;
+    //                 case 4:
+    //                     $this->handleDocumentUpload($request, $userId);
+    //                     break;
+    //                 case 5:
+    //                     $this->handleLoanDetails($request, $userId);
+    //                     return redirect()->route('loan.thankyou');
+    //                 default:
+    //                     return redirect()->route('loan.form', ['current_step' => 1])
+    //                         ->withErrors('Invalid step. Please restart the application process.');
+    //             }
+
+    //             return redirect()->route('loan.form', ['current_step' => $currentStep + 1]);
+    //         } else {
+    //             return redirect()->back()->withErrors('Invalid action. Please try again.');
+    //         }
+    //     } catch (\Exception $e) {
+    //         Log::error('Error handling step: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
+    //         return redirect()->back()->withErrors('Something went wrong. Please try again.');
+    //     }
+    // }
     public function handleStep(Request $request)
-    {
-        $sessionUserId = session('user_id');
-        $sessionUserRole = session('role_id');
+{
+    $sessionUserId   = session('user_id');
+    $sessionUserRole = session('role_id');
 
-        if (!$sessionUserId) {
-            return redirect()->route('login')->withErrors('User session expired. Please log in again.');
-        }
-
-        $currentStep = $request->input('current_step');
-
-        try {
-            // Save user_id from step 1 dropdown to session if admin
-            if ($sessionUserRole == 4 && $currentStep == 1) {
-                $selectedUserId = $request->input('user_id');
-                if (!$selectedUserId) {
-                    return redirect()->back()->withErrors('Please select a user.');
-                }
-                session(['selected_user_id' => $selectedUserId]);
-            }
-
-            // Determine user_id to use
-            if ($sessionUserRole == 4) {
-                $userId = session('selected_user_id');
-                if (!$userId) {
-                    return redirect()->route('loan.form', ['current_step' => 1])
-                        ->withErrors('User not selected. Please select a user in Step 1.');
-                }
-            } else {
-                $userId = $sessionUserId;
-            }
-
-            if ($request->has('previous')) {
-                $currentStep = max(1, $currentStep - 1);
-                return redirect()->route('loan.form', ['current_step' => $currentStep]);
-            } elseif ($request->has('next')) {
-                switch ($currentStep) {
-                    case 1:
-                        $this->handlePersonalDetails($request, $userId);
-                        break;
-                    case 2:
-                        $this->handleProfessionalDetails($request, $userId);
-                        break;
-                    case 3:
-                        $this->handleEducationDetails($request, $userId);
-                        break;
-                    case 4:
-                        $this->handleDocumentUpload($request, $userId);
-                        break;
-                    case 5:
-                        $this->handleLoanDetails($request, $userId);
-                        return redirect()->route('loan.thankyou');
-                    default:
-                        return redirect()->route('loan.form', ['current_step' => 1])
-                            ->withErrors('Invalid step. Please restart the application process.');
-                }
-
-                return redirect()->route('loan.form', ['current_step' => $currentStep + 1]);
-            } else {
-                return redirect()->back()->withErrors('Invalid action. Please try again.');
-            }
-        } catch (\Exception $e) {
-            Log::error('Error handling step: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
-            return redirect()->back()->withErrors('Something went wrong. Please try again.');
-        }
+    if (!$sessionUserId) {
+        return redirect()->route('login')
+            ->withErrors('User session expired. Please log in again.');
     }
+
+    $currentStep = (int) $request->input('current_step');
+
+    try {
+
+        /* ---------------- ADMIN USER SELECTION (STEP 1) ---------------- */
+        if ($sessionUserRole == 4 && $currentStep == 1) {
+            $selectedUserId = $request->input('user_id');
+            if (!$selectedUserId) {
+                return redirect()->back()->withErrors('Please select a user.');
+            }
+            session(['selected_user_id' => $selectedUserId]);
+        }
+
+        /* ---------------- USER ID RESOLUTION ---------------- */
+        if ($sessionUserRole == 4) {
+            $userId = session('selected_user_id');
+            if (!$userId) {
+                return redirect()->route('loan.form', ['current_step' => 1])
+                    ->withErrors('User not selected. Please select a user in Step 1.');
+            }
+        } else {
+            $userId = $sessionUserId;
+        }
+
+        /* ---------------- PREVIOUS BUTTON ---------------- */
+        if ($request->has('previous')) {
+            return redirect()->route('loan.form', [
+                'current_step' => max(1, $currentStep - 1)
+            ]);
+        }
+
+        /* ---------------- NEXT BUTTON ---------------- */
+        if ($request->has('next')) {
+
+            switch ($currentStep) {
+
+                case 1:
+                    $this->handlePersonalDetails($request, $userId);
+                    break;
+
+                case 2:
+                    $this->handleProfessionalDetails($request, $userId);
+                    break;
+
+                case 3:
+                    // ✅ FIX: Step-3 is Upload Documents
+                    $this->handleDocumentUpload($request, $userId);
+                    break;
+
+                case 4:
+                    // ✅ FIX: Step-4 is Loan Details
+                    $this->handleLoanDetails($request, $userId);
+                    return redirect()->route('loan.thankyou');
+
+                default:
+                    return redirect()->route('loan.form', ['current_step' => 1])
+                        ->withErrors('Invalid step. Please restart the application.');
+            }
+
+            // ✅ MOVE TO NEXT STEP
+            return redirect()->route('loan.form', [
+                'current_step' => $currentStep + 1
+            ]);
+        }
+
+        return redirect()->back()->withErrors('Invalid action.');
+
+    } catch (\Exception $e) {
+        Log::error('Loan Step Error', [
+            'message' => $e->getMessage(),
+            'step'    => $currentStep,
+            'user'    => $userId
+        ]);
+
+        return redirect()->back()
+            ->withErrors('Something went wrong. Please try again.');
+    }
+}
+
 
 
 

@@ -151,66 +151,8 @@
     background: #2563eb;
 }
 </style>  
-    <!-- <div class="card-header py-3">
-        <div class="d-flex justify-content-between align-items-center">
-           
-            <nav aria-label="breadcrumb" class="d-flex align-items-center">
-                <ol class="breadcrumb m-0 bg-transparent">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">All Users</li>
-                </ol>
-            </nav>
-      <div class="row no-gutters" style="gap:10px;"> 
- 
-    <div class="col-auto">
-        <a href="{{ route('allAgents') }}"  style="text-decoration: none;">
-            <div class="custom-btn" style="height:50px; width:150px; 
-                        background: linear-gradient(135deg, #6a11cb, #2575fc); 
-                        border-radius:12px; 
-                        display:flex; align-items:center; justify-content:center;
-                        color:white; font-weight:bold; 
-                        box-shadow:0 4px 15px rgba(0,0,0,0.2);
-                        transition:transform 0.2s ease, box-shadow 0.2s ease;">
-                <span>All Employee</span>
-            </div>
-        </a>
-    </div>
-
-  
-    <div class="col-auto">
-        <a href="{{ route('allPartners') }}"  style="text-decoration: none;">
-            <div class="custom-btn" style="height:50px; width:160px; 
-                        background: linear-gradient(135deg, #ff512f, #dd2476); 
-                        border-radius:12px; 
-                        display:flex; align-items:center; justify-content:center;
-                        color:white; font-weight:bold; 
-                        box-shadow:0 4px 15px rgba(0,0,0,0.2);
-                        transition:transform 0.2s ease, box-shadow 0.2s ease;">
-                <span>All Channel Partner</span>
-            </div>
-        </a>
-    </div>
-</div>
-
-
-
-
-
-
-
-          
-
-
-           
-            <button class="btn btn-primary ms-3" data-bs-toggle="modal" href="#addUserView">
-                <i class="fa fa-plus"></i> Add User
-            </button>
-        </div>
-    </div> -->
-     <!-- <button class="btn btn-primary ms-3" data-bs-toggle="modal" href="#addUserView">
-                <i class="fa fa-plus"></i> Add User
-    </button> -->
-    <div class="page-header">
+    
+  <div class="page-header">
     <div>
       <h1 id="pageTitle">All Customers</h1>
       <p id="pageSubtitle">Manage and view all customers information.</p>
@@ -234,7 +176,7 @@
                     <div class="customer-overview-grid">
 
  <!-- Total Customers -->
-<a href="{{ route('allUsers') }}" class="overview-link">
+<a href="javascript:void(0)" class="overview-link" onclick="loadUsers('customers')">
   <div class="overview-card blue active">
 
     <div class="overview-icon">
@@ -251,7 +193,9 @@
 </a>
 
 <!-- Total Employees -->
-<a href="{{ route('allAgents') }}" class="overview-link">
+<!-- Total Employees -->
+<a href="javascript:void(0)" class="overview-link" onclick="loadUsers('employees')">
+
   <div class="overview-card green">
 
     <div class="overview-icon">
@@ -271,7 +215,9 @@
 
 
 <!-- Channel Partners -->
-<a href="{{ route('allPartners') }}" class="overview-link">
+<!-- Channel Partners -->
+<a href="javascript:void(0)" class="overview-link" onclick="loadUsers('partners')">
+
   <div class="overview-card purple">
 
     <div class="overview-icon">
@@ -315,6 +261,15 @@
                 </div>
             </div>
     </div>
+
+          
+
+
+           
+ 
+  
+
+
     
 <style>
 /* Remove underline & blue color from clickable cards */
@@ -333,93 +288,9 @@
   color: inherit;
 }
 </style>
-    <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-    <!-- export button -->
-    <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet" />
-    <link href="{{ asset('theme') }}/dist-assets/css/sb-admin-2.min.css" rel="stylesheet">
-    <!-- <div class="row">
-        <div class="col-12 grid-margin">
-            <div class="card pt-3">
-                <div class="card-body">
-                    <div class="table-responsive" id="user_table_container">
-                        <table id="user_table" class="table">
-                            <thead>
-                                <tr>
-                                    <th> ID </th>
-                                    <th> Name </th>
-                                    <th> Email ID </th>
-                                    <th> Mobile Number </th>
-                                    <th> Pan No. </th>
-                                    <th> Status </th>
-                                    <th> Action </th>
-                                </tr>
-                            </thead>
-                            <tbody id="user_table_body">
-                                @foreach ($users as $user)
-                                    <tr>
-                                        <td>{{ $user->id }}</td>
-                                        <td><a href="javascript:void(0);" 
-                                        class="user-link" 
-                                        data-name="{{ $user->name }}" 
-                                        data-email="{{ $user->email_id }}" 
-                                        data-mobile="{{ $user->profile->mobile_no ?? '-' }}" 
-                                        data-dob="{{ $user->profile->pan_number ?? '-' }}" 
-                                        data-status="{{ $user->is_email_verify == 1 ? 'Active' : 'Inactive' }}"> {{ $user->name }}
-                                        </a>
+    
+    
 
-                                        </td>
-                                        <td>{{ $user->email_id }}</td>
-                                        <td>{{ $user->profile->mobile_no ?? '-' }}</td>
-                                        <td>{{ $user->profile->pan_number ?? ''}}</td>
-                                        <td>
-                                            <label>
-                                                <input type="radio" name="status_{{ $user->id }}" value="1"
-                                                    onclick="updateStatus({{ $user->id }}, 1)"
-                                                    {{ $user->is_email_verify == 1 ? 'checked' : '' }}>
-                                                Active
-                                            </label>
-                                            <label>
-                                                <input type="radio" name="status_{{ $user->id }}" value="0"
-                                                    onclick="updateStatus({{ $user->id }}, 0)"
-                                                    {{ $user->is_email_verify == 0 ? 'checked' : '' }}>
-                                                Inactive
-                                            </label>
-                                        </td>
-                                        <td>
-                                            <a class="btn btn-primary btn-xs edit" title="Edit"
-                                                href="{{ url('editUser/' . $user->id) }}">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                            <button class="btn btn-danger btn-xs delete" title="Delete"
-                                                onclick="deleteUser('{{ $user->id }}')">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                      
-                        <div class="d-flex justify-content-between align-items-center mt-4">
-                            <div class="dataTables_info">
-                                Showing {{ $users->firstItem() }} to {{ $users->lastItem() }} of {{ $users->total() }}
-                                entries
-                            </div>
-                            <div class="dataTables_paginate paging_simple_numbers">
-                                <nav>
-                                    {{ $users->onEachSide(1)->links('pagination::bootstrap-4') }}
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-<body>
 
 <div class="users-page">
 
@@ -472,116 +343,100 @@
                         </tr>
                     </thead>
 
-                    <tbody id="usersTable">
-                        @forelse ($users as $user)
-                        <tr>
+                  <tbody id="usersTableWrapper">
+   @forelse ($users as $user)
+<tr>
 
-                            <!-- CHECKBOX -->
-                            <td>
-                                <input type="checkbox" class="table-checkbox">
-                            </td>
+    <td>
+        <input type="checkbox" class="table-checkbox">
+    </td>
 
-                            <!-- USER -->
-                            <td>
-                                <div class="customer-cell">
-                                    <div class="customer-avatar">
-                                        {{ strtoupper(substr($user->name, 0, 2)) }}
-                                    </div>
+    <td>
+        <div class="customer-cell">
+            <div class="customer-avatar">
+                {{ strtoupper(substr($user->name, 0, 2)) }}
+            </div>
 
-                                    <div class="customer-info">
-                                        <div class="customer-name">
-                                            <a href="javascript:void(0);"
-                                               class="user-link"
-                                               data-name="{{ $user->name }}"
-                                               data-email="{{ $user->email_id }}"
-                                               data-mobile="{{ $user->profile->mobile_no ?? '-' }}"
-                                               data-pan="{{ $user->profile->pan_number ?? '-' }}"
-                                               data-status="{{ $user->is_email_verify ? 'Active' : 'Inactive' }}">
-                                                {{ $user->name }}
-                                            </a>
-                                        </div>
-                                        <div class="customer-id">
-                                            #{{ $user->id }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
+            <div class="customer-info">
+                <div class="customer-name">
+                    <a href="javascript:void(0);"
+                       class="user-link"
+                       data-name="{{ $user->name }}"
+                       data-email="{{ $user->email_id }}"
+                       data-mobile="{{ $user->profile->mobile_no ?? '-' }}"
+                       data-status="{{ $user->is_email_verify ? 'Active' : 'Inactive' }}">
+                        {{ $user->name }}
+                    </a>
+                </div>
+                <div class="customer-id">
+                    #{{ $user->id }}
+                </div>
+            </div>
+        </div>
+    </td>
 
-                            <!-- EMAIL -->
-                            <td>{{ $user->email_id }}</td>
+    <td>{{ $user->email_id }}</td>
+    <td>{{ $user->profile->mobile_no ?? '-' }}</td>
+    <td>{{ $user->profile->pan_number ?? '-' }}</td>
 
-                            <!-- CONTACT -->
-                            <td>{{ $user->profile->mobile_no ?? '-' }}</td>
+    <td>
+        <span class="status-badge {{ $user->is_email_verify ? 'active' : 'inactive' }}">
+            {{ $user->is_email_verify ? 'Active' : 'Inactive' }}
+        </span>
 
-                            <!-- PAN -->
-                            <td>{{ $user->profile->pan_number ?? '-' }}</td>
+        <div class="status-radio mt-1">
+            <label>
+                <input type="radio"
+                       name="status_{{ $user->id }}"
+                       {{ $user->is_email_verify ? 'checked' : '' }}
+                       onclick="updateStatus({{ $user->id }},1)">
+                Active
+            </label>
 
-                            <!-- STATUS -->
-                            <td>
-                                <span class="status-badge {{ $user->is_email_verify ? 'active' : 'inactive' }}">
-                                    {{ $user->is_email_verify ? 'Active' : 'Inactive' }}
-                                </span>
+            <label>
+                <input type="radio"
+                       name="status_{{ $user->id }}"
+                       {{ !$user->is_email_verify ? 'checked' : '' }}
+                       onclick="updateStatus({{ $user->id }},0)">
+                Inactive
+            </label>
+        </div>
+    </td>
 
-                                <div class="status-radio mt-1">
-                                    <label class="me-2">
-                                        <input type="radio"
-                                            name="status_{{ $user->id }}"
-                                            {{ $user->is_email_verify ? 'checked' : '' }}
-                                            onclick="updateStatus({{ $user->id }},1)">
-                                        Active
-                                    </label>
+    <td>
+        <div class="action-buttons d-flex gap-2">
+            <a href="javascript:void(0);"
+               class="action-icon text-primary edit-user-btn"
+               data-id="{{ $user->id }}"
+               data-name="{{ $user->name }}"
+               data-email="{{ $user->email_id }}"
+               data-mobile="{{ $user->profile->mobile_no ?? '' }}"
+               data-dob="{{ $user->profile->dob ?? '' }}"
+               data-address="{{ $user->profile->address ?? '' }}"
+               data-city="{{ $user->profile->city ?? '' }}"
+               data-state="{{ $user->profile->state ?? '' }}"
+               data-pincode="{{ $user->profile->pincode ?? '' }}">
+                <i class="fas fa-edit"></i>
+            </a>
 
-                                    <label>
-                                        <input type="radio"
-                                            name="status_{{ $user->id }}"
-                                            {{ !$user->is_email_verify ? 'checked' : '' }}
-                                            onclick="updateStatus({{ $user->id }},0)">
-                                        Inactive
-                                    </label>
-                                </div>
-                            </td>
+            <a href="javascript:void(0);"
+               class="action-icon text-danger"
+               onclick="deleteUser({{ $user->id }})">
+                <i class="fas fa-trash"></i>
+            </a>
+        </div>
+    </td>
 
-                            <!-- ACTIONS -->
-                            <td>
-                                <div class="action-buttons d-flex align-items-center gap-2">
-                                    <a href="javascript:void(0);"
-   class="action-icon text-primary edit-user-btn"
-   data-id="{{ $user->id }}"
-   data-name="{{ $user->name }}"
-   data-email="{{ $user->email_id }}"
-   data-mobile="{{ $user->profile->mobile_no ?? '' }}"
-   data-dob="{{ $user->profile->dob ?? '' }}"
-   data-address="{{ $user->profile->address ?? '' }}"
-   data-city="{{ $user->profile->city ?? '' }}"
-   data-state="{{ $user->profile->state ?? '' }}"
-   data-pincode="{{ $user->profile->pincode ?? '' }}"
-   title="Edit">
-   <i class="fas fa-edit"></i>
-</a>
+</tr>
+@empty
+<tr>
+    <td colspan="7" class="text-center py-4">
+        No users available
+    </td>
+</tr>
+@endforelse
 
-
-                                    <a href="javascript:void(0);"
-                                       class="action-icon text-danger"
-                                       title="Delete"
-                                       onclick="deleteUser({{ $user->id }})">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-
-                                    <span class="action-icon text-muted">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </span>
-                                </div>
-                            </td>
-
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="7" class="text-center py-4">
-                                No users available
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
+</tbody>
 
                 </table>
             </div>
@@ -590,6 +445,7 @@
     </div>
 
 </div>
+
 
 </div>
 <!-- search js -->
@@ -636,6 +492,63 @@ function checkStatus(row) {
     if (!badge) return true;
 
     return badge.classList.contains(currentStatus);
+}
+</script>
+<script>
+let currentType = 'customers';
+
+// 🔴 LOAD USERS BY CARD CLICK
+function loadUsers(type) {
+    currentType = type;
+
+    // Change page title
+    document.getElementById('pageTitle').innerText =
+        type === 'customers' ? 'All Customers' :
+        type === 'employees' ? 'All Employees' :
+        'Channel Partners';
+
+    document.getElementById('addButtonText').innerText =
+        type === 'customers' ? 'Add Customer' :
+        type === 'employees' ? 'Add Employee' :
+        'Add Partner';
+
+    $.ajax({
+        url: "{{ route('allUsers') }}",
+        data: { type: type },
+        success: function (html) {
+            $('#usersTableWrapper').html(html);
+        }
+    });
+}
+
+// 🔴 EDIT
+$(document).on('click', '.edit-user-btn', function () {
+    $('#user_id').val($(this).data('id'));
+    $('#full_name').val($(this).data('name'));
+    $('#email_id').val($(this).data('email'));
+    $('#mobile_no').val($(this).data('mobile'));
+
+    $('#submitBtn').text('Update');
+    $('#addUserView').modal('show');
+});
+
+// 🔴 DELETE
+function deleteUser(id) {
+    $.post("{{ route('deleteUser') }}", {
+        _token: "{{ csrf_token() }}",
+        user_id: id
+    }, function () {
+        loadUsers(currentType);
+    });
+}
+
+// 🔴 STATUS
+function updateStatus(id, status) {
+    $.post("{{ route('updateUserStatus') }}", {
+        _token: "{{ csrf_token() }}",
+        user_id: id,
+        is_email_verify: status
+    });
 }
 </script>
 
@@ -777,6 +690,12 @@ function checkStatus(row) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- export button -->
+    <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="{{ asset('theme') }}/dist-assets/css/sb-admin-2.min.css" rel="stylesheet">
 
     <!-- SweetAlert -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -898,6 +817,7 @@ $(document).on('click', '.edit-user-btn', function () {
                 });
             };
 
+           
             // Update User Status
             window.updateStatus = function(userId, status) {
                 $.ajax({
@@ -933,6 +853,6 @@ document.querySelectorAll('.user-link').forEach(link => {
     });
 });
 
-</script>
+     </script>
 
 @endsection
