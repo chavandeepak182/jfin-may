@@ -12,9 +12,9 @@
     <div class="container-fluid bg-white py-5">
         <div class="container">
             <div class="row g-5 align-items-start mb-5 pb-5">
-                <!-- Progress Bar Section -->
+             
               <div class="col-md-3">
-                <div class="progress-steps p-4">
+                <!-- <div class="progress-steps p-4">
                     <h5 class="text-primary mb-3">Application Steps</h5>
                     <ul class="list-group">
                         <li class="list-group-item {{ $currentStep == 1 ? 'active' : '' }}">
@@ -48,7 +48,47 @@
                             5. Loan Details
                         </li>
                     </ul>
-                </div>
+                </div> -->
+            <div class="progress-steps p-4">
+    <h5 class="text-primary mb-3">Application Steps</h5>
+
+    <ul class="list-group">
+
+        {{-- Step 1 --}}
+        <li class="list-group-item {{ $currentStep == 1 ? 'active' : '' }}">
+            @if(in_array(1, $completedSteps))
+                <i class="bi bi-check-circle-fill step-icon me-2"></i>
+            @endif
+            1. Personal Details
+        </li>
+
+        {{-- Step 2 --}}
+        <li class="list-group-item {{ $currentStep == 2 ? 'active' : '' }}">
+            @if(in_array(2, $completedSteps))
+                <i class="bi bi-check-circle-fill step-icon me-2"></i>
+            @endif
+            2. Professional Details
+        </li>
+
+        {{-- Step 3 (Qualification skipped, Upload Documents shown) --}}
+        <li class="list-group-item {{ $currentStep == 3 ? 'active' : '' }}">
+            @if(in_array(3, $completedSteps))
+                <i class="bi bi-check-circle-fill step-icon me-2"></i>
+            @endif
+            3. Upload Documents
+        </li>
+
+        {{-- Step 4 --}}
+        <li class="list-group-item {{ $currentStep == 4 ? 'active' : '' }}">
+            @if(in_array(4, $completedSteps))
+                <i class="bi bi-check-circle-fill step-icon me-2"></i>
+            @endif
+            4. Loan Details
+        </li>
+
+    </ul>
+</div>
+
             </div>
 
                 <!-- Form Section -->
@@ -154,41 +194,43 @@
                                         </div>
 
 
-                                        <div class="col-md-4">
-                                           <div class="form-floating">
-                                            <input type="text" name="pan_number"
-                                                value="{{ old('pan_number', $profile->pan_number ?? '') }}"
-                                                class="form-control" id="pan_number"
-                                                placeholder="PAN Number"
-                                                pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" 
-                                                maxlength="10"
-                                                title="Enter valid 10-character PAN (e.g., ABCDE1234F)">
-                                            <label for="pan_number">PAN Number</label>
-                                            @error('pan_number')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
+                                      <div class="col-md-4">
+                                                    <div class="form-floating">
+                                                        <input type="text" name="pan_number"
+                                                            value="{{ old('pan_number', $profile->pan_number ?? '') }}"
+                                                            class="form-control"
+                                                            id="pan_number"
+                                                            placeholder="PAN Number"
+                                                            pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+                                                            maxlength="10"
+                                                            title="Enter valid 10-character PAN (e.g., ABCDE1234F)"
+                                                            oninput="this.value = this.value.toUpperCase()">
+                                                        <label for="pan_number">PAN Number</label>
 
-                                        </div>
+                                                        @error('pan_number')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
 
                                            <div class="col-md-4">
-    <div class="form-floating">
-        <input type="text"
-            class="form-control"
-            id="phone"
-            name="mobile_no"
-            value="{{ old('mobile_no', $profile->mobile_no ?? $user->mobile_no) }}"
-            placeholder="Phone"
-            maxlength="10"
-            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
-            required>
-        <label for="phone">Phone <span class="text-danger">*</span></label>
-        <span id="phone-error" class="text-danger" style="font-size: 13px;"></span>
-        @error('mobile_no')
-            <span class="text-danger">{{ $message }}</span>
-        @enderror
-    </div>
-</div>
+                                                <div class="form-floating">
+                                                    <input type="text"
+                                                        class="form-control"
+                                                        id="phone"
+                                                        name="mobile_no"
+                                                        value="{{ old('mobile_no', $profile->mobile_no ?? $user->mobile_no) }}"
+                                                        placeholder="Phone"
+                                                        maxlength="10"
+                                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
+                                                        required>
+                                                    <label for="phone">Phone <span class="text-danger">*</span></label>
+                                                    <span id="phone-error" class="text-danger" style="font-size: 13px;"></span>
+                                                    @error('mobile_no')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
 
 <script>
 document.getElementById('phone').addEventListener('input', function() {
@@ -488,90 +530,9 @@ document.getElementById('phone').addEventListener('input', function() {
                                     </div>
                                 </fieldset>
 
-                                <!-- Qualification Details -->
-                            @elseif ($currentStep == 3)
-                              
-
-                                <fieldset>
-                                    <h4 class="text-primary mb-3">Qualification Details</h4>
-                                    <div class="row g-3">
-
-                                        <!-- Degree Dropdown (Qualification) -->
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <select class="form-control" id="qualification" name="qualification"
-                                                    required>
-                                                    <option value="">Select Degree</option>
-                                                    <option value="Bachelors"
-                                                        {{ old('qualification', $education->qualification ?? '') == 'Bachelors' ? 'selected' : '' }}>
-                                                        Bachelors</option>
-                                                    <option value="Masters"
-                                                        {{ old('qualification', $education->qualification ?? '') == 'Masters' ? 'selected' : '' }}>
-                                                        Masters</option>
-                                                    <option value="PhD"
-                                                        {{ old('qualification', $education->qualification ?? '') == 'PhD' ? 'selected' : '' }}>
-                                                        PhD</option>
-                                                    <option value="Other"
-                                                        {{ old('qualification', $education->qualification ?? '') == 'Other' ? 'selected' : '' }}>
-                                                        Other</option>
-                                                </select>
-                                                <label for="qualification">Highest Degree</label>
-                                            </div>
-                                        </div>
-
-                                        <!-- If "Other" is selected, show a text input to specify the qualification -->
-                                        <div class="col-md-6" id="otherQualificationInput" style="display: none;">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control" id="other_qualification"
-                                                    name="other_qualification"
-                                                    value="{{ old('other_qualification', $education->other_qualification ?? '') }}"
-                                                    placeholder="Other Qualification">
-                                                <label for="other_qualification">Specify Other Degree</label>
-                                            </div>
-                                        </div>
-
-                                        <!-- Pass Year Dropdown -->
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <select class="form-control" id="pass_year" name="pass_year" required>
-                                                    <option value="">Select Year</option>
-                                                    @for ($year = date('Y'); $year >= 1980; $year--)
-                                                        <option value="{{ $year }}"
-                                                            {{ old('pass_year', $education->pass_year ?? '') == $year ? 'selected' : '' }}>
-                                                            {{ $year }}</option>
-                                                    @endfor
-                                                </select>
-                                                <label for="pass_year">Pass Year</label>
-                                            </div>
-                                        </div>
-
-                                        <!-- College Name -->
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control" id="college_name"
-                                                    name="college_name"
-                                                    value="{{ old('college_name', $education->college_name ?? '') }}"
-                                                    placeholder="College Name" required>
-                                                <label for="college_name">College Name</label>
-                                            </div>
-                                        </div>
-
-                                        <!-- College Address -->
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control" id="college_address"
-                                                    name="college_address"
-                                                    value="{{ old('college_address', $education->college_address ?? '') }}"
-                                                    placeholder="College Address" required>
-                                                <label for="college_address">College Address</label>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </fieldset>
-
+                               
                                 <!-- Upload Documents -->
-                            @elseif ($currentStep == 4)
+                            @elseif ($currentStep == 3)
                                 <fieldset>
                                     <h4 class="text-primary">Upload Documents</h4>
                                     <div class="row g-3">
@@ -874,7 +835,7 @@ document.getElementById('phone').addEventListener('input', function() {
                                 </fieldset>
 
                                 <!-- Loan Details -->
-                            @elseif ($currentStep == 5)
+                            @elseif ($currentStep == 4)
                             
                                             <h4 class="text-primary mb-3">Loan Details</h4>
                                             <div class="row g-3">
