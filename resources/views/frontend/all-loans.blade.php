@@ -22,320 +22,107 @@
     <!-- DataTables Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-           
-                <!-- Header -->
-   <div class="page-header">
-    <h1>Loan Applications</h1>
-
-    <a href="../loan-application" class="btn-new-application">
-        <i class="fas fa-user-plus"></i>
-        New Application
-    </a>
-</div>
-
-<!-- <div class="customer-overview-grid">
-
-   
-    <a href="{{ route('loans.index') }}" style="text-decoration:none; color:inherit;">
-        <div class="overview-card blue active">
-
-            <div class="overview-icon">
-                <i class="fas fa-file-invoice-dollar"></i>
+            <div class="d-flex justify-content-between align-items-center">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="d-flex align-items-center">
+                    <ol class="breadcrumb m-0 bg-transparent">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">All Loans</li>
+                    </ol>
+                </nav>
+                <a href="../loan-application"><button class="btn btn-primary">Add Loans</button></a>
             </div>
 
-            <div class="overview-content">
-                <h3>Total Loans</h3>
-                <h4>{{ $totalLoans }}</h4>
-                <div class="stat-footer">Tracked from Records</div>
-            </div>
-
+            <form method="GET" action="{{ route('loans.index') }}" class="mt-4 mb-3">
+                <div class="row justify-content-space-between">
+                    <div class="col-md-3">
+                        <label for="status">Status:</label>
+                        <select name="status" id="status" class="form-control">
+                            <option value="">All</option>
+                            <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved
+                            </option>
+                            <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected
+                            </option>
+                            <option value="in process" {{ request('status') == 'in process' ? 'selected' : '' }}>In process
+                            </option>
+                            <option value="disbursed" {{ request('status') == 'disbursed' ? 'selected' : '' }}>Disbursed
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="start_date">Start Date:</label>
+                        <input type="date" name="start_date" id="start_date" class="form-control"
+                            value="{{ request('start_date') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="end_date">End Date:</label>
+                        <input type="date" name="end_date" id="end_date" class="form-control"
+                            value="{{ request('end_date') }}">
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <a href="{{ route('loans.index') }}" class="btn btn-secondary ms-2">Reset</a>
+                    </div>
+                </div>
+            </form>
         </div>
-    </a>
-
-
-    <a href="{{ route('inprocess.loans') }}" style="text-decoration:none; color:inherit;">
-        <div class="overview-card green">
-
-            <div class="overview-icon">
-                <i class="fas fa-sync-alt"></i>
-            </div>
-
-            <div class="overview-content">
-                <h3>In Process Loans</h3>
-                <h4>{{ $inProcessLoans }}</h4>
-                <div class="stat-footer">Last 24 Hours</div>
-            </div>
-
-        </div>
-    </a>
-
-    
-    <a href="{{ route('agent.approved.loans') }}" style="text-decoration:none; color:inherit;">
-        <div class="overview-card purple">
-
-            <div class="overview-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-
-            <div class="overview-content">
-                <h3>Approved Loans</h3>
-                <h4>{{ $approvedLoans }}</h4>
-                <div class="stat-footer">Last 24 Hours</div>
-            </div>
-
-        </div>
-    </a>
-
-   
-    <a href="{{ route('disbursed.loans') }}" style="text-decoration:none; color:inherit;">
-        <div class="overview-card white">
-
-            <div class="overview-icon">
-                <i class="fas fa-building-columns"></i>
-            </div>
-
-            <div class="overview-content">
-                <h3>Disbursed Loans</h3>
-                <h4>{{ $disbursedLoans }}</h4>
-                <div class="stat-footer">Last 24 Hours</div>
-            </div>
-
-        </div>
-    </a>
-
- 
-    <a href="{{ route('rejectedLoans') }}" style="text-decoration:none; color:inherit;">
-        <div class="overview-card red">
-
-            <div class="overview-icon">
-                <i class="fas fa-times-circle"></i>
-            </div>
-
-            <div class="overview-content">
-                <h3>Rejected Loans</h3>
-                <h4>{{ $rejectedLoans }}</h4>
-                <div class="stat-footer">Last 24 Hours</div>
-            </div>
-
-        </div>
-    </a>
-
-    <a href="{{ route('trashed.loans') }}" style="text-decoration:none; color:inherit;">
-        <div class="overview-card orange">
-
-            <div class="overview-icon">
-                <i class="fas fa-trash-alt"></i>
-            </div>
-
-            <div class="overview-content">
-                <h3>Trashed Loans</h3>
-                <h4>{{ $trashedLoans }}</h4>
-                <div class="stat-footer">Tracked from Records</div>
-            </div>
-
-        </div>
-    </a>
-
-</div> -->
-
-<div class="customer-overview-grid">
-
-    <!-- Total -->
-    <a href="{{ route('loans.index') }}" class="card-link">
-        <div class="overview-card blue {{ request('card') == null ? 'active' : '' }}">
-            <div class="overview-icon"><i class="fas fa-file-invoice-dollar"></i></div>
-            <div class="overview-content">
-                <h3>Total Loans</h3>
-                <h4>{{ $totalLoans }}</h4>
-                <div class="stat-footer">Tracked from Records</div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="loansTable" class="table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Loan No.</th>
+                            <th>Name</th>
+                            <th>Product Type</th>
+                            <th>Amount</th>
+                            <th>Bank</th>
+                            <th>Location</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($data['loans'] as $loan)
+                            <tr>
+                                <td>{{ $loop->iteration + ($data['loans']->currentPage() - 1) * $data['loans']->perPage() }}</td>
+                                <td>{{ $loan['loan_reference_id'] }}</td>
+                                <td>{{ $loan['user_name'] }}</td>
+                                <td>{{ $loan['loan_category_name'] }}</td>
+                                <td>{{ $loan['amount'] }}</td>
+                                <td>{{ $loan['bank_name'] }}</td>
+                                <td>{{ $loan['city'] }}</td>
+                                <td>
+                                    <a class="btn btn-primary btn-xs view" title="View"
+                                        href="{{ route('loan.view', ['id' => $loan['loan_id']]) }}">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-primary btn-xs edit" title="Edit"
+                                        href="{{ route('editLoan', ['id' => $loan['loan_id']]) }}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <button class="btn btn-danger btn-xs delete" title="Delete"
+                                        onclick="deleteLoan('{{ $loan['loan_id'] }}')">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <!-- Pagination Links -->
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div class="dataTables_info">
+                        Showing {{ $data['loans']->firstItem() }} to {{ $data['loans']->lastItem() }} of {{ $data['loans']->total() }}
+                        entries
+                    </div>
+                    <div class="dataTables_paginate paging_simple_numbers">
+                        <nav>
+                            {{ $data['loans']->onEachSide(1)->links('pagination::bootstrap-4') }}
+                        </nav>
+                    </div>
+                </div>
             </div>
         </div>
-    </a>
-
-    <!-- In Process -->
-    <a href="{{ route('loans.index',['card'=>'inprocess']) }}" class="card-link">
-        <div class="overview-card green {{ request('card')=='inprocess'?'active':'' }}">
-            <div class="overview-icon"><i class="fas fa-sync-alt"></i></div>
-            <div class="overview-content">
-                <h3>In Process</h3>
-                <h4>{{ $inProcessLoans }}</h4>
-                <div class="stat-footer">Last 24 Hours</div>
-            </div>
-        </div>
-    </a>
-
-    <!-- Approved -->
-    <a href="{{ route('loans.index',['card'=>'approved']) }}" class="card-link">
-        <div class="overview-card purple {{ request('card')=='approved'?'active':'' }}">
-            <div class="overview-icon"><i class="fas fa-check-circle"></i></div>
-            <div class="overview-content">
-                <h3>Approved</h3>
-                <h4>{{ $approvedLoans }}</h4>
-                <div class="stat-footer">Last 24 Hours</div>
-            </div>
-        </div>
-    </a>
-
-    <!-- Disbursed -->
-    <a href="{{ route('loans.index',['card'=>'disbursed']) }}" class="card-link">
-        <div class="overview-card white {{ request('card')=='disbursed'?'active':'' }}">
-            <div class="overview-icon"><i class="fas fa-building-columns"></i></div>
-            <div class="overview-content">
-                <h3>Disbursed</h3>
-                <h4>{{ $disbursedLoans }}</h4>
-                <div class="stat-footer">Last 24 Hours</div>
-            </div>
-        </div>
-    </a>
-
-    <!-- Rejected -->
-    <a href="{{ route('loans.index',['card'=>'rejected']) }}" class="card-link">
-        <div class="overview-card red {{ request('card')=='rejected'?'active':'' }}">
-            <div class="overview-icon"><i class="fas fa-times-circle"></i></div>
-            <div class="overview-content">
-                <h3>Rejected</h3>
-                <h4>{{ $rejectedLoans }}</h4>
-                <div class="stat-footer">Last 24 Hours</div>
-            </div>
-        </div>
-    </a>
-
-    <!-- Trashed -->
-    <a href="{{ route('loans.index',['card'=>'trashed']) }}" class="card-link">
-        <div class="overview-card orange {{ request('card')=='trashed'?'active':'' }}">
-            <div class="overview-icon"><i class="fas fa-trash-alt"></i></div>
-            <div class="overview-content">
-                <h3>Trashed</h3>
-                <h4>{{ $trashedLoans }}</h4>
-                <div class="stat-footer">Tracked from Records</div>
-            </div>
-        </div>
-    </a>
-
-</div>
-<style>.card-link,
-.card-link:hover,
-.card-link:focus,
-.card-link:active {
-    text-decoration: none !important;
-    color: inherit !important;
-}
-</style>
-
-
-
-          
-        </div>
-      <div class="table-card-large">
-    <div class="table-header-large">
-        <h3>All Loans</h3>
-    </div>
-
-    <div class="table-container-large">
-        <table class="loans-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>CUSTOMER</th>
-                    <th>LOAN TYPE</th>
-                    <th>AMOUNT</th>
-                    <th>BANK</th>
-                    <th>LOCATION</th>
-                    <th>STATUS</th>
-                    <th>ACTIONS</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @forelse ($data['loans'] as $loan)
-                    <tr>
-                        <!-- SR NO -->
-                        <td>
-                            {{ $loop->iteration + ($data['loans']->currentPage() - 1) * $data['loans']->perPage() }}
-                        </td>
-
-                        <!-- CUSTOMER -->
-                        <td>
-                            <div class="customer-cell">
-                                <div class="customer-avatar">
-                                    {{ strtoupper(substr($loan['user_name'] ?? 'NA', 0, 2)) }}
-                                </div>
-                                <div class="customer-info">
-                                    <div class="customer-name">
-                                        {{ $loan['user_name'] }}
-                                    </div>
-                                    <div class="customer-id">
-                                        {{ $loan['loan_reference_id'] }}
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-
-                        <!-- LOAN TYPE -->
-                        <td>{{ $loan['loan_category_name'] }}</td>
-
-                        <!-- AMOUNT -->
-                        <td>₹{{ number_format($loan['amount']) }}</td>
-
-                        <!-- BANK -->
-                        <td>{{ $loan['bank_name'] }}</td>
-
-                        <!-- LOCATION -->
-                        <td>{{ $loan['city'] }}</td>
-
-                        <!-- STATUS -->
-                        <td>
-                            <span class="status-badge active">
-                                {{ ucfirst($loan['status'] ?? 'Pending') }}
-                            </span>
-                        </td>
-
-                        <!-- ACTIONS -->
-                        <td>
-                            <div class="action-buttons">
-                                <a href="{{ route('loan.view', $loan['loan_id']) }}"
-                                   class="action-icon-btn" title="View">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-
-                                <a href="{{ route('editLoan', $loan['loan_id']) }}"
-                                   class="action-icon-btn" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-
-                                <button class="action-icon-btn"
-                                        onclick="deleteLoan('{{ $loan['loan_id'] }}')"
-                                        title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="8" style="text-align:center;padding:40px;">
-                            No loan records found
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Pagination -->
-    <div class="pagination">
-        <div class="pagination-info">
-            Showing {{ $data['loans']->firstItem() }}
-            to {{ $data['loans']->lastItem() }}
-            of {{ $data['loans']->total() }} loans
-        </div>
-
-        <div class="pagination-controls">
-            {{ $data['loans']->onEachSide(1)->links('pagination::bootstrap-4') }}
-        </div>
-    </div>
-</div>
-
     </div>
 
     <!-- Modal for adding loan -->

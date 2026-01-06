@@ -1,41 +1,40 @@
 
-<style>.card-link,
-.card-link:hover,
-.card-link:focus,
-.card-link:active {
-    text-decoration: none !important;
-    color: inherit !important;
-}
-</style>
-
-
-<style>.card-link,
-.card-link:hover,
-.card-link:focus,
-.card-link:active {
-    text-decoration: none !important;
-    color: inherit !important;
-}
-</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 @php
     $role_id = session()->get('role_id');
 @endphp
+<style>/* ===== SIDEBAR NAV ===== */
+.sidebar-nav .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    border-radius: 10px;
+    color: #374151;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
 
-<style>
-.card-link,
-.card-link:hover,
-.card-link:focus,
-.card-link:active {
-    text-decoration: none !important;
-    color: inherit !important;
+/* Hover */
+.sidebar-nav .nav-item:hover {
+    background: #eef2ff;
+    color: #1e40af;
+}
+
+/* Active (optional) */
+.sidebar-nav .nav-item.active {
+    background: #3B82F6;
+    color: #ffffff;
+}
+
+/* Icons */
+.sidebar-nav .nav-item i {
+    font-size: 16px;
 }
 </style>
-
-@php
-    $role_id = session()->get('role_id');
-@endphp
-
 <aside class="sidebar">
 
     <div class="sidebar-header">
@@ -67,7 +66,7 @@
 
         {{-- ================= LOANS ================= --}}
         @if($role_id == 4 || $role_id == 2 || $role_id == env('brokerRole_id'))
-            <a href="{{ route('loans.index') }}" class="nav-item">
+            <a href="{{ route('admin.loans') }}" class="nav-item">
                 <i class="fas fa-file-invoice-dollar"></i>
                 <span>Loan Applications</span>
             </a>

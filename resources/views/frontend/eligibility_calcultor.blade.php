@@ -7,7 +7,7 @@
 
 
 
-<section class="page-banner" style="background-image: url('../theme/frontend/img/emi.webp');">
+<section class="page-banner" style="background-image: url('{{ asset('theme') }}/frontend/img/emi.webp');">
     <div class="page-banner-overlay"></div>
 
     <div class="page-banner-container">
