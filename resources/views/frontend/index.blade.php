@@ -8,7 +8,7 @@
 @section('content')
         <!-- Carousel Start -->
         <div class="header-carousel owl-carousel">
-            <div class="header-carousel-item hero-bg" style="background-image: url(../theme/frontend/img/home-bannner.webp);">
+            <div class="header-carousel-item hero-bg" style="background-image: url('{{ asset('theme') }}/frontend/img/home-bannner.webp');">
                 <div class="carousel-caption">
                     <div class="container">
                         <div class="row g-4 align-items-center">
@@ -28,7 +28,7 @@
                     </div>
                 </div>
             </div>
-            <div class="header-carousel-item hero-bg" style="background-image: url(../theme/frontend/img/home-banner-2.webp);">
+            <div class="header-carousel-item hero-bg" style="background-image:url('{{ asset('theme') }}/frontend/img/home-banner-2.webp');">
                 <div class="carousel-caption">
                     <div class="container">
                         <div class="row g-4 align-items-center">
@@ -105,6 +105,24 @@
     background: #295cab;
     transform: scale(1.2);
 }
+
+/* ================= HERO BANNER MOBILE FIX ================= */
+@media (max-width: 991px) {
+
+    .header-carousel-item {
+        min-height: 380px;            /* IMPORTANT */
+        background-size: cover !important;
+        background-position: center center !important;
+        background-repeat: no-repeat !important;
+    }
+
+    .carousel-caption {
+        position: relative;
+        padding-top: 60px;
+        padding-bottom: 40px;
+    }
+}
+
 </style>
 
 
@@ -277,6 +295,7 @@ $(document).ready(function () {
 
 
    <style>/* OUTER WRAPPER */
+
 .finserv-wrapper {
     width: 100%;
     max-width: 1400px;

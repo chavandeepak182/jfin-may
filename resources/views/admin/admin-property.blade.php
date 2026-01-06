@@ -91,7 +91,7 @@ footer {
                 <!-- Card 1 -->
                 
  <div class="col-md-3 col-sm-6">
-                    <a href="{{ route('allProperties') }}" style="text-decoration: none;">
+                    <a href="s" style="text-decoration: none;">
                         <div class="stat-card">
                             <div class="stat-header pink-bg">
                       <i class="fas fa-building"></i>  

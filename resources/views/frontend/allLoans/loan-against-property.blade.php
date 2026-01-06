@@ -21,7 +21,7 @@
 </div> -->
 
 <!-- HOME EXTENSION HERO -->
-<div class="hl-hero-wrapper" style="background-image: url('../theme/frontend/img/lap.webp');">
+<div class="hl-hero-wrapper" style="background-image: url('{{ asset('theme') }}/frontend/img/lap.webp');">
     <div class="container">
         <div class="row align-items-center hl-hero-height">
 

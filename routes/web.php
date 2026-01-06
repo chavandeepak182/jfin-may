@@ -136,9 +136,9 @@ Route::get('/property/verify-otp', [PropertyAuthController::class, 'otpForm'])
 Route::post('/property/verify-otp', [PropertyAuthController::class, 'verifyOtp'])
     ->name('property.otp.verify');
 
-Route::get('/properties', [FrontendController::class, 'properties'])
-    ->middleware('auth')
-    ->name('properties');
+// Route::get('/properties', [FrontendController::class, 'properties'])
+//     ->middleware('auth')
+//     ->name('properties');
 
 
 //  login
@@ -415,6 +415,15 @@ Route::post('register', [UsersController::class, 'register'])->name('register');
 
 Route::middleware('isAdmin')->group(function () {
 Route::post('admin/insertUser',[UsersController::class,'insertUser'])->name('insertUser');
+Route::get('/get-user-by-id', [UsersController::class, 'getUserById'])
+    ->name('getUserById');
+
+    Route::get('/admin/load-list-by-type', 
+    [App\Http\Controllers\UsersController::class, 'loadListByType']
+)->name('load.list.by.type');
+
+
+
     Route::get('/editUser/{user_id}', [UsersController::class, 'editUser'])->name('editUser');
     Route::post('/updateUser', [UsersController::class, 'updateUser'])->name('updateUser');
     Route::post('/deleteUser', [UsersController::class, 'deleteUser'])->name('deleteUser');
@@ -563,7 +572,7 @@ Route::middleware('isPartner')->group(function () {
 
 
 //Frontend propertie 
-// Route::get('properties', [FrontendController::class, 'properties'])->name('properties');
+Route::get('properties', [FrontendController::class, 'properties'])->name('properties');
 
 
 

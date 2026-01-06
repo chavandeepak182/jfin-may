@@ -34,11 +34,14 @@ class BankController extends Controller
 {
     $totalloanbank = DB::table('loan_bank_details')->count();
     $totalmis = DB::table('mis')->count();
+    $totalEstimatedFiles = DB::table('estimated_files')->count();
+    $totalMonthlyPL = DB::table('monthly_pls')->count();
+    
     
 
 
      
-    return view('admin.admin-tool', compact('totalloanbank','totalmis'));
+    return view('admin.admin-tool', compact('totalloanbank','totalmis','totalEstimatedFiles','totalMonthlyPL'));
 }
 
     public function listreferral()
