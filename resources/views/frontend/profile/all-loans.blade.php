@@ -3,7 +3,7 @@
 
 @section('content')
 <div class="container-fluid p-0">
-	<h2 class="mb-3 text-center">My Loans</h2>
+	<h2 class="mb-3 text-center text-dark">My Loans</h2>
 	<div class="row">
 		<div class="col-md-10 mx-auto d-flex">
 			<div class="w-100">
