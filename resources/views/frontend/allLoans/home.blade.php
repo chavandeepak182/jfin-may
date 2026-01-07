@@ -6,7 +6,8 @@
 @section('content')
 
 <!-- HOME EXTENSION HERO -->
-<section class="hl-hero-wrapper" style="background-image: url('../theme/frontend/img/home_loans.webp');">
+<section class="hl-hero-wrapper" style="background-image: url('{{ asset('theme') }}/frontend/img/home_loans.webp');
+">
     <div class="hl-hero-overlay"></div>
 
     <div class="container">

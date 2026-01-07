@@ -31,21 +31,25 @@ class UsersController extends Controller
 
 public function adminCustomer(Request $request)
 {
-    // Counts
     $totalCustomers = DB::table('users')
-        
-        ->whereNull('deleted_at')
-        ->count();
+    ->where('role_id', 1)
+    ->whereNull('deleted_at')
+    ->count();
 
-    $totalOfficers = DB::table('users')
-        ->where('role_id', 2)
-        ->whereNull('deleted_at')
-        ->count();
+$totalEmployees = DB::table('users')
+    ->where('role_id', 2)
+    ->whereNull('deleted_at')
+    ->count();
 
-    $totalCp = DB::table('users')
-        ->where('role_id', 3)
-        ->whereNull('deleted_at')
-        ->count();
+$totalChannelPartners = DB::table('users')
+    ->where('role_id', 3)
+    ->whereNull('deleted_at')
+    ->count();
+
+$totalUsers = DB::table('users')
+    ->whereNull('deleted_at')
+    ->count();
+
 
     // Filters from AJAX
     $search = $request->search;
@@ -84,8 +88,8 @@ public function adminCustomer(Request $request)
 
     return view('admin.admin-users', compact(
         'totalCustomers',
-        'totalOfficers',
-        'totalCp',
+        'totalEmployees',
+        'totalChannelPartners',
         'users'
     ));
 }
@@ -176,19 +180,79 @@ public function updateUserStatus(Request $request)
     }
 
 
+// public function insertUser(Request $request)
+// {
+//     // ✅ Validation
+//     $validator = Validator::make($request->all(), [
+//         'full_name' => 'required|string|max:255',
+//         'email_id'  => 'required|email|unique:users,email_id',
+//         'mobile_no' => 'required|digits:10',
+//         'dob'       => 'required|date',
+//         'address'   => 'required|string',
+//         'city'      => 'required|string',
+//         'state'     => 'required|string',
+//         'pincode'   => 'required|digits:6',
+//     ]);
+
+//     if ($validator->fails()) {
+//         return response()->json([
+//             'status' => 0,
+//             'errors' => $validator->errors()
+//         ], 422);
+//     }
+
+//     // ✅ Create User
+//     $user = User::create([
+//         'name'            => $request->full_name,
+//         'email_id'        => $request->email_id,
+//         'password'        => bcrypt('123456'), // default password
+//         'role_id'         => 1,
+//         'is_email_verify' => 1,
+//     ]);
+
+//     // ✅ Create Profile
+//     Profile::create([
+//         'user_id'   => $user->id,
+//         'mobile_no' => $request->mobile_no,
+//         'dob'       => $request->dob,
+//         'address'   => $request->address,
+//         'city'      => $request->city,
+//         'state'     => $request->state,
+//         'pincode'   => $request->pincode,
+//     ]);
+
+//     return response()->json([
+//         'status' => 1,
+//         'msg'    => 'Customer added successfully'
+//     ]);
+// }
+
+// 
+
+
 public function insertUser(Request $request)
 {
-    // ✅ Validation
-    $validator = Validator::make($request->all(), [
+    $type = $request->user_type; // customer | agent | cp
+
+    // ================= VALIDATION =================
+    $rules = [
         'full_name' => 'required|string|max:255',
         'email_id'  => 'required|email|unique:users,email_id',
         'mobile_no' => 'required|digits:10',
-        'dob'       => 'required|date',
-        'address'   => 'required|string',
-        'city'      => 'required|string',
-        'state'     => 'required|string',
-        'pincode'   => 'required|digits:6',
-    ]);
+    ];
+
+    // Customer requires full profile
+    if ($type === 'customer') {
+        $rules = array_merge($rules, [
+            'dob'     => 'required|date',
+            'address' => 'required|string|max:255',
+            'city'    => 'required|string|max:100',
+            'state'   => 'required|string|max:100',
+            'pincode' => 'required|digits:6',
+        ]);
+    }
+
+    $validator = Validator::make($request->all(), $rules);
 
     if ($validator->fails()) {
         return response()->json([
@@ -197,31 +261,123 @@ public function insertUser(Request $request)
         ], 422);
     }
 
-    // ✅ Create User
-    $user = User::create([
-        'name'            => $request->full_name,
-        'email_id'        => $request->email_id,
-        'password'        => bcrypt('123456'), // default password
-        'role_id'         => 1,
-        'is_email_verify' => 1,
-    ]);
+    DB::beginTransaction();
 
-    // ✅ Create Profile
-    Profile::create([
-        'user_id'   => $user->id,
-        'mobile_no' => $request->mobile_no,
-        'dob'       => $request->dob,
-        'address'   => $request->address,
-        'city'      => $request->city,
-        'state'     => $request->state,
-        'pincode'   => $request->pincode,
-    ]);
+    try {
 
-    return response()->json([
-        'status' => 1,
-        'msg'    => 'Customer added successfully'
-    ]);
+        // ================= ROLE ID =================
+        $roleId = 1; // customer
+        if ($type === 'agent') $roleId = 2;
+        if ($type === 'cp')    $roleId = 3;
+
+        // ================= CREATE USER =================
+        $user = User::create([
+            'name'            => $request->full_name,
+            'email_id'        => $request->email_id,
+            'password'        => bcrypt('123456'),
+            'role_id'         => $roleId,
+            'is_email_verify' => 1,
+        ]);
+
+        // ================= CREATE PROFILE =================
+        Profile::create([
+            'user_id'           => $user->id,
+            'mobile_no'         => $request->mobile_no,
+            'dob'               => $request->dob ?? null,
+            'residence_address' => $request->address ?? null,
+            'city'              => $request->city ?? null,
+            'state'             => $request->state ?? null,
+            'pincode'           => $request->pincode ?? null,
+        ]);
+
+        DB::commit();
+
+        return response()->json([
+            'status' => 1,
+            'msg'    => ucfirst($type) . ' added successfully'
+        ]);
+
+    } catch (\Exception $e) {
+
+        DB::rollBack();
+
+        return response()->json([
+            'status' => 0,
+            'msg'    => 'Something went wrong',
+            'error'  => $e->getMessage()
+        ], 500);
+    }
 }
+
+
+public function getUserById(Request $request)
+{
+    $user = DB::table('users')
+        ->leftJoin('profile', 'users.id', '=', 'profile.user_id')
+        ->where('users.id', $request->id)
+        ->select(
+            'users.id',
+            'users.name',
+            'users.email_id',
+            'profile.mobile_no',
+            'profile.dob',
+            'profile.residence_address as address',
+            'profile.city',
+            'profile.state',
+            'profile.pincode'
+        )
+        ->first();
+
+    if (!$user) {
+        return response()->json([
+            'status' => 0,
+            'message' => 'User not found'
+        ], 404);
+    }
+
+    return response()->json($user);
+}
+
+public function loadListByType(Request $request)
+{
+    if ($request->type === 'customer') {
+        $users = User::where('role_id', 1)->with('profile')->get();
+    } elseif ($request->type === 'agent') {
+        $users = User::where('role_id', 2)->with('profile')->get();
+    } else {
+        $users = User::where('role_id', 3)->with('profile')->get();
+    }
+
+    $html = '';
+
+    foreach ($users as $user) {
+        $html .= '
+        <tr>
+            <td>'.$user->id.'</td>
+            <td>'.$user->name.'</td>
+            <td>'.$user->email_id.'</td>
+            <td>'.($user->profile->mobile_no ?? '-').'</td>
+            <td>'.($user->pan_no ?? '-').'</td>
+            <td>'.($user->is_email_verify ? 'Active' : 'Inactive').'</td>
+            <td>
+                <button class="btn btn-primary btn-xs edit-user"
+                        data-id="'.$user->id.'">
+                    <i class="fa fa-edit"></i>
+                </button>
+
+                <button class="btn btn-danger btn-xs delete-user"
+                        data-id="'.$user->id.'">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </td>
+        </tr>';
+    }
+
+    return response()->json(['html' => $html]);
+}
+
+
+
     //customer registration
     //     public function registerUser(Request $request)
     // {
