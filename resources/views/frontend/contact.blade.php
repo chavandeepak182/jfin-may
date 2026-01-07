@@ -3,7 +3,7 @@
 
 @section('content')
 <!-- Header Start -->
- <section class="page-banner" style="background-image: url('../theme/frontend/img/conatct.webp');">
+ <section class="page-banner" style="background-image:url('{{ asset('theme') }}/frontend/img/conatct.webp');">
     <div class="page-banner-overlay"></div>
 
     <div class="page-banner-container">

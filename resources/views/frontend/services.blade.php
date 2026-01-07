@@ -6,7 +6,7 @@
 @section('content')
 <!-- Header Start -->
 <!-- Page Banner Section -->
-<section class="page-banner" style="background-image: url('../theme/frontend/img/services.jpg');">
+<section class="page-banner" style="background-image: url('{{ asset('theme') }}/frontend/img/services.jpg');">
     <div class="page-banner-overlay"></div>
 
     <div class="page-banner-container">

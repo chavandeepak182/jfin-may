@@ -6,14 +6,41 @@
 @section('content')
 <!-- Header Start -->
 <!-- Page Banner Section -->
-<section class="page-banner" style="background-image: url('../theme/frontend/img/aboutus.webp');">
+<section class="page-banner" style="background-image: url('{{ asset('theme') }}/frontend/img/aboutus.webp');
+">
     <div class="page-banner-overlay"></div>
 
     <div class="page-banner-container">
         <!-- <h1 class="page-banner-title">About Jfinserv</h1> -->
     </div>
 </section>
+<style>/* ================= DESKTOP (UNCHANGED) ================= */
+.page-banner {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    background-size: cover;       /* desktop crop allowed */
+    background-position: center;
+    background-repeat: no-repeat;
+}
 
+/* Overlay */
+.page-banner-overlay {
+    position: absolute;
+    inset: 0;
+    /* background: rgba(0,0,0,0.35); */
+}
+
+/* ================= MOBILE ONLY FIX ================= */
+@media (max-width: 767px) {
+    .page-banner {
+        height: 280px;        /* ⬅ increase height */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+}
+</style>
 <!-- Header End -->
     <div class="container-fluid bg-light about py-5">
         <div class="container py-5">

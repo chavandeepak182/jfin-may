@@ -55,7 +55,7 @@
         <!-- Spinner End -->
         
         <!-- Topbar Start -->
-<style>/* ===== NOTICE BAR (RED BAR) ===== */
+<style>/* ================= NOTICE BAR ================= */
 .notice-bar {
     position: fixed;
     top: 0;
@@ -69,7 +69,7 @@
     z-index: 10000;
 }
 
-/* Moving text */
+/* SCROLLING TEXT (DESKTOP) */
 .notice-track {
     display: flex;
     align-items: center;
@@ -82,7 +82,7 @@
     font-size: 15px;
     font-weight: 600;
     padding-right: 40px;
-    margin-left: 241px;
+    margin-left: 240px; /* desktop spacing */
 }
 
 .notice-btn {
@@ -100,20 +100,16 @@
     color: #fff;
 }
 
-/* Animation */
+/* TEXT ANIMATION */
 @keyframes scrollText {
-    from {
-        transform: translateX(100%);
-    }
-    to {
-        transform: translateX(-100%);
-    }
+    from { transform: translateX(100%); }
+    to   { transform: translateX(-100%); }
 }
 
-/* ===== MAIN HEADER ===== */
+/* ================= HEADER ================= */
 .main-header {
     position: fixed;
-    top: 44px;              /* SAME as notice bar height */
+    top: 44px; /* below notice bar */
     left: 0;
     width: 100%;
     height: 66px;
@@ -122,10 +118,53 @@
     z-index: 9999;
 }
 
-/* ===== PUSH PAGE CONTENT ===== */
+/* PUSH CONTENT */
 body {
-    padding-top: 110px;     /* 44px notice + 66px header */
+    padding-top: 110px; /* notice + header */
 }
+
+/* ================================================= */
+/* ================= MOBILE VIEW =================== */
+/* ================================================= */
+@media (max-width: 991px) {
+
+    /* NOTICE BAR */
+    .notice-bar {
+        position: relative;
+        height: auto;
+        padding: 8px 12px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .notice-track {
+        animation: none;          /* stop scrolling */
+        white-space: normal;      /* allow wrap */
+    }
+
+    .notice-text {
+        margin-left: 0 !important;
+        padding-right: 0;
+        font-size: 13px;
+        line-height: 1.4;
+    }
+
+    .notice-btn {
+        margin-top: 6px;
+        font-size: 13px;
+    }
+
+    /* HEADER */
+    .main-header {
+        position: sticky;
+        top: 0;
+    }
+
+    body {
+        padding-top: 0;
+    }
+}
+
 </style>
 
 <!-- Sticky Notice Bar -->
@@ -145,74 +184,29 @@ body {
 
 
 
-        <!-- Topbar End -->
 
-        <!-- Navbar & Hero Start -->
-        <!-- <div class="container-fluid nav-bar px-0 px-lg-4 py-lg-0">
-            <div class="container">
-                <nav class="navbar navbar-expand-lg navbar-light"> 
-                    <a href="{{ asset('') }}" class="navbar-brand p-0">
-                        <img src="{{ asset('theme') }}/frontend/img/logo-white.svg" alt="Logo" class="w-100">
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                        <span class="fa fa-bars"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <div class="navbar-nav mx-0 mx-lg-auto">
-                            <a href="{{ url('/') }}" class="nav-item {{ Request::is('/') ? 'active' : '' }}">HOME</a>
-                            <a href="{{ url('about') }}" class="nav-item {{ Request::is('about') ? 'active' : '' }}">ABOUT</a>
-                            <div class="nav-item dropdown">
-                                <a href="{{ url('services') }}" class="nav-link nav-item">
-                                    <span class="dropdown-toggle">SERVICES</span>
-                                </a>
-                                <div class="dropdown-menu">
-                                    <a href="{{ url('home-loan') }}" class="dropdown-item {{ Request::is('home-loan') ? 'active' : '' }}">HOME LOAN</a>
-                                    <a href="{{ url('loan-against-property')}}" class="dropdown-item {{ Request::is('loan-against-property') ? 'active' : '' }}">LOAN AGAINST PROPERTY</a>
-                                    <a href="{{ url('project-loan')}}" class="dropdown-item {{ Request::is('project-loan') ? 'active' : '' }}">PROJECT LOAN</a>
-                                    <a href="{{ url('overdraft-facility')}}" class="dropdown-item {{ Request::is('overdraft-facility') ? 'active' : '' }}">OVERDRAFT FACILITY</a>
-                                    <a href="{{ url('lease-rental-discounting')}}" class="dropdown-item {{ Request::is('lease-rental-discounting') ? 'active' : '' }}">LEASE RENTAL DISCOUNTING</a>
-                                    <a href="{{ url('msme-loan')}}" class="dropdown-item {{ Request::is('msme-loan') ? 'active' : '' }}">MSME LOAN</a>
-                                </div>
-                            </div>
-                            <a href="{{ url('properties')}}" class="nav-item {{ Request::is('properties') ? 'active' : '' }}">PROPERTIES</a>
-                            <a href="{{ url('referral-program')}}" class="nav-item {{ Request::is('referral-program') ? 'active' : '' }}">REFERRALS</a>
-                           <a href="{{ route('blogs') }}" class="nav-item {{ Request::is('blogs') ? 'active' : '' }}">Blogs</a>
->
-
-
-
-                            <div class="nav-btn px-3">
-                                <a href="{{ url('contact')}}" class="btn btn-primary rounded-1 py-2 px-4 ms-3 flex-shrink-0 nav-item {{ Request::is('contact') ? 'active' : '' }}">CONTACT</a>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        </div> -->
-<!-- ===== TOP BAR ===== -->
-
-<!-- ===== HEADER ===== -->
 <header class="main-header">
     <div class="container">
         <div class="header-inner">
 
-            <!-- Logo -->
+            <!-- LOGO -->
             <a href="/" class="logo">
                 <img src="{{ asset('theme/frontend/img/icons/logo_jfinserv.jpg') }}" alt="JFINSERV">
             </a>
 
-            <!-- Navigation -->
-            <nav class="main-nav">
-                <ul>
+            <!-- MOBILE TOGGLE -->
+            <div class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </div>
 
-                    <li>
-                        <a href="{{ url('about') }}" class="nav-item {{ Request::is('about') ? 'active' : '' }}">
-                            About Us
-                        </a>
-                    </li>
+            <!-- NAV -->
+          <nav class="main-nav">
 
-                    <!-- PRODUCTS -->
-                    <li class="mega-dropdown">
+    <ul class="nav-list">
+
+        <li><a href="{{ url('about') }}">About Us</a></li>
+
+         <li class="mega-dropdown">
                         <a href="javascript:void(0)" id="productsToggle">Products</a>
 
                         <div class="mega-menu" id="productsMenu">
@@ -259,27 +253,12 @@ body {
                         </div>
                     </li>
 
-                    <!-- Calculator -->
-                    <li>
-                        <a href="{{ route('eligibility.calculator') }}" class="nav-item">
-                            Calculator
-                        </a>
-                    </li>
 
-                    <li>
-                        <a href="{{ url('services') }}" class="nav-item">
-                            Services
-                        </a>
-                    </li>
+        <li><a href="{{ route('eligibility.calculator') }}">Calculator</a></li>
+        <li><a href="{{ url('services') }}">Services</a></li>
+        <li><a href="{{ url('properties') }}">Properties</a></li>
 
-                    <li>
-                        <a href="{{ url('properties') }}" class="nav-item {{ Request::is('properties') ? 'active' : '' }}">
-                            Properties
-                        </a>
-                    </li>
-
-                    <!-- RESOURCES -->
-                    <li class="mega-dropdown calculator-dropdown">
+        <li class="mega-dropdown calculator-dropdown">
                         <a href="javascript:void(0)" class="dropdown-toggle">Resources</a>
 
                         <div class="mega-menu" style="width:320px;">
@@ -297,10 +276,78 @@ body {
                         </div>
                     </li>
 
-                </ul>
-            </nav>
-{{-- HEADER ACTION AREA --}}
-<div class="header-actions d-flex align-items-center gap-3">
+
+      <!-- ✅ MOBILE ACTIONS (ONLY MOBILE VIEW) -->
+<li class="mobile-actions">
+
+    {{-- APPLY NOW --}}
+    @if(Session::has('role_id'))
+        <a href="{{ route('loans.loans-list') }}" class="btn-primary-cta">
+            Apply Now
+        </a>
+    @else
+        <a href="{{ route('applyNow') }}" class="btn-primary-cta">
+            Apply Now
+        </a>
+    @endif
+
+    {{-- USER DROPDOWN (MOBILE) --}}
+    <div class="user-menu mobile-user-menu dropdown">
+
+        <a href="javascript:void(0)"
+           class="user-avatar dropdown-toggle"
+           data-bs-toggle="dropdown">
+            <i class="fas fa-user"></i>
+        </a>
+
+        <div class="dropdown-menu user-dropdown">
+
+            {{-- FINANCE --}}
+            @if(Session::has('role_id'))
+                <a href="{{ route('loans.loans-list') }}" class="dropdown-link">
+                    <i class="fas fa-wallet"></i>
+                    <span>Finance</span>
+                </a>
+            @else
+                <a href="{{ route('authv3.login.form') }}" class="dropdown-link">
+                    <i class="fas fa-wallet"></i>
+                    <span>Finance</span>
+                </a>
+            @endif
+
+            {{-- PROPERTY --}}
+            <a href="{{ route('property.login') }}" class="dropdown-link">
+                <i class="fas fa-building"></i>
+                <span>Property</span>
+            </a>
+
+            {{-- LOGGED IN OPTIONS --}}
+            @if(Session::has('role_id'))
+                <div class="dropdown-divider"></div>
+
+                <a href="/my-profile" class="dropdown-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="/logout" class="dropdown-link logout-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            @endif
+
+        </div>
+    </div>
+
+</li>
+
+    </ul>
+
+</nav>
+
+
+            <!-- DESKTOP ACTIONS -->
+        <div class="header-actions d-flex align-items-center gap-3">
 
     {{-- APPLY NOW --}}
     @if(Session::has('role_id'))
@@ -338,7 +385,7 @@ body {
             @endif
 
             {{-- PROPERTY (same for all) --}}
-            <a href="{{ route('properties') }}" class="dropdown-link">
+            <a href="{{ route('property.login') }}" class="dropdown-link">
                 <i class="fas fa-building"></i>
                 <span>Property</span>
             </a>
@@ -367,10 +414,79 @@ body {
 
 
         </div>
+
+
+        </div>
     </div>
 </header>
 
 <style>
+
+    .mobile-actions {
+    display: none;
+    padding: 15px;
+    border-top: 1px solid #eee;
+}
+
+@media (max-width: 991px) {
+    .mobile-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+    /* Desktop */
+.mobile-actions {
+    display: none;
+}
+
+/* Mobile only */
+@media (max-width: 991px) {
+
+    /* Hide desktop buttons */
+    .header-actions {
+        display: none !important;
+    }
+/* ================= MOBILE ACTIONS ================= */
+.mobile-actions {
+    display: none;
+}
+
+@media (max-width: 991px) {
+
+    .mobile-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding: 16px;
+        border-top: 1px solid #eee;
+        align-items: center;
+    }
+
+    .mobile-actions .btn-primary-cta {
+        width: 100%;
+        text-align: center;
+    }
+
+    .mobile-user-menu {
+        width: 100%;
+        text-align: center;
+    }
+
+    .mobile-user-menu .dropdown-menu {
+        position: static !important;
+        transform: none !important;
+        width: 100%;
+        margin-top: 10px;
+        box-shadow: none;
+        border: 1px solid #eee;
+        border-radius: 8px;
+    }
+}
+
+}
+
 /* HEADER ACTIONS */
 .header-actions {
     display: flex;
@@ -736,55 +852,185 @@ body {
 
 
 
-/* MOBILE */
+/* ================= MOBILE TOGGLE ================= */
+.mobile-toggle {
+    display: none; /* hidden on desktop */
+}
+
+/* ================= MOBILE VIEW ================= */
 @media (max-width: 991px) {
-    .mega-menu {
-        position: static;
+
+    /* SHOW TOGGLE */
+    .mobile-toggle {
+        display: block !important;
+        font-size: 26px;
+        cursor: pointer;
+        margin-left: auto;
+        z-index: 99999;
+    }
+
+    /* HIDE DESKTOP ACTIONS */
+    .header-actions {
+        display: none !important;
+    }
+
+    /* MOBILE MENU */
+    .main-nav ul {
+        display: none;
+        position: fixed;
+        top: 110px; /* notice bar + header */
+        left: 0;
         width: 100%;
-        flex-direction: column;
-        transform: none;
+        background: #fff;
+        border-top: 1px solid #eee;
+        z-index: 99998;
+    }
+
+    .main-nav ul.show {
+        display: block;
+    }
+
+    .main-nav li {
+        border-bottom: 1px solid #eee;
+    }
+
+    .main-nav a {
+        padding: 14px 16px;
+        display: block;
+        font-size: 16px;
+        line-height: normal;
+    }
+
+    /* MOBILE DROPDOWNS */
+    .mega-menu {
+        position: static !important;
+        width: 100% !important;
+        display: none;
         box-shadow: none;
-        padding: 15px;
+        padding: 10px;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+    }
+
+    .mega-menu.show {
+        display: block;
+    }
+
+    .mega-left {
+        grid-template-columns: 1fr;
     }
 
     .mega-right {
         width: 100%;
-        margin-top: 15px;
+        margin-top: 10px;
+        text-align: center;
     }
 }
+.mobile-actions {
+    display: none;
+}
+
+.mobile-actions.show {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+
 
 </style>
 <script>
-const toggle = document.getElementById("productsToggle");
-const menu = document.getElementById("productsMenu");
-
-toggle.addEventListener("click", function (e) {
-    e.stopPropagation();
-    menu.classList.toggle("show");
-});
-
-document.addEventListener("click", function (e) {
-    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-        menu.classList.remove("show");
-    }
-});
-</script>
-<script>
 document.addEventListener("DOMContentLoaded", function () {
-    const dropdown = document.querySelector(".calculator-dropdown");
-    const toggle = dropdown.querySelector(".dropdown-toggle");
 
-    toggle.addEventListener("click", function (e) {
+    const productsToggle = document.getElementById("productsToggle");
+    const productsMenu   = document.getElementById("productsMenu");
+
+    if (!productsToggle || !productsMenu) return;
+
+    productsToggle.addEventListener("click", function (e) {
         e.preventDefault();
-        dropdown.classList.toggle("active");
+        e.stopPropagation();
+
+        productsMenu.classList.toggle("show");
     });
 
-    // Close when clicking outside
+    /* Close when clicking outside */
     document.addEventListener("click", function (e) {
-        if (!dropdown.contains(e.target)) {
-            dropdown.classList.remove("active");
+        if (!productsMenu.contains(e.target) && !productsToggle.contains(e.target)) {
+            productsMenu.classList.remove("show");
         }
     });
+
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const mobileToggle  = document.getElementById("mobileToggle");
+    const navMenu       = document.querySelector(".main-nav ul");
+    const mobileActions = document.querySelector(".mobile-actions");
+
+    const productToggle = document.getElementById("productsToggle");
+    const productMenu   = document.getElementById("productsMenu");
+
+    const resourceToggle = document.querySelector(".calculator-dropdown .dropdown-toggle");
+    const resourceMenu   = document.querySelector(".calculator-dropdown .mega-menu");
+
+    /* SAFETY CHECK */
+    if (!mobileToggle || !navMenu) return;
+
+    /* MAIN MENU TOGGLE */
+    mobileToggle.addEventListener("click", function (e) {
+        e.stopPropagation();
+        navMenu.classList.toggle("show");
+
+        /* ✅ SHOW APPLY NOW + PROFILE IN MOBILE */
+        if (mobileActions) {
+            mobileActions.classList.toggle("show");
+        }
+    });
+
+    /* PRODUCTS DROPDOWN */
+    if (productToggle && productMenu) {
+        productToggle.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            productMenu.classList.toggle("show");
+        });
+    }
+
+    /* RESOURCES DROPDOWN */
+    if (resourceToggle && resourceMenu) {
+        resourceToggle.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            resourceMenu.classList.toggle("show");
+        });
+    }
+
+    /* CLOSE ON OUTSIDE CLICK */
+    document.addEventListener("click", function (e) {
+
+        if (!navMenu.contains(e.target) && !mobileToggle.contains(e.target)) {
+            navMenu.classList.remove("show");
+
+            if (mobileActions) {
+                mobileActions.classList.remove("show");
+            }
+        }
+
+        if (productMenu && !productMenu.contains(e.target)) {
+            productMenu.classList.remove("show");
+        }
+
+        if (resourceMenu && !resourceMenu.contains(e.target)) {
+            resourceMenu.classList.remove("show");
+        }
+    });
+
 });
 </script>
 
@@ -793,108 +1039,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-        <!-- Navbar & Hero End -->
 
-        <!-- dempo -->
-<!-- <header>
-    <div class="header-container">
-        <div class="logo">
-    <a href="{{ url('/') }}">
-    <img src="{{ asset('theme/frontend/img/icons/logo_jfinserv.jpg') }}" alt="JFINSERV Logo" style="height:39px;margin-left:-64px">
-
-</a>
-
-</div>
-
-        <div class="menu-toggle" id="menuToggle">
-            <i class="fa-solid fa-bars"></i>
-        </div>
-
-        <nav id="navMenu">
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Loans</a></li>
-                <li><a href="#">Investments</a></li>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </nav>
-
-        <a href="#" class="cta-btn">Apply Now</a>
-    </div>
-</header>
-
-<script>
-const menuToggle = document.getElementById("menuToggle");
-const navMenu = document.getElementById("navMenu");
-
-menuToggle.addEventListener("click", ()=>{
-    navMenu.classList.toggle("active");
-});
-</script> -->
-        <!-- Modal Search Start -->
-        <!-- <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color: #000;">
-                        <h5 class="modal-title text-white" id="exampleModalLabel">Enquire Now</h5>
-                        <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body d-flex align-items-center" style="background-color: #000;">
-                        <div class="input-group w-100 mx-auto d-flex">
-                            
-                            <form action="{{ route('enquiry.store') }}" method="POST">
-                                @csrf
-                                <div class="row g-3">
-                                    <div class="col-lg-12 col-xl-6">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control border-0" id="name" name="name" value="{{ old('name') }}" placeholder="Your Name" required>
-                                            <label for="name">Your Name</label>
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="col-lg-12 col-xl-6">
-                                        <div class="form-floating">
-                                            <input type="email" class="form-control border-0" id="email" name="email" value="{{ old('email') }}" placeholder="Your Email" required>
-                                            <label for="email">Your Email</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12 col-xl-6">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control border-0" id="contact" name="contact" value="{{ old('contact') }}" placeholder="Phone" required>
-                                            <label for="contact">Your Phone</label>
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="col-lg-12 col-xl-6">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control border-0" id="amount" name="amount"  value="{{ old('amount') }}" placeholder="Amount" required>
-                                            <label for="amount">Amount</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control border-0" id="address" name="address" value="{{ old('address') }}" placeholder="Address" required>
-                                            <label for="address">Address</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-floating">
-                                            <textarea class="form-control border-0" id="message" name="message" placeholder="Leave a message here" style="height: 120px" required>{{ old('message') }}</textarea>
-                                            <label for="message">Message</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 text-center">
-                                        <button class="btn btn-light w-50 py-2" type="submit">Submit</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-        
 
         <!-- Enquiry Modal -->
 <div class="modal fade enquiry-modal" id="searchModal" tabindex="-1">
@@ -1093,6 +1238,40 @@ menuToggle.addEventListener("click", ()=>{
             s0.parentNode.insertBefore(s1,s0);
             })();
         </script>
+
+        <script>
+const toggle = document.getElementById("productsToggle");
+const menu = document.getElementById("productsMenu");
+
+toggle.addEventListener("click", function (e) {
+    e.stopPropagation();
+    menu.classList.toggle("show");
+});
+
+document.addEventListener("click", function (e) {
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+        menu.classList.remove("show");
+    }
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const dropdown = document.querySelector(".calculator-dropdown");
+    const toggle = dropdown.querySelector(".dropdown-toggle");
+
+    toggle.addEventListener("click", function (e) {
+        e.preventDefault();
+        dropdown.classList.toggle("active");
+    });
+
+    // Close when clicking outside
+    document.addEventListener("click", function (e) {
+        if (!dropdown.contains(e.target)) {
+            dropdown.classList.remove("active");
+        }
+    });
+});
+</script>
         <!--End of Tawk.to Script-->
     </body>
     
