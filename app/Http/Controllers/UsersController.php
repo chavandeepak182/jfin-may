@@ -748,41 +748,80 @@ public function insertUser(Request $request)
         return view('frontend.profile.all-loans', compact('section', 'user', 'profile', 'professionalDetails', 'educationalDetails', 'documents', 'loans'));
     }
 
-    public function updateDocuments(Request $request)
-    {
-        // dd($request->all());
-        $userId = session('user_id'); // Retrieve user ID from session
+   public function updateDocuments(Request $request)
+{
+    Log::info('Document upload started');
 
-        if (!$userId) {
-            return redirect()->route('login')->withErrors('User session expired. Please log in again.');
-        }
+    $userId = session('user_id');
+    Log::info('Session user_id', ['user_id' => $userId]);
 
-        // Validate the request
-        $request->validate([
-            'documents.*.document_name' => 'required|string',
-            'documents.*.file' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+    if (!$userId) {
+        Log::error('User session missing');
+        return redirect()->route('login')
+            ->withErrors('User session expired. Please log in again.');
+    }
+
+    Log::info('Incoming request data', $request->all());
+
+    $request->validate([
+        'documents.*.document_name' => 'required|string',
+        'documents.*.file' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+    ]);
+
+    $documents = $request->input('documents', []);
+    Log::info('Documents array', ['documents' => $documents]);
+
+    if (empty($documents)) {
+        Log::warning('No documents found in request');
+        return back()->withErrors('Please add at least one document.');
+    }
+
+    foreach ($documents as $index => $document) {
+
+        Log::info('Processing document index', [
+            'index' => $index,
+            'document_name' => $document['document_name'] ?? null
         ]);
 
-        // Fetch all document fields from the request
-        $documents = $request->input('documents');
+        if ($request->hasFile("documents.$index.file")) {
 
-        // Loop through each document
-        foreach ($documents as $index => $document) {
-            // Check if the file is present in the request
-            if ($request->hasFile("documents.$index.file")) {
-                $file = $request->file("documents.$index.file");
-                $filePath = $file->store('documents', 'public'); // Store the file and get its path
+            Log::info('File found for index', ['index' => $index]);
 
-                // Store or update document information in the database
-                DB::table('documents')->updateOrInsert(
-                    ['user_id' => $userId, 'document_name' => $document['document_name']],
-                    ['file_path' => $filePath, 'updated_at' => now()]
-                );
-            }
+            $file = $request->file("documents.$index.file");
+            Log::info('File details', [
+                'original_name' => $file->getClientOriginalName(),
+                'size' => $file->getSize(),
+                'mime' => $file->getMimeType(),
+            ]);
+
+            $filePath = $file->store('documents', 'public');
+            Log::info('File stored', ['path' => $filePath]);
+
+            DB::table('documents')->insert([
+                'user_id' => $userId,
+                'document_name' => trim($document['document_name']),
+                'file_path' => $filePath,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            Log::info('Document inserted into DB', [
+                'user_id' => $userId,
+                'document_name' => $document['document_name'],
+            ]);
+
+        } else {
+            Log::error('File missing for index', ['index' => $index]);
         }
-
-        return redirect()->route('loan.profile', ['section' => 'document'])->with('success', 'Documents updated successfully.');
     }
+
+    Log::info('Document upload completed successfully');
+
+    return redirect()
+        ->route('loan.mypersonal', ['section' => 'document'])
+        ->with('success', 'Documents uploaded successfully.');
+}
+
 
     public function updateProfile(Request $request)
     {
