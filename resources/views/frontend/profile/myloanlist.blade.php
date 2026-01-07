@@ -8,7 +8,7 @@
             <div class="col-md-10 mx-auto">
                 <div class="row">
                     <div class="col-md-4">
-                        <h2 class="mb-3">My Loan List</h2>
+                        <h2 class="mb-3 text-dark">My Loan List</h2>
                     </div>
                     <div class="col-md-8 mx-auto mb-3">
                         <div class="d-flex justify-content-end">

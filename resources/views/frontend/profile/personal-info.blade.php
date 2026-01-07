@@ -1,395 +1,333 @@
 @extends('frontend.layouts.customer-dash')
-@section('title', "All Personal Details")
+@section('title', 'All Personal Details')
 
 @section('content')
-<div class="container p-0">
-	<div class="row g-4">
-		<div class="col-md-6">
-			<h3 class="mb-3">Personal Details</h3>
-			<div class="w-100">
-				@if ($profile)
-					<div class="bg-white py-5 px-5 rounded">
-						<h4 class="m-0 text-primary"><strong>{{ $user->name }}</strong></h4>
-						<p>{{ $user->email_id }}</p>
-						<p class="m-0">Mobile No.: <strong>{{ $profile->mobile_no }}</strong></p>
-						<p>Gender: <strong>{{ $profile->gender }}</strong> <span class="px-2">|</span> DOB: <strong>{{ $profile->dob }}</strong> <span class="px-2">|</span> Marital Status: <strong>{{ $profile->marital_status }}</strong></p>
-						<p class="m-0">Residence: <strong>{{ $profile->residence_address }}</strong></p>
-						<p>City: <strong>{{ $profile->city }}</strong> <span class="px-2">|</span> State: <strong>{{ $profile->state }}</strong> <span class="px-2">|</span> Pincode: <strong>{{ $profile->pincode }}</strong></p>
-						<p class="mt-5"><a class="btn btn-primary rounded-pill py-2 px-2 px-md-4" data-bs-toggle="modal" data-bs-target="#editProfileModal"><i class="far fa-edit me-2"></i> Update</a></p>
-					</div>
-				@else
-					<p>No personal information available.</p>
-				@endif
-			</div>
 
-			<!-- Edit Profile Modal -->
-			<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="editProfileModalLabel">Edit Personal Details</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-							<form action="{{ route('user.profile.update') }}" method="POST">
-								@csrf
-								<input type="hidden" name="user_id" value="{{ $user->id }}">
+<div class="container-fluid p-0">
+    <div class="row g-4">
 
-								<!-- Name -->
-								<div class="mb-3">
-									<label for="name" class="form-label">Name</label>
-									<input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $user->name) }}">
-									@error('name')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-
-								<!-- Email ID -->
-								<div class="mb-3">
-									<label for="email_id" class="form-label">Email ID</label>
-									<input type="email" class="form-control @error('email_id') is-invalid @enderror" id="email_id" name="email_id" value="{{ old('email_id', $user->email_id) }}">
-									@error('email_id')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-
-								<!-- Mobile No -->
-								<div class="mb-3">
-									<label for="mobile_no" class="form-label">Mobile No</label>
-									<input type="text" class="form-control @error('mobile_no') is-invalid @enderror" id="mobile_no" name="mobile_no" value="{{ old('mobile_no', $profile->mobile_no) }}">
-									@error('mobile_no')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-								<div class="mb-3">
-									<label for="dob" class="form-label">Date of Birth</label>
-									<input type="date" class="form-control @error('dob') is-invalid @enderror" id="dob" name="dob" value="{{ old('dob', $profile->dob) }}">
-									@error('dob')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-								<div class="mb-3">
-									<label for="marital_status" class="form-label">Marital Status</label>
-									<input type="text" class="form-control @error('marital_status') is-invalid @enderror" id="marital_status" name="marital_status" value="{{ old('marital_status', $profile->marital_status) }}">
-									@error('marital_status')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-								<div class="mb-3">
-									<label for="residence_address" class="form-label">Residence Address</label>
-									<input type="text" class="form-control @error('residence_address') is-invalid @enderror" id="residence_address" name="residence_address" value="{{ old('residence_address', $profile->residence_address) }}">
-									@error('residence_address')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-								<div class="mb-3">
-									<label for="city" class="form-label">City</label>
-									<input type="text" class="form-control @error('city') is-invalid @enderror" id="city" name="city" value="{{ old('city', $profile->city) }}">
-									@error('city')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-								<div class="mb-3">
-									<label for="state" class="form-label">State</label>
-									<input type="text" class="form-control @error('state') is-invalid @enderror" id="state" name="state" value="{{ old('state', $profile->state) }}">
-									@error('state')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-								<div class="mb-3">
-									<label for="pincode" class="form-label">Pincode</label>
-									<input type="text" class="form-control @error('pincode') is-invalid @enderror" id="pincode" name="pincode" value="{{ old('pincode', $profile->pincode) }}">
-									@error('pincode')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-									<button type="submit" class="btn btn-primary">Save changes</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="col-md-6">
-			<h3 class="mb-3">Professional Details</h3>
-			<div class="w-100">
-				@if ($professionalDetails)
-					<div class="bg-white py-5 px-5 rounded">
-						<p>Designation: <strong>{{ $professionalDetails->designation }}</strong></p>
-						<p>Company Name: <strong>{{ $professionalDetails->company_name }}</strong></p>
-						<p>Years of Experience: <strong>{{ $professionalDetails->experience_year }} yrs</strong></p>
-						<p>Company Address: <strong>{{ $professionalDetails->company_address }}</strong></p>
-						<p>Industry: <strong>{{ $professionalDetails->industry }}</strong></p>
-						<p class="mt-5">
-							<a class="btn btn-primary rounded-pill py-2 px-2 px-md-4" data-bs-toggle="modal" data-bs-target="#editProfessionalModal">
-								<i class="far fa-edit me-2"></i> Update
-							</a>
-						</p>
-					</div>
-				@else
-					<p>No professional information available. Please add your details.</p>
-				@endif
-			</div>
-
-			<!-- Edit Professional Modal -->
-			<div class="modal fade" id="editProfessionalModal" tabindex="-1" aria-labelledby="editProfessionalModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="editProfessionalModalLabel">Edit Professional Details</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-							<form action="{{ route('user.professional.update') }}" method="POST">
-								@csrf
-								<input type="hidden" name="professional_id" value="{{ $professionalDetails->professional_id ?? '' }}">
-
-								<!-- Profession Type -->
-								<div class="mb-3">
-									<label for="profession_type" class="form-label">Profession Type</label>
-									<input type="text" class="form-control @error('profession_type') is-invalid @enderror" id="profession_type" name="profession_type" value="{{ old('profession_type', $professionalDetails->profession_type ?? '') }}">
-									@error('profession_type')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-
-								<!-- Company Name -->
-								<div class="mb-3">
-									<label for="company_name" class="form-label">Company Name</label>
-									<input type="text" class="form-control @error('company_name') is-invalid @enderror" id="company_name" name="company_name" value="{{ old('company_name', $professionalDetails->company_name ?? '') }}">
-									@error('company_name')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-
-								<!-- Years of Experience -->
-								<div class="mb-3">
-									<label for="experience_year" class="form-label">Years of Experience</label>
-									<input type="number" class="form-control @error('experience_year') is-invalid @enderror" id="experience_year" name="experience_year" value="{{ old('experience_year', $professionalDetails->experience_year ?? '') }}">
-									@error('experience_year')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-
-								<!-- Company Address -->
-								<div class="mb-3">
-									<label for="company_address" class="form-label">Company Address</label>
-									<input type="text" class="form-control @error('company_address') is-invalid @enderror" id="company_address" name="company_address" value="{{ old('company_address', $professionalDetails->company_address ?? '') }}">
-									@error('company_address')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-
-								<!-- Industry -->
-								<div class="mb-3">
-									<label for="industry" class="form-label">Industry</label>
-									<input type="text" class="form-control @error('industry') is-invalid @enderror" id="industry" name="industry" value="{{ old('industry', $professionalDetails->industry ?? '') }}">
-									@error('industry')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-
-								<!-- Designation -->
-								<div class="mb-3">
-									<label for="designation" class="form-label">Designation</label>
-									<input type="text" class="form-control @error('designation') is-invalid @enderror" id="designation" name="designation" value="{{ old('designation', $professionalDetails->designation ?? '') }}">
-									@error('designation')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-									<button type="submit" class="btn btn-primary">Save changes</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="col-md-6">
-			<h3 class="mb-3">Educational Details</h3>
-			<div class="w-100">
-				@if ($educationalDetails)
-					<div class="bg-white py-5 px-5 rounded">
-						<input type="hidden" name="edu_id" value="{{ $educationalDetails->edu_id }}">
-						<p>Qualification: <strong>{{ $educationalDetails->qualification }}</strong></p>
-						<p>College Name: <strong>{{ $educationalDetails->college_name }}</strong></p>
-						<p>Passing Year: <strong>{{ $educationalDetails->pass_year }}</strong></p>
-						<p>College Address: <strong>{{ $educationalDetails->college_address }}</strong></p>
-						<p class="mt-5">
-							<a class="btn btn-primary rounded-pill py-2 px-2 px-md-4" data-bs-toggle="modal" data-bs-target="#editEducationalModal">
-								<i class="far fa-edit me-2"></i> Update
-							</a>
-						</p>
-					</div>
-				@else
-					<div class="bg-light py-5 px-5 rounded text-center">
-						<p class="text-muted mb-0">No educational information available.</p>
-					</div>
-				@endif
-			</div>
-
-			<!-- Edit Educational Modal -->
-			<div class="modal fade" id="editEducationalModal" tabindex="-1" aria-labelledby="editEducationalModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="editEducationalModalLabel">Edit Educational Details</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-						@if ($educationalDetails)
-							<form action="{{ route('user.educational.update') }}" method="POST">
-								@csrf
-								<input type="hidden" name="edu_id" value="{{ $educationalDetails->edu_id }}">
-
-								<!-- Qualification -->
-								<div class="mb-3">
-									<label for="qualification" class="form-label">Qualification</label>
-									<input type="text" class="form-control @error('qualification') is-invalid @enderror" id="qualification" name="qualification" value="{{ old('qualification', $educationalDetails->qualification) }}">
-									@error('qualification')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-
-								<!-- College Name -->
-								<div class="mb-3">
-									<label for="college_name" class="form-label">College Name</label>
-									<input type="text" class="form-control @error('college_name') is-invalid @enderror" id="college_name" name="college_name" value="{{ old('college_name', $educationalDetails->college_name) }}">
-									@error('college_name')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-
-								<!-- Passing Year -->
-								<div class="mb-3">
-									<label for="pass_year" class="form-label">Passing Year</label>
-									<input type="number" class="form-control @error('pass_year') is-invalid @enderror" id="pass_year" name="pass_year" value="{{ old('pass_year', $educationalDetails->pass_year) }}">
-									@error('pass_year')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-
-								<!-- College Address -->
-								<div class="mb-3">
-									<label for="college_address" class="form-label">College Address</label>
-									<input type="text" class="form-control @error('college_address') is-invalid @enderror" id="college_address" name="college_address" value="{{ old('college_address', $educationalDetails->college_address) }}">
-									@error('college_address')
-										<div class="invalid-feedback">{{ $message }}</div>
-									@enderror
-								</div>
-
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-									<button type="submit" class="btn btn-primary">Save changes</button>
-								</div>
-							</form>
-						@else
-							<div class="alert alert-warning">No education details available.</div>
-						@endif
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="col-md-6">
-    <h3 class="mb-3">Documents</h3>
-    <div class="w-100">
-        @if ($documents && count($documents) > 0)
-            <div class="card mb-4">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">Uploaded Documents</h5>
-                </div>
-                <div class="card-body p-0">
-                    <div class="list-group list-group-flush">
-                        @foreach ($documents as $document)
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-1 text-capitalize">{{ $document->document_name }}</h6>
-                                        <small class="text-muted">Uploaded: {{ \Carbon\Carbon::parse($document->created_at)->format('d M Y') }}</small>
-                                    </div>
-                                    <div class="btn-group">
-                                        <a href="{{ Storage::url($document->file_path) }}" 
-                                           target="_blank" 
-                                           class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-eye"></i> View
-                                        </a>
-                                        {{-- <button type="button" 
-                                                class="btn btn-sm btn-outline-secondary replace-document" 
-                                                data-doc-id="{{ $document->document_id }}">
-                                            <i class="fas fa-sync-alt"></i> Replace
-                                        </button> --}}
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        @else
-            <div class="alert alert-info">
-                <i class="fas fa-info-circle me-2"></i> No documents have been uploaded yet.
-            </div>
-        @endif
-
-        <div class="card">
-            <div class="card-header bg-white">
-                <h5 class="mb-0">Upload New Documents</h5>
-            </div>
-            <div class="card-body">
-                <form action="{{ route('loan.update_documents') }}" method="POST" enctype="multipart/form-data" id="documents-form">
-                    @csrf
-                    <div id="document-fields">
-                        <!-- Document fields will be added here dynamically -->
-                    </div>
-                    
-                    <div class="d-flex justify-content-between mt-4">
-                        <button type="button" id="add-document" class="btn btn-primary">
-                            <i class="fas fa-plus me-2"></i> Add Document
+        {{-- ================= PERSONAL DETAILS ================= --}}
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold">Personal Details</h5>
+                    @if($profile)
+                        <button class="btn btn-sm btn-primary rounded-pill"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editProfileModal">
+                            <i class="far fa-edit me-1"></i> Edit
                         </button>
-                        <button type="submit" class="btn btn-success" id="submit-documents" disabled>
-                            <i class="fas fa-save me-2"></i> Save Documents
-                        </button>
-                    </div>
-                </form>
+                    @endif
+                </div>
+
+                <div class="card-body">
+                    @if($profile)
+                        <h4 class="text-primary fw-bold mb-1">{{ $user->name ?? '—' }}</h4>
+                        <p class="text-muted mb-3">{{ $user->email_id ?? '—' }}</p>
+
+                        <p><strong>Mobile:</strong> {{ $profile->mobile_no ?? '—' }}</p>
+                        <p>
+                            <strong>Gender:</strong> {{ $profile->gender ?? '—' }}
+                            <span class="mx-2">|</span>
+                            <strong>DOB:</strong> {{ $profile->dob ?? '—' }}
+                            <span class="mx-2">|</span>
+                            <strong>Marital:</strong> {{ $profile->marital_status ?? '—' }}
+                        </p>
+
+                        <p><strong>Address:</strong> {{ $profile->residence_address ?? '—' }}</p>
+                        <p>
+                            <strong>City:</strong> {{ $profile->city ?? '—' }}
+                            <span class="mx-2">|</span>
+                            <strong>State:</strong> {{ $profile->state ?? '—' }}
+                            <span class="mx-2">|</span>
+                            <strong>Pincode:</strong> {{ $profile->pincode ?? '—' }}
+                        </p>
+                    @else
+                        <div class="alert alert-info mb-0">
+                            No personal information available.
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
+
+        {{-- ================= PROFESSIONAL DETAILS ================= --}}
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold">Professional Details</h5>
+                    <button class="btn btn-sm btn-primary rounded-pill"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editProfessionalModal">
+                        <i class="far fa-edit me-1"></i> Edit
+                    </button>
+                </div>
+
+                <div class="card-body">
+                    @if($professionalDetails)
+                        <p><strong>Designation:</strong> {{ $professionalDetails->designation ?? '—' }}</p>
+                        <p><strong>Company:</strong> {{ $professionalDetails->company_name ?? '—' }}</p>
+                        <p><strong>Experience:</strong>
+                            {{ $professionalDetails->experience_year ? $professionalDetails->experience_year.' yrs' : '—' }}
+                        </p>
+                        <p><strong>Industry:</strong> {{ $professionalDetails->industry ?? '—' }}</p>
+                        <p><strong>Company Address:</strong> {{ $professionalDetails->company_address ?? '—' }}</p>
+                    @else
+                        <div class="alert alert-info mb-0">
+                            No professional details added yet.
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+		<!-- ================= EDIT PERSONAL DETAILS MODAL ================= -->
+		<div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-lg modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Edit Personal Details</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					</div>
+
+					<form action="{{ route('user.profile.update') }}" method="POST">
+						@csrf
+						<input type="hidden" name="user_id" value="{{ $user->id }}">
+
+						<div class="modal-body row g-3">
+
+							<div class="col-md-6">
+								<label class="form-label">Name</label>
+								<input type="text" name="name"
+									class="form-control"
+									value="{{ old('name', $user->name ?? '') }}">
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label">Email</label>
+								<input type="email" name="email_id"
+									class="form-control"
+									value="{{ old('email_id', $user->email_id ?? '') }}">
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label">Mobile No</label>
+								<input type="text" name="mobile_no"
+									class="form-control"
+									value="{{ old('mobile_no', $profile->mobile_no ?? '') }}">
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label">Date of Birth</label>
+								<input type="date" name="dob"
+									class="form-control"
+									value="{{ old('dob', $profile->dob ?? '') }}">
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label">Gender</label>
+								<input type="text" name="gender"
+									class="form-control"
+									value="{{ old('gender', $profile->gender ?? '') }}">
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label">Marital Status</label>
+								<input type="text" name="marital_status"
+									class="form-control"
+									value="{{ old('marital_status', $profile->marital_status ?? '') }}">
+							</div>
+
+							<div class="col-12">
+								<label class="form-label">Residence Address</label>
+								<input type="text" name="residence_address"
+									class="form-control"
+									value="{{ old('residence_address', $profile->residence_address ?? '') }}">
+							</div>
+
+							<div class="col-md-4">
+								<label class="form-label">City</label>
+								<input type="text" name="city"
+									class="form-control"
+									value="{{ old('city', $profile->city ?? '') }}">
+							</div>
+
+							<div class="col-md-4">
+								<label class="form-label">State</label>
+								<input type="text" name="state"
+									class="form-control"
+									value="{{ old('state', $profile->state ?? '') }}">
+							</div>
+
+							<div class="col-md-4">
+								<label class="form-label">Pincode</label>
+								<input type="text" name="pincode"
+									class="form-control"
+									value="{{ old('pincode', $profile->pincode ?? '') }}">
+							</div>
+
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+							<button type="submit" class="btn btn-primary">Save Changes</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- ================= EDIT PROFESSIONAL DETAILS MODAL ================= -->
+		<div class="modal fade" id="editProfessionalModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-lg modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Edit Professional Details</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					</div>
+
+					<form action="{{ route('user.professional.update') }}" method="POST">
+						@csrf
+						<input type="hidden" name="professional_id"
+							value="{{ $professionalDetails->professional_id ?? '' }}">
+
+						<div class="modal-body row g-3">
+
+							<div class="col-md-6">
+								<label class="form-label">Profession Type</label>
+								<input type="text" name="profession_type"
+									class="form-control"
+									value="{{ old('profession_type', $professionalDetails->profession_type ?? '') }}">
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label">Designation</label>
+								<input type="text" name="designation"
+									class="form-control"
+									value="{{ old('designation', $professionalDetails->designation ?? '') }}">
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label">Company Name</label>
+								<input type="text" name="company_name"
+									class="form-control"
+									value="{{ old('company_name', $professionalDetails->company_name ?? '') }}">
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label">Industry</label>
+								<input type="text" name="industry"
+									class="form-control"
+									value="{{ old('industry', $professionalDetails->industry ?? '') }}">
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label">Experience (Years)</label>
+								<input type="number" name="experience_year"
+									class="form-control"
+									value="{{ old('experience_year', $professionalDetails->experience_year ?? '') }}">
+							</div>
+
+							<div class="col-12">
+								<label class="form-label">Company Address</label>
+								<input type="text" name="company_address"
+									class="form-control"
+									value="{{ old('company_address', $professionalDetails->company_address ?? '') }}">
+							</div>
+
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+							<button type="submit" class="btn btn-primary">Save Changes</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+
+        {{-- ================= DOCUMENTS ================= --}}
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0 fw-bold">Documents</h5>
+                </div>
+
+                <div class="card-body">
+
+                    {{-- Uploaded Documents --}}
+                    @if($documents && count($documents))
+                        <div class="list-group mb-4">
+                            @foreach($documents as $document)
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1 text-capitalize text-dark">
+                                            {{ $document->document_name ?? 'Document' }}
+                                        </h6>
+                                        <!-- <small class="text-muted">
+                                            Uploaded: {{ optional($document->created_at)->format('d M Y') ?? '—' }}
+                                        </small> -->
+                                    </div>
+
+                                    <a href="{{ Storage::url($document->file_path) }}"
+                                       target="_blank"
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye me-1"></i> View
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            No documents uploaded yet.
+                        </div>
+                    @endif
+
+                    {{-- Upload Documents --}}
+                    <form action="{{ route('loan.update_documents') }}"
+                          method="POST"
+                          enctype="multipart/form-data"
+                          id="documents-form">
+                        @csrf
+						<input type="hidden" name="user_id" value="{{ session('user_id') }}">
+                        <div id="document-fields" class="mb-4"></div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" id="add-document" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i> Add Document
+                            </button>
+                            <button type="submit" id="submit-documents" class="btn btn-success" disabled>
+                                <i class="fas fa-save me-2"></i> Save Documents
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
-	</div>
-</div>
 @endsection
-
 @section('custom-script')
 <script>
-	document.getElementById('add-document').addEventListener('click', function() {
-		var index = document.querySelectorAll('#document-fields .document-field').length;
-		const submitBtn = document.getElementById('submit-documents');
-		var newField = `
-			<div class="document-field mb-3">
-				<input type="text" name="documents[${index}][document_name]" class="form-control mb-2" placeholder="Document Name" required>
-				<input type="file" name="documents[${index}][file]" class="form-control mb-2" required>
-				<button type="button" class="btn btn-danger remove-document">Remove</button>
-			</div>
-		`;
-		document.getElementById('document-fields').insertAdjacentHTML('beforeend', newField);
-		submitBtn.disabled = false;
-	});
+document.getElementById('add-document').addEventListener('click', function () {
+    const index = document.querySelectorAll('.document-field').length;
+    document.getElementById('document-fields').insertAdjacentHTML('beforeend', `
+        <div class="document-field mb-3">
+            <input type="text" name="documents[${index}][document_name]" class="form-control mb-2" placeholder="Document Name" required>
+            <input type="file" name="documents[${index}][file]" class="form-control mb-2" required>
+            <button type="button" class="btn btn-danger remove-document">Remove</button>
+        </div>
+    `);
+    document.getElementById('submit-documents').disabled = false;
+});
 
-	// Event delegation to handle removal of dynamically added fields
-	document.getElementById('document-fields').addEventListener('click', function(e) {
-		if (e.target.classList.contains('remove-document')) {
-			e.target.parentElement.remove();
-		}
-	});
+document.getElementById('document-fields').addEventListener('click', function (e) {
+    if (e.target.classList.contains('remove-document')) {
+        e.target.closest('.document-field').remove();
+    }
+});
 </script>
 @endsection

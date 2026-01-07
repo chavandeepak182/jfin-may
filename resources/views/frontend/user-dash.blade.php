@@ -2,198 +2,310 @@
 @section('title', "My Profile")
 
 @section('content')
+<style>
+.dashboard-card {
+    border-radius: 18px;
+    color: #fff;
+    padding: 24px;
+    height: 170px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.dashboard-card .icon-box {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-card h6 {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 6px;
+}
+
+.dashboard-card h2 {
+    font-weight: 700;
+    margin: 0;
+}
+
+.dashboard-card .badge-change {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: rgba(255,255,255,0.25);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+/* Gradient colors */
+.bg-blue {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+.bg-purple {
+    background: linear-gradient(135deg, #a855f7, #7c3aed);
+}
+.bg-orange {
+    background: linear-gradient(135deg, #fb923c, #f97316);
+}
+.bg-green {
+    background: linear-gradient(135deg, #34d399, #10b981);
+}
+
+.application-card {
+    background: #fff;
+    border-radius: 2rem;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 400px;
+}
+
+@media (min-width: 768px) {
+    .application-card {
+        flex-direction: row;
+    }
+}
+
+.application-image {
+    position: relative;
+    min-height: 220px;
+}
+
+.application-image img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.application-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,.2), transparent);
+}
+
+.application-image-content {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    color: #fff;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(254, 243, 199, .9);
+    color: #92400e;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background: #f59e0b;
+    border-radius: 50%;
+}
+
+.application-content {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+}
+
+.progress {
+    height: 8px;
+    border-radius: 999px;
+}
+
+.progress-bar {
+    border-radius: 999px;
+}
+
+.step-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.alert-action {
+    background: rgba(255,237,213,.5);
+    border: 1px solid #fed7aa;
+    border-radius: 1.25rem;
+    padding: 16px;
+    display: flex;
+    gap: 14px;
+}
+</style>
+
 <div class="container-fluid p-0">
-	<h1 class="h3 mb-3"><strong>Welcome</strong> to Jfinserv</h1>
-	<div class="row">
-		<div class="col-xl-6">
-			<div class="w-100">
-				<div class="row">
-					<div class="col-md-6">
-						<div class="card">
-							<div class="card-body">
-								<div class="row">
-									<div class="col mt-0">
-										<h5 class="card-title">My Loans</h5>
-									</div>
-									<div class="col-auto">
-										<div class="stat text-primary">
-											<i class="align-middle" data-feather="credit-card"></i>
-										</div>
-									</div>
-								</div>
-								<!-- Display the loan count dynamically -->
-								<h4 class="mt-1 mb-3">{{ $loanCount }}</h4>
-								<div class="mb-0">
-									<span class="text-muted">Since last week</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="card">
-							<div class="card-body">
-								<div class="row">
-									<div class="col mt-0">
-										<h5 class="card-title">Disbursed Loans</h5>
-									</div>
-									<div class="col-auto">
-										<div class="stat text-primary">
-											<i class="align-middle" data-feather="users"></i>
-										</div>
-									</div>
-								</div>
-								<!-- Display the disbursed loan count dynamically -->
-								<h4 class="mt-1 mb-3">{{ $disbursedLoanCount }}</h4>
-								<div class="mb-0">
-									<span class="text-muted">Since last week</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="card">
-							<div class="card-body">
-								<div class="row">
-									<div class="col mt-0">
-										<h5 class="card-title">Earnings</h5>
-									</div>
-									<div class="col-auto">
-										<div class="stat text-primary">
-											<i class="align-middle" data-feather="briefcase"></i>
-										</div>
-									</div>
-								</div>
-								<!-- Display the wallet balance dynamically -->
-								<h4 class="mt-1 mb-3">₹{{ number_format($walletBalance, 2) }}</h4>
-								<div class="mb-0">
-									<span class="text-muted">Since last week</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="card">
-							<div class="card-body">
-								<div class="row">
-									<div class="col mt-0">
-										<h5 class="card-title">Referral Code</h5>
-									</div>
-									<div class="col-auto">
-										<!-- Share Icon with Dropdown -->
-										<div class="dropdown">
-											<a href="#" class="stat text-primary" data-bs-toggle="dropdown" aria-expanded="false">
-												<i class="align-middle" data-feather="share-2"></i>
-											</a>
-											<ul class="dropdown-menu">
-												<li>
-													<a class="dropdown-item" href="https://wa.me/?text=Hi%2C%0AGood%20news%21%20You%27ve%20received%20a%20special%20referral%20code%20to%20unlock%20amazing%20benefits%20with%20JFinserv%0A%0AReferral%20Code%3A%20{{ $referralCode }}%0Ahttps%3A%2F%2Fjfs.digital%2F" target="_blank">
-														Share via WhatsApp
-													</a>
-												</li>
-												<li>
-													<a class="dropdown-item" href="mailto:?subject=Special%20Referral%20Code%20from%20JFinserv&body=Hi%2C%0A%0AGood%20news%21%20You%27ve%20received%20a%20special%20referral%20code%20to%20unlock%20amazing%20benefits%20with%20JFinserv%0A%0AReferral%20Code%3A%20{{ $referralCode }}%0Ahttps%3A%2F%2Fjfs.digital%2F" target="_blank">
-														Share via Email
-													</a>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</div>
-								<!-- Display Referral Code -->
-								<h4 class="mt-1 mb-3">{{ $referralCode }}</h4>
-								<div class="mb-0">
-									<span class="text-muted">Share your referral code!</span>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>			
 
-		<div class="col-xl-6">
-			<div class="card flex-fill w-100">
-				<div class="card-header">
-					<h5 class="card-title mb-0">Total Earnings</h5>
-				</div>
-				<div class="card-body py-3">
-					<div class="chart chart-sm">
-						<canvas id="chartjs-dashboard-line"></canvas>
+    <h1 class="h3 mb-4 text-black">Dashboard Overview</h1>
+
+		<div class="row g-4">
+
+			<!-- My Loans -->
+				<div class="col-md-6 col-xl-3">
+					<div class="dashboard-card bg-blue">
+						<span class="badge-change">+2.5%</span>
+
+						<div class="icon-box mb-3">
+							<i data-feather="credit-card"></i>
+						</div>
+
+						<h6>My Loans</h6>
+						<h2>{{ $loanCount }}</h2>
 					</div>
 				</div>
+
+				<!-- Disbursed Loans -->
+				<div class="col-md-6 col-xl-3">
+					<div class="dashboard-card bg-purple">
+						<span class="badge-change">+4.5%</span>
+
+						<div class="icon-box mb-3">
+							<i data-feather="users"></i>
+						</div>
+
+						<h6>Disbursed Loans</h6>
+						<h2>{{ $disbursedLoanCount }}</h2>
+					</div>
+				</div>
+
+			<!-- Earnings -->
+			<div class="col-md-6 col-xl-3">
+				<div class="dashboard-card bg-orange">
+					<span class="badge-change">+1.2%</span>
+
+					<div class="icon-box mb-3">
+						<i data-feather="briefcase"></i>
+					</div>
+
+					<h6>Total Earnings</h6>
+					<h2>₹{{ number_format($walletBalance, 0) }}</h2>
+				</div>
 			</div>
+
+			<!-- Referral Code -->
+			<div class="col-md-6 col-xl-3">
+				<div class="dashboard-card bg-green">
+					<span class="badge-change">-0.5%</span>
+
+					<div class="icon-box mb-3">
+						<i data-feather="share-2"></i>
+					</div>
+
+					<h6>Referral Code</h6>
+					<h2>{{ $referralCode }}</h2>
+				</div>
+			</div>
+
 		</div>
-	</div>
 
-	<script>
-		document.addEventListener("DOMContentLoaded", function() {
-			var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
-			var gradient = ctx.createLinearGradient(0, 0, 0, 225);
-			gradient.addColorStop(0, "rgba(215, 227, 244, 1)");
-			gradient.addColorStop(1, "rgba(215, 227, 244, 0)");
-			// Line chart
-			new Chart(document.getElementById("chartjs-dashboard-line"), {
-				type: "line",
-				data: {
-					labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-					datasets: [{
-						label: "Sales ($)",
-						fill: true,
-						backgroundColor: gradient,
-						borderColor: window.theme.primary,
-						data: [
-							2115,
-							1562,
-							1584,
-							1892,
-							1587,
-							1923,
-							2566,
-							2448,
-							2805,
-							3438,
-							2917,
-							3327
-						]
-					}]
-				},
-				options: {
-					maintainAspectRatio: false,
-					legend: {
-						display: false
-					},
-					tooltips: {
-						intersect: false
-					},
-					hover: {
-						intersect: true
-					},
-					plugins: {
-						filler: {
-							propagate: false
-						}
-					},
-					scales: {
-						xAxes: [{
-							reverse: true,
-							gridLines: {
-								color: "rgba(0,0,0,0.0)"
-							}
-						}],
-						yAxes: [{
-							ticks: {
-								stepSize: 1000
-							},
-							display: true,
-							borderDash: [3, 3],
-							gridLines: {
-								color: "rgba(0,0,0,0.0)"
-							}
-						}]
-					}
-				}
-			});
-		});
-	</script>
 </div>
+<div class="row mt-5">
+    <div class="col-12">
+
+        <div class="application-card">
+
+            <!-- LEFT IMAGE -->
+            <div class="application-image col-md-5">
+                <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&q=80&w=800">
+
+                <div class="application-image-content">
+                    <span class="status-badge mb-2">
+                        <span class="status-dot"></span>
+                        Underwriting Review
+                    </span>
+
+                    <h3 class="fw-bold mb-1">₹3,50,000</h3>
+                    <small class="opacity-75">Home Mortgage Refinance</small>
+                </div>
+            </div>
+
+            <!-- RIGHT CONTENT -->
+            <div class="application-content col-md-7">
+
+                <!-- Header -->
+                <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
+                    <div>
+                        <h4 class="fw-bold mb-1">Application #4920-X</h4>
+                        <small class="text-muted">Submitted on Oct 12, 2023</small>
+                    </div>
+
+                    <a href="{{ route('loan.form') }}" class="btn btn-primary rounded-pill px-4 fw-semibold d-flex align-items-center gap-2">
+                        Resume Application
+                        <i data-feather="arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Progress -->
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <strong class="small">Step 3 of 5: Document Verification</strong>
+                        <strong class="text-primary small">60%</strong>
+                    </div>
+
+                    <div class="progress mb-3">
+                        <div class="progress-bar bg-primary" style="width:60%"></div>
+                    </div>
+
+                    <div class="d-flex justify-content-between text-muted step-label">
+                        <span>Application</span>
+                        <span>Credit Check</span>
+                        <span class="text-dark">Docs</span>
+                        <span>Approval</span>
+                        <span>Closing</span>
+                    </div>
+                </div>
+
+                <!-- Action Required -->
+                <div class="alert-action mt-auto">
+                    <div class="bg-warning bg-opacity-25 p-2 rounded">
+                        <i data-feather="alert-triangle" class="text-warning"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold text-warning mb-1">Action Required</h6>
+                        <p class="small mb-2 text-warning">
+                            Please upload your W-2 form for the year 2022 to proceed.
+                        </p>
+                        <a href="#" class="fw-bold text-primary small text-uppercase">
+                            Upload Documents
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{{-- Feather Icons --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        feather.replace();
+    });
+</script>
+
 @endsection
