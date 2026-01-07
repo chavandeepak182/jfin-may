@@ -17,6 +17,81 @@
     <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet" />
     <title>@yield('title')</title>
+    <style>
+
+
+.sidebar-brand {
+    background-color: #0f172a !important;
+}
+
+.sidebar-brand span {
+    color: #ffffff;
+}
+
+/* Sidebar links */
+.sidebar-link {
+    color: #cbd5e1 !important;
+    font-size: 14px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    margin: 4px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Icons */
+.sidebar-link i,
+.sidebar-link svg {
+    color: #94a3b8;
+}
+
+/* Hover */
+.sidebar-link:hover {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+}
+
+/* Active */
+.sidebar-item.active > .sidebar-link {
+    background-color: #6366f1 !important; /* Indigo */
+    color: #ffffff !important;
+}
+
+.sidebar-item.active > .sidebar-link i {
+    color: #ffffff !important;
+}
+
+/* Dropdown arrow */
+.sidebar-link .fa-angle-down {
+    float: right;
+    margin-left: auto;
+}
+
+/* Submenu */
+.sidebar-dropdown,
+.collapse {
+    background-color: transparent;
+}
+
+.collapse .sidebar-link {
+    padding-left: 45px;
+    font-size: 13px;
+    color: #cbd5e1 !important;
+}
+
+.collapse .sidebar-link:hover {
+    background-color: #1e293b !important;
+}
+
+/* Badge */
+.sidebar-link .badge {
+    background-color: #4f46e5;
+    font-size: 10px;
+    margin-left: auto;
+}
+
+    </style>
 
 </head>
 
@@ -25,153 +100,206 @@
         <nav id="sidebar" class="sidebar js-sidebar">
             <div class="sidebar-content js-simplebar">
                 <a class="sidebar-brand" href="{{ url('/') }}">
-                    <span class="align-middle"><img style="background-color: white;" width="100%" height="50px"
-                            src="{{ asset('theme/logo.png') }}"></span>
+                    <span class="align-middle"><img width="100%" height="50px" src="{{ asset('theme/logo.png') }}"></span>
                 </a>
 
                 <ul class="sidebar-nav">
-                    <!-- Dashboard Link -->
+
+                    <!-- Dashboard -->
                     <li class="sidebar-item {{ Request::is('my-profile') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ url('/my-profile') }}">
-                            <i class="fas fa-tachometer-alt custom-icon"></i> <span
-                                class="align-middle">Dashboard</span>
+                            <i class="fas fa-tachometer-alt custom-icon"></i>
+                            <span class="align-middle">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <!-- My Queries -->
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="#">
+                            <i class="fas fa-question-circle"></i>
+                            <span class="align-middle">My Queries</span>
+                        </a>
+                    </li>
+
+                    <!-- My Calls -->
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="#">
+                            <i class="fas fa-phone"></i>
+                            <span class="align-middle">My Calls</span>
                         </a>
                     </li>
 
                     <!-- My Loans Dropdown -->
-                    <li
-                        class="sidebar-item {{ Request::is('myloans*') || Request::is('loans-list') || Request::is('myloans') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="#" data-bs-toggle="collapse" data-bs-target="#loan-dropdown"
-                            aria-expanded="false">
-                            <i class="align-middle" data-feather="layers"></i> <span class="align-middle">My Loans <i
-                                    class="fas fa-angle-down"></i></span>
+                    <li class="sidebar-item {{ Request::is('myloans*') || Request::is('loans-list') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="#" data-bs-toggle="collapse" data-bs-target="#loan-dropdown" aria-expanded="false">
+                            <i class="fas fa-credit-card"></i>
+                            <span class="align-middle">
+                                My Loans <i class="fas fa-angle-down ms-1"></i>
+                            </span>
                         </a>
-                        <ul class="collapse" id="loan-dropdown">
-                            <li><a class="sidebar-link" href="{{ route('loans.loans-list') }}">Total Loans</a></li>
-                            <li><a class="sidebar-link" href="{{ route('loan.myloans') }}">Track Loan</a></li>
+                        <ul class="collapse {{ Request::is('myloans*') || Request::is('loans-list') ? 'show' : '' }}"
+    id="loan-dropdown">
+                            <li>
+                                <a class="sidebar-link" href="{{ route('loans.loans-list') }}">
+                                    Loan
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidebar-link" href="{{ route('loan.myloans') }}">
+                                    Track Loan
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
-                    <li class="sidebar-item {{ Request::is('child-nodes*') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('user.childNodes') }}">
-                            <i class="align-middle" data-feather="user"></i> <span class="align-middle">LegDown</span>
+                    <!-- Documents -->
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="#">
+                            <i class="fas fa-file-alt"></i>
+                            <span class="align-middle">Documents</span>
                         </a>
                     </li>
 
-                    <!-- My Details Dropdown -->
-                    <li
-                        class="sidebar-item {{ Request::is('mypersonal*') || Request::is('mypersonal') || Request::is('myprofessional') || Request::is('myeducation') || Request::is('mydocuments') ? 'active' : '' }}">
+                    <!-- Properties -->
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="#">
+                            <i class="fas fa-building"></i>
+                            <span class="align-middle">Properties</span>
+                        </a>
+                    </li>
+
+                    <!-- Refer & Earn -->
+                    <li class="sidebar-item {{ Request::is('user/walletbalance*') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('user.walletbalance') }}">
+                            <i class="fas fa-gift"></i>
+                            <span class="align-middle">Refer & Earn</span>
+                        </a>
+                    </li>
+
+                    <!-- Settings -->
+                    <li class="sidebar-item {{ Request::is('mypersonal*') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('loan.mypersonal') }}">
-                            <i class="align-middle" data-feather="user"></i> <span class="align-middle">My Details</span>
+                            <i class="fas fa-cog"></i>
+                            <span class="align-middle">Settings</span>
                         </a>
                     </li>
 
-                    <li
-                        class="sidebar-item {{ Request::is('user/walletbalance*') || Request::is('user/walletbalance') || Request::is('user/transactions') ? 'active' : '' }}">
-                        <a class="sidebar-link" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#referral-dropdown" aria-expanded="false">
-                            <i class="align-middle" data-feather="layers"></i> <span class="align-middle">Referral <i
-                                    class="fas fa-angle-down"></i></span>
-                        </a>
-                        <ul class="collapse" id="referral-dropdown">
-                            <li><a class="sidebar-link" href="{{ route('user.walletbalance') }}">Wallet</a></li>
-                            <li><a class="sidebar-link" href="{{ route('transactions.list') }}">Transactions</a></li>
-                        </ul>
-                    </li>
                 </ul>
+
             </div>
         </nav>
 
         <div class="main">
-            <nav class="navbar navbar-expand navbar-light navbar-bg">
-                <a class="sidebar-toggle js-sidebar-toggle">
-                    <i class="hamburger align-self-center"></i>
-                </a>
+           <nav class="navbar navbar-expand navbar-light navbar-bg border-bottom">
+            <a class="sidebar-toggle js-sidebar-toggle me-3">
+                <i class="hamburger align-self-center"></i>
+            </a>
 
-                <div class="navbar-collapse collapse">
-                    <ul class="navbar-nav navbar-align">
-                        <li class="nav-item">
-                            <a class="nav-icon" href="{{ route('messages.index') }}">
-                                <div class="position-relative">
-                                    <i class="align-middle" data-feather="mail"></i>
-                                    <span class="indicator" id="mailbox-count">0</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown"
-                                data-bs-toggle="dropdown">
-                                <div class="position-relative">
-                                    <i class="align-middle" data-feather="bell"></i>
-                                    <span class="indicator"
-                                        id="notification-count">{{ \App\Models\NotificationLog::where('user_id', auth()->id())->where('seen_by_user', false)->count() }}</span>
-                                </div>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0"
-                                aria-labelledby="alertsDropdown">
-                                <div class="dropdown-menu-header">
-
-                                    @php
-                                        $unreadCount = \App\Models\NotificationLog::where('user_id', auth()->id())
-                                            ->where('seen_by_user', false)
-                                            ->count();
-                                    @endphp
-                                    @if ($unreadCount > 0)
-                                        <span id="notification-header">You have {{ $unreadCount }} new
-                                            notifications</span>
-                                    @else
-                                        <span id="notification-header">No new notifications</span>
-                                    @endif
-                                </div>
-                                <div class="list-group" id="notification-list">
-                                    @forelse(\App\Models\NotificationLog::where('user_id', auth()->id())
-										->orderBy('created_at', 'desc')
-										->limit(5)
-										->get() as $notification)
-                                        {{-- Display each notification --}}
-                                        <a href="{{ $notification->url ?? '#' }}"
-                                            class="list-group-item list-group-item-action {{ $notification->seen_by_user ? '' : 'unread-notification' }}"
-                                            data-id="{{ $notification->id }}">
-                                            <div class="row g-0 align-items-center">
-                                                <div class="col-2">
-                                                    <i class="text-{{ $notification->seen_by_user ? 'secondary' : 'primary' }}"
-                                                        data-feather="{{ $notification->icon ?? 'bell' }}"></i>
-                                                </div>
-                                                <div class="col-10">
-                                                    <div class="text-dark">
-                                                        {{ $notification->title }}</div>
-                                                    <div class="text-muted small mt-1">
-                                                        {{ $notification->description }}</div>
-                                                    <div class="text-muted small">
-                                                        {{ $notification->created_at->diffForHumans() }}</div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    @empty
-                                        <div class="list-group-item">
-                                            <div class="text-center text-muted py-2">No notifications found</div>
-                                        </div>
-                                    @endforelse
-                                </div>
-                                <div class="dropdown-menu-footer">
-                                    <a href="{{ route('notifications.index') }}" class="text-primary">View all
-                                        notifications</a>
-                                    @if ($unreadCount > 0)
-                                        <a href="#" class="text-primary float-end"
-                                            id="mark-all-notifications-read">Mark all as read</a>
-                                    @endif
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link d-none d-sm-inline-block" href="/logout">
-                                <i class="align-middle" data-feather="log-out"></i> <span class="align-middle"
-                                    style="font-size: 14px">Logout</span>
-                            </a>
-                        </li>
-                    </ul>
+            {{-- Search --}}
+            <form class="d-none d-md-inline-block">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-light border-0">
+                        <i data-feather="search"></i>
+                    </span>
+                    <input type="text"
+                        class="form-control border-0 bg-light"
+                        placeholder="Search...">
                 </div>
+            </form>
+
+            <div class="navbar-collapse collapse">
+                <ul class="navbar-nav ms-auto align-items-center">
+
+                    {{-- Messages --}}
+                    <li class="nav-item me-2">
+                        <a class="nav-icon" href="{{ route('messages.index') }}">
+                            <div class="position-relative">
+                                <i data-feather="mail"></i>
+                                <span class="indicator" id="mailbox-count">0</span>
+                            </div>
+                        </a>
+                    </li>
+
+                    {{-- Notifications --}}
+                    <li class="nav-item dropdown me-2">
+                        <a class="nav-icon dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <div class="position-relative">
+                                <i data-feather="bell"></i>
+                                <span class="indicator">
+                                    {{ \App\Models\NotificationLog::where('user_id', auth()->id())->where('seen_by_user', false)->count() }}
+                                </span>
+                            </div>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0">
+                            <div class="dropdown-menu-header">
+                                Notifications
+                            </div>
+
+                            <div class="list-group">
+                                @forelse(
+                                    \App\Models\NotificationLog::where('user_id', auth()->id())
+                                    ->orderBy('created_at','desc')
+                                    ->limit(5)->get()
+                                    as $notification
+                                )
+                                    <a href="{{ $notification->url ?? '#' }}"
+                                    class="list-group-item list-group-item-action {{ $notification->seen_by_user ? '' : 'fw-bold' }}">
+                                        <div class="d-flex">
+                                            <i class="me-2 text-primary" data-feather="{{ $notification->icon ?? 'bell' }}"></i>
+                                            <div>
+                                                <div>{{ $notification->title }}</div>
+                                                <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                @empty
+                                    <div class="text-center text-muted py-3">No notifications</div>
+                                @endforelse
+                            </div>
+
+                            <div class="dropdown-menu-footer text-center">
+                                <a href="{{ route('notifications.index') }}">View all</a>
+                            </div>
+                        </div>
+                    </li>
+
+                    {{-- Avatar Dropdown --}}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center"
+                        href="#"
+                        data-bs-toggle="dropdown">
+                            <img
+                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=John"
+                                class="rounded-circle"
+                                width="36"
+                                height="36"
+                                alt="Avatar">
+                            <div class="d-none d-sm-block ms-2 text-start">
+                                <div class="fw-bold">{{ auth()->user()->name ?? 'User' }}</div>
+                                <small class="text-muted">Last Sync: 10:30 AM</small>
+                            </div>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i data-feather="log-out" class="me-2"></i> Logout
+                            </a>
+
+                            <form id="logout-form"
+                                action="{{ route('logout') }}"
+                                method="POST"
+                                class="d-none">
+                                @csrf
+                            </form>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
             </nav>
+
 
             <main class="content">
                 @yield('content')

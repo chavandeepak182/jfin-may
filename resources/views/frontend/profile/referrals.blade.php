@@ -1,65 +1,86 @@
 @extends('frontend.layouts.customer-dash')
-@section('title', "My Wallet")
+@section('title', 'My Wallet')
 
 @section('content')
 <div class="container-fluid p-0">
-    <h2 class="mb-3 text-center">My Wallet</h2>
-    <div class="row">
-        <div class="col-md-10 mx-auto d-flex">
-            <div class="w-100">
-                <div class="bg-white py-5 px-5 rounded">
-                    <h4>Wallet Balance</h4>
-                    <p>Your current wallet balance is: <strong>₹{{ number_format($walletBalance, 2) }}</strong></p>
 
-                    <!-- Withdrawal Form -->
-                    <h4>Withdraw Funds</h4>
-                    <form action="{{ route('user.withdraw.request') }}" method="POST" class="w-50">
-                        @csrf
-                        <div class="form-group pb-4">
-                            <label for="amount">Amount to Withdraw</label>
-                            <input type="number" name="amount" class="form-control" placeholder="Enter amount" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Request Withdrawal</button>
-                    </form>
+    <div class="mb-4">
+        <h3 class="fw-bold text-dark">My Wallet</h3>
+        <p class="text-muted">Manage your earnings and withdrawals</p>
+    </div>
 
-                    <!-- Display any success messages -->
+    <div class="row g-4">
+
+        {{-- LEFT SIDE --}}
+        <div class="col-lg-8">
+
+            {{-- WALLET BALANCE --}}
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body text-center py-5">
+                    <p class="text-uppercase text-muted fw-bold small mb-1">Current Balance</p>
+                    <h1 class="fw-bold text-primary mb-4">
+                        ₹{{ number_format($walletBalance, 2) }}
+                    </h1>
+
+                    {{-- Withdraw --}}
+                    <div class="col-md-6 mx-auto">
+                        <form action="{{ route('user.withdraw.request') }}" method="POST">
+                            @csrf
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">₹</span>
+                                <input type="number"
+                                       name="amount"
+                                       class="form-control"
+                                       placeholder="Enter amount"
+                                       required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold rounded-pill">
+                                Withdraw
+                            </button>
+                        </form>
+                    </div>
+
                     @if(session('message'))
-                        <div class="alert alert-success mt-3">
+                        <div class="alert alert-success mt-4">
                             {{ session('message') }}
                         </div>
                     @endif
+                </div>
+            </div>
 
-                    <!-- Transaction History -->
-                    <h4 class="mt-4">Transaction History</h4>
+            {{-- TRANSACTION HISTORY --}}
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0 fw-bold">Transaction History</h5>
+                </div>
+
+                <div class="card-body">
                     <div class="table-responsive">
-                        <table id="transactionHistory" class="table table-bordered">
-                            <thead>
+                        <table id="transactionHistory" class="table align-middle">
+                            <thead class="table-light">
                                 <tr>
-                                    <th>REFERRAL ID</th>
+                                    <th>Transaction ID</th>
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th>Date</th>
                                 </tr>
                             </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                    <th>Date</th>
-                                </tr>
-                            </tfoot>
                             <tbody>
                                 @foreach($combinedData as $data)
                                     <tr>
                                         <td>{{ $data->transaction_id ?? $data->id }}</td>
                                         <td>₹{{ number_format($data->amount, 2) }}</td>
                                         <td>
-                                            <span class="{{ $data->status == 'pending' ? 'text-warning' : ($data->status == 'completed' ? 'text-success' : '') }}">
+                                            <span class="badge
+                                                {{ $data->status === 'pending' ? 'bg-warning' :
+                                                   ($data->status === 'completed' ? 'bg-success' : 'bg-secondary') }}">
                                                 {{ ucfirst($data->status) }}
                                             </span>
                                         </td>
-                                        <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d M Y, h:i A') }}</td>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($data->created_at)->format('d M Y, h:i A') }}
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -67,36 +88,44 @@
                     </div>
                 </div>
             </div>
-        </div>						
+
+        </div>
+
+        {{-- RIGHT SIDE --}}
+        <div class="col-lg-4">
+
+            {{-- STATUS CARD --}}
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body">
+                    <p class="text-uppercase text-muted fw-bold small mb-2">Status</p>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="fw-bold">Last Withdrawal</span>
+                        <span class="badge bg-warning">Pending</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">Last Payout</span>
+                        <span class="text-success fw-bold">₹450.00</span>
+                    </div>
+
+                    <small class="text-muted d-block mt-2">Oct 24, 2023</small>
+                </div>
+            </div>
+
+            {{-- PROMO CARD --}}
+            <div class="card border-0 text-white"
+                 style="background: linear-gradient(135deg, #4f46e5, #4338ca);">
+                <div class="card-body py-4">
+                    <h5 class="fw-bold mb-2">Earn More With Us</h5>
+                    <p class="small mb-0">
+                        Unlock exclusive rewards by referring friends to our platform.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 </div>
-@endsection
-
-@section('custom-script')
-<!-- DataTables and Export Buttons scripts -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
-
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-<script>
-    $(document).ready(function() {
-        $('#transactionHistory').DataTable({
-            processing: true,
-            serverSide: false, // Since we are using static data, set to false
-            paging: false, // Disable pagination as we're displaying all data
-            searching: false, // Disable searching if not needed
-            info: false, // Disable info display
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'excel', 'pdf', 'print'
-            ]
-        });
-    });
-</script>
 @endsection
