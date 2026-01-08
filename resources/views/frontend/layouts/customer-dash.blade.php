@@ -18,78 +18,109 @@
     <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet" />
     <title>@yield('title')</title>
     <style>
+/* =========================================
+   FINMATE STYLE SIDEBAR (JFINSERV)
+========================================= */
 
+/* Sidebar container */
+.sidebar,
+.sidebar-content {
+    background: #ffffff !important;
+    border-right: 1px solid #e5e7eb;
+}
 
+/* Logo area */
 .sidebar-brand {
-    background-color: #0f172a !important;
+    background: #ffffff !important;
+    padding: 20px;
+    border-bottom: 1px solid #f1f5f9;
 }
 
-.sidebar-brand span {
-    color: #ffffff;
+/* Remove any default dark bg */
+.sidebar-item {
+    background: transparent !important;
 }
 
-/* Sidebar links */
+/* Sidebar links – default */
 .sidebar-link {
-    color: #cbd5e1 !important;
-    font-size: 14px;
-    padding: 10px 16px;
-    border-radius: 8px;
-    margin: 4px 10px;
+    background: transparent !important;
+    color: #475569 !important; /* slate-600 */
+    padding: 14px 18px;
+    margin: 6px 12px;
+    border-radius: 14px;
+    font-weight: 500;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 14px;
+    transition: all 0.2s ease;
 }
 
-/* Icons */
+/* Icons default */
 .sidebar-link i,
 .sidebar-link svg {
-    color: #94a3b8;
+    font-size: 18px;
+    color: #94a3b8 !important; /* slate-400 */
 }
 
 /* Hover */
 .sidebar-link:hover {
-    background-color: #1e293b !important;
-    color: #ffffff !important;
+    background: #f1f5f9 !important;
+    color: #1e293b !important;
 }
 
-/* Active */
+/* Hover icon */
+.sidebar-link:hover i {
+    color: #1e293b !important;
+}
+
+/* ACTIVE ITEM (Finmate style) */
 .sidebar-item.active > .sidebar-link {
-    background-color: #6366f1 !important; /* Indigo */
+    background: #3b82f6 !important; /* Blue-500 */
     color: #ffffff !important;
+    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.35);
 }
 
+/* Active icon */
 .sidebar-item.active > .sidebar-link i {
     color: #ffffff !important;
 }
 
+/* Badge (notification count like FINMATE) */
+.sidebar-link .badge {
+    background: #eef2ff;
+    color: #3b82f6;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 4px 8px;
+    margin-left: auto;
+}
+
 /* Dropdown arrow */
 .sidebar-link .fa-angle-down {
-    float: right;
     margin-left: auto;
+    color: #94a3b8;
 }
 
 /* Submenu */
-.sidebar-dropdown,
-.collapse {
-    background-color: transparent;
-}
-
 .collapse .sidebar-link {
-    padding-left: 45px;
-    font-size: 13px;
-    color: #cbd5e1 !important;
+    background: transparent !important;
+    padding-left: 48px;
+    font-size: 14px;
+    color: #64748b !important;
 }
 
+/* Submenu hover */
 .collapse .sidebar-link:hover {
-    background-color: #1e293b !important;
+    background: #eef2ff !important;
 }
 
-/* Badge */
-.sidebar-link .badge {
-    background-color: #4f46e5;
-    font-size: 10px;
-    margin-left: auto;
+/* Remove disabled / faded look */
+.sidebar-link[aria-disabled],
+.sidebar-link.disabled {
+    opacity: 1 !important;
 }
+
 
     </style>
 
@@ -137,8 +168,7 @@
                                 My Loans <i class="fas fa-angle-down ms-1"></i>
                             </span>
                         </a>
-                        <ul class="collapse {{ Request::is('myloans*') || Request::is('loans-list') ? 'show' : '' }}"
-    id="loan-dropdown">
+                        <ul class="collapse {{ Request::is('myloans*') || Request::is('loans-list') ? 'show' : '' }}" id="loan-dropdown">
                             <li>
                                 <a class="sidebar-link" href="{{ route('loans.loans-list') }}">
                                     Loan
@@ -154,7 +184,7 @@
 
                     <!-- Documents -->
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="#">
+                        <a class="sidebar-link" href="{{ route('loan.mydocuments')}}">
                             <i class="fas fa-file-alt"></i>
                             <span class="align-middle">Documents</span>
                         </a>
@@ -181,6 +211,12 @@
                         <a class="sidebar-link" href="{{ route('loan.mypersonal') }}">
                             <i class="fas fa-cog"></i>
                             <span class="align-middle">Settings</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ Request::is('help-support*') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('user.help.support') }}">
+                            <i class="fas fa-question-circle"></i>
+                            <span class="align-middle">Help & Support</span>
                         </a>
                     </li>
 

@@ -3,16 +3,60 @@
 
 @section('content')
 
+<style>
+.profile-card {
+    transition: all 0.25s ease;
+    border-radius: 14px;
+}
+
+.profile-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+}
+
+.icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-value {
+    font-weight: 600;
+    color: #1e293b;
+}
+</style>
+
 <div class="container-fluid p-0">
+
+    {{-- ================= PAGE HEADER ================= --}}
+    <div class="mb-4">
+        <h3 class="fw-bold mb-1 text-dark">Profile & Settings</h3>
+        <p class="text-muted mb-0">
+            View and manage your personal and professional information
+        </p>
+    </div>
+
     <div class="row g-4">
 
         {{-- ================= PERSONAL DETAILS ================= --}}
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0 h-100">
+        <div class="col-xl-6">
+            <div class="card shadow-sm border-0 h-100 profile-card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold">Personal Details</h5>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-circle bg-primary bg-opacity-10">
+                            <i class="fas fa-user text-primary"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold">Personal Details</h5>
+                            <small class="text-muted">Basic personal information</small>
+                        </div>
+                    </div>
+
                     @if($profile)
-                        <button class="btn btn-sm btn-primary rounded-pill"
+                        <button class="btn btn-sm btn-outline-primary rounded-pill"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editProfileModal">
                             <i class="far fa-edit me-1"></i> Edit
@@ -22,26 +66,41 @@
 
                 <div class="card-body">
                     @if($profile)
-                        <h4 class="text-primary fw-bold mb-1">{{ $user->name ?? '—' }}</h4>
-                        <p class="text-muted mb-3">{{ $user->email_id ?? '—' }}</p>
 
-                        <p><strong>Mobile:</strong> {{ $profile->mobile_no ?? '—' }}</p>
-                        <p>
-                            <strong>Gender:</strong> {{ $profile->gender ?? '—' }}
-                            <span class="mx-2">|</span>
-                            <strong>DOB:</strong> {{ $profile->dob ?? '—' }}
-                            <span class="mx-2">|</span>
-                            <strong>Marital:</strong> {{ $profile->marital_status ?? '—' }}
-                        </p>
+                        <h4 class="fw-bold mb-1">{{ $user->name ?? '—' }}</h4>
+                        <p class="text-muted mb-4">{{ $user->email_id ?? '—' }}</p>
 
-                        <p><strong>Address:</strong> {{ $profile->residence_address ?? '—' }}</p>
-                        <p>
-                            <strong>City:</strong> {{ $profile->city ?? '—' }}
-                            <span class="mx-2">|</span>
-                            <strong>State:</strong> {{ $profile->state ?? '—' }}
-                            <span class="mx-2">|</span>
-                            <strong>Pincode:</strong> {{ $profile->pincode ?? '—' }}
-                        </p>
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <small class="text-muted">Mobile</small>
+                                <div class="section-value">{{ $profile->mobile_no ?? '—' }}</div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <small class="text-muted">Gender</small>
+                                <div class="section-value">{{ $profile->gender ?? '—' }}</div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <small class="text-muted">Date of Birth</small>
+                                <div class="section-value">{{ $profile->dob ?? '—' }}</div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <small class="text-muted">Marital Status</small>
+                                <div class="section-value">{{ $profile->marital_status ?? '—' }}</div>
+                            </div>
+
+                            <div class="col-12 mt-2">
+                                <small class="text-muted">Residential Address</small>
+                                <div class="section-value">
+                                    {{ $profile->residence_address ?? '—' }},
+                                    {{ $profile->city ?? '—' }},
+                                    {{ $profile->state ?? '—' }} - {{ $profile->pincode ?? '—' }}
+                                </div>
+                            </div>
+                        </div>
+
                     @else
                         <div class="alert alert-info mb-0">
                             No personal information available.
@@ -52,11 +111,20 @@
         </div>
 
         {{-- ================= PROFESSIONAL DETAILS ================= --}}
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0 h-100">
+        <div class="col-xl-6">
+            <div class="card shadow-sm border-0 h-100 profile-card">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold">Professional Details</h5>
-                    <button class="btn btn-sm btn-primary rounded-pill"
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-circle bg-primary bg-opacity-10">
+							<i class="fas fa-briefcase text-primary"></i>
+						</div>
+                        <div>
+                            <h5 class="mb-0 fw-bold">Professional Details</h5>
+                            <small class="text-muted">Employment & work information</small>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-sm btn-outline-primary rounded-pill"
                             data-bs-toggle="modal"
                             data-bs-target="#editProfessionalModal">
                         <i class="far fa-edit me-1"></i> Edit
@@ -65,13 +133,36 @@
 
                 <div class="card-body">
                     @if($professionalDetails)
-                        <p><strong>Designation:</strong> {{ $professionalDetails->designation ?? '—' }}</p>
-                        <p><strong>Company:</strong> {{ $professionalDetails->company_name ?? '—' }}</p>
-                        <p><strong>Experience:</strong>
-                            {{ $professionalDetails->experience_year ? $professionalDetails->experience_year.' yrs' : '—' }}
-                        </p>
-                        <p><strong>Industry:</strong> {{ $professionalDetails->industry ?? '—' }}</p>
-                        <p><strong>Company Address:</strong> {{ $professionalDetails->company_address ?? '—' }}</p>
+
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <small class="text-muted">Designation</small>
+                                <div class="section-value">{{ $professionalDetails->designation ?? '—' }}</div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <small class="text-muted">Company</small>
+                                <div class="section-value">{{ $professionalDetails->company_name ?? '—' }}</div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <small class="text-muted">Experience</small>
+                                <div class="section-value">
+                                    {{ $professionalDetails->experience_year ? $professionalDetails->experience_year.' yrs' : '—' }}
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <small class="text-muted">Industry</small>
+                                <div class="section-value">{{ $professionalDetails->industry ?? '—' }}</div>
+                            </div>
+
+                            <div class="col-12">
+                                <small class="text-muted">Company Address</small>
+                                <div class="section-value">{{ $professionalDetails->company_address ?? '—' }}</div>
+                            </div>
+                        </div>
+
                     @else
                         <div class="alert alert-info mb-0">
                             No professional details added yet.
@@ -80,7 +171,10 @@
                 </div>
             </div>
         </div>
-		<!-- ================= EDIT PERSONAL DETAILS MODAL ================= -->
+
+    </div>
+
+    <!-- ================= EDIT PERSONAL DETAILS MODAL ================= -->
 		<div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
 			<div class="modal-dialog modal-lg modal-dialog-centered">
 				<div class="modal-content">
@@ -244,90 +338,5 @@
 			</div>
 		</div>
 
-
-
-        {{-- ================= DOCUMENTS ================= --}}
-        <div class="col-12">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0 fw-bold">Documents</h5>
-                </div>
-
-                <div class="card-body">
-
-                    {{-- Uploaded Documents --}}
-                    @if($documents && count($documents))
-                        <div class="list-group mb-4">
-                            @foreach($documents as $document)
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-1 text-capitalize text-dark">
-                                            {{ $document->document_name ?? 'Document' }}
-                                        </h6>
-                                        <!-- <small class="text-muted">
-                                            Uploaded: {{ optional($document->created_at)->format('d M Y') ?? '—' }}
-                                        </small> -->
-                                    </div>
-
-                                    <a href="{{ Storage::url($document->file_path) }}"
-                                       target="_blank"
-                                       class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-eye me-1"></i> View
-                                    </a>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle me-2"></i>
-                            No documents uploaded yet.
-                        </div>
-                    @endif
-
-                    {{-- Upload Documents --}}
-                    <form action="{{ route('loan.update_documents') }}"
-                          method="POST"
-                          enctype="multipart/form-data"
-                          id="documents-form">
-                        @csrf
-						<input type="hidden" name="user_id" value="{{ session('user_id') }}">
-                        <div id="document-fields" class="mb-4"></div>
-
-                        <div class="d-flex justify-content-between mt-4">
-                            <button type="button" id="add-document" class="btn btn-primary">
-                                <i class="fas fa-plus me-2"></i> Add Document
-                            </button>
-                            <button type="submit" id="submit-documents" class="btn btn-success" disabled>
-                                <i class="fas fa-save me-2"></i> Save Documents
-                            </button>
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
 </div>
-@endsection
-@section('custom-script')
-<script>
-document.getElementById('add-document').addEventListener('click', function () {
-    const index = document.querySelectorAll('.document-field').length;
-    document.getElementById('document-fields').insertAdjacentHTML('beforeend', `
-        <div class="document-field mb-3">
-            <input type="text" name="documents[${index}][document_name]" class="form-control mb-2" placeholder="Document Name" required>
-            <input type="file" name="documents[${index}][file]" class="form-control mb-2" required>
-            <button type="button" class="btn btn-danger remove-document">Remove</button>
-        </div>
-    `);
-    document.getElementById('submit-documents').disabled = false;
-});
-
-document.getElementById('document-fields').addEventListener('click', function (e) {
-    if (e.target.classList.contains('remove-document')) {
-        e.target.closest('.document-field').remove();
-    }
-});
-</script>
 @endsection

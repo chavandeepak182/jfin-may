@@ -255,8 +255,16 @@
 
                     <div class="form-group" id="approvedAmountBox" style="display: none;">
                         <label for="amount_approved">Approved Amount:<span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" id="amountApproved" name="amount_approved"
-                            value="{{ $loan->amount_approved ?? null }}">
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="amountApproved"
+                            name="amount_approved"
+                            min="0"
+                            step="1"
+                            value="{{ $loan->amount_approved ?? '' }}"
+                            oninput="this.value = this.value < 0 ? 0 : this.value"
+                        >
                     </div>
 
                     <div class="form-group" id="remark-box" style="display: none;">

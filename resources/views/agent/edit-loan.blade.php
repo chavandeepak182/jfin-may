@@ -81,11 +81,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6" id="approvedAmountBox" style="display: none;">
-                        <div class="form-group">
-                            <label for="amount_approved">Approved Amount:<span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" id="amount_approved" name="amount_approved" value="{{ $loan->amount_approved ?? null }}">
-                        </div>
+                    <div class="form-group" id="approvedAmountBox" style="display: none;">
+                        <label for="amount_approved">Approved Amount:<span class="text-danger">*</span></label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="amountApproved"
+                            name="amount_approved"
+                            min="0"
+                            step="1"
+                            value="{{ $loan->amount_approved ?? '' }}"
+                            oninput="this.value = this.value < 0 ? 0 : this.value"
+                        >
                     </div>
                     <!-- Sanction Letter (Visible only if status is 'approved') -->
                     <div class="col-md-12">
