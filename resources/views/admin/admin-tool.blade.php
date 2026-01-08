@@ -211,7 +211,7 @@
                 </a>
 
                 <!-- ================= MONTHLY P&L ================= -->
-                <a href="{{ route('monthlyPL.index') }}" class="overview-link">
+                <a href="{{ route('monthlyPL.list') }}" class="overview-link">
                     <div class="overview-card blue">
 
                         <div class="overview-icon">

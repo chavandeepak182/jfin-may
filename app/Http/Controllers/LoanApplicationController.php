@@ -263,7 +263,12 @@ public function index(Request $request)
         ->whereNotNull('deleted_at')
         ->count();
          $approvedLoan = DB::table('loans')->where('status', 'approved')->count();
-         $disbursedLoans = DB::table('loans')->where('status', 'disbursed')->count();
+        //  $disbursedLoans = DB::table('loans')->where('status', 'disbursed')->count();
+        $disbursedLoans = DB::table('loans')
+    ->where('status', 'disbursed')
+    ->whereNotNull('loan_reference_id')
+    ->count();
+
          $rejectedLoans = DB::table('loans')->where('status', 'rejected')->count();
 
         return view('admin.admin-loans', compact('totalLoans','inProcessLoans','trashedloans','approvedLoan','disbursedLoans','rejectedLoans'));
@@ -332,7 +337,7 @@ public function index(Request $request)
                 'status' => 'required|string',
                 'loan_category_id' => 'required|integer',
                 'amount' => 'required|numeric',
-                'amount_approved' => ['required_if:status,disbursed','nullable','numeric'],
+                'amount_approved' => ['required_if:status,disbursed','nullable','numeric','min:0'],
                 'tenure' => 'required|integer',
                 'in_principle' => 'nullable|string',
                 'remarks' => 'nullable|string',
@@ -713,6 +718,16 @@ public function index(Request $request)
 public function showForm(Request $request)
 {
     $currentStep = $request->input('current_step', 1);
+    // Decide layout based on panel
+// Decide layout based on role
+$layout = 'frontend.layouts.header'; // default = customer
+
+if (session('role_id') == 4) {
+    // Admin
+    $layout = 'layouts.header';
+}
+
+
 
     // ✅ Validation rules (only when form is submitted)
     if ($request->isMethod('post')) {
@@ -795,6 +810,7 @@ if ($loan && $currentStep > 5)           $completedSteps[] = 5;
 
     return view('frontend.professional-info', compact(
         'currentStep',
+        'layout',
         'loanCategories',
         'states',
         'hasExistingLoan',
@@ -813,6 +829,196 @@ if ($loan && $currentStep > 5)           $completedSteps[] = 5;
 }
 
 
+
+
+
+public function ajaxList(Request $request)
+{
+    $type = $request->type;
+
+    $query = Loan::query();
+
+    if ($type === 'pending') {
+        $query->whereNull('assigned_to');
+    }
+    elseif ($type === 'inprocess') {
+        $query->where('status', 'inprocess');
+    }
+    elseif ($type === 'approved') {
+        $query->where('status', 'approved');
+    }
+    elseif ($type === 'disbursed') {
+        $query->where('status', 'disbursed');
+    }
+    elseif ($type === 'rejected') {
+        $query->where('status', 'rejected');
+    }
+    elseif ($type === 'trashed') {
+        $query->onlyTrashed();
+    }
+
+    // ✅ ASCENDING order by created_at
+    $loans = $query->oldest()->paginate(10);
+
+    return view('partials.list', compact('loans'))->render();
+}
+
+public function ajaxPendingLoans()
+{
+    $pendingLoans = DB::table('loans')
+        ->leftJoin('users', 'loans.user_id', '=', 'users.id')
+        ->leftJoin('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+        ->where(function ($query) {
+            $query->whereNull('loans.agent_id')
+                ->orWhere(function ($subQuery) {
+                    $subQuery->whereNotNull('loans.agent_id')
+                        ->whereIn('loans.agent_action', ['pending', 'rejected'])
+                        ->orWhereNull('loans.agent_action');
+                });
+        })
+        ->select(
+            'loans.*',
+            'users.name as user_name',
+            'loan_category.category_name as category_name'
+        )
+        ->orderByDesc('loans.created_at')
+        ->paginate(10);
+
+    $agents = DB::table('users')->where('role_id', 2)->get();
+
+    return view('partials.pending-loans', compact('pendingLoans', 'agents'));
+}
+
+
+public function ajaxInprocessLoans()
+{
+    $loans = DB::table('loans')
+        ->join('users', 'loans.user_id', '=', 'users.id')
+        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+        ->select(
+            'loans.loan_id',
+            'loans.loan_reference_id',
+            'loans.amount',
+            'loans.tenure',
+            'users.name as user_name',
+            'loan_category.category_name'
+        )
+        ->where('loans.status', 'in process')   // ✅ only in-process
+        ->whereNull('loans.deleted_at')          // ✅ exclude trashed
+        ->orderByDesc('loans.created_at')
+        ->paginate(10);
+
+    return view('partials.inprocess-loans', compact('loans'));
+}
+
+public function ajaxTrashedLoans()
+{
+    $loans = \App\Models\Loan::onlyTrashed()
+        ->with([
+            'user.profile.cityRelation',
+            'loanCategory',
+            'bankDetails'
+        ])
+        ->whereNotNull('loan_reference_id')
+        ->orderBy('deleted_at', 'desc')
+        ->paginate(10);
+
+    // Transform data (same as your existing logic)
+    $loans->getCollection()->transform(function ($loan) {
+        return [
+            'loan_id' => $loan->loan_id,
+            'loan_reference_id' => $loan->loan_reference_id,
+            'user_name' => $loan->user->name ?? 'N/A',
+            'loan_category_name' => $loan->loanCategory->category_name ?? 'N/A',
+            'amount' => $loan->amount,
+            'bank_name' => $loan->bankDetails->bank_name ?? 'N/A',
+            'city' => $loan->user->profile->cityRelation->city ?? 'N/A',
+        ];
+    });
+
+    // ✅ IMPORTANT: return PARTIAL view
+    return view('partials.trashed-loans', compact('loans'));
+}
+public function ajaxApprovedLoans()
+{
+    $role_id = session()->get('role_id');
+    $agent_id = session()->get('user_id');
+
+    // Only Agent (2) or Admin (4)
+    if (!in_array($role_id, [2, 4])) {
+        abort(403);
+    }
+
+    $loans = DB::table('loans')
+        ->join('users', 'loans.user_id', '=', 'users.id')
+        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+        ->select(
+            'loans.loan_id',
+            'loans.amount',
+            'loans.tenure',
+            'loans.loan_reference_id',
+            'users.name as user_name',
+            'loan_category.category_name as loan_category_name'
+        )
+        ->where('loans.status', 'approved')
+        ->where('loans.agent_id', $agent_id)
+        ->orderByDesc('loans.created_at')
+        ->paginate(10);
+
+    // ✅ Return PARTIAL view
+    return view('partials.approved-loans', compact('loans'));
+}
+
+public function ajaxDisbursedLoans()
+{
+    $loans = DB::table('loans')
+        ->join('users', 'loans.user_id', '=', 'users.id')
+        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+        ->select(
+            'loans.loan_id',
+            'loans.loan_reference_id',
+            'loans.amount',
+            'loans.tenure',
+            'users.name as user_name',
+            'loan_category.category_name'
+        )
+        ->where('loans.status', 'disbursed')
+        ->whereNotNull('loans.loan_reference_id')
+        ->orderByDesc('loans.created_at')
+        ->paginate(10);
+
+    // ✅ RETURN PARTIAL VIEW ONLY
+    return view('partials.disbursed-loans', compact('loans'));
+}
+public function ajaxRejectedLoans()
+{
+    $role_id  = session()->get('role_id');
+    $agent_id = session()->get('user_id');
+
+    // Only agent or admin
+    if ($role_id != 2 && $role_id != 4) {
+        abort(403);
+    }
+
+    $loans = DB::table('loans')
+        ->join('users', 'loans.user_id', '=', 'users.id')
+        ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+        ->select(
+            'loans.loan_id',
+            'loans.loan_reference_id',
+            'loans.amount',
+            'loans.tenure',
+            'users.name as user_name',
+            'loan_category.category_name as loan_category_name'
+        )
+        ->where('loans.status', 'rejected')
+        ->where('loans.agent_id', $agent_id)
+        ->orderByDesc('loans.created_at')
+        ->paginate(10);
+
+    // ✅ RETURN PARTIAL VIEW
+    return view('partials.rejected-loans', compact('loans'));
+}
 
 
     //CreditReport
@@ -1130,62 +1336,106 @@ if ($loan && $currentStep > 5)           $completedSteps[] = 5;
     }
 
 
+    // protected function handleProfessionalDetails(Request $request, $userId)
+    // {
+
+       
+
+    //     $validated = $request->validate([
+    //         'profession_type' => 'required|string|in:salaried,self',
+    //         'company_name' => 'required|string|max:255',
+    //         'industry' => 'required|string|max:100',
+    //         'company_address' => 'required|string|max:255',
+    //         'experience_year' => 'required|integer',
+    //         'designation' => 'required|string|max:100',
+    //         'netsalary' => $request->input('profession_type') === 'salaried' ? 'required|numeric' : 'nullable|numeric',
+    //         'gross_salary' => $request->input('profession_type') === 'salaried' ? 'required|numeric' : 'nullable|numeric',
+    //         'selfincome' => $request->input('profession_type') === 'self' ? 'required|numeric' : 'nullable|numeric',
+    //         'business_establish_date' => $request->input('profession_type') === 'self' ? 'required|date' : 'nullable|date',
+    //     ]);
+
+
+    //     $loan_id = Session::get('current_loan_id') ?? Loan::where('user_id', $userId)
+    //         ->whereNotIn('status', ['disbursed', 'rejected'])
+    //         ->first();
+    //     $professional = Professional::where('user_id', $userId)->where('loan_id', $loan_id)->first();
+
+    //     if (!$professional) {
+            
+    //         Professional::create([
+    //             'user_id' => $userId,
+    //             'loan_id' => $loan_id,
+    //             'profession_type' => $validated['profession_type'],
+    //             'company_name' => $validated['company_name'],
+    //             'industry' => $validated['industry'],
+    //             'company_address' => $validated['company_address'],
+    //             'experience_year' => $validated['experience_year'],
+    //             'designation' => $validated['designation'],
+    //             'netsalary' => $validated['netsalary'] ?? null,
+    //             'gross_salary' => $validated['gross_salary'] ?? null,
+    //             'business_establish_date' => $validated['business_establish_date'] ?? null,
+    //             'selfincome' => $validated['selfincome'] ?? null,
+    //         ]);
+    //     } else {
+          
+    //         $professional->update([
+    //             'profession_type' => $validated['profession_type'],
+    //             'company_name' => $validated['company_name'],
+    //             'industry' => $validated['industry'],
+    //             'company_address' => $validated['company_address'],
+    //             'experience_year' => $validated['experience_year'],
+    //             'designation' => $validated['designation'],
+    //             'netsalary' => $validated['netsalary'] ?? null,
+    //             'gross_salary' => $validated['gross_salary'] ?? null,
+    //             'business_establish_date' => $validated['business_establish_date'] ?? null,
+    //             'selfincome' => $validated['selfincome'] ?? null,
+    //         ]);
+    //     }
+    // }
+
     protected function handleProfessionalDetails(Request $request, $userId)
-    {
+{
+    $validated = $request->validate([
+        'profession_type' => 'required|string|in:salaried,self',
+        'company_name' => 'required|string|max:255',
+        'industry' => 'required|string|max:100',
+        'company_address' => 'required|string|max:255',
+        'experience_year' => 'required|integer',
+        'designation' => 'required|string|max:100',
+        'netsalary' => $request->profession_type === 'salaried' ? 'required|numeric' : 'nullable|numeric',
+        'gross_salary' => $request->profession_type === 'salaried' ? 'required|numeric' : 'nullable|numeric',
+        'selfincome' => $request->profession_type === 'self' ? 'required|numeric' : 'nullable|numeric',
+        'business_establish_date' => $request->profession_type === 'self' ? 'required|date' : 'nullable|date',
+    ]);
 
-        // dd($request->all());die;
+    /** ✅ ALWAYS GET LOAN ID AS INTEGER */
+    $loanId = session('current_loan_id');
 
-        $validated = $request->validate([
-            'profession_type' => 'required|string|in:salaried,self',
-            'company_name' => 'required|string|max:255',
-            'industry' => 'required|string|max:100',
-            'company_address' => 'required|string|max:255',
-            'experience_year' => 'required|integer',
-            'designation' => 'required|string|max:100',
-            'netsalary' => $request->input('profession_type') === 'salaried' ? 'required|numeric' : 'nullable|numeric',
-            'gross_salary' => $request->input('profession_type') === 'salaried' ? 'required|numeric' : 'nullable|numeric',
-            'selfincome' => $request->input('profession_type') === 'self' ? 'required|numeric' : 'nullable|numeric',
-            'business_establish_date' => $request->input('profession_type') === 'self' ? 'required|date' : 'nullable|date',
-        ]);
-
-
-        $loan_id = Session::get('current_loan_id') ?? Loan::where('user_id', $userId)
-            ->whereNotIn('status', ['disbursed', 'rejected'])
-            ->first();
-        $professional = Professional::where('user_id', $userId)->where('loan_id', $loan_id)->first();
-
-        if (!$professional) {
-            // No record exists, create a new one
-            Professional::create([
-                'user_id' => $userId,
-                'loan_id' => $loan_id,
-                'profession_type' => $validated['profession_type'],
-                'company_name' => $validated['company_name'],
-                'industry' => $validated['industry'],
-                'company_address' => $validated['company_address'],
-                'experience_year' => $validated['experience_year'],
-                'designation' => $validated['designation'],
-                'netsalary' => $validated['netsalary'] ?? null,
-                'gross_salary' => $validated['gross_salary'] ?? null,
-                'business_establish_date' => $validated['business_establish_date'] ?? null,
-                'selfincome' => $validated['selfincome'] ?? null,
-            ]);
-        } else {
-            // Update existing record
-            $professional->update([
-                'profession_type' => $validated['profession_type'],
-                'company_name' => $validated['company_name'],
-                'industry' => $validated['industry'],
-                'company_address' => $validated['company_address'],
-                'experience_year' => $validated['experience_year'],
-                'designation' => $validated['designation'],
-                'netsalary' => $validated['netsalary'] ?? null,
-                'gross_salary' => $validated['gross_salary'] ?? null,
-                'business_establish_date' => $validated['business_establish_date'] ?? null,
-                'selfincome' => $validated['selfincome'] ?? null,
-            ]);
-        }
+    if (!$loanId) {
+        throw new \Exception('Loan ID missing in session');
     }
+
+    /** ✅ UPDATE OR CREATE (NO DUPLICATES EVER) */
+    Professional::updateOrCreate(
+        [
+            'loan_id' => $loanId,   // UNIQUE KEY
+        ],
+        [
+            'user_id' => $userId,
+            'profession_type' => $validated['profession_type'],
+            'company_name' => $validated['company_name'],
+            'industry' => $validated['industry'],
+            'company_address' => $validated['company_address'],
+            'experience_year' => $validated['experience_year'],
+            'designation' => $validated['designation'],
+            'netsalary' => $validated['netsalary'] ?? null,
+            'gross_salary' => $validated['gross_salary'] ?? null,
+            'selfincome' => $validated['selfincome'] ?? null,
+            'business_establish_date' => $validated['business_establish_date'] ?? null,
+        ]
+    );
+}
+
     protected function handleEducationDetails(Request $request, $userId)
     {
         $validated = $request->validate([
@@ -1199,11 +1449,11 @@ if ($loan && $currentStep > 5)           $completedSteps[] = 5;
             ->whereNotIn('status', ['disbursed', 'rejected'])
             ->first();
 
-        // Check if education details already exist
+        
         $education = Education::where('user_id', $userId)->where('loan_id', $loan_id)->first();
 
         if (!$education) {
-            // Insert new record if not found
+          
             Education::create([
                 'user_id' => $userId,
                 'loan_id' => $loan_id,
@@ -1213,7 +1463,7 @@ if ($loan && $currentStep > 5)           $completedSteps[] = 5;
                 'college_address' => $validated['college_address'],
             ]);
         } else {
-            // Update existing record
+           
             $education->update([
                 'qualification' => $validated['qualification'],
                 'pass_year' => $validated['pass_year'],
