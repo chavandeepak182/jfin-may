@@ -8,7 +8,7 @@
 @section('content')
         <!-- Carousel Start -->
         <div class="header-carousel owl-carousel">
-            <div class="header-carousel-item hero-bg" style="background-image: url('{{ asset('theme') }}/frontend/img/home-bannner.webp');">
+            <div class="header-carousel-item hero-bg" style="background-image: url('{{ asset('theme') }}/frontend/img/home-bannner.jpg');">
                 <div class="carousel-caption">
                     <div class="container">
                         <div class="row g-4 align-items-center">
@@ -28,7 +28,7 @@
                     </div>
                 </div>
             </div>
-            <div class="header-carousel-item hero-bg" style="background-image:url('{{ asset('theme') }}/frontend/img/home-banner-2.webp');">
+            <div class="header-carousel-item hero-bg" style="background-image:url('{{ asset('theme') }}/frontend/img/home-banner-2.jpg');">
                 <div class="carousel-caption">
                     <div class="container">
                         <div class="row g-4 align-items-center">
@@ -781,7 +781,7 @@ document.querySelectorAll('.service-btn').forEach(btn => {
                         </div>
                     </div>
                     <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.4s">
-                        <img src="{{ asset('theme') }}/frontend/img/faq_img.webp" class="img-fluid w-100" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/faq_img.jpg" class="img-fluid w-100" alt="">
                     </div>
                 </div>
             </div>

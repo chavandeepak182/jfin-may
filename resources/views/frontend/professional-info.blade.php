@@ -1,7 +1,11 @@
-@extends('frontend.layouts.header')
+@extends($layout)
+
 @section('title', 'Apply for a Loan | Jfinserv')
 
 @section('content')
+    <!-- Add Loan Form -->
+
+
 
 @php
     $completedSteps = $completedSteps ?? [];
@@ -857,29 +861,28 @@ document.getElementById('phone').addEventListener('input', function() {
                                             </select>
 
 
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input type="text" name="referral_code" value="{{ old('referral_code') }}" class="form-control" id="referral_code" placeholder="Referral Code">
-                                                        <label for="referral_code">Referral Code (Optional)</label>
-                                                    </div>
+                                                @if ($user->loans()->count() <= 1)
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input type="text" name="referral_code"
+                                                        value="{{ old('referral_code') }}" class="form-control"
+                                                        id="referral_code" placeholder="Referral Code">
+                                                    <label for="referral_code">Referral Code (Optional)</label>
                                                 </div>
+                                            </div>
 
 
 
+
+                                         
+                                            <div class="row mt-2">
                                                 <div class="col-md-6">
-                                                    <!-- <div class="form-floating">
-                                                        <input type="text" name="pan_number" value="{{ old('pan_number', $loan->pan_number ?? '') }}" class="form-control" id="pan_number" placeholder="PAN Number">
-                                                        <label for="pan_number"></label>
-                                                    </div> -->
+                                                    <button type="button" id="check-referral-code"
+                                                        class="btn btn-primary w-100 py-3">Check Code</button>
                                                 </div>
-
-                                                
-
-                                                <div class="row mt-2">
-                        <div class="col-md-6">
-                            <button type="button" id="check-referral-code" class="btn btn-primary">Check Code</button>
-                        </div>
-                        <div id="referral-feedback" class="col-md-12 mt-3"></div>
+                                                <div id="referral-feedback" class="col-md-12 mt-3"></div>
+                                            </div>
+                                        @endif
                     </div>
                                         </fieldset>
 

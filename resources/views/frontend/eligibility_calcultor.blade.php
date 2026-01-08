@@ -6,6 +6,16 @@
 @section('content')
 
 
+
+<section class="page-banner" style="background-image: url('{{ asset('theme') }}/frontend/img/emi.jpg');">
+    <div class="page-banner-overlay"></div>
+
+    <div class="page-banner-container">
+        <!-- <h1 class="page-banner-title">About Jfinserv</h1> -->
+    </div>
+</section>
+
+
 <style>
     
     
