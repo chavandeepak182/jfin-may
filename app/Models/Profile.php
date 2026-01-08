@@ -22,10 +22,13 @@ class Profile extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function cityRelation()
-    {
-        return $this->belongsTo(Cities::class, 'city');
-    }
+ public function cityRelation()
+{
+    return $this->belongsTo(Cities::class, 'city', 'id');
+}
+
+
+    
 
     public function stateRelation()
     {

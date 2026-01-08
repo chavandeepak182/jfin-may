@@ -78,7 +78,7 @@ $totalUsers = DB::table('users')
             }
         })
 
-        ->orderBy('created_at', 'desc')
+        ->orderBy('created_at', 'asc')
         ->paginate(10);
 
     // AJAX response (important)

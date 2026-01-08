@@ -23,10 +23,10 @@ class Loan extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-    public function profile()
-    {
-        return $this->belongsTo(Profile::class, 'profile_id');
-    }
+    // public function profile()
+    // {
+    //     return $this->belongsTo(Profile::class, 'profile_id');
+    // }
     public function agent()
     {
         return $this->belongsTo(User::class, 'agent_id');
