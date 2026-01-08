@@ -5,7 +5,7 @@
 
 @section('content')
 
-<div class="hl-hero-wrapper"style="background-image: url('{{ asset('theme') }}/frontend/img/overdraft_loan.webp'); height:600px">
+<div class="hl-hero-wrapper"style="background-image: url('{{ asset('theme') }}/frontend/img/overdraft_loan.jpg'); height:600px">
     <div class="container">
         <div class="row align-items-center hl-hero-height">
 

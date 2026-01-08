@@ -7,7 +7,7 @@
 
 
 <!-- header start  -->
-<section class="hl-hero-wrapper" style="background-image: url('{{ asset('theme') }}/frontend/img/pro_loans.webp');
+<section class="hl-hero-wrapper" style="background-image: url('{{ asset('theme') }}/frontend/img/pro_loans.jpg');
 ">
     
 

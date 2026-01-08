@@ -6,7 +6,7 @@
 @section('content')
 
 
-<div class="hl-hero-wrapper" style="background-image:url('{{ asset('theme') }}/frontend/img/lrd_loan.webp');">
+<div class="hl-hero-wrapper" style="background-image:url('{{ asset('theme') }}/frontend/img/lrd_loan.jpg');">
     <div class="container">
 "
         <div class="row align-items-center hl-hero-height">
