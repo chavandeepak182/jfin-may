@@ -5,199 +5,382 @@
 @endsection
 @section('content')
     @parent
-    <style>
-          .stat-card {
-        background: #fff;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-        transition: transform 0.2s ease;
-        width: 260px;
-        height: 160px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        margin: 10px auto;
-         border: 2px solid #ccc;
-    }
-    .stat-card:hover {
-        transform: translateY(-3px);
-    }
-    .stat-header {
-        padding: 8px;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        height: 50px;
-    }
-    .stat-body {
-        flex: 1;
-        padding: 5px;
-        text-align: center;
-    }
-    .stat-body h4 {
-        margin: 0;
-        font-weight: bold;
-        font-size: 28px;
-        color: #333;
-    }
-    .stat-body h6 {
-        margin: 0;
-        font-size: 18px;
-        color: #555;
-    }
-    .stat-footer {
-        font-size: 11px;
-        color: #999;
-        padding: 4px;
-        border-top: 1px solid #f0f0f0;
-        text-align: center;
-    }
 
-    .card-row .col-md-4:nth-of-type(1) {
-    margin-top: 20px;
+    <!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+.loan-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 18px 20px;
+    height: 177px;
+    border: 1px solid #eef0f4;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    transition: all 0.25s ease;
 }
 
-.card-row .col-md-3,
-.card-row .col-md-4 {
-    margin-bottom: 20px; /* row मधील vertical gap */
+.loan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.08);
 }
 
-    
-#content-wrapper,
-#content {
-    background-color: white !important;
+.loan-card.active {
+    border: 2px solid #377dff;
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.badge-soft {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.loan-title {
+    font-size: 18px;
+    color: #6b7280;
+    margin-top: 14px;
+}
+
+.loan-value {
+    font-size: 30px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.loan-sub {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+/* Soft colors */
+.bg-blue-soft { background:#eef4ff; color:#377dff; }
+.bg-green-soft { background:#ecfdf3; color:#16a34a; }
+.bg-yellow-soft { background:#fff7ed; color:#f59e0b; }
+.bg-red-soft { background:#fef2f2; color:#dc2626; }
+.bg-purple-soft { background:#f5f3ff; color:#7c3aed; }
+
+.badge-green { background:#e7f9ef; color:#16a34a; }
+.badge-red { background:#fdecec; color:#dc2626; }
+
+.card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.btn-new-application {
+    text-decoration: none !important;   /* remove underline */
+    color: #ffffff;                     /* normal text color */
+    background-color: #0d6efd;          /* button color */
+    padding: 10px 18px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Hover */
+.btn-new-application:hover {
+    text-decoration: none !important;
+    color: #ffffff !important;          /* white on hover */
+    background-color: #084298;          /* darker blue */
+}
+
+/* Visited link fix */
+.btn-new-application:visited {
+    color: #ffffff;
+}
+
+.loan-card.active {
+    border-color: #0d6efd;
+    color: #000;
+    border-radius: 10px;
+}
+
+.loan-card.active .loan-title,
+.loan-card.active .loan-value,
+.loan-card.active .loan-sub {
+    color: #000;
 }
 
 
+/* Focus & active fix */
+.btn-new-application:focus,
+.btn-new-application:active {
+    outline: none;
+    box-shadow: none;
+    text-decoration: none;
+    color: #ffffff;
+}
 
-    /* Colors */
-    .blue-bg { background-color: #1DA1F2; }
-    .pink-bg { background-color: #e91e63; }
-    .green-bg { background-color: #4caf50; }
-    .orange-bg { background-color: #ff9800; }
-    .yellow-bg { background-color: #fbc02d;}
-.   .red-bg { background-color: #bc2222ff; }
-    
+</style>
 
-    </style>
- 
+             <!-- Header -->
+   <div class="page-header">
+    <h1>Loan Applications</h1>
 
-<div class="row pt-5 pb-5 justify-content-center card-row">
-    <!-- Card 1 -->
-    <div class="col-md-3 col-sm-6 mb-4">
-        <a href="{{ route('loans.index') }}" style="text-decoration: none;">
-            <div class="stat-card">
-                <div class="stat-header blue-bg">
-                   <i class="fas fa-file-invoice-dollar"></i> 
+    <a href="../loan-application" class="btn-new-application">
+        <i class="fas fa-user-plus"></i>
+        New Application
+    </a>
+</div>
+
+<div class="row g-4 pt-4">
+    <!-- <a href="../loan-application"><button class="btn btn-primary">Add Loans</button></a> -->
+
+    <!-- All Loans -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+        <a href="javascript:void(0)" class="card-link loan-filter" data-type="all">
+           <div class="loan-card">
+
+                <div class="card-top">
+                    <div class="card-icon bg-purple-soft">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <span class="badge-soft badge-green">+12.5%</span>
                 </div>
-                <div class="stat-body">
-                    <h6>All Loans</h6>
-                    <h4>{{ $totalLoans }}</h4>
-                </div>
-                <div class="stat-footer">Tracked from Records</div>
+
+                <div class="loan-title">All Loans</div>
+                <div class="loan-value">{{ $totalLoans }}</div>
+                <div class="loan-sub">Tracked from records</div>
             </div>
         </a>
     </div>
 
-    <!-- Card 2 -->
-    <div class="col-md-3 col-sm-6 mb-4">
-        <a href="{{ route('pendingLoans') }}" style="text-decoration: none;">
-            <div class="stat-card">
-                <div class="stat-header pink-bg">
-                    <i class="fas fa-hourglass-start"></i> 
+    <!-- Not Assigned Loans -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+      <a href="javascript:void(0)" class="card-link loan-filter" data-type="pending">
+
+            <div class="loan-card">
+                <div class="card-top">
+                    <div class="card-icon bg-yellow-soft">
+                        <i class="fas fa-hourglass-start"></i>
+                    </div>
+                    <span class="badge-soft badge-red">+8.2%</span>
                 </div>
-                <div class="stat-body">
-                    <h6>Not Assigned Loans</h6>
-                    <h4>{{ $inProcessLoans }}</h4>
-                </div>
-                <div class="stat-footer">Tracked from Records</div>
+
+                <div class="loan-title">Pending Loans</div>
+                <div class="loan-value">{{ $inProcessLoans }}</div>
+                <div class="loan-sub">Tracked from records</div>
             </div>
         </a>
     </div>
 
-    <!-- Card 3 -->
-    <div class="col-md-3 col-sm-6 mb-4">
-        <a href="{{ route('inprocess.loans') }}" style="text-decoration: none;">
-            <div class="stat-card">
-                <div class="stat-header green-bg">
-                    <i class="fas fa-sync-alt"></i>  
+    <!-- Inprocess Loans -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+         <a href="javascript:void(0)"
+       class="card-link loan-filter"
+       data-type="inprocess">
+            <div class="loan-card">
+                <div class="card-top">
+                    <div class="card-icon bg-green-soft">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <span class="badge-soft badge-green">+5.1%</span>
                 </div>
-                <div class="stat-body">
-                    <h6>Inprocess Loans</h6>
-                    <h4>{{ $inProcessLoans }}</h4>
-                </div>
-                <div class="stat-footer">Last 24 Hours</div>
+
+                <div class="loan-title">Inprocess Loans</div>
+                <div class="loan-value">{{ $inProcessLoans }}</div>
+                <div class="loan-sub">Last 24 hours</div>
             </div>
         </a>
     </div>
 
-    <!-- Card 4 -->
-    <div class="col-md-3 col-sm-6 mb-4">
-        <a href="{{ route('trashed.loans') }}" style="text-decoration: none;">  
-            <div class="stat-card">
-                <div class="stat-header orange-bg">
-                    <i class="fas fa-trash-alt"></i> 
+    <!-- Trashed Loans -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+        <a href="javascript:void(0)"
+   class="card-link loan-filter"
+   data-type="trashed">
+            <div class="loan-card">
+                <div class="card-top">
+                    <div class="card-icon bg-red-soft">
+                        <i class="fas fa-trash-alt"></i>
+                    </div>
+                    <span class="badge-soft badge-red">+15.3%</span>
                 </div>
-                <div class="stat-body">
-                    <h6>Trashed Loans</h6>
-                    <h4>{{ $trashedloans }}</h4>
-                </div>
-                <div class="stat-footer">Last 24 Hours</div>
+
+                <div class="loan-title">Trashed Loans</div>
+                <div class="loan-value">{{ $trashedloans }}</div>
+                <div class="loan-sub">Last 24 hours</div>
             </div>
-        </a>    
+        </a>
     </div>
 
-    <!-- Card 5 -->
-    <div class="col-md-3 col-sm-6 mb-4">
-        <a href="{{ route('agent.approved.loans')}}" style="text-decoration: none;">  
-            <div class="stat-card">
-                <div class="stat-header green-bg">
-                    <i class="fas fa-file-invoice-dollar"></i> <i class="fas fa-check text-success"></i>
+    <!-- Approved Loans -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+       <a href="javascript:void(0)"
+   class="card-link loan-filter"
+   data-type="approved">
+
+            <div class="loan-card">
+                <div class="card-top">
+                    <div class="card-icon bg-green-soft">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <span class="badge-soft badge-green">+12.5%</span>
                 </div>
-                <div class="stat-body">
-                    <h6>Approved Loans</h6>
-                    <h4>{{ $approvedLoan }}</h4>
-                </div>
-                <div class="stat-footer">Last 24 Hours</div>
+
+                <div class="loan-title">Approved Loans</div>
+                <div class="loan-value">{{ $approvedLoan }}</div>
+                <div class="loan-sub">Last 24 hours</div>
             </div>
-        </a>    
+        </a>
     </div>
 
-    <!-- Card 6 -->
-    <div class="col-md-3 col-sm-6 mb-4">
-        <a href="{{ route('disbursed.loans')}}" style="text-decoration: none;">  
-            <div class="stat-card">
-                <div class="stat-header blue-bg">
-                    <i class="fas fa-building-columns text-primary"></i> <i class="fas fa-arrow-right text-primary"></i>
+    <!-- Disbursed Loans -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+    <a href="javascript:void(0)"
+   class="card-link loan-filter"
+   data-type="disbursed">
+
+            <div class="loan-card">
+                <div class="card-top">
+                    <div class="card-icon bg-blue-soft">
+                        <i class="fas fa-building-columns"></i>
+                    </div>
+                    <span class="badge-soft badge-green">+8.2%</span>
                 </div>
-                <div class="stat-body">
-                    <h6>Disbursed Loans</h6>
-                    <h4>{{ $disbursedLoans }}</h4>
-                </div>
-                <div class="stat-footer">Last 24 Hours</div>
+
+                <div class="loan-title">Disbursed Loans</div>
+                <div class="loan-value">{{ $disbursedLoans }}</div>
+                <div class="loan-sub">Last 24 hours</div>
             </div>
-        </a>    
+        </a>
     </div>
 
-    <!-- Card 7 -->
-    <div class="col-md-3 col-sm-6 mb-4">
-        <a href="{{ route('rejectedLoans')}}" style="text-decoration: none;">  
-            <div class="stat-card">
-                <div class="stat-header yellow-bg">
-                    <i class="fas fa-building-columns text-danger"></i> <i class="fas fa-times-circle text-danger"></i>
+    <!-- Rejected Loans -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+        <a href="javascript:void(0)"
+   class="card-link loan-filter"
+   data-type="rejected">
+
+            <div class="loan-card">
+                <div class="card-top">
+                    <div class="card-icon bg-red-soft">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <span class="badge-soft badge-red">-5.1%</span>
                 </div>
-                <div class="stat-body">
-                    <h6>Rejected Loans</h6>
-                    <h4>{{ $rejectedLoans }}</h4>
-                </div>
-                <div class="stat-footer">Last 24 Hours</div>
+
+                <div class="loan-title">Rejected Loans</div>
+                <div class="loan-value">{{ $rejectedLoans }}</div>
+                <div class="loan-sub">Last 24 hours</div>
             </div>
-        </a>    
+        </a>
+    </div>
+
+</div>
+<script>
+$(document).ready(function () {
+
+    $('.loan-filter').on('click', function () {
+
+        // Remove active class from all cards
+        $('.loan-card').removeClass('active');
+
+        // Add active class to clicked card only
+        $(this).find('.loan-card').addClass('active');
+
+        // Optional: get filter type
+        let type = $(this).data('type');
+        console.log('Selected type:', type);
+
+        // Here you can call AJAX if needed
+    });
+
+});
+</script>
+
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div id="loanListArea">
+            <div class="text-muted text-center">
+                Click any card to view loan list
+            </div>
+        </div>
     </div>
 </div>
+<script>
+$(document).ready(function () {
+
+  function loadLoans(type = 'all') {
+
+    let url = "{{ route('loan.ajax.list') }}";
+
+    if (type === 'pending') {
+        url = "{{ route('loan.ajax.pending') }}";
+    }
+
+    if (type === 'approved') {
+        url = "{{ route('loan.ajax.approved') }}";
+    }
+
+    if (type === 'disbursed') {
+        url = "{{ route('loan.ajax.disbursed') }}";
+    }
+
+    if (type === 'rejected') {
+        url = "{{ route('loan.ajax.rejected') }}";
+    }
+
+    if (type === 'trashed') {
+        url = "{{ route('loan.ajax.trashed') }}";
+    }
+
+    $('#loanListArea').html('<div class="text-center py-4">Loading...</div>');
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        success: function (res) {
+            $('#loanListArea').html(res);
+        },
+        error: function (xhr) {
+            console.log(xhr.responseText);
+            $('#loanListArea').html(
+                '<div class="text-danger text-center">Error loading loans</div>'
+            );
+        }
+    });
+}
+
+    // card click
+    $('.loan-filter').on('click', function (e) {
+        e.preventDefault();
+        loadLoans($(this).data('type'));
+    });
+
+    // load ALL by default
+    loadLoans('all');
+
+});
+</script>
+
+
+
+
 
 
 
