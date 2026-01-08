@@ -390,6 +390,33 @@ Route::get('admin/addloans', [AdminController::class, 'addLoans'])->name('addloa
 Route::get('admin/create-loan', [AdminController::class, 'createLoans'])->name('admin.create-loan');
     Route::post('/admin/loan-application/step', [LoanApplicationController::class, 'submitLoanApplication'])->name('admin.handle_step');
 
+Route::get('/loans/ajax/list', [LoanApplicationController::class, 'ajaxList'])
+    ->name('loan.ajax.list');
+    Route::get('/loans/ajax/pending', [LoanApplicationController::class, 'ajaxPendingLoans'])
+    ->name('loan.ajax.pending');
+    Route::get('/loans/ajax/inprocess',
+    [LoanApplicationController::class, 'ajaxInprocessLoans']
+)->name('loan.ajax.inprocess');
+Route::get('/loans/ajax/trashed',
+    [LoanApplicationController::class, 'ajaxTrashedLoans']
+)->name('loan.ajax.trashed');
+Route::get(
+    '/loans/ajax/approved',
+    [LoanApplicationController::class, 'ajaxApprovedLoans']
+)->name('loan.ajax.approved');
+Route::get(
+    '/loans/ajax/disbursed',
+    [LoanApplicationController::class, 'ajaxDisbursedLoans']
+)->name('loan.ajax.disbursed');
+
+Route::get(
+    '/loans/ajax/rejected',
+    [LoanApplicationController::class, 'ajaxRejectedLoans']
+)->name('loan.ajax.rejected');
+
+
+
+
 
 
 //export
