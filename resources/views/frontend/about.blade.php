@@ -6,7 +6,7 @@
 @section('content')
 <!-- Header Start -->
 <!-- Page Banner Section -->
-<section class="page-banner" style="background-image: url('{{ asset('theme') }}/frontend/img/aboutus.webp');
+<section class="page-banner" style="background-image: url('{{ asset('theme') }}/frontend/img/aboutus.jpg');
 ">
     <div class="page-banner-overlay"></div>
 
@@ -1008,7 +1008,7 @@ document.querySelectorAll('.service-btn').forEach(btn => {
                         </div>
                     </div>
                     <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.4s">
-                        <img src="{{ asset('theme') }}/frontend/img/faq_img.webp" class="img-fluid w-100" alt="">
+                        <img src="{{ asset('theme') }}/frontend/img/faq_img.jpg" class="img-fluid w-100" alt="">
                     </div>
                 </div>
             </div>

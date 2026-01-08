@@ -82,7 +82,7 @@
 
         {{-- ================= USERS ================= --}}
         @if($role_id == 4)
-            <a href="{{ route('allUsers') }}" class="nav-item">
+            <a href="{{ route('admin.customers') }}" class="nav-item">
                 <i class="fas fa-users"></i>
                 <span>Users</span>
             </a>

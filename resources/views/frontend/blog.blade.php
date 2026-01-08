@@ -7,7 +7,7 @@
 @section('content')
 
 <!-- ===== Hero Slider ===== -->
-<section class="page-banner" style="background-image: url('{{ asset('theme') }}/frontend/img/blog.webp');">
+<section class="page-banner" style="background-image: url('{{ asset('theme') }}/frontend/img/blog.jpg');">
     <div class="page-banner-overlay"></div>
 
     <div class="page-banner-container">

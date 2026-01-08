@@ -4,8 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Lead;
 use App\Models\User;
+use App\Models\LoanBank;
+use App\Models\Mis;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\EstimatedFile;
+use App\Models\MonthlyPL;
+
 
 class LeadController extends Controller {
 
@@ -28,13 +33,88 @@ class LeadController extends Controller {
 
     // count dashboard
 
-    public function leadlist()
-    {
-        $enquiries = DB::table('enquiries')->count();
-         $leads = DB::table('leads')->count();
+// public function leadlist()
+// {
+//     $enquiriesCount = DB::table('enquiries')->count(); // for card
+//     $leadsCount     = DB::table('leads')->count();     // for card
 
-        return view('admin.admin-leads', compact('enquiries','leads'));
+//     $enquiries = DB::table('enquiries')->get();        // ALWAYS load list
+
+//     return view('admin.admin-leads', compact(
+//         'enquiriesCount',
+//         'leadsCount',
+//         'enquiries'
+//     ));
+// }
+
+
+
+public function leadlist(Request $request)
+{
+    // ================= COUNTS =================
+    $enquiriesCount       = DB::table('enquiries')->count();
+    $leadsCount           = DB::table('leads')->count();
+    $totalEstimatedFiles  = EstimatedFile::count();
+    $totalMonthlyPL       = MonthlyPL::count();
+
+    // ================= LISTS =================
+    $enquiries = DB::table('enquiries')->get();
+    $leads     = Lead::with('agent')->paginate(10);
+
+    // MIS
+    $banks      = LoanBank::all();
+    $misRecords = Mis::latest()->paginate(10);
+
+    // Loan Banks
+    $loanbanks = DB::table('loan_bank_details')->paginate(10);
+
+    // ================= ESTIMATED FILE =================
+    $query = EstimatedFile::query();
+
+    if ($request->filled('search')) {
+        $query->where(function ($q) use ($request) {
+            $q->where('customer_name', 'like', '%' . $request->search . '%')
+              ->orWhere('mobile', 'like', '%' . $request->search . '%');
+        });
     }
+
+    $grossRevenue = 0;
+
+    if ($request->filled('report_month')) {
+        $date = Carbon::createFromFormat('Y-m', $request->report_month);
+
+        $query->whereYear('report_month', $date->year)
+              ->whereMonth('report_month', $date->month);
+
+        $grossRevenue = (clone $query)->sum('estimate_revenue');
+    }
+
+    $estimatedFiles = $query->orderBy('id', 'desc')->get();
+
+    // ================= MONTHLY P&L =================
+    $pls = MonthlyPL::orderBy('year', 'desc')
+                    ->orderBy('month', 'desc')
+                    ->get();
+
+    return view('admin.admin-leads', compact(
+        'enquiriesCount',
+        'leadsCount',
+        'totalEstimatedFiles',
+        'totalMonthlyPL',
+        'enquiries',
+        'leads',
+        'misRecords',
+        'banks',
+        'loanbanks',
+        'estimatedFiles',
+        'grossRevenue',
+        'pls'
+    ));
+}
+
+
+
+
     public function create() {
         // Check if the user has role_id 4 (admin) or 2 (agent)
         if (!in_array(session('role_id'), [4, 2])) {
