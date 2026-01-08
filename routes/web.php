@@ -332,7 +332,8 @@ Route::middleware(['isUserOrAdmin'])->group(function () {
     Route::get('/myprofessional', [UsersController::class, 'myprofessional'])->name('loan.myprofessional');
     Route::get('/myeducation', [UsersController::class, 'myeducation'])->name('loan.myeducation');
     Route::get('/mydocuments', [UsersController::class, 'mydocuments'])->name('loan.mydocuments');
-
+    Route::delete('/mydocuments/{id}', [UsersController::class, 'deleteDocument'])
+    ->name('loan.deletedocument');
 
     Route::post('/update-documents', [UsersController::class, 'updateDocuments'])->name('loan.update_documents');
     Route::put('/my-profile/update', [UsersController::class, 'updateProfile'])->name('profile.update');
@@ -350,7 +351,8 @@ Route::middleware(['isUserOrAdmin'])->group(function () {
     Route::post('updateLoan', [LoanApplicationController::class, 'update'])->name('updateLoan');
 
 });
-
+Route::get('/help-support', [UsersController::class, 'helpSupport'])
+    ->name('user.help.support');
 
 // Route::get('admin/loan-application', [LoanApplicationController::class, 'showForm'])->name('loan.form');
 

@@ -747,7 +747,30 @@ public function insertUser(Request $request)
         $loans = DB::table('loans')->where('user_id', $userId)->get();
         return view('frontend.profile.all-loans', compact('section', 'user', 'profile', 'professionalDetails', 'educationalDetails', 'documents', 'loans'));
     }
+public function mydocuments()
+{
+    \Log::info('Opening My Documents page');
 
+    $userId = session('user_id');
+
+    if (!$userId) {
+        \Log::error('User session missing while opening documents');
+        return redirect()->route('login')
+            ->withErrors('Session expired. Please login again.');
+    }
+
+    $documents = DB::table('documents')
+        ->where('user_id', $userId)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    \Log::info('Fetched user documents', [
+        'user_id' => $userId,
+        'count' => $documents->count()
+    ]);
+
+    return view('frontend.profile.documents', compact('documents'));
+}
    public function updateDocuments(Request $request)
 {
     Log::info('Document upload started');
@@ -820,6 +843,48 @@ public function insertUser(Request $request)
     return redirect()
         ->route('loan.mypersonal', ['section' => 'document'])
         ->with('success', 'Documents uploaded successfully.');
+}
+public function deleteDocument($id)
+{
+    \Log::info('Delete document request', ['document_id' => $id]);
+
+    $userId = session('user_id');
+
+    if (!$userId) {
+        \Log::error('Session expired while deleting document');
+        return redirect()->route('login');
+    }
+
+    $document = DB::table('documents')
+        ->where('id', $id)
+        ->where('user_id', $userId)
+        ->first();
+
+    if (!$document) {
+        \Log::warning('Document not found or unauthorized delete attempt', [
+            'document_id' => $id,
+            'user_id' => $userId
+        ]);
+
+        return back()->withErrors('Document not found.');
+    }
+
+    // Delete file from storage
+    if ($document->file_path && Storage::disk('public')->exists($document->file_path)) {
+        Storage::disk('public')->delete($document->file_path);
+    }
+
+    // Delete DB record
+    DB::table('documents')->where('id', $id)->delete();
+
+    \Log::info('Document deleted successfully', [
+        'document_id' => $id,
+        'user_id' => $userId
+    ]);
+
+    return redirect()
+        ->route('loan.mydocuments')
+        ->with('success', 'Document removed successfully.');
 }
 
 
@@ -1145,4 +1210,8 @@ public function insertUser(Request $request)
 
         return response()->json(['notifications' => $notificationsData]);
     }
+    public function helpSupport()
+{
+    return view('user.help-support');
+}
 }
