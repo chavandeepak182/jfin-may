@@ -496,7 +496,11 @@
 .tab-content {
     border-top: 1px solid #e5e7eb;
     padding-top: 25px;
+<<<<<<< HEAD
     max-width: 900px;
+=======
+    max-width: 90%;
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
     margin: auto;
 }
 

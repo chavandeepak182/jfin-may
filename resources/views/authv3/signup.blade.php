@@ -328,6 +328,26 @@ body {
     display: none;
   }
 }
+<<<<<<< HEAD
+=======
+.alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+.alert-danger {
+    background-color: #FEE2E2;
+    border: 1px solid #FCA5A5;
+    color: #B91C1C;
+}
+
+.alert ul {
+    margin: 0;
+    padding-left: 18px;
+}
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
     </style>
 </head>
 
@@ -346,15 +366,28 @@ body {
         </div>
 
         <h2 class="auth-heading">Create Account</h2>
+<<<<<<< HEAD
 
         @if ($errors->any())
           <p style="color:red">{{ $errors->first() }}</p>
         @endif
 
+=======
+          @if ($errors->any())
+              <div class="alert alert-danger">
+                  <ul class="mb-0">
+                      @foreach ($errors->all() as $error)
+                          <li>{{ $error }}</li>
+                      @endforeach
+                  </ul>
+              </div>
+          @endif
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
         <form method="POST" action="{{ route('authv3.signup.submit') }}">
           @csrf
 
           <div class="form-field">
+<<<<<<< HEAD
             <label>Full Name</label>
             <input type="text" name="name" required>
           </div>
@@ -372,6 +405,37 @@ body {
           <div class="form-field">
             <label>Password</label>
             <input type="password" name="password" required>
+=======
+              <label>Full Name</label>
+              <input type="text" name="name" value="{{ old('name') }}">
+              @error('name')
+                  <small class="text-danger">{{ $message }}</small>
+              @enderror
+          </div>
+
+          <div class="form-field">
+              <label>Mobile Number</label>
+              <input type="text" name="mobile_no" value="{{ old('mobile_no') }}">
+              @error('mobile_no')
+                  <small class="text-danger">{{ $message }}</small>
+              @enderror
+          </div>
+
+          <div class="form-field">
+              <label>Email Address</label>
+              <input type="email" name="email_id" value="{{ old('email_id') }}">
+              @error('email_id')
+                  <small class="text-danger">{{ $message }}</small>
+              @enderror
+          </div>
+
+          <div class="form-field">
+              <label>Password</label>
+              <input type="password" name="password">
+              @error('password')
+                  <small class="text-danger">{{ $message }}</small>
+              @enderror
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
           </div>
 
           <button class="btn-primary">Signup & Get OTP</button>
@@ -379,10 +443,17 @@ body {
 
         <div class="auth-divider">OR</div>
 
+<<<<<<< HEAD
      <a href="{{ route('authv3.google.login') }}" class="social-btn google-btn">
   <i class="fab fa-google"></i>
   <span>Sign up with Google</span>
 </a>
+=======
+        <a href="{{ route('authv3.google.login') }}" class="social-btn google-btn">
+          <i class="fab fa-google"></i>
+          <span>Sign up with Google</span>
+        </a>
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 
 
         <div class="auth-footer-link">
@@ -392,6 +463,7 @@ body {
 
       </div>
     </div>
+<<<<<<< HEAD
 <!-- ================= RIGHT PROMO ================= -->
 <div class="auth-promo-column">
   <div class="promo-content">
@@ -456,6 +528,72 @@ body {
   </div>
 </div>
 
+=======
+    <!-- ================= RIGHT PROMO ================= -->
+    <div class="auth-promo-column">
+      <div class="promo-content">
+
+        <!-- ===== PROMO TEXT (TOP) ===== -->
+        <div class="promo-text">
+          <h2>Smart Financial Strategies for Wealth Creation</h2>
+
+          <div class="promo-features">
+            <div class="feature-item">
+              <i class="fas fa-check-circle"></i>
+              Diversified Investment Portfolio
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-check-circle"></i>
+              Real-time Market Analytics
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-check-circle"></i>
+              Expert Financial Advisory
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== GRAPH CARD (BOTTOM) ===== -->
+        <div class="analytics-card">
+          <div class="analytics-header">
+            <div>
+              <h3>Financial Growth Strategy</h3>
+              <p class="card-subtitle">Portfolio Performance</p>
+            </div>
+            <div class="chart-value">+28.5%</div>
+          </div>
+
+          <div class="line-chart-premium">
+            <svg viewBox="0 0 280 180" preserveAspectRatio="none">
+              <!-- GRID -->
+              <line x1="0" y1="150" x2="280" y2="150" stroke="#e5e7eb"/>
+              <line x1="0" y1="110" x2="280" y2="110" stroke="#e5e7eb"/>
+              <line x1="0" y1="70"  x2="280" y2="70"  stroke="#e5e7eb"/>
+
+              <!-- LINE -->
+              <polyline
+                fill="none"
+                stroke="#3B82F6"
+                stroke-width="4"
+                points="20,140 60,120 100,95 140,70 180,55 220,40 260,30"
+              />
+
+              <!-- DOTS -->
+              <circle cx="20"  cy="140" r="4" fill="#3B82F6"/>
+              <circle cx="60"  cy="120" r="4" fill="#3B82F6"/>
+              <circle cx="100" cy="95"  r="4" fill="#3B82F6"/>
+              <circle cx="140" cy="70"  r="4" fill="#3B82F6"/>
+              <circle cx="180" cy="55"  r="4" fill="#3B82F6"/>
+              <circle cx="220" cy="40"  r="4" fill="#3B82F6"/>
+              <circle cx="260" cy="30"  r="4" fill="#3B82F6"/>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
   </div>
 </div>
 

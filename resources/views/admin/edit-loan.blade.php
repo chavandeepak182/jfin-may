@@ -50,6 +50,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
+<<<<<<< HEAD
                                         <label for="user_id">Name:</label>
                                         <input type="text" class="form-control" id="user_id" name="user_id"
                                             value="{{ $applyingUser->name ?? '' }}" readonly>
@@ -351,6 +352,277 @@
 
                     <!-- Education Information -->
                     <!-- <div class="section mb-4 mt-5">
+=======
+                                        <label for="user_id">User:</label>
+                                        <input type="text" class="form-control" id="user_id" name="user_id"
+                                            value="{{ $applyingUser->name ?? '' }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="loan_reference_id">Loan Id:</label>
+                                        <input type="text" class="form-control" id="loan_reference_id"
+                                            name="loan_reference_id"
+                                            value="{{ old('loan_reference_id', $loan->loan_reference_id ?? '') }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="mobile_no">Mobile No:</label>
+                                        <input type="text" class="form-control" id="mobile_no" name="mobile_no"
+                                            value="{{ old('mobile_no', $profile->mobile_no ?? '') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="marital_status">Marital Status:</label>
+                                        <select class="form-control" id="marital_status" name="marital_status">
+                                            <option value="single"
+                                                {{ old('marital_status', $profile->marital_status ?? '') == 'single' ? 'selected' : '' }}>
+                                                Single</option>
+                                            <option value="married"
+                                                {{ old('marital_status', $profile->marital_status ?? '') == 'married' ? 'selected' : '' }}>
+                                                Married</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="dob">Date of Birth:</label>
+                                        <input type="date" class="form-control" id="dob" name="dob"
+                                            value="{{ old('dob', $profile->dob ?? '') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="residence_address">Residence Address:</label>
+                                        <textarea class="form-control" id="residence_address" name="residence_address">{{ old('residence_address', $profile->residence_address ?? '') }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="city">City:</label>
+                                        <input type="text" class="form-control" id="city" name="city"
+                                            value="{{ old('city', $profile->city ?? '') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="state">State:</label>
+                                        <input type="text" class="form-control" id="state" name="state"
+                                            value="{{ old('state', $profile->state ?? '') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="pincode">Pincode:</label>
+                                        <input type="text" class="form-control" id="pincode" name="pincode"
+                                            value="{{ old('pincode', $profile->pincode ?? '') }}">
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+
+                    <!-- Professional Information -->
+                    <div class="section mb-4">
+                        <h3 class="h4 mb-2"><strong>Professional Information</strong></h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="company_name">Company Name:</label>
+                                        <input type="text" class="form-control" id="company_name" name="company_name"
+                                            value="{{ old('company_name', $professional->company_name ?? '') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="industry">Industry:</label>
+                                        <input type="text" class="form-control" id="industry" name="industry"
+                                            value="{{ old('industry', $professional->industry ?? '') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="company_address">Company Address:</label>
+                                        <textarea class="form-control" id="company_address" name="company_address">{{ old('company_address', $professional->company_address ?? '') }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="experience_year">Experience Year:</label>
+                                        <input type="number" class="form-control" id="experience_year"
+                                            name="experience_year"
+                                            value="{{ old('experience_year', $professional->experience_year ?? '') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="designation">Designation:</label>
+                                        <input type="text" class="form-control" id="designation" name="designation"
+                                            value="{{ old('designation', $professional->designation ?? '') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="net_salary">Net Salary:</label>
+                                        <input type="number" class="form-control" id="net_salary" name="netsalary"
+                                            value="{{ old('netsalary', $professional->netsalary ?? '') }}">
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+
+                    <!-- Loan Information -->
+                    <div class="section mb-4">
+                        <h3 class="h4 mb-2"><strong>Loan Information</strong></h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="status">Loan Status:</label>
+                                        <select name="status" class="form-control" id="status" required
+                                            onchange="toggleRemarkBox(this.value)">
+                                            <option value="approved"
+                                                {{ old('status', $loan->status ?? '') == 'approved' ? 'selected' : '' }}>
+                                                Approved</option>
+                                            <option value="rejected"
+                                                {{ old('status', $loan->status ?? '') == 'rejected' ? 'selected' : '' }}>
+                                                Rejected</option>
+                                            <option value="in process"
+                                                {{ old('status', $loan->status ?? '') == 'in process' ? 'selected' : '' }}>
+                                                In Process</option>
+                                            <option value="disbursed"
+                                                {{ old('status', $loan->status ?? '') == 'disbursed' ? 'selected' : '' }}>
+                                                Disbursed</option>
+                                            <option value="document pending"
+                                                {{ old('status', $loan->status ?? '') == 'document pending' ? 'selected' : '' }}>
+                                                Document Pending</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="loan_category_id">Loan Category:</label>
+                                        <select name="loan_category_id" class="form-control" required>
+                                            @foreach ($loanCategories as $category)
+                                                <option value="{{ $category->loan_category_id }}"
+                                                    {{ old('loan_category_id', $loan->loan_category_id ?? '') == $category->loan_category_id ? 'selected' : '' }}>
+                                                    {{ $category->category_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="amount">Amount:</label>
+                                        <input type="number" class="form-control" id="amount" name="amount"
+                                            value="{{ old('amount', $loan->amount ?? '') }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="tenure">Tenure:</label>
+                                        <input type="number" class="form-control" id="tenure" name="tenure"
+                                            value="{{ old('tenure', $loan->tenure ?? '') }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="tenure">Tentative Approval</label>
+                                        <select name="in_principle" id="in_principle" class="form-control">
+                                            <option value="Yes" {{ $loan->in_principle == 'Yes' ? 'selected' : '' }}>
+                                                Yes</option>
+                                            <option value="No" {{ $loan->in_principle == 'No' ? 'selected' : '' }}>No
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Sanction Letter (Visible only if status is 'approved') -->
+                                <div class="col-md-6">
+                                    <div id="sanctionLetterBox" class="section mb-4" style="display: none;">
+                                        <h3 class="h4 mb-2"><strong>Sanction Letter</strong></h4>
+                                            <div class="form-group">
+                                                <label for="sanction_letter">Upload Sanction Letter:</label>
+                                                <input type="file" class="form-control" id="sanction_letter"
+                                                    name="sanction_letter">
+                                                @if ($loan->sanction_letter)
+                                                    <small>Current file: <a
+                                                            href="{{ asset('storage/sanction_letters/' . $loan->sanction_letter) }}"
+                                                            target="_blank">{{ $loan->sanction_letter }}</a></small>
+                                                @endif
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="form-group" id="approvedAmountBox" style="display: none;">
+                        <label for="amount_approved">Approved Amount:<span class="text-danger">*</span></label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="amountApproved"
+                            name="amount_approved"
+                            min="0"
+                            step="1"
+                            value="{{ $loan->amount_approved ?? '' }}"
+                            oninput="this.value = this.value < 0 ? 0 : this.value"
+                        >
+                    </div>
+
+                    <div class="form-group" id="remark-box" style="display: none;">
+                        <label for="remark">Remark:</label>
+                        <textarea class="form-control" id="remark" name="remarks">{{ old('remarks') }}</textarea>
+                    </div>
+
+
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success px-4 py-3 rounded"><strong>UPDATE LOAN</strong></button>
+                    </div>
+                </div>
+
+                <!-- Right Section: Documents -->
+                <div class="col-md-4 bg-light p-5">
+                    <div class="section mb-4">
+                        <h3 class="h4 mb-2"><strong>Documents</strong></h4>
+                            <!-- Documents -->
+                            <h6>Uploaded:</h6>
+                            @foreach ($documents as $doc)
+                                <div class="col-md-12 mb-3">
+                                 <div class="document-wrapper">
+    <a href="{{ Storage::url($doc->file_path) }}" target="_blank" style="display: flex; align-items: center; gap: 10px;">
+        <img src="{{ Storage::url($doc->file_path) }}" 
+             alt="{{ $doc->document_name }}" 
+             style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd;">
+        <span>{{ $doc->document_name }}</span>
+    </a>
+</div>
+
+                                </div>
+                            @endforeach
+                            <!-- Document Upload -->
+                            <h6>Upload New Documents:</h6>
+                            <div id="document-upload-section">
+                                <div class="document-upload-row mb-3">
+                                    <div class="row">
+                                        <div class="col-md-12 mb-2">
+                                            <input type="text" name="document_name[]" class="form-control"
+                                                placeholder="Document Name">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input type="file" name="documents[]" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="addDocumentUploadRow()">Add Another
+                                Document</button>
+                    </div>
+
+                    <!-- Education Information -->
+                    <div class="section mb-4 mt-5">
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
                         <h3 class="h4 mb-2"><strong>Education Information</strong></h4>
                             <div class="row">
                                 <div class="col-md-6">
@@ -384,7 +656,11 @@
                                     </div>
                                 </div>
                             </div>
+<<<<<<< HEAD
                     </div> -->
+=======
+                    </div>
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
                 </div>
             </div>
         </form>
@@ -421,7 +697,11 @@
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 window.location.href =
+<<<<<<< HEAD
                                     "{{ route('admin.loans') }}"; // Redirect to the loans index
+=======
+                                    "{{ route('loans.index') }}"; // Redirect to the loans index
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
                             }
                         });
                     },

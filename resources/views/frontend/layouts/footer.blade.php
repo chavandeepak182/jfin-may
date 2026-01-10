@@ -51,7 +51,11 @@
                         <h4 class="text-white mb-4">Reach Us</h4>
                         <p class="text-white">Office No. 423, Sterling Centre,<br>MG Road, Camp, Pune,<br>Maharashtra 411001.</p>
                         <p class="text-white m-0"><a href="mailto:contact@jfinserv.com"><span class="text-white"><i class="fas fa-envelope"></i> contact@jfinserv.com</span></a></p>
+<<<<<<< HEAD
                         <p class="text-white mb-3"><a href="tel:917385551623"><span class="text-white"><i class="fa fa-phone-alt"></i> +91 73855 51623</span></a></p>
+=======
+                        <p class="text-white mb-3"><a href="tel:917385551623"><span class="text-white"><i class="fa fa-phone-alt"></i> +91 73874 65783</span></a></p>
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
                         <!-- <div class="d-flex flex-shrink-0">
                             <div class="footer-btn">
                                 <a href="#" class="btn btn-lg-square rounded-circle position-relative wow tada" data-wow-delay=".9s">

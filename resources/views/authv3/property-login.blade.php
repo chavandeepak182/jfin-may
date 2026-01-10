@@ -17,6 +17,7 @@ body{
     display:flex;
     align-items:center;
     justify-content:center;
+<<<<<<< HEAD
     background: linear-gradient(135deg,#eaf0ff,#f8f9fa);
     font-family:'Segoe UI', sans-serif;
 }
@@ -36,6 +37,19 @@ body{
 .auth-card{
     width:50%;
     padding:40px 35px;
+=======
+    background: linear-gradient(135deg,#eef2ff,#f8f9fa);
+    font-family:'Segoe UI', sans-serif;
+}
+
+.auth-card{
+    width:100%;
+    max-width:420px;
+    background:#fff;
+    padding:35px 30px;
+    border-radius:16px;
+    box-shadow:0 20px 45px rgba(0,0,0,.08);
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 }
 
 .auth-title{
@@ -87,6 +101,7 @@ body{
     text-decoration:none;
     font-weight:600;
 }
+<<<<<<< HEAD
 
 /* RIGHT DESIGN */
 .auth-visual{
@@ -158,11 +173,14 @@ body{
         display:none;
     }
 }
+=======
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 </style>
 </head>
 
 <body>
 
+<<<<<<< HEAD
 <div class="auth-wrapper">
 
     <!-- LEFT : YOUR FORM (UNCHANGED LOGIC) -->
@@ -268,6 +286,65 @@ body{
         </div>
 
     </div>
+=======
+<div class="auth-card">
+
+    <h3 class="text-center auth-title mb-1">
+        Login to continue
+    </h3>
+    <p class="text-center auth-sub mb-4">
+        Enter your mobile number to receive OTP
+    </p>
+
+    {{-- Success Message --}}
+    @if(session('success'))
+        <div class="alert alert-success text-center">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    {{-- Error Message --}}
+    @if($errors->any())
+        <div class="alert alert-danger">
+            @foreach($errors->all() as $error)
+                <div>{{ $error }}</div>
+            @endforeach
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('property.login.otp') }}">
+        @csrf
+
+        <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="fas fa-mobile-alt"></i>
+                </span>
+                <input type="text"
+                       name="mobile_no"
+                       class="form-control"
+                       placeholder="Mobile Number"
+                       maxlength="10"
+                       required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 btn-login">
+            <i class="fas fa-paper-plane me-1"></i> Send OTP
+        </button>
+    </form>
+
+    <div class="divider">
+        <span>OR</span>
+    </div>
+
+    <p class="text-center signup-link mb-0">
+        New user?
+        <a href="{{ route('property.signup') }}">
+            Create an account
+        </a>
+    </p>
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 
 </div>
 

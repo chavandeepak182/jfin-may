@@ -111,6 +111,7 @@
                 <span>MLM</span>
             </a>
         @endif
+<<<<<<< HEAD
         {{-- ================= COMMISSION ================= --}}
 @if($role_id == 4)
     <a href="{{ route('allCommission') }}" class="nav-item">
@@ -119,6 +120,8 @@
     </a>
 @endif
 
+=======
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 
     </nav>
 

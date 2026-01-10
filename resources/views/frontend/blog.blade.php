@@ -49,7 +49,11 @@
 
 <!-- ===== Search + Category Filter ===== -->
 <div class="container py-5">
+<<<<<<< HEAD
   <h2 class="section-title mb-4 text-center" style="color:#000;">Explore Blogs</h2>
+=======
+  <h2 class="section-title mb-4 text-center">Explore Blogs</h2>
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 
   <form method="GET" action="{{ route('blogs.index') }}">
     <div class="row g-3 align-items-center justify-content-center mb-5">

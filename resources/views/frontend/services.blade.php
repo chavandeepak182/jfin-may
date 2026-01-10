@@ -13,19 +13,27 @@
         <!-- <h1 class="page-banner-title">About Jfinserv</h1> -->
     </div>
 </section>
+<<<<<<< HEAD
 <style>
     .d-inline-block{
 
         color:#000;
     }
 </style>
+=======
+
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 <!-- Header End -->
 
 <!-- Service Start -->
 <div class="container service py-5 mb-5">
     <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
         <h4 class="text-primary">One Stop Solution</h4>
+<<<<<<< HEAD
         <h1 class="display-4 mb-4"style="color:#000;">We Handle All Your Lending Needs</h1>
+=======
+        <h1 class="display-4 mb-4">We Handle All Your Lending Needs</h1>
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
         <p class="mb-0">Select your desired loan amount, complete a brief set of questions, and receive an instant loan offer. Effortlessly provide the required documents to our representative. Choose the final sanctioned loan offer with terms that align with your needs.</p>
     </div>
     <div class="row g-4 justify-content-center pb-5">
@@ -74,11 +82,19 @@
         <div class="col-md-4 wow fadeInUp" data-wow-delay="0.8s">
             <div class="service-item shadow">
                 <div class="service-img">
+<<<<<<< HEAD
                     <img src="{{ asset('theme') }}/frontend/img/msme_loan_1.jpg" class="img-fluid rounded-top w-100" alt="">
                 </div>
                 <div class="service-content p-4">
                     <div class="service-content-inner">
                         <a href="{{ url('msme-loan')}}" class="d-inline-block h4 mb-4" style="color:#000">MSME Loan</a>
+=======
+                    <img src="{{ asset('theme') }}/frontend/img/MSME_Loan.jpg" class="img-fluid rounded-top w-100" alt="">
+                </div>
+                <div class="service-content p-4">
+                    <div class="service-content-inner">
+                        <a href="{{ url('msme-loan')}}" class="d-inline-block h4 mb-4">MSME Loan</a>
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
                         <p class="mb-4">This service meets the diverse needs of small and medium businesses. Whether you're expanding, investing in equipment, or increasing capital.</p>
                         <a class="btn btn-primary rounded-pill py-2 px-4" href="{{ url('msme-loan')}}">Read More</a>
                     </div>
@@ -88,7 +104,11 @@
         <div class="col-md-4 wow fadeInUp" data-wow-delay="0.8s">
             <div class="service-item shadow">
                 <div class="service-img">
+<<<<<<< HEAD
                     <img src="{{ asset('theme') }}/frontend/img/overdraft_loan_1.jpg" class="img-fluid rounded-top w-100" alt="">
+=======
+                    <img src="{{ asset('theme') }}/frontend/img/overdraft_loan.jpg" class="img-fluid rounded-top w-100" alt="">
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
                 </div>
                 <div class="service-content p-4">
                     <div class="service-content-inner">
@@ -102,7 +122,11 @@
         <div class="col-md-4 wow fadeInUp" data-wow-delay="0.8s">
             <div class="service-item shadow">
                 <div class="service-img">
+<<<<<<< HEAD
                     <img src="{{ asset('theme') }}/frontend/img/lrd_loan_1.jpg" class="img-fluid rounded-top w-100" alt="">
+=======
+                    <img src="{{ asset('theme') }}/frontend/img/lrd_loan.jpg" class="img-fluid rounded-top w-100" alt="">
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
                 </div>
                 <div class="service-content p-4">
                     <div class="service-content-inner">

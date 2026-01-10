@@ -33,6 +33,7 @@ class BankController extends Controller
 
 
     // count dashboard
+<<<<<<< HEAD
 public function loanbankslist(Request $request)
 {
     // ================= COUNTS =================
@@ -82,6 +83,20 @@ public function loanbankslist(Request $request)
         'grossRevenue',
         'pls'
     ));
+=======
+    public function loanbankslist()
+{
+    $totalloanbank = DB::table('loan_bank_details')->count();
+    $totalmis = DB::table('mis')->count();
+    $totalEstimatedFiles = DB::table('estimated_files')->count();
+    $totalMonthlyPL = DB::table('monthly_pls')->count();
+    
+    
+
+
+     
+    return view('admin.admin-tool', compact('totalloanbank','totalmis','totalEstimatedFiles','totalMonthlyPL'));
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 }
 
     public function listreferral()

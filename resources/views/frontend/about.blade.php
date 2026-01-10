@@ -678,6 +678,37 @@ document.querySelectorAll('.service-btn').forEach(btn => {
                 </div>
             </div>
 
+<<<<<<< HEAD
+=======
+            <!-- Nidhi Sonigra -->
+            <div class="col-lg-3 col-md-6" data-aos="fade-up">
+                <div class="team-card">
+                    <img src="{{ asset('theme') }}/frontend/img/team/nidhi.png" alt="Nidhi Sonigra">
+                    <ul class="social-link">
+                        <li><a href="#"><i class="bx bxl-linkedin-square"></i></a></li>
+                    </ul>
+                    <div class="content">
+                        <h3>Nidhi Sonigra</h3>
+                        <span>Manager - Admin</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lokesh Bhosale -->
+            <div class="col-lg-3 col-md-6" data-aos="fade-up">
+                <div class="team-card">
+                    <img src="{{ asset('theme') }}/frontend/img/team/lokesh.png" alt="Lokesh Bhosale">
+                    <ul class="social-link">
+                        <li><a href="#"><i class="bx bxl-linkedin-square"></i></a></li>
+                    </ul>
+                    <div class="content">
+                        <h3>Lokesh Bhosale</h3>
+                        <span>Sales Manager</span>
+                    </div>
+                </div>
+            </div>
+
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
             <!-- Prakash -->
             <div class="col-lg-3 col-md-6" data-aos="fade-up">
                 <div class="team-card">
@@ -705,35 +736,65 @@ document.querySelectorAll('.service-btn').forEach(btn => {
                     </div>
                 </div>
             </div>
+<<<<<<< HEAD
 
             <!-- Lokesh Bhosale -->
             <div class="col-lg-3 col-md-6" data-aos="fade-up">
                 <div class="team-card">
                     <img src="{{ asset('theme') }}/frontend/img/team/lokesh.png" alt="Lokesh Bhosale">
+=======
+            
+            <!-- Kevin Sunny -->
+            <div class="col-lg-3 col-md-6" data-aos="fade-up">
+                <div class="team-card">
+                    <img src="{{ asset('theme') }}/frontend/img/team/dumy.jpg" alt="Kevin Sunny">
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
                     <ul class="social-link">
                         <li><a href="#"><i class="bx bxl-linkedin-square"></i></a></li>
                     </ul>
                     <div class="content">
+<<<<<<< HEAD
                         <h3>Lokesh Bhosale</h3>
                         <span>Sales Manager</span>
+=======
+                        <h3>Kevin Sunny</h3>
+                        <span>Sales Executive</span>
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
                     </div>
                 </div>
             </div>
 
+<<<<<<< HEAD
             <!-- Nidhi Sonigra -->
             <div class="col-lg-3 col-md-6" data-aos="fade-up">
                 <div class="team-card">
                     <img src="{{ asset('theme') }}/frontend/img/team/nidhi.png" alt="Nidhi Sonigra">
+=======
+            <!-- Avinash Bodke -->
+            <div class="col-lg-3 col-md-6" data-aos="fade-up">
+                <div class="team-card">
+                    <img src="{{ asset('theme') }}/frontend/img/team/dumy.jpg" alt="Avinash Bodke">
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
                     <ul class="social-link">
                         <li><a href="#"><i class="bx bxl-linkedin-square"></i></a></li>
                     </ul>
                     <div class="content">
+<<<<<<< HEAD
                         <h3>Nidhi Sonigra</h3>
                         <span>Manager - Admin</span>
                     </div>
                 </div>
             </div>
 
+=======
+                        <h3>Avinash Bodke</h3>
+                        <span>Senior Accountant</span>
+                    </div>
+                </div>
+            </div>
+            
+    
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
             <!-- Rushikesh Suryavanshi -->
             <div class="col-lg-3 col-md-6" data-aos="fade-up">
                 <div class="team-card">
@@ -776,6 +837,37 @@ document.querySelectorAll('.service-btn').forEach(btn => {
                 </div>
             </div>
 
+<<<<<<< HEAD
+=======
+            <!-- Aasta Rokade -->
+            <div class="col-lg-3 col-md-6" data-aos="fade-up">
+                <div class="team-card">
+                    <img src="{{ asset('theme') }}/frontend/img/team/dumy.jpg" alt="Aasta Rokade">
+                    <ul class="social-link">
+                        <li><a href="#"><i class="bx bxl-linkedin-square"></i></a></li>
+                    </ul>
+                    <div class="content">
+                        <h3>Aasta Rokade</h3>
+                        <span>Executive Telecaller</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nikita Sanap -->
+            <div class="col-lg-3 col-md-6" data-aos="fade-up">
+                <div class="team-card">
+                    <img src="{{ asset('theme') }}/frontend/img/team/dumy.jpg" alt="Nikita Sanap">
+                    <ul class="social-link">
+                        <li><a href="#"><i class="bx bxl-linkedin-square"></i></a></li>
+                    </ul>
+                    <div class="content">
+                        <h3>Nikita Sanap</h3>
+                        <span>Executive Telecaller</span>
+                    </div>
+                </div>
+            </div>
+
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
         </div>
     </div>
 </div>

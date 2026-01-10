@@ -432,6 +432,7 @@ $(document).ready(function () {
     left: -300px;
 }
 
+<<<<<<< HEAD
 
     .d-inline-block{
 
@@ -439,6 +440,8 @@ $(document).ready(function () {
     }
 >
 
+=======
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 /* RESPONSIVE */
 @media (max-width: 1200px) {
     .services-grid {
@@ -596,7 +599,11 @@ document.querySelectorAll('.service-btn').forEach(btn => {
                     <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.6s">
                         <div class="service-item">
                             <div class="service-img">
+<<<<<<< HEAD
                                 <img src="{{ asset('theme') }}/frontend/img/msme_loan_1.jpg" class="img-fluid rounded-top w-100" alt="">
+=======
+                                <img src="{{ asset('theme') }}/frontend/img/MSME_Loan.jpg" class="img-fluid rounded-top w-100" alt="">
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
                                 <!-- <div class="service-icon p-3">
                                     <i class="fa-solid fa-business-time fa-2x"></i>
                                 </div> -->s

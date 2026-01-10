@@ -28,6 +28,7 @@
                             @csrf
                             <div class="input-group mb-3">
                                 <span class="input-group-text">₹</span>
+
                                <input type="number"
        name="amount"
        class="form-control"
@@ -45,6 +46,21 @@
                             </button>
                         </form>
                     </div>
+
+
+                                <input type="number"
+                                       name="amount"
+                                       class="form-control"
+                                       placeholder="Enter amount"
+                                       required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold rounded-pill">
+                                Withdraw
+                            </button>
+                        </form>
+                    </div>
+
 
                     @if(session('message'))
                         <div class="alert alert-success mt-4">

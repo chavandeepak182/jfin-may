@@ -104,7 +104,11 @@
             </button>
         </div>
 
+<<<<<<< HEAD
 <!--        
+=======
+        <!-- Loan Bank Button -->
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
         <div id="addBankBtn" style="display:none;">
             <button type="button"
                     class="btn btn-primary"
@@ -114,7 +118,11 @@
             </button>
         </div>
 
+<<<<<<< HEAD
        
+=======
+        <!-- ✅ Estimated File Button -->
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
         <div id="addEstimatedBtn" style="display:none;">
             <a href="{{ route('estimatedFile.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus-lg"></i> Add Estimated File
@@ -129,7 +137,11 @@
                 </a>
             
 
+<<<<<<< HEAD
         </div> -->
+=======
+        </div>
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
         
 
     </div>
@@ -211,8 +223,13 @@
 </div>
 
 
+<<<<<<< HEAD
     
      <!-- <div class="col-xl-3 col-lg-4 col-md-6">
+=======
+    <!-- All Loan Banks -->
+     <div class="col-xl-3 col-lg-4 col-md-6">
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
         <div class="analytics-card"
              onclick="showLoanBanks()"
              style="cursor:pointer;">
@@ -240,6 +257,7 @@
             </div>
 
         </div>
+<<<<<<< HEAD
     </div> -->
 
 
@@ -249,6 +267,17 @@
 
     <!-- Estimated Files -->
     <!-- <div class="col-xl-3 col-lg-4 col-md-6 mt-5">
+=======
+    </div>
+
+
+
+    <!-- All Loan Banks -->
+    
+
+    <!-- Estimated Files -->
+    <div class="col-xl-3 col-lg-4 col-md-6 mt-5">
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
         <div class="analytics-card"
              onclick="showEstimatedFiles()"
              style="cursor:pointer;">
@@ -276,11 +305,19 @@
             </div>
 
         </div>
+<<<<<<< HEAD
     </div> -->
 
 
     <!-- Monthly P&l -->
      <!-- <div class="col-xl-3 col-lg-4 col-md-6 mt-5">
+=======
+    </div>
+
+
+    <!-- Monthly P&l -->
+     <div class="col-xl-3 col-lg-4 col-md-6 mt-5">
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
     <div class="analytics-card"
          onclick="showMonthlyPL()"
          style="cursor:pointer;">
@@ -307,7 +344,11 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
 </div> -->
+=======
+</div>
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 
 
 
@@ -438,7 +479,11 @@
     </div>
 </div>
 <!-- loanbank -->
+<<<<<<< HEAD
  <!-- <div id="loanBankSection" class="card mt-5" style="display:none;">
+=======
+ <div id="loanBankSection" class="card mt-5" style="display:none;">
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
     <div class="card-body">
         <div class="table-responsive">
             <table id="example" class="table table-striped">
@@ -479,18 +524,30 @@
             {{ $loanbanks->links() }}
         </div>
     </div>
+<<<<<<< HEAD
 </div> -->
+=======
+</div>
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 
 <script>
 function hideAllSections() {
     document.getElementById('enquiryList').style.display = 'none';
     document.getElementById('leadsSection').style.display = 'none';
     document.getElementById('misSection').style.display = 'none';
+<<<<<<< HEAD
     // document.getElementById('loanBankSection').style.display = 'none';
 
     document.getElementById('addLeadBtn').style.display = 'none';
     document.getElementById('misBtns').style.display = 'none';
     // document.getElementById('addBankBtn').style.display = 'none';
+=======
+    document.getElementById('loanBankSection').style.display = 'none';
+
+    document.getElementById('addLeadBtn').style.display = 'none';
+    document.getElementById('misBtns').style.display = 'none';
+    document.getElementById('addBankBtn').style.display = 'none';
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 }
 
 function showEnquiryList() {
@@ -510,6 +567,7 @@ function showMISList() {
     document.getElementById('misBtns').style.display = 'block';
 }
 
+<<<<<<< HEAD
 // function showLoanBanks() {
 //     hideAllSections();
 //     // document.getElementById('loanBankSection').style.display = 'block';
@@ -519,6 +577,17 @@ function showMISList() {
 
 <!-- Add Bank Modal -->
 <!-- <div class="modal fade" id="addBankView" tabindex="-1" aria-hidden="true">
+=======
+function showLoanBanks() {
+    hideAllSections();
+    document.getElementById('loanBankSection').style.display = 'block';
+    document.getElementById('addBankBtn').style.display = 'block';
+}
+</script>
+
+<!-- Add Bank Modal -->
+<div class="modal fade" id="addBankView" tabindex="-1" aria-hidden="true">
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -560,7 +629,11 @@ function showMISList() {
                         </div>
                     </div>
 
+<<<<<<< HEAD
                    
+=======
+                    <!-- Missing footer added here -->
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Close
@@ -575,16 +648,36 @@ function showMISList() {
 
         </div>
     </div>
+<<<<<<< HEAD
 </div> -->
+=======
+</div>
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 
 
 
 <!-- estimated -->
+<<<<<<< HEAD
  <!-- <div id="estimatedFileSection" class="card mt-5" style="display:none;">
 
     
 
    
+=======
+ <div id="estimatedFileSection" class="card mt-5" style="display:none;">
+
+    <!-- Header -->
+    <!-- <div class="card-header d-flex justify-content-between align-items-center">
+        <h4>Estimated Files</h4>
+
+        <a href="{{ route('estimatedFile.create') }}"
+           class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Add Estimated File
+        </a>
+    </div> -->
+
+    <!-- FILTER BAR -->
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
     <div class="p-4 bg-white">
         <form method="GET" action="{{ route('admin.listlead') }}">
             <div class="row g-3 align-items-end">
@@ -619,7 +712,11 @@ function showMISList() {
         </form>
     </div>
 
+<<<<<<< HEAD
    
+=======
+    <!-- Gross Revenue -->
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
     @if(request('report_month'))
         <div class="alert alert-info m-4 d-flex justify-content-between">
             <strong>
@@ -632,7 +729,11 @@ function showMISList() {
         </div>
     @endif
 
+<<<<<<< HEAD
     
+=======
+    <!-- TABLE -->
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
     <div class="card-body">
         <table class="table table-bordered">
             <thead>
@@ -665,11 +766,19 @@ function showMISList() {
         </table>
     </div>
 
+<<<<<<< HEAD
 </div> -->
 
 <!-- <div id="monthlyPLSection" class="card mt-5" style="display:none;">
 
 
+=======
+</div>
+
+<div id="monthlyPLSection" class="card mt-5" style="display:none;">
+
+    <!-- Header -->
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
         <h4>Monthly P&amp;L</h4>
 
@@ -679,7 +788,11 @@ function showMISList() {
         </a>
     </div>
 
+<<<<<<< HEAD
    
+=======
+    <!-- Table -->
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered table-hover align-middle">
@@ -720,7 +833,11 @@ function showMISList() {
             </table>
         </div>
     </div>
+<<<<<<< HEAD
 </div> -->
+=======
+</div>
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 
 <script>
 /* ================= COMMON HIDE FUNCTION ================= */
@@ -729,17 +846,28 @@ function hideAllSections() {
     'enquiryList',
     'leadsSection',
     'misSection',
+<<<<<<< HEAD
     // 'loanBankSection',
     // 'estimatedFileSection',
     // 'monthlyPLSection' 
+=======
+    'loanBankSection',
+    'estimatedFileSection',
+    'monthlyPLSection' // ✅ ADD THIS
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 ];
 
 
     const buttons = [
         'addLeadBtn',
         'misBtns',
+<<<<<<< HEAD
         // 'addBankBtn',
         // 'addEstimatedBtn'
+=======
+        'addBankBtn',
+        'addEstimatedBtn'
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
     ];
 
     sections.forEach(id => {
@@ -774,6 +902,7 @@ function showMISList() {
     localStorage.setItem('activeSection', 'mis');
 }
 
+<<<<<<< HEAD
 // function showLoanBanks() {
 //     hideAllSections();
 //     document.getElementById('loanBankSection').style.display = 'block';
@@ -787,6 +916,21 @@ function showMISList() {
 //     document.getElementById('addEstimatedBtn').style.display = 'block';
 //     localStorage.setItem('activeSection', 'estimatedfiles');
 // }
+=======
+function showLoanBanks() {
+    hideAllSections();
+    document.getElementById('loanBankSection').style.display = 'block';
+    document.getElementById('addBankBtn').style.display = 'block';
+    localStorage.setItem('activeSection', 'loanbanks');
+}
+
+function showEstimatedFiles() {
+    hideAllSections();
+    document.getElementById('estimatedFileSection').style.display = 'block';
+    document.getElementById('addEstimatedBtn').style.display = 'block';
+    localStorage.setItem('activeSection', 'estimatedfiles');
+}
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 
 /* ================= RESTORE STATE AFTER RELOAD ================= */
 document.addEventListener('DOMContentLoaded', function () {
@@ -799,7 +943,19 @@ document.addEventListener('DOMContentLoaded', function () {
     case 'mis':
         showMISList();
         break;
+<<<<<<< HEAD
     
+=======
+    case 'loanbanks':
+        showLoanBanks();
+        break;
+    case 'estimatedfiles':
+        showEstimatedFiles();
+        break;
+    case 'monthlypl':           // ✅ ADD THIS
+        showMonthlyPL();
+        break;
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
     default:
         showEnquiryList();
 }
@@ -807,6 +963,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /* ================= ADD BANK MODAL ================= */
+<<<<<<< HEAD
 // function openAddBankModal() {
 //     const modal = new bootstrap.Modal(document.getElementById('addBankView'));
 //     modal.show();
@@ -841,12 +998,52 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <!-- <script>
+=======
+function openAddBankModal() {
+    const modal = new bootstrap.Modal(document.getElementById('addBankView'));
+    modal.show();
+}
+
+/* ================= ADD BANK AJAX ================= */
+$('#addBank').on('submit', function (e) {
+    e.preventDefault(); // IMPORTANT
+
+    $.ajax({
+        url: "{{ route('insertLoanBank') }}",
+        method: "POST",
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            if (response.status === 1) {
+                $('#addBankView').modal('hide');
+
+                // stay on Loan Banks after reload
+                localStorage.setItem('activeSection', 'loanbanks');
+                location.reload();
+            } else {
+                alert('Failed to add bank');
+            }
+        },
+        error: function () {
+            alert('Something went wrong');
+        }
+    });
+});
+</script>
+
+<script>
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 function showMonthlyPL() {
     hideAllSections();
     document.getElementById('monthlyPLSection').style.display = 'block';
     localStorage.setItem('activeSection', 'monthlypl');
 }
+<<<<<<< HEAD
 </script> -->
+=======
+</script>
+>>>>>>> 9eb4201780c7e653167c1cc52a57c17a77722daa
 
 @endsection
 
