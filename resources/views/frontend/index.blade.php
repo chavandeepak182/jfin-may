@@ -432,6 +432,13 @@ $(document).ready(function () {
     left: -300px;
 }
 
+
+    .d-inline-block{
+
+        color:#000;
+    }
+>
+
 /* RESPONSIVE */
 @media (max-width: 1200px) {
     .services-grid {
@@ -589,10 +596,10 @@ document.querySelectorAll('.service-btn').forEach(btn => {
                     <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.6s">
                         <div class="service-item">
                             <div class="service-img">
-                                <img src="{{ asset('theme') }}/frontend/img/MSME_Loan.jpg" class="img-fluid rounded-top w-100" alt="">
+                                <img src="{{ asset('theme') }}/frontend/img/msme_loan_1.jpg" class="img-fluid rounded-top w-100" alt="">
                                 <!-- <div class="service-icon p-3">
                                     <i class="fa-solid fa-business-time fa-2x"></i>
-                                </div> -->
+                                </div> -->s
                             </div>
                             <div class="service-content p-4">
                                 <div class="service-content-inner">

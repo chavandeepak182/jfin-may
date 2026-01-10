@@ -362,10 +362,20 @@ body {
 
 
     {{-- USER DROPDOWN --}}
-    <div class="user-menu dropdown">
-        <a href="#" class="user-avatar dropdown-toggle" data-bs-toggle="dropdown">
-            <i class="fas fa-user"></i>
-        </a>
+   {{-- USER DROPDOWN (DESKTOP) --}}
+<div class="user-menu dropdown" style="margin-left: 80px;
+">
+    <a href="#"
+       class="user-avatar dropdown-toggle"
+       data-bs-toggle="dropdown"
+       title="{{ Session::has('role_id') ? auth()->user()->name : 'Login' }}">
+
+        @if(Session::has('role_id'))
+            {{ auth()->user()->name }}
+        @else
+            Login
+        @endif
+    </a>
 
         <div class="dropdown-menu dropdown-menu-end user-dropdown">
 
@@ -408,7 +418,7 @@ body {
         </div>
     </div>
 
-</div>
+         </div>
 
 
 
@@ -516,7 +526,7 @@ body {
     width: 42px;
     height: 42px;
     border-radius: 50%;
-    background: #f1f5f9;
+    /* background: #f1f5f9; */
     display: flex;
     align-items: center;
     justify-content: center;

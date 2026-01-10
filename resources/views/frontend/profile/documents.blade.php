@@ -108,10 +108,10 @@
                                 @csrf
                                 @method('DELETE')
 
-                                <button type="submit"
+                                <!-- <button type="submit"
                                         class="btn btn-link text-danger p-0 text-decoration-none">
                                     <i class="fas fa-trash me-1"></i> Remove
-                                </button>
+                                </button> -->
                             </form>
 
                         </div>

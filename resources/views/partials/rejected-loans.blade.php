@@ -47,15 +47,16 @@
             </tbody>
         </table>
 
-        <!-- Pagination -->
+        {{-- ✅ Pagination --}}
+        @if ($loans->hasPages())
         <div class="d-flex justify-content-between align-items-center mt-3">
-            <div>
+            <div class="text-muted">
                 Showing {{ $loans->firstItem() }} to {{ $loans->lastItem() }}
                 of {{ $loans->total() }} entries
             </div>
-            <div>
-                {{ $loans->links('pagination::bootstrap-4') }}
-            </div>
+
+            {{ $loans->links('pagination::bootstrap-4') }}
         </div>
+        @endif
     </div>
 </div>

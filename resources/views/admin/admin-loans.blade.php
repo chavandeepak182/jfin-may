@@ -379,6 +379,30 @@ $(document).ready(function () {
 </script>
 
 
+<script>
+$(document).on('click', '#loanListArea .pagination a', function (e) {
+    e.preventDefault(); // 🚫 stop page change
+
+    let url = $(this).attr('href');
+
+    $('#loanListArea').html(
+        '<div class="text-center py-4">Loading...</div>'
+    );
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (res) {
+            $('#loanListArea').html(res);
+        },
+        error: function () {
+            $('#loanListArea').html(
+                '<div class="text-danger text-center">Failed to load data</div>'
+            );
+        }
+    });
+});
+</script>
 
 
 

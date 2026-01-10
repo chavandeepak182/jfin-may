@@ -52,7 +52,8 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'email_otp_expires_at' => 'datetime'
+            'email_otp_expires_at' => 'datetime',
+             'last_login_at'         => 'datetime', // ✅ ADD THIS
         ];
     }
     public function roles()

@@ -111,6 +111,14 @@
                 <span>MLM</span>
             </a>
         @endif
+        {{-- ================= COMMISSION ================= --}}
+@if($role_id == 4)
+    <a href="{{ route('allCommission') }}" class="nav-item">
+        <i class="fas fa-coins"></i>
+        <span>Commission</span>
+    </a>
+@endif
+
 
     </nav>
 

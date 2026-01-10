@@ -50,7 +50,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="user_id">User:</label>
+                                        <label for="user_id">Name:</label>
                                         <input type="text" class="form-control" id="user_id" name="user_id"
                                             value="{{ $applyingUser->name ?? '' }}" readonly>
                                     </div>
@@ -64,12 +64,17 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="mobile_no">Mobile No:</label>
-                                        <input type="text" class="form-control" id="mobile_no" name="mobile_no"
-                                            value="{{ old('mobile_no', $profile->mobile_no ?? '') }}">
-                                    </div>
-                                </div>
+    <div class="form-group">
+        <label for="mobile_no">Mobile No:</label>
+        <input type="text"
+               class="form-control"
+               id="mobile_no"
+               name="mobile_no"
+               value="{{ old('mobile_no', $profile->mobile_no ?? '') }}"
+               readonly>
+    </div>
+</div>
+
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="marital_status">Marital Status:</label>
@@ -99,16 +104,22 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="city">City:</label>
-                                        <input type="text" class="form-control" id="city" name="city"
-                                            value="{{ old('city', $profile->city ?? '') }}">
+                                        <input type="text"
+                                        class="form-control"
+                                        value="{{ \DB::table('cities')->where('id',$profile->city)->value('city') }}">
+
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="state">State:</label>
-                                        <input type="text" class="form-control" id="state" name="state"
-                                            value="{{ old('state', $profile->state ?? '') }}">
-                                    </div>
+    <label for="state">State:</label>
+    <input type="text"
+           class="form-control"
+           id="state"
+           value="{{ old('state', $profile->stateRelation->name ?? '') }}"
+           readonly>
+</div>
+
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -209,20 +220,41 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="amount">Amount:</label>
-                                        <input type="number" class="form-control" id="amount" name="amount"
-                                            value="{{ old('amount', $loan->amount ?? '') }}" required>
+                              <div class="col-md-4" id="amountBox">
+                                        <div class="form-group">
+                                            <label for="amount">Amount:</label>
+                                            <input
+                                                type="number"
+                                                class="form-control"
+                                                id="amount"
+                                                name="amount"
+                                                min="0"
+                                                step="1"
+                                                value="{{ old('amount', $loan->amount ?? '') }}"
+                                                oninput="this.value = this.value < 0 ? 0 : this.value"
+                                                required
+                                            >
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="tenure">Tenure:</label>
-                                        <input type="number" class="form-control" id="tenure" name="tenure"
-                                            value="{{ old('tenure', $loan->tenure ?? '') }}" required>
-                                    </div>
-                                </div>
+
+                               <div class="col-md-4">
+    <div class="form-group">
+        <label for="tenure">Tenure:</label>
+        <select class="form-control" id="tenure" name="tenure" required>
+            <option value="">Select Tenure</option>
+
+            @for ($year = 1; $year <= 15; $year++)
+                @php $months = $year * 12; @endphp
+                <option value="{{ $months }}"
+                    {{ old('tenure', $loan->tenure ?? '') == $months ? 'selected' : '' }}>
+                    {{ $year }} {{ $year == 1 ? 'Year' : 'Years' }} ({{ $months }} Months)
+                </option>
+            @endfor
+
+        </select>
+    </div>
+</div>
+
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="tenure">Tentative Approval</label>
@@ -318,7 +350,7 @@
                     </div>
 
                     <!-- Education Information -->
-                    <div class="section mb-4 mt-5">
+                    <!-- <div class="section mb-4 mt-5">
                         <h3 class="h4 mb-2"><strong>Education Information</strong></h4>
                             <div class="row">
                                 <div class="col-md-6">
@@ -352,7 +384,7 @@
                                     </div>
                                 </div>
                             </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </form>
@@ -389,7 +421,7 @@
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 window.location.href =
-                                    "{{ route('loans.index') }}"; // Redirect to the loans index
+                                    "{{ route('admin.loans') }}"; // Redirect to the loans index
                             }
                         });
                     },

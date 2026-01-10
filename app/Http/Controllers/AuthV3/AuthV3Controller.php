@@ -168,6 +168,10 @@ public function signupSubmit(Request $request)
         $otpRow->update(['is_verify' => 1]);
 
         Auth::loginUsingId($userId);
+        /* ✅ UPDATE LAST LOGIN TIME */
+User::where('id', $userId)->update([
+    'last_login_at' => now()
+]);
 
         session([
             'user_id'  => Auth::id(),
@@ -282,6 +286,10 @@ public function loginWithEmail(Request $request)
     }
 
     Auth::loginUsingId($user->id);
+    /* ✅ UPDATE LAST LOGIN TIME */
+$user->update([
+    'last_login_at' => now()
+]);
 
     session([
         'user_id'  => $user->id,
@@ -348,6 +356,13 @@ public function handleGoogleCallback()
 
     // login user
     Auth::login($user);
+    Auth::login($user);
+
+/* ✅ UPDATE LAST LOGIN TIME */
+$user->update([
+    'last_login_at' => now()
+]);
+
 
     // ✅ SAME redirect as OTP & Email login
     return redirect('/loans-list');
