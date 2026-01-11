@@ -29,10 +29,14 @@
                             <div class="input-group mb-3">
                                 <span class="input-group-text">₹</span>
                                 <input type="number"
-                                       name="amount"
-                                       class="form-control"
-                                       placeholder="Enter amount"
-                                       required>
+                                    name="amount"
+                                    class="form-control"
+                                    placeholder="Enter amount"
+                                    required
+                                    min="0"
+                                    step="1"
+                                    onkeydown="return event.key !== '-'"
+                                    oninput="if (this.value < 0) this.value='';">
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100 py-2 fw-bold rounded-pill">
