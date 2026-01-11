@@ -5,7 +5,12 @@
 @section('content')
     <!-- Add Loan Form -->
 
-
+<style>.form-floating > .form-select {
+    height: calc(3.5rem + 2px);
+    padding-top: 1.625rem;
+    padding-bottom: .625rem;
+}
+</style>
 
 @php
     $completedSteps = $completedSteps ?? [];
@@ -104,7 +109,7 @@
                             </div>
                         @endif
 
-                        @if ($errors->any())
+                        <!-- @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>
                                     @foreach ($errors->all() as $error)
@@ -112,9 +117,9 @@
                                     @endforeach
                                 </ul>
                             </div>
-                        @endif
+                        @endif -->
 
-                        <form action="{{ route('loan.handle_step') }}" method="POST" enctype="multipart/form-data"
+                        <form  id="loanForm" action="{{ route('loan.handle_step') }}" method="POST" enctype="multipart/form-data"
                             role="form" autocomplete="off" class="form">
                             @csrf
                             <input type="hidden" name="current_step" value="{{ $currentStep }}">
@@ -187,9 +192,14 @@
 
                                         <div class="col-md-4">
                                             <div class="form-floating">
-                                                <input type="text" name="full_name"
+                                               <input type="text"
+                                                    name="full_name"
                                                     value="{{ old('full_name', $profile->full_name ?? '') }}"
-                                                    class="form-control" id="full_name" placeholder="Full Name">
+                                                    class="form-control"
+                                                    id="full_name"
+                                                    placeholder="Full Name"
+                                                    oninput="this.value = this.value.replace(/[^A-Za-z .]/g,'')">
+
                                                 <label for="full_name">Full Name (As per PAN)</label>
                                                 @error('full_name')
                                                     <span class="text-danger">{{ $message }}</span>
@@ -236,18 +246,18 @@
                                                 </div>
                                             </div>
 
-<script>
-document.getElementById('phone').addEventListener('input', function() {
-    const phone = this.value;
-    const errorSpan = document.getElementById('phone-error');
-    
-    if (phone.length > 0 && phone.length < 10) {
-        errorSpan.textContent = 'Phone number must be 10 digits.';
-    } else {
-        errorSpan.textContent = '';
-    }
-});
-</script>
+                                            <script>
+                                            document.getElementById('phone').addEventListener('input', function() {
+                                                const phone = this.value;
+                                                const errorSpan = document.getElementById('phone-error');
+                                                
+                                                if (phone.length > 0 && phone.length < 10) {
+                                                    errorSpan.textContent = 'Phone number must be 10 digits.';
+                                                } else {
+                                                    errorSpan.textContent = '';
+                                                }
+                                            });
+                                            </script>
 
                                         {{-- <button type="button" class="btn btn-primary" id="fetchReportBtn">Fetch Credit Report</button> --}}
 
@@ -266,24 +276,33 @@ document.getElementById('phone').addEventListener('input', function() {
 
                                         <div class="col-md-4">
                                             <div class="form-floating">
-                                                <select class="form-control" id="marital_status" name="marital_status"
-                                                    required>
-                                                    <option value="" selected disabled hidden>Select Marital Status
-                                                    </option>
+                                                <select class="form-select"
+                                                        id="marital_status"
+                                                        name="marital_status"
+                                                        required>
+                                                    <option value="" disabled hidden>Select Marital Status</option>
+
                                                     <option value="Single"
                                                         {{ old('marital_status', $profile->marital_status ?? '') == 'Single' ? 'selected' : '' }}>
-                                                        Single</option>
+                                                        Single
+                                                    </option>
+
                                                     <option value="Married"
                                                         {{ old('marital_status', $profile->marital_status ?? '') == 'Married' ? 'selected' : '' }}>
-                                                        Married</option>
+                                                        Married
+                                                    </option>
                                                 </select>
-                                                <label for="marital_status">Marital Status <span
-                                                        class="text-danger">*</span></label>
+
+                                                <label for="marital_status">
+                                                    Marital Status <span class="text-danger">*</span>
+                                                </label>
+
                                                 @error('marital_status')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
+
 
                                         <div class="col-md-12">
                                             <div class="form-floating">
@@ -366,20 +385,60 @@ document.getElementById('phone').addEventListener('input', function() {
                                 <fieldset>
                                     <h4 class="text-primary mb-3">Professional Details</h4>
                                     <div class="row g-3">
-                                        <div class="col-md-12">
-                                                <div class="form-check form-check-inline me-5">
-                                                    <input class="form-check-input profession_type" type="radio"
-                                                        name="profession_type" id="salariedTab" value="salaried"
-                                                        {{ old('profession_type', $professional->profession_type ?? '') == 'salaried' ? 'checked' : '' }}>
-                                                    <label for="salariedTab">Salaried Employees</label>
-                                                </div>
-                                                <div class="form-check form-check-inline me-5">
-                                                    <input class="form-check-input profession_type" type="radio"
-                                                        name="profession_type" id="selfTab" value="self"
-                                                        {{ old('profession_type', $professional->profession_type ?? '') == 'self' ? 'checked' : '' }}>
-                                                    <label for="selfTab">Self Employed/ Business Professionals</label>
-                                                </div>
-                                        </div>
+                                     <div class="col-md-12">
+    <div class="form-check form-check-inline me-5">
+        <input class="form-check-input profession_type"
+               type="radio"
+               name="profession_type"
+               id="salariedTab"
+               value="salaried"
+               {{ old('profession_type', $professional->profession_type ?? '') == 'salaried' ? 'checked' : '' }}>
+        <label for="salariedTab">Salaried Employees</label>
+    </div>
+
+    <div class="form-check form-check-inline me-5">
+        <input class="form-check-input profession_type"
+               type="radio"
+               name="profession_type"
+               id="selfTab"
+               value="self"
+               {{ old('profession_type', $professional->profession_type ?? '') == 'self' ? 'checked' : '' }}>
+        <label for="selfTab">Self Employed / Business Professionals</label>
+    </div>
+
+    {{-- 🔴 error message BELOW radio --}}
+    @error('profession_type')
+        <div class="text-danger mt-2">{{ $message }}</div>
+    @enderror
+
+    {{-- JS inline error --}}
+    <div id="profession-error" class="text-danger mt-2" style="display:none;">
+        Please select profession type.
+    </div>
+</div>
+<script>
+document.getElementById('loanForm').addEventListener('submit', function (e) {
+
+    const radios = document.querySelectorAll('input[name="profession_type"]');
+    const errorBox = document.getElementById('profession-error');
+
+    let selected = false;
+
+    radios.forEach(function(radio) {
+        if (radio.checked) {
+            selected = true;
+        }
+    });
+
+    if (!selected) {
+        e.preventDefault(); // ⛔ submit थांबवतो
+        errorBox.style.display = 'block';
+    } else {
+        errorBox.style.display = 'none';
+    }
+});
+</script>
+
 
 
 
@@ -428,10 +487,17 @@ document.getElementById('phone').addEventListener('input', function() {
 
                                         <div class="col-md-6">
                                             <div class="form-floating">
-                                                <input type="number" class="form-control" id="experience_year"
-                                                    name="experience_year"
-                                                    value="{{ old('experience_year', $professional->experience_year ?? '') }}"
-                                                    placeholder="Experience Year" required>
+                                                                                        <input type="number"
+                                                class="form-control"
+                                                id="experience_year"
+                                                name="experience_year"
+                                                value="{{ old('experience_year', $professional->experience_year ?? '') }}"
+                                                placeholder="Experience Year"
+                                                min="0"
+                                                max="99"
+                                                oninput="this.value = this.value.slice(0, 2)"
+                                                required>
+
                                                 <label for="experience_year">Experience Year <span
                                                         class="text-danger">*</span></label>
                                             </div>
@@ -442,10 +508,15 @@ document.getElementById('phone').addEventListener('input', function() {
 
                                         <div class="col-md-6">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control" id="designation"
-                                                    name="designation"
-                                                    value="{{ old('designation', $professional->designation ?? '') }}"
-                                                    placeholder="Designation" required>
+                                                <input type="text"
+                                                class="form-control"
+                                                id="designation"
+                                                name="designation"
+                                                value="{{ old('designation', $professional->designation ?? '') }}"
+                                                placeholder="Designation"
+                                                oninput="this.value = this.value.replace(/[^A-Za-z ]/g, '')"
+                                                required>
+
                                                 <label for="designation">Designation <span
                                                         class="text-danger">*</span></label>
                                             </div>
@@ -456,10 +527,16 @@ document.getElementById('phone').addEventListener('input', function() {
 
                                         <div class="col-md-6" id="netsalary">
                                             <div class="form-floating">
-                                                <input type="number" class="form-control" id="netsalary"
-                                                    name="netsalary"
-                                                    value="{{ old('netsalary', $professional->netsalary ?? '') }}"
-                                                    placeholder="Net Salary">
+                                                <input type="number"
+                                                class="form-control"
+                                                id="netsalary"
+                                                name="netsalary"
+                                                value="{{ old('netsalary', $professional->netsalary ?? '') }}"
+                                                placeholder="Net Salary"
+                                                min="0"
+                                                onkeydown="return event.key !== '-'"
+                                                oninput="if(this.value < 0) this.value='';">
+
                                                 <label for="netsalary">Net Salary <span
                                                         class="text-danger">*</span></label>
                                             </div>
@@ -470,10 +547,15 @@ document.getElementById('phone').addEventListener('input', function() {
 
                                         <div class="col-md-6" id="gross_salary">
                                             <div class="form-floating">
-                                                <input type="number" class="form-control" id="gross_salary"
-                                                    name="gross_salary"
-                                                    value="{{ old('gross_salary', $professional->gross_salary ?? '') }}"
-                                                    placeholder="Gross Salary">
+                                                <input type="number"
+                                                class="form-control"
+                                                id="gross_salary"
+                                                name="gross_salary"
+                                                value="{{ old('gross_salary', $professional->gross_salary ?? '') }}"
+                                                placeholder="Gross Salary"
+                                                min="0"
+                                                onkeydown="return event.key !== '-'"
+                                                oninput="if(this.value < 0) this.value='';">
                                                 <label for="gross_salary">Gross Salary <span
                                                         class="text-danger">*</span></label>
                                             </div>
@@ -534,11 +616,44 @@ document.getElementById('phone').addEventListener('input', function() {
                                     </div>
                                 </fieldset>
 
-                               
+                               <script>
+                                    document.getElementById('submit-btn').addEventListener('click', function (e) {
+
+                                        const radios = document.querySelectorAll('input[name="profession_type"]');
+                                        const errorBox = document.getElementById('profession-error');
+
+                                        let selected = false;
+                                        radios.forEach(r => {
+                                            if (r.checked) selected = true;
+                                        });
+
+                                        if (!selected) {
+                                            e.preventDefault(); // ❌ form submit थांबवा
+                                            errorBox.style.display = 'block';
+                                        } else {
+                                            errorBox.style.display = 'none';
+                                        }
+                                    });
+                              </script>
+
                                 <!-- Upload Documents -->
                             @elseif ($currentStep == 3)
                                 <fieldset>
                                     <h4 class="text-primary">Upload Documents</h4>
+                           <h3 class="h4 mb-2">
+                                <strong class="text-primary">Documents</strong>
+                                <small class="text-muted" style="font-size: 70%;">
+                                    (Max size: 2MB)
+                                </small>
+                            </h3>
+
+                            <p class="text-muted mb-3" style="font-size: 14px;">
+                                Please upload documents in 
+                                <strong>JPG</strong>, 
+                                <strong>PNG</strong> or 
+                                <strong>PDF</strong> format only.
+                            </p>
+
                                     <div class="row g-3">
                                         <div class="accordion" id="accordionExample">
                                             <div class="accordion-item">
@@ -845,7 +960,18 @@ document.getElementById('phone').addEventListener('input', function() {
                                             <div class="row g-3">
                                                 <div class="col-md-6">
                                                     <div class="form-floating">
-                                                        <input type="number" step="0.01" name="amount" value="{{ old('amount', $loan->amount ?? '') }}" class="form-control" id="amount" placeholder="Amount" required>
+                                                       <input type="number"
+                                                        step="0.01"
+                                                        name="amount"
+                                                        value="{{ old('amount', $loan->amount ?? '') }}"
+                                                        class="form-control"
+                                                        id="amount"
+                                                        placeholder="Amount"
+                                                        min="0"
+                                                        onkeydown="return event.key !== '-'"
+                                                        oninput="if(this.value < 0) this.value='';"
+                                                        required>
+
                                                         <label for="amount">Loan Amount</label>
                                                     </div>
                                                 </div>
@@ -883,7 +1009,7 @@ document.getElementById('phone').addEventListener('input', function() {
                                                 <div id="referral-feedback" class="col-md-12 mt-3"></div>
                                             </div>
                                         @endif
-                    </div>
+                                             </div>
                                         </fieldset>
 
 

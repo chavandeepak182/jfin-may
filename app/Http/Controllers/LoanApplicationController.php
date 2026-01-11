@@ -254,25 +254,46 @@ public function index(Request $request)
 
 
     // count dashboard
+public function loanlist()
+{
+    /* ================= COUNTS ================= */
 
-    public function loanlist()
-    {
-        $totalLoans = DB::table('loans')->count();
-        $inProcessLoans = DB::table('loans')->where('status', 'in process')->count();
-        $trashedloans = DB::table('loans')
-        ->whereNotNull('deleted_at')
+    $totalLoans = Loan::count();
+
+    $inProcessLoans = Loan::where('status', 'in process')->count();
+
+    $trashedloans = Loan::onlyTrashed()->count();
+
+    $approvedLoan = Loan::where('status', 'approved')->count();
+
+    $disbursedLoans = Loan::where('status', 'disbursed')
+        ->whereNotNull('loan_reference_id')
         ->count();
-         $approvedLoan = DB::table('loans')->where('status', 'approved')->count();
-        //  $disbursedLoans = DB::table('loans')->where('status', 'disbursed')->count();
-        $disbursedLoans = DB::table('loans')
-    ->where('status', 'disbursed')
-    ->whereNotNull('loan_reference_id')
-    ->count();
 
-         $rejectedLoans = DB::table('loans')->where('status', 'rejected')->count();
+    $rejectedLoans = Loan::where('status', 'rejected')->count();
 
-        return view('admin.admin-loans', compact('totalLoans','inProcessLoans','trashedloans','approvedLoan','disbursedLoans','rejectedLoans'));
-    }
+
+    /* ================= PAGINATED LOANS ================= */
+
+    $loans = Loan::with([
+            'user.profile.cityRelation',
+            'loanCategory',
+            'bankDetails'
+        ])
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);   // 👈 REQUIRED
+
+
+    return view('admin.admin-loans', compact(
+        'totalLoans',
+        'inProcessLoans',
+        'trashedloans',
+        'approvedLoan',
+        'disbursedLoans',
+        'rejectedLoans',
+        'loans' // 👈 IMPORTANT
+    ));
+}
     public function edit($id)
     {
         $loan = Loan::with(['user', 'loanCategory'])->where('loan_id', $id)->first();
@@ -336,7 +357,7 @@ public function index(Request $request)
                 'loan_id' => 'required|integer',
                 'status' => 'required|string',
                 'loan_category_id' => 'required|integer',
-                'amount' => 'required|numeric',
+                'amount' => 'required|numeric','min:0',
                 'amount_approved' => ['required_if:status,disbursed','nullable','numeric','min:0'],
                 'tenure' => 'required|integer',
                 'in_principle' => 'nullable|string',
@@ -857,11 +878,14 @@ public function ajaxList(Request $request)
         $query->onlyTrashed();
     }
 
-    // ✅ ASCENDING order by created_at
-    $loans = $query->oldest()->paginate(10);
+    // ✅ NEW FIRST (LATEST)
+    $loans = $query->latest()->paginate(10);
+    // OR
+    // $loans = $query->orderBy('created_at', 'desc')->paginate(10);
 
     return view('partials.list', compact('loans'))->render();
 }
+
 
 public function ajaxPendingLoans()
 {
@@ -1261,79 +1285,239 @@ public function ajaxRejectedLoans()
             'user'    => $userId
         ]);
 
-        return redirect()->back()
-            ->withErrors('Something went wrong. Please try again.');
+        // return redirect()->back()
+        //     ->withErrors('Something went wrong. Please try again.');
+         return redirect()->back();
+
     }
 }
 
 
 
 
-    protected function handlePersonalDetails(Request $request, $userId)
-    {
-        $validated = $request->validate([
-            'mobile_no' => 'required|string|max:15',
-            'full_name' => 'required|string',
-            'pan_number' => 'required|string',
-            'marital_status' => 'required|string|max:50',
-            'dob' => 'required|date',
-            'residence_address' => 'required|string|max:255',
-            'city' => 'required|integer|exists:cities,id',
-            'state' => 'required|integer|exists:states,id',
-            'pincode' => 'required|string|max:10',
-            'loan_category_id' => 'required|integer',
-            'bank_id' => 'required|integer',
-        ]);
+    // protected function handlePersonalDetails(Request $request, $userId)
+    // {
+    //     $validated = $request->validate([
+    //         'mobile_no' => 'required|string|max:15',
+    //         'full_name' => 'required|string',
+    //         'pan_number' => 'required|string',
+    //         'marital_status' => 'required|string|max:50',
+    //         'dob' => 'required|date',
+    //         'residence_address' => 'required|string|max:255',
+    //         'city' => 'required|integer|exists:cities,id',
+    //         'state' => 'required|integer|exists:states,id',
+    //         'pincode' => 'required|string|max:10',
+    //         'loan_category_id' => 'required|integer',
+    //         'bank_id' => 'required|integer',
+    //     ]);
 
-        $loan = Loan::where('user_id', $userId)
-            ->whereNotIn('status', ['disbursed', 'rejected'])
-            ->first();
+    //     $loan = Loan::where('user_id', $userId)
+    //         ->whereNotIn('status', ['disbursed', 'rejected'])
+    //         ->first();
 
-        if (!$loan) {
-            // Create new loan
-            $loan = new Loan();
-            $loan->user_id = $userId;
-            $loan->loan_reference_id = $this->generateLoanReferenceId(); // Generate unique reference ID
-            $loan->loan_category_id = $validated['loan_category_id'];
-            $loan->bank_id = $validated['bank_id'];
-            $loan->status = 'in process';
-            $loan->save();
-        } else {
-            // Update existing loan
-            $loan->update([
-                'loan_category_id' => $validated['loan_category_id'],
-                'bank_id' => $validated['bank_id']
-            ]);
-        }
+    //     if (!$loan) {
+           
+    //         $loan = new Loan();
+    //         $loan->user_id = $userId;
+    //         $loan->loan_reference_id = $this->generateLoanReferenceId(); // Generate unique reference ID
+    //         $loan->loan_category_id = $validated['loan_category_id'];
+    //         $loan->bank_id = $validated['bank_id'];
+    //         $loan->status = 'in process';
+    //         $loan->save();
+    //     } else {
+           
+    //         $loan->update([
+    //             'loan_category_id' => $validated['loan_category_id'],
+    //             'bank_id' => $validated['bank_id']
+    //         ]);
+    //     }
 
-        // Update or insert into the 'profile' table
-        DB::table('profile')->updateOrInsert(
-            [
-                'user_id' => $userId,
-                'loan_id' => $loan->loan_id
+       
+    //     DB::table('profile')->updateOrInsert(
+    //         [
+    //             'user_id' => $userId,
+    //             'loan_id' => $loan->loan_id
+    //         ],
+    //         [
+    //             'mobile_no' => $validated['mobile_no'],
+    //             'full_name' => $validated['full_name'],
+    //             'pan_number' => $validated['pan_number'],
+    //             'marital_status' => $validated['marital_status'],
+    //             'dob' => $validated['dob'],
+    //             'residence_address' => $validated['residence_address'],
+    //             'city' => $validated['city'],
+    //             'state' => $validated['state'],
+    //             'pincode' => $validated['pincode']
+    //         ]
+    //     );
+
+   
+    //     Session::put('loan_category_id', $validated['loan_category_id']);
+    //     Session::put('bank_id', $validated['bank_id']);
+
+       
+
+
+    //     Session::put('current_loan_id', $loan->loan_id);
+    // }
+//       protected function handlePersonalDetails(Request $request, $userId)
+//     {
+//         $validated = $request->validate([
+//             'mobile_no' => 'required|string|max:15',
+//             'full_name' => 'required|string',
+//             'pan_number' => 'required|string',
+//             'marital_status' => 'required|string|max:50',
+//             'dob' => 'required|date',
+//             'residence_address' => 'required|string|max:255',
+//             'city' => 'required|integer|exists:cities,id',
+//             'state' => 'required|integer|exists:states,id',
+//             'pincode' => 'required|string|max:10',
+//             'loan_category_id' => 'required|integer',
+//             'bank_id' => 'required|integer',
+//         ]);
+
+//         $loan = Loan::where('user_id', $userId)
+//             ->whereNotIn('status', ['disbursed', 'rejected'])
+//             ->first();
+
+//         if (!$loan) {
+           
+//             $loan = new Loan();
+//             $loan->user_id = $userId;
+//             $loan->loan_reference_id = $this->generateLoanReferenceId(); // Generate unique reference ID
+//             $loan->loan_category_id = $validated['loan_category_id'];
+//             $loan->bank_id = $validated['bank_id'];
+//             $loan->status = 'in process';
+//             $loan->save();
+//         } else {
+           
+//             $loan->update([
+//                 'loan_category_id' => $validated['loan_category_id'],
+//                 'bank_id' => $validated['bank_id']
+//             ]);
+//         }
+
+       
+//    Profile::updateOrCreate(
+//     ['user_id' => $userId],   // ✅ ONLY user_id (UNIQUE)
+//     [
+//         'mobile_no'         => $validated['mobile_no'],
+//         'full_name'         => $validated['full_name'],
+//         'pan_number'        => $validated['pan_number'],
+//         'marital_status'    => $validated['marital_status'],
+//         'dob'               => $validated['dob'],
+//         'residence_address' => $validated['residence_address'],
+//         'city'              => $validated['city'],
+//         'state'             => $validated['state'],
+//         'pincode'           => $validated['pincode'],
+//     ]
+// );
+
+   
+//         Session::put('loan_category_id', $validated['loan_category_id']);
+//         Session::put('bank_id', $validated['bank_id']);
+
+       
+
+
+//         Session::put('current_loan_id', $loan->loan_id);
+//     }
+
+// protected function handlePersonalDetails(Request $request, $userId)
+// {
+//     $validated = $request->validate([
+//     'mobile_no' => 'required|digits:10',
+//     'full_name' => 'required|string|min:3',
+//     'pan_number' => 'required|regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/',
+//     'marital_status' => 'required',
+//     'dob' => 'required|date',
+//     'residence_address' => 'required|min:5',
+//     'state' => 'required',
+//     'city' => 'required',
+//     'pincode' => 'required|digits:6',
+//     'loan_category_id' => 'required',
+//     'bank_id' => 'required',
+// ]);
+
+//     // ✅ ONLY PROFILE (NO LOAN HERE)
+//     Profile::updateOrCreate(
+//         ['user_id' => $userId],
+//         [
+//             'mobile_no'         => $validated['mobile_no'],
+//             'full_name'         => $validated['full_name'],
+//             'pan_number'        => $validated['pan_number'],
+//             'marital_status'    => $validated['marital_status'],
+//             'dob'               => $validated['dob'],
+//             'residence_address' => $validated['residence_address'],
+//             'city'              => $validated['city'],
+//             'state'             => $validated['state'],
+//             'pincode'           => $validated['pincode'],
+//         ]
+//     );
+
+//     // store only selections
+//     Session::put('loan_category_id', $validated['loan_category_id']);
+//     Session::put('bank_id', $validated['bank_id']);
+// }
+protected function handlePersonalDetails(Request $request, $userId)
+{
+    $validated = $request->validate(
+        [
+            'mobile_no' => 'required|digits:10',
+
+            // 🔴 NAME: only letters + space, no digits
+            'full_name' => [
+                'required',
+                'regex:/^[A-Za-z ]+$/',
+                'min:3'
             ],
-            [
-                'mobile_no' => $validated['mobile_no'],
-                'full_name' => $validated['full_name'],
-                'pan_number' => $validated['pan_number'],
-                'marital_status' => $validated['marital_status'],
-                'dob' => $validated['dob'],
-                'residence_address' => $validated['residence_address'],
-                'city' => $validated['city'],
-                'state' => $validated['state'],
-                'pincode' => $validated['pincode']
-            ]
-        );
 
-        // Store loan_category_id and bank_id in session
-        Session::put('loan_category_id', $validated['loan_category_id']);
-        Session::put('bank_id', $validated['bank_id']);
+            'pan_number' => [
+                'required',
+                'regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/'
+            ],
 
-        // Check if a loan already exists for this user
+            'marital_status' => 'required',
+            'dob' => 'required|date',
+            'residence_address' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+            'pincode' => 'required|digits:6',
+            'loan_category_id' => 'required',
+            'bank_id' => 'required',
+        ],
+        [
+            // ✅ Custom messages (clear & user friendly)
+            'full_name.required' => 'Full name is required.',
+            'full_name.regex' => 'Name should contain only letters and spaces.',
+            'mobile_no.digits' => 'Mobile number must be exactly 10 digits.',
+            'pan_number.regex' => 'Enter valid PAN number (ABCDE1234F).',
+            'pincode.digits' => 'Pincode must be 6 digits.',
+        ]
+    );
+
+    // ✅ ONLY PROFILE (NO LOAN HERE)
+    Profile::updateOrCreate(
+        ['user_id' => $userId],
+        [
+            'mobile_no'         => $validated['mobile_no'],
+            'full_name'         => $validated['full_name'],
+            'pan_number'        => $validated['pan_number'],
+            'marital_status'    => $validated['marital_status'],
+            'dob'               => $validated['dob'],
+            'residence_address' => $validated['residence_address'],
+            'city'              => $validated['city'],
+            'state'             => $validated['state'],
+            'pincode'           => $validated['pincode'],
+        ]
+    );
+
+    // ✅ store only selections
+    Session::put('loan_category_id', $validated['loan_category_id']);
+    Session::put('bank_id', $validated['bank_id']);
+}
 
 
-        Session::put('current_loan_id', $loan->loan_id);
-    }
 
 
     // protected function handleProfessionalDetails(Request $request, $userId)
@@ -1393,35 +1577,170 @@ public function ajaxRejectedLoans()
     //     }
     // }
 
-    protected function handleProfessionalDetails(Request $request, $userId)
+//     protected function handleProfessionalDetails(Request $request, $userId)
+// {
+//     $validated = $request->validate([
+//         'profession_type' => 'required|string|in:salaried,self',
+//         'company_name' => 'required|string|max:255',
+//         'industry' => 'required|string|max:100',
+//         'company_address' => 'required|string|max:255',
+//         'experience_year' => 'required|integer',
+//         'designation' => 'required|string|max:100',
+//         'netsalary' => $request->profession_type === 'salaried' ? 'required|numeric' : 'nullable|numeric',
+//         'gross_salary' => $request->profession_type === 'salaried' ? 'required|numeric' : 'nullable|numeric',
+//         'selfincome' => $request->profession_type === 'self' ? 'required|numeric' : 'nullable|numeric',
+//         'business_establish_date' => $request->profession_type === 'self' ? 'required|date' : 'nullable|date',
+//     ]);
+
+   
+//     $loanId = session('current_loan_id');
+
+//     if (!$loanId) {
+//         throw new \Exception('Loan ID missing in session');
+//     }
+
+   
+//     Professional::updateOrCreate(
+//         [
+//             'loan_id' => $loanId,   // UNIQUE KEY
+//         ],
+//         [
+//             'user_id' => $userId,
+//             'profession_type' => $validated['profession_type'],
+//             'company_name' => $validated['company_name'],
+//             'industry' => $validated['industry'],
+//             'company_address' => $validated['company_address'],
+//             'experience_year' => $validated['experience_year'],
+//             'designation' => $validated['designation'],
+//             'netsalary' => $validated['netsalary'] ?? null,
+//             'gross_salary' => $validated['gross_salary'] ?? null,
+//             'selfincome' => $validated['selfincome'] ?? null,
+//             'business_establish_date' => $validated['business_establish_date'] ?? null,
+//         ]
+//     );
+// }
+// protected function handleProfessionalDetails(Request $request, $userId)
+// {
+//     // $validated = $request->validate([
+//     //     'profession_type' => 'required|string|in:salaried,self',
+//     //     'company_name' => 'required|string|max:255',
+//     //     'industry' => 'required|string|max:100',
+//     //     'company_address' => 'required|string|max:255',
+//     //     'experience_year' => 'required|integer',
+//     //     'designation' => 'required|string|max:100',
+//     //     'netsalary' => $request->profession_type === 'salaried' ? 'required|numeric' : 'nullable|numeric',
+//     //     'gross_salary' => $request->profession_type === 'salaried' ? 'required|numeric' : 'nullable|numeric',
+//     //     'selfincome' => $request->profession_type === 'self' ? 'required|numeric' : 'nullable|numeric',
+//     //     'business_establish_date' => $request->profession_type === 'self' ? 'required|date' : 'nullable|date',
+//     // ]);
+//     $validated = $request->validate([
+//     'profession_type' => 'required|in:salaried,self',
+//     'company_name' => 'required|min:2',
+//     'industry' => 'required',
+//     'company_address' => 'required|min:5',
+//     'experience_year' => 'required|integer|min:0',
+//     'designation' => 'required',
+
+//     'netsalary' => $request->profession_type === 'salaried'
+//         ? 'required|numeric|min:1'
+//         : 'nullable',
+
+//     'gross_salary' => $request->profession_type === 'salaried'
+//         ? 'required|numeric|min:1'
+//         : 'nullable',
+
+//     'selfincome' => $request->profession_type === 'self'
+//         ? 'required|numeric|min:1'
+//         : 'nullable',
+
+//     'business_establish_date' => $request->profession_type === 'self'
+//         ? 'required|date'
+//         : 'nullable',
+// ]);
+
+//     // ✅ NO loan_id here
+//     Professional::updateOrCreate(
+//         ['user_id' => $userId],
+//         [
+//             'profession_type' => $validated['profession_type'],
+//             'company_name' => $validated['company_name'],
+//             'industry' => $validated['industry'],
+//             'company_address' => $validated['company_address'],
+//             'experience_year' => $validated['experience_year'],
+//             'designation' => $validated['designation'],
+//             'netsalary' => $validated['netsalary'] ?? null,
+//             'gross_salary' => $validated['gross_salary'] ?? null,
+//             'selfincome' => $validated['selfincome'] ?? null,
+//             'business_establish_date' => $validated['business_establish_date'] ?? null,
+//         ]
+//     );
+// }
+
+protected function handleProfessionalDetails(Request $request, $userId)
 {
-    $validated = $request->validate([
-        'profession_type' => 'required|string|in:salaried,self',
-        'company_name' => 'required|string|max:255',
-        'industry' => 'required|string|max:100',
-        'company_address' => 'required|string|max:255',
-        'experience_year' => 'required|integer',
-        'designation' => 'required|string|max:100',
-        'netsalary' => $request->profession_type === 'salaried' ? 'required|numeric' : 'nullable|numeric',
-        'gross_salary' => $request->profession_type === 'salaried' ? 'required|numeric' : 'nullable|numeric',
-        'selfincome' => $request->profession_type === 'self' ? 'required|numeric' : 'nullable|numeric',
-        'business_establish_date' => $request->profession_type === 'self' ? 'required|date' : 'nullable|date',
-    ]);
-
-    /** ✅ ALWAYS GET LOAN ID AS INTEGER */
-    $loanId = session('current_loan_id');
-
-    if (!$loanId) {
-        throw new \Exception('Loan ID missing in session');
-    }
-
-    /** ✅ UPDATE OR CREATE (NO DUPLICATES EVER) */
-    Professional::updateOrCreate(
+    $validated = $request->validate(
         [
-            'loan_id' => $loanId,   // UNIQUE KEY
+            'profession_type' => 'required|in:salaried,self',
+
+            'company_name' => [
+                'required',
+                'regex:/^[A-Za-z0-9 .,&()-]+$/',
+                'min:2'
+            ],
+
+            'industry' => [
+                'required',
+                'regex:/^[A-Za-z .,&()-]+$/'
+            ],
+
+            'company_address' => 'required',
+
+            'experience_year' => 'required|integer|min:0|max:99',
+
+
+            'designation' => [
+                'required',
+                'regex:/^[A-Za-z .,&()-]+$/'
+            ],
+
+            // 🔹 Salaried validation
+            'netsalary' => $request->profession_type === 'salaried'
+                ? 'required|numeric|min:1'
+                : 'nullable',
+
+            'gross_salary' => $request->profession_type === 'salaried'
+                ? 'required|numeric|min:1'
+                : 'nullable',
+
+            // 🔹 Self employed validation
+            'selfincome' => $request->profession_type === 'self'
+                ? 'required|numeric|min:1'
+                : 'nullable',
+
+            'business_establish_date' => $request->profession_type === 'self'
+                ? 'required|date'
+                : 'nullable',
         ],
         [
-            'user_id' => $userId,
+            // ✅ Custom messages
+            'company_name.regex' => 'Company name contains invalid characters.',
+            'industry.regex' => 'Industry name should contain only letters.',
+            'designation.regex' => 'Designation should contain only letters.',
+            'netsalary.min' => 'Net salary must be greater than zero.',
+            'gross_salary.min' => 'Gross salary must be greater than zero.',
+            'selfincome.min' => 'Total income must be greater than zero.',
+            'experience_year.max' => 'Experience year must be maximum 2 digits.',
+              'experience_year.min' => 'Experience year cannot be negative.',
+              'profession_type.required' => 'Please select profession type.',
+
+
+        ]
+    );
+
+    // ✅ SAVE PROFESSIONAL DETAILS
+    Professional::updateOrCreate(
+        ['user_id' => $userId],
+        [
             'profession_type' => $validated['profession_type'],
             'company_name' => $validated['company_name'],
             'industry' => $validated['industry'],
@@ -1435,6 +1754,8 @@ public function ajaxRejectedLoans()
         ]
     );
 }
+
+
 
     protected function handleEducationDetails(Request $request, $userId)
     {
@@ -1501,34 +1822,34 @@ public function ajaxRejectedLoans()
             );
         }
     }
-    protected function handleDocumentUpload(Request $request, $userId)
-    {
+    // protected function handleDocumentUpload(Request $request, $userId)
+    // {
 
-        $loan_id = Session::get('current_loan_id') ?? Loan::where('user_id', $userId)
-            ->whereNotIn('status', ['disbursed', 'rejected'])
-            ->first();
+    //     $loan_id = Session::get('current_loan_id') ?? Loan::where('user_id', $userId)
+    //         ->whereNotIn('status', ['disbursed', 'rejected'])
+    //         ->first();
 
-        $documents = ['aadhar_card', 'pancard', 'qualification_proof', 'salary_slip', 'form_16', 'bank_statement', 'passport', 'light_bill', 'dl', 'rent_agree']; // List of possible document types
+    //     $documents = ['aadhar_card', 'pancard', 'qualification_proof', 'salary_slip', 'form_16', 'bank_statement', 'passport', 'light_bill', 'dl', 'rent_agree']; // List of possible document types
 
-        foreach ($documents as $docType) {
-            if ($request->hasFile($docType)) {
-                $file = $request->file($docType);
-                $fileName = $docType . '_' . $userId . '.' . $file->extension();
-                $filePath = $file->storeAs('documents', $fileName, 'public');
+    //     foreach ($documents as $docType) {
+    //         if ($request->hasFile($docType)) {
+    //             $file = $request->file($docType);
+    //             $fileName = $docType . '_' . $userId . '.' . $file->extension();
+    //             $filePath = $file->storeAs('documents', $fileName, 'public');
 
-                DB::table('documents')->updateOrInsert(
-                    [
-                        'user_id' => $userId,
-                        'loan_id' => $loan_id,
-                        'document_name' => $docType
-                    ],
-                    [
-                        'file_path' => $filePath
-                    ]
-                );
-            }
-        }
-    }
+    //             DB::table('documents')->updateOrInsert(
+    //                 [
+    //                     'user_id' => $userId,
+    //                     'loan_id' => $loan_id,
+    //                     'document_name' => $docType
+    //                 ],
+    //                 [
+    //                     'file_path' => $filePath
+    //                 ]
+    //             );
+    //         }
+    //     }
+    // }
     // protected function handleLoanDetails(Request $request, $userId)
     // {
     //     // Retrieve stored loan category and bank from session
@@ -1677,64 +1998,188 @@ public function ajaxRejectedLoans()
 
     // }
 
-    protected function handleLoanDetails(Request $request, $userId)
-    {
-        // Retrieve stored loan category and bank from session
-        $loan_category_id = Session::get('loan_category_id');
-        $bank_id = Session::get('bank_id');
+    // protected function handleLoanDetails(Request $request, $userId)
+    // {
+    //     // Retrieve stored loan category and bank from session
+    //     $loan_category_id = Session::get('loan_category_id');
+    //     $bank_id = Session::get('bank_id');
 
-        if (!$loan_category_id || !$bank_id) {
-            return redirect()->back()->withErrors(['error' => 'Loan category and bank ID are required.']);
+    //     if (!$loan_category_id || !$bank_id) {
+    //         return redirect()->back()->withErrors(['error' => 'Loan category and bank ID are required.']);
+    //     }
+
+    //     $validated = $request->validate([
+    //         'amount' => 'required|numeric',
+    //         'tenure' => 'required|integer',
+    //         'referral_code' => 'nullable|string|max:50',
+    //     ]);
+
+    //     $loanReferenceId = $this->generateLoanReferenceId();
+    //     $referralUserId = null;
+
+    //     if (!empty($validated['referral_code'])) {
+    //         $referralUser = DB::table('users')->where('referral_code', $validated['referral_code'])->first();
+    //         $referralUserId = $referralUser->id ?? null;
+    //     }
+
+    //     $existingLoan = Session::get('current_loan_id');
+
+    //     if ($existingLoan && is_int($existingLoan)) {
+    //         $existingLoan = Loan::find($existingLoan); // Convert ID to model
+    //     }
+
+    //     if (!$existingLoan) {
+    //         // First-time creation
+    //         $loan = Loan::create([
+    //             'user_id' => $userId,
+    //             'loan_reference_id' => $loanReferenceId,
+    //             'loan_category_id' => $loan_category_id,
+    //             'bank_id' => $bank_id,
+    //             'amount' => $validated['amount'],
+    //             'tenure' => $validated['tenure'],
+    //             'referral_user_id' => $referralUserId,
+    //             'status' => 'in process',
+    //         ]);
+    //         Session::put('loan_reference_id', $loanReferenceId);
+    //         Session::put('current_loan_id', $loan->loan_id);
+    //     } else {
+    //         $existingLoan->update([
+    //             'loan_category_id' => $loan_category_id,
+    //             'bank_id' => $bank_id,
+    //             'amount' => $validated['amount'],
+    //             'tenure' => $validated['tenure'],
+    //             'referral_user_id' => $referralUserId,
+    //         ]);
+    //         Session::put('loan_reference_id', $loanReferenceId);
+    //         Session::put('current_loan_id', $existingLoan->loan_id);
+    //     }
+
+    //     Session::put('is_loan', true);
+    // }
+
+protected function handleDocumentUpload(Request $request, $userId)
+{
+    /* ===============================
+       STEP 1: VALIDATION (OPTIONAL FILES)
+       =============================== */
+
+    $request->validate([
+        'aadhar_card'         => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'pancard'             => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'qualification_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'salary_slip'         => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'form_16'             => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'bank_statement'      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'passport'            => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'light_bill'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'dl'                  => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'rent_agree'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+    ], [
+        'mimes' => 'Only JPG, PNG or PDF files are allowed.',
+        'max'   => 'File size must be less than 2MB.',
+    ]);
+
+    /* ===============================
+       STEP 2: LOAN FETCH (SAFE)
+       =============================== */
+
+    $loan = Session::get('current_loan_id')
+        ? Loan::find(Session::get('current_loan_id'))
+        : Loan::where('user_id', $userId)
+            ->whereNotIn('status', ['disbursed', 'rejected'])
+            ->first();
+
+    if (!$loan) {
+        return; // loan नसल्यास upload skip
+    }
+
+    /* ===============================
+       STEP 3: DOCUMENT UPLOAD
+       =============================== */
+
+    $documents = [
+        'aadhar_card',
+        'pancard',
+        'qualification_proof',
+        'salary_slip',
+        'form_16',
+        'bank_statement',
+        'passport',
+        'light_bill',
+        'dl',
+        'rent_agree'
+    ];
+
+    foreach ($documents as $docType) {
+
+        if ($request->hasFile($docType)) {
+
+            $file = $request->file($docType);
+
+            // ✅ unique filename (overwrite issue avoid)
+            $fileName = $docType . '_' . $userId . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+            $filePath = $file->storeAs('documents', $fileName, 'public');
+
+            DB::table('documents')->updateOrInsert(
+                [
+                    'user_id'       => $userId,
+                    'loan_id'       => $loan->loan_id,
+                    'document_name' => $docType
+                ],
+                [
+                    'file_path' => $filePath,
+                    'updated_at' => now()
+                ]
+            );
         }
+    }
+}
 
+
+    protected function handleLoanDetails(Request $request, $userId)
+{
+    DB::beginTransaction();
+
+    try {
+        // $validated = $request->validate([
+        //     'amount' => 'required|numeric',
+        //     'tenure' => 'required|integer',
+        //     'referral_code' => 'nullable|string|max:50',
+        // ]);
         $validated = $request->validate([
-            'amount' => 'required|numeric',
-            'tenure' => 'required|integer',
+            'amount' => 'required|numeric|min:1',
+            'tenure' => 'required|integer|min:1|max:30',
             'referral_code' => 'nullable|string|max:50',
         ]);
 
-        $loanReferenceId = $this->generateLoanReferenceId();
-        $referralUserId = null;
+        $loan = Loan::create([
+            'user_id' => $userId,
+            'loan_reference_id' => $this->generateLoanReferenceId(),
+            'loan_category_id' => Session::get('loan_category_id'),
+            'bank_id' => Session::get('bank_id'),
+            'amount' => $validated['amount'],
+            'tenure' => $validated['tenure'],
+            'status' => 'in process',
+        ]);
 
-        if (!empty($validated['referral_code'])) {
-            $referralUser = DB::table('users')->where('referral_code', $validated['referral_code'])->first();
-            $referralUserId = $referralUser->id ?? null;
-        }
+        Session::put('current_loan_id', $loan->loan_id);
 
-        $existingLoan = Session::get('current_loan_id');
+        DB::commit();
 
-        if ($existingLoan && is_int($existingLoan)) {
-            $existingLoan = Loan::find($existingLoan); // Convert ID to model
-        }
+    } catch (\Exception $e) {
+        DB::rollBack();
 
-        if (!$existingLoan) {
-            // First-time creation
-            $loan = Loan::create([
-                'user_id' => $userId,
-                'loan_reference_id' => $loanReferenceId,
-                'loan_category_id' => $loan_category_id,
-                'bank_id' => $bank_id,
-                'amount' => $validated['amount'],
-                'tenure' => $validated['tenure'],
-                'referral_user_id' => $referralUserId,
-                'status' => 'in process',
-            ]);
-            Session::put('loan_reference_id', $loanReferenceId);
-            Session::put('current_loan_id', $loan->loan_id);
-        } else {
-            $existingLoan->update([
-                'loan_category_id' => $loan_category_id,
-                'bank_id' => $bank_id,
-                'amount' => $validated['amount'],
-                'tenure' => $validated['tenure'],
-                'referral_user_id' => $referralUserId,
-            ]);
-            Session::put('loan_reference_id', $loanReferenceId);
-            Session::put('current_loan_id', $existingLoan->loan_id);
-        }
+        \Log::error('Loan creation failed', [
+            'user' => $userId,
+            'error' => $e->getMessage()
+        ]);
 
-        Session::put('is_loan', true);
+        throw $e; // prevents entry
     }
+}
+
+
     protected function generateLoanReferenceId()
 {
     $latestLoan = Loan::orderBy('loan_id', 'desc')->first();
@@ -1853,7 +2298,9 @@ public function ajaxRejectedLoans()
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Loan application submission failed: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
-            return redirect()->back()->withErrors('Something went wrong. Please try again.');
+            // return redirect()->back()->withErrors('Something went wrong. Please try again.');
+            throw $e; // or just let validation handle it
+
         }
     }
 

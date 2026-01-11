@@ -1,8 +1,9 @@
 <div class="card-body">
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Loan ID</th>
                     <th>Amount</th>
                     <th>Tenure</th>
@@ -15,19 +16,24 @@
             <tbody>
                 @forelse($loans as $loan)
                     <tr>
+                        <!-- ✅ Correct serial number across pages -->
+                        <td>
+                            {{ ($loans->currentPage() - 1) * $loans->perPage() + $loop->iteration }}
+                        </td>
+
                         <td>{{ $loan->loan_reference_id }}</td>
                         <td>₹ {{ number_format($loan->amount) }}</td>
                         <td>{{ $loan->tenure }}</td>
                         <td>{{ $loan->user_name }}</td>
-                        <td>{{ $loan->category_name }}</td>
+                        <td>{{ $loan->loan_category_name }}</td>
                         <td>
                             <a class="btn btn-primary btn-xs"
-                               href="{{ route('loan.view', $loan->loan_id) }}">
+                               href="{{ route('agent.loan.view', $loan->loan_id) }}">
                                 <i class="fa fa-eye"></i>
                             </a>
 
                             <a class="btn btn-warning btn-xs"
-                               href="{{ route('editLoan', $loan->loan_id) }}">
+                               href="{{ route('agent.editLoan', $loan->loan_id) }}">
                                 <i class="fa fa-edit"></i>
                             </a>
 
@@ -39,20 +45,21 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center text-muted">
-                            No disbursed loans found
+                        <td colspan="7" class="text-center text-muted">
+                            No approved loans found
                         </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
 
-        <!-- Pagination -->
+        <!-- ✅ Pagination -->
         <div class="d-flex justify-content-between align-items-center mt-3">
             <div>
                 Showing {{ $loans->firstItem() }} to {{ $loans->lastItem() }}
                 of {{ $loans->total() }} entries
             </div>
+
             <div>
                 {{ $loans->links('pagination::bootstrap-4') }}
             </div>

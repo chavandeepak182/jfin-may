@@ -172,27 +172,23 @@
                         <h3 class="h4 mb-2"><strong>Loan Information</strong></h4>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="status">Loan Status:</label>
-                                        <select name="status" class="form-control" id="status" required
-                                            onchange="toggleRemarkBox(this.value)">
-                                            <option value="approved"
-                                                {{ old('status', $loan->status ?? '') == 'approved' ? 'selected' : '' }}>
-                                                Approved</option>
-                                            <option value="rejected"
-                                                {{ old('status', $loan->status ?? '') == 'rejected' ? 'selected' : '' }}>
-                                                Rejected</option>
-                                            <option value="in process"
-                                                {{ old('status', $loan->status ?? '') == 'in process' ? 'selected' : '' }}>
-                                                In Process</option>
-                                            <option value="disbursed"
-                                                {{ old('status', $loan->status ?? '') == 'disbursed' ? 'selected' : '' }}>
-                                                Disbursed</option>
-                                            <option value="document pending"
-                                                {{ old('status', $loan->status ?? '') == 'document pending' ? 'selected' : '' }}>
-                                                Document Pending</option>
-                                        </select>
-                                    </div>
+                                  <div class="form-group">
+    <label for="status">Loan Status:</label>
+
+    <select class="form-control" id="status" disabled>
+        <option value="approved" {{ $loan->status == 'approved' ? 'selected' : '' }}>Approved</option>
+        <option value="rejected" {{ $loan->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
+        <option value="in process" {{ $loan->status == 'in process' ? 'selected' : '' }}>In Process</option>
+        <option value="disbursed" {{ $loan->status == 'disbursed' ? 'selected' : '' }}>Disbursed</option>
+        <option value="document pending" {{ $loan->status == 'document pending' ? 'selected' : '' }}>
+            Document Pending
+        </option>
+    </select>
+
+    <!-- ✅ actual value submit होण्यासाठी -->
+    <input type="hidden" name="status" value="{{ $loan->status }}">
+</div>
+
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -267,11 +263,11 @@
                 <div class="col-md-4 bg-light p-5">
                     <div class="section mb-4">
                      <h3 class="h4 mb-2">
-                        <strong>Documents</strong> 
+                        <strong style="color:#000">Documents</strong> 
                         <small class="text-muted" style="font-size: 70%;">(Max size: 2MB)</small>
                     </h3>
                             <!-- Documents -->
-                            <h6>Uploaded:</h6>
+                            <h6 style="color:#000">Uploaded:</h6>
                             @foreach ($documents as $doc)
                                 <div class="col-md-12 mb-3">
                                     <div class="document-wrapper">
@@ -282,7 +278,7 @@
                                 </div>
                             @endforeach
                             <!-- Document Upload -->
-                            <h6>Upload New Documents:</h6>
+                            <h6 style="color:#000">Upload New Documents:</h6>
                             <div id="document-upload-section">
                                 <div class="document-upload-row mb-3">
                                     <div class="row">
@@ -301,7 +297,7 @@
                     </div>
 
                     <!-- Education Information -->
-                    <div class="section mb-4 mt-5">
+                    <!-- <div class="section mb-4 mt-5">
                         <h3 class="h4 mb-2"><strong>Education Information</strong></h4>
                             <div class="row">
                                 <div class="col-md-6">
@@ -335,7 +331,7 @@
                                     </div>
                                 </div>
                             </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </form>

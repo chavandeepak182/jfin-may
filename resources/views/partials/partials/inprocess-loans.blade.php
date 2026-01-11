@@ -4,6 +4,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Loan ID</th>
                         <th>User Name</th>
                         <th>Loan Category</th>
@@ -16,6 +17,11 @@
                 <tbody>
                     @forelse($loans as $loan)
                     <tr>
+                        <!-- ✅ Proper serial number -->
+                        <td>
+                            {{ ($loans->currentPage() - 1) * $loans->perPage() + $loop->iteration }}
+                        </td>
+
                         <td>{{ $loan->loan_reference_id }}</td>
                         <td>{{ $loan->user_name }}</td>
                         <td>{{ $loan->category_name }}</td>
@@ -40,15 +46,25 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center text-muted">
+                        <td colspan="7" class="text-center text-muted">
                             No in-process loans found
                         </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
-
-           
         </div>
+
+        <!-- ✅ Pagination -->
+        @if ($loans->hasPages())
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <div class="text-muted">
+                Showing {{ $loans->firstItem() }} to {{ $loans->lastItem() }}
+                of {{ $loans->total() }} results
+            </div>
+
+            {{ $loans->links('pagination::bootstrap-5') }}
+        </div>
+        @endif
     </div>
 </div>
