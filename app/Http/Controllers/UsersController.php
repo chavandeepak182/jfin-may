@@ -996,9 +996,10 @@ public function mydocuments()
 
     Log::info('Document upload completed successfully');
 
-    return redirect()
-        ->route('loan.mypersonal', ['section' => 'document'])
+      return redirect()
+        ->route('loan.mydocuments', ['section' => 'document'])
         ->with('success', 'Documents uploaded successfully.');
+
 }
 public function deleteDocument($id)
 {
