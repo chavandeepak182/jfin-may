@@ -4,10 +4,10 @@
             <thead>
                 <tr>
                     <th>Loan ID</th>
-                    <th>Amount</th>
-                    <th>Tenure</th>
                     <th>Customer Name</th>
                     <th>Loan Category</th>
+                    <th>Amount</th>
+                    <th>Tenure</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -16,10 +16,10 @@
                 @forelse($loans as $loan)
                     <tr>
                         <td>{{ $loan->loan_reference_id }}</td>
+                        <td>{{ $loan->user_name ?? 'N/A' }}</td>
+                        <td>{{ $loan->loan_category_name ?? 'N/A' }}</td>
                         <td>₹ {{ number_format($loan->amount) }}</td>
                         <td>{{ $loan->tenure }}</td>
-                        <td>{{ $loan->user_name }}</td>
-                        <td>{{ $loan->loan_category_name }}</td>
                         <td>
                             <a class="btn btn-primary btn-xs"
                                href="{{ route('agent.loan.view', $loan->loan_id) }}">
@@ -40,22 +40,23 @@
                 @empty
                     <tr>
                         <td colspan="6" class="text-center text-muted">
-                            No approved loans found
+                            No rejected loans found
                         </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
 
-        <!-- Pagination -->
+        {{-- ✅ Pagination --}}
+        @if ($loans->hasPages())
         <div class="d-flex justify-content-between align-items-center mt-3">
-            <div>
+            <div class="text-muted">
                 Showing {{ $loans->firstItem() }} to {{ $loans->lastItem() }}
                 of {{ $loans->total() }} entries
             </div>
-            <div>
-                {{ $loans->links('pagination::bootstrap-4') }}
-            </div>
+
+            {{ $loans->links('pagination::bootstrap-4') }}
         </div>
+        @endif
     </div>
 </div>
