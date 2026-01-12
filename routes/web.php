@@ -359,6 +359,14 @@ Route::get('/help-support', [UsersController::class, 'helpSupport'])
 // Route::get('admin/loan-application', [LoanApplicationController::class, 'showForm'])->name('loan.form');
 
 
+
+
+// customer bank add fun
+
+
+Route::post('/user/bank/save', [UsersController::class, 'saveBankDetails'])
+    ->name('user.bank.save');
+
 //loan admin
 Route::get('admin/loans', [LoanApplicationController::class, 'index'])->name('loans.index');
 Route::post('admin/insertLoan', [LoanApplicationController::class, 'store'])->name('admin.insertLoan');

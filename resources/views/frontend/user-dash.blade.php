@@ -7,7 +7,7 @@
     border-radius: 18px;
     color: #fff;
     padding: 24px;
-    height: 170px;
+    height: 187px;
     position: relative;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.08);

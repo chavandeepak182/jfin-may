@@ -14,6 +14,8 @@ use App\Models\Profile;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Collection;
+
 
 class ReferralController extends Controller
 {
@@ -287,37 +289,78 @@ public function showTransactionHistoryadmin($transactionId)
     }
 
     //admin wallet
-    public function userWalletbalance()
-{
-    $userId = session('user_id'); // Assuming user_id is stored in the session
-    $walletBalance = DB::table('wallet')->where('user_id', $userId)->value('wallet_balance');
+//     public function userWalletbalance()
+// {
+//     $userId = session('user_id'); // Assuming user_id is stored in the session
+//     $walletBalance = DB::table('wallet')->where('user_id', $userId)->value('wallet_balance');
 
-    // Fetch the user's transaction history
+//     // Fetch the user's transaction history
+//     $transactions = DB::table('transactions')
+//         ->where('user_id', $userId)
+//         ->select('id', 'user_id', 'amount', 'transaction_id', 'status', 'created_at')
+//         ->get()
+//         ->toArray(); // Convert to array
+
+//     // Fetch the user's pending withdrawal requests
+//     $withdrawalRequests = DB::table('withdrawal_requests')
+//         ->where('user_id', $userId)
+//         ->where('status', 'pending') // Filter for pending status
+//         ->select('id', 'amount', 'status', 'created_at')
+//         ->get()
+//         ->toArray(); // Convert to array
+
+//     // Combine transactions and withdrawal requests
+//     $combinedData = array_merge($transactions, $withdrawalRequests);
+
+//     // Sort by created_at in descending order
+//     usort($combinedData, function($a, $b) {
+//         return strtotime($b->created_at) - strtotime($a->created_at);
+//     });
+
+//     // return view('admin.walletbalance', compact('walletBalance', 'combinedData'));
+//     return view('frontend.profile.referrals', compact('walletBalance', 'combinedData'));
+// }
+
+
+public function userWalletbalance()
+{
+    // 1️⃣ Get logged-in user ID
+    $userId = session('user_id');
+
+    // 2️⃣ Wallet balance
+    $walletBalance = DB::table('wallet')
+        ->where('user_id', $userId)
+        ->value('wallet_balance') ?? 0;
+
+    // 3️⃣ Transactions
     $transactions = DB::table('transactions')
         ->where('user_id', $userId)
         ->select('id', 'user_id', 'amount', 'transaction_id', 'status', 'created_at')
-        ->get()
-        ->toArray(); // Convert to array
+        ->get();
 
-    // Fetch the user's pending withdrawal requests
+    // 4️⃣ Pending withdrawal requests
     $withdrawalRequests = DB::table('withdrawal_requests')
         ->where('user_id', $userId)
-        ->where('status', 'pending') // Filter for pending status
+        ->where('status', 'pending')
         ->select('id', 'amount', 'status', 'created_at')
-        ->get()
-        ->toArray(); // Convert to array
+        ->get();
 
-    // Combine transactions and withdrawal requests
-    $combinedData = array_merge($transactions, $withdrawalRequests);
+    // 5️⃣ Merge + sort
+    $combinedData = $transactions
+        ->merge($withdrawalRequests)
+        ->sortByDesc('created_at');
 
-    // Sort by created_at in descending order
-    usort($combinedData, function($a, $b) {
-        return strtotime($b->created_at) - strtotime($a->created_at);
-    });
+    // 6️⃣ IMPORTANT: define empty descendants for Leg Down tab
+    $descendants = collect();
 
-    // return view('admin.walletbalance', compact('walletBalance', 'combinedData'));
-    return view('frontend.profile.referrals', compact('walletBalance', 'combinedData'));
+    // 7️⃣ Load view
+    return view('frontend.profile.referrals', compact(
+        'walletBalance',
+        'combinedData',
+        'descendants'
+    ));
 }
+
 public function listUsers(Request $request)
 {
     $search = $request->input('search');
