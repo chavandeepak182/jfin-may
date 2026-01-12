@@ -848,44 +848,80 @@ public function loadListByType(Request $request)
     }
 
     //customer profile
-    public function showProfile(Request $request)
-    {
-        $section = $request->query('section', 'personal');
-        $userId = session('user_id'); // Retrieve user ID from session
+   public function showProfile(Request $request)
+{
+    $section = $request->query('section', 'personal');
+    $userId = session('user_id'); // Retrieve user ID from session
 
-        if (!$userId) {
-            return redirect()->route('login')->withErrors('User session expired. Please log in again.');
+    if (!$userId) {
+        return redirect()->route('login')->withErrors('User session expired. Please log in again.');
+    }
+
+    // Fetch user
+    $user = DB::table('users')->where('id', $userId)->first();
+
+    // Fetch loans
+    $loans = DB::table('loans')->where('user_id', $userId)->get();
+    $loanCount = $loans->count();
+
+    $disbursedLoanCount = DB::table('loans')
+        ->where('user_id', $userId)
+        ->where('status', 'disbursed')
+        ->count();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Referral Code Logic
+    |--------------------------------------------------------------------------
+    | - Before disbursed loan → show message
+    | - After disbursed loan → generate & show code
+    */
+
+    if ($disbursedLoanCount > 0) {
+
+        // Generate referral code only once
+        if (empty($user->referral_code)) {
+
+            $generatedCode = 'REF' . strtoupper(uniqid());
+
+            DB::table('users')
+                ->where('id', $userId)
+                ->update(['referral_code' => $generatedCode]);
+
+            $referralCode = $generatedCode;
+        } else {
+            $referralCode = $user->referral_code;
         }
 
-        // Fetch user-related data
-        $user = DB::table('users')->where('id', $userId)->first();
-        $referralCode = $user->referral_code ?? ''; // Fetch referral code
+    } else {
+        // User registered but no disbursed loan yet
+       $referralCode = 'After Disbursed';
 
-        // Other existing data fetching (loans, wallet, etc.)
-        $profile = DB::table('profile')->where('user_id', $userId)->first();
-        $professionalDetails = DB::table('professional_details')->where('user_id', $userId)->first();
-        $educationalDetails = DB::table('education_details')->where('user_id', $userId)->first();
-        $documents = DB::table('documents')->where('user_id', $userId)->get();
-        $loans = DB::table('loans')->where('user_id', $userId)->get();
-        $loanCount = $loans->count();
-        $disbursedLoanCount = DB::table('loans')->where('user_id', $userId)->where('status', 'disbursed')->count();
-        $wallet = DB::table('wallet')->where('user_id', $userId)->first();
-        $walletBalance = $wallet->wallet_balance ?? 0;
-
-        return view('frontend.user-dash', compact(
-            'section',
-            'user',
-            'profile',
-            'professionalDetails',
-            'educationalDetails',
-            'documents',
-            'loans',
-            'loanCount',
-            'disbursedLoanCount',
-            'walletBalance',
-            'referralCode' // Pass referral code to the view
-        ));
     }
+
+    // Other existing data (NO CHANGE)
+    $profile = DB::table('profile')->where('user_id', $userId)->first();
+    $professionalDetails = DB::table('professional_details')->where('user_id', $userId)->first();
+    $educationalDetails = DB::table('education_details')->where('user_id', $userId)->first();
+    $documents = DB::table('documents')->where('user_id', $userId)->get();
+    $wallet = DB::table('wallet')->where('user_id', $userId)->first();
+    $walletBalance = $wallet->wallet_balance ?? 0;
+
+    return view('frontend.user-dash', compact(
+        'section',
+        'user',
+        'profile',
+        'professionalDetails',
+        'educationalDetails',
+        'documents',
+        'loans',
+        'loanCount',
+        'disbursedLoanCount',
+        'walletBalance',
+        'referralCode'
+    ));
+}
+
     public function test(Request $request)
     {
         $userId = session('user_id'); // Retrieve user ID from session
@@ -1311,18 +1347,51 @@ public function deleteDocument($id)
         } else {
             $notifications = $notificationsResponse->getData()->notifications;
         }
+        // Fetch bank details
+        $bankDetails = DB::table('customer_banks')
+            ->where('user_id', $userId)
+            ->first();
 
-        // Return a single Blade view
-        return view('frontend.profile.personal-info', compact(
-            'user',
-            'profile',
-            'professionalDetails',
-            'educationalDetails',
-            'documents',
-            'notifications',
-            'section'
-        ));
+
+       return view('frontend.profile.personal-info', compact(
+    'user',
+    'profile',
+    'professionalDetails',
+    'educationalDetails',
+    'documents',
+    'notifications',
+    'section',
+    'bankDetails'
+));
+
+
     }
+
+    // customer bank
+    public function saveBankDetails(Request $request)
+{
+    $request->validate([
+        'bank_name'   => 'required',
+        'account_no'  => 'required',
+        'branch_name' => 'required',
+        'upi_id'      => 'nullable',
+    ]);
+
+    DB::table('customer_banks')->updateOrInsert(
+        ['user_id' => $request->user_id],
+        [
+            'bank_name'   => $request->bank_name,
+            'account_no'  => $request->account_no,
+            'branch_name' => $request->branch_name,
+            'upi_id'      => $request->upi_id,
+            'updated_at'  => now(),
+            'created_at'  => now(),
+        ]
+    );
+
+    return back()->with('success', 'Bank details saved successfully.');
+}
+
     public function markAsRead($id)
     {
         $notification = Notification::find($id);
