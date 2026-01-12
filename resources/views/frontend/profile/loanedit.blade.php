@@ -423,7 +423,7 @@
 
         // Initialize the form based on current status
         document.addEventListener('DOMContentLoaded', function() {
-            var status = document.getElementById('status') ? document.getElementById('status').value : '';
+           var status = document.querySelector('input[name="status"]').value;
             toggleSanctionLetterBox(status);
         });
 

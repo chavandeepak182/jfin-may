@@ -1,23 +1,3 @@
-
-<style>
-    table {
-    width: 100%;
-    background: #fff;
-}
-.pagination-wrapper {
-    position: relative;
-    z-index: 1000;
-}
-
-#loanListArea {
-    position: relative;
-    z-index: 1000;
-    overflow: visible !important;
-}
-
-</style>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
 @if($loans->count())
 
 <table class="table table-bordered">
@@ -38,31 +18,34 @@
         <tr>
             <td>{{ $loan->loan_id }}</td>
             <td>{{ $loan->loan_reference_id }}</td>
-            <td>{{ $loan->user->name }}</td>
-            <td>{{ $loan->loanCategory->category_name }}</td>
+
+            {{-- SAFE relation access --}}
+            <td>{{ optional($loan->user)->name ?? '-' }}</td>
+            <td>{{ optional($loan->loanCategory)->category_name ?? '-' }}</td>
             <td>₹ {{ number_format($loan->amount) }}</td>
-            <td>{{ $loan->bankDetails->bank_name }}</td>
-            <td>{{ $loan->user->profile->cityRelation->city }}</td>
-         <td>
-    {{-- View --}}
-    <a class="btn btn-sm btn-primary"
-       href="{{ route('loan.view', ['id' => $loan->loan_id]) }}">
-        <i class="fa fa-eye"></i>
-    </a>
+            <td>{{ optional($loan->bankDetails)->bank_name ?? '-' }}</td>
 
-    {{-- Edit --}}
-    <a class="btn btn-sm btn-warning"
-       href="{{ route('editLoan', ['id' => $loan->loan_id]) }}">
-        <i class="fa fa-edit"></i>
-    </a>
+            {{-- Deep relation safe --}}
+            <td>
+                {{ optional(optional(optional($loan->user)->profile)->cityRelation)->city ?? '-' }}
+            </td>
 
-    {{-- Delete --}}
-    <button class="btn btn-sm btn-danger"
-        onclick="deleteLoan('{{ $loan->loan_id }}')">
-        <i class="fa fa-trash"></i>
-    </button>
-</td>
+            <td>
+                <a class="btn btn-sm btn-primary"
+                   href="{{ route('loan.view', ['id' => $loan->loan_id]) }}">
+                    <i class="fa fa-eye"></i>
+                </a>
 
+                <a class="btn btn-sm btn-warning"
+                   href="{{ route('editLoan', ['id' => $loan->loan_id]) }}">
+                    <i class="fa fa-edit"></i>
+                </a>
+
+                <button class="btn btn-sm btn-danger"
+                        onclick="deleteLoan('{{ $loan->loan_id }}')">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </td>
         </tr>
     @endforeach
     </tbody>
@@ -77,27 +60,3 @@
     No loans found
 </div>
 @endif
-
-<script>
-function deleteLoan(id) {
-    if (!confirm('Are you sure you want to delete this loan?')) {
-        return;
-    }
-
-    fetch("{{ url('agent/loan/delete') }}/" + id, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message || 'Loan deleted successfully');
-        location.reload();
-    })
-    .catch(error => {
-        alert('Something went wrong');
-    });
-}
-</script>

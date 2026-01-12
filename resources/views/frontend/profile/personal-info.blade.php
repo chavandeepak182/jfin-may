@@ -338,5 +338,126 @@
 			</div>
 		</div>
 
+		{{-- ================= BANK DETAILS ================= --}}
+<div class="col-xl-6">
+    <div class="card shadow-sm border-0 h-100 profile-card">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <div class="icon-circle bg-primary bg-opacity-10">
+                    <i class="fas fa-university text-primary"></i>
+                </div>
+                <div>
+                    <h5 class="mb-0 fw-bold">Bank Details</h5>
+                    <small class="text-muted">Withdrawal account information</small>
+                </div>
+            </div>
+
+            <button class="btn btn-sm btn-outline-primary rounded-pill"
+                    data-bs-toggle="modal"
+                    data-bs-target="#bankDetailsModal">
+                <i class="far fa-edit me-1"></i>
+                {{ $bankDetails ? 'Edit' : 'Add' }}
+            </button>
+        </div>
+
+        <div class="card-body">
+            @if($bankDetails)
+
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <small class="text-muted">Bank Name</small>
+                        <div class="section-value">{{ $bankDetails->bank_name }}</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <small class="text-muted">Account Number</small>
+                        <div class="section-value">{{ $bankDetails->account_no }}</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <small class="text-muted">Branch</small>
+                        <div class="section-value">{{ $bankDetails->branch_name }}</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <small class="text-muted">UPI ID</small>
+                        <div class="section-value">{{ $bankDetails->upi_id ?? '—' }}</div>
+                    </div>
+                </div>
+
+            @else
+                <div class="alert alert-warning mb-0">
+                    Bank details not added yet.
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+<!-- ================= BANK DETAILS MODAL ================= -->
+<div class="modal fade" id="bankDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    {{ $bankDetails ? 'Edit Bank Details' : 'Add Bank Details' }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form action="{{ route('user.bank.save') }}" method="POST">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ $user->id }}">
+
+                <div class="modal-body row g-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label">Bank Name</label>
+                        <input type="text" name="bank_name"
+                               class="form-control"
+                               value="{{ old('bank_name', $bankDetails->bank_name ?? '') }}"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Account Number</label>
+                        <input type="text" name="account_no"
+                               class="form-control"
+                               value="{{ old('account_no', $bankDetails->account_no ?? '') }}"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Branch Name</label>
+                        <input type="text" name="branch_name"
+                               class="form-control"
+                               value="{{ old('branch_name', $bankDetails->branch_name ?? '') }}"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">UPI ID (Optional)</label>
+                        <input type="text" name="upi_id"
+                               class="form-control"
+                               value="{{ old('upi_id', $bankDetails->upi_id ?? '') }}">
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Save Bank Details
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
 </div>
 @endsection
