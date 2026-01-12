@@ -32,7 +32,7 @@ class User extends Authenticatable
         'email_verified_at',
         'is_email_verify',
         'is_property_applied'
-,
+
     ];
     /**
      * The attributes that should be hidden for serialization.
@@ -52,7 +52,8 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'email_otp_expires_at' => 'datetime'
+            'email_otp_expires_at' => 'datetime',
+             'last_login_at'         => 'datetime', // ✅ ADD THIS
         ];
     }
     public function roles()
