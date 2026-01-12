@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\Notification;
 use App\Services\CreditScoreService;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cookie;
+use Carbon\Carbon;
+
 
 
 
@@ -1476,9 +1478,18 @@ protected function handlePersonalDetails(Request $request, $userId)
                 'required',
                 'regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/'
             ],
-
+'dob' => [
+        'required',
+        'date',
+        'before:today',
+        function ($attribute, $value, $fail) {
+            if (Carbon::parse($value)->age < 18) {
+                $fail('You must be at least 18 years old to apply for a loan');
+            }
+        },
+    ],
             'marital_status' => 'required',
-            'dob' => 'required|date',
+            // 'dob' => 'required|date',
             'residence_address' => 'required',
             'state' => 'required',
             'city' => 'required',

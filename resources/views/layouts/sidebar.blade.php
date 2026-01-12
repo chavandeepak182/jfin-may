@@ -1,6 +1,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 @php
     $role_id = session()->get('role_id');
@@ -111,6 +112,13 @@
                 <span>MLM</span>
             </a>
         @endif
+        {{-- ================= COMMISSION ================= --}}
+@if($role_id == 4)
+    <a href="{{ route('allCommission') }}" class="nav-item">
+        <i class="fas fa-coins"></i>
+        <span>Commission</span>
+    </a>
+@endif
 
     </nav>
 

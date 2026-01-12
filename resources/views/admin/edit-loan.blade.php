@@ -389,7 +389,7 @@
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 window.location.href =
-                                    "{{ route('loans.index') }}"; // Redirect to the loans index
+                                    "{{ route('admin.loans') }}"; // Redirect to the loans index
                             }
                         });
                     },

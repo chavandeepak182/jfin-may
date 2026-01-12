@@ -262,17 +262,26 @@
                                         {{-- <button type="button" class="btn btn-primary" id="fetchReportBtn">Fetch Credit Report</button> --}}
 
                                         <div class="col-md-4">
-                                            <div class="form-floating">
-                                                <input type="date" class="form-control" id="dob" name="dob"
-                                                    value="{{ old('dob', $profile->dob ?? '') }}" placeholder="DOB"
-                                                    required>
-                                                <label for="dob">Date of Birth <span
-                                                        class="text-danger">*</span></label>
-                                                @error('dob')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                        </div>
+    <div class="form-floating">
+        <input type="date"
+               class="form-control @error('dob') is-invalid @enderror"
+               id="dob"
+               name="dob"
+               value="{{ old('dob', $profile->dob ?? '') }}"
+               placeholder="DOB"
+               max="{{ now()->subYears(18)->format('Y-m-d') }}"
+               required>
+
+        <label for="dob">Date of Birth <span class="text-danger">*</span></label>
+
+        @error('dob')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
+    </div>
+</div>
+
 
                                         <div class="col-md-4">
                                             <div class="form-floating">
@@ -1085,7 +1094,7 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
                                         Save & Continue <i class="bi bi-arrow-right"></i>
                                     </button>
                                 </div>
-
+                            </div>
                         </form>
                     </div>
                 </div>

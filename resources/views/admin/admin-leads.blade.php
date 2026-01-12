@@ -104,7 +104,7 @@
             </button>
         </div>
 
-        <!-- Loan Bank Button -->
+<!--        
         <div id="addBankBtn" style="display:none;">
             <button type="button"
                     class="btn btn-primary"
@@ -114,7 +114,7 @@
             </button>
         </div>
 
-        <!-- ✅ Estimated File Button -->
+       
         <div id="addEstimatedBtn" style="display:none;">
             <a href="{{ route('estimatedFile.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus-lg"></i> Add Estimated File
@@ -129,7 +129,7 @@
                 </a>
             
 
-        </div>
+        </div> -->
         
 
     </div>
@@ -211,8 +211,8 @@
 </div>
 
 
-    <!-- All Loan Banks -->
-     <div class="col-xl-3 col-lg-4 col-md-6">
+    
+     <!-- <div class="col-xl-3 col-lg-4 col-md-6">
         <div class="analytics-card"
              onclick="showLoanBanks()"
              style="cursor:pointer;">
@@ -240,15 +240,15 @@
             </div>
 
         </div>
-    </div>
+    </div> -->
 
 
 
-    <!-- All Loan Banks -->
+   
     
 
     <!-- Estimated Files -->
-    <div class="col-xl-3 col-lg-4 col-md-6 mt-5">
+    <!-- <div class="col-xl-3 col-lg-4 col-md-6 mt-5">
         <div class="analytics-card"
              onclick="showEstimatedFiles()"
              style="cursor:pointer;">
@@ -276,11 +276,11 @@
             </div>
 
         </div>
-    </div>
+    </div> -->
 
 
     <!-- Monthly P&l -->
-     <div class="col-xl-3 col-lg-4 col-md-6 mt-5">
+     <!-- <div class="col-xl-3 col-lg-4 col-md-6 mt-5">
     <div class="analytics-card"
          onclick="showMonthlyPL()"
          style="cursor:pointer;">
@@ -307,7 +307,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
 
@@ -438,7 +438,7 @@
     </div>
 </div>
 <!-- loanbank -->
- <div id="loanBankSection" class="card mt-5" style="display:none;">
+ <!-- <div id="loanBankSection" class="card mt-5" style="display:none;">
     <div class="card-body">
         <div class="table-responsive">
             <table id="example" class="table table-striped">
@@ -479,18 +479,18 @@
             {{ $loanbanks->links() }}
         </div>
     </div>
-</div>
+</div> -->
 
 <script>
 function hideAllSections() {
     document.getElementById('enquiryList').style.display = 'none';
     document.getElementById('leadsSection').style.display = 'none';
     document.getElementById('misSection').style.display = 'none';
-    document.getElementById('loanBankSection').style.display = 'none';
+    // document.getElementById('loanBankSection').style.display = 'none';
 
     document.getElementById('addLeadBtn').style.display = 'none';
     document.getElementById('misBtns').style.display = 'none';
-    document.getElementById('addBankBtn').style.display = 'none';
+    // document.getElementById('addBankBtn').style.display = 'none';
 }
 
 function showEnquiryList() {
@@ -510,15 +510,15 @@ function showMISList() {
     document.getElementById('misBtns').style.display = 'block';
 }
 
-function showLoanBanks() {
-    hideAllSections();
-    document.getElementById('loanBankSection').style.display = 'block';
-    document.getElementById('addBankBtn').style.display = 'block';
-}
+// function showLoanBanks() {
+//     hideAllSections();
+//     // document.getElementById('loanBankSection').style.display = 'block';
+//     // document.getElementById('addBankBtn').style.display = 'block';
+// }
 </script>
 
 <!-- Add Bank Modal -->
-<div class="modal fade" id="addBankView" tabindex="-1" aria-hidden="true">
+<!-- <div class="modal fade" id="addBankView" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -560,7 +560,7 @@ function showLoanBanks() {
                         </div>
                     </div>
 
-                    <!-- Missing footer added here -->
+                   
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Close
@@ -575,24 +575,16 @@ function showLoanBanks() {
 
         </div>
     </div>
-</div>
+</div> -->
 
 
 
 <!-- estimated -->
- <div id="estimatedFileSection" class="card mt-5" style="display:none;">
+ <!-- <div id="estimatedFileSection" class="card mt-5" style="display:none;">
 
-    <!-- Header -->
-    <!-- <div class="card-header d-flex justify-content-between align-items-center">
-        <h4>Estimated Files</h4>
+    
 
-        <a href="{{ route('estimatedFile.create') }}"
-           class="btn btn-primary">
-            <i class="bi bi-plus-lg"></i> Add Estimated File
-        </a>
-    </div> -->
-
-    <!-- FILTER BAR -->
+   
     <div class="p-4 bg-white">
         <form method="GET" action="{{ route('admin.listlead') }}">
             <div class="row g-3 align-items-end">
@@ -627,7 +619,7 @@ function showLoanBanks() {
         </form>
     </div>
 
-    <!-- Gross Revenue -->
+   
     @if(request('report_month'))
         <div class="alert alert-info m-4 d-flex justify-content-between">
             <strong>
@@ -640,7 +632,7 @@ function showLoanBanks() {
         </div>
     @endif
 
-    <!-- TABLE -->
+    
     <div class="card-body">
         <table class="table table-bordered">
             <thead>
@@ -673,11 +665,11 @@ function showLoanBanks() {
         </table>
     </div>
 
-</div>
+</div> -->
 
-<div id="monthlyPLSection" class="card mt-5" style="display:none;">
+<!-- <div id="monthlyPLSection" class="card mt-5" style="display:none;">
 
-    <!-- Header -->
+
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
         <h4>Monthly P&amp;L</h4>
 
@@ -687,7 +679,7 @@ function showLoanBanks() {
         </a>
     </div>
 
-    <!-- Table -->
+   
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered table-hover align-middle">
@@ -728,7 +720,7 @@ function showLoanBanks() {
             </table>
         </div>
     </div>
-</div>
+</div> -->
 
 <script>
 /* ================= COMMON HIDE FUNCTION ================= */
@@ -737,17 +729,17 @@ function hideAllSections() {
     'enquiryList',
     'leadsSection',
     'misSection',
-    'loanBankSection',
-    'estimatedFileSection',
-    'monthlyPLSection' // ✅ ADD THIS
+    // 'loanBankSection',
+    // 'estimatedFileSection',
+    // 'monthlyPLSection' 
 ];
 
 
     const buttons = [
         'addLeadBtn',
         'misBtns',
-        'addBankBtn',
-        'addEstimatedBtn'
+        // 'addBankBtn',
+        // 'addEstimatedBtn'
     ];
 
     sections.forEach(id => {
@@ -782,19 +774,19 @@ function showMISList() {
     localStorage.setItem('activeSection', 'mis');
 }
 
-function showLoanBanks() {
-    hideAllSections();
-    document.getElementById('loanBankSection').style.display = 'block';
-    document.getElementById('addBankBtn').style.display = 'block';
-    localStorage.setItem('activeSection', 'loanbanks');
-}
+// function showLoanBanks() {
+//     hideAllSections();
+//     document.getElementById('loanBankSection').style.display = 'block';
+//     document.getElementById('addBankBtn').style.display = 'block';
+//     localStorage.setItem('activeSection', 'loanbanks');
+// }
 
-function showEstimatedFiles() {
-    hideAllSections();
-    document.getElementById('estimatedFileSection').style.display = 'block';
-    document.getElementById('addEstimatedBtn').style.display = 'block';
-    localStorage.setItem('activeSection', 'estimatedfiles');
-}
+// function showEstimatedFiles() {
+//     hideAllSections();
+//     document.getElementById('estimatedFileSection').style.display = 'block';
+//     document.getElementById('addEstimatedBtn').style.display = 'block';
+//     localStorage.setItem('activeSection', 'estimatedfiles');
+// }
 
 /* ================= RESTORE STATE AFTER RELOAD ================= */
 document.addEventListener('DOMContentLoaded', function () {
@@ -807,15 +799,7 @@ document.addEventListener('DOMContentLoaded', function () {
     case 'mis':
         showMISList();
         break;
-    case 'loanbanks':
-        showLoanBanks();
-        break;
-    case 'estimatedfiles':
-        showEstimatedFiles();
-        break;
-    case 'monthlypl':           // ✅ ADD THIS
-        showMonthlyPL();
-        break;
+    
     default:
         showEnquiryList();
 }
@@ -823,46 +807,46 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /* ================= ADD BANK MODAL ================= */
-function openAddBankModal() {
-    const modal = new bootstrap.Modal(document.getElementById('addBankView'));
-    modal.show();
-}
+// function openAddBankModal() {
+//     const modal = new bootstrap.Modal(document.getElementById('addBankView'));
+//     modal.show();
+// }
 
 /* ================= ADD BANK AJAX ================= */
-$('#addBank').on('submit', function (e) {
-    e.preventDefault(); // IMPORTANT
+// $('#addBank').on('submit', function (e) {
+//     e.preventDefault();
 
-    $.ajax({
-        url: "{{ route('insertLoanBank') }}",
-        method: "POST",
-        data: new FormData(this),
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            if (response.status === 1) {
-                $('#addBankView').modal('hide');
+//     $.ajax({
+//         url: "{{ route('insertLoanBank') }}",
+//         method: "POST",
+//         data: new FormData(this),
+//         processData: false,
+//         contentType: false,
+//         success: function (response) {
+//             if (response.status === 1) {
+//                 $('#addBankView').modal('hide');
 
-                // stay on Loan Banks after reload
-                localStorage.setItem('activeSection', 'loanbanks');
-                location.reload();
-            } else {
-                alert('Failed to add bank');
-            }
-        },
-        error: function () {
-            alert('Something went wrong');
-        }
-    });
-});
+                
+//                 localStorage.setItem('activeSection', 'loanbanks');
+//                 location.reload();
+//             } else {
+//                 alert('Failed to add bank');
+//             }
+//         },
+//         error: function () {
+//             alert('Something went wrong');
+//         }
+//     });
+// });
 </script>
 
-<script>
+<!-- <script>
 function showMonthlyPL() {
     hideAllSections();
     document.getElementById('monthlyPLSection').style.display = 'block';
     localStorage.setItem('activeSection', 'monthlypl');
 }
-</script>
+</script> -->
 
 @endsection
 

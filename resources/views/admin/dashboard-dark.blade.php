@@ -36,7 +36,7 @@
                 <div class="col-12">
                     <div class="metrics-grid">
                         <!-- Total Loans -->
-                        <a href="{{ route('loans.index') }}" class="metric-link">
+                        <a href="{{ route('admin.loans') }}" class="metric-link">
                             <div class="metric-card">
                                 <div class="metric-icon purple"><i class="fas fa-dollar-sign"></i></div>
                                 <div class="metric-content">
@@ -52,7 +52,7 @@
                         </a>
 
                         <!-- Total Leads -->
-                        <a href="/admin/leads" class="metric-link">
+                        <a href="{{ route('admin.listlead') }}" class="metric-link">
                             <div class="metric-card">
                                 <div class="metric-icon yellow"><i class="fas fa-bullhorn"></i></div>
                                 <div class="metric-content">
@@ -68,7 +68,7 @@
                         </a>
 
                         <!-- Total Employees -->
-                        <a href="{{ route('allUsers') }}" class="metric-link">
+                        <a href="{{ route('admin.customers') }}" class="metric-link">
                             <div class="metric-card">
                                 <div class="metric-icon green"><i class="fas fa-user-tie"></i></div>
                                 <div class="metric-content">
@@ -84,7 +84,7 @@
                         </a>
 
                         <!-- Total Customers -->
-                        <a href="{{ route('allUsers') }}" class="metric-link">
+                        <a href="{{ route('admin.customers') }}" class="metric-link">
                             <div class="metric-card">
                                 <div class="metric-icon purple"><i class="fas fa-users"></i></div>
                                 <div class="metric-content">
@@ -897,6 +897,20 @@ body {
 .chart-container {
     height: 300px;
     position: relative;
+}
+
+.metric-link {
+    text-decoration: none !important;
+    color: inherit !important;
+    display: block;
+}
+
+.metric-link:hover,
+.metric-link:focus,
+.metric-link:active {
+    text-decoration: none !important;
+    color: inherit !important;
+    outline: none !important;
 }
 
 /* Bottom Row */
