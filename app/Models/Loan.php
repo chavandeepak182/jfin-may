@@ -14,7 +14,7 @@ class Loan extends Model
     protected $casts = [
         'amount_approved' => 'integer',
     ];
-    protected $fillable = ['loan_category_id', 'amount', 'tenure', 'status', 'referral_user_id', 'amount_approved', 'loan_reference_id', 'bank_id'];
+    protected $fillable = ['loan_category_id', 'amount', 'tenure', 'status', 'referral_user_id', 'amount_approved', 'loan_reference_id', 'bank_id','user_id'];
     public function loanCategory()
     {
         return $this->belongsTo(LoanCategory::class, 'loan_category_id', 'loan_category_id');
