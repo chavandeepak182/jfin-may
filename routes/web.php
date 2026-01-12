@@ -40,6 +40,8 @@ Route::get('admin/loans-list', [LoanApplicationController::class, 'loanlist'])->
 Route::get('admin/property', [PropertyController::class, 'propertylist'])->name('admin.property');
 Route::get('admin/leadslist', [LeadController::class, 'leadlist'])->name('admin.listlead');
 Route::get('admin/banklist', [BankController::class, 'loanbankslist'])->name('admin.bank');
+Route::post('/admin/loan-bank/store', [BankController::class, 'insertLoanBank'])
+    ->name('admin.loanbank.store');
 Route::get('admin/referrallist', [BankController::class, 'listreferral'])->name('admin.allreferral');
 Route::get('admin/eligible', [BankController::class, 'eligiblelist'])->name('admin.eligible');
 
