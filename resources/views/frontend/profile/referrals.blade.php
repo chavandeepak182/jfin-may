@@ -238,39 +238,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const loanBox = document.getElementById('loan-details');
     const loanBody = loanBox.querySelector('tbody');
 
-    document.querySelectorAll('.child-loans-dropdown').forEach(el => {
-        el.addEventListener('change', async () => {
+    document.querySelectorAll('.child-loans-dropdown').forEach(dropdown => {
+        dropdown.addEventListener('change', async () => {
+
+            const userId = dropdown.dataset.userId;
 
             loanBox.style.display = 'block';
             loanBody.innerHTML =
                 '<tr><td colspan="6" class="text-center">Loading...</td></tr>';
 
-            const userId = el.dataset.userId;
+            try {
+                const res = await fetch(`/api/loans/${userId}`);
+                const loans = await res.json();
 
-            const res = await fetch(`/api/loans/${userId}`);
-            const loans = await res.json();
+                loanBody.innerHTML = '';
 
-            loanBody.innerHTML = '';
+                if (!loans.length) {
+                    loanBody.innerHTML =
+                        '<tr><td colspan="6" class="text-center">No loans found</td></tr>';
+                    return;
+                }
 
-            if (loans.length === 0) {
+                loans.forEach((l, i) => {
+                    loanBody.innerHTML += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${l.loan_reference_id}</td>
+                            <td>₹${l.amount}</td>
+                            <td>${l.status}</td>
+                            <td>${l.category}</td>
+                            <td>${l.created_at}</td>
+                        </tr>`;
+                });
+
+            } catch (err) {
                 loanBody.innerHTML =
-                    '<tr><td colspan="6" class="text-center">No loans found</td></tr>';
+                    '<tr><td colspan="6" class="text-danger text-center">Failed to load loans</td></tr>';
+                console.error(err);
             }
-
-            loans.forEach((l, i) => {
-                loanBody.innerHTML += `
-                    <tr>
-                        <td>${i + 1}</td>
-                        <td>${l.loan_reference_id}</td>
-                        <td>₹${l.amount}</td>
-                        <td>${l.status}</td>
-                        <td>${l.category}</td>
-                        <td>${l.created_at}</td>
-                    </tr>
-                `;
-            });
         });
     });
 });
 </script>
 @endsection
+
