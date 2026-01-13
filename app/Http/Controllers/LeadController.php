@@ -158,7 +158,7 @@ public function leadlist(Request $request)
     
         // Create the lead if valid
         Lead::create($request->all());
-        return redirect()->route('leads.index')->with('success', 'Lead added successfully.');
+        return redirect()->route('admin.listlead')->with('success', 'Lead added successfully.');
     }
 
     public function show(Lead $lead) {
@@ -220,7 +220,7 @@ public function leadlist(Request $request)
         // Update the lead
         $lead->update($request->all());
     
-        return redirect()->route('leads.index')->with('success', 'Lead updated successfully.');
+        return redirect()->route('admin.listlead')->with('success', 'Lead updated successfully.');
     }
 
     public function destroy(Lead $lead) {
@@ -231,7 +231,7 @@ public function leadlist(Request $request)
     
         // Delete the lead if the user is an admin
         $lead->delete();
-        return redirect()->route('leads.index')->with('success', 'Lead deleted successfully.');
+        return redirect()->route('admin.listlead')->with('success', 'Lead deleted successfully.');
     }
 }
 

@@ -338,7 +338,7 @@
 			</div>
 		</div>
 
-		{{-- ================= BANK DETAILS ================= --}}
+{{-- ================= BANK DETAILS ================= --}}
 <div class="col-xl-6">
     <div class="card shadow-sm border-0 h-100 profile-card">
         <div class="card-header bg-white d-flex justify-content-between align-items-center">
@@ -362,8 +362,8 @@
 
         <div class="card-body">
             @if($bankDetails)
-
                 <div class="row g-3">
+
                     <div class="col-sm-6">
                         <small class="text-muted">Bank Name</small>
                         <div class="section-value">{{ $bankDetails->bank_name }}</div>
@@ -371,11 +371,18 @@
 
                     <div class="col-sm-6">
                         <small class="text-muted">Account Number</small>
-                        <div class="section-value">{{ $bankDetails->account_no }}</div>
+                        <div class="section-value">
+                            ****{{ substr($bankDetails->account_no, -4) }}
+                        </div>
                     </div>
 
                     <div class="col-sm-6">
-                        <small class="text-muted">Branch</small>
+                        <small class="text-muted">IFSC Code</small>
+                        <div class="section-value">{{ $bankDetails->ifsc_code }}</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <small class="text-muted">Branch Name</small>
                         <div class="section-value">{{ $bankDetails->branch_name }}</div>
                     </div>
 
@@ -383,8 +390,8 @@
                         <small class="text-muted">UPI ID</small>
                         <div class="section-value">{{ $bankDetails->upi_id ?? '—' }}</div>
                     </div>
-                </div>
 
+                </div>
             @else
                 <div class="alert alert-warning mb-0">
                     Bank details not added yet.
@@ -393,6 +400,8 @@
         </div>
     </div>
 </div>
+
+
 <!-- ================= BANK DETAILS MODAL ================= -->
 <div class="modal fade" id="bankDetailsModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -411,36 +420,76 @@
 
                 <div class="modal-body row g-3">
 
+                    <!-- Bank Name -->
                     <div class="col-md-6">
                         <label class="form-label">Bank Name</label>
-                        <input type="text" name="bank_name"
-                               class="form-control"
+                        <input type="text"
+                               name="bank_name"
+                               class="form-control @error('bank_name') is-invalid @enderror"
                                value="{{ old('bank_name', $bankDetails->bank_name ?? '') }}"
-                               required>
+                               required
+                               pattern="[A-Za-z ]+"
+                               oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')">
+                        @error('bank_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
+                    <!-- Account Number -->
                     <div class="col-md-6">
                         <label class="form-label">Account Number</label>
-                        <input type="text" name="account_no"
-                               class="form-control"
+                        <input type="text"
+                               name="account_no"
+                               class="form-control @error('account_no') is-invalid @enderror"
                                value="{{ old('account_no', $bankDetails->account_no ?? '') }}"
-                               required>
+                               required
+                               pattern="[0-9]+"
+                               maxlength="18"
+                               oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                        @error('account_no')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
+                    <!-- IFSC Code -->
+                    <div class="col-md-6">
+                        <label class="form-label">IFSC Code</label>
+                        <input type="text"
+                               name="ifsc_code"
+                               class="form-control text-uppercase @error('ifsc_code') is-invalid @enderror"
+                               value="{{ old('ifsc_code', $bankDetails->ifsc_code ?? '') }}"
+                               placeholder="SBIN0001234"
+                               required>
+                        @error('ifsc_code')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Branch Name -->
                     <div class="col-md-6">
                         <label class="form-label">Branch Name</label>
-                        <input type="text" name="branch_name"
-                               class="form-control"
+                        <input type="text"
+                               name="branch_name"
+                               class="form-control @error('branch_name') is-invalid @enderror"
                                value="{{ old('branch_name', $bankDetails->branch_name ?? '') }}"
-                               required>
+                               required
+                               pattern="[A-Za-z ]+"
+                               oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')">
+                        @error('branch_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label">UPI ID (Optional)</label>
-                        <input type="text" name="upi_id"
-                               class="form-control"
-                               value="{{ old('upi_id', $bankDetails->upi_id ?? '') }}">
-                    </div>
+                    <!-- UPI ID -->
+                   <input type="text"
+       name="upi_id"
+       class="form-control @error('upi_id') is-invalid @enderror"
+       value="{{ old('upi_id', $bankDetails->upi_id ?? '') }}"
+       placeholder="example@upi"
+       pattern="[a-zA-Z0-9._-]+@[a-zA-Z]{2,}"
+       title="Enter a valid UPI ID (example@bank)"
+       oninput="this.value=this.value.replace(/[^a-zA-Z0-9._@-]/g,'')">
+
 
                 </div>
 
@@ -457,6 +506,7 @@
         </div>
     </div>
 </div>
+
 
 
 </div>
