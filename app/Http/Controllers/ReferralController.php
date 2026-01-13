@@ -15,6 +15,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Collection;
+use App\Models\Category;
 
 
 class ReferralController extends Controller
@@ -324,36 +325,60 @@ public function showTransactionHistoryadmin($transactionId)
 
 public function userWalletbalance()
 {
-    // 1️⃣ Get logged-in user ID
     $userId = session('user_id');
 
-    // 2️⃣ Wallet balance
+    if (!$userId) {
+        return redirect()->route('login');
+    }
+
+    // 1️⃣ Wallet balance
     $walletBalance = DB::table('wallet')
         ->where('user_id', $userId)
         ->value('wallet_balance') ?? 0;
 
-    // 3️⃣ Transactions
+    // 2️⃣ Transactions
     $transactions = DB::table('transactions')
         ->where('user_id', $userId)
-        ->select('id', 'user_id', 'amount', 'transaction_id', 'status', 'created_at')
+        ->select('id', 'amount', 'transaction_id', 'status', 'created_at')
         ->get();
 
-    // 4️⃣ Pending withdrawal requests
-    $withdrawalRequests = DB::table('withdrawal_requests')
+    // 3️⃣ Withdrawal requests
+    $withdrawals = DB::table('withdrawal_requests')
         ->where('user_id', $userId)
-        ->where('status', 'pending')
         ->select('id', 'amount', 'status', 'created_at')
         ->get();
 
-    // 5️⃣ Merge + sort
+    // 4️⃣ Merge + sort
     $combinedData = $transactions
-        ->merge($withdrawalRequests)
+        ->merge($withdrawals)
         ->sortByDesc('created_at');
 
-    // 6️⃣ IMPORTANT: define empty descendants for Leg Down tab
-    $descendants = collect();
+    // 5️⃣ LEG DOWN (CHILD NODES)
+    $userNode = Category::where('user_id', $userId)->first();
 
-    // 7️⃣ Load view
+    if ($userNode) {
+        $descendants = Category::where('_lft', '>', $userNode->_lft)
+            ->where('_rgt', '<', $userNode->_rgt)
+            ->get();
+
+        $descendants->transform(function ($node) {
+
+            $user = DB::table('users')->where('id', $node->user_id)->first();
+
+            $parentUserId = Category::where('id', $node->parent_id)->value('user_id');
+            $parentUser = DB::table('users')->where('id', $parentUserId)->first();
+
+            $node->name = $user->name ?? 'N/A';
+            $node->referral_code = $user->referral_code ?? 'N/A';
+            $node->parent_name = $parentUser->name ?? 'Root';
+
+            return $node;
+        });
+    } else {
+        $descendants = collect();
+    }
+
+    // 6️⃣ Load wallet page
     return view('frontend.profile.referrals', compact(
         'walletBalance',
         'combinedData',

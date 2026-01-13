@@ -101,7 +101,7 @@
         @if($role_id == 4)
             <a href="{{ route('admin.bank') }}" class="nav-item">
                 <i class="fas fa-wrench"></i>
-                <span>Tools</span>
+                <span>Master</span>
             </a>
         @endif
 
@@ -113,12 +113,12 @@
             </a>
         @endif
         {{-- ================= COMMISSION ================= --}}
-@if($role_id == 4)
+<!-- @if($role_id == 4)
     <a href="{{ route('allCommission') }}" class="nav-item">
         <i class="fas fa-coins"></i>
         <span>Commission</span>
     </a>
-@endif
+@endif -->
 
     </nav>
 

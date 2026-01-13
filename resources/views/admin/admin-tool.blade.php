@@ -73,6 +73,28 @@
     font-size: 13px;
     color: #22c55e;
 }
+
+/* FIX PAGINATION UI */
+.pagination {
+    justify-content: center;
+}
+
+.pagination li a,
+.pagination li span {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    padding: 6px 12px !important;
+}
+
+.pagination svg {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+.pagination li {
+    display: inline-block;
+}
+
 </style>
 
     
@@ -80,7 +102,7 @@
  
              <!-- Header -->
 <div class="page-header d-flex justify-content-between align-items-center">
-    <h1>Tools</h1>
+    <h1>Master</h1>
 
     <div class="d-flex gap-2">
 
@@ -213,7 +235,38 @@
                     </div>
                 </div>
             </div>
-            </div>        
+            </div> 
+                   <!--commistion  -->
+                   <div class="col-xl-3 col-lg-4 col-md-6">
+    <a href="{{ route('allCommission') }}" style="text-decoration:none; color:inherit;">
+        <div class="analytics-card" style="cursor:pointer;">
+
+            <div class="analytics-row">
+                <div class="analytics-icon icon-blue">
+                    <i class="fas fa-hand-holding-usd"></i>
+                </div>
+
+                <div class="analytics-content">
+                    <div class="analytics-title">Commission</div>
+
+                    <div class="analytics-bottom">
+                        <div class="analytics-value">
+                            1
+                        </div>
+                    </div>
+
+                    <div class="analytics-bottom">
+                        <div class="analytics-growth">
+                            Total commission earned
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </a>
+</div>
+
         
     </div> 
 
@@ -266,7 +319,8 @@
                 </tbody>
             </table>
 
-            {{ $loanbanks->links() }}
+          {{ $loanbanks->links('pagination::bootstrap-5') }}
+
         </div>
     </div>
 </div> 
@@ -325,9 +379,9 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Close
                         </button>
-                        <button type="submit" class="btn btn-primary">
-                            Add Bank
-                        </button>
+                      <button type="submit" class="btn btn-primary" id="bankSubmitBtn">
+                        Save Bank
+                    </button>
                     </div>
 
                 </form>
@@ -423,6 +477,8 @@
     </div>
 
 </div>
+{{ $estimatedFiles->links('pagination::bootstrap-5') }}
+
 
 <div id="monthlyPLSection" class="card mt-5" style="display:none;">
 
@@ -475,6 +531,8 @@
         </div>
     </div>
 </div> 
+{{ $pls->links('pagination::bootstrap-5') }}
+
 <script>
 function showMonthlyPL() {
     hideAllSections();
@@ -635,7 +693,13 @@ document.getElementById('addBank').addEventListener('submit', function (e) {
     let form = this;
     let formData = new FormData(form);
 
-    fetch(form.action, {
+    let bankId = document.querySelector('input[name="bank_id"]').value;
+
+    let url = bankId 
+        ? "{{ route('updateBank') }}"   // EDIT
+        : "{{ route('admin.loanbank.store') }}"; // ADD
+
+    fetch(url, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('input[name=_token]').value
@@ -646,15 +710,62 @@ document.getElementById('addBank').addEventListener('submit', function (e) {
     .then(data => {
         if (data.status === 1) {
             alert(data.msg);
-
-            // ✅ REDIRECT HERE
-            window.location.href = "{{ route('admin.bank') }}";
+            window.location.reload();
         } else {
             alert('Something went wrong');
         }
-    })
-    .catch(err => console.error(err));
+    });
 });
+</script>
+<script>
+function deleteBank(bankId) {
+
+    if (!confirm('Are you sure you want to delete this bank?')) {
+        return;
+    }
+
+    fetch("{{ route('deleteBank') }}", {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ bank_id: bankId })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 1) {
+            alert(data.msg);
+            window.location.reload();
+        } else {
+            alert('Delete failed');
+        }
+    });
+}
+</script>
+
+<script>
+function openEditBankModal(btn) {
+
+    // change modal title
+    document.getElementById('bankModalTitle').innerText = 'Edit Bank';
+
+    // change submit button text
+    document.getElementById('bankSubmitBtn').innerText = 'Update Bank';
+
+    // fill form values
+    document.querySelector('input[name="bank_id"]').value = btn.dataset.id;
+    document.querySelector('input[name="bank_name"]').value = btn.dataset.bank_name;
+    document.querySelector('input[name="ifsc_code"]').value = btn.dataset.ifsc_code;
+    document.querySelector('input[name="branch_name"]').value = btn.dataset.branch_name;
+    document.querySelector('input[name="manager_name"]').value = btn.dataset.manager_name;
+    document.querySelector('input[name="bank_address"]').value = btn.dataset.bank_address;
+    document.querySelector('input[name="manager_number"]').value = btn.dataset.manager_number;
+
+    // open modal
+    let modal = new bootstrap.Modal(document.getElementById('addBankView'));
+    modal.show();
+}
 </script>
 
 
