@@ -323,32 +323,32 @@ public function loanlist()
         return view('admin.edit-loan', compact('loan', 'loanCategories', 'profile', 'documents', 'professional', 'education', 'agents', 'applyingUser'));
     }
 
-    public function loanedit($id)
-    {
-        $loan = Loan::with(['user', 'loanCategory'])->where('loan_id', $id)->first();
+    // public function loanedit($id)
+    // {
+    //     $loan = Loan::with(['user', 'loanCategory'])->where('loan_id', $id)->first();
 
-        if (!$loan) {
-            return redirect()->route('agent.allAgentLoans')->with('error', 'Loan not found');
-        }
+    //     if (!$loan) {
+    //         return redirect()->route('agent.allAgentLoans')->with('error', 'Loan not found');
+    //     }
 
-        // Fetch related data
-        $profile = Profile::with('cityRelation', 'stateRelation')->where('user_id', $loan->user_id)->first();
-        $professional = Professional::where('user_id', $loan->user_id)->first();
-        $education = Education::where('user_id', $loan->user_id)->first();
-        $documents = \DB::table('documents')->where('user_id', $loan->user_id)->get();
+    //     // Fetch related data
+    //     $profile = Profile::with('cityRelation', 'stateRelation')->where('user_id', $loan->user_id)->first();
+    //     $professional = Professional::where('user_id', $loan->user_id)->first();
+    //     $education = Education::where('user_id', $loan->user_id)->first();
+    //     $documents = \DB::table('documents')->where('user_id', $loan->user_id)->get();
 
-        // Fetch all users with role_id 2 (agents) and loan categories
-        $agents = User::join('role_user', 'users.id', '=', 'role_user.user_id')
-            ->where('role_user.role_id', 2)
-            ->select('users.id', 'users.name')
-            ->get();
+    //     // Fetch all users with role_id 2 (agents) and loan categories
+    //     $agents = User::join('role_user', 'users.id', '=', 'role_user.user_id')
+    //         ->where('role_user.role_id', 2)
+    //         ->select('users.id', 'users.name')
+    //         ->get();
 
-        $applyingUser = User::find($loan->user_id);
-        $loanCategories = LoanCategory::all();
+    //     $applyingUser = User::find($loan->user_id);
+    //     $loanCategories = LoanCategory::all();
 
-        // Pass all data to the view
-        return view('frontend.profile.loanedit', compact('loan', 'loanCategories', 'profile', 'documents', 'professional', 'education', 'agents', 'applyingUser'));
-    }
+    //     // Pass all data to the view
+    //     return view('frontend.profile.loanedit', compact('loan', 'loanCategories', 'profile', 'documents', 'professional', 'education', 'agents', 'applyingUser'));
+    // }
 
     // public function update(Request $request)
     // {
@@ -555,6 +555,56 @@ public function loanlist()
     // }
 
 
+
+    public function loanedit($id)
+{
+    $loan = Loan::with(['user', 'loanCategory'])
+                ->where('loan_id', $id)
+                ->first();
+
+    if (!$loan) {
+        return redirect()
+            ->route('agent.allAgentLoans')
+            ->with('error', 'Loan not found');
+    }
+
+    // Fetch related data
+    $profile = Profile::with('cityRelation', 'stateRelation')
+                      ->where('user_id', $loan->user_id)
+                      ->first();
+
+    $professional = Professional::where('user_id', $loan->user_id)->first();
+    $education    = Education::where('user_id', $loan->user_id)->first();
+    $documents    = \DB::table('documents')->where('user_id', $loan->user_id)->get();
+
+    // Fetch agents (role_id = 2)
+    $agents = User::join('role_user', 'users.id', '=', 'role_user.user_id')
+        ->where('role_user.role_id', 2)
+        ->select('users.id', 'users.name')
+        ->get();
+
+    $applyingUser  = User::find($loan->user_id);
+    $loanCategories = LoanCategory::all();
+
+    // 🔐 Check if logged-in user is Admin
+    $isAdmin = auth()->check() && auth()->user()->role === 'admin';
+
+    // Pass everything to view
+    return view(
+        'frontend.profile.loanedit',
+        compact(
+            'loan',
+            'loanCategories',
+            'profile',
+            'documents',
+            'professional',
+            'education',
+            'agents',
+            'applyingUser',
+            'isAdmin'
+        )
+    );
+}
 
     public function update(Request $request)
     {

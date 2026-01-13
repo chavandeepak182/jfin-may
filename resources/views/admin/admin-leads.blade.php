@@ -7,7 +7,7 @@
     @parent
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- your custom JS here -->
 
@@ -96,13 +96,10 @@
 
         <!-- MIS Buttons -->
         <div id="misBtns" style="display:none;">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMISView">
-                <i class="fa fa-plus"></i> Add MIS
-            </button>
-            <button class="btn btn-success" id="exportExcel">
-                Export to Excel
-            </button>
-        </div>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMISView">
+        <i class="fa fa-plus"></i> Add MIS
+    </button>
+</div>
 
 <!--        
         <div id="addBankBtn" style="display:none;">
@@ -191,24 +188,30 @@
 
 
     <!-- All MIS -->
-   <div class="col-xl-3 col-lg-4 col-md-6">
-    <div class="analytics-card" onclick="showMISList()" style="cursor:pointer;">
-        <div class="analytics-row">
-            <div class="analytics-icon icon-yellow">
-                <i class="fas fa-chart-line"></i>
+ <div class="analytics-card"
+     onclick="showMISList()"
+     style="cursor:pointer;">
+
+    <div class="analytics-row">
+        <div class="analytics-icon icon-yellow">
+            <i class="fas fa-chart-line"></i>
+        </div>
+
+        <div class="analytics-content">
+            <div class="analytics-title">All MIS</div>
+
+            <div class="analytics-bottom">
+                <div class="analytics-value">{{ $misRecords->total() }}</div>
             </div>
-            <div class="analytics-content">
-                <div class="analytics-title">All MIS</div>
-                <div class="analytics-bottom">
-                    <div class="analytics-value">{{ $misRecords->total() }}</div>
-                </div>
-                <div class="analytics-bottom">
-                    <div class="analytics-growth">+15.3% from last month</div>
-                </div>
+
+            <div class="analytics-bottom">
+                <div class="analytics-growth">+15.3% from last month</div>
             </div>
         </div>
     </div>
 </div>
+
+
 
 
     
@@ -375,11 +378,22 @@
                         <td>{{ $lead->lead_source }}</td>
                         <td>{{ \Carbon\Carbon::parse($lead->follow_up_date)->format('d M Y') }}</td>
                         <td>{{ $lead->agent->name ?? 'N/A' }}</td>
-                        <td>
-                            <a class="btn btn-warning btn-xs" href="{{ route('leads.edit', $lead->id) }}">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                        </td>
+                       <td class="d-flex gap-1">
+                                <!-- Edit -->
+                                <a class="btn btn-warning btn-xs" href="{{ route('leads.edit', $lead->id) }}">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+
+                                <!-- Delete -->
+                                <form action="{{ route('leads.destroy', $lead->id) }}" method="POST" class="delete-form">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-xs">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+
                     </tr>
                     @endforeach
                 </tbody>
@@ -389,6 +403,19 @@
         </div>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.delete-form').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            if (confirm('Are you sure you want to delete this lead?')) {
+                this.submit();
+            }
+        });
+    });
+});
+</script>
 
 
 <!-- mis -->
@@ -486,12 +513,11 @@ function hideAllSections() {
     document.getElementById('enquiryList').style.display = 'none';
     document.getElementById('leadsSection').style.display = 'none';
     document.getElementById('misSection').style.display = 'none';
-    // document.getElementById('loanBankSection').style.display = 'none';
 
     document.getElementById('addLeadBtn').style.display = 'none';
     document.getElementById('misBtns').style.display = 'none';
-    // document.getElementById('addBankBtn').style.display = 'none';
 }
+
 
 function showEnquiryList() {
     hideAllSections();
@@ -508,7 +534,9 @@ function showMISList() {
     hideAllSections();
     document.getElementById('misSection').style.display = 'block';
     document.getElementById('misBtns').style.display = 'block';
+    localStorage.setItem('activeSection', 'mis');
 }
+
 
 // function showLoanBanks() {
 //     hideAllSections();

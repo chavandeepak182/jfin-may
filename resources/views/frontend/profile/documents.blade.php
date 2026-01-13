@@ -101,7 +101,7 @@
                                 <i class="fas fa-download me-1"></i> Download
                             </a>
 
-                            <form action="{{ route('loan.deletedocument', $doc->document_id) }}"
+                            <!-- <form action="{{ route('loan.deletedocument', $doc->document_id) }}"
                                 method="POST"
                                 class="d-inline"
                                 onsubmit="return confirm('Remove this document?');">
@@ -112,7 +112,7 @@
                                         class="btn btn-link text-danger p-0 text-decoration-none">
                                     <i class="fas fa-trash me-1"></i> Remove
                                 </button>
-                            </form>
+                            </form> -->
 
                         </div>
                     </div>

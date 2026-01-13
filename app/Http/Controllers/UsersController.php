@@ -1318,79 +1318,93 @@ public function deleteDocument($id)
         $loans = $query->paginate(10); // Use paginate() for better performance with large datasets
         return view('frontend.profile.myloanlist', compact('loans', 'statuses', 'statusFilter', 'hasActiveLoan'));
     }
-    public function mydetails(Request $request)
-    {
-        $section = $request->query('section', 'personal'); // Default to 'personal'
-        $userId = session('user_id'); // Retrieve user ID from session
+   public function mydetails(Request $request)
+{
+    $section = $request->query('section', 'personal');
+    $userId = session('user_id');
 
-        if (!$userId) {
-            return redirect()->route('login')->withErrors('User session expired. Please log in again.');
-        }
-
-        // Fetch user information
-        $user = DB::table('users')->where('id', $userId)->first();
-
-        // Fetch profile, professional, and educational details
-        $profile = DB::table('profile')->where('user_id', $userId)->first();
-        $professionalDetails = DB::table('professional_details')->where('user_id', $userId)->first();
-        $educationalDetails = DB::table('education_details')->where('user_id', $userId)->first();
-
-        // Fetch user documents
-        $documents = DB::table('documents')->where('user_id', $userId)->get();
-
-        // Fetch notifications
-        $notificationsResponse = $this->getNotifications($userId, 5, 'Profile update');
-
-        if ($notificationsResponse->status() !== 200) {
-            Log::error('Failed to fetch notifications', ['response' => $notificationsResponse->getContent()]);
-            $notifications = [];
-        } else {
-            $notifications = $notificationsResponse->getData()->notifications;
-        }
-        // Fetch bank details
-        $bankDetails = DB::table('customer_banks')
-            ->where('user_id', $userId)
-            ->first();
-
-
-       return view('frontend.profile.personal-info', compact(
-    'user',
-    'profile',
-    'professionalDetails',
-    'educationalDetails',
-    'documents',
-    'notifications',
-    'section',
-    'bankDetails'
-));
-
-
+    if (!$userId) {
+        return redirect()->route('login')
+            ->withErrors('User session expired. Please log in again.');
     }
 
+    $user = DB::table('users')->where('id', $userId)->first();
+    $profile = DB::table('profile')->where('user_id', $userId)->first();
+    $professionalDetails = DB::table('professional_details')->where('user_id', $userId)->first();
+    $educationalDetails = DB::table('education_details')->where('user_id', $userId)->first();
+    $documents = DB::table('documents')->where('user_id', $userId)->get();
+
+    $notificationsResponse = $this->getNotifications($userId, 5, 'Profile update');
+    $notifications = $notificationsResponse->status() === 200
+        ? $notificationsResponse->getData()->notifications
+        : [];
+
+    $bankDetails = DB::table('customer_banks')
+        ->where('user_id', $userId)
+        ->first();
+
+    return view('frontend.profile.personal-info', compact(
+        'user',
+        'profile',
+        'professionalDetails',
+        'educationalDetails',
+        'documents',
+        'notifications',
+        'section',
+        'bankDetails'
+    ));
+}
+
+
     // customer bank
-    public function saveBankDetails(Request $request)
+
+public function saveBankDetails(Request $request)
 {
+    $userId = session('user_id');
+
+    if (!$userId) {
+        return back()->withErrors('User session expired.');
+    }
+
     $request->validate([
-        'bank_name'   => 'required',
-        'account_no'  => 'required',
-        'branch_name' => 'required',
-        'upi_id'      => 'nullable',
+        'bank_name'   => 'required|regex:/^[A-Za-z ]+$/|max:100',
+        'account_no'  => 'required|digits_between:9,18',
+        'branch_name' => 'required|regex:/^[A-Za-z ]+$/|max:100',
+        'ifsc_code'   => 'required|regex:/^[A-Z]{4}0[A-Z0-9]{6}$/',
+        'upi_id' => 'nullable|regex:/^[a-zA-Z0-9._-]+@[a-zA-Z]{2,}$/',
     ]);
 
-    DB::table('customer_banks')->updateOrInsert(
-        ['user_id' => $request->user_id],
-        [
+    $exists = DB::table('customer_banks')
+        ->where('user_id', $userId)
+        ->exists();
+
+    if ($exists) {
+        DB::table('customer_banks')
+            ->where('user_id', $userId)
+            ->update([
+                'bank_name'   => $request->bank_name,
+                'account_no'  => $request->account_no,
+                'branch_name' => $request->branch_name,
+                'ifsc_code'   => strtoupper($request->ifsc_code),
+                'upi_id'      => $request->upi_id,
+                'updated_at'  => now(),
+            ]);
+    } else {
+        DB::table('customer_banks')->insert([
+            'user_id'     => $userId,
             'bank_name'   => $request->bank_name,
             'account_no'  => $request->account_no,
             'branch_name' => $request->branch_name,
+            'ifsc_code'   => strtoupper($request->ifsc_code),
             'upi_id'      => $request->upi_id,
-            'updated_at'  => now(),
             'created_at'  => now(),
-        ]
-    );
+            'updated_at'  => now(),
+        ]);
+    }
 
     return back()->with('success', 'Bank details saved successfully.');
 }
+
 
     public function markAsRead($id)
     {
