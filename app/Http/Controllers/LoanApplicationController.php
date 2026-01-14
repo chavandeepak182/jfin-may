@@ -2685,7 +2685,7 @@ protected function handleDocumentUpload(Request $request, $userId)
             $customerId = $loan->user_id;
 
             // Send notifications
-            event(new \App\Events\AgentAssigned($adminId, $agentId, $customerId, $loan->loan_reference_id, $agentName));
+            event(new \App\Events\AgentAssigned($adminId, $agentId, $customerId, $loan->loan_id, $loan->loan_reference_id, $agentName));
             return redirect()->route('loans.index')->with('success', 'Agent assigned successfully!');
         }
 
@@ -2788,10 +2788,11 @@ protected function handleDocumentUpload(Request $request, $userId)
             ->leftJoin('users', 'loans.user_id', '=', 'users.id') // Join with users table
             ->leftJoin('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id') // Join with loan_category table
             ->where(function ($query) {
-                $query->whereNull('agent_id')
-                    ->orWhere(function ($subQuery) {
-                        $subQuery->whereNotNull('agent_id')
-                            ->whereIn('agent_action', ['Pending', 'Rejected', null]);
+                $query->whereNull('loans.agent_id')   // Not assigned yet
+
+                    ->orWhere(function ($q) {
+                        $q->whereNotNull('loans.agent_id')
+                            ->where('loans.agent_action', 'rejected'); // Only rejected loans
                     });
             })
             ->select('loans.*', 'users.name as user_name', 'loan_category.category_name as category_name') // Select necessary fields

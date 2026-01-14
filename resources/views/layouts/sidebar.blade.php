@@ -66,15 +66,15 @@
         @endif
 
         {{-- ================= LOANS ================= --}}
-        @if($role_id == 4 || $role_id == 2 || $role_id == env('brokerRole_id'))
-            <a href="{{ route('admin.loans') }}" class="nav-item">
+        @if(in_array($role_id, [4, 2, env('brokerRole_id')]))
+            <a href="{{ $role_id == 2 ? route('agent.allAgentLoans') : route('admin.loans') }}" class="nav-item">
                 <i class="fas fa-file-invoice-dollar"></i>
                 <span>Loan Applications</span>
             </a>
         @endif
 
         {{-- ================= PROPERTY ================= --}}
-        @if($role_id == 4 || $role_id == 2 || $role_id == env('partnerRole_id'))
+        @if($role_id == 4 || $role_id == env('partnerRole_id'))
             <a href="{{ route('allProperties') }}" class="nav-item">
                 <i class="fas fa-building"></i>
                 <span>Property</span>
