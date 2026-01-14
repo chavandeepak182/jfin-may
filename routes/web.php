@@ -31,7 +31,8 @@ use App\Http\Controllers\AuthV3\AuthV3Controller;
 use App\Http\Controllers\EstimatedFileController;
 use App\Http\Controllers\MonthlyPLController;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\TicketMessageController;
 
 require __DIR__.'/auth.php';
 // dashbord path
@@ -748,3 +749,19 @@ Route::get(
     'admin/monthly-pl/export-with-estimated/{id}',
     [MonthlyPLController::class, 'exportWithEstimated']
 )->name('monthlyPL.exportWithEstimated');
+
+Route::middleware(['auth'])->group(function(){
+
+    Route::get('/tickets', [TicketController::class,'index'])->name('tickets.index');
+    Route::get('/tickets/create', [TicketController::class,'create'])->name('tickets.create');
+    Route::post('/tickets', [TicketController::class,'store'])->name('tickets.store');
+    Route::get('/tickets/{id}', [TicketController::class,'show'])->name('tickets.show');
+
+    Route::post('/tickets/{id}/message', [TicketMessageController::class,'sendMessage'])->name('tickets.message');
+    Route::get('/admin/user/{userId}/loans', [TicketController::class,'getUserLoans']);
+    Route::get('/admin/loan/{loanId}/agent', [TicketController::class,'getLoanAgent']);
+    Route::post('/tickets/{id}/close', [TicketController::class,'close'])
+    ->name('tickets.close');
+    Route::get('/agent/customers', [TicketController::class,'agentCustomers']);
+    Route::get('/agent/user/{id}/loans', [TicketController::class,'agentUserLoans']);
+});
