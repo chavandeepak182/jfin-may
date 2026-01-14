@@ -146,7 +146,7 @@
 
                     <!-- My Queries -->
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="#">
+                        <a class="sidebar-link" href="{{ route('tickets.index') }}">
                             <i class="fas fa-question-circle"></i>
                             <span class="align-middle">My Queries</span>
                         </a>

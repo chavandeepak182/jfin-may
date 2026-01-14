@@ -9,24 +9,41 @@ use Illuminate\Database\Eloquent\Model;
 class Loan extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'loans'; // Ensure this matches your loans table name
-    protected $primaryKey = 'loan_id'; // Ensure this matches your primary key column
+
+    protected $table = 'loans';
+    protected $primaryKey = 'loan_id';
+
+    public $incrementing = true;
+    protected $keyType = 'int';
+
     protected $casts = [
         'amount_approved' => 'integer',
     ];
-    protected $fillable = ['loan_category_id', 'amount', 'tenure', 'status', 'referral_user_id', 'amount_approved', 'loan_reference_id', 'bank_id','user_id'];
+
+    protected $fillable = [
+        'loan_category_id',
+        'amount',
+        'tenure',
+        'status',
+        'referral_user_id',
+        'amount_approved',
+        'loan_reference_id',
+        'bank_id',
+        'user_id',
+        'agent_id',
+        'agent_action',
+    ];
+
     public function loanCategory()
     {
         return $this->belongsTo(LoanCategory::class, 'loan_category_id', 'loan_category_id');
     }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-    // public function profile()
-    // {
-    //     return $this->belongsTo(Profile::class, 'profile_id');
-    // }
+
     public function agent()
     {
         return $this->belongsTo(User::class, 'agent_id');
