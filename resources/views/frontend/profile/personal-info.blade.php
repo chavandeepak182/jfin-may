@@ -481,15 +481,17 @@
                     </div>
 
                     <!-- UPI ID -->
-                   <input type="text"
-       name="upi_id"
-       class="form-control @error('upi_id') is-invalid @enderror"
-       value="{{ old('upi_id', $bankDetails->upi_id ?? '') }}"
-       placeholder="example@upi"
-       pattern="[a-zA-Z0-9._-]+@[a-zA-Z]{2,}"
-       title="Enter a valid UPI ID (example@bank)"
-       oninput="this.value=this.value.replace(/[^a-zA-Z0-9._@-]/g,'')">
-
+                     <div class="col-md-6">
+                        <label class="form-label">Branch Name</label>
+                        <input type="text"
+                            name="upi_id"
+                            class="form-control @error('upi_id') is-invalid @enderror"
+                            value="{{ old('upi_id', $bankDetails->upi_id ?? '') }}"
+                            placeholder="example@upi"
+                            pattern="[a-zA-Z0-9._-]+@[a-zA-Z]{2,}"
+                            title="Enter a valid UPI ID (example@bank)"
+                          oninput="this.value=this.value.replace(/[^a-zA-Z0-9._@-]/g,'')">
+                      </div>
 
                 </div>
 

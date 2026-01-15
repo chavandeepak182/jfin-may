@@ -52,14 +52,15 @@ class LeadController extends Controller {
 public function leadlist(Request $request)
 {
     // ================= COUNTS =================
-    $enquiriesCount       = DB::table('enquiries')->count();
-    $leadsCount           = DB::table('leads')->count();
-    $totalEstimatedFiles  = EstimatedFile::count();
-    $totalMonthlyPL       = MonthlyPL::count();
+    $enquiriesCount      = DB::table('enquiries')->count();
+    $leadsCount          = DB::table('leads')->count();
+    $totalEstimatedFiles = EstimatedFile::count();
+    $totalMonthlyPL      = MonthlyPL::count();
 
     // ================= LISTS =================
-    $enquiries = DB::table('enquiries')->get();
-    $leads     = Lead::with('agent')->paginate(10);
+    $enquiries = DB::table('enquiries')->paginate(10);
+
+    $leads = Lead::with('agent')->paginate(10);
 
     // MIS
     $banks      = LoanBank::all();
@@ -89,12 +90,23 @@ public function leadlist(Request $request)
         $grossRevenue = (clone $query)->sum('estimate_revenue');
     }
 
-    $estimatedFiles = $query->orderBy('id', 'desc')->get();
+    $estimatedFiles = $query->orderBy('id', 'desc')->paginate(10);
 
     // ================= MONTHLY P&L =================
     $pls = MonthlyPL::orderBy('year', 'desc')
                     ->orderBy('month', 'desc')
-                    ->get();
+                    ->paginate(10);
+
+    // ================= REFERRAL LEADS =================
+    $referralLeads = DB::table('referral_leads')
+        ->join('users', 'users.id', '=', 'referral_leads.user_id')
+        ->select(
+            'referral_leads.*',
+            'users.name as referrer_name',
+            'users.mobile_no as referrer_mobile'
+        )
+        ->orderBy('referral_leads.created_at', 'desc')
+        ->paginate(10);
 
     return view('admin.admin-leads', compact(
         'enquiriesCount',
@@ -108,7 +120,8 @@ public function leadlist(Request $request)
         'loanbanks',
         'estimatedFiles',
         'grossRevenue',
-        'pls'
+        'pls',
+        'referralLeads'
     ));
 }
 
