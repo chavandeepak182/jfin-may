@@ -292,7 +292,7 @@ Route::post('userLogin', [FrontendController::class, 'userLogin'])->name('userLo
 // Route::post('submit-otp', [AdminController::class, 'postVerifyOtp'])->name('submit-otp');
 
 
-Route::get('logout', [FrontendController::class, 'logout'])->name('logout');
+// Route::get('logout', [FrontendController::class, 'logout'])->name('logout');
 Route::get('forgot', [FrontendController::class, 'forgot'])->name('forgot');
 Route::get('/activate', [FrontendController::class, 'activate'])->name('activate')->middleware('throttle:6,1');;
 
@@ -614,7 +614,7 @@ Route::middleware('isPartner')->group(function () {
     Route::get('/editProperty/{property_id}', [PropertyController::class, 'editProperty'])->name('editProperty');
     Route::post('/updatePropertie', [PropertyController::class, 'updatePropertie'])->name('updatePropertie');
     Route::post('/deletePropertie', [PropertyController::class, 'deletePropertie'])->name('deletePropertie');
-    Route::post('/activate', [PropertyController::class, 'activate'])->name('activate');
+    Route::post('/activate-property', [PropertyController::class, 'activate'])->name('activate.property');
 
     //profile
     Route::get('/partner/profile', [ProfileController::class, 'showPartnerProfile'])->name('partner.profile');
