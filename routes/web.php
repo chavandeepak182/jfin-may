@@ -33,6 +33,7 @@ use App\Http\Controllers\MonthlyPLController;
 use Maatwebsite\Excel\Facades\Excel;
 
 
+
 require __DIR__.'/auth.php';
 // dashbord path
 Route::get('/admin/customers', action: [UsersController::class, 'adminCustomer'])->name('admin.customers');
@@ -318,7 +319,7 @@ Route::get('/applyNow', [LoanApplicationController::class, 'applyNow'])
     ->name('applyNow');
 Route::get('/start_loan/{id}', [LoanApplicationController::class, 'start_loan'])->name('start_loan');
 
-Route::middleware(['isUserOrAdmin'])->group(function () {
+Route::middleware(['isUser'])->group(function () {
    
     Route::get('/loan-application', [LoanApplicationController::class, 'showForm'])->name('loan.form');
     Route::post('/fetch-credit-report', [LoanApplicationController::class, 'fetchReport']);
@@ -352,11 +353,24 @@ Route::middleware(['isUserOrAdmin'])->group(function () {
 
     Route::post('updateLoan', [LoanApplicationController::class, 'update'])->name('updateLoan');
 
+    // referlalead in cutomer
+    Route::post(
+    '/invite-referral-submit',
+    [ReferralController::class, 'submitInviteReferral']
+)->name('invite.referral.submit');
+
+
 });
 Route::get('/help-support', [UsersController::class, 'helpSupport'])
     ->name('user.help.support');
 
 // Route::get('admin/loan-application', [LoanApplicationController::class, 'showForm'])->name('loan.form');
+Route::middleware(['isAdmin'])->group(function () {
+
+    Route::post('admin/updateLoan', [LoanApplicationController::class, 'update'])
+        ->name('admin.updateLoan');
+
+});
 
 
 
