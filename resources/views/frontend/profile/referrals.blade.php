@@ -26,6 +26,14 @@
                 Leg Down
             </button>
         </li>
+        <li class="nav-item">
+    <button class="nav-link fw-bold"
+            data-bs-toggle="pill"
+            data-bs-target="#inviteReferralTab">
+        Invite Referral
+    </button>
+</li>
+
     </ul>
 
     {{-- TAB CONTENT --}}
@@ -192,7 +200,7 @@
                                             <td>{{ $d->referral_code }}</td>
                                             <td>{{ $d->parent_name }}</td>
                                             <td>
-                                                <select class="form-select child-loans-dropdown"
+                                               <select class="form-select child-loans-dropdown"
                                                         data-user-id="{{ $d->user_id }}">
                                                     <option selected disabled>View</option>
                                                     <option value="view">View Loans</option>
@@ -226,59 +234,104 @@
             </div>
 
         </div>
+        <div class="tab-pane fade" id="inviteReferralTab">
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white">
+            <h5 class="fw-bold mb-0">Invite Referral</h5>
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST" action="{{ route('invite.referral.submit') }}">
+                @csrf
+
+                <div class="mb-3">
+                    <label>Friend Name</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Mobile Number</label>
+                    <input type="text" name="mobile" class="form-control" maxlength="10" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Email (optional)</label>
+                    <input type="email" name="email" class="form-control">
+                </div>
+
+                <button class="btn btn-primary fw-bold">
+                    Send Invite
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
 
     </div>
 </div>
 @endsection
 
+
 @section('custom-script')
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('change', async function (e) {
+
+    if (!e.target.classList.contains('child-loans-dropdown')) return;
+
+    const dropdown = e.target;
+    const userId = dropdown.dataset.userId;
 
     const loanBox = document.getElementById('loan-details');
     const loanBody = loanBox.querySelector('tbody');
 
-    document.querySelectorAll('.child-loans-dropdown').forEach(dropdown => {
-        dropdown.addEventListener('change', async () => {
+    loanBox.style.display = 'block';
+    loanBody.innerHTML =
+        '<tr><td colspan="6" class="text-center">Loading...</td></tr>';
 
-            const userId = dropdown.dataset.userId;
+    try {
+        const res = await fetch(`/loans-by-child?user_id=${userId}`);
+        if (!res.ok) throw new Error('Request failed');
 
-            loanBox.style.display = 'block';
+        const loans = await res.json();
+        loanBody.innerHTML = '';
+
+        if (!loans.length) {
             loanBody.innerHTML =
-                '<tr><td colspan="6" class="text-center">Loading...</td></tr>';
+                '<tr><td colspan="6" class="text-center">No loans found</td></tr>';
+            return;
+        }
 
-            try {
-                const res = await fetch(`/api/loans/${userId}`);
-                const loans = await res.json();
-
-                loanBody.innerHTML = '';
-
-                if (!loans.length) {
-                    loanBody.innerHTML =
-                        '<tr><td colspan="6" class="text-center">No loans found</td></tr>';
-                    return;
-                }
-
-                loans.forEach((l, i) => {
-                    loanBody.innerHTML += `
-                        <tr>
-                            <td>${i + 1}</td>
-                            <td>${l.loan_reference_id}</td>
-                            <td>₹${l.amount}</td>
-                            <td>${l.status}</td>
-                            <td>${l.category}</td>
-                            <td>${l.created_at}</td>
-                        </tr>`;
-                });
-
-            } catch (err) {
-                loanBody.innerHTML =
-                    '<tr><td colspan="6" class="text-danger text-center">Failed to load loans</td></tr>';
-                console.error(err);
-            }
+        loans.forEach((loan, i) => {
+            loanBody.innerHTML += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${loan.loan_reference_id}</td>
+                    <td>₹${loan.amount}</td>
+                    <td>${loan.status}</td>
+                    <td>${loan.category_name}</td>
+                    <td>${loan.created_at}</td>
+                </tr>`;
         });
-    });
+
+    } catch (err) {
+        loanBody.innerHTML =
+            '<tr><td colspan="6" class="text-danger text-center">Failed to load loans</td></tr>';
+        console.error(err);
+    }
+
+    dropdown.selectedIndex = 0;
 });
 </script>
 @endsection
+
+
+
+
+
+
 

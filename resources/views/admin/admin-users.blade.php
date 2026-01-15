@@ -403,7 +403,11 @@
 
                             <div class="form-group col-lg-4">
                                 <label for="recipient-name" class="col-form-label">Password:</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                               <input type="password"
+                                    class="form-control"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Leave blank to keep current password">
                             </div>
                         </div>
                         <input type="hidden" id="user_type" name="user_type" value="customer">
@@ -488,6 +492,8 @@ $(document).on('click', '.edit-user', function () {
             $('#city').val(res.city);
             $('#state').val(res.state);
             $('#pincode').val(res.pincode);
+            $('#password').val('');
+
 
             $('#submitUserBtn').text('Update');
 
@@ -627,7 +633,7 @@ $(document).on('click', '.load-list', function () {
         $('#exampleModalLabel').text('Add New Customer');
     } 
     else if (type === 'agent') {
-        $('#openAddModal').text('Add Agent');
+        $('#openAddModal').text('Add Employees');
         $('#exampleModalLabel').text('Add New Agent');
     } 
     else if (type === 'cp') {

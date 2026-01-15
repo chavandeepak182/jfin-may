@@ -386,6 +386,28 @@ public function userWalletbalance()
     ));
 }
 
+public function submitInviteReferral(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'mobile' => 'required|digits:10',
+        'email' => 'nullable|email',
+    ]);
+
+    DB::table('referral_leads')->insert([
+        'user_id'       => auth()->id(),
+        'name'          => $request->name,
+        'mobile'        => $request->mobile,
+        'email'         => $request->email,
+        'referral_code' => auth()->user()->referral_code,
+        'status'        => 'pending',
+        'created_at'    => now(),
+        'updated_at'    => now(),
+    ]);
+
+    return back()->with('message', 'Referral invite sent successfully');
+}
+
 public function listUsers(Request $request)
 {
     $search = $request->input('search');

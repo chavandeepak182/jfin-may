@@ -37,7 +37,10 @@
 
 
     <div class="bg-white">
-        <form id="editLoanForm" method="post" action="{{ route('updateLoan') }}">
+        <!-- <form id="editLoanForm" method="post" action="{{ route('updateLoan') }}"> -->
+            <form id="editLoanForm" method="post" action="{{ route('admin.updateLoan') }}"
+ enctype="multipart/form-data">
+
             @csrf
             <input type="hidden" name="loan_id" value="{{ old('loan_id', $loan->loan_id ?? '') }}">
 
@@ -358,7 +361,7 @@
         </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
 
             $('#editLoanForm').submit(function(e) {
@@ -393,14 +396,20 @@
                             }
                         });
                     },
-                    error: function(response) {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Something went wrong!',
-                            icon: 'error',
-                            confirmButtonText: 'OK'
-                        });
-                    },
+                    error: function(xhr) {
+    let msg = 'Something went wrong';
+
+    if (xhr.responseJSON?.message) {
+        msg = xhr.responseJSON.message;
+    }
+
+    Swal.fire({
+        title: 'Error!',
+        text: msg,
+        icon: 'error'
+    });
+}
+
                     complete: function() {
                         submitButton.prop('disabled', false);
                         submitButton.html(originalText);
@@ -408,7 +417,56 @@
                 });
             });
         });
-    </script>
+    </script> -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+$(document).ready(function () {
+
+    $('#editLoanForm').on('submit', function (e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);
+        let btn = $(this).find('button[type="submit"]');
+
+        btn.prop('disabled', true);
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+
+            success: function (response) {
+                Swal.fire({
+                    title: response.msg,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = "{{ route('admin.loans') }}";
+                });
+            },
+
+            error: function (xhr) {
+                let msg = 'Something went wrong';
+                if (xhr.responseJSON?.msg) {
+                    msg = xhr.responseJSON.msg;
+                }
+                Swal.fire('Error', msg, 'error');
+            },
+
+            complete: function () {
+                btn.prop('disabled', false);
+            }
+        });
+
+        return false;
+    });
+
+});
+</script>
+
+
     <script>
         function toggleRemarkBox(value) {
             var remarkBox = document.getElementById('remark-box');
