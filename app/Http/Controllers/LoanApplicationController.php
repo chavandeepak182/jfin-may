@@ -606,215 +606,351 @@ public function loanlist()
     );
 }
 
-    public function update(Request $request)
-    {
-        // dd($request->all());
-        try {
-            // Validate the request
-            $validated = $request->validate([
-                'loan_id' => 'required|integer',
-                'status' => 'required|string',
-                'loan_category_id' => 'required|integer',
-                'amount' => 'required|numeric','min:0',
-                'amount_approved' => ['required_if:status,disbursed','nullable','numeric','min:0'],
-                'tenure' => 'required|integer',
-                'in_principle' => 'nullable|string',
-                'remarks' => 'nullable|string',
-                'sanction_letter' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+    // public function update(Request $request)
+    // {
+    //     // dd($request->all());
+    //     try {
+    //         // Validate the request
+    //         $validated = $request->validate([
+    //             'loan_id' => 'required|integer',
+    //             'status' => 'required|string',
+    //             'loan_category_id' => 'required|integer',
+    //             'amount' => 'required|numeric','min:0',
+    //             'amount_approved' => ['required_if:status,disbursed','nullable','numeric','min:0'],
+    //             'tenure' => 'required|integer',
+    //             'in_principle' => 'nullable|string',
+    //             'remarks' => 'nullable|string',
+    //             'sanction_letter' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
 
-                'documents.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120'
+    //             'documents.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120'
 
+    //         ]);
+
+
+
+    //         \DB::transaction(function () use ($request) {
+    //             $loan = Loan::where('loan_id', $request->input('loan_id'))->firstOrFail();
+    //             $oldStatus = $loan->status;
+    //             $newStatus = $request->input('status');
+
+    //             \Log::info('Loan status update:', [
+    //                 'loan_id' => $loan->loan_id,
+    //                 'old_status' => $oldStatus,
+    //                 'new_status' => $newStatus,
+    //             ]);
+
+    //             // Update loan details
+    //             $loan->loan_category_id = $request->input('loan_category_id');
+    //             $loan->amount = $request->input('amount');
+    //             $loan->tenure = $request->input('tenure');
+    //             $loan->status = $newStatus;
+    //             $loan->remarks = $request->input('remarks');
+    //             $loan->in_principle = $request->input('in_principle');
+    //             $loan->amount_approved = $request->input('amount_approved');
+    //             $loan->save();
+
+    //             // echo $loan;die;
+
+    //             // Save the remark in the loan_remarks table
+    //             if ($request->input('remarks')) {
+    //                 \DB::table('loan_remarks')->insert([
+    //                     'loan_id' => $loan->loan_id,
+    //                     'agent_id' => session()->get('user_id'),
+    //                     'status' => $newStatus,
+    //                     'remarks' => $request->input('remarks'),
+    //                     'created_at' => now(),
+    //                     'updated_at' => now(),
+    //                 ]);
+    //             }
+
+    //            if ($request->hasFile('sanction_letter')) {
+    //                     $file = $request->file('sanction_letter');
+
+    //                     $filename = time() . '_' . $file->getClientOriginalName();
+
+    //                     $file->storeAs('sanction_letters', $filename, 'public');
+
+    //                     $loan->sanction_letter = $filename;
+    //                     $loan->save();
+    //                 }
+
+
+    //             // Handle document uploads
+    //             if ($request->hasFile('documents')) {
+    //                 $documents = $request->file('documents');
+    //                 $documentNames = $request->input('document_name');
+
+    //                 foreach ($documents as $index => $document) {
+    //                     // Ensure there's a corresponding name for each document
+    //                     $name = $documentNames[$index] ?? $document->getClientOriginalName();
+
+    //                     $path = $document->store('documents', 'public');
+
+    //                     Document::create([
+    //                         'user_id' => $loan->user_id,
+    //                         'loan_id' => $loan->loan_id,
+    //                         'document_name' => $name,
+    //                         'file_path' => $path,
+    //                         'created_at' => now(),
+    //                         'updated_at' => now(),
+    //                     ]);
+    //                 }
+    //             }
+
+    //             // Send email notification if the status has changed
+    //             if ($oldStatus !== $newStatus) {
+    //                 log::info('Dispatching LoanStatusUpdated event for loan ID: ' . $loan->loan_reference_id, [
+    //                     'old_status' => $oldStatus,
+    //                     'new_status' => $newStatus,
+    //                     'loan_reference_id' => $loan->loan_reference_id,
+    //                     'user_id' => auth()->id(),
+    //                 ]);
+    //                 event(new LoanStatusUpdated(
+    //                     $loan->loan_reference_id,
+    //                     auth()->id(),
+    //                     auth()->user()->roles->name, // assuming you store role
+    //                     $loan->status,
+    //                     $loan->user_id
+    //                 ));
+    //                 $customer = $loan->user;
+    //                 $customerEmail = $customer->email_id;
+    //                 $customerName = $customer->name;
+    //                 $status = $newStatus;
+    //                 $remarks = $request->input('remarks');
+    //                 $msg = "Your loan status has been updated to: $status. Remarks: $remarks";
+    //                 $temp_id = 4; // Example template ID, adjust accordingly
+    //                 app(UsersController::class)->temail($customerEmail, $customerName, $msg, $temp_id);
+    //             }
+
+    //             // Start MLM Insertion
+    //             // if ($newStatus == 'disbursed') {
+    //             //     $name = $customerName;
+    //             //     $parent = $loan->referral_user_id;
+    //             //     $nodeInserted = app(CategoryController::class)->addNode($parent, $name);
+    //             //     $amount_approved = $loan->amount_approved;
+
+    //             //     $userId = $loan->user_id;
+    //             //     app(CategoryController::class)->commission_destribution($parent, $amount_approved, $userId);
+    //             // }
+
+    //             if ($newStatus == 'disbursed') {
+    //                 $loan->amount_approved = $request->input('amount_approved');
+    //                 $loan->status = $newStatus; // Set status again, to be sure
+    //                 $loan->save(); // Explicitly save all changes
+
+    //                 Log::info('Loan approved amount set for loan ID: ' . $loan->loan_id);
+
+    //                 // Handle tree node addition
+    //                 $referralUser = User::find($loan->referral_user_id);
+
+    //                 if (!$referralUser) {
+    //                     Log::warning("Referral user not found for ID: {$loan->referral_user_id}. Searching for next available node.");
+    //                     $parentNode = app(CategoryController::class)->findNextAvailableNode();
+
+    //                     if (!$parentNode) {
+    //                         Log::error("No available position found in the tree.");
+    //                         return;
+    //                     }
+
+    //                     $parentUserId = $parentNode->user_id;
+    //                 } else {
+    //                     Log::info("Referral user found: " . json_encode($referralUser->toArray()));
+    //                     $parentUserId = $referralUser->id;
+    //                 }
+
+    //                 $childName = $loan->user->name;
+    //                 $childUserId = $loan->user->id;
+
+    //                 $existingCategory = DB::table('categories')->where('user_id', $childUserId)->first();
+
+    //                 if ($existingCategory) {
+    //                     Log::info("User already exists in the tree. Skipping node insertion for user ID: {$childUserId}");
+    //                 } else {
+    //                     if (app(CategoryController::class)->addNode($parentUserId, $childName, $childUserId)) {
+    //                         Log::info("Node successfully inserted into tree for loan applicant.");
+    //                     } else {
+    //                         Log::error("Failed to insert node into tree for loan applicant.");
+    //                         return;
+    //                     }
+    //                 }
+
+    //                 // Fetch ancestors for commission distribution
+    //                 $childCategory = DB::table('categories')->where('user_id', $childUserId)->first();
+
+    //                 if (!$childCategory) {
+    //                     Log::error("Category not found for Child User ID: {$childUserId}");
+    //                     return;
+    //                 }
+
+    //                 $ancestors = DB::table('categories')
+    //                     ->where('_lft', '<', $childCategory->_lft)
+    //                     ->where('_rgt', '>', $childCategory->_rgt)
+    //                     ->orderBy('_lft', 'asc')
+    //                     ->get();
+
+    //                 if ($ancestors->isEmpty()) {
+    //                     Log::info("No ancestors found for Child User ID: {$childUserId}. Skipping commission distribution.");
+    //                     return;
+    //                 }
+
+    //                 // Distribute commission
+    //                 app(CategoryController::class)->commissionDistribution($childUserId, $loan->amount_approved);
+
+    //                 if ($referralUser) {
+    //                     Log::info("Commission distribution executed for user: {$loan->user_id}, Parent: {$referralUser->name}");
+    //                 } else {
+    //                     Log::info("Commission distribution executed for user: {$loan->user_id}, No valid referral user found.");
+    //                 }
+    //             }
+    //         });
+
+
+
+    //         return redirect()->back()->with('success', 'Loan updated successfully!');
+    //     } catch (\Exception $e) {
+    //         \Log::error('Error updating loan', ['exception' => $e->getMessage()]);
+    //         if ($request->expectsJson()) {
+    //             return response()->json(['status' => 0, 'msg' => 'An error occurred while updating: ' . $e->getMessage()]);
+    //         }
+    //         return redirect()->back()->withErrors(['error' => 'An error occurred while updating: ' . $e->getMessage()])->withInput();
+    //     }
+    // }
+
+public function update(Request $request)
+{
+    try {
+
+        // ✅ VALIDATION (CORRECT)
+        $request->validate([
+            'loan_id'           => 'required|integer',
+            'status'            => 'required|string',
+            'loan_category_id'  => 'required|integer',
+            'amount'            => 'required|numeric|min:0',
+            'amount_approved'   => 'nullable|required_if:status,approved,disbursed|numeric|min:0',
+            'tenure'            => 'required|integer',
+            'in_principle'      => 'nullable|string',
+            'remarks'           => 'nullable|string',
+            'sanction_letter'   => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'documents.*'       => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120',
+        ]);
+
+        DB::transaction(function () use ($request) {
+
+            $loan = Loan::where('loan_id', $request->loan_id)->firstOrFail();
+
+            $oldStatus = $loan->status;
+            $newStatus = $request->status;
+
+            // ✅ UPDATE LOAN
+            $loan->update([
+                'loan_category_id' => $request->loan_category_id,
+                'amount'           => $request->amount,
+                'tenure'           => $request->tenure,
+                'status'           => $newStatus,
+                'remarks'          => $request->remarks,
+                'in_principle'     => $request->in_principle,
+                'amount_approved'  => $request->amount_approved,
             ]);
 
-
-
-            \DB::transaction(function () use ($request) {
-                $loan = Loan::where('loan_id', $request->input('loan_id'))->firstOrFail();
-                $oldStatus = $loan->status;
-                $newStatus = $request->input('status');
-
-                \Log::info('Loan status update:', [
-                    'loan_id' => $loan->loan_id,
-                    'old_status' => $oldStatus,
-                    'new_status' => $newStatus,
+            // ✅ SAVE REMARKS
+            if (!empty($request->remarks)) {
+                DB::table('loan_remarks')->insert([
+                    'loan_id'    => $loan->loan_id,
+                    'agent_id'   => auth()->id(), // ✅ safer than session()
+                    'status'     => $newStatus,
+                    'remarks'    => $request->remarks,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
-
-                // Update loan details
-                $loan->loan_category_id = $request->input('loan_category_id');
-                $loan->amount = $request->input('amount');
-                $loan->tenure = $request->input('tenure');
-                $loan->status = $newStatus;
-                $loan->remarks = $request->input('remarks');
-                $loan->in_principle = $request->input('in_principle');
-                $loan->amount_approved = $request->input('amount_approved');
-                $loan->save();
-
-                // echo $loan;die;
-
-                // Save the remark in the loan_remarks table
-                if ($request->input('remarks')) {
-                    \DB::table('loan_remarks')->insert([
-                        'loan_id' => $loan->loan_id,
-                        'agent_id' => session()->get('user_id'),
-                        'status' => $newStatus,
-                        'remarks' => $request->input('remarks'),
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                }
-
-               if ($request->hasFile('sanction_letter')) {
-                        $file = $request->file('sanction_letter');
-
-                        $filename = time() . '_' . $file->getClientOriginalName();
-
-                        $file->storeAs('sanction_letters', $filename, 'public');
-
-                        $loan->sanction_letter = $filename;
-                        $loan->save();
-                    }
-
-
-                // Handle document uploads
-                if ($request->hasFile('documents')) {
-                    $documents = $request->file('documents');
-                    $documentNames = $request->input('document_name');
-
-                    foreach ($documents as $index => $document) {
-                        // Ensure there's a corresponding name for each document
-                        $name = $documentNames[$index] ?? $document->getClientOriginalName();
-
-                        $path = $document->store('documents', 'public');
-
-                        Document::create([
-                            'user_id' => $loan->user_id,
-                            'loan_id' => $loan->loan_id,
-                            'document_name' => $name,
-                            'file_path' => $path,
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ]);
-                    }
-                }
-
-                // Send email notification if the status has changed
-                if ($oldStatus !== $newStatus) {
-                    log::info('Dispatching LoanStatusUpdated event for loan ID: ' . $loan->loan_reference_id, [
-                        'old_status' => $oldStatus,
-                        'new_status' => $newStatus,
-                        'loan_reference_id' => $loan->loan_reference_id,
-                        'user_id' => auth()->id(),
-                    ]);
-                    event(new LoanStatusUpdated(
-                        $loan->loan_reference_id,
-                        auth()->id(),
-                        auth()->user()->roles->name, // assuming you store role
-                        $loan->status,
-                        $loan->user_id
-                    ));
-                    $customer = $loan->user;
-                    $customerEmail = $customer->email_id;
-                    $customerName = $customer->name;
-                    $status = $newStatus;
-                    $remarks = $request->input('remarks');
-                    $msg = "Your loan status has been updated to: $status. Remarks: $remarks";
-                    $temp_id = 4; // Example template ID, adjust accordingly
-                    app(UsersController::class)->temail($customerEmail, $customerName, $msg, $temp_id);
-                }
-
-                // Start MLM Insertion
-                // if ($newStatus == 'disbursed') {
-                //     $name = $customerName;
-                //     $parent = $loan->referral_user_id;
-                //     $nodeInserted = app(CategoryController::class)->addNode($parent, $name);
-                //     $amount_approved = $loan->amount_approved;
-
-                //     $userId = $loan->user_id;
-                //     app(CategoryController::class)->commission_destribution($parent, $amount_approved, $userId);
-                // }
-
-                if ($newStatus == 'disbursed') {
-                    $loan->amount_approved = $request->input('amount_approved');
-                    $loan->status = $newStatus; // Set status again, to be sure
-                    $loan->save(); // Explicitly save all changes
-
-                    Log::info('Loan approved amount set for loan ID: ' . $loan->loan_id);
-
-                    // Handle tree node addition
-                    $referralUser = User::find($loan->referral_user_id);
-
-                    if (!$referralUser) {
-                        Log::warning("Referral user not found for ID: {$loan->referral_user_id}. Searching for next available node.");
-                        $parentNode = app(CategoryController::class)->findNextAvailableNode();
-
-                        if (!$parentNode) {
-                            Log::error("No available position found in the tree.");
-                            return;
-                        }
-
-                        $parentUserId = $parentNode->user_id;
-                    } else {
-                        Log::info("Referral user found: " . json_encode($referralUser->toArray()));
-                        $parentUserId = $referralUser->id;
-                    }
-
-                    $childName = $loan->user->name;
-                    $childUserId = $loan->user->id;
-
-                    $existingCategory = DB::table('categories')->where('user_id', $childUserId)->first();
-
-                    if ($existingCategory) {
-                        Log::info("User already exists in the tree. Skipping node insertion for user ID: {$childUserId}");
-                    } else {
-                        if (app(CategoryController::class)->addNode($parentUserId, $childName, $childUserId)) {
-                            Log::info("Node successfully inserted into tree for loan applicant.");
-                        } else {
-                            Log::error("Failed to insert node into tree for loan applicant.");
-                            return;
-                        }
-                    }
-
-                    // Fetch ancestors for commission distribution
-                    $childCategory = DB::table('categories')->where('user_id', $childUserId)->first();
-
-                    if (!$childCategory) {
-                        Log::error("Category not found for Child User ID: {$childUserId}");
-                        return;
-                    }
-
-                    $ancestors = DB::table('categories')
-                        ->where('_lft', '<', $childCategory->_lft)
-                        ->where('_rgt', '>', $childCategory->_rgt)
-                        ->orderBy('_lft', 'asc')
-                        ->get();
-
-                    if ($ancestors->isEmpty()) {
-                        Log::info("No ancestors found for Child User ID: {$childUserId}. Skipping commission distribution.");
-                        return;
-                    }
-
-                    // Distribute commission
-                    app(CategoryController::class)->commissionDistribution($childUserId, $loan->amount_approved);
-
-                    if ($referralUser) {
-                        Log::info("Commission distribution executed for user: {$loan->user_id}, Parent: {$referralUser->name}");
-                    } else {
-                        Log::info("Commission distribution executed for user: {$loan->user_id}, No valid referral user found.");
-                    }
-                }
-            });
-
-
-
-            return redirect()->back()->with('success', 'Loan updated successfully!');
-        } catch (\Exception $e) {
-            \Log::error('Error updating loan', ['exception' => $e->getMessage()]);
-            if ($request->expectsJson()) {
-                return response()->json(['status' => 0, 'msg' => 'An error occurred while updating: ' . $e->getMessage()]);
             }
-            return redirect()->back()->withErrors(['error' => 'An error occurred while updating: ' . $e->getMessage()])->withInput();
-        }
+
+            // ✅ SANCTION LETTER UPLOAD
+            if ($request->hasFile('sanction_letter')) {
+                $file = $request->file('sanction_letter');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->storeAs('sanction_letters', $filename, 'public');
+
+                $loan->update(['sanction_letter' => $filename]);
+            }
+
+            // ✅ DOCUMENT UPLOAD
+            if ($request->hasFile('documents')) {
+                foreach ($request->file('documents') as $index => $doc) {
+                    $path = $doc->store('documents', 'public');
+
+                    Document::create([
+                        'user_id'       => $loan->user_id,
+                        'loan_id'       => $loan->loan_id,
+                        'document_name' => $request->document_name[$index] ?? $doc->getClientOriginalName(),
+                        'file_path'     => $path,
+                    ]);
+                }
+            }
+
+            // ✅ STATUS CHANGE EVENT + EMAIL
+            if ($oldStatus !== $newStatus) {
+
+                $roleName = auth()->user()?->roles?->first()?->name ?? null;
+
+                event(new LoanStatusUpdated(
+                    $loan->loan_reference_id,
+                    auth()->id(),
+                    $roleName,
+                    $newStatus,
+                    $loan->user_id
+                ));
+
+                $customer = $loan->user;
+                app(UsersController::class)->temail(
+                    $customer->email_id,
+                    $customer->name,
+                    "Your loan status has been updated to: $newStatus. Remarks: {$request->remarks}",
+                    4
+                );
+            }
+
+            // ✅ MLM / COMMISSION (ONLY WHEN DISBURSED)
+            if ($newStatus === 'disbursed') {
+
+                $referralUser = User::find($loan->referral_user_id);
+
+                $parentUserId = $referralUser?->id
+                    ?? app(CategoryController::class)->findNextAvailableNode()?->user_id
+                    ?? throw new \Exception('No parent node available');
+
+                $childUserId = $loan->user_id;
+
+                if (!DB::table('categories')->where('user_id', $childUserId)->exists()) {
+                    app(CategoryController::class)->addNode(
+                        $parentUserId,
+                        $loan->user->name,
+                        $childUserId
+                    );
+                }
+
+                app(CategoryController::class)->commissionDistribution(
+                    $childUserId,
+                    $loan->amount_approved
+                );
+            }
+        });
+
+        // ✅ JSON RESPONSE FOR AJAX
+        return response()->json([
+            'status' => 1,
+            'msg' => 'Loan updated successfully'
+        ]);
+
+    } catch (\Exception $e) {
+
+        return response()->json([
+            'status' => 0,
+            'msg' => $e->getMessage()
+        ], 422);
     }
+}
+
+
     //admin
     public function inprocess()
     {

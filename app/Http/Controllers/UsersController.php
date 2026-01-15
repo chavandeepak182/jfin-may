@@ -6,6 +6,7 @@ use App\Mail\SendUserCredentials;
 use App\Mail\VerifyEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+
 use Session;
 use Validator;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
+
+
 class UsersController extends Controller
 {
     public function addUser()
@@ -31,27 +34,23 @@ class UsersController extends Controller
 
 public function adminCustomer(Request $request)
 {
+    /* ===================== COUNTS ===================== */
     $totalCustomers = DB::table('users')
-    ->where('role_id', 1)
-    ->whereNull('deleted_at')
-    ->count();
+        ->where('role_id', 1)
+        ->whereNull('deleted_at')
+        ->count();
 
-$totalEmployees = DB::table('users')
-    ->where('role_id', 2)
-    ->whereNull('deleted_at')
-    ->count();
+    $totalEmployees = DB::table('users')
+        ->where('role_id', 2)
+        ->whereNull('deleted_at')
+        ->count();
 
-$totalChannelPartners = DB::table('users')
-    ->where('role_id', 3)
-    ->whereNull('deleted_at')
-    ->count();
+    $totalChannelPartners = DB::table('users')
+        ->where('role_id', 3)
+        ->whereNull('deleted_at')
+        ->count();
 
-$totalUsers = DB::table('users')
-    ->whereNull('deleted_at')
-    ->count();
-
-
-    // Filters from AJAX
+    /* ===================== FILTERS ===================== */
     $search = $request->search;
     $status = $request->status;
 
@@ -59,33 +58,33 @@ $totalUsers = DB::table('users')
         ->where('role_id', 1)
         ->whereNull('deleted_at')
 
-        // 🔍 SEARCH FILTER
+        /* 🔍 SEARCH FILTER */
         ->when($search, function ($q) use ($search) {
             $q->where(function ($qq) use ($search) {
-                $qq->where('name', 'like', "%$search%")
-                   ->orWhere('email_id', 'like', "%$search%")
-                   ->orWhere('id', 'like', "%$search%");
+                $qq->where('name', 'like', "%{$search}%")
+                   ->orWhere('email_id', 'like', "%{$search}%")
+                   ->orWhere('id', 'like', "%{$search}%");
             });
         })
 
-        // 🟢 ACTIVE / 🔴 INACTIVE FILTER
-        ->when($status, function ($q) use ($status) {
-            if ($status == 'active') {
+        /* 🟢 ACTIVE / 🔴 INACTIVE FILTER */
+        ->when($status !== null && $status !== '', function ($q) use ($status) {
+            if ($status === 'active') {
                 $q->where('is_email_verify', 1);
-            }
-            if ($status == 'inactive') {
+            } elseif ($status === 'inactive') {
                 $q->where('is_email_verify', 0);
             }
         })
 
-        ->orderBy('created_at', 'asc')
+        ->orderBy('created_at', 'desc')
         ->paginate(10);
 
-    // AJAX response (important)
+    /* ===================== AJAX RESPONSE ===================== */
     if ($request->ajax()) {
         return view('admin.partials.users-table', compact('users'))->render();
     }
 
+    /* ===================== NORMAL VIEW ===================== */
     return view('admin.admin-users', compact(
         'totalCustomers',
         'totalEmployees',
@@ -93,6 +92,7 @@ $totalUsers = DB::table('users')
         'users'
     ));
 }
+
 
 
     
@@ -558,13 +558,75 @@ public function loadListByType(Request $request)
     return view('admin.editUser', compact('data'));
 }
 
-  public function updateUser(Request $request)
+//   public function updateUser(Request $request)
+// {
+//     // ✅ Validation
+//     $request->validate([
+//         'user_id'    => 'required|exists:users,id',
+//         'full_name'  => 'required|string|max:255',
+//         'email_id'   => 'required|email|max:255',
+//         'mobile_no'  => 'nullable|string|max:15',
+//         'dob'        => 'nullable|date',
+//         'address'    => 'nullable|string|max:255',
+//         'city'       => 'nullable|string|max:100',
+//         'state'      => 'nullable|string|max:100',
+//         'pincode'    => 'nullable|string|max:10',
+//     ]);
+
+//     try {
+//         DB::beginTransaction();
+
+//         // ✅ Update users table
+//         DB::table('users')
+//             ->where('id', $request->user_id)
+//             ->update([
+//                 'name'       => $request->full_name,
+//                 'email_id'   => $request->email_id,
+//                 'updated_at' => now(),
+//             ]);
+
+//         // ✅ Update OR Insert profile
+//         DB::table('profile')->updateOrInsert(
+//             ['user_id' => $request->user_id],
+//             [
+//                 'mobile_no'          => $request->mobile_no,
+//                 'dob'                => $request->dob,
+//                 'residence_address'  => $request->address,
+//                 'city'               => $request->city,
+//                 'state'              => $request->state,
+//                 'pincode'            => $request->pincode,
+//                 'updated_at'         => now(),
+//             ]
+//         );
+
+//         DB::commit();
+
+//         return response()->json([
+//             'status' => 1,
+//             'msg'    => 'User information updated successfully!'
+//         ]);
+
+//     } catch (\Exception $e) {
+//         DB::rollBack();
+
+//         return response()->json([
+//             'status' => 0,
+//             'msg'    => 'Something went wrong',
+//             'error'  => $e->getMessage()
+//         ], 500);
+//     }
+// }
+
+
+
+
+public function updateUser(Request $request)
 {
-    // ✅ Validation
     $request->validate([
         'user_id'    => 'required|exists:users,id',
         'full_name'  => 'required|string|max:255',
         'email_id'   => 'required|email|max:255',
+        'password'   => 'nullable|min:6', // ✅ added
         'mobile_no'  => 'nullable|string|max:15',
         'dob'        => 'nullable|date',
         'address'    => 'nullable|string|max:255',
@@ -576,26 +638,33 @@ public function loadListByType(Request $request)
     try {
         DB::beginTransaction();
 
-        // ✅ Update users table
+        // 🔥 Prepare user update data
+        $userData = [
+            'name'       => $request->full_name,
+            'email_id'   => $request->email_id,
+            'updated_at' => now(),
+        ];
+
+        // 🔐 Update password ONLY if entered
+        if (!empty($request->password)) {
+            $userData['password'] = Hash::make($request->password);
+        }
+
         DB::table('users')
             ->where('id', $request->user_id)
-            ->update([
-                'name'       => $request->full_name,
-                'email_id'   => $request->email_id,
-                'updated_at' => now(),
-            ]);
+            ->update($userData);
 
         // ✅ Update OR Insert profile
         DB::table('profile')->updateOrInsert(
             ['user_id' => $request->user_id],
             [
-                'mobile_no'          => $request->mobile_no,
-                'dob'                => $request->dob,
-                'residence_address'  => $request->address,
-                'city'               => $request->city,
-                'state'              => $request->state,
-                'pincode'            => $request->pincode,
-                'updated_at'         => now(),
+                'mobile_no'         => $request->mobile_no,
+                'dob'               => $request->dob,
+                'residence_address' => $request->address,
+                'city'              => $request->city,
+                'state'             => $request->state,
+                'pincode'           => $request->pincode,
+                'updated_at'        => now(),
             ]
         );
 
@@ -603,7 +672,7 @@ public function loadListByType(Request $request)
 
         return response()->json([
             'status' => 1,
-            'msg'    => 'User information updated successfully!'
+            'msg'    => 'User updated successfully'
         ]);
 
     } catch (\Exception $e) {
@@ -616,7 +685,6 @@ public function loadListByType(Request $request)
         ], 500);
     }
 }
-
 
    public function deleteUser(Request $request)
     {

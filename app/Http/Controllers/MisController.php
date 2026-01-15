@@ -61,91 +61,172 @@ class MisController extends Controller
     }
 
 
-   public function store(Request $request)
-    {
-        // 1️⃣  Log the raw incoming payload.
-        Log::info('MIS::store – incoming request', $request->all());
+//   public function store(Request $request)
+// {
+//     // 1️⃣ Log raw request (for debugging)
+//     Log::info('MIS::store – incoming request', $request->all());
 
-        try {
-            // 2️⃣  Validate – will throw ValidationException on failure.
-            $validatedData = $request->validate([
-                'name'            => 'required|string|max:255',
-                'email'           => 'required|email|max:255',
-                'contact'         => 'required|string|max:255',
-                'office_contact'  => 'nullable|string|max:255',
-                'product_type'    => 'required|string|max:255',
-                'bank_name'       => 'required|string|max:255',
-                'occupation'      => 'required|string|max:255',
-                'branch_name'     => 'required|string|max:255',
-                'amount'          => 'required|numeric',
-                'address'         => 'required|string',
-                'city'            => 'required|string|max:255',
-                'office_address'  => 'nullable|string|max:255',
-                'bm_name'         => 'nullable|string|max:255',
-                'login_date'      => 'nullable|date',
-                'status'          => 'nullable|string|max:255',
-                'in_principle'    => 'nullable|string|max:255',
-                'remark'          => 'nullable|string',
-                'legal'           => 'nullable|string|max:255',
-                'valuation'       => 'nullable|string|max:255',
-                'leads'           => 'nullable|string|max:255',
-                'file_work'       => 'nullable|string|max:255',
-            ]);
+//     try {
+//         // 2️⃣ Validate request
+//         $validatedData = $request->validate([
+//             'name'            => 'required|string|max:255',
+//           'email' => 'required|email|max:255|unique:mis,email',
 
-            Log::info('MIS::store – validation passed', $validatedData);
+//             'contact'         => 'required|string|max:255',
+//             'office_contact'  => 'nullable|string|max:255',
+//             'product_type'    => 'required|string|max:255',
+//             'bank_name'       => 'required|string|max:255',
+//             'occupation'      => 'required|string|max:255',
+//             'branch_name'     => 'required|string|max:255',
+//             'amount'          => 'required|numeric',
+//             'address'         => 'required|string',
+//             'city'            => 'required|string|max:255',
+//             'office_address'  => 'nullable|string|max:255',
+//             'bm_name'         => 'nullable|string|max:255',
+//             'login_date'      => 'nullable|date',
+//             'status'          => 'nullable|string|max:255',
+//             'in_principle'    => 'nullable|string|max:255',
+//             'remark'          => 'nullable|string',
+//             'legal'           => 'nullable|string|max:255',
+//             'valuation'       => 'nullable|string|max:255',
+//             'leads'           => 'nullable|string|max:255',
+//             'file_work'       => 'nullable|string|max:255',
+//         ]);
 
-            // 3️⃣  Persist inside a transaction so both inserts succeed/fail together.
-            DB::beginTransaction();
+//         Log::info('MIS::store – validation passed', $validatedData);
 
-            // Insert into mis table.
+//         // 3️⃣ Start transaction
+//         DB::beginTransaction();
+
+//         // 4️⃣ Insert MIS record
+//        $misId = DB::table('mis')->insertGetId($validatedData);
+//         Log::info('MIS::store – MIS inserted', ['mis_id' => $misId]);
+
+//         // 5️⃣ Insert related bank details (✅ correct FK usage)
+//       DB::table('company_bank_details')->insert([
+//     'mis_id'          => $misId,
+//     'bank_name'       => $validatedData['bank_name'],
+//     'branch_name'     => $validatedData['branch_name'] ?? null,
+//     'manager_name'    => $validatedData['bm_name'] ?? null,
+//     'manager_number'  => null,
+//     'acc_name'        => null,
+//     'acc_number'      => null,
+//     'ifsc_code'       => null,
+//     'gst_number'      => null,
+//     'pan_number'      => null,
+//     'bank_address'    => null,
+//     'created_at'      => now(),
+//     'updated_at'      => now(),
+// ]);
+
+//         Log::info('MIS::store – company_bank_details inserted', ['mis_id' => $misId]);
+
+//         // 6️⃣ Commit transaction
+//         DB::commit();
+
+//         // 7️⃣ Return success JSON
+//         return response()->json([
+//             'status'  => true,
+//             'message' => 'MIS record added successfully!',
+//             'id'      => $misId,
+//         ], 201);
+
+//     } catch (ValidationException $e) {
+
+//         // Validation error
+//         Log::warning('MIS::store – validation failed', [
+//             'errors' => $e->errors()
+//         ]);
+
+//         return response()->json([
+//             'status'  => 'error',
+//             'message' => 'Validation errors occurred.',
+//             'errors'  => $e->errors(),
+//         ], 422);
+
+//     } catch (\Throwable $e) {
+
+//         // Any unexpected error
+//         DB::rollBack();
+
+//         Log::error('MIS::store – unexpected error', [
+//             'message' => $e->getMessage(),
+//             'line'    => $e->getLine(),
+//             'file'    => $e->getFile(),
+//         ]);
+
+//         return response()->json([
+//             'status'  => 'error',
+//             'message' => 'Something went wrong while saving the record.',
+//         ], 500);
+//     }
+// }
+
+public function store(Request $request)
+{
+    Log::info('MIS::store – incoming request', $request->all());
+
+    try {
+        $validatedData = $request->validate([
+            'name'         => 'required|string|max:255',
+            'email'        => 'required|email|max:255|unique:mis,email',
+            'contact'      => 'required|string|max:255',
+            'product_type' => 'required|string|max:255',
+            'bank_name'    => 'required|string|max:255',
+            'occupation'   => 'required|string|max:255',
+            'branch_name'  => 'required|string|max:255',
+            'amount'       => 'required|numeric',
+            'address'      => 'required|string',
+            'city'         => 'required|string|max:255',
+            'bm_name'      => 'nullable|string|max:255',
+            'login_date'   => 'nullable|date',
+            'status'       => 'nullable|string|max:255',
+            'in_principle' => 'nullable|string|max:255',
+            'remark'       => 'nullable|string',
+            'legal'        => 'nullable|string|max:255',
+            'valuation'    => 'nullable|string|max:255',
+            'leads'        => 'nullable|string|max:255',
+            'file_work'    => 'nullable|string|max:255',
+        ]);
+
+        DB::transaction(function () use ($validatedData, &$misId) {
+
             $misId = DB::table('mis')->insertGetId($validatedData);
-            Log::info('MIS::store – inserted into mis table', ['id' => $misId]);
 
-            // Insert into company_bank_details table.
             DB::table('company_bank_details')->insert([
-                'bank_name'  => $validatedData['bank_name'],
-                'id'     => $misId,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'mis_id'       => $misId,
+                'bank_name'    => $validatedData['bank_name'],
+                'branch_name'  => $validatedData['branch_name'],
+                'manager_name' => $validatedData['bm_name'] ?? null,
+                'created_at'   => now(),
+                'updated_at'   => now(),
             ]);
-            Log::info('MIS::store – inserted into company_bank_details', ['id' => $misId]);
+        });
 
-            DB::commit();
+       return response()->json([
+    'status' => true,
+    'message' => 'MIS record added successfully!',
+    'id' => $misId,
+], 201);
 
-            // 4️⃣  Return success JSON.
-            return response()->json([
-                'status'  => 'success',
-                'message' => 'Record added successfully!',
-                'id'  => $misId,
-            ], 201);
 
-        } catch (ValidationException $e) {
+    } catch (ValidationException $e) {
+        return response()->json([
+            'status' => false,
+            'errors' => $e->errors(),
+        ], 422);
 
-            // 5️⃣  Log and return validation errors.
-            Log::warning('MIS::store – validation failed', ['errors' => $e->errors()]);
+    } catch (\Throwable $e) {
+        Log::error('MIS::store error', [
+            'message' => $e->getMessage(),
+        ]);
 
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Validation errors occurred.',
-                'errors'  => $e->errors(),
-            ], 422);
-
-        } catch (\Throwable $e) {
-
-            // 6️⃣  Roll back, log and return unexpected errors.
-            DB::rollBack();
-
-            Log::error('MIS::store – unexpected error', [
-                'message' => $e->getMessage(),
-                'trace'   => $e->getTraceAsString(),
-            ]);
-
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Something went wrong while saving the record.',
-            ], 500);
-        }
+        return response()->json([
+            'status'  => false,
+            'message' => 'Something went wrong.',
+        ], 500);
     }
+}
 
     public function edit($id)
     {
@@ -197,15 +278,25 @@ public function update(Request $request, $id)
         // Log updated record
         Log::info('Updated MIS Record:', $misRecord->fresh()->toArray());
 
-        return redirect()->route('mis.index')->with('success', 'Record updated successfully');
+        return redirect()->route('admin.listlead')->with('success', 'Record updated successfully');
     }
     public function destroy(Request $request)
-    {
-        $mis = Mis::find($request->id);
-        if ($mis) {
-            $mis->delete();
-            return response()->json(['status' => 'success', 'message' => 'Record deleted successfully!']);
-        }
-        return response()->json(['status' => 'error', 'message' => 'Record not found!']);
+{
+    $mis = Mis::find($request->id);
+
+    if ($mis) {
+        $mis->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Record deleted successfully!'
+        ]);
     }
+
+    return response()->json([
+        'status' => false,
+        'message' => 'Record not found!'
+    ]);
+}
+
 }

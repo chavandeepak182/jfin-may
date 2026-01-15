@@ -74,11 +74,11 @@
 
 <td>
     {{-- Edit button (hide only after disbursement) --}}
-    @if (strtolower($loan->status) !== 'disbursed')
+    <!-- @if (strtolower($loan->status) !== 'disbursed')
         <a href="loanedit/{{ $loan->loan_id }}" class="btn btn-sm btn-warning">
             Edit
         </a>
-    @endif
+    @endif -->
 
     {{-- View Sanction Letter (when Approved OR Disbursed) --}}
     @if (

@@ -281,7 +281,7 @@
                         <th>Bank Name</th>
                         <th>IFSC</th>
                         <th>Branch</th>
-                        <th>Manager</th>
+                        <th>Manager Name</th>
                         <th>Manager Number</th>
                         <th>Address</th>
                         <th>Action</th>
