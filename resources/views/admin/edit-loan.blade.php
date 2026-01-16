@@ -246,10 +246,15 @@
                                                 <input type="file" class="form-control" id="sanction_letter"
                                                     name="sanction_letter">
                                                 @if ($loan->sanction_letter)
-                                                    <small>Current file: <a
-                                                            href="{{ asset('storage/sanction_letters/' . $loan->sanction_letter) }}"
-                                                            target="_blank">{{ $loan->sanction_letter }}</a></small>
-                                                @endif
+    <small>
+        Current file:
+        <a href="{{ Storage::url($loan->sanction_letter) }}" target="_blank">
+            {{ basename($loan->sanction_letter) }}
+        </a>
+    </small>
+@endif
+
+
                                             </div>
                                     </div>
                                 </div>
@@ -522,22 +527,23 @@ $(document).ready(function () {
             documentUploadSection.appendChild(newRow);
         }
 
-        function toggleSanctionLetterBox(status) {
-            document.getElementById('sanctionLetterBox').style.display = (status === 'approved') ? 'block' : 'none';
-        }
+       function toggleSanctionLetterBox(status) {
+    if (status === 'approved' || status === 'disbursed') {
+        document.getElementById('sanctionLetterBox').style.display = 'block';
+    } else {
+        document.getElementById('sanctionLetterBox').style.display = 'none';
+    }
+}
 
         // Initialize the form based on current status
-        document.addEventListener('DOMContentLoaded', function() {
-
-
-            var statusElement = document.getElementById('status');
-
-            if (statusElement) {
-                const statusValue = statusElement.value;
-                toggleSanctionLetterBox(statusValue);
-                toggleRemarkBox(statusValue);
-            }
-        });
+      document.addEventListener('DOMContentLoaded', function() {
+    var statusElement = document.getElementById('status');
+    if (statusElement) {
+        const statusValue = statusElement.value;
+        toggleSanctionLetterBox(statusValue);
+        toggleRemarkBox(statusValue);
+    }
+});
 
         // Listen for changes in the loan status
         document.getElementById('status').addEventListener('change', function() {

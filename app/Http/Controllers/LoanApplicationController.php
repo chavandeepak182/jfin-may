@@ -826,11 +826,12 @@ public function update(Request $request)
             'status'            => 'required|string',
             'loan_category_id'  => 'required|integer',
             'amount'            => 'required|numeric|min:0',
-            'amount_approved'   => 'nullable|required_if:status,approved,disbursed|numeric|min:0',
+            'amount_approved' => 'required_if:status,approved,disbursed',
             'tenure'            => 'required|integer',
             'in_principle'      => 'nullable|string',
             'remarks'           => 'nullable|string',
-            'sanction_letter'   => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'sanction_letter' => 'required_if:status,approved,disbursed|file|mimes:pdf,doc,docx|max:2048',
+
             'documents.*'       => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120',
         ]);
 
@@ -865,13 +866,18 @@ public function update(Request $request)
             }
 
             // ✅ SANCTION LETTER UPLOAD
-            if ($request->hasFile('sanction_letter')) {
-                $file = $request->file('sanction_letter');
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $file->storeAs('sanction_letters', $filename, 'public');
+          if ($request->file('sanction_letter')) {
 
-                $loan->update(['sanction_letter' => $filename]);
-            }
+    $file = $request->file('sanction_letter');
+
+    $filename = uniqid().'_'.$file->getClientOriginalName();
+
+    $path = $file->storeAs('sanction_letters', $filename, 'public');
+
+    $loan->sanction_letter = $filename; // or $path
+    $loan->save();
+}
+
 
             // ✅ DOCUMENT UPLOAD
             if ($request->hasFile('documents')) {
@@ -1253,42 +1259,102 @@ if ($loan && $currentStep > 5)           $completedSteps[] = 5;
 
 
 
+// public function ajaxList(Request $request)
+// {
+//     $type = $request->type;
+
+//     $query = Loan::query();
+
+//     if ($type === 'pending') {
+//         $query->whereNull('assigned_to');
+//     }
+//     elseif ($type === 'inprocess') {
+//         $query->where('status', 'inprocess');
+//     }
+//     elseif ($type === 'approved') {
+//         $query->where('status', 'approved');
+//     }
+//     elseif ($type === 'disbursed') {
+//         $query->where('status', 'disbursed');
+//     }
+//     elseif ($type === 'rejected') {
+//         $query->where('status', 'rejected');
+//     }
+//     elseif ($type === 'trashed') {
+//         $query->onlyTrashed();
+//     }
+
+//     // ✅ NEW FIRST (LATEST)
+//     $loans = $query->latest()->paginate(10);
+//     // OR
+//     // $loans = $query->orderBy('created_at', 'desc')->paginate(10);
+
+//     return view('partials.list', compact('loans'))->render();
+// }
+
 public function ajaxList(Request $request)
 {
-    $type = $request->type;
+    $type   = $request->type;
+    $search = $request->search;
 
-    $query = Loan::query();
+    $query = Loan::query()
+        ->when($search, function ($q) use ($search) {
+            $q->whereHas('user', function ($u) use ($search) {
+                $u->where('name', 'LIKE', "%{$search}%");
+            });
+        });
 
     if ($type === 'pending') {
         $query->whereNull('assigned_to');
-    }
-    elseif ($type === 'inprocess') {
+    } elseif ($type === 'inprocess') {
         $query->where('status', 'inprocess');
-    }
-    elseif ($type === 'approved') {
+    } elseif ($type === 'approved') {
         $query->where('status', 'approved');
-    }
-    elseif ($type === 'disbursed') {
+    } elseif ($type === 'disbursed') {
         $query->where('status', 'disbursed');
-    }
-    elseif ($type === 'rejected') {
+    } elseif ($type === 'rejected') {
         $query->where('status', 'rejected');
-    }
-    elseif ($type === 'trashed') {
+    } elseif ($type === 'trashed') {
         $query->onlyTrashed();
     }
 
-    // ✅ NEW FIRST (LATEST)
-    $loans = $query->latest()->paginate(10);
-    // OR
-    // $loans = $query->orderBy('created_at', 'desc')->paginate(10);
+    $loans = $query->latest()
+        ->paginate(10)
+        ->appends(['search' => $search]);
 
-    return view('partials.list', compact('loans'))->render();
+    return view('partials.list', compact('loans'));
 }
 
+// public function ajaxPendingLoans()
+// {
+//     $pendingLoans = DB::table('loans')
+//         ->leftJoin('users', 'loans.user_id', '=', 'users.id')
+//         ->leftJoin('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+//         ->where(function ($query) {
+//             $query->whereNull('loans.agent_id')
+//                 ->orWhere(function ($subQuery) {
+//                     $subQuery->whereNotNull('loans.agent_id')
+//                         ->whereIn('loans.agent_action', ['pending', 'rejected'])
+//                         ->orWhereNull('loans.agent_action');
+//                 });
+//         })
+//         ->select(
+//             'loans.*',
+//             'users.name as user_name',
+//             'loan_category.category_name as category_name'
+//         )
+//         ->orderByDesc('loans.created_at')
+//         ->paginate(10);
 
-public function ajaxPendingLoans()
+//     $agents = DB::table('users')->where('role_id', 2)->get();
+
+//     return view('partials.pending-loans', compact('pendingLoans', 'agents'));
+// }
+
+public function ajaxPendingLoans(Request $request)
 {
+    $search = $request->search;
+
     $pendingLoans = DB::table('loans')
         ->leftJoin('users', 'loans.user_id', '=', 'users.id')
         ->leftJoin('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
@@ -1300,22 +1366,48 @@ public function ajaxPendingLoans()
                         ->orWhereNull('loans.agent_action');
                 });
         })
+        ->when($search, function ($q) use ($search) {
+            $q->where('users.name', 'LIKE', "%{$search}%");
+        })
         ->select(
             'loans.*',
             'users.name as user_name',
             'loan_category.category_name as category_name'
         )
         ->orderByDesc('loans.created_at')
-        ->paginate(10);
+        ->paginate(10)
+        ->appends(['search' => $search]);
 
     $agents = DB::table('users')->where('role_id', 2)->get();
 
     return view('partials.pending-loans', compact('pendingLoans', 'agents'));
 }
 
+// public function ajaxInprocessLoans()
+// {
+//     $loans = DB::table('loans')
+//         ->join('users', 'loans.user_id', '=', 'users.id')
+//         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+//         ->select(
+//             'loans.loan_id',
+//             'loans.loan_reference_id',
+//             'loans.amount',
+//             'loans.tenure',
+//             'users.name as user_name',
+//             'loan_category.category_name'
+//         )
+//         ->where('loans.status', 'in process')   // ✅ only in-process
+//         ->whereNull('loans.deleted_at')          // ✅ exclude trashed
+//         ->orderByDesc('loans.created_at')
+//         ->paginate(10);
 
-public function ajaxInprocessLoans()
+//     return view('partials.inprocess-loans', compact('loans'));
+// }
+
+public function ajaxInprocessLoans(Request $request)
 {
+    $search = $request->search;
+
     $loans = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
@@ -1327,16 +1419,21 @@ public function ajaxInprocessLoans()
             'users.name as user_name',
             'loan_category.category_name'
         )
-        ->where('loans.status', 'in process')   // ✅ only in-process
-        ->whereNull('loans.deleted_at')          // ✅ exclude trashed
+        ->where('loans.status', 'inprocess') // ✅ FIXED
+        ->when($search, function ($q) use ($search) {
+            $q->where('users.name', 'LIKE', "%{$search}%");
+        })
+        ->whereNull('loans.deleted_at')
         ->orderByDesc('loans.created_at')
-        ->paginate(10);
+        ->paginate(10)
+        ->appends(['search' => $search]);
 
     return view('partials.inprocess-loans', compact('loans'));
 }
 
 public function ajaxTrashedLoans()
 {
+    
     $loans = \App\Models\Loan::onlyTrashed()
         ->with([
             'user.profile.cityRelation',
@@ -1346,7 +1443,7 @@ public function ajaxTrashedLoans()
         ->whereNotNull('loan_reference_id')
         ->orderBy('deleted_at', 'desc')
         ->paginate(10);
-
+     
     // Transform data (same as your existing logic)
     $loans->getCollection()->transform(function ($loan) {
         return [

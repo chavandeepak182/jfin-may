@@ -68,13 +68,14 @@ public function adminCustomer(Request $request)
         })
 
         /* 🟢 ACTIVE / 🔴 INACTIVE FILTER */
-        ->when($status !== null && $status !== '', function ($q) use ($status) {
-            if ($status === 'active') {
-                $q->where('is_email_verify', 1);
-            } elseif ($status === 'inactive') {
-                $q->where('is_email_verify', 0);
-            }
-        })
+       ->when($status !== null && $status !== '', function ($q) use ($status) {
+    if ($status === 'active') {
+        $q->where('otp_verify', 1);
+    } elseif ($status === 'inactive') {
+        $q->where('otp_verify', 0);
+    }
+})
+
 
         ->orderBy('created_at', 'desc')
         ->paginate(10);
@@ -172,11 +173,15 @@ public function allUsers(Request $request)
 
 public function updateUserStatus(Request $request)
     {
-        DB::table('users')
-            ->where('id', $request->user_id)
-            ->update(['is_email_verify' => $request->is_email_verify]);
+         User::where('id', $request->user_id)
+        ->update([
+            'otp_verify' => $request->status
+        ]);
 
-        return response()->json(['message' => 'User status updated successfully']);
+    return response()->json([
+        'status' => 1,
+        'msg' => 'Status updated successfully'
+    ]);
     }
 
 
@@ -378,15 +383,56 @@ public function getUserById(Request $request)
 
 public function loadListByType(Request $request)
 {
-    if ($request->type === 'customer') {
-        $users = User::where('role_id', 1)->with('profile')->get();
-    } elseif ($request->type === 'agent') {
-        $users = User::where('role_id', 2)->with('profile')->get();
-    } else {
-        $users = User::where('role_id', 3)->with('profile')->get();
-    }
+    /* ================= ROLE MAP ================= */
+    $roleMap = [
+        'customer' => 1,
+        'agent'    => 2,
+        'cp'       => 3,
+    ];
 
+    $roleId = $roleMap[$request->type] ?? 1;
+
+    /* ================= FILTER INPUTS ================= */
+    $search = $request->search;
+    $status = $request->status;
+
+    /* ================= QUERY ================= */
+    $users = User::with('profile')
+        ->where('role_id', $roleId)
+        ->whereNull('deleted_at')
+
+        // 🔍 SEARCH
+        ->when($search, function ($q) use ($search) {
+            $q->where(function ($qq) use ($search) {
+                $qq->where('id', 'like', "%{$search}%")
+                   ->orWhere('name', 'like', "%{$search}%")
+                   ->orWhere('email_id', 'like', "%{$search}%");
+            });
+        })
+
+        // 🟢 ACTIVE / 🔴 INACTIVE
+        ->when($status !== null && $status !== '', function ($q) use ($status) {
+            if ($status === 'active') {
+                $q->where('is_email_verify', 1);
+            } elseif ($status === 'inactive') {
+                $q->where('is_email_verify', 0);
+            }
+        })
+
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
+
+    /* ================= HTML BUILD ================= */
     $html = '';
+
+    if ($users->count() === 0) {
+        $html .= '
+            <tr>
+                <td colspan="7" class="text-center text-muted">
+                    No records found
+                </td>
+            </tr>';
+    }
 
     foreach ($users as $user) {
         $html .= '
@@ -395,8 +441,12 @@ public function loadListByType(Request $request)
             <td>'.$user->name.'</td>
             <td>'.$user->email_id.'</td>
             <td>'.($user->profile->mobile_no ?? '-').'</td>
-            <td>'.($user->pan_no ?? '-').'</td>
-            <td>'.($user->is_email_verify ? 'Active' : 'Inactive').'</td>
+            <td>'.($user->profile->pan_number ?? '-').'</td>
+            <td>
+                '.($user->is_email_verify
+                    ? '<span class="badge bg-success">Active</span>'
+                    : '<span class="badge bg-danger">Inactive</span>').'
+            </td>
             <td>
                 <button class="btn btn-primary btn-xs edit-user"
                         data-id="'.$user->id.'">
@@ -411,8 +461,13 @@ public function loadListByType(Request $request)
         </tr>';
     }
 
-    return response()->json(['html' => $html]);
+    return response()->json([
+        'html'       => $html,
+        'pagination' => (string) $users->links('pagination::bootstrap-4'),
+        'total'      => $users->total()
+    ]);
 }
+
 
 
 

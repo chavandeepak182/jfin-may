@@ -59,8 +59,7 @@ public function leadlist(Request $request)
 
     // ================= LISTS =================
     $enquiries = DB::table('enquiries')->paginate(10);
-
-    $leads = Lead::with('agent')->paginate(10);
+    $leads     = Lead::with('agent')->paginate(10);
 
     // MIS
     $banks      = LoanBank::all();
@@ -97,23 +96,24 @@ public function leadlist(Request $request)
                     ->orderBy('month', 'desc')
                     ->paginate(10);
 
-    // ================= REFERRAL LEADS =================
+    // ================= REFERRAL LEADS (✅ FIXED) =================
     $referralLeads = DB::table('referral_leads as rl')
-    ->join('users as ref', 'ref.id', '=', 'rl.user_id') // referrer
-    ->leftJoin('users as cust', 'cust.email_id', '=', 'rl.email') // customer check
-
-    ->select(
-        'rl.*',
-        'ref.name as referrer_name',
-        'ref.mobile_no as referrer_mobile',
-
-        DB::raw("CASE 
-            WHEN cust.id IS NOT NULL THEN 'created'
-            ELSE 'pending'
-        END as status")
-    )
-    ->orderBy('rl.created_at', 'desc')
-    ->paginate(10);
+        ->join('users as u', 'u.id', '=', 'rl.user_id')
+        ->leftJoin('loan_category as lc', 'lc.loan_category_id', '=', 'rl.product_type')
+        ->select(
+            'rl.*',
+            'u.name as referrer_name',
+            'u.mobile_no as referrer_mobile',
+            DB::raw("
+                CASE
+                    WHEN rl.product_type IS NULL THEN rl.other_remark
+                    WHEN lc.category_name IS NULL THEN rl.other_remark
+                    ELSE lc.category_name
+                END AS product_name
+            ")
+        )
+        ->orderBy('rl.created_at', 'desc')
+        ->paginate(10);
 
     return view('admin.admin-leads', compact(
         'enquiriesCount',
@@ -131,6 +131,7 @@ public function leadlist(Request $request)
         'referralLeads'
     ));
 }
+
 
 
 
