@@ -482,7 +482,7 @@
 
                     <!-- UPI ID -->
                      <div class="col-md-6">
-                        <label class="form-label">Branch Name</label>
+                        <label class="form-label">UPI Id</label>
                         <input type="text"
                             name="upi_id"
                             class="form-control @error('upi_id') is-invalid @enderror"

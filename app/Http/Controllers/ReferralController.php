@@ -323,90 +323,218 @@ public function showTransactionHistoryadmin($transactionId)
 // }
 
 
+// public function userWalletbalance()
+// {
+//     $userId = session('user_id');
+
+//     if (!$userId) {
+//         return redirect()->route('login');
+//     }
+
+//     // 1️⃣ Wallet balance
+//     $walletBalance = DB::table('wallet')
+//         ->where('user_id', $userId)
+//         ->value('wallet_balance') ?? 0;
+
+//     // 2️⃣ Transactions
+//     $transactions = DB::table('transactions')
+//         ->where('user_id', $userId)
+//         ->select('id', 'amount', 'transaction_id', 'status', 'created_at')
+//         ->get();
+
+//     // 3️⃣ Withdrawals
+//     $withdrawals = DB::table('withdrawal_requests')
+//         ->where('user_id', $userId)
+//         ->select('id', 'amount', 'status', 'created_at')
+//         ->get();
+
+//     // 4️⃣ Merge + sort
+//     $combinedData = $transactions
+//         ->merge($withdrawals)
+//         ->sortByDesc('created_at');
+
+//     // 5️⃣ LEG DOWN (USE SAME LOGIC AS getAllChildNodes)
+//     $userNode = Category::where('user_id', $userId)->first();
+
+//     if ($userNode) {
+
+//         $descendants = Category::where('_lft', '>', $userNode->_lft)
+//             ->where('_rgt', '<', $userNode->_rgt)
+//             ->get();
+
+//         $descendants->transform(function ($node) {
+
+//             // Child user
+//             $user = DB::table('users')->where('id', $node->user_id)->first();
+
+//             // ✅ SAME LOGIC AS getAllChildNodes
+//             $parentName = DB::table('users')
+//                 ->where('id', $node->parent_id)
+//                 ->value('name');
+
+//             $node->name = $user->name ?? 'N/A';
+//             $node->referral_code = $user->referral_code ?? 'N/A';
+//             $node->parent_name = $parentName ?? 'N/A';
+
+//             return $node;
+//         });
+
+//     } else {
+//         $descendants = collect();
+//     }
+
+//     // 6️⃣ Load wallet page
+//     return view('frontend.profile.referrals', compact(
+//         'walletBalance',
+//         'combinedData',
+//         'descendants'
+//     ));
+// }
+
+
 public function userWalletbalance()
 {
-    $userId = session('user_id');
+    $userId = auth()->id();
 
     if (!$userId) {
         return redirect()->route('login');
     }
 
-    // 1️⃣ Wallet balance
+    /* ================= WALLET ================= */
     $walletBalance = DB::table('wallet')
         ->where('user_id', $userId)
         ->value('wallet_balance') ?? 0;
 
-    // 2️⃣ Transactions
+    /* ================= TRANSACTIONS ================= */
     $transactions = DB::table('transactions')
         ->where('user_id', $userId)
         ->select('id', 'amount', 'transaction_id', 'status', 'created_at')
         ->get();
 
-    // 3️⃣ Withdrawal requests
+    /* ================= WITHDRAWALS ================= */
     $withdrawals = DB::table('withdrawal_requests')
         ->where('user_id', $userId)
         ->select('id', 'amount', 'status', 'created_at')
         ->get();
 
-    // 4️⃣ Merge + sort
     $combinedData = $transactions
         ->merge($withdrawals)
         ->sortByDesc('created_at');
 
-    // 5️⃣ LEG DOWN (CHILD NODES)
+    /* ================= LEG DOWN ================= */
     $userNode = Category::where('user_id', $userId)->first();
+    $descendants = collect();
 
     if ($userNode) {
         $descendants = Category::where('_lft', '>', $userNode->_lft)
             ->where('_rgt', '<', $userNode->_rgt)
-            ->get();
+            ->get()
+            ->map(function ($node) {
+                $user = DB::table('users')->where('id', $node->user_id)->first();
+                $parentName = DB::table('users')
+                    ->where('id', $node->parent_id)
+                    ->value('name');
 
-        $descendants->transform(function ($node) {
+                $node->name = $user->name ?? 'N/A';
+                $node->referral_code = $user->referral_code ?? 'N/A';
+                $node->parent_name = $parentName ?? 'N/A';
 
-            $user = DB::table('users')->where('id', $node->user_id)->first();
-
-            $parentUserId = Category::where('id', $node->parent_id)->value('user_id');
-            $parentUser = DB::table('users')->where('id', $parentUserId)->first();
-
-            $node->name = $user->name ?? 'N/A';
-            $node->referral_code = $user->referral_code ?? 'N/A';
-            $node->parent_name = $parentUser->name ?? 'Root';
-
-            return $node;
-        });
-    } else {
-        $descendants = collect();
+                return $node;
+            });
     }
 
-    // 6️⃣ Load wallet page
+    /* ================= PRODUCT TYPES ================= */
+    $loanCategories = DB::table('loan_category')
+        
+        ->get();
+
+    /* ================= MY REFERRAL INVITES ================= */
+    $myReferralLeads = DB::table('referral_leads as rl')
+        ->leftJoin('loan_category as lc', 'lc.loan_category_id', '=', 'rl.product_type')
+        ->where('rl.user_id', $userId)
+        ->orderByDesc('rl.created_at')
+        ->select(
+            'rl.id',
+            'rl.name',
+            'rl.mobile',
+            'rl.email',
+            'rl.status',
+            'rl.created_at',
+            DB::raw("
+                CASE
+                    WHEN rl.product_type IS NULL THEN rl.other_remark
+                    WHEN lc.category_name IS NULL THEN rl.other_remark
+                    ELSE lc.category_name
+                END AS product_name
+            ")
+        )
+        ->get();
+
     return view('frontend.profile.referrals', compact(
         'walletBalance',
         'combinedData',
-        'descendants'
+        'descendants',
+        'loanCategories',
+        'myReferralLeads'
     ));
 }
+
+
 
 public function submitInviteReferral(Request $request)
 {
     $request->validate([
-        'name' => 'required|string|max:255',
-        'mobile' => 'required|digits:10',
-        'email' => 'nullable|email',
+        'name'         => 'required|string|max:255',
+        'mobile'       => 'required|digits:10',
+        'email'        => 'nullable|email',
+        'product_type' => 'required',
+        'other_remark' => 'nullable|string|max:255',
     ]);
 
+    /* ✅ DUPLICATE CHECK */
+    $duplicate = DB::table('referral_leads')
+        ->where('mobile', $request->mobile)
+        ->when($request->filled('email'), function ($q) use ($request) {
+            $q->orWhere('email', $request->email);
+        })
+        ->exists();
+
+    if ($duplicate) {
+        return redirect()
+            ->route('user.walletbalance', ['tab' => 'invite'])
+            ->with('message', 'This mobile number or email is already referred.');
+    }
+
+    /* ✅ PRODUCT TYPE LOGIC */
+    $productType = null;
+    $otherRemark = null;
+
+    if ($request->product_type === 'other') {
+        $otherRemark = $request->other_remark;
+    } else {
+        $productType = (int) $request->product_type;
+    }
+
+    /* ✅ INSERT */
     DB::table('referral_leads')->insert([
         'user_id'       => auth()->id(),
         'name'          => $request->name,
         'mobile'        => $request->mobile,
         'email'         => $request->email,
+        'product_type'  => $productType,
+        'other_remark'  => $otherRemark,
         'referral_code' => auth()->user()->referral_code,
         'status'        => 'pending',
         'created_at'    => now(),
         'updated_at'    => now(),
     ]);
 
-    return back()->with('message', 'Referral invite sent successfully');
+    return redirect()
+        ->route('user.walletbalance', ['tab' => 'invite'])
+        ->with('message', 'Referral invite sent successfully');
 }
+
+
 
 public function listUsers(Request $request)
 {

@@ -75,6 +75,30 @@
     font-size: 13px;
     color: #22c55e;
 }
+/* FIX BROKEN PAGINATION */
+.pagination {
+    display: flex !important;
+    justify-content: center;
+    gap: 6px;
+}
+
+.pagination li {
+    list-style: none;
+}
+
+.pagination li a,
+.pagination li span {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    transform: none !important;
+}
+
+.pagination i,
+.pagination svg {
+    display: none !important;
+}
+
 </style>
 
 
@@ -260,9 +284,8 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="d-flex justify-content-center mt-3">
-    {{ $enquiries->links() }}
-</div>
+        {{ $enquiries->links('pagination::bootstrap-4') }}
+
 
     </div>
 </div>
@@ -316,9 +339,7 @@
                 </tbody>
             </table>
 
-            <div class="d-flex justify-content-center mt-3">
-    {{ $leads->links() }}
-</div>
+           {{ $leads->links('pagination::bootstrap-4') }}
 
         </div>
     </div>
@@ -395,9 +416,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </tbody>
             </table>
 
-          <div class="d-flex justify-content-center mt-3">
-                {{ $misRecords->links() }}
-            </div>
+          {{ $misRecords->links('pagination::bootstrap-4') }}
 
         </div>
     </div>
@@ -447,159 +466,75 @@ function deleteMIS(id) {
     </div>
 
     <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Referrer</th>
-                        <th>Referrer Mobile</th>
-                        <th>Referral Code</th>  <!-- 👈 ADD THIS -->
-                        <th>Lead Name</th>
-                        <th>Lead Mobile</th>
-                        <th>Lead Email</th>
-                        <th>Status</th>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Referrer</th>
+                    <th>Referrer Mobile</th>
+                    <th>Referral Code</th>
+                    <th>Lead Name</th>
+                    <th>Lead Mobile</th>
+                    <th>Lead Email</th>
+                    <th>Product Type</th>   <!-- ✅ ADDED -->
+                    <th>Status</th>
                         <th>Action</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
+                    <th>Date</th>
+                </tr>
+            </thead>
 
-                <tbody>
-                    @forelse($referralLeads as $i => $lead)
-                        <tr>
-                            <td>{{ $i + 1 }}</td>
-                            <td>{{ $lead->referrer_name }}</td>
-                            <td>{{ $lead->referrer_mobile }}</td>
-                            <td>
-                            <span class="fw-bold text-primary">
-                                {{ $lead->referral_code }}
-                            </span>
-                        </td>
-                            <td>{{ $lead->name }}</td>
-                            <td>{{ $lead->mobile }}</td>
-                            <td>{{ $lead->email ?? '-' }}</td>
-                            <td>
-                                <span class="badge
-                                    {{ $lead->status === 'pending' ? 'bg-warning' : 'bg-success' }}">
-                                    {{ ucfirst($lead->status) }}
-                                </span>
-                            </td>
-                            <td>
-                                @if($lead->status === 'pending')
-                                    <button type="button"
-                                            class="btn btn-success btn-sm create-account-btn"
-                                            data-name="{{ $lead->name }}"
-                                            data-email="{{ $lead->email }}"
-                                            data-mobile="{{ $lead->mobile }}">
-                                        Create Account
-                                    </button>
-                                @else
-                                    <span class="text-muted">Created</span>
-                                @endif
-                            </td>
-                            <td>{{ \Carbon\Carbon::parse($lead->created_at)->format('d M Y') }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="8" class="text-center text-muted">
-                                No referral leads found
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-            <div class="d-flex justify-content-center mt-3">
-                {{ $referralLeads->links() }}
-            </div>
+            <tbody>
+            @forelse($referralLeads as $i => $lead)
+                <tr>
+                    <td>{{ $i + 1 }}</td>
+                    <td>{{ $lead->referrer_name }}</td>
+                    <td>{{ $lead->referrer_mobile }}</td>
 
-        </div>
+                    <td>
+                        <span class="fw-bold text-primary">
+                            {{ $lead->referral_code }}
+                        </span>
+                    </td>
+
+                    <td>{{ $lead->name }}</td>
+                    <td>{{ $lead->mobile }}</td>
+                    <td>{{ $lead->email ?? '-' }}</td>
+
+                    <!-- ✅ PRODUCT TYPE -->
+                    <td>
+    <span class="badge bg-info">
+        {{ $lead->product_name ?? '-' }}
+    </span>
+</td>
+
+
+                    <td>
+                        <span class="badge
+                            {{ $lead->status === 'pending' ? 'bg-warning' : 'bg-success' }}">
+                            {{ ucfirst($lead->status) }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {{ \Carbon\Carbon::parse($lead->created_at)->format('d M Y') }}
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="10" class="text-center text-muted">
+                        No referral leads found
+                    </td>
+                </tr>
+            @endforelse
+            </tbody>
+        </table>
+
+        {{ $referralLeads->links('pagination::bootstrap-4') }}
     </div>
 </div>
-{{-- Add User Modal --}}
-<div class="modal fade" id="addUserView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add New user</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form class="user" id="addUser" method="post">
-                        @csrf
-                        <div class="row">
-                            <div class="form-group col-lg-4">
-                                <label for="recipient-name" class="col-form-label">Name:</label>
-                                <input type="text" class="form-control" id="full_name" name="full_name" required>
-                            </div>
-                            
 
-                            <div class="form-group col-lg-4">
-                                <label for="recipient-name" class="col-form-label">Email ID:</label>
-                                <input type="email" class="form-control" id="email_id" name="email_id" required>
-                            </div>
-                              <input type="hidden" id="user_id" name="user_id">
-
-                            <div class="form-group col-lg-4">
-                                <label for="recipient-name" class="col-form-label">Password:</label>
-                               <input type="password"
-                                    class="form-control"
-                                    id="password"
-                                    name="password"
-                                    placeholder="Leave blank to keep current password">
-                            </div>
-                        </div>
-                        <input type="hidden" id="user_type" name="user_type" value="customer">
-
-
-                        <div class="row">
-                            <div class="form-group col-lg-4">
-                                <label for="recipient-name" class="col-form-label">Mobile Number:</label>
-                                <input type="tel" class="form-control" id="mobile_no" name="mobile_no" required>
-                            </div>
-
-                            <div class="form-group col-lg-4">
-                                <label for="recipient-name" class="col-form-label">Date of Birth:</label>
-                                <input type="date" class="form-control" id="dob" name="dob">
-                            </div>
-
-                            <div class="form-group col-lg-4">
-                                <label for="recipient-name" class="col-form-label">Address:</label>
-                                <input type="tel" class="form-control" id="address" name="address">
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="form-group col-lg-4">
-                                <label for="recipient-name" class="col-form-label">City:</label>
-                                <input type="text" class="form-control" id="city" name="city">
-                            </div>
-
-                            <div class="form-group col-lg-4">
-                                <label for="recipient-name" class="col-form-label">State:</label>
-                                <input type="text" class="form-control" id="state" name="state">
-                            </div>
-
-                            <div class="form-group col-lg-4">
-                                <label for="recipient-name" class="col-form-label">Pincode:</label>
-                                <input type="text" class="form-control" id="pincode" name="pincode">
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <!-- <button type="submit" class="btn btn-primary">Save</button> -->
-                            <button type="submit"
-                                    class="btn btn-primary"
-                                    id="submitUserBtn">
-                                Save
-                            </button>
-
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
 
 
 

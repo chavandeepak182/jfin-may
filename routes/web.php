@@ -38,6 +38,12 @@ use App\Http\Controllers\TicketMessageController;
 require __DIR__.'/auth.php';
 // dashbord path
 Route::get('/admin/customers', action: [UsersController::class, 'adminCustomer'])->name('admin.customers');
+// update user
+
+Route::post('/admin/user/update-status',
+    [UsersController::class, 'updateUserStatus']
+)->name('update.user.status');
+
 Route::get('admin/loans-list', [LoanApplicationController::class, 'loanlist'])->name('admin.loans');
 Route::get('admin/property', [PropertyController::class, 'propertylist'])->name('admin.property');
 Route::get('admin/leadslist', [LeadController::class, 'leadlist'])->name('admin.listlead');
@@ -219,6 +225,7 @@ Route::middleware('isAdmin')->group(function () {
 });
 
 
+
 //permission
     Route::prefix('admin')->group(function () {
     Route::resource('permissions', App\Http\Controllers\PermissionController::class);
@@ -320,7 +327,7 @@ Route::get('/applyNow', [LoanApplicationController::class, 'applyNow'])
     ->name('applyNow');
 Route::get('/start_loan/{id}', [LoanApplicationController::class, 'start_loan'])->name('start_loan');
 
-Route::middleware(['isUser'])->group(function () {
+Route::middleware(['isUserOrAdmin'])->group(function () {
    
     Route::get('/loan-application', [LoanApplicationController::class, 'showForm'])->name('loan.form');
     Route::post('/fetch-credit-report', [LoanApplicationController::class, 'fetchReport']);
@@ -365,13 +372,15 @@ Route::middleware(['isUser'])->group(function () {
 Route::get('/help-support', [UsersController::class, 'helpSupport'])
     ->name('user.help.support');
 
-// Route::get('admin/loan-application', [LoanApplicationController::class, 'showForm'])->name('loan.form');
+
 Route::middleware(['isAdmin'])->group(function () {
 
     Route::post('admin/updateLoan', [LoanApplicationController::class, 'update'])
         ->name('admin.updateLoan');
 
 });
+
+
 
 
 
