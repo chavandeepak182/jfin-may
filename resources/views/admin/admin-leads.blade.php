@@ -459,6 +459,7 @@ function deleteMIS(id) {
                         <th>Lead Mobile</th>
                         <th>Lead Email</th>
                         <th>Status</th>
+                        <th>Action</th>
                         <th>Date</th>
                     </tr>
                 </thead>
@@ -483,6 +484,19 @@ function deleteMIS(id) {
                                     {{ ucfirst($lead->status) }}
                                 </span>
                             </td>
+                            <td>
+                                @if($lead->status === 'pending')
+                                    <button type="button"
+                                            class="btn btn-success btn-sm create-account-btn"
+                                            data-name="{{ $lead->name }}"
+                                            data-email="{{ $lead->email }}"
+                                            data-mobile="{{ $lead->mobile }}">
+                                        Create Account
+                                    </button>
+                                @else
+                                    <span class="text-muted">Created</span>
+                                @endif
+                            </td>
                             <td>{{ \Carbon\Carbon::parse($lead->created_at)->format('d M Y') }}</td>
                         </tr>
                     @empty
@@ -493,15 +507,99 @@ function deleteMIS(id) {
                         </tr>
                     @endforelse
                 </tbody>
-
             </table>
             <div class="d-flex justify-content-center mt-3">
-    {{ $referralLeads->links() }}
-</div>
+                {{ $referralLeads->links() }}
+            </div>
 
         </div>
     </div>
 </div>
+{{-- Add User Modal --}}
+<div class="modal fade" id="addUserView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add New user</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="user" id="addUser" method="post">
+                        @csrf
+                        <div class="row">
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Name:</label>
+                                <input type="text" class="form-control" id="full_name" name="full_name" required>
+                            </div>
+                            
+
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Email ID:</label>
+                                <input type="email" class="form-control" id="email_id" name="email_id" required>
+                            </div>
+                              <input type="hidden" id="user_id" name="user_id">
+
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Password:</label>
+                               <input type="password"
+                                    class="form-control"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Leave blank to keep current password">
+                            </div>
+                        </div>
+                        <input type="hidden" id="user_type" name="user_type" value="customer">
+
+
+                        <div class="row">
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Mobile Number:</label>
+                                <input type="tel" class="form-control" id="mobile_no" name="mobile_no" required>
+                            </div>
+
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Date of Birth:</label>
+                                <input type="date" class="form-control" id="dob" name="dob">
+                            </div>
+
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Address:</label>
+                                <input type="tel" class="form-control" id="address" name="address">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">City:</label>
+                                <input type="text" class="form-control" id="city" name="city">
+                            </div>
+
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">State:</label>
+                                <input type="text" class="form-control" id="state" name="state">
+                            </div>
+
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Pincode:</label>
+                                <input type="text" class="form-control" id="pincode" name="pincode">
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <!-- <button type="submit" class="btn btn-primary">Save</button> -->
+                            <button type="submit"
+                                    class="btn btn-primary"
+                                    id="submitUserBtn">
+                                Save
+                            </button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -1065,19 +1163,100 @@ $('#addMISRecord').on('submit', function (e) {
     });
 });
 </script>
+<script>
+$(document).on('click', '.create-account-btn', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
 
+    // Get data from button
+    let name   = $(this).data('name');
+    let email  = $(this).data('email');
+    let mobile = $(this).data('mobile');
 
+    // Reset form safely
+    if ($('#addUser').length) {
+        $('#addUser')[0].reset();
+    }
 
+    // Clear user_id so INSERT happens (not update)
+    $('#user_id').val('');
 
+    // Set user type as customer
+    $('#user_type').val('customer');
 
+    // Prefill fields
+    $('#full_name').val(name);
+    $('#email_id').val(email);
+    $('#mobile_no').val(mobile);
 
+    // Optional: clear password field
+    $('#password').val('');
 
+    // Open modal
+    $('#addUserView').modal('show');
+});
+</script>
+<script>
+$(document).off('submit', '#addUser').on('submit', '#addUser', function (e) {
+    e.preventDefault();
 
+    if ($('#submitUserBtn').prop('disabled')) return;
 
+    let formData = new FormData(this);
+    let userId = $('#user_id').val();
+    let url = userId
+        ? "{{ route('updateUser') }}"
+        : "{{ route('insertUser') }}";
 
+    $('#submitUserBtn').prop('disabled', true);
 
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
 
+        success: function (res) {
+            if (res.status === 1) {
+                swal("Success", res.msg, "success").then(() => {
+                    $('#addUserView').modal('hide');
+                    $('#addUser')[0].reset();
+                    $('#user_id').val('');
+                    $('#submitUserBtn').text('Save').prop('disabled', false);
 
+                    // reload current list
+                    $.ajax({
+                        url: "{{ route('load.list.by.type') }}",
+                        type: "GET",
+                        data: { type: currentType },
+                        success: function (res) {
+                            $('#user_table_body').html(res.html);
+                        }
+                    });
+                });
+            } else {
+                $('#submitUserBtn').prop('disabled', false);
+                swal("Error", "Something went wrong", "error");
+            }
+        },
+
+        error: function (xhr) {
+            $('#submitUserBtn').prop('disabled', false);
+
+            if (xhr.status === 422) {
+                let msg = '';
+                $.each(xhr.responseJSON.errors, function (k, v) {
+                    msg += v[0] + '\n';
+                });
+                swal("Validation Error", msg, "error");
+            } else {
+                swal("Error", "Server error occurred", "error");
+            }
+        }
+    });
+});
+</script>
 @endsection
 
 @section('script')
