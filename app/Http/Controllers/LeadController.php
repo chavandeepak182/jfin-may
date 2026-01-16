@@ -98,15 +98,22 @@ public function leadlist(Request $request)
                     ->paginate(10);
 
     // ================= REFERRAL LEADS =================
-    $referralLeads = DB::table('referral_leads')
-        ->join('users', 'users.id', '=', 'referral_leads.user_id')
-        ->select(
-            'referral_leads.*',
-            'users.name as referrer_name',
-            'users.mobile_no as referrer_mobile'
-        )
-        ->orderBy('referral_leads.created_at', 'desc')
-        ->paginate(10);
+    $referralLeads = DB::table('referral_leads as rl')
+    ->join('users as ref', 'ref.id', '=', 'rl.user_id') // referrer
+    ->leftJoin('users as cust', 'cust.email_id', '=', 'rl.email') // customer check
+
+    ->select(
+        'rl.*',
+        'ref.name as referrer_name',
+        'ref.mobile_no as referrer_mobile',
+
+        DB::raw("CASE 
+            WHEN cust.id IS NOT NULL THEN 'created'
+            ELSE 'pending'
+        END as status")
+    )
+    ->orderBy('rl.created_at', 'desc')
+    ->paginate(10);
 
     return view('admin.admin-leads', compact(
         'enquiriesCount',
