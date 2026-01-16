@@ -479,6 +479,7 @@ function deleteMIS(id) {
                     <th>Lead Email</th>
                     <th>Product Type</th>   <!-- ✅ ADDED -->
                     <th>Status</th>
+                        <th>Action</th>
                     <th>Date</th>
                 </tr>
             </thead>
@@ -1097,19 +1098,100 @@ $('#addMISRecord').on('submit', function (e) {
     });
 });
 </script>
+<script>
+$(document).on('click', '.create-account-btn', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
 
+    // Get data from button
+    let name   = $(this).data('name');
+    let email  = $(this).data('email');
+    let mobile = $(this).data('mobile');
 
+    // Reset form safely
+    if ($('#addUser').length) {
+        $('#addUser')[0].reset();
+    }
 
+    // Clear user_id so INSERT happens (not update)
+    $('#user_id').val('');
 
+    // Set user type as customer
+    $('#user_type').val('customer');
 
+    // Prefill fields
+    $('#full_name').val(name);
+    $('#email_id').val(email);
+    $('#mobile_no').val(mobile);
 
+    // Optional: clear password field
+    $('#password').val('');
 
+    // Open modal
+    $('#addUserView').modal('show');
+});
+</script>
+<script>
+$(document).off('submit', '#addUser').on('submit', '#addUser', function (e) {
+    e.preventDefault();
 
+    if ($('#submitUserBtn').prop('disabled')) return;
 
+    let formData = new FormData(this);
+    let userId = $('#user_id').val();
+    let url = userId
+        ? "{{ route('updateUser') }}"
+        : "{{ route('insertUser') }}";
 
+    $('#submitUserBtn').prop('disabled', true);
 
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
 
+        success: function (res) {
+            if (res.status === 1) {
+                swal("Success", res.msg, "success").then(() => {
+                    $('#addUserView').modal('hide');
+                    $('#addUser')[0].reset();
+                    $('#user_id').val('');
+                    $('#submitUserBtn').text('Save').prop('disabled', false);
 
+                    // reload current list
+                    $.ajax({
+                        url: "{{ route('load.list.by.type') }}",
+                        type: "GET",
+                        data: { type: currentType },
+                        success: function (res) {
+                            $('#user_table_body').html(res.html);
+                        }
+                    });
+                });
+            } else {
+                $('#submitUserBtn').prop('disabled', false);
+                swal("Error", "Something went wrong", "error");
+            }
+        },
+
+        error: function (xhr) {
+            $('#submitUserBtn').prop('disabled', false);
+
+            if (xhr.status === 422) {
+                let msg = '';
+                $.each(xhr.responseJSON.errors, function (k, v) {
+                    msg += v[0] + '\n';
+                });
+                swal("Validation Error", msg, "error");
+            } else {
+                swal("Error", "Server error occurred", "error");
+            }
+        }
+    });
+});
+</script>
 @endsection
 
 @section('script')
