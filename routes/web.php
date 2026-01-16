@@ -651,13 +651,21 @@ Route::middleware('isAdmin')->group(function () {
 // Cibil Score Api
 Route::get('credit-score', [CibilController::class, 'fetchCreditScore']);
 
-Route::get('/mis', [MISController::class, 'index'])->name('mis.index');
-Route::post('/mis/store', [MISController::class, 'store'])->name('mis.store');
-Route::post('/mis/delete', [MISController::class, 'destroy'])->name('mis.delete');
-Route::get('/mis/edit/{id}', [MISController::class, 'edit'])->name('mis.edit');
-Route::put('/mis/update/{id}', [MISController::class, 'update'])->name('mis.update');
-Route::get('mis/export/excel', [MisController::class, 'exportExcel'])->name('mis.exportExcel');
+// Route::get('/mis', [MISController::class, 'index'])->name('mis.index');
+// Route::post('/mis/store', [MISController::class, 'store'])->name('mis.store');
+// Route::post('/mis/delete', [MISController::class, 'destroy'])->name('mis.delete');
+// Route::get('/mis/edit/{id}', [MISController::class, 'edit'])->name('mis.edit');
+// Route::put('/mis/update/{id}', [MISController::class, 'update'])->name('mis.update');
+
+Route::middleware(['mis.access'])->group(function () {
+    Route::get('/mis', [MISController::class, 'index'])->name('mis.index');
+    Route::post('/mis/store', [MISController::class, 'store'])->name('mis.store');
+    Route::post('/mis/delete', [MISController::class, 'destroy'])->name('mis.delete');
+    Route::get('/mis/edit/{id}', [MISController::class, 'edit'])->name('mis.edit');
+    Route::put('/mis/update/{id}', [MISController::class, 'update'])->name('mis.update');
+    Route::get('mis/export/excel', [MisController::class, 'exportExcel'])->name('mis.exportExcel');
 Route::get('mis/export/pdf', [MisController::class, 'exportPDF'])->name('mis.exportPDF');
+});
 
 
 // Mail
