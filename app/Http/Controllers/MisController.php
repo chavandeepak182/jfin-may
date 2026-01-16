@@ -75,113 +75,11 @@ private function authorizeMIS($mis)
     $userId = session()->get('user_id');
 
     if ($roleId == env('adminRole_id')) return true;
-
     if ($roleId == env('agentRole_id') && $mis->created_by == $userId) return true;
 
-    abort(403, 'Unauthorized');
+    abort(403);
 }
 
-
-//   public function store(Request $request)
-// {
-//     // 1️⃣ Log raw request (for debugging)
-//     Log::info('MIS::store – incoming request', $request->all());
-
-//     try {
-//         // 2️⃣ Validate request
-//         $validatedData = $request->validate([
-//             'name'            => 'required|string|max:255',
-//           'email' => 'required|email|max:255|unique:mis,email',
-
-//             'contact'         => 'required|string|max:255',
-//             'office_contact'  => 'nullable|string|max:255',
-//             'product_type'    => 'required|string|max:255',
-//             'bank_name'       => 'required|string|max:255',
-//             'occupation'      => 'required|string|max:255',
-//             'branch_name'     => 'required|string|max:255',
-//             'amount'          => 'required|numeric',
-//             'address'         => 'required|string',
-//             'city'            => 'required|string|max:255',
-//             'office_address'  => 'nullable|string|max:255',
-//             'bm_name'         => 'nullable|string|max:255',
-//             'login_date'      => 'nullable|date',
-//             'status'          => 'nullable|string|max:255',
-//             'in_principle'    => 'nullable|string|max:255',
-//             'remark'          => 'nullable|string',
-//             'legal'           => 'nullable|string|max:255',
-//             'valuation'       => 'nullable|string|max:255',
-//             'leads'           => 'nullable|string|max:255',
-//             'file_work'       => 'nullable|string|max:255',
-//         ]);
-
-//         Log::info('MIS::store – validation passed', $validatedData);
-
-//         // 3️⃣ Start transaction
-//         DB::beginTransaction();
-
-//         // 4️⃣ Insert MIS record
-//        $misId = DB::table('mis')->insertGetId($validatedData);
-//         Log::info('MIS::store – MIS inserted', ['mis_id' => $misId]);
-
-//         // 5️⃣ Insert related bank details (✅ correct FK usage)
-//       DB::table('company_bank_details')->insert([
-//     'mis_id'          => $misId,
-//     'bank_name'       => $validatedData['bank_name'],
-//     'branch_name'     => $validatedData['branch_name'] ?? null,
-//     'manager_name'    => $validatedData['bm_name'] ?? null,
-//     'manager_number'  => null,
-//     'acc_name'        => null,
-//     'acc_number'      => null,
-//     'ifsc_code'       => null,
-//     'gst_number'      => null,
-//     'pan_number'      => null,
-//     'bank_address'    => null,
-//     'created_at'      => now(),
-//     'updated_at'      => now(),
-// ]);
-
-//         Log::info('MIS::store – company_bank_details inserted', ['mis_id' => $misId]);
-
-//         // 6️⃣ Commit transaction
-//         DB::commit();
-
-//         // 7️⃣ Return success JSON
-//         return response()->json([
-//             'status'  => true,
-//             'message' => 'MIS record added successfully!',
-//             'id'      => $misId,
-//         ], 201);
-
-//     } catch (ValidationException $e) {
-
-//         // Validation error
-//         Log::warning('MIS::store – validation failed', [
-//             'errors' => $e->errors()
-//         ]);
-
-//         return response()->json([
-//             'status'  => 'error',
-//             'message' => 'Validation errors occurred.',
-//             'errors'  => $e->errors(),
-//         ], 422);
-
-//     } catch (\Throwable $e) {
-
-//         // Any unexpected error
-//         DB::rollBack();
-
-//         Log::error('MIS::store – unexpected error', [
-//             'message' => $e->getMessage(),
-//             'line'    => $e->getLine(),
-//             'file'    => $e->getFile(),
-//         ]);
-
-//         return response()->json([
-//             'status'  => 'error',
-//             'message' => 'Something went wrong while saving the record.',
-//         ], 500);
-//     }
-// }
 
 public function store(Request $request)
 {
