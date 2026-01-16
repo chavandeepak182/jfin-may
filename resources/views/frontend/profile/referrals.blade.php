@@ -11,7 +11,7 @@
     </div>
 
     {{-- TABS --}}
-    <ul class="nav nav-pills mb-4" role="tablist">
+    <!-- <ul class="nav nav-pills mb-4" role="tablist">
         <li class="nav-item">
             <button class="nav-link active fw-bold"
                     data-bs-toggle="pill"
@@ -34,13 +34,41 @@
     </button>
 </li>
 
-    </ul>
+    </ul> -->
+<ul class="nav nav-pills mb-4" role="tablist">
+
+    <li class="nav-item">
+        <button class="nav-link fw-bold {{ request('tab') !== 'invite' ? 'active' : '' }}"
+                data-bs-toggle="pill"
+                data-bs-target="#walletTab">
+            Wallet
+        </button>
+    </li>
+
+    <li class="nav-item">
+        <button class="nav-link fw-bold"
+                data-bs-toggle="pill"
+                data-bs-target="#legDownTab">
+            Leg Down
+        </button>
+    </li>
+
+    <li class="nav-item">
+        <button class="nav-link fw-bold {{ request('tab') === 'invite' ? 'active' : '' }}"
+                data-bs-toggle="pill"
+                data-bs-target="#inviteReferralTab">
+            Invite Referral
+        </button>
+    </li>
+
+</ul>
 
     {{-- TAB CONTENT --}}
     <div class="tab-content">
 
         {{-- ================= WALLET TAB ================= --}}
-        <div class="tab-pane fade show active" id="walletTab">
+        <div class="tab-pane fade {{ request('tab') !== 'invite' ? 'show active' : '' }}" id="walletTab">
+
 
             <div class="row g-4">
 
@@ -78,11 +106,11 @@
                                 </form>
                             </div>
 
-                            @if(session('message'))
+                            <!-- @if(session('message'))
                                 <div class="alert alert-success mt-4">
                                     {{ session('message') }}
                                 </div>
-                            @endif
+                            @endif -->
                         </div>
                     </div>
 
@@ -234,42 +262,131 @@
             </div>
 
         </div>
-        <div class="tab-pane fade" id="inviteReferralTab">
+        
+<div class="tab-pane fade {{ request('tab') === 'invite' ? 'show active' : '' }}"
+     id="inviteReferralTab">
 
-    <div class="card shadow-sm border-0">
+        @if(session('message'))
+        <div class="alert alert-success mb-3">
+            {{ session('message') }}
+        </div>
+    @endif
+
+    <!-- ✅ Invite Form Card -->
+    <div class="card shadow-sm border-0 mb-4">
         <div class="card-header bg-white">
             <h5 class="fw-bold mb-0">Invite Referral</h5>
         </div>
 
         <div class="card-body">
-
             <form method="POST" action="{{ route('invite.referral.submit') }}">
                 @csrf
 
                 <div class="mb-3">
-                    <label>Friend Name</label>
+                    <label class="form-label">Friend Name</label>
                     <input type="text" name="name" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
-                    <label>Mobile Number</label>
+                    <label class="form-label">Mobile Number</label>
                     <input type="text" name="mobile" class="form-control" maxlength="10" required>
                 </div>
 
                 <div class="mb-3">
-                    <label>Email (optional)</label>
+                    <label class="form-label">Email (Optional)</label>
                     <input type="email" name="email" class="form-control">
                 </div>
 
-                <button class="btn btn-primary fw-bold">
-                    Send Invite
-                </button>
-            </form>
+                <div class="mb-3">
+                    <label class="form-label">Product Type</label>
+                    <select name="product_type" id="productType" class="form-select" required>
+                        <option value="">Select Product</option>
+                        @foreach($loanCategories as $category)
+                            <option value="{{ $category->loan_category_id }}">
+                                {{ $category->category_name }}
+                            </option>
+                        @endforeach
+                        <option value="other">Other</option>
+                    </select>
+                </div>
 
+                <div class="mb-3 d-none" id="otherRemarkBox">
+                    <label class="form-label">Please Specify</label>
+                    <input type="text" name="other_remark" class="form-control">
+                </div>
+
+                <button class="btn btn-primary fw-bold">Send Invite</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ✅ Referral List Card -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white">
+            <h6 class="fw-bold mb-0">My Referral Invites</h6>
+        </div>
+
+        <div class="card-body">
+            @if($myReferralLeads->count())
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Mobile</th>
+                                <th>Email</th>
+                                <th>Product</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($myReferralLeads as $i => $lead)
+                                <tr>
+                                    <td>{{ $i + 1 }}</td>
+                                    <td>{{ $lead->name }}</td>
+                                    <td>{{ $lead->mobile }}</td>
+                                    <td>{{ $lead->email ?? '-' }}</td>
+                                    <td>{{ $lead->product_name ?? '-' }}</td>
+                                    <td>
+                                        <span class="badge bg-warning">
+                                            {{ ucfirst($lead->status) }}
+                                        </span>
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($lead->created_at)->format('d M Y') }}</td>
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <p class="text-muted text-center mb-0">
+                    No referral invites sent yet.
+                </p>
+            @endif
         </div>
     </div>
 
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const productType = document.getElementById('productType');
+    const remarkBox = document.getElementById('otherRemarkBox');
+
+    productType.addEventListener('change', function () {
+        if (this.value === 'other') {
+            remarkBox.classList.remove('d-none');
+        } else {
+            remarkBox.classList.add('d-none');
+        }
+    });
+});
+</script>
+
+
 
 
     </div>

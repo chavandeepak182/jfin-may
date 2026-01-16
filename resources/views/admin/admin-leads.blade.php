@@ -75,6 +75,30 @@
     font-size: 13px;
     color: #22c55e;
 }
+/* FIX BROKEN PAGINATION */
+.pagination {
+    display: flex !important;
+    justify-content: center;
+    gap: 6px;
+}
+
+.pagination li {
+    list-style: none;
+}
+
+.pagination li a,
+.pagination li span {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    transform: none !important;
+}
+
+.pagination i,
+.pagination svg {
+    display: none !important;
+}
+
 </style>
 
 
@@ -260,9 +284,8 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="d-flex justify-content-center mt-3">
-    {{ $enquiries->links() }}
-</div>
+        {{ $enquiries->links('pagination::bootstrap-4') }}
+
 
     </div>
 </div>
@@ -316,9 +339,7 @@
                 </tbody>
             </table>
 
-            <div class="d-flex justify-content-center mt-3">
-    {{ $leads->links() }}
-</div>
+           {{ $leads->links('pagination::bootstrap-4') }}
 
         </div>
     </div>
@@ -395,9 +416,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </tbody>
             </table>
 
-          <div class="d-flex justify-content-center mt-3">
-                {{ $misRecords->links() }}
-            </div>
+          {{ $misRecords->links('pagination::bootstrap-4') }}
 
         </div>
     </div>
@@ -447,60 +466,73 @@ function deleteMIS(id) {
     </div>
 
     <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Referrer</th>
-                        <th>Referrer Mobile</th>
-                        <th>Referral Code</th>  <!-- 👈 ADD THIS -->
-                        <th>Lead Name</th>
-                        <th>Lead Mobile</th>
-                        <th>Lead Email</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Referrer</th>
+                    <th>Referrer Mobile</th>
+                    <th>Referral Code</th>
+                    <th>Lead Name</th>
+                    <th>Lead Mobile</th>
+                    <th>Lead Email</th>
+                    <th>Product Type</th>   <!-- ✅ ADDED -->
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
 
-                <tbody>
-                    @forelse($referralLeads as $i => $lead)
-                        <tr>
-                            <td>{{ $i + 1 }}</td>
-                            <td>{{ $lead->referrer_name }}</td>
-                            <td>{{ $lead->referrer_mobile }}</td>
-                            <td>
-                            <span class="fw-bold text-primary">
-                                {{ $lead->referral_code }}
-                            </span>
-                        </td>
-                            <td>{{ $lead->name }}</td>
-                            <td>{{ $lead->mobile }}</td>
-                            <td>{{ $lead->email ?? '-' }}</td>
-                            <td>
-                                <span class="badge
-                                    {{ $lead->status === 'pending' ? 'bg-warning' : 'bg-success' }}">
-                                    {{ ucfirst($lead->status) }}
-                                </span>
-                            </td>
-                            <td>{{ \Carbon\Carbon::parse($lead->created_at)->format('d M Y') }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="8" class="text-center text-muted">
-                                No referral leads found
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
+            <tbody>
+            @forelse($referralLeads as $i => $lead)
+                <tr>
+                    <td>{{ $i + 1 }}</td>
+                    <td>{{ $lead->referrer_name }}</td>
+                    <td>{{ $lead->referrer_mobile }}</td>
 
-            </table>
-            <div class="d-flex justify-content-center mt-3">
-    {{ $referralLeads->links() }}
+                    <td>
+                        <span class="fw-bold text-primary">
+                            {{ $lead->referral_code }}
+                        </span>
+                    </td>
+
+                    <td>{{ $lead->name }}</td>
+                    <td>{{ $lead->mobile }}</td>
+                    <td>{{ $lead->email ?? '-' }}</td>
+
+                    <!-- ✅ PRODUCT TYPE -->
+                    <td>
+    <span class="badge bg-info">
+        {{ $lead->product_name ?? '-' }}
+    </span>
+</td>
+
+
+                    <td>
+                        <span class="badge
+                            {{ $lead->status === 'pending' ? 'bg-warning' : 'bg-success' }}">
+                            {{ ucfirst($lead->status) }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {{ \Carbon\Carbon::parse($lead->created_at)->format('d M Y') }}
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="10" class="text-center text-muted">
+                        No referral leads found
+                    </td>
+                </tr>
+            @endforelse
+            </tbody>
+        </table>
+
+        {{ $referralLeads->links('pagination::bootstrap-4') }}
+    </div>
 </div>
 
-        </div>
-    </div>
 </div>
 
 
