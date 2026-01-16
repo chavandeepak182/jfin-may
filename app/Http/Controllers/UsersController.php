@@ -264,6 +264,94 @@ public function updateUserStatus(Request $request)
 //         ], 500);
 //     }
 // }
+// public function insertUser(Request $request)
+// {
+//     $type = $request->user_type; // customer | agent | cp
+
+    
+//     $rules = [
+//         'full_name' => 'required|string|max:255',
+//         'email_id'  => 'required|email|unique:users,email_id',
+//         'mobile_no' => 'required|digits:10',
+//     ];
+
+   
+//     if ($type === 'customer') {
+//         $rules = array_merge($rules, [
+//             'dob'     => 'required|date',
+//             'address' => 'required|string|max:255',
+//             'city'    => 'required|string|max:100',
+//             'state'   => 'required|string|max:100',
+//             'pincode' => 'required|digits:6',
+//         ]);
+//     }
+
+//     $validator = Validator::make($request->all(), $rules);
+
+//     if ($validator->fails()) {
+//         return response()->json([
+//             'status' => 0,
+//             'errors' => $validator->errors()
+//         ], 422);
+//     }
+
+//     DB::beginTransaction();
+
+//     try {
+
+//         // ================= ROLE ID =================
+//         $roleId = 1; // customer
+//         if ($type === 'agent') $roleId = 2;
+//         if ($type === 'cp')    $roleId = 3;
+
+//         // ================= REFERRAL CODE (for customer) =================
+//         $referralCode = null;
+
+//         if ($type === 'customer') {
+//             do {
+//                 $referralCode = Str::upper(Str::random(8));
+//             } while (User::where('referral_code', $referralCode)->exists());
+//         }
+
+//         // ================= CREATE USER =================
+//         $user = User::create([
+//             'name'            => $request->full_name,
+//             'email_id'        => $request->email_id,
+//             'password'        => bcrypt('123456'),
+//             'role_id'         => $roleId,
+//             'referral_code'   => $referralCode,   // ✅ Generated here
+//             'is_email_verify' => 1,
+//         ]);
+
+//         // ================= CREATE PROFILE =================
+//         Profile::create([
+//             'user_id'           => $user->id,
+//             'mobile_no'         => $request->mobile_no,
+//             'dob'               => $request->dob ?? null,
+//             'residence_address' => $request->address ?? null,
+//             'city'              => $request->city ?? null,
+//             'state'             => $request->state ?? null,
+//             'pincode'           => $request->pincode ?? null,
+//         ]);
+
+//         DB::commit();
+
+//         return response()->json([
+//             'status' => 1,
+//             'msg'    => ucfirst($type) . ' added successfully'
+//         ]);
+
+//     } catch (\Exception $e) {
+
+//         DB::rollBack();
+
+//         return response()->json([
+//             'status' => 0,
+//             'msg'    => 'Something went wrong',
+//             'error'  => $e->getMessage()
+//         ], 500);
+//     }
+// }
 public function insertUser(Request $request)
 {
     $type = $request->user_type; // customer | agent | cp

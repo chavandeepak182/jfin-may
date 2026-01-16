@@ -294,85 +294,6 @@
         <div class="col-12 grid-margin">
             <div class="card pt-3">
                 <div class="card-body">
-         <style>
-/* ===== Top Filter Bar ===== */
-.filter-bar {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    background: #fff;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #e5e7eb;
-}
-
-.filter-bar .search-box {
-    flex: 1;
-    position: relative;
-}
-
-.filter-bar .search-box input {
-    width: 100%;
-    padding: 10px 12px 10px 36px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    font-size: 14px;
-}
-
-.filter-bar .search-box i {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #9ca3af;
-}
-
-.filter-bar select {
-    min-width: 160px;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    background: #f3f4f6;
-    font-size: 14px;
-}
-
-.filter-bar button {
-    padding: 10px 16px;
-    border-radius: 8px;
-}
-/* FIX RADIO VISIBILITY */
-input[type="radio"] {
-    height: auto !important;
-    width: auto !important;
-    padding: 0 !important;
-    margin-right: 6px;
-    accent-color: #2563eb;
-}
-
-</style>
-
-<div class="filter-bar mb-3">
-    <!-- Search -->
-    <div class="search-box">
-        <i class="fas fa-search"></i>
-        <input type="text"
-               id="searchInput"
-               placeholder="Search customers by name, email, or ID">
-    </div>
-
-    <!-- Status -->
-    <select id="statusFilter">
-        <option value="">All Status</option>
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
-    </select>
-
-    <!-- Reset -->
-    <button class="btn btn-outline-secondary" id="resetFilter">
-        Reset
-    </button>
-</div>
-
                     <div class="table-responsive" id="user_table_container">
                         <table id="user_table" class="table">
                             <thead>
@@ -403,26 +324,20 @@ input[type="radio"] {
                                         <td>{{ $user->email_id }}</td>
                                         <td>{{ $user->profile->mobile_no ?? '-' }}</td>
                                         <td>{{ $user->profile->pan_number ?? ''}}</td>
-                                                <td>
-                                                    <label>
-                                                        <input type="radio"
-                                                            name="status_'.$user->id.'"
-                                                            value="1"
-                                                            onclick="updateStatus('.$user->id.', 1)"
-                                                            '.($user->otp_verify == 1 ? 'checked' : '').'>
-                                                        Active
-                                                    </label>
-
-                                                    <label style="margin-left:10px;">
-                                                        <input type="radio"
-                                                            name="status_'.$user->id.'"
-                                                            value="0"
-                                                            onclick="updateStatus('.$user->id.', 0)"
-                                                            '.($user->otp_verify == 0 ? 'checked' : '').'>
-                                                        Inactive
-                                                    </label>
-                                                </td>
-
+                                        <td>
+                                            <label>
+                                                <input type="radio" name="status_{{ $user->id }}" value="1"
+                                                    onclick="updateStatus({{ $user->id }}, 1)"
+                                                    {{ $user->is_email_verify == 1 ? 'checked' : '' }}>
+                                                Active
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="status_{{ $user->id }}" value="0"
+                                                    onclick="updateStatus({{ $user->id }}, 0)"
+                                                    {{ $user->is_email_verify == 0 ? 'checked' : '' }}>
+                                                Inactive
+                                            </label>
+                                        </td>
                                         <td>
                                            <button type="button"
                                                     class="btn btn-primary btn-xs edit-user"
@@ -488,11 +403,7 @@ input[type="radio"] {
 
                             <div class="form-group col-lg-4">
                                 <label for="recipient-name" class="col-form-label">Password:</label>
-                               <input type="password"
-                                    class="form-control"
-                                    id="password"
-                                    name="password"
-                                    placeholder="Leave blank to keep current password">
+                                <input type="password" class="form-control" id="password" name="password" required>
                             </div>
                         </div>
                         <input type="hidden" id="user_type" name="user_type" value="customer">
@@ -577,8 +488,6 @@ $(document).on('click', '.edit-user', function () {
             $('#city').val(res.city);
             $('#state').val(res.state);
             $('#pincode').val(res.pincode);
-            $('#password').val('');
-
 
             $('#submitUserBtn').text('Update');
 
@@ -700,96 +609,47 @@ $(document).on('click', '.delete-user', function () {
     });
 });
 </script>
-
-
-
-
 <script>
-var currentType = 'customer';
-let typingTimer = null;
-
-/* ================= LOAD USERS ================= */
-function loadUsers(page = 1) {
-    $.ajax({
-        url: "{{ route('load.list.by.type') }}",
-        type: "GET",
-        data: {
-            type: currentType,
-            search: $('#searchInput').val(),
-            status: $('#statusFilter').val(),
-            page: page
-        },
-        success: function (res) {
-            $('#user_table_body').html(res.html);
-            $('.dataTables_paginate').html(res.pagination || '');
-        },
-        error: function (err) {
-            console.error('Load error:', err);
-        }
-    });
-}
-
-/* ================= SEARCH ================= */
-$(document).on('keyup', '#searchInput', function () {
-    clearTimeout(typingTimer);
-    typingTimer = setTimeout(() => loadUsers(), 400);
-});
-
-/* ================= STATUS FILTER ================= */
-$(document).on('change', '#statusFilter', function () {
-    loadUsers();
-});
-
-/* ================= RESET ================= */
-$(document).on('click', '#resetFilter', function () {
-    $('#searchInput').val('');
-    $('#statusFilter').val('');
-    loadUsers();
-});
-
-/* ================= PAGINATION ================= */
-$(document).on('click', '.pagination a', function (e) {
-    e.preventDefault();
-    let page = $(this).attr('href').split('page=')[1];
-    loadUsers(page);
-});
-
-/* ================= CARD SWITCH ================= */
 $(document).on('click', '.load-list', function () {
+
     $('.overview-link').removeClass('active');
     $(this).addClass('active');
 
-    currentType = $(this).data('type');
-    $('#user_type').val(currentType);
+    let type = $(this).data('type');
+    currentType = type; // 🔥 STORE CURRENT TYPE
 
-    $('#searchInput').val('');
-    $('#statusFilter').val('');
+    // Update hidden input
+    $('#user_type').val(type);
 
-    loadUsers();
-});
+    // Change Add button + modal title
+    if (type === 'customer') {
+        $('#openAddModal').text('Add Customer');
+        $('#exampleModalLabel').text('Add New Customer');
+    } 
+    else if (type === 'agent') {
+        $('#openAddModal').text('Add Employee');
+        $('#exampleModalLabel').text('Add New Agent');
+    } 
+    else if (type === 'cp') {
+        $('#openAddModal').text('Add Channel Partner');
+        $('#exampleModalLabel').text('Add New Channel Partner');
+    }
 
-/* ================= INITIAL LOAD ================= */
-$(document).ready(function () {
-    loadUsers();
-});
-</script>
-<script>function updateStatus(userId, status) {
+    // Load table data
     $.ajax({
-        url: "{{ route('update.user.status') }}",
-        type: "POST",
-        data: {
-            _token: "{{ csrf_token() }}",
-            user_id: userId,
-            status: status
-        },
+        url: "{{ route('load.list.by.type') }}",
+        type: "GET",
+        data: { type: type },
         success: function (res) {
-            if (res.status === 1) {
-                swal("Success", "Status is " + (status == 1 ? "Active" : "Inactive"), "success");
-            }
+            $('#user_table_body').html(res.html);
         }
     });
-}
+});
 </script>
 
+<script>
+let currentType = 'customer'; // default
+</script>
 
+  
 @endsection
