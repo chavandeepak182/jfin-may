@@ -271,7 +271,7 @@
                     </div>
                 </div>
                 <!-- Education Information -->
-                <div class="section mb-4">
+                <!-- <div class="section mb-4">
                     <h3 class="h5 mb-3 mt-3"><strong>Education Information</strong></h3>
                     <div class="row">
                         <div class="col-md-6">
@@ -299,7 +299,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>            
         </div>
     </form>

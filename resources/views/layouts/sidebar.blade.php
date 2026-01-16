@@ -114,6 +114,13 @@
                 <span>MLM</span>
             </a>
         @endif
+        @if ($role_id == 4)
+    <a href="{{ route('tickets.index') }}" class="nav-item">
+        <i class="fas fa-project-diagram"></i>
+        <span>My Queries</span>
+    </a>
+@endif
+
         {{-- ================= COMMISSION ================= --}}
 <!-- @if($role_id == 4)
     <a href="{{ route('allCommission') }}" class="nav-item">
