@@ -1371,59 +1371,114 @@ public function deleteDocument($id)
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
     //personal info update
-    public function updateUserProfile(Request $request)
-    {
-        \Log::info('Received Request', $request->all());
+    // public function updateUserProfile(Request $request)
+    // {
+    //     \Log::info('Received Request', $request->all());
 
-        // Validate the request
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email_id' => 'required|email|max:255',
-            'mobile_no' => 'nullable|string|max:15',
-            'dob' => 'nullable|date',
-            'marital_status' => 'nullable|string|max:20',
-            'residence_address' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:100',
-            'state' => 'nullable|string|max:100',
-            'pincode' => 'nullable|numeric|digits:6'
-        ]);
+    //     // Validate the request
+    //     $request->validate([
+    //         'name' => 'required|string|max:255',
+    //         'email_id' => 'required|email|max:255',
+    //         'mobile_no' => 'nullable|string|max:15',
+    //         'dob' => 'nullable|date',
+    //         'marital_status' => 'nullable|string|max:20',
+    //         'residence_address' => 'nullable|string|max:255',
+    //         'city' => 'nullable|string|max:100',
+    //         'state' => 'nullable|string|max:100',
+    //         'pincode' => 'nullable|numeric|digits:6'
+    //     ]);
 
-        // Update the user
-        $userUpdated = DB::table('users')
-            ->where('id', $request->user_id)
-            ->update([
-                'name' => $request->name,
-                'email_id' => $request->email_id,
-            ]);
+    //     // Update the user
+    //     $userUpdated = DB::table('users')
+    //         ->where('id', $request->user_id)
+    //         ->update([
+    //             'name' => $request->name,
+    //             'email_id' => $request->email_id,
+    //         ]);
 
-        \Log::info('User update result:', ['user_id' => $request->user_id, 'result' => $userUpdated]);
+    //     \Log::info('User update result:', ['user_id' => $request->user_id, 'result' => $userUpdated]);
 
-        // Update the profile
-        $profileUpdated = DB::table('profile')
-            ->where('profile_id', $request->profile_id)
-            ->update([
-                'mobile_no' => $request->mobile_no,
-                'dob' => $request->dob,
-                'marital_status' => $request->marital_status,
-                'residence_address' => $request->residence_address,
-                'city' => $request->city,
-                'state' => $request->state,
-                'pincode' => $request->pincode
-            ]);
+    //     // Update the profile
+    //     $profileUpdated = DB::table('profile')
+    //         ->where('profile_id', $request->profile_id)
+    //         ->update([
+    //             'mobile_no' => $request->mobile_no,
+    //             'dob' => $request->dob,
+    //             'marital_status' => $request->marital_status,
+    //             'residence_address' => $request->residence_address,
+    //             'city' => $request->city,
+    //             'state' => $request->state,
+    //             'pincode' => $request->pincode
+    //         ]);
 
-        \Log::info('Profile update result:', ['profile_id' => $request->profile_id, 'result' => $profileUpdated]);
+    //     \Log::info('Profile update result:', ['profile_id' => $request->profile_id, 'result' => $profileUpdated]);
 
-        // Check if update was successful
-        if ($userUpdated === 0 && $profileUpdated === 0) {
-            \Log::warning('No changes detected during update.', [
-                'user_id' => $request->user_id,
-                'profile_id' => $request->profile_id
-            ]);
-            return redirect()->back()->with('warning', 'No changes were made to your profile.');
-        }
+    //     // Check if update was successful
+    //     if ($userUpdated === 0 && $profileUpdated === 0) {
+    //         \Log::warning('No changes detected during update.', [
+    //             'user_id' => $request->user_id,
+    //             'profile_id' => $request->profile_id
+    //         ]);
+    //         return redirect()->back()->with('warning', 'No changes were made to your profile.');
+    //     }
 
-        return redirect()->back()->with('success', 'Profile updated successfully!');
+    //     return redirect()->back()->with('success', 'Profile updated successfully!');
+    // }
+
+public function updateUserProfile(Request $request)
+{
+    $userId = auth()->id(); // ✅ ALWAYS
+
+    if (!$userId) {
+        return redirect()->route('login');
     }
+
+    // ✅ VALIDATION (FIXED)
+    $request->validate([
+        'name'              => 'required|string|max:255',
+        'email_id'          => 'required|email|max:255',
+        'mobile_no'         => 'nullable|string|max:15',
+        'dob'               => 'nullable|date',
+        'gender'            => 'nullable|in:male,female,other',
+        'marital_status'    => 'nullable|string|max:20',
+        'residence_address' => 'nullable|string|max:255',
+        'city'              => 'nullable|integer|exists:cities,id',
+        'state'             => 'nullable|integer|exists:states,id',
+        'pincode'           => 'nullable|string|max:10',
+    ]);
+
+    DB::transaction(function () use ($request, $userId) {
+
+        // ✅ UPDATE USERS TABLE
+        DB::table('users')
+            ->where('id', $userId)
+            ->update([
+                'name'       => $request->name,
+                'email_id'   => $request->email_id,
+                'updated_at' => now(),
+            ]);
+
+        // ✅ UPDATE PROFILE TABLE (FIXED)
+        DB::table('profile')->updateOrInsert(
+            ['user_id' => $userId],
+            [
+                'mobile_no'         => $request->mobile_no,
+                'dob'               => $request->dob,
+                'gender'            => $request->gender,
+                'marital_status'    => $request->marital_status,
+                'residence_address' => $request->residence_address,
+                'city'              => $request->city,
+                'state'             => $request->state,
+                'pincode'           => $request->pincode,
+                'updated_at'        => now(),
+            ]
+        );
+    });
+
+    return redirect()->back()->with('success', 'Profile updated successfully');
+}
+
+
     //education detail update
     public function updateUserEducational(Request $request)
     {
@@ -1567,47 +1622,113 @@ public function deleteDocument($id)
         $loans = $query->paginate(10); // Use paginate() for better performance with large datasets
         return view('frontend.profile.myloanlist', compact('loans', 'statuses', 'statusFilter', 'hasActiveLoan'));
     }
-   public function mydetails(Request $request)
+//    public function mydetails(Request $request)
+// {
+//     $section = $request->query('section', 'personal');
+//     $userId = session('user_id');
+
+//     if (!$userId) {
+//         return redirect()->route('login')
+//             ->withErrors('User session expired. Please log in again.');
+//     }
+
+//     DB::table('users')
+//     ->where('id', $request->user_id)
+//     ->update([
+//         'name'       => $request->name,
+//         'email_id'   => $request->email_id,
+//         'updated_at' => now(),
+//     ]);
+
+// DB::table('profile')->updateOrInsert(
+//     ['user_id' => $request->user_id],
+//     [
+//         'mobile_no'         => $request->mobile_no,
+//         'dob'               => $request->dob,
+//         'gender'            => $request->gender,
+//         'marital_status'    => $request->marital_status,
+//         'residence_address' => $request->residence_address,
+//         'city'              => $request->city,   // ID
+//         'state'             => $request->state,  // ID
+//         'pincode'           => $request->pincode,
+//         'updated_at'        => now(),
+//     ]
+// );
+
+//     $professionalDetails = DB::table('professional_details')->where('user_id', $userId)->first();
+//     $educationalDetails = DB::table('education_details')->where('user_id', $userId)->first();
+//     $documents = DB::table('documents')->where('user_id', $userId)->get();
+
+//     $notificationsResponse = $this->getNotifications($userId, 5, 'Profile update');
+//     $notifications = $notificationsResponse->status() === 200
+//         ? $notificationsResponse->getData()->notifications
+//         : [];
+
+//     $bankDetails = DB::table('customer_banks')
+//         ->where('user_id', $userId)
+//         ->first();
+//         $states = DB::table('states')->get();
+// $cities = DB::table('cities')->get();
+
+
+// return view('frontend.profile.personal-info', compact(
+//     'user',
+//     'profile',
+//     'professionalDetails',
+//     'educationalDetails',
+//     'documents',
+//     'notifications',
+//     'section',
+//     'bankDetails',
+//     'states',
+//     'cities'
+// ));
+// }
+
+
+    // customer bank
+
+public function mydetails(Request $request)
 {
-    $section = $request->query('section', 'personal');
     $userId = session('user_id');
 
     if (!$userId) {
-        return redirect()->route('login')
-            ->withErrors('User session expired. Please log in again.');
+        return redirect()->route('login');
     }
 
     $user = DB::table('users')->where('id', $userId)->first();
-    $profile = DB::table('profile')->where('user_id', $userId)->first();
-    $professionalDetails = DB::table('professional_details')->where('user_id', $userId)->first();
-    $educationalDetails = DB::table('education_details')->where('user_id', $userId)->first();
-    $documents = DB::table('documents')->where('user_id', $userId)->get();
 
-    $notificationsResponse = $this->getNotifications($userId, 5, 'Profile update');
-    $notifications = $notificationsResponse->status() === 200
-        ? $notificationsResponse->getData()->notifications
-        : [];
+    $profile = DB::table('profile')
+        ->leftJoin('states', 'states.id', '=', 'profile.state')
+        ->leftJoin('cities', 'cities.id', '=', 'profile.city')
+        ->where('profile.user_id', $userId)
+        ->select(
+            'profile.*',
+            'states.name as state_name',
+            'cities.city as city_name'
+        )
+        ->first();
+
+    $professionalDetails = DB::table('professional_details')
+        ->where('user_id', $userId)->first();
 
     $bankDetails = DB::table('customer_banks')
-        ->where('user_id', $userId)
-        ->first();
+        ->where('user_id', $userId)->first();
+
+    $states = DB::table('states')->get();
+    $cities = DB::table('cities')->get();
 
     return view('frontend.profile.personal-info', compact(
         'user',
         'profile',
         'professionalDetails',
-        'educationalDetails',
-        'documents',
-        'notifications',
-        'section',
-        'bankDetails'
+        'bankDetails',
+        'states',
+        'cities'
     ));
 }
 
-
-    // customer bank
-
-public function saveBankDetails(Request $request)
+    public function saveBankDetails(Request $request)
 {
     $userId = session('user_id');
 

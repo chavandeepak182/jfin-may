@@ -65,7 +65,7 @@
                                     <div class="form-group">
                                         <label for="mobile_no">Mobile No:</label>
                                         <input type="text" class="form-control" id="mobile_no" name="mobile_no"
-                                            value="{{ old('mobile_no', $profile->mobile_no ?? '') }}">
+                                            value="{{ old('mobile_no', $profile->mobile_no ?? '') }}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -81,37 +81,61 @@
                                         </select>
                                     </div>
                                 </div>
+                               <div class="col-md-4">
+    <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select class="form-control" id="gender" name="gender">
+            <option value="">Select Gender</option>
+
+            <option value="male"
+                {{ old('gender', $profile->gender ?? '') == 'male' ? 'selected' : '' }}>
+                Male
+            </option>
+
+            <option value="female"
+                {{ old('gender', $profile->gender ?? '') == 'female' ? 'selected' : '' }}>
+                Female
+            </option>
+
+            <option value="other"
+                {{ old('gender', $profile->gender ?? '') == 'other' ? 'selected' : '' }}>
+                Other
+            </option>
+        </select>
+    </div>
+</div>
+
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="dob">Date of Birth:</label>
                                         <input type="date" class="form-control" id="dob" name="dob"
-                                            value="{{ old('dob', $profile->dob ?? '') }}">
+                                            value="{{ old('dob', $profile->dob ?? '') }}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="residence_address">Residence Address:</label>
-                                        <textarea class="form-control" id="residence_address" name="residence_address">{{ old('residence_address', $profile->residence_address ?? '') }}</textarea>
+                                        <textarea class="form-control" id="residence_address" name="residence_address" readonly>{{ old('residence_address', $profile->residence_address ?? '') }}</textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="city">City:</label>
-                                        <input type="text" class="form-control" id="city" name="city"
+                                        <input type="text" class="form-control" id="city" name="city" readonly
                                             value="{{ old('city', $profile->cityRelation->city ?? '') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="state">State:</label>
-                                        <input type="text" class="form-control" id="state" name="state"
+                                        <input type="text" class="form-control" id="state" name="state"readonly
                                             value="{{ old('state', $profile->stateRelation->name ?? '') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="pincode">Pincode:</label>
-                                        <input type="text" class="form-control" id="pincode" name="pincode"
+                                        <input type="text" class="form-control" id="pincode" name="pincode"readonly
                                             value="{{ old('pincode', $profile->pincode ?? '') }}">
                                     </div>
                                 </div>
@@ -125,42 +149,42 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="company_name">Company Name:</label>
-                                        <input type="text" class="form-control" id="company_name" name="company_name"
+                                        <input type="text" class="form-control" id="company_name" name="company_name" readonly
                                             value="{{ old('company_name', $professional->company_name ?? '') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="industry">Industry:</label>
-                                        <input type="text" class="form-control" id="industry" name="industry"
+                                        <input type="text" class="form-control" id="industry" name="industry" readonly
                                             value="{{ old('industry', $professional->industry ?? '') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="company_address">Company Address:</label>
-                                        <textarea class="form-control" id="company_address" name="company_address">{{ old('company_address', $professional->company_address ?? '') }}</textarea>
+                                        <textarea class="form-control" id="company_address" name="company_address" readonly>{{ old('company_address', $professional->company_address ?? '') }}</textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="experience_year">Experience Year:</label>
                                         <input type="number" class="form-control" id="experience_year"
-                                            name="experience_year"
+                                            name="experience_year" readonly
                                             value="{{ old('experience_year', $professional->experience_year ?? '') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="designation">Designation:</label>
-                                        <input type="text" class="form-control" id="designation" name="designation"
+                                        <input type="text" class="form-control" id="designation" name="designation" readonly
                                             value="{{ old('designation', $professional->designation ?? '') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="net_salary">Net Salary:</label>
-                                        <input type="number" class="form-control" id="net_salary" name="netsalary"
+                                        <input type="number" class="form-control" id="net_salary" name="netsalary" readonly
                                             value="{{ old('netsalary', $professional->netsalary ?? '') }}">
                                     </div>
                                 </div>
@@ -172,22 +196,22 @@
                         <h3 class="h4 mb-2"><strong>Loan Information</strong></h4>
                             <div class="row">
                                 <div class="col-md-6">
-                                  <div class="form-group">
-    <label for="status">Loan Status:</label>
+                                                                <div class="form-group">
+                                    <label for="status">Loan Status:</label>
 
-    <select class="form-control" id="status" disabled>
-        <option value="approved" {{ $loan->status == 'approved' ? 'selected' : '' }}>Approved</option>
-        <option value="rejected" {{ $loan->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
-        <option value="in process" {{ $loan->status == 'in process' ? 'selected' : '' }}>In Process</option>
-        <option value="disbursed" {{ $loan->status == 'disbursed' ? 'selected' : '' }}>Disbursed</option>
-        <option value="document pending" {{ $loan->status == 'document pending' ? 'selected' : '' }}>
-            Document Pending
-        </option>
-    </select>
+                                    <select class="form-control" id="status" disabled>
+                                        <option value="approved" {{ $loan->status == 'approved' ? 'selected' : '' }}>Approved</option>
+                                        <option value="rejected" {{ $loan->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                                        <option value="in process" {{ $loan->status == 'in process' ? 'selected' : '' }}>In Process</option>
+                                        <option value="disbursed" {{ $loan->status == 'disbursed' ? 'selected' : '' }}>Disbursed</option>
+                                        <option value="document pending" {{ $loan->status == 'document pending' ? 'selected' : '' }}>
+                                            Document Pending
+                                        </option>
+                                    </select>
 
-    <!-- ✅ actual value submit होण्यासाठी -->
-    <input type="hidden" name="status" value="{{ $loan->status }}">
-</div>
+                                    <!-- ✅ actual value submit  -->
+                                    <input type="hidden" name="status" value="{{ $loan->status }}">
+                                </div>
 
                                 </div>
                                 <div class="col-md-6">

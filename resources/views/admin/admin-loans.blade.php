@@ -180,7 +180,7 @@
                     <span class="badge-soft badge-red">+8.2%</span>
                 </div>
 
-                <div class="loan-title">Pending Loans</div>
+                <div class="loan-title">Pending Assigned Loans</div>
                 <div class="loan-value">{{ $inProcessLoans }}</div>
                 <div class="loan-sub">Tracked from records</div>
             </div>
