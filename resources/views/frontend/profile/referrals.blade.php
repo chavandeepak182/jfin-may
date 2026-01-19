@@ -337,7 +337,7 @@
                                 <th>Mobile</th>
                                 <th>Email</th>
                                 <th>Product</th>
-                                <th>Status</th>
+                                <!-- <th>Status</th> -->
                                 <th>Date</th>
                             </tr>
                         </thead>
@@ -349,11 +349,11 @@
                                     <td>{{ $lead->mobile }}</td>
                                     <td>{{ $lead->email ?? '-' }}</td>
                                     <td>{{ $lead->product_name ?? '-' }}</td>
-                                    <td>
+                                    <!-- <td>
                                         <span class="badge bg-warning">
                                             {{ ucfirst($lead->status) }}
                                         </span>
-                                    </td>
+                                    </td> -->
                                     <td>{{ \Carbon\Carbon::parse($lead->created_at)->format('d M Y') }}</td>
 
                                 </tr>

@@ -76,10 +76,13 @@
                                 <div class="section-value">{{ $profile->mobile_no ?? '—' }}</div>
                             </div>
 
-                            <div class="col-sm-6">
+                           <div class="col-sm-6">
                                 <small class="text-muted">Gender</small>
-                                <div class="section-value">{{ $profile->gender ?? '—' }}</div>
+                                <div class="section-value">
+                                    {{ $profile->gender ? ucfirst($profile->gender) : '—' }}
+                                </div>
                             </div>
+
 
                             <div class="col-sm-6">
                                 <small class="text-muted">Date of Birth</small>
@@ -94,9 +97,10 @@
                             <div class="col-12 mt-2">
                                 <small class="text-muted">Residential Address</small>
                                 <div class="section-value">
-                                    {{ $profile->residence_address ?? '—' }},
-                                    {{ $profile->city ?? '—' }},
-                                    {{ $profile->state ?? '—' }} - {{ $profile->pincode ?? '—' }}
+                                   {{ $profile->residence_address ?? '—' }},
+                                    {{ $profile->city_name ?? '—' }},
+                                    {{ $profile->state_name ?? '—' }} - {{ $profile->pincode ?? '—' }}
+
                                 </div>
                             </div>
                         </div>
@@ -185,7 +189,7 @@
 
 					<form action="{{ route('user.profile.update') }}" method="POST">
 						@csrf
-						<input type="hidden" name="user_id" value="{{ $user->id }}">
+						<!-- <input type="hidden" name="user_id" value="{{ $user->id }}"> -->
 
 						<div class="modal-body row g-3">
 
@@ -218,13 +222,29 @@
 							</div>
 
 							<div class="col-md-6">
-								<label class="form-label">Gender</label>
-								<input type="text" name="gender"
-									class="form-control"
-									value="{{ old('gender', $profile->gender ?? '') }}">
-							</div>
+                                <label class="form-label">Gender</label>
+                                <select name="gender" class="form-select">
+                                    <option value="">Select Gender</option>
 
-							<div class="col-md-6">
+                                    <option value="male"
+                                        {{ old('gender', $profile->gender ?? '') == 'male' ? 'selected' : '' }}>
+                                        Male
+                                    </option>
+
+                                    <option value="female"
+                                        {{ old('gender', $profile->gender ?? '') == 'female' ? 'selected' : '' }}>
+                                        Female
+                                    </option>
+
+                                    <option value="other"
+                                        {{ old('gender', $profile->gender ?? '') == 'other' ? 'selected' : '' }}>
+                                        Other
+                                    </option>
+                                </select>
+                            </div>
+
+
+                                                        <div class="col-md-6">
 								<label class="form-label">Marital Status</label>
 								<input type="text" name="marital_status"
 									class="form-control"
@@ -238,26 +258,45 @@
 									value="{{ old('residence_address', $profile->residence_address ?? '') }}">
 							</div>
 
-							<div class="col-md-4">
-								<label class="form-label">City</label>
-								<input type="text" name="city"
-									class="form-control"
-									value="{{ old('city', $profile->city ?? '') }}">
-							</div>
+						<div class="row g-3">
 
-							<div class="col-md-4">
-								<label class="form-label">State</label>
-								<input type="text" name="state"
-									class="form-control"
-									value="{{ old('state', $profile->state ?? '') }}">
-							</div>
+                                <!-- STATE -->
+                                <div class="col-md-4">
+                                    <label class="form-label">State</label>
+                                    <select name="state" class="form-select">
+                                        @foreach($states as $state)
+                                            <option value="{{ $state->id }}"
+                                                {{ old('state', $profile->state) == $state->id ? 'selected' : '' }}>
+                                                {{ $state->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <!-- CITY -->
+                                <div class="col-md-4">
+                                    <label class="form-label">City</label>
+                                    <select name="city" class="form-select">
+                                        @foreach($cities as $city)
+                                            <option value="{{ $city->id }}"
+                                                {{ old('city', $profile->city) == $city->id ? 'selected' : '' }}>
+                                                {{ $city->city }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-							<div class="col-md-4">
-								<label class="form-label">Pincode</label>
-								<input type="text" name="pincode"
-									class="form-control"
-									value="{{ old('pincode', $profile->pincode ?? '') }}">
-							</div>
+
+                                        <!-- PINCODE -->
+                                        <div class="col-md-4">
+                                            <label class="form-label">Pincode</label>
+                                            <input type="text"
+                                                name="pincode"
+                                                class="form-control"
+                                                value="{{ old('pincode', $profile->pincode ?? '') }}">
+                                        </div>
+
+                                            </div>
+
 
 						</div>
 
