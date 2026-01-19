@@ -311,6 +311,30 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                      <div class="col-md-4">
+    <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select class="form-control" id="gender" name="gender">
+            <option value="">Select Gender</option>
+
+            <option value="male"
+                {{ old('gender', $profile->gender ?? '') == 'male' ? 'selected' : '' }}>
+                Male
+            </option>
+
+            <option value="female"
+                {{ old('gender', $profile->gender ?? '') == 'female' ? 'selected' : '' }}>
+                Female
+            </option>
+
+            <option value="other"
+                {{ old('gender', $profile->gender ?? '') == 'other' ? 'selected' : '' }}>
+                Other
+            </option>
+        </select>
+    </div>
+</div>
+
 
 
                                         <div class="col-md-12">

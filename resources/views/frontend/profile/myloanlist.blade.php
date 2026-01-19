@@ -73,19 +73,24 @@
         </td>
 
 <td>
-    {{-- Edit button (ONLY when Approved) --}}
-    @if (strtolower($loan->status ?? '') === 'approved')
-        <a href="{{ url('loanedit/'.$loan->loan_id) }}" class="btn btn-sm btn-warning">
-            Edit
-        </a>
-    @endif
+    {{-- Edit button (ONLY for In Process & Approved) --}}
+@php
+    $editableStatuses = ['in process', 'approved'];
+@endphp
+
+@if (in_array(trim(strtolower($loan->status ?? '')), $editableStatuses, true))
+    <a href="{{ url('loanedit/'.$loan->loan_id) }}" class="btn btn-sm btn-warning">
+        Edit
+    </a>
+@endif
+
 
     {{-- View Sanction Letter (Approved OR Disbursed) --}}
     @if (
         !empty($loan->sanction_letter) &&
         in_array(strtolower($loan->status ?? ''), ['approved', 'disbursed'])
     )
-        <a href="{{ asset('storage/sanction_letters/' . $loan->sanction_letter) }}"
+        <a href="{{ asset('storage/' . $loan->sanction_letter) }}"
            class="btn btn-sm btn-primary"
            target="_blank">
             View
