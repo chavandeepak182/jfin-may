@@ -986,120 +986,83 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
                                     </div>
                                 </fieldset>
 
-                                <!-- Loan Details -->
-                            @elseif ($currentStep == 4)
-                            
-                                            <h4 class="text-primary mb-3">Loan Details</h4>
-                                            <div class="row g-3">
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                       <input type="number"
-                                                        step="0.01"
-                                                        name="amount"
-                                                        value="{{ old('amount', $loan->amount ?? '') }}"
-                                                        class="form-control"
-                                                        id="amount"
-                                                        placeholder="Amount"
-                                                        min="0"
-                                                        onkeydown="return event.key !== '-'"
-                                                        oninput="if(this.value < 0) this.value='';"
-                                                        required>
+                        <!-- Loan Details -->
+@elseif ($currentStep == 4)
 
-                                                        <label for="amount">Loan Amount</label>
-                                                    </div>
-                                                </div>
-                                             <select name="tenure" id="tenure" class="form-control" required>
-                                                <option value="">Select Tenure</option>
+@php
+    // Check if user already has any DISBURSED loan
+    $hasDisbursedLoan = $user->loans()
+        ->where('status', 'disbursed')
+        ->exists();
+@endphp
 
-                                                @for ($i = 1; $i <= 30; $i++)
-                                                    <option value="{{ $i }}"
-                                                        {{ old('tenure', $loan->tenure ?? '') == $i ? 'selected' : '' }}>
-                                                        {{ $i }} year{{ $i > 1 ? 's' : '' }}
-                                                    </option>
-                                                @endfor
-                                            </select>
+<h4 class="text-primary mb-3">Loan Details</h4>
 
+<div class="row g-3">
 
-                                                @if ($user->loans()->count() <= 1)
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" name="referral_code"
-                                                        value="{{ old('referral_code') }}" class="form-control"
-                                                        id="referral_code" placeholder="Referral Code">
-                                                    <label for="referral_code">Referral Code (Optional)</label>
-                                                </div>
-                                            </div>
+    <!-- Loan Amount -->
+    <div class="col-md-6">
+        <div class="form-floating">
+            <input type="number"
+                   step="0.01"
+                   name="amount"
+                   value="{{ old('amount', $loan->amount ?? '') }}"
+                   class="form-control"
+                   id="amount"
+                   placeholder="Amount"
+                   min="0"
+                   onkeydown="return event.key !== '-'"
+                   oninput="if(this.value < 0) this.value='';"
+                   required>
+            <label for="amount">Loan Amount</label>
+        </div>
+    </div>
 
+    <!-- Tenure -->
+    <div class="col-md-6">
+        <div class="form-floating">
+            <select name="tenure" id="tenure" class="form-control" required>
+                <option value="">Select Tenure</option>
+                @for ($i = 1; $i <= 30; $i++)
+                    <option value="{{ $i }}"
+                        {{ old('tenure', $loan->tenure ?? '') == $i ? 'selected' : '' }}>
+                        {{ $i }} year{{ $i > 1 ? 's' : '' }}
+                    </option>
+                @endfor
+            </select>
+            <label for="tenure">Tenure (in years)</label>
+        </div>
+    </div>
 
+    <!-- Referral Code (ONLY IF NO DISBURSED LOAN) -->
+    @if (!$hasDisbursedLoan)
+        <div class="col-md-6">
+            <div class="form-floating">
+                <input type="text"
+                       name="referral_code"
+                       value="{{ old('referral_code') }}"
+                       class="form-control"
+                       id="referral_code"
+                       placeholder="Referral Code">
+                <label for="referral_code">Referral Code (Optional)</label>
+            </div>
+        </div>
 
+        <div class="row mt-2">
+            <div class="col-md-6">
+                <button type="button"
+                        id="check-referral-code"
+                        class="btn btn-primary w-100 py-3">
+                    Check Code
+                </button>
+            </div>
+            <div id="referral-feedback" class="col-md-12 mt-3"></div>
+        </div>
+    @endif
 
-                                         
-                                            <div class="row mt-2">
-                                                <div class="col-md-6">
-                                                    <button type="button" id="check-referral-code"
-                                                        class="btn btn-primary w-100 py-3">Check Code</button>
-                                                </div>
-                                                <div id="referral-feedback" class="col-md-12 mt-3"></div>
-                                            </div>
-                                        @endif
-                                             </div>
-                                        </fieldset>
+</div>
+@endif
 
-
-                                <!-- <fieldset>
-                                    <h4 class="text-primary mb-3">Loan Details</h4>
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="number" step="0.01" name="amount"
-                                                    value="{{ old('amount', $loan->amount ?? '') }}"
-                                                    class="form-control" id="amount" placeholder="Amount" required>
-                                                <label for="amount">Loan Amount</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <select name="tenure" id="tenure" class="form-control" required>
-                                                    <option value="">Select Tenure</option>
-                                                    @for ($i = 1; $i <= 30; $i++)
-                                                        <option value="{{ $i }}"
-                                                            {{ old('tenure', $loan->tenure ?? '') == $i ? 'selected' : '' }}>
-                                                            {{ $i }} year{{ $i > 1 ? 's' : '' }}</option>
-                                                    @endfor
-                                                </select>
-                                                <label for="tenure">Tenure (in years)</label>
-                                            </div>
-                                        </div>
-
-                                     
-                                        @if ($user->loans()->count() <= 1)
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" name="referral_code"
-                                                        value="{{ old('referral_code') }}" class="form-control"
-                                                        id="referral_code" placeholder="Referral Code">
-                                                    <label for="referral_code">Referral Code (Optional)</label>
-                                                </div>
-                                            </div>
-
-
-
-
-                                         
-                                            <div class="row mt-2">
-                                                <div class="col-md-6">
-                                                    <button type="button" id="check-referral-code"
-                                                        class="btn btn-primary w-100 py-3">Check Code</button>
-                                                </div>
-                                                <div id="referral-feedback" class="col-md-12 mt-3"></div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </fieldset> -->
-
-
-
-                            @endif
 
                             <!-- Navigation Buttons -->
                             <div class="row g-3 mt-4">
@@ -1221,7 +1184,7 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
         document.getElementById('state').addEventListener('change', function() {
             const stateId = this.value;
             const citySelect = document.getElementById('city');
-            citySelect.innerHTML = '<option value="">Select City</option>'; // Reset options
+            citySelect.innerHTML = '<option value="">Select</option>'; // Reset options
 
             if (stateId) {
                 fetch(`/cities/${stateId}`)
