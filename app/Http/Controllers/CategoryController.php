@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 class CategoryController extends Controller
 {
@@ -91,66 +93,104 @@ private function buildTree($categories, $parentId = null)
         return response()->json(['status' => 0, 'msg' => 'Failed to add node'], 500);
     }
 }
-public function findNextAvailableNode()
+public function findNextAvailableNode($startUserId = null)
 {
-    // Fetch the root node (assuming root has `parent_id = null`)
-    $rootNode = DB::table('categories')->whereNull('parent_id')->first();
+    // 🔹 Decide BFS starting point
+    if ($startUserId) {
+        // Start from referral user
+        $rootNode = DB::table('categories')
+            ->where('user_id', $startUserId)
+            ->first();
 
-    if (!$rootNode) {
-        \Log::error("Root node not found.");
-        return null;
+        if (!$rootNode) {
+            \Log::error("Referral root node not found for User ID: {$startUserId}");
+            return null;
+        }
+
+        \Log::info("Searching next available node under referral User ID={$startUserId}");
+    } else {
+        // Start from global root
+        $rootNode = DB::table('categories')
+            ->whereNull('parent_id')
+            ->first();
+
+        if (!$rootNode) {
+            \Log::error("Global root node not found.");
+            return null;
+        }
+
+        \Log::info("Searching next available node in full MLM tree");
     }
 
-    // Perform a breadth-first search (BFS) to find the next available node
-    $queue = [$rootNode]; // Start with the root node
+    // 🔹 BFS traversal
+    $queue = [$rootNode];
 
     while (!empty($queue)) {
-        $currentNode = array_shift($queue); // Dequeue the first node
+        $currentNode = array_shift($queue);
 
-        // Count children of the current node
-        $childrenCount = DB::table('categories')->where('parent_id', $currentNode->user_id)->count();
+        $children = DB::table('categories')
+            ->where('parent_id', $currentNode->user_id)
+            ->get();
 
-        if ($childrenCount < 2) {
-            // Found a node with an empty position
+        if ($children->count() < 2) {
+            \Log::info("Next available node found: User ID={$currentNode->user_id}");
             return $currentNode;
         }
 
-        // Enqueue the children of the current node for further traversal
-        $children = DB::table('categories')->where('parent_id', $currentNode->user_id)->get();
         foreach ($children as $child) {
             $queue[] = $child;
         }
     }
 
-    // No available position found
+    \Log::warning("No available node found.");
     return null;
 }
     /**
      * Add a node under a specific parent ID or find the next available position.
      */
-    public function addNode($parentUserId, $childName, $childUserId)
+public function addNode($parentUserId, $childName, $childUserId)
 {
-    \Log::info("Adding node: Parent User ID: $parentUserId, Child Name: $childName, Child User ID: $childUserId");
+    Log::info("Adding node: Parent User ID: $parentUserId, Child Name: $childName, Child User ID: $childUserId");
 
-    // Validate the parent category
-    $parentCategory = DB::table('categories')->where('user_id', $parentUserId)->first();
+    // 🔹 Validate parent category
+    $parentCategory = DB::table('categories')
+        ->where('user_id', $parentUserId)
+        ->first();
 
     if (!$parentCategory) {
-        \Log::error("Parent category not found for User ID: $parentUserId");
+        Log::error("Parent category not found for User ID: $parentUserId");
         return false;
     }
 
-    // Count existing children
-    $childCount = DB::table('categories')->where('parent_id', $parentCategory->user_id)->count();
+    // 🔹 Count direct children
+    $childCount = DB::table('categories')
+        ->where('parent_id', $parentCategory->user_id)
+        ->count();
 
+    /**
+     * ✅ CASE 1: Parent has space → insert directly
+     */
     if ($childCount < 2) {
-        // Insert the new child node
         return $this->insertNode($parentCategory, $childName, $childUserId);
-    } else {
-        \Log::info("Parent User ID={$parentUserId} already has 2 children. Searching for next available node.");
-        return false; // Shouldn't reach here due to pre-checks
     }
+
+    /**
+     * ✅ CASE 2: Parent full → search inside referral subtree
+     */
+    Log::info("Parent User ID={$parentUserId} already has 2 children. Searching inside referral subtree.");
+
+    $nextParent = $this->findNextAvailableNode($parentUserId);
+
+    if (!$nextParent) {
+        Log::error("No available position found under referral subtree for User ID={$parentUserId}");
+        return false;
+    }
+
+    Log::info("Next available parent found under referral subtree: User ID={$nextParent->user_id}");
+
+    return $this->insertNode($nextParent, $childName, $childUserId);
 }
+
     
     /**
      * Helper function to insert a new node.
