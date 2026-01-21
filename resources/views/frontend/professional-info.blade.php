@@ -5,11 +5,14 @@
 @section('content')
     <!-- Add Loan Form -->
 
-<style>.form-floating > .form-select {
+<style>
+    .form-floating > .form-select {
     height: calc(3.5rem + 2px);
     padding-top: 1.625rem;
-    padding-bottom: .625rem;
+    padding-bottom: 0.625rem;
+    margin-bottom: 12px;   /* 👈 adds space between User & Loan */
 }
+
 </style>
 
 @php

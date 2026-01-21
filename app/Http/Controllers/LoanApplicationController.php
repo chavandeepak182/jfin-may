@@ -273,6 +273,14 @@ public function loanlist()
         ->count();
 
     $rejectedLoans = Loan::where('status', 'rejected')->count();
+    $pendingLoansCount = DB::table('loans')
+    ->where(function ($query) {
+        $query->whereNull('agent_id')
+              ->orWhereIn('agent_action', ['rejected', null]);
+    })
+    ->count();
+
+
 
 
     /* ================= PAGINATED LOANS ================= */
@@ -293,7 +301,8 @@ public function loanlist()
         'approvedLoan',
         'disbursedLoans',
         'rejectedLoans',
-        'loans' // 👈 IMPORTANT
+        'loans', // 👈 IMPORTANT
+        'pendingLoansCount'
     ));
 }
     public function edit($id)
@@ -305,7 +314,10 @@ public function loanlist()
         }
 
         // Fetch related data
-        $profile = Profile::where('user_id', $loan->user_id)->first();
+        // $profile = Profile::where('user_id', $loan->user_id)->first();
+        $profile = Profile::with(['cityRelation', 'stateRelation'])
+    ->where('user_id', $loan->user_id)
+    ->first();
         $professional = Professional::where('user_id', $loan->user_id)->first();
         $education = Education::where('user_id', $loan->user_id)->first();
         $documents = \DB::table('documents')->where('user_id', $loan->user_id)->get();
@@ -1573,6 +1585,7 @@ if (session('role_id') == 4) {
     $loanCategories = DB::table('loan_category')->get();
     $loanBanks = DB::table('loan_bank_details')->get();
     $userId = session('user_id');
+    
 
     if (!$userId) {
         return redirect()->route('login')->withErrors('User session expired. Please log in again.');
@@ -1750,10 +1763,9 @@ public function ajaxPendingLoans(Request $request)
         ->leftJoin('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
         ->where(function ($query) {
             $query->whereNull('loans.agent_id')
-                ->orWhere(function ($subQuery) {
-                    $subQuery->whereNotNull('loans.agent_id')
-                        ->whereIn('loans.agent_action', ['pending', 'rejected'])
-                        ->orWhereNull('loans.agent_action');
+                ->orWhere(function ($q) {
+                    $q->whereNotNull('loans.agent_id')
+                      ->where('loans.agent_action', 'rejected');
                 });
         })
         ->when($search, function ($q) use ($search) {
@@ -1772,6 +1784,7 @@ public function ajaxPendingLoans(Request $request)
 
     return view('partials.pending-loans', compact('pendingLoans', 'agents'));
 }
+
 
 // public function ajaxInprocessLoans()
 // {
@@ -1801,19 +1814,17 @@ public function ajaxInprocessLoans(Request $request)
     $loans = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-        ->select(
-            'loans.loan_id',
-            'loans.loan_reference_id',
-            'loans.amount',
-            'loans.tenure',
-            'users.name as user_name',
-            'loan_category.category_name'
-        )
-        ->where('loans.status', 'inprocess') // ✅ FIXED
+        ->where('loans.status', 'in process')          // ✅ correct
+        ->whereNotNull('loans.loan_reference_id')      // ✅ correct
+        ->whereNull('loans.deleted_at')                // ✅ correct
         ->when($search, function ($q) use ($search) {
             $q->where('users.name', 'LIKE', "%{$search}%");
         })
-        ->whereNull('loans.deleted_at')
+        ->select(
+            'loans.*',
+            'users.name as user_name',
+            'loan_category.category_name as category_name'
+        )
         ->orderByDesc('loans.created_at')
         ->paginate(10)
         ->appends(['search' => $search]);
@@ -1821,9 +1832,9 @@ public function ajaxInprocessLoans(Request $request)
     return view('partials.inprocess-loans', compact('loans'));
 }
 
-public function ajaxTrashedLoans()
+
+public function ajaxTrashedLoans(Request $request)
 {
-    
     $loans = \App\Models\Loan::onlyTrashed()
         ->with([
             'user.profile.cityRelation',
@@ -1833,52 +1844,53 @@ public function ajaxTrashedLoans()
         ->whereNotNull('loan_reference_id')
         ->orderBy('deleted_at', 'desc')
         ->paginate(10);
-     
-    // Transform data (same as your existing logic)
-    $loans->getCollection()->transform(function ($loan) {
-        return [
-            'loan_id' => $loan->loan_id,
-            'loan_reference_id' => $loan->loan_reference_id,
-            'user_name' => $loan->user->name ?? 'N/A',
-            'loan_category_name' => $loan->loanCategory->category_name ?? 'N/A',
-            'amount' => $loan->amount,
-            'bank_name' => $loan->bankDetails->bank_name ?? 'N/A',
-            'city' => $loan->user->profile->cityRelation->city ?? 'N/A',
-        ];
-    });
 
-    // ✅ IMPORTANT: return PARTIAL view
+    // ❌ NO transform here
+    // Keep Eloquent models for Blade compatibility
+
     return view('partials.trashed-loans', compact('loans'));
 }
-public function ajaxApprovedLoans()
+public function restoreLoan(Request $request)
 {
-    $role_id = session()->get('role_id');
-    $agent_id = session()->get('user_id');
+    $loan = \App\Models\Loan::withTrashed()
+        ->where('loan_id', $request->loan_id)
+        ->first();
 
-    // Only Agent (2) or Admin (4)
-    if (!in_array($role_id, [2, 4])) {
-        abort(403);
+    if (!$loan) {
+        return response()->json([
+            'status' => 1,
+            'msg' => 'Loan not found'
+        ], 404);
     }
 
+    $loan->restore();
+
+    return response()->json([
+        'status' => 0,
+        'msg' => 'Loan restored successfully'
+    ]);
+}
+
+
+public function ajaxApprovedLoans(Request $request)
+{
     $loans = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-        ->select(
-            'loans.loan_id',
-            'loans.amount',
-            'loans.tenure',
-            'loans.loan_reference_id',
-            'users.name as user_name',
-            'loan_category.category_name as loan_category_name'
-        )
         ->where('loans.status', 'approved')
-        ->where('loans.agent_id', $agent_id)
+        ->whereNotNull('loans.loan_reference_id')
+        ->select(
+            'loans.*',
+            'users.name as user_name',
+            'loan_category.category_name as loan_category_name' // ✅ FIX
+        )
         ->orderByDesc('loans.created_at')
         ->paginate(10);
 
-    // ✅ Return PARTIAL view
     return view('partials.approved-loans', compact('loans'));
 }
+
+
 
 public function ajaxDisbursedLoans()
 {
@@ -3393,10 +3405,10 @@ protected function handleLoanDetails(Request $request, $userId)
 
             // Send notifications
             event(new \App\Events\AgentAssigned($adminId, $agentId, $customerId, $loan->loan_id, $loan->loan_reference_id, $agentName));
-            return redirect()->route('loans.index')->with('success', 'Agent assigned successfully!');
+            return redirect()->route('admin.loans')->with('success', 'Agent assigned successfully!');
         }
 
-        return redirect()->route('loans.index')->with('error', 'Failed to assign agent.');
+        return redirect()->route('admin.loans')->with('error', 'Failed to assign agent.');
     }
     public function assignedLoans()
     {

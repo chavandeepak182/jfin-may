@@ -498,6 +498,8 @@ Route::get('/get-user-by-id', [UsersController::class, 'getUserById'])
     Route::get('admin/allUsers', [UsersController::class, 'allUsers'])->name('allUsers');  
     Route::post('/update-user-status', [UsersController::class, 'updateUserStatus'])->name('updateUserStatus');
     Route::post('admin/assignAgent', [LoanApplicationController::class, 'assignAgent'])->name('assignAgent');
+Route::post('/loan/restore', [LoanApplicationController::class, 'restoreLoan'])
+    ->name('loan.restore');
 
     //activity list
     Route::get('admin/activities', [AdminController::class, 'activities'])->name('activities');  
