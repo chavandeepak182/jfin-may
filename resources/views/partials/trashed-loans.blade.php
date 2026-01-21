@@ -59,3 +59,45 @@
         </div>
     </div>
 </div>
+<script>
+function restoreLoan(loanId) {
+    Swal.fire({
+        title: 'Restore loan?',
+        text: 'This loan will be restored.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#198754',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, restore'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "{{ route('loan.restore') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    loan_id: loanId
+                },
+                success: function (response) {
+                    Swal.fire(
+                        'Restored!',
+                        response.msg ?? 'Loan restored successfully.',
+                        'success'
+                    );
+
+                    // ✅ Reload list OR remove row
+                    location.reload();
+                },
+                error: function () {
+                    Swal.fire(
+                        'Error!',
+                        'Failed to restore loan.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+}
+</script>
+

@@ -404,6 +404,7 @@ public function insertUser(Request $request)
         // ================= CREATE USER =================
         $user = User::create([
             'name'            => $request->full_name,
+            'mobile_no'         => $request->mobile_no,
             'email_id'        => $request->email_id,
             'password'        => bcrypt('123456'),
             'role_id'         => $roleId,
@@ -421,6 +422,17 @@ public function insertUser(Request $request)
             'state'             => $request->state ?? null,
             'pincode'           => $request->pincode ?? null,
         ]);
+// ================= OTP AUTO VERIFY (CUSTOMER ONLY) =================
+        if ($type === 'customer') {
+            DB::table('otp')->insert([
+                'user_id'    => $user->id,
+                'otp'        => rand(100000, 999999),
+                'is_verify'  => 1, // ✅ auto verified
+                'expires_at'=> null,
+                'created_at'=> now(),
+                'updated_at'=> now(),
+            ]);
+        }
 
         DB::commit();
 
@@ -450,7 +462,7 @@ public function getUserById(Request $request)
             'users.id',
             'users.name',
             'users.email_id',
-            'profile.mobile_no',
+            'users.mobile_no',
             'profile.dob',
             'profile.residence_address as address',
             'profile.city',
@@ -498,14 +510,15 @@ public function loadListByType(Request $request)
             });
         })
 
-        // 🟢 ACTIVE / 🔴 INACTIVE
-        ->when($status !== null && $status !== '', function ($q) use ($status) {
-            if ($status === 'active') {
-                $q->where('is_email_verify', 1);
-            } elseif ($status === 'inactive') {
-                $q->where('is_email_verify', 0);
-            }
-        })
+        
+        /* 🟢 ACTIVE / 🔴 INACTIVE FILTER */
+       ->when($status !== null && $status !== '', function ($q) use ($status) {
+    if ($status === 'active') {
+        $q->where('otp_verify', 1);
+    } elseif ($status === 'inactive') {
+        $q->where('otp_verify', 0);
+    }
+})
 
         ->orderBy('created_at', 'desc')
         ->paginate(10);
