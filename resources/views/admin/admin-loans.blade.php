@@ -181,7 +181,7 @@
                 </div>
 
                 <div class="loan-title">Pending Assigned Loans</div>
-                <div class="loan-value">{{ $inProcessLoans }}</div>
+                <div class="loan-value">{{ $pendingLoansCount }}</div>
                 <div class="loan-sub">Tracked from records</div>
             </div>
         </a>
@@ -343,30 +343,28 @@ $(document).ready(function () {
 
     function loadLoans(type = 'all', search = '') {
 
-        currentType = type;
-        let url = "{{ route('loan.ajax.list') }}";
+    currentType = type;
+    let url = "{{ route('loan.ajax.list') }}";
 
-        if (type === 'pending') url = "{{ route('loan.ajax.pending') }}";
-        if (type === 'approved') url = "{{ route('loan.ajax.approved') }}";
-        if (type === 'disbursed') url = "{{ route('loan.ajax.disbursed') }}";
-        if (type === 'rejected') url = "{{ route('loan.ajax.rejected') }}";
-        if (type === 'trashed') url = "{{ route('loan.ajax.trashed') }}";
+    if (type === 'inprocess') url = "{{ route('loan.ajax.inprocess') }}"; // ✅ ADD THIS
+    if (type === 'pending')   url = "{{ route('loan.ajax.pending') }}";
+    if (type === 'approved')  url = "{{ route('loan.ajax.approved') }}";
+    if (type === 'disbursed') url = "{{ route('loan.ajax.disbursed') }}";
+    if (type === 'rejected')  url = "{{ route('loan.ajax.rejected') }}";
+    if (type === 'trashed')   url = "{{ route('loan.ajax.trashed') }}";
 
-        $('#loanListArea').html('<div class="text-center py-4">Loading...</div>');
+    $('#loanListArea').html('<div class="text-center py-4">Loading...</div>');
 
-        $.ajax({
-            url: url,
-            type: "GET",
-            data: {
-                search: search
-            },
-            success: function (res) {
-                $('#loanListArea').html(res);
-            }
-        });
-    }
+    $.ajax({
+        url: url,
+        type: "GET",
+        data: { search: search },
+        success: function (res) {
+            $('#loanListArea').html(res);
+        }
+    });
+}
 
-    // Card click
     $('.loan-filter').on('click', function (e) {
         e.preventDefault();
         loadLoans($(this).data('type'), $('#loanSearch').val());

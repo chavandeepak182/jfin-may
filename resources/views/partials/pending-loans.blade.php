@@ -1,78 +1,165 @@
 <div class="card-body">
-    <div class="table-responsive">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Loan ID</th>
-                    <th>Customer Name</th>
-                    <th>Loan Category</th>
-                    <th>Amount</th>
-                    <th>Tenure</th>
-                    <th>Assign To</th>
-                    <th>Agent Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($pendingLoans as $loan)
-                <tr>
-                    <td>{{ $loan->loan_reference_id }}</td>
-                    <td>{{ $loan->user->name ?? 'N/A' }}</td>
-                    <td>{{ $loan->loanCategory->category_name ?? 'N/A' }}</td>
-                    <td>₹ {{ number_format($loan->amount) }}</td>
-                    <td>{{ $loan->tenure }}</td>
+            <div class="table-responsive">
+                <table id="example" class="table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Loan ID</th>
+                            <th>User</th>
+                            <th>Loan Category</th>
+                            <th>Amount</th>
+                            <th>Tenure</th>
+                            <th>Assign To</th>
+                            <th>Agent Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($pendingLoans as $loan)
+                            <tr>
+                                <td>{{ $loan->loan_reference_id }}</td>
+                                <td>{{ $loan->user_name ?? 'N/A' }}</td>
+                                <td>{{ $loan->category_name ?? 'N/A' }}</td>
+                                <td>{{ $loan->amount }}</td>
+                                <td>{{ $loan->tenure }}</td>
+                                <td>
+                                    <form action="{{ route('assignAgent') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="loan_id" value="{{ $loan->loan_id }}">
+                                        <div class="form-group">
+                                            <label for="agent_id">Assign Agent:</label>
+                                            <select name="agent_id" id="agent_id_{{ $loan->loan_id }}"
+                                                class="form-control assign-agent" data-loan-id="{{ $loan->loan_id }}">
+                                                <option value="">Select Agent</option>
+                                                @foreach ($agents as $agent)
+                                                    <option value="{{ $agent->id }}"
+                                                        {{ $loan->agent_id == $agent->id ? 'selected' : '' }}>
+                                                        {{ $agent->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @if ($loan->agent_action === 'pending')
+                                            <button type="submit" class="btn btn-primary">Assign</button>
+                                        @elseif($loan->agent_action === 'rejected')
+                                            <button type="submit" class="btn btn-warning">Reassign</button>
+                                        @endif
+                                    </form>
+                                </td>
+                                <td>{{ ucfirst($loan->agent_action) ?? 'Pending' }}</td>
+                                <td>
+                                    <a class="btn btn-primary btn-xs edit" title="Edit"
+                                        href="{{ route('editLoan', ['id' => $loan->loan_id]) }}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <button class="btn btn-danger btn-xs delete" title="Delete"
+                                        onclick="deleteLoan('{{ $loan->loan_id }}')">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
 
-                    <td>
-                        <form action="{{ route('assignAgent') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="loan_id" value="{{ $loan->loan_id }}">
-
-                            <select name="agent_id" class="form-control mb-1">
-                                <option value="">Select Agent</option>
-                                @foreach ($agents as $agent)
-                                    <option value="{{ $agent->id }}"
-                                        {{ $loan->agent_id == $agent->id ? 'selected' : '' }}>
-                                        {{ $agent->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                            @if (empty($loan->agent_action) || $loan->agent_action === 'pending')
-                                <button type="submit" class="btn btn-sm btn-primary">Assign</button>
-                            @elseif ($loan->agent_action === 'rejected')
-                                <button type="submit" class="btn btn-sm btn-warning">Reassign</button>
-                            @endif
-                        </form>
-                    </td>
-
-                    <td>{{ ucfirst($loan->agent_action ?? 'Pending') }}</td>
-
-                    <td>
-                        <a href="{{ route('editLoan', $loan->loan_id) }}" class="btn btn-sm btn-warning">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                        <button class="btn btn-sm btn-danger"
-                            onclick="deleteLoan({{ $loan->loan_id }})">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="8" class="text-center text-muted">No pending loans found</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    <!-- ✅ Pagination -->
-    <div class="d-flex justify-content-between align-items-center mt-3">
-        <div>
-            Showing {{ $pendingLoans->firstItem() }} to {{ $pendingLoans->lastItem() }}
-            of {{ $pendingLoans->total() }} results
+                <!-- Pagination Links -->
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div class="dataTables_info">
+                        Showing {{ $pendingLoans->firstItem() }} to {{ $pendingLoans->lastItem() }} of
+                        {{ $pendingLoans->total() }}
+                        entries
+                    </div>
+                    <div class="dataTables_paginate paging_simple_numbers">
+                        <nav>
+                            {{ $pendingLoans->onEachSide(1)->links('pagination::bootstrap-4') }}
+                        </nav>
+                    </div>
+                </div>
+            </div>
         </div>
+        <!--export button -->
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 
-        {{ $pendingLoans->links('pagination::bootstrap-5') }}
-    </div>
-</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        // $('.assign-agent').change(function() {
+        //     var agentId = $(this).val();
+        //     var loanId = $(this).data('loan-id');
+
+        //     if(agentId) {
+        //         $.ajax({
+        //             url: "{{ route('assignAgent') }}",
+        //             method: "POST",
+        //             data: {
+        //                 '_token': '{{ csrf_token() }}',
+        //                 'loan_id': loanId,
+        //                 'agent_id': agentId,
+        //             },
+        //             success: function (response) {
+        //                 Swal.fire({
+        //                     title: response.msg,
+        //                     text: "",
+        //                     icon: "success",
+        //                     confirmButtonText: 'OK'
+        //                 }).then(function () {
+        //                     location.reload();
+        //                 });
+        //             },
+        //             error: function (response) {
+        //                 Swal.fire({
+        //                     title: response.msg,
+        //                     text: "",
+        //                     icon: "error",
+        //                     confirmButtonText: 'OK'
+        //                 });
+        //             }
+        //         });
+        //     }
+        // });
+
+        // Define deleteLoan function
+        function deleteLoan(loanId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('deleteLoan') }}",
+                        method: "POST",
+                        data: {
+                            '_token': '{{ csrf_token() }}',
+                            'loan_id': loanId,
+                        },
+                        success: function(response) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Your loan has been deleted.',
+                                'success'
+                            ).then(function() {
+                                location.reload();
+                            });
+                        },
+                        error: function(response) {
+                            Swal.fire(
+                                'Error!',
+                                'There was an issue deleting the loan.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        }
+    </script>

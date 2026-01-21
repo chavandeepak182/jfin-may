@@ -1256,41 +1256,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<script>
-$('#addMISRecord').on('submit', function (e) {
-    e.preventDefault();
 
-    $.ajax({
-        url: "{{ route('mis.store') }}",
-        type: "POST",
-        data: new FormData(this),
-        processData: false,
-        contentType: false,
-
-        success: function (response) {
-            // ✅ SUCCESS
-            if (response.status === true) {
-                swal("Success", response.message, "success").then(() => {
-                    location.reload(); // record will appear in list
-                });
-            } else {
-                swal("Error", response.message ?? "Something went wrong", "error");
-            }
-        },
-
-        error: function (xhr) {
-            // ❌ VALIDATION ERROR
-            if (xhr.status === 422) {
-                let errors = xhr.responseJSON.errors;
-                let firstError = Object.values(errors)[0][0];
-                swal("Validation Error", firstError, "warning");
-            } else {
-                swal("Error", "Something went wrong", "error");
-            }
-        }
-    });
-});
-</script>
 <script>
 $(document).on('click', '.create-account-btn', function (e) {
     e.preventDefault();
@@ -1385,6 +1351,69 @@ $(document).off('submit', '#addUser').on('submit', '#addUser', function (e) {
     });
 });
 </script>
+
+<!-- mis add -->
+ <script>
+$('#addMISRecord').on('submit', function (e) {
+    e.preventDefault();
+
+    $.ajax({
+        url: "{{ route('mis.store') }}",
+        type: "POST",
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+
+        success: function (response) {
+
+            if (response.status === true) {
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: response.message,
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    $('#addMISView').modal('hide');
+                    location.reload();
+                });
+
+            } else {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message || 'Something went wrong'
+                });
+
+            }
+        },
+
+        error: function (xhr) {
+
+            if (xhr.status === 422) {
+                let firstError = Object.values(xhr.responseJSON.errors)[0][0];
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: firstError
+                });
+
+            } else {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Server error occurred'
+                });
+
+            }
+        }
+    });
+});
+</script>
+
 @endsection
 
 @section('script')
