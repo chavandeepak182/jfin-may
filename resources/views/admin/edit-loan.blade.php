@@ -19,7 +19,7 @@
             </nav>
             <!-- Add User Button -->
             <div>
-                <a href="{{ url()->previous() }}" class="btn btn-secondary"><i class="bi bi-arrow-left-square me-2"></i>
+                <a href="{{ route('admin.loans') }}" class="btn btn-secondary"><i class="bi bi-arrow-left-square me-2"></i>
                     Back</a>
             </div>
         </div>
@@ -103,14 +103,17 @@
                                     <div class="form-group">
                                         <label for="city">City:</label>
                                         <input type="text" class="form-control" id="city" name="city"
-                                            value="{{ old('city', $profile->city ?? '') }}">
+                                        value="{{ old('city', $profile->cityRelation->city ?? '') }}">
+
+
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="state">State:</label>
-                                        <input type="text" class="form-control" id="state" name="state"
-                                            value="{{ old('state', $profile->state ?? '') }}">
+                                       <input type="text" class="form-control" id="state" name="state"
+                                        value="{{ old('state', $profile->stateRelation->name ?? '') }}">
+
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -245,14 +248,14 @@
                                                 <label for="sanction_letter">Upload Sanction Letter:</label>
                                                 <input type="file" class="form-control" id="sanction_letter"
                                                     name="sanction_letter">
-                                                @if ($loan->sanction_letter)
-    <small>
-        Current file:
-        <a href="{{ Storage::url($loan->sanction_letter) }}" target="_blank">
-            {{ basename($loan->sanction_letter) }}
-        </a>
-    </small>
-@endif
+                                                                                                @if ($loan->sanction_letter)
+                                                    <small>
+                                                        Current file:
+                                                        <a href="{{ Storage::url($loan->sanction_letter) }}" target="_blank">
+                                                            {{ basename($loan->sanction_letter) }}
+                                                        </a>
+                                                    </small>
+                                                @endif
 
 
                                             </div>
@@ -293,16 +296,16 @@
                         <h3 class="h4 mb-2"><strong>Documents</strong></h4>
                             <!-- Documents -->
                             <h6>Uploaded:</h6>
-                            @foreach ($documents as $doc)
-                                <div class="col-md-12 mb-3">
-                                 <div class="document-wrapper">
-    <a href="{{ Storage::url($doc->file_path) }}" target="_blank" style="display: flex; align-items: center; gap: 10px;">
-        <img src="{{ Storage::url($doc->file_path) }}" 
-             alt="{{ $doc->document_name }}" 
-             style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd;">
-        <span>{{ $doc->document_name }}</span>
-    </a>
-</div>
+                                                            @foreach ($documents as $doc)
+                                                                <div class="col-md-12 mb-3">
+                                                                <div class="document-wrapper">
+                                    <a href="{{ Storage::url($doc->file_path) }}" target="_blank" style="display: flex; align-items: center; gap: 10px;">
+                                        <img src="{{ Storage::url($doc->file_path) }}" 
+                                            alt="{{ $doc->document_name }}" 
+                                            style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd;">
+                                        <span>{{ $doc->document_name }}</span>
+                                    </a>
+                                </div>
 
                                 </div>
                             @endforeach

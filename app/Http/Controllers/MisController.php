@@ -148,11 +148,11 @@ public function store(Request $request)
     $misId = DB::table('mis')->insertGetId($validatedData);
 });
 
-        return response()->json([
-            'status'  => 'success',
-            'message' => 'MIS record added successfully!',
-            'id'      => $misId,
-        ], 201);
+       return response()->json([
+    'status'  => true,
+    'message' => 'MIS record added successfully!',
+    'id'      => $misId,
+], 201);
 
     } catch (ValidationException $e) {
 

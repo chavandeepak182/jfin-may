@@ -25,6 +25,16 @@
     box-shadow: 0 10px 40px rgba(0,0,0,0.12);
     padding: 24px 28px 30px;
 }
+.modal-backdrop {
+    display: none !important;
+}
+body.modal-open {
+    overflow: auto !important;
+    padding-right: 0 !important;
+}
+.modal-backdrop.show {
+    opacity: 0 !important;
+}
 
 /* ===== Header ===== */
 .modal-header {
@@ -315,7 +325,7 @@
                                         class="user-link" 
                                         data-name="{{ $user->name }}" 
                                         data-email="{{ $user->email_id }}" 
-                                        data-mobile="{{ $user->profile->mobile_no ?? '-' }}" 
+                                        data-mobile="{{ $user->mobile_no ?? '-' }}" 
                                         data-dob="{{ $user->profile->pan_number ?? '-' }}" 
                                         data-status="{{ $user->is_email_verify == 1 ? 'Active' : 'Inactive' }}"> {{ $user->name }}
                                         </a>

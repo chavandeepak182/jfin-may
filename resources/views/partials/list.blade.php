@@ -60,3 +60,46 @@
     No loans found
 </div>
 @endif
+<script>
+function deleteLoan(loanId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This loan will be deleted!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, delete it'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "{{ route('deleteLoan') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    loan_id: loanId
+                },
+                success: function (response) {
+                    Swal.fire(
+                        'Deleted!',
+                        response.msg ?? 'Loan deleted successfully.',
+                        'success'
+                    );
+
+                    // ✅ Remove row from table (NO reload)
+                    $('#loan-row-' + loanId).fadeOut(400, function () {
+                        $(this).remove();
+                    });
+                },
+                error: function () {
+                    Swal.fire(
+                        'Error!',
+                        'Something went wrong while deleting.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+}
+</script>
