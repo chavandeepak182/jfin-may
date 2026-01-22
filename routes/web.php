@@ -55,7 +55,83 @@ Route::get('admin/eligible', [BankController::class, 'eligiblelist'])->name('adm
 
  Route::get('admin/dashboard_test', [AdminController::class, 'dashboard_test'])->name('dashboard_test');
 
+Route::get('/', function () {
+    return view('dhara-jfin.index');
+});
+// Route::get('/', function () {
+//     return view('frontend.index');
+// });
+Route::get('/about',function () {
+    return view('dhara-jfin.about');
+    });
+// Route::get('about', [FrontendController::class, 'AboutView']);
 
+
+Route::get('/home-loan',function () {
+    return view('dhara-jfin.home-loan');
+    });
+// Route::get('home-loan', [FrontendController::class, 'HomeLoanView']);
+
+
+Route::get('/project-loan',function () {
+    return view('dhara-jfin.project-loan');
+    });
+// Route::get('project-loan', [FrontendController::class, 'ProjectLoanView']);
+
+Route::get('/msme-loan',function () {
+    return view('dhara-jfin.msme-loan');
+    });
+// Route::get('msme-loan', [FrontendController::class, 'MSMELoanView']);
+
+
+Route::get('/loan-against-property',function () {
+    return view('dhara-jfin.loan-against-property');
+    });
+// Route::get('loan-against-property', [FrontendController::class, 'LAPLoanView']);
+
+Route::get('/overdraft-facility',function () {
+    return view('dhara-jfin.overdraft-facility');
+    });
+// Route::get('overdraft-facility', [FrontendController::class, 'OverdraftLoanView']);
+
+
+Route::get('/lease-rental-discounting',function () {
+    return view('dhara-jfin.lease-rental-discounting');
+    });
+// Route::get('lease-rental-discounting', [FrontendController::class, 'LRDLoanView']);
+
+
+Route::get('/eligibility-calculator',function () {
+    return view('dhara-jfin.calculator');
+    })->name('eligibility.calculator');
+
+//     Route::get('/eligibility-calculator', function () {
+//     return view('frontend.eligibility_calcultor');
+// })->name('eligibility.calculator');
+
+Route::get('/services',function () {
+    return view('dhara-jfin.services');
+    });
+// Route::get('services', [FrontendController::class, 'ServicesView']);
+
+Route::get('/contact',function () {
+    return view('dhara-jfin.contact');
+    });
+// Route::get('contact', [FrontendController::class, 'ContactView']);
+
+Route::get('/privacy-policy',function () {
+    return view('dhara-jfin.privacy');
+    });
+// Route::get('privacy-policy', [FrontendController::class, 'PrivacyView']);
+
+Route::get('/terms-and-conditions',function () {
+    return view('dhara-jfin.terms_and_cond');
+    });
+// Route::get('terms-and-conditions', [FrontendController::class, 'TermCondView']);
+
+// Route::get('/dhara-apply',function () {
+//     return view('dhara-jfin.apply');
+//     });
 //  demo login
 
 
@@ -254,34 +330,15 @@ Route::middleware('isAdmin')->group(function () {
     });
 
 
-//frontend routes
-Route::get('/', function () {
-    return view('frontend.index');
-});
 
 
-Route::get('/eligibility-calculator', function () {
-    return view('frontend.eligibility_calcultor');
-})->name('eligibility.calculator');
-
-Route::get('contact', [FrontendController::class, 'ContactView']);
 Route::get('test', [FrontendController::class, 'TestView']);
 Route::get('registration', [FrontendController::class, 'RegisterView']);
-Route::get('services', [FrontendController::class, 'ServicesView']);
-Route::get('about', [FrontendController::class, 'AboutView']);
-Route::get('privacy-policy', [FrontendController::class, 'PrivacyView']);
-Route::get('terms-and-conditions', [FrontendController::class, 'TermCondView']);
 Route::get('myprofile', [FrontendController::class, 'ProfileView']);
 Route::get('emi-calculator', [FrontendController::class, 'CalculatorView']);
 // Route::get('properties', [FrontendController::class, 'properties'])->name('properties');
 Route::get('property-details/{property_id}', [FrontendController::class, 'PropDetailsView']);
 Route::get('referral-program', [FrontendController::class, 'ReferralsView']);
-Route::get('home-loan', [FrontendController::class, 'HomeLoanView']);
-Route::get('loan-against-property', [FrontendController::class, 'LAPLoanView']);
-Route::get('project-loan', [FrontendController::class, 'ProjectLoanView']);
-Route::get('overdraft-facility', [FrontendController::class, 'OverdraftLoanView']);
-Route::get('lease-rental-discounting', [FrontendController::class, 'LRDLoanView']);
-Route::get('msme-loan', [FrontendController::class, 'MSMELoanView']);
 
 Route::post('search_properties', [FrontendController::class, 'search_properties'])->name('search_properties');
 

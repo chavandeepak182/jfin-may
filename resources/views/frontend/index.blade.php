@@ -579,7 +579,7 @@ document.querySelectorAll('.service-btn').forEach(btn => {
                             </div>
                             <div class="service-content p-4">
                                 <div class="service-content-inner">
-                                    <a href="#" class="d-inline-block h4 mb-4">Project Loan</a>
+                                    <a href="#" class="d-inline-block h4 mb-4 text-dark">Project Loan</a>
                                     <p class="mb-4">We simplify construction financing with low rates and an easy online application, offering tailored loans that ensure a smooth and timely process.</p>
                                     <a class="btn btn-primary rounded-1 uppercase py-2 px-4" href="/project-loan" target="_blank">Know More</a>
                                 </div>
