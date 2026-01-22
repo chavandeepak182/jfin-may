@@ -76,10 +76,13 @@
                                 <div class="section-value">{{ $profile->mobile_no ?? '—' }}</div>
                             </div>
 
-                            <div class="col-sm-6">
+                           <div class="col-sm-6">
                                 <small class="text-muted">Gender</small>
-                                <div class="section-value">{{ $profile->gender ?? '—' }}</div>
+                                <div class="section-value">
+                                    {{ $profile->gender ? ucfirst($profile->gender) : '—' }}
+                                </div>
                             </div>
+
 
                             <div class="col-sm-6">
                                 <small class="text-muted">Date of Birth</small>
@@ -94,9 +97,10 @@
                             <div class="col-12 mt-2">
                                 <small class="text-muted">Residential Address</small>
                                 <div class="section-value">
-                                    {{ $profile->residence_address ?? '—' }},
-                                    {{ $profile->city ?? '—' }},
-                                    {{ $profile->state ?? '—' }} - {{ $profile->pincode ?? '—' }}
+                                   {{ $profile->residence_address ?? '—' }},
+                                    {{ $profile->city_name ?? '—' }},
+                                    {{ $profile->state_name ?? '—' }} - {{ $profile->pincode ?? '—' }}
+
                                 </div>
                             </div>
                         </div>
@@ -185,7 +189,7 @@
 
 					<form action="{{ route('user.profile.update') }}" method="POST">
 						@csrf
-						<input type="hidden" name="user_id" value="{{ $user->id }}">
+						<!-- <input type="hidden" name="user_id" value="{{ $user->id }}"> -->
 
 						<div class="modal-body row g-3">
 
@@ -218,13 +222,29 @@
 							</div>
 
 							<div class="col-md-6">
-								<label class="form-label">Gender</label>
-								<input type="text" name="gender"
-									class="form-control"
-									value="{{ old('gender', $profile->gender ?? '') }}">
-							</div>
+                                <label class="form-label">Gender</label>
+                                <select name="gender" class="form-select">
+                                    <option value="">Select Gender</option>
 
-							<div class="col-md-6">
+                                    <option value="male"
+                                        {{ old('gender', $profile->gender ?? '') == 'male' ? 'selected' : '' }}>
+                                        Male
+                                    </option>
+
+                                    <option value="female"
+                                        {{ old('gender', $profile->gender ?? '') == 'female' ? 'selected' : '' }}>
+                                        Female
+                                    </option>
+
+                                    <option value="other"
+                                        {{ old('gender', $profile->gender ?? '') == 'other' ? 'selected' : '' }}>
+                                        Other
+                                    </option>
+                                </select>
+                            </div>
+
+
+                                                        <div class="col-md-6">
 								<label class="form-label">Marital Status</label>
 								<input type="text" name="marital_status"
 									class="form-control"
@@ -238,26 +258,45 @@
 									value="{{ old('residence_address', $profile->residence_address ?? '') }}">
 							</div>
 
-							<div class="col-md-4">
-								<label class="form-label">City</label>
-								<input type="text" name="city"
-									class="form-control"
-									value="{{ old('city', $profile->city ?? '') }}">
-							</div>
+						<div class="row g-3">
 
-							<div class="col-md-4">
-								<label class="form-label">State</label>
-								<input type="text" name="state"
-									class="form-control"
-									value="{{ old('state', $profile->state ?? '') }}">
-							</div>
+                                <!-- STATE -->
+                                <div class="col-md-4">
+                                    <label class="form-label">State</label>
+                                    <select name="state" class="form-select">
+                                        @foreach($states as $state)
+                                            <option value="{{ $state->id }}"
+                                                {{ old('state', $profile->state) == $state->id ? 'selected' : '' }}>
+                                                {{ $state->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <!-- CITY -->
+                                <div class="col-md-4">
+                                    <label class="form-label">City</label>
+                                    <select name="city" class="form-select">
+                                        @foreach($cities as $city)
+                                            <option value="{{ $city->id }}"
+                                                {{ old('city', $profile->city) == $city->id ? 'selected' : '' }}>
+                                                {{ $city->city }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-							<div class="col-md-4">
-								<label class="form-label">Pincode</label>
-								<input type="text" name="pincode"
-									class="form-control"
-									value="{{ old('pincode', $profile->pincode ?? '') }}">
-							</div>
+
+                                        <!-- PINCODE -->
+                                        <div class="col-md-4">
+                                            <label class="form-label">Pincode</label>
+                                            <input type="text"
+                                                name="pincode"
+                                                class="form-control"
+                                                value="{{ old('pincode', $profile->pincode ?? '') }}">
+                                        </div>
+
+                                            </div>
+
 
 						</div>
 
@@ -337,6 +376,179 @@
 				</div>
 			</div>
 		</div>
+
+{{-- ================= BANK DETAILS ================= --}}
+<div class="col-xl-6">
+    <div class="card shadow-sm border-0 h-100 profile-card">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <div class="icon-circle bg-primary bg-opacity-10">
+                    <i class="fas fa-university text-primary"></i>
+                </div>
+                <div>
+                    <h5 class="mb-0 fw-bold">Bank Details</h5>
+                    <small class="text-muted">Withdrawal account information</small>
+                </div>
+            </div>
+
+            <button class="btn btn-sm btn-outline-primary rounded-pill"
+                    data-bs-toggle="modal"
+                    data-bs-target="#bankDetailsModal">
+                <i class="far fa-edit me-1"></i>
+                {{ $bankDetails ? 'Edit' : 'Add' }}
+            </button>
+        </div>
+
+        <div class="card-body">
+            @if($bankDetails)
+                <div class="row g-3">
+
+                    <div class="col-sm-6">
+                        <small class="text-muted">Bank Name</small>
+                        <div class="section-value">{{ $bankDetails->bank_name }}</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <small class="text-muted">Account Number</small>
+                        <div class="section-value">
+                            ****{{ substr($bankDetails->account_no, -4) }}
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <small class="text-muted">IFSC Code</small>
+                        <div class="section-value">{{ $bankDetails->ifsc_code }}</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <small class="text-muted">Branch Name</small>
+                        <div class="section-value">{{ $bankDetails->branch_name }}</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <small class="text-muted">UPI ID</small>
+                        <div class="section-value">{{ $bankDetails->upi_id ?? '—' }}</div>
+                    </div>
+
+                </div>
+            @else
+                <div class="alert alert-warning mb-0">
+                    Bank details not added yet.
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+
+
+<!-- ================= BANK DETAILS MODAL ================= -->
+<div class="modal fade" id="bankDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    {{ $bankDetails ? 'Edit Bank Details' : 'Add Bank Details' }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form action="{{ route('user.bank.save') }}" method="POST">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ $user->id }}">
+
+                <div class="modal-body row g-3">
+
+                    <!-- Bank Name -->
+                    <div class="col-md-6">
+                        <label class="form-label">Bank Name</label>
+                        <input type="text"
+                               name="bank_name"
+                               class="form-control @error('bank_name') is-invalid @enderror"
+                               value="{{ old('bank_name', $bankDetails->bank_name ?? '') }}"
+                               required
+                               pattern="[A-Za-z ]+"
+                               oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')">
+                        @error('bank_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Account Number -->
+                    <div class="col-md-6">
+                        <label class="form-label">Account Number</label>
+                        <input type="text"
+                               name="account_no"
+                               class="form-control @error('account_no') is-invalid @enderror"
+                               value="{{ old('account_no', $bankDetails->account_no ?? '') }}"
+                               required
+                               pattern="[0-9]+"
+                               maxlength="18"
+                               oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                        @error('account_no')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- IFSC Code -->
+                    <div class="col-md-6">
+                        <label class="form-label">IFSC Code</label>
+                        <input type="text"
+                               name="ifsc_code"
+                               class="form-control text-uppercase @error('ifsc_code') is-invalid @enderror"
+                               value="{{ old('ifsc_code', $bankDetails->ifsc_code ?? '') }}"
+                               placeholder="SBIN0001234"
+                               required>
+                        @error('ifsc_code')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Branch Name -->
+                    <div class="col-md-6">
+                        <label class="form-label">Branch Name</label>
+                        <input type="text"
+                               name="branch_name"
+                               class="form-control @error('branch_name') is-invalid @enderror"
+                               value="{{ old('branch_name', $bankDetails->branch_name ?? '') }}"
+                               required
+                               pattern="[A-Za-z ]+"
+                               oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')">
+                        @error('branch_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- UPI ID -->
+                     <div class="col-md-6">
+                        <label class="form-label">UPI Id</label>
+                        <input type="text"
+                            name="upi_id"
+                            class="form-control @error('upi_id') is-invalid @enderror"
+                            value="{{ old('upi_id', $bankDetails->upi_id ?? '') }}"
+                            placeholder="example@upi"
+                            pattern="[a-zA-Z0-9._-]+@[a-zA-Z]{2,}"
+                            title="Enter a valid UPI ID (example@bank)"
+                          oninput="this.value=this.value.replace(/[^a-zA-Z0-9._@-]/g,'')">
+                      </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Save Bank Details
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
 
 </div>
 @endsection

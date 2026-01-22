@@ -37,11 +37,11 @@
                     </div>
                 </div>
 
-                <div class="mt-3">
+                <!-- <div class="mt-3">
                     <button type="button" id="addMoreDocs" class="btn btn-light">
                         + Add More Documents
                     </button>
-                </div>
+                </div> -->
 
                 <div class="mt-4">
                     <button type="submit" class="btn btn-primary px-5">
@@ -74,9 +74,15 @@
                             <h6 class="fw-semibold mb-1 text-dark">
                                 {{ $doc->document_name }}
                             </h6>
-                            <small class="text-muted">
-                                {{ round(Storage::disk('public')->size($doc->file_path)/1024/1024, 2) }} MB
-                            </small>
+                           <small class="text-muted">
+    @if(Storage::disk('public')->exists($doc->file_path))
+        {{ round(Storage::disk('public')->size($doc->file_path) / 1024 / 1024, 2) }} MB
+    @else
+        <span class="text-danger">File missing</span>
+    @endif
+</small>
+
+                            
 
                             <div class="progress mt-2" style="height:6px;">
                                 <div class="progress-bar bg-primary" style="width:100%"></div>
@@ -101,7 +107,7 @@
                                 <i class="fas fa-download me-1"></i> Download
                             </a>
 
-                            <form action="{{ route('loan.deletedocument', $doc->document_id) }}"
+                            <!-- <form action="{{ route('loan.deletedocument', $doc->document_id) }}"
                                 method="POST"
                                 class="d-inline"
                                 onsubmit="return confirm('Remove this document?');">
@@ -112,7 +118,7 @@
                                         class="btn btn-link text-danger p-0 text-decoration-none">
                                     <i class="fas fa-trash me-1"></i> Remove
                                 </button>
-                            </form>
+                            </form> -->
 
                         </div>
                     </div>

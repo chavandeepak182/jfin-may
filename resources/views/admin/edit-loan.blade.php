@@ -19,7 +19,7 @@
             </nav>
             <!-- Add User Button -->
             <div>
-                <a href="{{ url()->previous() }}" class="btn btn-secondary"><i class="bi bi-arrow-left-square me-2"></i>
+                <a href="{{ route('admin.loans') }}" class="btn btn-secondary"><i class="bi bi-arrow-left-square me-2"></i>
                     Back</a>
             </div>
         </div>
@@ -37,7 +37,10 @@
 
 
     <div class="bg-white">
-        <form id="editLoanForm" method="post" action="{{ route('updateLoan') }}">
+        <!-- <form id="editLoanForm" method="post" action="{{ route('updateLoan') }}"> -->
+            <form id="editLoanForm" method="post" action="{{ route('admin.updateLoan') }}"
+ enctype="multipart/form-data">
+
             @csrf
             <input type="hidden" name="loan_id" value="{{ old('loan_id', $loan->loan_id ?? '') }}">
 
@@ -100,14 +103,17 @@
                                     <div class="form-group">
                                         <label for="city">City:</label>
                                         <input type="text" class="form-control" id="city" name="city"
-                                            value="{{ old('city', $profile->city ?? '') }}">
+                                        value="{{ old('city', $profile->cityRelation->city ?? '') }}">
+
+
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="state">State:</label>
-                                        <input type="text" class="form-control" id="state" name="state"
-                                            value="{{ old('state', $profile->state ?? '') }}">
+                                       <input type="text" class="form-control" id="state" name="state"
+                                        value="{{ old('state', $profile->stateRelation->name ?? '') }}">
+
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -242,11 +248,16 @@
                                                 <label for="sanction_letter">Upload Sanction Letter:</label>
                                                 <input type="file" class="form-control" id="sanction_letter"
                                                     name="sanction_letter">
-                                                @if ($loan->sanction_letter)
-                                                    <small>Current file: <a
-                                                            href="{{ asset('storage/sanction_letters/' . $loan->sanction_letter) }}"
-                                                            target="_blank">{{ $loan->sanction_letter }}</a></small>
+                                                                                                @if ($loan->sanction_letter)
+                                                    <small>
+                                                        Current file:
+                                                        <a href="{{ Storage::url($loan->sanction_letter) }}" target="_blank">
+                                                            {{ basename($loan->sanction_letter) }}
+                                                        </a>
+                                                    </small>
                                                 @endif
+
+
                                             </div>
                                     </div>
                                 </div>
@@ -285,16 +296,16 @@
                         <h3 class="h4 mb-2"><strong>Documents</strong></h4>
                             <!-- Documents -->
                             <h6>Uploaded:</h6>
-                            @foreach ($documents as $doc)
-                                <div class="col-md-12 mb-3">
-                                 <div class="document-wrapper">
-    <a href="{{ Storage::url($doc->file_path) }}" target="_blank" style="display: flex; align-items: center; gap: 10px;">
-        <img src="{{ Storage::url($doc->file_path) }}" 
-             alt="{{ $doc->document_name }}" 
-             style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd;">
-        <span>{{ $doc->document_name }}</span>
-    </a>
-</div>
+                                                            @foreach ($documents as $doc)
+                                                                <div class="col-md-12 mb-3">
+                                                                <div class="document-wrapper">
+                                    <a href="{{ Storage::url($doc->file_path) }}" target="_blank" style="display: flex; align-items: center; gap: 10px;">
+                                        <img src="{{ Storage::url($doc->file_path) }}" 
+                                            alt="{{ $doc->document_name }}" 
+                                            style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd;">
+                                        <span>{{ $doc->document_name }}</span>
+                                    </a>
+                                </div>
 
                                 </div>
                             @endforeach
@@ -318,7 +329,7 @@
                     </div>
 
                     <!-- Education Information -->
-                    <div class="section mb-4 mt-5">
+                    <!-- <div class="section mb-4 mt-5">
                         <h3 class="h4 mb-2"><strong>Education Information</strong></h4>
                             <div class="row">
                                 <div class="col-md-6">
@@ -353,12 +364,12 @@
                                 </div>
                             </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
 
             $('#editLoanForm').submit(function(e) {
@@ -389,18 +400,24 @@
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 window.location.href =
-                                    "{{ route('loans.index') }}"; // Redirect to the loans index
+                                    "{{ route('admin.loans') }}"; // Redirect to the loans index
                             }
                         });
                     },
-                    error: function(response) {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Something went wrong!',
-                            icon: 'error',
-                            confirmButtonText: 'OK'
-                        });
-                    },
+                    error: function(xhr) {
+    let msg = 'Something went wrong';
+
+    if (xhr.responseJSON?.message) {
+        msg = xhr.responseJSON.message;
+    }
+
+    Swal.fire({
+        title: 'Error!',
+        text: msg,
+        icon: 'error'
+    });
+}
+
                     complete: function() {
                         submitButton.prop('disabled', false);
                         submitButton.html(originalText);
@@ -408,7 +425,56 @@
                 });
             });
         });
-    </script>
+    </script> -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+$(document).ready(function () {
+
+    $('#editLoanForm').on('submit', function (e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);
+        let btn = $(this).find('button[type="submit"]');
+
+        btn.prop('disabled', true);
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+
+            success: function (response) {
+                Swal.fire({
+                    title: response.msg,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = "{{ route('admin.loans') }}";
+                });
+            },
+
+            error: function (xhr) {
+                let msg = 'Something went wrong';
+                if (xhr.responseJSON?.msg) {
+                    msg = xhr.responseJSON.msg;
+                }
+                Swal.fire('Error', msg, 'error');
+            },
+
+            complete: function () {
+                btn.prop('disabled', false);
+            }
+        });
+
+        return false;
+    });
+
+});
+</script>
+
+
     <script>
         function toggleRemarkBox(value) {
             var remarkBox = document.getElementById('remark-box');
@@ -464,22 +530,23 @@
             documentUploadSection.appendChild(newRow);
         }
 
-        function toggleSanctionLetterBox(status) {
-            document.getElementById('sanctionLetterBox').style.display = (status === 'approved') ? 'block' : 'none';
-        }
+       function toggleSanctionLetterBox(status) {
+    if (status === 'approved' || status === 'disbursed') {
+        document.getElementById('sanctionLetterBox').style.display = 'block';
+    } else {
+        document.getElementById('sanctionLetterBox').style.display = 'none';
+    }
+}
 
         // Initialize the form based on current status
-        document.addEventListener('DOMContentLoaded', function() {
-
-
-            var statusElement = document.getElementById('status');
-
-            if (statusElement) {
-                const statusValue = statusElement.value;
-                toggleSanctionLetterBox(statusValue);
-                toggleRemarkBox(statusValue);
-            }
-        });
+      document.addEventListener('DOMContentLoaded', function() {
+    var statusElement = document.getElementById('status');
+    if (statusElement) {
+        const statusValue = statusElement.value;
+        toggleSanctionLetterBox(statusValue);
+        toggleRemarkBox(statusValue);
+    }
+});
 
         // Listen for changes in the loan status
         document.getElementById('status').addEventListener('change', function() {

@@ -31,15 +31,25 @@ use App\Http\Controllers\AuthV3\AuthV3Controller;
 use App\Http\Controllers\EstimatedFileController;
 use App\Http\Controllers\MonthlyPLController;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\TicketMessageController;
 
 
 require __DIR__.'/auth.php';
 // dashbord path
 Route::get('/admin/customers', action: [UsersController::class, 'adminCustomer'])->name('admin.customers');
+// update user
+
+Route::post('/admin/user/update-status',
+    [UsersController::class, 'updateUserStatus']
+)->name('update.user.status');
+
 Route::get('admin/loans-list', [LoanApplicationController::class, 'loanlist'])->name('admin.loans');
 Route::get('admin/property', [PropertyController::class, 'propertylist'])->name('admin.property');
 Route::get('admin/leadslist', [LeadController::class, 'leadlist'])->name('admin.listlead');
 Route::get('admin/banklist', [BankController::class, 'loanbankslist'])->name('admin.bank');
+Route::post('/admin/loan-bank/store', [BankController::class, 'insertLoanBank'])
+    ->name('admin.loanbank.store');
 Route::get('admin/referrallist', [BankController::class, 'listreferral'])->name('admin.allreferral');
 Route::get('admin/eligible', [BankController::class, 'eligiblelist'])->name('admin.eligible');
 
@@ -291,6 +301,7 @@ Route::middleware('isAdmin')->group(function () {
 });
 
 
+
 //permission
     Route::prefix('admin')->group(function () {
     Route::resource('permissions', App\Http\Controllers\PermissionController::class);
@@ -407,12 +418,35 @@ Route::middleware(['isUserOrAdmin'])->group(function () {
 
     Route::post('updateLoan', [LoanApplicationController::class, 'update'])->name('updateLoan');
 
+    // referlalead in cutomer
+    Route::post(
+    '/invite-referral-submit',
+    [ReferralController::class, 'submitInviteReferral']
+)->name('invite.referral.submit');
+
+
 });
 Route::get('/help-support', [UsersController::class, 'helpSupport'])
     ->name('user.help.support');
 
-// Route::get('admin/loan-application', [LoanApplicationController::class, 'showForm'])->name('loan.form');
 
+Route::middleware(['isAdmin'])->group(function () {
+
+    Route::post('admin/updateLoan', [LoanApplicationController::class, 'update'])
+        ->name('admin.updateLoan');
+
+});
+
+
+
+
+
+
+// customer bank add fun
+
+
+Route::post('/user/bank/save', [UsersController::class, 'saveBankDetails'])
+    ->name('user.bank.save');
 
 //loan admin
 Route::get('admin/loans', [LoanApplicationController::class, 'index'])->name('loans.index');
@@ -521,6 +555,8 @@ Route::get('/get-user-by-id', [UsersController::class, 'getUserById'])
     Route::get('admin/allUsers', [UsersController::class, 'allUsers'])->name('allUsers');  
     Route::post('/update-user-status', [UsersController::class, 'updateUserStatus'])->name('updateUserStatus');
     Route::post('admin/assignAgent', [LoanApplicationController::class, 'assignAgent'])->name('assignAgent');
+Route::post('/loan/restore', [LoanApplicationController::class, 'restoreLoan'])
+    ->name('loan.restore');
 
     //activity list
     Route::get('admin/activities', [AdminController::class, 'activities'])->name('activities');  
@@ -646,7 +682,7 @@ Route::middleware('isPartner')->group(function () {
     Route::get('/editProperty/{property_id}', [PropertyController::class, 'editProperty'])->name('editProperty');
     Route::post('/updatePropertie', [PropertyController::class, 'updatePropertie'])->name('updatePropertie');
     Route::post('/deletePropertie', [PropertyController::class, 'deletePropertie'])->name('deletePropertie');
-    Route::post('/activate', [PropertyController::class, 'activate'])->name('activate');
+    Route::post('/activate-property', [PropertyController::class, 'activate'])->name('activate.property');
 
     //profile
     Route::get('/partner/profile', [ProfileController::class, 'showPartnerProfile'])->name('partner.profile');
@@ -683,13 +719,22 @@ Route::middleware('isAdmin')->group(function () {
 // Cibil Score Api
 Route::get('credit-score', [CibilController::class, 'fetchCreditScore']);
 
-Route::get('/mis', [MISController::class, 'index'])->name('mis.index');
-Route::post('/mis/store', [MISController::class, 'store'])->name('mis.store');
-Route::post('/mis/delete', [MISController::class, 'destroy'])->name('mis.delete');
-Route::get('/mis/edit/{id}', [MISController::class, 'edit'])->name('mis.edit');
-Route::put('/mis/update/{id}', [MISController::class, 'update'])->name('mis.update');
-Route::get('mis/export/excel', [MisController::class, 'exportExcel'])->name('mis.exportExcel');
-Route::get('mis/export/pdf', [MisController::class, 'exportPDF'])->name('mis.exportPDF');
+// Route::get('/mis', [MISController::class, 'index'])->name('mis.index');
+// Route::post('/mis/store', [MISController::class, 'store'])->name('mis.store');
+// Route::post('/mis/delete', [MISController::class, 'destroy'])->name('mis.delete');
+// Route::get('/mis/edit/{id}', [MISController::class, 'edit'])->name('mis.edit');
+// Route::put('/mis/update/{id}', [MISController::class, 'update'])->name('mis.update');
+
+Route::group([], function () {
+    Route::get('/mis', [MisController::class, 'index'])->name('mis.index');
+    Route::post('/mis/store', [MisController::class, 'store'])->name('mis.store');
+    Route::post('/mis/delete', [MisController::class, 'destroy'])->name('mis.delete');
+    Route::get('/mis/edit/{id}', [MisController::class, 'edit'])->name('mis.edit');
+    Route::put('/mis/update/{id}', [MisController::class, 'update'])->name('mis.update');
+    Route::get('mis/export/excel', [MisController::class, 'exportExcel'])->name('mis.exportExcel');
+    Route::get('mis/export/pdf', [MisController::class, 'exportPDF'])->name('mis.exportPDF');
+});
+
 
 
 // Mail
@@ -795,3 +840,19 @@ Route::get(
     'admin/monthly-pl/export-with-estimated/{id}',
     [MonthlyPLController::class, 'exportWithEstimated']
 )->name('monthlyPL.exportWithEstimated');
+
+Route::middleware(['auth'])->group(function(){
+
+    Route::get('/tickets', [TicketController::class,'index'])->name('tickets.index');
+    Route::get('/tickets/create', [TicketController::class,'create'])->name('tickets.create');
+    Route::post('/tickets', [TicketController::class,'store'])->name('tickets.store');
+    Route::get('/tickets/{id}', [TicketController::class,'show'])->name('tickets.show');
+
+    Route::post('/tickets/{id}/message', [TicketMessageController::class,'sendMessage'])->name('tickets.message');
+    Route::get('/admin/user/{userId}/loans', [TicketController::class,'getUserLoans']);
+    Route::get('/admin/loan/{loanId}/agent', [TicketController::class,'getLoanAgent']);
+    Route::post('/tickets/{id}/close', [TicketController::class,'close'])
+    ->name('tickets.close');
+    Route::get('/agent/customers', [TicketController::class,'agentCustomers']);
+    Route::get('/agent/user/{id}/loans', [TicketController::class,'agentUserLoans']);
+});
