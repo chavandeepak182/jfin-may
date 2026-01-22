@@ -106,7 +106,7 @@
     <div class="otp-card">
 
         <h3>Verify OTP</h3>
-        <p>Please enter the 4-digit OTP sent to your mobile number</p>
+        <p>Please enter the OTP sent to your mobile</p>
 
         {{-- Error message --}}
         @if ($errors->any())
@@ -124,9 +124,9 @@
             <input
                 type="text"
                 name="otp"
-                maxlength="4"
+                maxlength="6"
                 class="otp-input"
-                placeholder="● ● ● ●"
+                placeholder="● ● ● ● ● ●"
                 required
             >
 

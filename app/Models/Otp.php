@@ -16,6 +16,7 @@ class Otp extends Model
         'user_id',
         'otp',
         'is_verify',
+        'session_id',
         'expires_at',   // ✅ ADD THIS
     ];
 
