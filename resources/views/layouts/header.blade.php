@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title')</title>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
@@ -14,12 +15,19 @@
 
     <!-- SB Admin CSS -->
     <link href="{{ asset('theme/dist-assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <!-- FIX: Load same Bootstrap CSS as customer -->
+<link href="{{ asset('theme/frontend/css/bootstrap.min.css') }}" rel="stylesheet">
+
     <link href="{{ asset('theme/dist-assets/css/sb-admin-3.css') }}" rel="stylesheet">
 
     <!-- Summernote -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs4.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> -->
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -61,6 +69,31 @@
         .sidebar-dark .nav-item .nav-link i {
             color: #fff;
         }
+        /* FIX FORM WIDTH IN ADMIN */
+.content .container,
+.content .container-fluid {
+    max-width: 1140px;
+    margin: auto;
+}
+/* FIX FORM INPUTS */
+.form-control,
+.form-select {
+    height: calc(2.5rem + 2px);
+    border-radius: 0.375rem;
+}
+.step,
+.step-active {
+    background: #0d6efd !important;
+    color: #fff;
+}
+.form-group,
+.form-floating {
+    margin-bottom: 12px;
+}
+.form-select {
+    margin-bottom: 10px;
+}
+
     </style>
 </head>
 
@@ -155,8 +188,8 @@
 </div>
 
 {{-- JS --}}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ asset('theme/dist-assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></cript>
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+<!-- <script src="{{ asset('theme/dist-assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></cript> -->
 <script src="{{ asset('theme/dist-assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 <script src="{{ asset('theme/dist-assets/js/sb-admin-2.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs4.min.js"></script>

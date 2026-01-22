@@ -54,12 +54,37 @@ class AuthV3Controller extends Controller
 
 public function signupSubmit(Request $request)
 {
-    $request->validate([
-        'name'      => 'required|string|max:255',
-        'mobile_no' => 'required|digits:10',
-        'email_id'  => 'required|email',
-        'password'  => 'required|min:6',
-    ]);
+    $request->validate(
+        [
+            'name' => [
+                'required',
+                'regex:/^[a-zA-Z\s]+$/',
+                'max:255',
+            ],
+            'mobile_no' => [
+                'required',
+                'digits:10',
+            ],
+            'email_id' => [
+                'required',
+                'email',
+            ],
+            'password' => [
+                'required',
+                'min:6',
+            ],
+        ],
+        [
+            'name.required'      => 'Full name is required',
+            'name.regex'         => 'Name can contain only letters and spaces',
+            'mobile_no.required' => 'Mobile number is required',
+            'mobile_no.digits'   => 'Mobile number must be exactly 10 digits',
+            'email_id.required'  => 'Email address is required',
+            'email_id.email'     => 'Please enter a valid email address',
+            'password.required'  => 'Password is required',
+            'password.min'       => 'Password must be at least 6 characters',
+        ]
+    );
 
     $user = User::where('mobile_no', $request->mobile_no)
                 ->orWhere('email_id', $request->email_id)
@@ -68,9 +93,9 @@ public function signupSubmit(Request $request)
     if ($user) {
 
         if ($user->role_id == 1) {
-            return back()->withErrors([
-                'mobile_no' => 'You already have a Finance account'
-            ]);
+            return back()
+                ->withErrors(['mobile_no' => 'You already have a Finance account'])
+                ->withInput();
         }
 
         $user->update([
@@ -79,7 +104,6 @@ public function signupSubmit(Request $request)
 
     } else {
 
-        // 🔑 Generate referral code
         do {
             $referralCode = Str::upper(Str::random(8));
         } while (User::where('referral_code', $referralCode)->exists());
@@ -168,7 +192,9 @@ public function signupSubmit(Request $request)
         $otpRow->update(['is_verify' => 1]);
 
         Auth::loginUsingId($userId);
-
+        User::where('id', $userId)->update([
+            'last_login_at' => now()
+        ]);
         session([
             'user_id'  => Auth::id(),
             'username' => Auth::user()->name,
@@ -282,6 +308,10 @@ public function loginWithEmail(Request $request)
     }
 
     Auth::loginUsingId($user->id);
+    /* ✅ UPDATE LAST LOGIN TIME */
+$user->update([
+    'last_login_at' => now()
+]);
 
     session([
         'user_id'  => $user->id,
@@ -348,6 +378,13 @@ public function handleGoogleCallback()
 
     // login user
     Auth::login($user);
+    Auth::login($user);
+
+/* ✅ UPDATE LAST LOGIN TIME */
+$user->update([
+    'last_login_at' => now()
+]);
+
 
     // ✅ SAME redirect as OTP & Email login
     return redirect('/loans-list');

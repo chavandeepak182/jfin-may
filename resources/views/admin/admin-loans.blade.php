@@ -180,8 +180,8 @@
                     <span class="badge-soft badge-red">+8.2%</span>
                 </div>
 
-                <div class="loan-title">Pending Loans</div>
-                <div class="loan-value">{{ $inProcessLoans }}</div>
+                <div class="loan-title">Pending Assigned Loans</div>
+                <div class="loan-value">{{ $pendingLoansCount }}</div>
                 <div class="loan-sub">Tracked from records</div>
             </div>
         </a>
@@ -312,6 +312,20 @@ $(document).ready(function () {
 });
 </script>
 
+<div class="row mt-4">
+    <div class="col-md-4 ms-auto">
+        <div class="input-group">
+            <span class="input-group-text bg-white">
+                <i class="fas fa-search text-muted"></i>
+            </span>
+            <input type="text"
+                   id="loanSearch"
+                   class="form-control border-start-0"
+                   placeholder="Search by applicant name...">
+        </div>
+    </div>
+</div>
+
 
 <div class="row mt-4">
     <div class="col-12">
@@ -325,64 +339,69 @@ $(document).ready(function () {
 <script>
 $(document).ready(function () {
 
-  function loadLoans(type = 'all') {
+    let currentType = 'all';
 
+    function loadLoans(type = 'all', search = '') {
+
+    currentType = type;
     let url = "{{ route('loan.ajax.list') }}";
 
-    if (type === 'pending') {
-        url = "{{ route('loan.ajax.pending') }}";
-    }
-
-    if (type === 'approved') {
-        url = "{{ route('loan.ajax.approved') }}";
-    }
-
-    if (type === 'disbursed') {
-        url = "{{ route('loan.ajax.disbursed') }}";
-    }
-
-    if (type === 'rejected') {
-        url = "{{ route('loan.ajax.rejected') }}";
-    }
-
-    if (type === 'trashed') {
-        url = "{{ route('loan.ajax.trashed') }}";
-    }
+    if (type === 'inprocess') url = "{{ route('loan.ajax.inprocess') }}"; // ✅ ADD THIS
+    if (type === 'pending')   url = "{{ route('loan.ajax.pending') }}";
+    if (type === 'approved')  url = "{{ route('loan.ajax.approved') }}";
+    if (type === 'disbursed') url = "{{ route('loan.ajax.disbursed') }}";
+    if (type === 'rejected')  url = "{{ route('loan.ajax.rejected') }}";
+    if (type === 'trashed')   url = "{{ route('loan.ajax.trashed') }}";
 
     $('#loanListArea').html('<div class="text-center py-4">Loading...</div>');
 
     $.ajax({
         url: url,
         type: "GET",
+        data: { search: search },
         success: function (res) {
             $('#loanListArea').html(res);
-        },
-        error: function (xhr) {
-            console.log(xhr.responseText);
-            $('#loanListArea').html(
-                '<div class="text-danger text-center">Error loading loans</div>'
-            );
         }
     });
 }
 
-    // card click
     $('.loan-filter').on('click', function (e) {
         e.preventDefault();
-        loadLoans($(this).data('type'));
+        loadLoans($(this).data('type'), $('#loanSearch').val());
     });
 
-    // load ALL by default
-    loadLoans('all');
+    // Search typing
+    $('#loanSearch').on('keyup', function () {
+        loadLoans(currentType, $(this).val());
+    });
 
+    // Load all by default
+    loadLoans('all');
 });
 </script>
 
 
+<script>
+$(document).on('click', '#loanListArea .pagination a', function (e) {
+    e.preventDefault();
 
+    let url = $(this).attr('href');
+    let search = $('#loanSearch').val();
 
+    $('#loanListArea').html('<div class="text-center py-4">Loading...</div>');
 
-
+    $.ajax({
+        url: url,
+        type: 'GET',
+        data: {
+            search: search
+        },
+        success: function (res) {
+            $('#loanListArea').html(res);
+        }
+    });
+});
+</script>
 
 @endsection
 

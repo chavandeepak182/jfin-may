@@ -6,10 +6,7 @@
 @section('content')
     @parent
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- your custom JS here -->
+
 
 <style>
 .analytics-card {
@@ -78,6 +75,30 @@
     font-size: 13px;
     color: #22c55e;
 }
+/* FIX BROKEN PAGINATION */
+.pagination {
+    display: flex !important;
+    justify-content: center;
+    gap: 6px;
+}
+
+.pagination li {
+    list-style: none;
+}
+
+.pagination li a,
+.pagination li span {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    transform: none !important;
+}
+
+.pagination i,
+.pagination svg {
+    display: none !important;
+}
+
 </style>
 
 
@@ -96,40 +117,12 @@
 
         <!-- MIS Buttons -->
         <div id="misBtns" style="display:none;">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMISView">
-                <i class="fa fa-plus"></i> Add MIS
-            </button>
-            <button class="btn btn-success" id="exportExcel">
-                Export to Excel
-            </button>
-        </div>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMISView">
+        <i class="fa fa-plus"></i> Add MIS
+    </button>
+</div>
 
-        <!-- Loan Bank Button -->
-        <div id="addBankBtn" style="display:none;">
-            <button type="button"
-                    class="btn btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#addBankView">
-                <i class="fa fa-plus"></i> Add Bank
-            </button>
-        </div>
 
-        <!-- ✅ Estimated File Button -->
-        <div id="addEstimatedBtn" style="display:none;">
-            <a href="{{ route('estimatedFile.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-lg"></i> Add Estimated File
-            </a>
-            
-
-        </div>
-            <div id="addEstimatedBtn" style="display:none;">
-            <a href="{{ route('monthlyPL.index') }}"
-                class="btn btn-primary">
-                + Create Monthly P&L
-                </a>
-            
-
-        </div>
         
 
     </div>
@@ -191,8 +184,10 @@
 
 
     <!-- All MIS -->
-   <div class="col-xl-3 col-lg-4 col-md-6">
-    <div class="analytics-card" onclick="showMISList()" style="cursor:pointer;">
+<div class="col-xl-3 col-lg-4 col-md-6">
+    <div class="analytics-card"
+         onclick="showMISList()"
+         style="cursor:pointer;">
         <div class="analytics-row">
             <div class="analytics-icon icon-yellow">
                 <i class="fas fa-chart-line"></i>
@@ -203,7 +198,7 @@
                     <div class="analytics-value">{{ $misRecords->total() }}</div>
                 </div>
                 <div class="analytics-bottom">
-                    <div class="analytics-growth">+15.3% from last month</div>
+                    <div class="analytics-growth">+8.2% from last month</div>
                 </div>
             </div>
         </div>
@@ -211,103 +206,51 @@
 </div>
 
 
-    <!-- All Loan Banks -->
-     <div class="col-xl-3 col-lg-4 col-md-6">
-        <div class="analytics-card"
-             onclick="showLoanBanks()"
-             style="cursor:pointer;">
-
-            <div class="analytics-row">
-                <div class="analytics-icon icon-green">
-                    <i class="fas fa-university"></i>
-                </div>
-
-                <div class="analytics-content">
-                    <div class="analytics-title">All Loan Banks</div>
-
-                    <div class="analytics-bottom">
-                        <div class="analytics-value">
-                            {{ $loanbanks->total() }}
-                        </div>
-                    </div>
-
-                    <div class="analytics-bottom">
-                        <div class="analytics-growth">
-                            +22.5% from last month
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-
-
-    <!-- All Loan Banks -->
-    
-
-    <!-- Estimated Files -->
-    <div class="col-xl-3 col-lg-4 col-md-6 mt-5">
-        <div class="analytics-card"
-             onclick="showEstimatedFiles()"
-             style="cursor:pointer;">
-
-            <div class="analytics-row">
-                <div class="analytics-icon icon-purple">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                </div>
-
-                <div class="analytics-content">
-                    <div class="analytics-title">Estimated Files</div>
-
-                    <div class="analytics-bottom">
-                        <div class="analytics-value">
-                            {{ $totalEstimatedFiles }}
-                        </div>
-                    </div>
-
-                    <div class="analytics-bottom">
-                        <div class="analytics-growth">
-                            Calculated from records
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-
-    <!-- Monthly P&l -->
-     <div class="col-xl-3 col-lg-4 col-md-6 mt-5">
+<!-- Referral Leads -->
+<div class="col-xl-3 col-lg-4 col-md-6">
     <div class="analytics-card"
-         onclick="showMonthlyPL()"
+         onclick="showReferralLeads()"
          style="cursor:pointer;">
 
         <div class="analytics-row">
-            <div class="analytics-icon icon-blue">
-                <i class="fas fa-file-invoice-dollar"></i>
+            <div class="analytics-icon icon-green">
+                <i class="fas fa-share-alt"></i>
             </div>
 
             <div class="analytics-content">
-                <div class="analytics-title">Monthly P&amp;L</div>
+                <div class="analytics-title">Referral Leads</div>
 
                 <div class="analytics-bottom">
                     <div class="analytics-value">
-                        {{ $totalMonthlyPL }}
+                        {{ $referralLeads->count() }}
                     </div>
                 </div>
 
                 <div class="analytics-bottom">
                     <div class="analytics-growth">
-                        Tracked from records
+                        Tracked from users
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+
+
+
+    
+     
+
+
+
+   
+    
+
+   
+
+    
 
 
 
@@ -344,6 +287,9 @@
                 @endforeach
             </tbody>
         </table>
+        {{ $enquiries->links('pagination::bootstrap-4') }}
+
+
     </div>
 </div>
 
@@ -375,25 +321,54 @@
                         <td>{{ $lead->lead_source }}</td>
                         <td>{{ \Carbon\Carbon::parse($lead->follow_up_date)->format('d M Y') }}</td>
                         <td>{{ $lead->agent->name ?? 'N/A' }}</td>
-                        <td>
-                            <a class="btn btn-warning btn-xs" href="{{ route('leads.edit', $lead->id) }}">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                        </td>
+                       <td class="d-flex gap-1">
+                                <!-- Edit -->
+                                <a class="btn btn-warning btn-xs" href="{{ route('leads.edit', $lead->id) }}">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+
+                                <!-- Delete -->
+                                <form action="{{ route('leads.destroy', $lead->id) }}" method="POST" class="delete-form">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-xs">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+
                     </tr>
                     @endforeach
                 </tbody>
             </table>
 
-            {{ $leads->links() }}
+           {{ $leads->links('pagination::bootstrap-4') }}
+
         </div>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.delete-form').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            if (confirm('Are you sure you want to delete this lead?')) {
+                this.submit();
+            }
+        });
+    });
+});
+</script>
 
 
 <!-- mis -->
  <div id="misSection" class="card mt-5" style="display:none;">
-
+  <!-- ✅ SUCCESS MESSAGE (ADD HERE) -->
+    <div id="misSuccessMsg"
+         class="alert alert-success text-center fw-bold d-none mt-3">
+        ✅ MIS added successfully
+    </div>
     <!-- MIS Header -->
     
 
@@ -423,75 +398,349 @@
                         <td>{{ $mis->product_type }}</td>
                         <td>{{ $mis->amount }}</td>
                         <td>{{ $mis->city }}</td>
-                        <td>
+                        <td class="d-flex gap-1">
+                            <!-- Edit -->
                             <a href="{{ route('mis.edit', $mis->id) }}" class="btn btn-sm btn-primary">
                                 Edit
                             </a>
+
+                            <!-- Delete -->
+                        <button type="button"
+                                class="btn btn-sm btn-danger"
+                                onclick="deleteMIS({{ $mis->id }})"
+                                title="Delete">
+                            <i class="fa fa-trash"></i>
+                        </button>
+
                         </td>
+
                     </tr>
                     @endforeach
                 </tbody>
             </table>
 
-            {{ $misRecords->links() }}
-        </div>
-    </div>
-</div>
-<!-- loanbank -->
- <div id="loanBankSection" class="card mt-5" style="display:none;">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table id="example" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Bank Name</th>
-                        <th>IFSC</th>
-                        <th>Branch</th>
-                        <th>Manager</th>
-                        <th>Manager Number</th>
-                        <th>Address</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($loanbanks as $bank)
-                    <tr>
-                        <td>{{ $bank->bank_name }}</td>
-                        <td>{{ $bank->ifsc_code }}</td>
-                        <td>{{ $bank->branch_name }}</td>
-                        <td>{{ $bank->manager_name }}</td>
-                        <td>{{ $bank->manager_number }}</td>
-                        <td>{{ $bank->bank_address }}</td>
-                        <td>
-                            <a href="{{ url('editBank/'.$bank->bank_id) }}" class="btn btn-primary btn-xs">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                            <button class="btn btn-danger btn-xs"
-                                onclick="deleteBank('{{ $bank->bank_id }}')">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+          {{ $misRecords->links('pagination::bootstrap-4') }}
 
-            {{ $loanbanks->links() }}
         </div>
     </div>
 </div>
 
 <script>
+function deleteMIS(id) {
+    swal({
+        title: "Are you sure?",
+        text: "This record will be permanently deleted!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+
+        if (willDelete) {
+            $.ajax({
+                url: "{{ route('mis.delete') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id
+                },
+                success: function (response) {
+                    if (response.status === true) {
+                        swal("Deleted", response.message, "success")
+                            .then(() => location.reload());
+                    } else {
+                        swal("Error", response.message, "error");
+                    }
+                },
+                error: function () {
+                    swal("Error", "Something went wrong", "error");
+                }
+            });
+        }
+
+    });
+}
+</script>
+
+
+<div id="referralLeadsSection" class="card mt-5" style="display:none;">
+
+    <div class="card-header">
+        <h4>Referral Leads</h4>
+    </div>
+
+    <div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Referrer</th>
+                    <th>Referrer Mobile</th>
+                    <th>Referral Code</th>
+                    <th>Lead Name</th>
+                    <th>Lead Mobile</th>
+                    <th>Lead Email</th>
+                    <th>Product Type</th>   <!-- ✅ ADDED -->
+                    <th>Status</th>
+                    <th>Action</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            @forelse($referralLeads as $i => $lead)
+                <tr>
+                    <td>{{ $i + 1 }}</td>
+                    <td>{{ $lead->referrer_name }}</td>
+                    <td>{{ $lead->referrer_mobile }}</td>
+
+                    <td>
+                        <span class="fw-bold text-primary">
+                            {{ $lead->referral_code }}
+                        </span>
+                    </td>
+
+                    <td>{{ $lead->name }}</td>
+                    <td>{{ $lead->mobile }}</td>
+                    <td>{{ $lead->email ?? '-' }}</td>
+
+                    <!-- ✅ PRODUCT TYPE -->
+                                    <td>
+                    <span class="badge bg-info">
+                        {{ $lead->product_name ?? '-' }}
+                    </span>
+                </td>
+
+
+                   <td>
+                                <span class="badge
+                                    {{ $lead->status === 'pending' ? 'bg-warning' : 'bg-success' }}">
+                                    {{ ucfirst($lead->status) }}
+                                </span>
+                            </td>
+                            <td>
+                                @if($lead->status === 'pending')
+                                    <button type="button"
+                                            class="btn btn-success btn-sm create-account-btn"
+                                            data-name="{{ $lead->name }}"
+                                            data-email="{{ $lead->email }}"
+                                            data-mobile="{{ $lead->mobile }}">
+                                        Create Account
+                                    </button>
+                                @else
+                                    <span class="text-muted">Created</span>
+                                @endif
+                            </td>
+                    
+
+                    <td>
+                        {{ \Carbon\Carbon::parse($lead->created_at)->format('d M Y') }}
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="10" class="text-center text-muted">
+                        No referral leads found
+                    </td>
+                </tr>
+            @endforelse
+            </tbody>
+        </table>
+
+        {{ $referralLeads->links('pagination::bootstrap-4') }}
+    </div>
+</div>
+
+</div>
+<!-- create account user model  -->
+<div class="modal fade" id="addUserView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add New user</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="user" id="addUser" method="post">
+                        @csrf
+                        <div class="row">
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Name:</label>
+                                <input type="text" class="form-control" id="full_name" name="full_name" required>
+                            </div>
+                            
+
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Email ID:</label>
+                                <input type="email" class="form-control" id="email_id" name="email_id" required>
+                            </div>
+                              <input type="hidden" id="user_id" name="user_id">
+
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Password:</label>
+                               <input type="password"
+                                    class="form-control"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Leave blank to keep current password">
+                            </div>
+                        </div>
+                        <input type="hidden" id="user_type" name="user_type" value="customer">
+
+
+                        <div class="row">
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Mobile Number:</label>
+                                <input type="tel" class="form-control" id="mobile_no" name="mobile_no" required>
+                            </div>
+
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Date of Birth:</label>
+                                <input type="date" class="form-control" id="dob" name="dob">
+                            </div>
+
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Address:</label>
+                                <input type="tel" class="form-control" id="address" name="address">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">City:</label>
+                                <input type="text" class="form-control" id="city" name="city">
+                            </div>
+
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">State:</label>
+                                <input type="text" class="form-control" id="state" name="state">
+                            </div>
+
+                            <div class="form-group col-lg-4">
+                                <label for="recipient-name" class="col-form-label">Pincode:</label>
+                                <input type="text" class="form-control" id="pincode" name="pincode">
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <!-- <button type="submit" class="btn btn-primary">Save</button> -->
+                            <button type="submit"
+                                    class="btn btn-primary"
+                                    id="submitUserBtn">
+                                Save
+                            </button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+$(document).on('click', '.create-account-btn', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Get data from button
+    let name   = $(this).data('name');
+    let email  = $(this).data('email');
+    let mobile = $(this).data('mobile');
+
+    // Reset form safely
+    if ($('#addUser').length) {
+        $('#addUser')[0].reset();
+    }
+
+    // Clear user_id so INSERT happens (not update)
+    $('#user_id').val('');
+
+    // Set user type as customer
+    $('#user_type').val('customer');
+
+    // Prefill fields
+    $('#full_name').val(name);
+    $('#email_id').val(email);
+    $('#mobile_no').val(mobile);
+
+    // Optional: clear password field
+    $('#password').val('');
+
+    // Open modal
+    $('#addUserView').modal('show');
+});
+</script>
+<script>
+$(document).off('submit', '#addUser').on('submit', '#addUser', function (e) {
+    e.preventDefault();
+
+    if ($('#submitUserBtn').prop('disabled')) return;
+
+    let formData = new FormData(this);
+    let userId = $('#user_id').val();
+    let url = userId
+        ? "{{ route('updateUser') }}"
+        : "{{ route('insertUser') }}";
+
+    $('#submitUserBtn').prop('disabled', true);
+
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success: function (res) {
+            if (res.status === 1) {
+                swal("Success", res.msg, "success").then(() => {
+                    $('#addUserView').modal('hide');
+                    $('#addUser')[0].reset();
+                    $('#user_id').val('');
+                    $('#submitUserBtn').text('Save').prop('disabled', false);
+
+                    // reload current list
+                    $.ajax({
+                        url: "{{ route('load.list.by.type') }}",
+                        type: "GET",
+                        data: { type: currentType },
+                        success: function (res) {
+                            $('#user_table_body').html(res.html);
+                        }
+                    });
+                });
+            } else {
+                $('#submitUserBtn').prop('disabled', false);
+                swal("Error", "Something went wrong", "error");
+            }
+        },
+
+        error: function (xhr) {
+            $('#submitUserBtn').prop('disabled', false);
+
+            if (xhr.status === 422) {
+                let msg = '';
+                $.each(xhr.responseJSON.errors, function (k, v) {
+                    msg += v[0] + '\n';
+                });
+                swal("Validation Error", msg, "error");
+            } else {
+                swal("Error", "Server error occurred", "error");
+            }
+        }
+    });
+});
+</script>
+<script>
 function hideAllSections() {
     document.getElementById('enquiryList').style.display = 'none';
     document.getElementById('leadsSection').style.display = 'none';
     document.getElementById('misSection').style.display = 'none';
-    document.getElementById('loanBankSection').style.display = 'none';
 
     document.getElementById('addLeadBtn').style.display = 'none';
     document.getElementById('misBtns').style.display = 'none';
-    document.getElementById('addBankBtn').style.display = 'none';
 }
+
 
 function showEnquiryList() {
     hideAllSections();
@@ -508,17 +757,19 @@ function showMISList() {
     hideAllSections();
     document.getElementById('misSection').style.display = 'block';
     document.getElementById('misBtns').style.display = 'block';
+    localStorage.setItem('activeSection', 'mis');
 }
 
-function showLoanBanks() {
-    hideAllSections();
-    document.getElementById('loanBankSection').style.display = 'block';
-    document.getElementById('addBankBtn').style.display = 'block';
-}
+
+// function showLoanBanks() {
+//     hideAllSections();
+//     // document.getElementById('loanBankSection').style.display = 'block';
+//     // document.getElementById('addBankBtn').style.display = 'block';
+// }
 </script>
 
 <!-- Add Bank Modal -->
-<div class="modal fade" id="addBankView" tabindex="-1" aria-hidden="true">
+<!-- <div class="modal fade" id="addBankView" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -560,7 +811,7 @@ function showLoanBanks() {
                         </div>
                     </div>
 
-                    <!-- Missing footer added here -->
+                   
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Close
@@ -575,24 +826,16 @@ function showLoanBanks() {
 
         </div>
     </div>
-</div>
+</div> -->
 
 
 
 <!-- estimated -->
- <div id="estimatedFileSection" class="card mt-5" style="display:none;">
+ <!-- <div id="estimatedFileSection" class="card mt-5" style="display:none;">
 
-    <!-- Header -->
-    <!-- <div class="card-header d-flex justify-content-between align-items-center">
-        <h4>Estimated Files</h4>
+    
 
-        <a href="{{ route('estimatedFile.create') }}"
-           class="btn btn-primary">
-            <i class="bi bi-plus-lg"></i> Add Estimated File
-        </a>
-    </div> -->
-
-    <!-- FILTER BAR -->
+   
     <div class="p-4 bg-white">
         <form method="GET" action="{{ route('admin.listlead') }}">
             <div class="row g-3 align-items-end">
@@ -627,7 +870,7 @@ function showLoanBanks() {
         </form>
     </div>
 
-    <!-- Gross Revenue -->
+   
     @if(request('report_month'))
         <div class="alert alert-info m-4 d-flex justify-content-between">
             <strong>
@@ -640,7 +883,7 @@ function showLoanBanks() {
         </div>
     @endif
 
-    <!-- TABLE -->
+    
     <div class="card-body">
         <table class="table table-bordered">
             <thead>
@@ -673,11 +916,11 @@ function showLoanBanks() {
         </table>
     </div>
 
-</div>
+</div> -->
 
-<div id="monthlyPLSection" class="card mt-5" style="display:none;">
+<!-- <div id="monthlyPLSection" class="card mt-5" style="display:none;">
 
-    <!-- Header -->
+
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
         <h4>Monthly P&amp;L</h4>
 
@@ -687,7 +930,7 @@ function showLoanBanks() {
         </a>
     </div>
 
-    <!-- Table -->
+   
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered table-hover align-middle">
@@ -728,26 +971,237 @@ function showLoanBanks() {
             </table>
         </div>
     </div>
+</div> -->
+<!-- Add MIS Record Modal -->
+<div class="modal fade" id="addMISView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+               <form id="addMISRecord">
+    @csrf
+                    <div class="row">
+                        <div class="form-group col-lg-6">
+                            <label for="name" class="col-form-label">Name:</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="email" class="col-form-label">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-6">
+                            <label for="contact" class="col-form-label">Contact:</label>
+                            <input type="text" class="form-control" id="contact" name="contact" required>
+                        </div>
+                        <!-- <div class="form-group col-lg-6">
+                            <label for="office_contact" class="col-form-label">Office Contact:</label>
+                            <input type="text" class="form-control" id="office_contact" name="office_contact" required>
+                        </div> -->
+                        <div class="form-group col-lg-6">
+                            <label for="product_type" class="col-form-label">Product Type:</label>
+                            <select class="form-control" id="product_type" name="product_type" required>
+                                <option value="">Select Product Type</option>
+                                <option value="Home Loan">Home Loan</option>
+                                <option value="Personal Loan">Personal Loan</option>
+                                <option value="MSME">MSME</option>
+                                <option value="BT + Topup">BT + Topup</option>
+                                <option value="Lap/Mortage">Lap/Mortage</option>
+                                <option value="Project Funding">Project Funding</option>
+                                <option value="CGTMS">CGTMS</option>
+                                <option value="Term Loan">Term Loan</option>
+                                <option value="Working Capital">Working Capital</option>
+                                <option value="Machinary Loan">Machinary Loan</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="occupation" class="col-form-label">Occupation:</label>
+                            <select class="form-control" id="occupation" name="occupation" required>
+                                <option value="">Select Occupation</option>
+                                <option value="Salaried" {{ old('occupation', $misRecord->occupation ?? '') == 'Salaried' ? 'selected' : '' }}>Salaried</option>
+                                <option value="Self Employed" {{ old('occupation', $misRecord->occupation ?? '') == 'Self Employed' ? 'selected' : '' }}>Self Employed</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="bank_name" class="col-form-label">Bank Name:</label>
+                            <select class="form-control" id="bank_name" name="bank_name" required>
+                                <option value="">Select Bank Name</option>
+                                @foreach($banks as $bank)
+                                    <option value="{{ $bank->bank_name }}">{{ $bank->bank_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="branch_name" class="col-form-label">Branch Name:</label>
+                            <input type="text" class="form-control" id="branch_name" name="branch_name" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-6">
+                            <label for="bm_name" class="col-form-label">BM Name:</label>
+                            <input type="text" class="form-control" id="bm_name" name="bm_name">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="login_date" class="col-form-label">Login Date:</label>
+                            <input type="date" class="form-control" id="login_date" name="login_date">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="status" class="col-form-label">Status:</label>
+                            <select class="form-control" id="status" name="status">
+                                <option value="">Select Status</option>
+                                <option value="open">Open</option>
+                                <option value="processing">Processing</option>
+                                <option value="closed">Closed</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="in_principle" class="col-form-label">In-Principle:</label>
+                            <select class="form-control" id="in_principle" name="in_principle">
+                                <option value="">Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label for="remark" class="col-form-label">Remark:</label>
+                            <textarea class="form-control" id="remark" name="remark" rows="2"></textarea>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="legal" class="col-form-label">Legal:</label>
+                            <input type="text" class="form-control" id="legal" name="legal">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="valuation" class="col-form-label">Valuation:</label>
+                            <input type="text" class="form-control" id="valuation" name="valuation">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="leads" class="col-form-label">Leads:</label>
+                            <input type="text" class="form-control" id="leads" name="leads">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="file_work" class="col-form-label">File Work:</label>
+                            <input type="text" class="form-control" id="file_work" name="file_work">
+                        </div>
+                    </div>
+
+                    
+                    <div class="row">
+                        <div class="form-group col-lg-6">
+                            <label for="amount" class="col-form-label">Amount:</label>
+                            <input type="number" step="0.01" class="form-control" id="amount" name="amount" required>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="city" class="col-form-label">City:</label>
+                            <input type="text" class="form-control" id="city" name="city" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label for="address" class="col-form-label">Residencial Address:</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <!-- <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label for="office_address" class="col-form-label">Office Address:</label>
+                            <textarea class="form-control" id="office_address" name="office_address" rows="3" required></textarea>
+                        </div>
+                    </div> -->
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- MIS Details Modal -->
+<div class="modal fade" id="misDetailsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg rounded-4 border-0">
+      
+      <!-- Header -->
+      <div class="modal-header bg-primary text-white rounded-top-4">
+        <h5 class="modal-title fw-bold">📋 MIS Record Details</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <!-- Body -->
+      <div class="modal-body p-4">
+
+        <!-- Name & Contact on top -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="fw-bold text-dark mb-0" id="detail_name">-</h4>
+          <div class="text-muted">
+            <i class="bi bi-envelope"></i> <span id="detail_email">-</span> &nbsp; | &nbsp;
+            <i class="bi bi-phone"></i> <span id="detail_contact">-</span>
+          </div>
+        </div>
+        <hr>
+
+        <div class="row gy-2">
+          <div class="col-md-6">
+            <strong>ID:</strong> <span id="detail_id">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Product Type:</strong> <span id="detail_product">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Occupation:</strong> <span id="detail_occupation">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Bank:</strong> <span id="detail_bank">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Branch:</strong> <span id="detail_branch">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Login Date:</strong> <span id="detail_login">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Status:</strong> <span id="detail_status" class="badge bg-success">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Leads:</strong> <span id="detail_leads">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>Amount:</strong> ₹<span id="detail_amount">-</span>
+          </div>
+          <div class="col-md-6">
+            <strong>City:</strong> <span id="detail_city">-</span>
+          </div>
+          <div class="col-12">
+            <strong>Address:</strong> <span id="detail_address" style="white-space:pre-wrap;">-</span>
+          </div>
+        </div>
+
+      </div>
+      
+      <!-- Footer -->
+      <div class="modal-footer border-0">
+        <button class="btn btn-secondary px-4" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-/* ================= COMMON HIDE FUNCTION ================= */
 function hideAllSections() {
-   const sections = [
-    'enquiryList',
-    'leadsSection',
-    'misSection',
-    'loanBankSection',
-    'estimatedFileSection',
-    'monthlyPLSection' // ✅ ADD THIS
-];
-
+    const sections = [
+        'enquiryList',
+        'leadsSection',
+        'misSection',
+        'referralLeadsSection'
+    ];
 
     const buttons = [
         'addLeadBtn',
-        'misBtns',
-        'addBankBtn',
-        'addEstimatedBtn'
+        'misBtns'
     ];
 
     sections.forEach(id => {
@@ -761,11 +1215,10 @@ function hideAllSections() {
     });
 }
 
-/* ================= SECTION SHOW FUNCTIONS ================= */
 function showEnquiryList() {
     hideAllSections();
     document.getElementById('enquiryList').style.display = 'block';
-    localStorage.setItem('activeSection', 'enquiries');
+    localStorage.setItem('activeSection', 'enquiry');
 }
 
 function showLeadsList() {
@@ -782,86 +1235,183 @@ function showMISList() {
     localStorage.setItem('activeSection', 'mis');
 }
 
-function showLoanBanks() {
+function showReferralLeads() {
     hideAllSections();
-    document.getElementById('loanBankSection').style.display = 'block';
-    document.getElementById('addBankBtn').style.display = 'block';
-    localStorage.setItem('activeSection', 'loanbanks');
+    document.getElementById('referralLeadsSection').style.display = 'block';
+    localStorage.setItem('activeSection', 'referral');
 }
 
-function showEstimatedFiles() {
-    hideAllSections();
-    document.getElementById('estimatedFileSection').style.display = 'block';
-    document.getElementById('addEstimatedBtn').style.display = 'block';
-    localStorage.setItem('activeSection', 'estimatedfiles');
-}
-
-/* ================= RESTORE STATE AFTER RELOAD ================= */
 document.addEventListener('DOMContentLoaded', function () {
     const active = localStorage.getItem('activeSection');
 
-    switch (active) {
-    case 'leads':
+    if (active === 'leads') {
         showLeadsList();
-        break;
-    case 'mis':
+    } else if (active === 'mis') {
         showMISList();
-        break;
-    case 'loanbanks':
-        showLoanBanks();
-        break;
-    case 'estimatedfiles':
-        showEstimatedFiles();
-        break;
-    case 'monthlypl':           // ✅ ADD THIS
-        showMonthlyPL();
-        break;
-    default:
+    } else if (active === 'referral') {
+        showReferralLeads();
+    } else {
         showEnquiryList();
-}
-
+    }
 });
+</script>
 
-/* ================= ADD BANK MODAL ================= */
-function openAddBankModal() {
-    const modal = new bootstrap.Modal(document.getElementById('addBankView'));
-    modal.show();
-}
 
-/* ================= ADD BANK AJAX ================= */
-$('#addBank').on('submit', function (e) {
-    e.preventDefault(); // IMPORTANT
+<script>
+$(document).on('click', '.create-account-btn', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Get data from button
+    let name   = $(this).data('name');
+    let email  = $(this).data('email');
+    let mobile = $(this).data('mobile');
+
+    // Reset form safely
+    if ($('#addUser').length) {
+        $('#addUser')[0].reset();
+    }
+
+    // Clear user_id so INSERT happens (not update)
+    $('#user_id').val('');
+
+    // Set user type as customer
+    $('#user_type').val('customer');
+
+    // Prefill fields
+    $('#full_name').val(name);
+    $('#email_id').val(email);
+    $('#mobile_no').val(mobile);
+
+    // Optional: clear password field
+    $('#password').val('');
+
+    // Open modal
+    $('#addUserView').modal('show');
+});
+</script>
+<script>
+$(document).off('submit', '#addUser').on('submit', '#addUser', function (e) {
+    e.preventDefault();
+
+    if ($('#submitUserBtn').prop('disabled')) return;
+
+    let formData = new FormData(this);
+    let userId = $('#user_id').val();
+    let url = userId
+        ? "{{ route('updateUser') }}"
+        : "{{ route('insertUser') }}";
+
+    $('#submitUserBtn').prop('disabled', true);
 
     $.ajax({
-        url: "{{ route('insertLoanBank') }}",
-        method: "POST",
-        data: new FormData(this),
+        url: url,
+        type: "POST",
+        data: formData,
         processData: false,
         contentType: false,
-        success: function (response) {
-            if (response.status === 1) {
-                $('#addBankView').modal('hide');
 
-                // stay on Loan Banks after reload
-                localStorage.setItem('activeSection', 'loanbanks');
-                location.reload();
+        success: function (res) {
+            if (res.status === 1) {
+                swal("Success", res.msg, "success").then(() => {
+                    $('#addUserView').modal('hide');
+                    $('#addUser')[0].reset();
+                    $('#user_id').val('');
+                    $('#submitUserBtn').text('Save').prop('disabled', false);
+
+                    // reload current list
+                    $.ajax({
+                        url: "{{ route('load.list.by.type') }}",
+                        type: "GET",
+                        data: { type: currentType },
+                        success: function (res) {
+                            $('#user_table_body').html(res.html);
+                        }
+                    });
+                });
             } else {
-                alert('Failed to add bank');
+                $('#submitUserBtn').prop('disabled', false);
+                swal("Error", "Something went wrong", "error");
             }
         },
-        error: function () {
-            alert('Something went wrong');
+
+        error: function (xhr) {
+            $('#submitUserBtn').prop('disabled', false);
+
+            if (xhr.status === 422) {
+                let msg = '';
+                $.each(xhr.responseJSON.errors, function (k, v) {
+                    msg += v[0] + '\n';
+                });
+                swal("Validation Error", msg, "error");
+            } else {
+                swal("Error", "Server error occurred", "error");
+            }
         }
     });
 });
 </script>
 
-<script>
-function showMonthlyPL() {
-    hideAllSections();
-    document.getElementById('monthlyPLSection').style.display = 'block';
-    localStorage.setItem('activeSection', 'monthlypl');
-}
+<!-- mis add -->
+ <script>
+$('#addMISRecord').on('submit', function (e) {
+    e.preventDefault();
+
+    $.ajax({
+        url: "{{ route('mis.store') }}",
+        type: "POST",
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+
+        success: function (response) {
+
+            if (response.status === true) {
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: response.message,
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    $('#addMISView').modal('hide');
+                    location.reload();
+                });
+
+            } else {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message || 'Something went wrong'
+                });
+
+            }
+        },
+
+        error: function (xhr) {
+
+            if (xhr.status === 422) {
+                let firstError = Object.values(xhr.responseJSON.errors)[0][0];
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: firstError
+                });
+
+            } else {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Server error occurred'
+                });
+
+            }
+        }
+    });
+});
 </script>
 
 @endsection

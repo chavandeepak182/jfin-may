@@ -35,34 +35,80 @@
                 @if ($loans && count($loans) > 0)
                     <table class="table table-hover my-0 bg-white rounded-0">
                         <thead>
-                            <tr>
-                                <th>#</th>
-                                <th class="d-none d-xl-table-cell">Loan Reference ID</th>
-                                <th class="d-none d-xl-table-cell">Amount</th>
-                                <th>Status</th>
-                                <th class="d-none d-md-table-cell">Created At</th>
-                                <th class="d-none d-md-table-cell">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($loans as $index => $loan)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $loan->loan_reference_id }}</td>
-                                    <td>{{ number_format($loan->amount, 2) }}</td>
-                                    <td>{{ ucfirst($loan->status) }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($loan->created_at)->format('d-m-Y') }}</td>
-
-                                    <td>
-                                        @if (!in_array($loan->status, ['disbursed', 'approved']))
-                                            <a href="loanedit/{{ $loan->loan_id }}">Edit</a>
-                                        @else
-                                            <span class="text-muted">N/A</span>
-                                        @endif
-                                    </td>
+                                    <th>#</th>
+                                    <th class="d-none d-xl-table-cell">Loan Reference ID</th>
+                                    <th class="d-none d-xl-table-cell">Applied Amount</th>
+                                    <th class="d-none d-xl-table-cell">Disbursed Amount</th>
+                                    <th>Status</th>
+                                    <th class="d-none d-md-table-cell">Created At</th>
+                                    <th class="d-none d-md-table-cell">Action</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
+                            </thead>
+
+ <tbody>
+@foreach ($loans as $index => $loan)
+    <tr>
+        <td>{{ $index + 1 }}</td>
+        <td>{{ $loan->loan_reference_id }}</td>
+
+        {{-- Applied Amount --}}
+        <td>
+            ₹ {{ number_format($loan->amount, 2) }}
+        </td>
+
+        {{-- Disbursed Amount --}}
+        <td>
+            @if($loan->status === 'disbursed' && !empty($loan->amount_approved))
+                ₹ {{ number_format($loan->amount_approved, 2) }}
+            @else
+                <span class="text-muted">—</span>
+            @endif
+        </td>
+
+        <td>{{ ucfirst($loan->status) }}</td>
+
+        <td>
+            {{ \Carbon\Carbon::parse($loan->created_at)->format('d-m-Y') }}
+        </td>
+
+<td>
+    {{-- Edit button (ONLY for In Process & Approved) --}}
+@php
+    $editableStatuses = ['in process', 'approved'];
+@endphp
+
+@if (in_array(trim(strtolower($loan->status ?? '')), $editableStatuses, true))
+    <a href="{{ url('loanedit/'.$loan->loan_id) }}" class="btn btn-sm btn-warning">
+        Edit
+    </a>
+@endif
+
+
+    {{-- View Sanction Letter (Approved OR Disbursed) --}}
+    @if (
+        !empty($loan->sanction_letter) &&
+        in_array(strtolower($loan->status ?? ''), ['approved', 'disbursed'])
+    )
+        <a href="{{ asset('storage/' . $loan->sanction_letter) }}"
+           class="btn btn-sm btn-primary"
+           target="_blank">
+            View
+        </a>
+    @endif
+
+    {{-- Rejected --}}
+    @if (strtolower($loan->status ?? '') === 'rejected')
+        <span class="text-muted">N/A</span>
+    @endif
+</td>
+
+
+
+    </tr>
+@endforeach
+</tbody>
+
                     </table>
                 @else
                     <p class="text-center">No loans found.</p>

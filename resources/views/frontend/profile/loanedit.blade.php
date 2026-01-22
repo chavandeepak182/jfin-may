@@ -65,7 +65,7 @@
                                     <div class="form-group">
                                         <label for="mobile_no">Mobile No:</label>
                                         <input type="text" class="form-control" id="mobile_no" name="mobile_no"
-                                            value="{{ old('mobile_no', $profile->mobile_no ?? '') }}">
+                                            value="{{ old('mobile_no', $profile->mobile_no ?? '') }}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -81,37 +81,61 @@
                                         </select>
                                     </div>
                                 </div>
+                               <div class="col-md-4">
+    <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select class="form-control" id="gender" name="gender">
+            <option value="">Select Gender</option>
+
+            <option value="male"
+                {{ old('gender', $profile->gender ?? '') == 'male' ? 'selected' : '' }}>
+                Male
+            </option>
+
+            <option value="female"
+                {{ old('gender', $profile->gender ?? '') == 'female' ? 'selected' : '' }}>
+                Female
+            </option>
+
+            <option value="other"
+                {{ old('gender', $profile->gender ?? '') == 'other' ? 'selected' : '' }}>
+                Other
+            </option>
+        </select>
+    </div>
+</div>
+
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="dob">Date of Birth:</label>
                                         <input type="date" class="form-control" id="dob" name="dob"
-                                            value="{{ old('dob', $profile->dob ?? '') }}">
+                                            value="{{ old('dob', $profile->dob ?? '') }}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="residence_address">Residence Address:</label>
-                                        <textarea class="form-control" id="residence_address" name="residence_address">{{ old('residence_address', $profile->residence_address ?? '') }}</textarea>
+                                        <textarea class="form-control" id="residence_address" name="residence_address" readonly>{{ old('residence_address', $profile->residence_address ?? '') }}</textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="city">City:</label>
-                                        <input type="text" class="form-control" id="city" name="city"
+                                        <input type="text" class="form-control" id="city" name="city" readonly
                                             value="{{ old('city', $profile->cityRelation->city ?? '') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="state">State:</label>
-                                        <input type="text" class="form-control" id="state" name="state"
+                                        <input type="text" class="form-control" id="state" name="state"readonly
                                             value="{{ old('state', $profile->stateRelation->name ?? '') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="pincode">Pincode:</label>
-                                        <input type="text" class="form-control" id="pincode" name="pincode"
+                                        <input type="text" class="form-control" id="pincode" name="pincode"readonly
                                             value="{{ old('pincode', $profile->pincode ?? '') }}">
                                     </div>
                                 </div>
@@ -125,42 +149,42 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="company_name">Company Name:</label>
-                                        <input type="text" class="form-control" id="company_name" name="company_name"
+                                        <input type="text" class="form-control" id="company_name" name="company_name" readonly
                                             value="{{ old('company_name', $professional->company_name ?? '') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="industry">Industry:</label>
-                                        <input type="text" class="form-control" id="industry" name="industry"
+                                        <input type="text" class="form-control" id="industry" name="industry" readonly
                                             value="{{ old('industry', $professional->industry ?? '') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="company_address">Company Address:</label>
-                                        <textarea class="form-control" id="company_address" name="company_address">{{ old('company_address', $professional->company_address ?? '') }}</textarea>
+                                        <textarea class="form-control" id="company_address" name="company_address" readonly>{{ old('company_address', $professional->company_address ?? '') }}</textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="experience_year">Experience Year:</label>
                                         <input type="number" class="form-control" id="experience_year"
-                                            name="experience_year"
+                                            name="experience_year" readonly
                                             value="{{ old('experience_year', $professional->experience_year ?? '') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="designation">Designation:</label>
-                                        <input type="text" class="form-control" id="designation" name="designation"
+                                        <input type="text" class="form-control" id="designation" name="designation" readonly
                                             value="{{ old('designation', $professional->designation ?? '') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="net_salary">Net Salary:</label>
-                                        <input type="number" class="form-control" id="net_salary" name="netsalary"
+                                        <input type="number" class="form-control" id="net_salary" name="netsalary" readonly
                                             value="{{ old('netsalary', $professional->netsalary ?? '') }}">
                                     </div>
                                 </div>
@@ -172,27 +196,23 @@
                         <h3 class="h4 mb-2"><strong>Loan Information</strong></h4>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="status">Loan Status:</label>
-                                        <select name="status" class="form-control" id="status" required
-                                            onchange="toggleRemarkBox(this.value)">
-                                            <option value="approved"
-                                                {{ old('status', $loan->status ?? '') == 'approved' ? 'selected' : '' }}>
-                                                Approved</option>
-                                            <option value="rejected"
-                                                {{ old('status', $loan->status ?? '') == 'rejected' ? 'selected' : '' }}>
-                                                Rejected</option>
-                                            <option value="in process"
-                                                {{ old('status', $loan->status ?? '') == 'in process' ? 'selected' : '' }}>
-                                                In Process</option>
-                                            <option value="disbursed"
-                                                {{ old('status', $loan->status ?? '') == 'disbursed' ? 'selected' : '' }}>
-                                                Disbursed</option>
-                                            <option value="document pending"
-                                                {{ old('status', $loan->status ?? '') == 'document pending' ? 'selected' : '' }}>
-                                                Document Pending</option>
-                                        </select>
-                                    </div>
+                                                                <div class="form-group">
+                                    <label for="status">Loan Status:</label>
+
+                                    <select class="form-control" id="status" disabled>
+                                        <option value="approved" {{ $loan->status == 'approved' ? 'selected' : '' }}>Approved</option>
+                                        <option value="rejected" {{ $loan->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                                        <option value="in process" {{ $loan->status == 'in process' ? 'selected' : '' }}>In Process</option>
+                                        <option value="disbursed" {{ $loan->status == 'disbursed' ? 'selected' : '' }}>Disbursed</option>
+                                        <option value="document pending" {{ $loan->status == 'document pending' ? 'selected' : '' }}>
+                                            Document Pending
+                                        </option>
+                                    </select>
+
+                                    <!-- ✅ actual value submit  -->
+                                    <input type="hidden" name="status" value="{{ $loan->status }}">
+                                </div>
+
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -233,22 +253,29 @@
                                         </select>
                                     </div>
                                 </div>
-                                <!-- Sanction Letter (Visible only if status is 'approved') -->
-                                <div class="col-md-6">
-                                    <div id="sanctionLetterBox" class="section mb-4" style="display: none;">
-                                        <h3 class="h4 mb-2"><strong>Sanction Letter</strong></h4>
-                                            <div class="form-group">
-                                                <label for="sanction_letter">Upload Sanction Letter:</label>
-                                                <input type="file" class="form-control" id="sanction_letter"
-                                                    name="sanction_letter">
-                                                @if ($loan->sanction_letter)
-                                                    <small>Current file: <a
-                                                            href="{{ asset('storage/sanction_letters/' . $loan->sanction_letter) }}"
-                                                            target="_blank">{{ $loan->sanction_letter }}</a></small>
-                                                @endif
-                                            </div>
+                                @if($loan->amount_approved !== null)
+                                    <div class="form-group">
+                                        <label>Approved Amount</label>
+                                        <input type="text"
+                                            class="form-control"
+                                            value="₹ {{ number_format($loan->amount_approved, 2) }}"
+                                            readonly>
                                     </div>
-                                </div>
+                                @endif
+                                <!-- Sanction Letter (Visible only if status is 'approved') -->
+                                {{-- Sanction Letter : ADMIN ONLY --}}
+                                    @if ($isAdmin && !empty($loan->sanction_letter))
+                                        <div class="mb-3">
+                                            <label class="form-label">Sanction Letter</label><br>
+
+                                            <a href="{{ asset('storage/sanction_letters/' . $loan->sanction_letter) }}"
+                                            target="_blank"
+                                            class="btn btn-sm btn-primary">
+                                                View Sanction Letter
+                                            </a>
+                                        </div>
+                                    @endif
+
                             </div>
                     </div>
 
@@ -263,80 +290,99 @@
                     </div>
                 </div>
 
-                <!-- Right Section: Documents -->
-                <div class="col-md-4 bg-light p-5">
-                    <div class="section mb-4">
-                     <h3 class="h4 mb-2">
-                        <strong>Documents</strong> 
-                        <small class="text-muted" style="font-size: 70%;">(Max size: 2MB)</small>
-                    </h3>
-                            <!-- Documents -->
-                            <h6>Uploaded:</h6>
-                            @foreach ($documents as $doc)
-                                <div class="col-md-12 mb-3">
-                                    <div class="document-wrapper">
-                                        <a href="{{ Storage::url($doc->file_path) }}"
-                                            target="_blank">{{ $doc->document_name }}</a>
+               <!-- Right Section: Documents -->
+<div class="col-md-4 bg-light p-5">
+    <div class="section mb-4">
+        <h3 class="h4 mb-2">
+            <strong style="color:#000">Documents</strong>
+            <small class="text-muted" style="font-size: 70%;">(Max size: 2MB)</small>
+        </h3>
 
-                                    </div>
-                                </div>
-                            @endforeach
-                            <!-- Document Upload -->
-                            <h6>Upload New Documents:</h6>
-                            <div id="document-upload-section">
-                                <div class="document-upload-row mb-3">
-                                    <div class="row">
-                                        <div class="col-md-12 mb-2">
-                                            <input type="text" name="document_name[]" class="form-control"
-                                                placeholder="Document Name">
-                                        </div>
-                                        <div class="col-md-12">
-                                            <input type="file" name="documents[]" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-primary" onclick="addDocumentUploadRow()">Add Another
-                                Document</button>
-                    </div>
-
-                    <!-- Education Information -->
-                    <div class="section mb-4 mt-5">
-                        <h3 class="h4 mb-2"><strong>Education Information</strong></h4>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="qualification">Qualification:</label>
-                                        <input type="text" class="form-control" id="qualification"
-                                            name="qualification"
-                                            value="{{ old('qualification', $education->qualification ?? '') }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="pass_year">Passing Year:</label>
-                                        <input type="text" class="form-control" id="pass_year" name="pass_year"
-                                            value="{{ old('pass_year', $education->pass_year ?? '') }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="college_name">College Name:</label>
-                                        <input type="text" class="form-control" id="college_name" name="college_name"
-                                            value="{{ old('college_name', $education->college_name ?? '') }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="college_address">College Address:</label>
-                                        <input type="text" class="form-control" id="college_address"
-                                            name="college_address"
-                                            value="{{ old('college_address', $education->college_address ?? '') }}">
-                                    </div>
-                                </div>
-                            </div>
-                    </div>
+        <!-- Documents -->
+        <h6 style="color:#000">Uploaded:</h6>
+        @foreach ($documents as $doc)
+            <div class="col-md-12 mb-3">
+                <div class="document-wrapper">
+                    <a href="{{ Storage::url($doc->file_path) }}"
+                       target="_blank">{{ $doc->document_name }}</a>
                 </div>
+            </div>
+        @endforeach
+
+        <!-- Document Upload -->
+        <h6 style="color:#000">Upload New Documents:</h6>
+
+        <div id="document-upload-section">
+    <!-- First row (NO remove button) -->
+    <div class="document-upload-row mb-3">
+        <div class="row align-items-center">
+            <div class="col-md-5 mb-2">
+                <input type="text"
+                       name="document_name[]"
+                       class="form-control"
+                       placeholder="Document Name">
+            </div>
+
+            <div class="col-md-5 mb-2">
+                <input type="file"
+                       name="documents[]"
+                       class="form-control">
+            </div>
+
+            <div class="col-md-2 mb-2 text-end">
+                <!-- empty space -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button"
+        class="btn btn-primary"
+        onclick="addDocumentUploadRow()">
+    Add Another Document
+</button>
+
+
+        
+    </div>
+</div>
+<script>
+    function addDocumentUploadRow() {
+        let section = document.getElementById('document-upload-section');
+
+        let row = document.createElement('div');
+        row.className = 'document-upload-row mb-3';
+
+        row.innerHTML = `
+            <div class="row align-items-center">
+                <div class="col-md-5 mb-2">
+                    <input type="text" name="document_name[]" class="form-control" placeholder="Document Name">
+                </div>
+
+                <div class="col-md-5 mb-2">
+                    <input type="file" name="documents[]" class="form-control">
+                </div>
+
+                <div class="col-md-2 mb-2 text-end">
+                    <button type="button"
+                            class="btn btn-danger"
+                            onclick="removeDocumentRow(this)">
+                        Remove
+                    </button>
+                </div>
+            </div>
+        `;
+
+        section.appendChild(row);
+    }
+
+    function removeDocumentRow(btn) {
+        btn.closest('.document-upload-row').remove();
+    }
+</script>
+
+
+
             </div>
         </form>
     </div>
@@ -394,7 +440,7 @@
             });
         });
     </script>
-    <script>
+    <!-- <script>
         function toggleRemarkBox(value) {
             var remarkBox = document.getElementById('remark-box');
             if (value === 'rejected' || value === 'approved' || value === 'in process' || value === 'disbursed') {
@@ -427,7 +473,7 @@
 
         // Initialize the form based on current status
         document.addEventListener('DOMContentLoaded', function() {
-            var status = document.getElementById('status') ? document.getElementById('status').value : '';
+           var status = document.querySelector('input[name="status"]').value;
             toggleSanctionLetterBox(status);
         });
 
@@ -435,5 +481,5 @@
         document.getElementById('status').addEventListener('change', function() {
             toggleSanctionLetterBox(this.value);
         });
-    </script>
+    </script> -->
 @endsection

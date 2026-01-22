@@ -146,7 +146,7 @@
 
                     <!-- My Queries -->
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="#">
+                        <a class="sidebar-link" href="{{ route('tickets.index') }}">
                             <i class="fas fa-question-circle"></i>
                             <span class="align-middle">My Queries</span>
                         </a>
@@ -313,7 +313,13 @@
                                 alt="Avatar">
                             <div class="d-none d-sm-block ms-2 text-start">
                                 <div class="fw-bold">{{ auth()->user()->name ?? 'User' }}</div>
-                                <small class="text-muted">Last Sync: 10:30 AM</small>
+                                <small class="text-muted">
+                                    
+                                    {{ auth()->user()->last_login_at
+                                        ? auth()->user()->last_login_at->format('d M , h:i A')
+                                        : '—'
+                                    }}
+                                </small>
                             </div>
                         </a>
 

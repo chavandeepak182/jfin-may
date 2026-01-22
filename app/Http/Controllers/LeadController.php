@@ -52,13 +52,13 @@ class LeadController extends Controller {
 public function leadlist(Request $request)
 {
     // ================= COUNTS =================
-    $enquiriesCount       = DB::table('enquiries')->count();
-    $leadsCount           = DB::table('leads')->count();
-    $totalEstimatedFiles  = EstimatedFile::count();
-    $totalMonthlyPL       = MonthlyPL::count();
+    $enquiriesCount      = DB::table('enquiries')->count();
+    $leadsCount          = DB::table('leads')->count();
+    $totalEstimatedFiles = EstimatedFile::count();
+    $totalMonthlyPL      = MonthlyPL::count();
 
     // ================= LISTS =================
-    $enquiries = DB::table('enquiries')->get();
+    $enquiries = DB::table('enquiries')->paginate(10);
     $leads     = Lead::with('agent')->paginate(10);
 
     // MIS
@@ -89,12 +89,38 @@ public function leadlist(Request $request)
         $grossRevenue = (clone $query)->sum('estimate_revenue');
     }
 
-    $estimatedFiles = $query->orderBy('id', 'desc')->get();
+    $estimatedFiles = $query->orderBy('id', 'desc')->paginate(10);
 
     // ================= MONTHLY P&L =================
     $pls = MonthlyPL::orderBy('year', 'desc')
                     ->orderBy('month', 'desc')
-                    ->get();
+                    ->paginate(10);
+
+    // ================= REFERRAL LEADS (✅ FIXED) =================
+    $referralLeads = DB::table('referral_leads as rl')
+        ->join('users as u', 'u.id', '=', 'rl.user_id')
+        ->leftJoin('loan_category as lc', 'lc.loan_category_id', '=', 'rl.product_type')
+        ->leftJoin('users as cust', 'cust.email_id', '=', 'rl.email')
+        ->select(
+            'rl.*',
+            'u.name as referrer_name',
+            'u.mobile_no as referrer_mobile',
+            DB::raw("
+                CASE
+                    WHEN rl.product_type IS NULL THEN rl.other_remark
+                    WHEN lc.category_name IS NULL THEN rl.other_remark
+                    ELSE lc.category_name
+                END AS product_name
+            "),
+             DB::raw("
+                CASE
+                    WHEN cust.id IS NOT NULL THEN 'created'
+                    ELSE 'pending'
+                END AS status
+            ")
+        )
+        ->orderBy('rl.created_at', 'desc')
+        ->paginate(10);
 
     return view('admin.admin-leads', compact(
         'enquiriesCount',
@@ -108,9 +134,11 @@ public function leadlist(Request $request)
         'loanbanks',
         'estimatedFiles',
         'grossRevenue',
-        'pls'
+        'pls',
+        'referralLeads'
     ));
 }
+
 
 
 
@@ -158,7 +186,7 @@ public function leadlist(Request $request)
     
         // Create the lead if valid
         Lead::create($request->all());
-        return redirect()->route('leads.index')->with('success', 'Lead added successfully.');
+        return redirect()->route('admin.listlead')->with('success', 'Lead added successfully.');
     }
 
     public function show(Lead $lead) {
@@ -220,7 +248,7 @@ public function leadlist(Request $request)
         // Update the lead
         $lead->update($request->all());
     
-        return redirect()->route('leads.index')->with('success', 'Lead updated successfully.');
+        return redirect()->route('admin.listlead')->with('success', 'Lead updated successfully.');
     }
 
     public function destroy(Lead $lead) {
@@ -231,7 +259,7 @@ public function leadlist(Request $request)
     
         // Delete the lead if the user is an admin
         $lead->delete();
-        return redirect()->route('leads.index')->with('success', 'Lead deleted successfully.');
+        return redirect()->route('admin.listlead')->with('success', 'Lead deleted successfully.');
     }
 }
 
