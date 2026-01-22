@@ -8,6 +8,7 @@
                     <th>Customer Name</th>
                     <th>Loan Type</th>
                     <th>Amount</th>
+                     <th>Status</th>
                     <th>Bank</th>
                     <th>Location</th>
                     <th>Action</th>
@@ -26,6 +27,8 @@
                         <td>{{ $loan->user->name ?? 'N/A' }}</td>
                         <td>{{ $loan->loanCategory->category_name ?? 'N/A' }}</td>
                         <td>₹ {{ number_format($loan->amount) }}</td>
+                        <td>{{ ucfirst($loan->status) }}</td>
+
                         <td>{{ $loan->bankDetails->bank_name ?? 'N/A' }}</td>
                         <td>{{ $loan->user->profile->cityRelation->city ?? 'N/A' }}</td>
 

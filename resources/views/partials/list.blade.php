@@ -8,6 +8,7 @@
             <th>Customer Name</th>
             <th>Loan Type</th>
             <th>Amount</th>
+            <th>Status</th>
             <th>Bank</th>
             <th>Location</th>
             <th>Action</th>
@@ -23,6 +24,8 @@
             <td>{{ optional($loan->user)->name ?? '-' }}</td>
             <td>{{ optional($loan->loanCategory)->category_name ?? '-' }}</td>
             <td>₹ {{ number_format($loan->amount) }}</td>
+            <td>{{ ucfirst($loan->status) }}</td>
+
             <td>{{ optional($loan->bankDetails)->bank_name ?? '-' }}</td>
 
             {{-- Deep relation safe --}}

@@ -263,26 +263,26 @@
                                 <!-- STATE -->
                                 <div class="col-md-4">
                                     <label class="form-label">State</label>
-                                    <select name="state" class="form-select">
+                                    <select name="state" id="state" class="form-select">
+                                        <option value="">Select State</option>
                                         @foreach($states as $state)
                                             <option value="{{ $state->id }}"
-                                                {{ old('state', $profile->state) == $state->id ? 'selected' : '' }}>
+                                                {{ old('state', $profile->state ?? '') == $state->id ? 'selected' : '' }}>
                                                 {{ $state->name }}
                                             </option>
                                         @endforeach
                                     </select>
+
+
+
                                 </div>
                                 <!-- CITY -->
                                 <div class="col-md-4">
                                     <label class="form-label">City</label>
-                                    <select name="city" class="form-select">
-                                        @foreach($cities as $city)
-                                            <option value="{{ $city->id }}"
-                                                {{ old('city', $profile->city) == $city->id ? 'selected' : '' }}>
-                                                {{ $city->city }}
-                                            </option>
-                                        @endforeach
+                                    <select name="city" id="city" class="form-select">
+                                        <option value="">Select City</option>
                                     </select>
+
                                 </div>
 
 
@@ -551,4 +551,49 @@
 
 
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const stateSelect = document.getElementById('state');
+    const citySelect  = document.getElementById('city');
+
+    const selectedCity = "{{ old('city', $profile->city ?? '') }}";
+
+    function loadCities(stateId, selectedCity = null) {
+        if (!stateId) {
+            citySelect.innerHTML = '<option value="">Select City</option>';
+            return;
+        }
+
+        fetch(`/get-cities/${stateId}`)
+            .then(res => res.json())
+            .then(cities => {
+                citySelect.innerHTML = '<option value="">Select City</option>';
+
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city.id;
+                    option.textContent = city.city;
+
+                    if (selectedCity && selectedCity == city.id) {
+                        option.selected = true;
+                    }
+
+                    citySelect.appendChild(option);
+                });
+            });
+    }
+
+    // When state changes
+    stateSelect.addEventListener('change', function () {
+        loadCities(this.value);
+    });
+
+    // 🔥 IMPORTANT: load cities on EDIT page load
+    if (stateSelect.value) {
+        loadCities(stateSelect.value, selectedCity);
+    }
+});
+</script>
+
 @endsection

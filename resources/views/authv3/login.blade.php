@@ -243,6 +243,29 @@ body {
     display: none;
   }
 }
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  /* padding-right: 45px; */
+}
+
+.password-wrapper i {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+.password-wrapper i:hover {
+  color: #3B82F6;
+}
+
 </style>
 
 <script>
@@ -296,10 +319,15 @@ function toggleLogin(type){
   <input type="email" name="email_id" required>
 </div>
 
-<div class="form-field">
+<div class="form-field password-field">
   <label>Password</label>
-  <input type="password" name="password" required>
+
+  <div class="password-wrapper">
+    <input type="password" name="password" id="passwordInput" required>
+    <i class="fa-solid fa-eye" id="togglePassword"></i>
+  </div>
 </div>
+
 
 <button class="btn-primary">Login</button>
 </form>
@@ -380,6 +408,21 @@ New user?
 
   </div>
 </div>
+<script>
+document.getElementById('togglePassword').addEventListener('click', function () {
+    const passwordInput = document.getElementById('passwordInput');
+
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        this.classList.remove('fa-eye');
+        this.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        this.classList.remove('fa-eye-slash');
+        this.classList.add('fa-eye');
+    }
+});
+</script>
 
 
 </body>
