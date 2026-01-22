@@ -134,7 +134,7 @@
                             @if ($currentStep == 1)
                                 <fieldset>
                                     <h4 class="text-primary mb-3">Personal Details</h4>
-                                    @if (session('role_id') == 4)
+                                    <!-- @if (session('role_id') == 4)
                                         <div class="row g-3">
                                             <div class="col-md-6">
                                                 <div class="form-floating">
@@ -154,7 +154,29 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @endif
+                                    @endif -->
+                                                @if (session('role_id') == 4)
+                                                                <div class="row g-3">
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-floating">
+                                                                            <select name="user_id" id="user_id" class="form-select" required>
+                                                                                <option value="">Select User</option>
+
+                                                                                @foreach ($loanUsers as $u)
+                                                                                    <option value="{{ $u->id }}"
+                                                                                        data-mobile="{{ $u->mobile_no }}"
+                                                                                        {{ old('user_id', $loan->user_id ?? '') == $u->id ? 'selected' : '' }}>
+                                                                                        {{ $u->name }} ({{ $u->email_id }})
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
+
+                                                                            <label>User <span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                @endif
+
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <div class="form-floating">
@@ -232,7 +254,7 @@
 
                                            <div class="col-md-4">
                                                 <div class="form-floating">
-                                                    <input type="text"
+                                                    <!-- <input type="text"
                                                         class="form-control"
                                                         id="phone"
                                                         name="mobile_no"
@@ -240,7 +262,17 @@
                                                         placeholder="Phone"
                                                         maxlength="10"
                                                         oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
-                                                        required>
+                                                        required> -->
+                                                        <input type="text"
+                                                            class="form-control"
+                                                            id="phone"
+                                                            name="mobile_no"
+                                                            value="{{ old('mobile_no', $profile->mobile_no ?? $user->mobile_no ?? '') }}"
+                                                            placeholder="Phone"
+                                                            maxlength="10"
+                                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
+                                                            required>
+
                                                     <label for="phone">Phone <span class="text-danger">*</span></label>
                                                     <span id="phone-error" class="text-danger" style="font-size: 13px;"></span>
                                                     @error('mobile_no')
@@ -314,29 +346,40 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                      <div class="col-md-4">
-    <div class="form-group">
-        <label for="gender">Gender:</label>
-        <select class="form-control" id="gender" name="gender">
-            <option value="">Select Gender</option>
+                                    <div class="col-md-4">
+                                        <div class="form-floating">
+                                            <select class="form-select"
+                                                    id="gender"
+                                                    name="gender"
+                                                    required>
+                                                <option value="" disabled hidden>Select Gender</option>
 
-            <option value="male"
-                {{ old('gender', $profile->gender ?? '') == 'male' ? 'selected' : '' }}>
-                Male
-            </option>
+                                                <option value="male"
+                                                    {{ old('gender', $profile->gender ?? '') == 'male' ? 'selected' : '' }}>
+                                                    Male
+                                                </option>
 
-            <option value="female"
-                {{ old('gender', $profile->gender ?? '') == 'female' ? 'selected' : '' }}>
-                Female
-            </option>
+                                                <option value="female"
+                                                    {{ old('gender', $profile->gender ?? '') == 'female' ? 'selected' : '' }}>
+                                                    Female
+                                                </option>
 
-            <option value="other"
-                {{ old('gender', $profile->gender ?? '') == 'other' ? 'selected' : '' }}>
-                Other
-            </option>
-        </select>
-    </div>
-</div>
+                                                <option value="other"
+                                                    {{ old('gender', $profile->gender ?? '') == 'other' ? 'selected' : '' }}>
+                                                    Other
+                                                </option>
+                                            </select>
+
+                                            <label for="gender">
+                                                Gender <span class="text-danger">*</span>
+                                            </label>
+
+                                            @error('gender')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
 
 
 
@@ -753,7 +796,7 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
                                                         <div class="row g-3">
                                                             @if ($professional->profession_type == 'salaried')
 
-                                                                @foreach (['light_bill', 'dl', 'rent_agree'] as $docType)
+                                                                @foreach (['light_bill', 'rent_agreement'] as $docType)
                                                                     <div class="col-md-6">
                                                                         <div class="form-floating">
                                                                             <input type="file"
@@ -1496,5 +1539,35 @@ document.getElementById('pincode').addEventListener('input', function() {
     }
 });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const userSelect = document.getElementById('user_id');
+    const phoneInput = document.getElementById('phone');
+
+    if (!userSelect || !phoneInput) return;
+
+    function fillMobile() {
+        const option = userSelect.options[userSelect.selectedIndex];
+        const mobile = option?.dataset.mobile;
+
+        if (mobile) {
+            phoneInput.value = mobile;
+        }
+    }
+
+    // when admin changes user
+    userSelect.addEventListener('change', fillMobile);
+
+    // 🔥 VERY IMPORTANT: auto-fill on page load
+    setTimeout(fillMobile, 200);
+
+});
+</script>
+
+
+
+
 
 @endsection

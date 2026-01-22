@@ -7,7 +7,9 @@
                     <th>Amount</th>
                     <th>Tenure</th>
                     <th>Customer Name</th>
+                    
                     <th>Loan Category</th>
+                     <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -20,6 +22,20 @@
                         <td>{{ $loan->tenure }}</td>
                         <td>{{ $loan->user_name }}</td>
                         <td>{{ $loan->category_name }}</td>
+                        <td>
+    @if ($loan->status === 'pending')
+        <span class="badge bg-warning text-dark">Pending</span>
+    @elseif ($loan->status === 'approved')
+        <span class="badge bg-primary">Approved</span>
+    @elseif ($loan->status === 'disbursed')
+        <span class="badge bg-success">Disbursed</span>
+    @elseif ($loan->status === 'rejected')
+        <span class="badge bg-danger">Rejected</span>
+    @else
+        <span class="badge bg-secondary">{{ ucfirst($loan->status) }}</span>
+    @endif
+</td>
+
                         <td>
                             <a class="btn btn-primary btn-sm"
                                href="{{ route('loan.view', $loan->loan_id) }}">
