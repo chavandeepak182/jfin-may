@@ -153,12 +153,12 @@
                     </li>
 
                     <!-- My Calls -->
-                    <li class="sidebar-item">
+                    <!-- <li class="sidebar-item">
                         <a class="sidebar-link" href="#">
                             <i class="fas fa-phone"></i>
                             <span class="align-middle">My Calls</span>
                         </a>
-                    </li>
+                    </li> -->
 
                     <!-- My Loans Dropdown -->
                     <li class="sidebar-item {{ Request::is('myloans*') || Request::is('loans-list') ? 'active' : '' }}">

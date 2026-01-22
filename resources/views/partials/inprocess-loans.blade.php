@@ -7,6 +7,7 @@
                         <th>User Name</th>
                         <th>Loan Category</th>
                         <th>Amount</th>
+                         <th>Status</th>
                         <th>Tenure</th>
                         <th>Action</th> 
                     </tr>
@@ -18,6 +19,8 @@
                         <td>{{ $loan->user_name }}</td>
                         <td>{{ $loan->category_name }}</td>
                         <td>{{ $loan->amount }}</td>
+                        <td>{{ ucfirst($loan->status) }}</td>
+
                         <td>{{ $loan->tenure }}</td>
                         <td>
                             <a class="btn btn-primary btn-xs view" title="View" href="{{ route('loan.view', ['id' => $loan->loan_id]) }}">

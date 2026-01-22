@@ -1600,6 +1600,18 @@ if (session('role_id') == 4) {
 
     $loanUsers = collect();
 
+// if (session('role_id') == 4) {
+//     $loanUsers = User::join('otp', 'otp.user_id', '=', 'users.id')
+//         ->where('users.role_id', 1)
+//         ->where('otp.is_verify', 1)
+//         ->select(
+//             'users.id',
+//             'users.name',
+//             'users.email_id'
+//         )
+//         ->distinct()
+//         ->get();
+// }
 if (session('role_id') == 4) {
     $loanUsers = User::join('otp', 'otp.user_id', '=', 'users.id')
         ->where('users.role_id', 1)
@@ -1607,11 +1619,13 @@ if (session('role_id') == 4) {
         ->select(
             'users.id',
             'users.name',
-            'users.email_id'
+            'users.email_id',
+            'users.mobile_no'   // ✅ ADD THIS
         )
         ->distinct()
         ->get();
 }
+
 
     $profile       = DB::table('profile')->where('user_id', $userId)->latest('profile_id')->first();
     $professional  = DB::table('professional_details')->where('user_id', $userId)->latest('professional_id')->first();
@@ -1807,6 +1821,11 @@ public function ajaxPendingLoans(Request $request)
 //     return view('partials.inprocess-loans', compact('loans'));
 // }
 
+
+
+
+
+
 public function ajaxInprocessLoans(Request $request)
 {
     $search = $request->search;
@@ -1902,6 +1921,7 @@ public function ajaxDisbursedLoans()
             'loans.loan_reference_id',
             'loans.amount',
             'loans.tenure',
+            'loans.status', // ✅ IMPORTANT
             'users.name as user_name',
             'loan_category.category_name'
         )
@@ -2360,11 +2380,12 @@ public function ajaxRejectedLoans()
 // }
 protected function handlePersonalDetails(Request $request, $userId)
 {
+  // Normalize gender to lowercase
     if ($request->filled('gender')) {
-    $request->merge([
-        'gender' => strtolower($request->gender)
-    ]);
-}
+        $request->merge([
+            'gender' => strtolower($request->gender)
+        ]);
+    }
 
     $validated = $request->validate(
         [
@@ -2392,7 +2413,7 @@ protected function handlePersonalDetails(Request $request, $userId)
         },
     ],
             'marital_status' => 'required',
-            'gender' => 'nullable|in:male,female,other',
+            'gender' => 'required|in:male,female,other',
 
             // 'dob' => 'required|date',
             'residence_address' => 'required',
@@ -2420,7 +2441,7 @@ protected function handlePersonalDetails(Request $request, $userId)
             'full_name'         => $validated['full_name'],
             'pan_number'        => $validated['pan_number'],
             'marital_status'    => $validated['marital_status'],
-            'gender'            => $validated['gender'],
+          'gender'            => $validated['gender'], // ✅ SAVED
             'dob'               => $validated['dob'],
             'residence_address' => $validated['residence_address'],
             'city'              => $validated['city'],
@@ -2974,30 +2995,139 @@ protected function handleProfessionalDetails(Request $request, $userId)
     //     Session::put('is_loan', true);
     // }
 
+// protected function handleDocumentUpload(Request $request, $userId)
+// {
+//     /* ===============================
+//        STEP 1: VALIDATION (OPTIONAL FILES)
+//        =============================== */
+
+//     $request->validate([
+//         'aadhar_card'         => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'pancard'             => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'qualification_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'salary_slip'         => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'form_16'             => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'bank_statement'      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'passport'            => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'light_bill'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'driving_license'     => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'rent_agreement'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'business_license'            => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'itr_with_tax_paid_challan'   => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'balance_sheet'               => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'bank_acount_statments'       => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'offer_letter'                => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'hr_verification_letter'      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'closure_letter'              => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'degree_certificate'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'propert_document'            => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'existing_loan_statment'      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//         'saction_letter'              => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+//     ], [
+//         'mimes' => 'Only JPG, PNG or PDF files are allowed.',
+//         'max'   => 'File size must be less than 2MB.',
+//     ]);
+
+//     /* ===============================
+//        STEP 2: LOAN FETCH (SAFE)
+//        =============================== */
+
+//     $loan = Session::get('current_loan_id')
+//         ? Loan::find(Session::get('current_loan_id'))
+//         : Loan::where('user_id', $userId)
+//             ->whereNotIn('status', ['disbursed', 'rejected'])
+//             ->first();
+
+//     if (!$loan) {
+//         return; // loan नसल्यास upload skip
+//     }
+
+//     /* ===============================
+//        STEP 3: DOCUMENT UPLOAD
+//        =============================== */
+
+//     $documents = [
+//         'aadhar_card',
+//         'pancard',
+//         'qualification_proof',
+//         'salary_slip',
+//         'form_16',
+//         'bank_statement',
+//         'passport',
+//         'light_bill',
+//         'driving_license',
+//         'rent_agreement',
+//         'business_license',
+//         'itr_with_tax_paid_challan',
+//         'balance_sheet',
+//         'bank_acount_statments',
+//         'offer_letter',
+//         'hr_verification_letter',
+//         'closure_letter',
+//         'degree_certificate',
+//         'propert_document',
+//         'existing_loan_statment',
+//         'saction_letter',
+//     ];
+
+//     foreach ($documents as $docType) {
+
+//         if ($request->hasFile($docType)) {
+
+//             $file = $request->file($docType);
+
+//             // ✅ unique filename (overwrite issue avoid)
+//             $fileName = $docType . '_' . $userId . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+//             $filePath = $file->storeAs('documents', $fileName, 'public');
+
+//             DB::table('documents')->updateOrInsert(
+//                 [
+//                     'user_id'       => $userId,
+//                     'loan_id'       => $loan->loan_id,
+//                     'document_name' => $docType
+//                 ],
+//                 [
+//                     'file_path' => $filePath,
+//                     'updated_at' => now(),
+//                     'created_at' => now(),
+//                 ]
+//             );
+//         }
+//     }
+// }
 protected function handleDocumentUpload(Request $request, $userId)
 {
     /* ===============================
-       STEP 1: VALIDATION (OPTIONAL FILES)
+       STEP 1: VALIDATION
        =============================== */
 
     $request->validate([
-        'aadhar_card'         => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-        'pancard'             => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-        'qualification_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-        'salary_slip'         => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-        'form_16'             => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-        'bank_statement'      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-        'passport'            => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-        'light_bill'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-        'dl'                  => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-        'rent_agree'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-    ], [
-        'mimes' => 'Only JPG, PNG or PDF files are allowed.',
-        'max'   => 'File size must be less than 2MB.',
+        'aadhar_card'                  => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'pancard'                      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'qualification_proof'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'salary_slip'                  => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'form_16'                      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'bank_statement'               => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'passport'                     => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'light_bill'                   => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'driving_license'              => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'rent_agreement'               => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'business_license'             => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'itr_with_tax_paid_challan'    => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'balance_sheet'                => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'bank_account_statements'      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'offer_letter'                 => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'hr_verification_letter'       => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'closure_letter'               => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'degree_certificate'           => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'property_document'            => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'existing_loan_statement'      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        'sanction_letter'              => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
     ]);
 
     /* ===============================
-       STEP 2: LOAN FETCH (SAFE)
+       STEP 2: FETCH LOAN
        =============================== */
 
     $loan = Session::get('current_loan_id')
@@ -3006,12 +3136,10 @@ protected function handleDocumentUpload(Request $request, $userId)
             ->whereNotIn('status', ['disbursed', 'rejected'])
             ->first();
 
-    if (!$loan) {
-        return; // loan नसल्यास upload skip
-    }
+    if (!$loan) return;
 
     /* ===============================
-       STEP 3: DOCUMENT UPLOAD
+       STEP 3: UPLOAD DOCUMENTS
        =============================== */
 
     $documents = [
@@ -3023,35 +3151,43 @@ protected function handleDocumentUpload(Request $request, $userId)
         'bank_statement',
         'passport',
         'light_bill',
-        'dl',
-        'rent_agree'
+        'driving_license',
+        'rent_agreement',
+        'business_license',
+        'itr_with_tax_paid_challan',
+        'balance_sheet',
+        'bank_account_statements',
+        'offer_letter',
+        'hr_verification_letter',
+        'closure_letter',
+        'degree_certificate',
+        'property_document',
+        'existing_loan_statement',
+        'sanction_letter',
     ];
 
     foreach ($documents as $docType) {
-
         if ($request->hasFile($docType)) {
 
             $file = $request->file($docType);
-
-            // ✅ unique filename (overwrite issue avoid)
             $fileName = $docType . '_' . $userId . '_' . time() . '.' . $file->getClientOriginalExtension();
-
             $filePath = $file->storeAs('documents', $fileName, 'public');
 
             DB::table('documents')->updateOrInsert(
                 [
                     'user_id'       => $userId,
                     'loan_id'       => $loan->loan_id,
-                    'document_name' => $docType
+                    'document_name' => $docType,
                 ],
                 [
-                    'file_path' => $filePath,
-                    'updated_at' => now()
+                    'file_path'  => $filePath,
+                    'updated_at' => now(),
                 ]
             );
         }
     }
 }
+
 
 
 protected function handleLoanDetails(Request $request, $userId)
