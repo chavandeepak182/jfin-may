@@ -262,7 +262,7 @@ public function signupSubmit(Request $request)
         $apiKey = env('TWO_FACTOR_API_KEY');
         $mobile = "91" . $user->mobile_no;
 
-        $url = "https://2factor.in/API/V1/{$apiKey}/SMS/{$mobile}/AUTOGEN/Registration+OTP";
+        $url = "https://2factor.in/API/V1/{$apiKey}/SMS/{$mobile}/AUTOGEN/OTPMSG";
 
         $response = Http::timeout(20)->get($url);
 
