@@ -15,7 +15,7 @@ class Profile extends Model
     protected $primaryKey = 'user_id';
     protected $keyType = 'int';
     protected $fillable = [
-       'loan_id', 'user_id', 'full_name', 'pan_number', 'mobile_no', 'email_id', 'marital_status', 'dob', 'residence_address', 'city', 'state', 'pincode'
+       'loan_id', 'user_id', 'full_name', 'pan_number', 'mobile_no', 'email_id', 'marital_status','gender', 'dob', 'residence_address', 'city', 'state', 'pincode'
     ];
     public function user()
     {

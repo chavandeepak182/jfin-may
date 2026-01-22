@@ -6,8 +6,10 @@
                     <th>#</th>
                     <th>Loan ID</th>
                     <th>Amount</th>
+
                     <th>Tenure</th>
                     <th>Customer Name</th>
+                     <th>Status</th>
                     <th>Loan Category</th>
                     <th>Action</th>
                 </tr>
@@ -26,6 +28,8 @@
                         <td>{{ $loan->tenure }}</td>
                         <td>{{ $loan->user_name }}</td>
                         <td>{{ $loan->loan_category_name }}</td>
+                        <td>{{ ucfirst($loan->status) }}</td>
+
                         <td>
                             <a class="btn btn-primary btn-xs"
                                href="{{ route('agent.loan.view', $loan->loan_id) }}">

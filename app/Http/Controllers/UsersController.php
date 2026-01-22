@@ -1728,8 +1728,9 @@ public function mydetails(Request $request)
     $bankDetails = DB::table('customer_banks')
         ->where('user_id', $userId)->first();
 
+   // ✅ ONLY STATES
     $states = DB::table('states')->get();
-    $cities = DB::table('cities')->get();
+    // $cities = DB::table('cities')->get();
 
     return view('frontend.profile.personal-info', compact(
         'user',
@@ -1737,9 +1738,20 @@ public function mydetails(Request $request)
         'professionalDetails',
         'bankDetails',
         'states',
-        'cities'
+        // 'cities'
     ));
 }
+
+
+// slect city mypersonal
+public function getCities($stateId)
+{
+    return DB::table('cities')
+        ->where('state_id', $stateId)
+        ->orderBy('city')
+        ->get();
+}
+
 
     public function saveBankDetails(Request $request)
 {
