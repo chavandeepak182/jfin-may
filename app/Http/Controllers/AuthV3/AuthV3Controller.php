@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Http;
 
 
 class AuthV3Controller extends Controller
@@ -163,51 +163,66 @@ public function signupSubmit(Request $request)
         return view('authv3.verify_otp');
     }
 
-    public function verifyOtp(Request $request)
-    {
-        $request->validate([
-            'otp' => 'required|digits:4',
-        ]);
+   public function verifyOtp(Request $request)
+{
+    $request->validate([
+        'otp' => 'required|digits_between:4,6',
+    ]);
 
-        $userId = session('otp_user_id');
+    $userId = session('otp_user_id');
 
-        if (!$userId) {
-            return redirect()->route('authv3.login.form')
-                ->withErrors('Session expired. Please try again.');
+    if (!$userId) {
+        return redirect()->route('authv3.login.form')
+            ->withErrors('Session expired. Please try again.');
+    }
+
+    $otpRow = Otp::where('user_id', $userId)
+        ->where('is_verify', 0)
+        ->where('expires_at', '>=', now())
+        ->latest()
+        ->first();
+
+    if (!$otpRow) {
+        return back()->withErrors(['otp' => 'OTP expired or not found']);
+    }
+
+    try {
+        $apiKey = env('TWO_FACTOR_API_KEY');
+
+        $url = "https://2factor.in/API/V1/{$apiKey}/SMS/VERIFY/{$otpRow->session_id}/{$request->otp}";
+
+        $response = Http::timeout(15)->get($url)->json();
+
+        if (($response['Status'] ?? '') !== 'Success') {
+            return back()->withErrors(['otp' => 'Invalid OTP']);
         }
 
-        $otpRow = Otp::where('user_id', $userId)
-            ->where('otp', $request->otp)
-            ->where('is_verify', 0)
-            ->where('expires_at', '>=', now())
-            ->latest()
-            ->first();
-
-        if (!$otpRow) {
-            return back()->withErrors([
-                'otp' => 'Invalid or expired OTP'
-            ]);
-        }
-
+        // ✅ mark verified
         $otpRow->update(['is_verify' => 1]);
 
+        // login user
         Auth::loginUsingId($userId);
+
         User::where('id', $userId)->update([
             'last_login_at' => now()
         ]);
+
         session([
             'user_id'  => Auth::id(),
             'username' => Auth::user()->name,
             'role_id'  => Auth::user()->role_id,
         ]);
 
-        // 🔐 clear otp session
         session()->forget('otp_user_id');
 
-        // return redirect('/loans-list');
         return $this->redirectByRole(Auth::user());
 
+    } catch (\Throwable $e) {
+        \Log::error('OTP verify failed', ['error' => $e->getMessage()]);
+        return back()->withErrors(['otp' => 'OTP verification failed']);
     }
+}
+
 
     /* ================= RESEND OTP ================= */
 
@@ -237,51 +252,60 @@ public function signupSubmit(Request $request)
     //         'expires_at'=> now()->addMinutes(5),
     //     ]);
     // }
-    private function generateOtp($userId)
+ private function generateOtp($userId)
 {
-    // 🔹 get user
     $user = User::find($userId);
-    if (!$user) {
-        return;
-    }
+    if (!$user) return false;
 
-    // 🔹 generate OTP
-    $otp = rand(1000, 9999);
-
-    // 🔹 save OTP in DB (same as before)
-    Otp::create([
-        'user_id'     => $userId,
-        'otp'         => $otp,
-        'is_verify'   => 0,
-        'expires_at'  => now()->addMinutes(5),
-    ]);
-
-    // 🔹 send OTP SMS via TwoFactor
     try {
 
         $apiKey = env('TWO_FACTOR_API_KEY');
-        $sender = env('TWO_FACTOR_SENDER');
-        $countryCode = env('TWO_FACTOR_COUNTRY_CODE');
+        $mobile = "91" . $user->mobile_no;
 
-        $mobile = $countryCode . $user->mobile_no;
+        $url = "https://2factor.in/API/V1/{$apiKey}/SMS/{$mobile}/AUTOGEN/Registration+OTP";
 
-        // TwoFactor API URL
-        $url = "https://2factor.in/API/V1/{$apiKey}/SMS/{$mobile}/{$otp}/{$sender}";
+        $response = Http::timeout(20)->get($url);
 
-        // CURL request
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        \Log::info("OTP API RAW", [
+            'status' => $response->status(),
+            'body'   => $response->body()
+        ]);
 
-        $response = curl_exec($ch);
-        curl_close($ch);
+        if (!$response->successful()) {
+            return false;
+        }
 
-        // Optional: log response (debug)
-        // \Log::info('TwoFactor OTP Response', ['response' => $response]);
+        $json = $response->json();
 
-    } catch (\Exception $e) {
-        \Log::error('OTP SMS Failed', ['error' => $e->getMessage()]);
+        if (($json['Status'] ?? '') !== 'Success') {
+            \Log::error("OTP API FAILED", $json);
+            return false;
+        }
+
+        $sessionId = $json['Details'];
+
+        if (!$sessionId) {
+            \Log::error("Session ID missing from 2Factor response");
+            return false;
+        }
+
+        // delete old
+        Otp::where('user_id', $userId)->delete();
+
+        // insert new
+        Otp::create([
+            'user_id'    => $userId,
+            'otp'        => null,           // AUTOGEN
+            'session_id' => $sessionId,     // IMPORTANT
+            'is_verify'  => 0,
+            'expires_at' => now()->addMinutes(5),
+        ]);
+
+        return true;
+
+    } catch (\Throwable $e) {
+        \Log::error("OTP Send Exception", ['error' => $e->getMessage()]);
+        return false;
     }
 }
 
