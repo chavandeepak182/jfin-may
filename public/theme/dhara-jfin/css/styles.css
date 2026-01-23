@@ -4702,14 +4702,14 @@ body.menu-open .back-to-top {
     }
     .hero-content {
         display: block !important;
-        max-width: 100%;
+        max-width: 55%;
         margin-left: 0;
         padding: 0 5%;
         text-align: left;
         z-index: 10;
     }
     .hero-intro{
-        font-size:1rem;
+        font-size:0.5rem;
     }
 
      .hero h1, .hero p {
