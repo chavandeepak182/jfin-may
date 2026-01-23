@@ -242,10 +242,11 @@
     </div> -->
 
     <!-- Approved Loans -->
-    <!-- <div class="col-xl-3 col-lg-4 col-md-6">
-       <a href="javascript:void(0)"
-   class="card-link loan-filter"
-   data-type="approved">
+    <div class="col-xl-3 col-lg-4 col-md-6">
+    <!-- Approved Loans -->
+<a href="javascript:void(0)" id="approvedLoanCard" class="card-link">
+
+
 
             <div class="loan-card">
                 <div class="card-top">
@@ -256,17 +257,17 @@
                 </div>
 
                 <div class="loan-title">Approved Loans</div>
-                <div class="loan-value">7</div>
+                <div class="loan-value">{{ $approvedCount }}</div>
                 <div class="loan-sub">Last 24 hours</div>
             </div>
         </a>
-    </div> -->
+    </div>
 
     <!-- Disbursed Loans -->
     <div class="col-xl-3 col-lg-4 col-md-6">
-    <a href="javascript:void(0)"
-   class="card-link loan-filter"
-   data-type="disbursed">
+  <a href="javascript:void(0)" id="disbursedLoanCard" class="card-link">
+
+
 
             <div class="loan-card">
                 <div class="card-top">
@@ -277,7 +278,7 @@
                 </div>
 
                 <div class="loan-title">Disbursed Loans</div>
-                <div class="loan-value">2</div>
+                <div class="loan-value">{{ $disbursedCount }}</div>
                 <div class="loan-sub">Last 24 hours</div>
             </div>
         </a>
@@ -321,7 +322,7 @@
 
 <div id="assignedLoansContainer" class="mt-3"></div>
 
-<div id="assignedLoansContainer"></div>
+<!-- <div id="assignedLoansContainer"></div> -->
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
@@ -424,6 +425,56 @@ $('#inProcessCard').click(function () {
     });
 });
 </script>
+
+
+<script>
+$('#approvedLoanCard').click(function () {
+
+    // active effect
+    $('.loan-card').removeClass('active');
+    $(this).find('.loan-card').addClass('active');
+
+    // loader
+    $('#assignedLoansContainer').html(
+        '<div class="text-center mt-4">Loading...</div>'
+    );
+
+    // AJAX call
+    $.get("{{ route('agent.approvedLoans.ajax') }}", function (html) {
+        $('#assignedLoansContainer').html(html);
+    });
+});
+</script>
+<script>
+$(document).on('click', '#loanTableWrapper .pagination a', function (e) {
+    e.preventDefault();
+
+    let url = $(this).attr('href');
+
+    $('#assignedLoansContainer').html('Loading...');
+
+    $.get(url, function (html) {
+        $('#assignedLoansContainer').html(html);
+    });
+});
+</script>
+<script>
+$('#disbursedLoanCard').click(function () {
+
+    $('.loan-card').removeClass('active');
+    $(this).find('.loan-card').addClass('active');
+
+    $('#assignedLoansContainer').html(
+        '<div class="text-center mt-4">Loading...</div>'
+    );
+
+    $.get("{{ route('agent.disbursedLoans.ajax') }}", function (html) {
+        $('#assignedLoansContainer').html(html);
+    });
+});
+</script>
+
+
 
 @endsection
 
