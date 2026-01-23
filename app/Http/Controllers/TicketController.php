@@ -45,17 +45,17 @@ class TicketController extends Controller
         $user = auth()->user();
 
         // Decide layout based on role
-        if ($user->role_id == env('adminRole_id') || $user->role_id == env('agentRole_id')) {
+        if ($user->role_id == config('constants.roles.admin') || $user->role_id == config('constants.roles.agent')) {
             $layout = 'layouts.header';
         } else {
             $layout = 'frontend.layouts.customer-dash';
         }
 
         // Admin data
-        if ($user->role_id == env('adminRole_id')) {
+        if ($user->role_id == config('constants.roles.admin')) {
 
-            $users  = \App\Models\User::where('role_id', env('customerRole'))->get();
-            $agents = \App\Models\User::where('role_id', env('agentRole_id'))->get();
+            $users  = \App\Models\User::where('role_id', config('constants.roles.customer'))->get();
+            $agents = \App\Models\User::where('role_id', config('constants.roles.agent'))->get();
             $loans  = \App\Models\Loan::all();
 
             return view('tickets.create', compact('users','agents','loans','layout'));
@@ -72,7 +72,7 @@ class TicketController extends Controller
 
         /* ================= VALIDATION ================= */
 
-        if ($user->role_id == env('customerRole')) {
+        if ($user->role_id == config('constants.roles.customer')) {
             $request->validate([
                 'loan_id' => 'required|exists:loans,loan_id',
                 'subject' => 'required',
@@ -80,7 +80,7 @@ class TicketController extends Controller
             ]);
         }
 
-        if ($user->role_id == env('agentRole_id')) {
+        if ($user->role_id == config('constants.roles.agent')) {
             $request->validate([
                 'user_id' => 'required|exists:users,id',
                 'loan_id' => 'required|exists:loans,loan_id',
@@ -91,7 +91,7 @@ class TicketController extends Controller
 
         /* ================= ADMIN ================= */
 
-        if ($user->role_id == env('adminRole_id')) {
+        if ($user->role_id == config('constants.roles.admin')) {
 
             $agentId = $request->agent_id;
 
@@ -111,7 +111,7 @@ class TicketController extends Controller
 
         /* ================= AGENT ================= */
 
-        elseif ($user->role_id == env('agentRole_id')) {
+        elseif ($user->role_id == config('constants.roles.agent')) {
 
             // Ensure this loan belongs to this agent
             $loan = Loan::where('loan_id', $request->loan_id)
@@ -170,7 +170,7 @@ class TicketController extends Controller
         $user = auth()->user();
 
         // Decide layout
-        if ($user->role_id == env('adminRole_id') || $user->role_id == env('agentRole_id')) {
+        if ($user->role_id == config('constants.roles.admin') || $user->role_id == config('constants.roles.agent')) {
             $layout = 'layouts.header';
         } else {
             $layout = 'frontend.layouts.customer-dash';
@@ -188,9 +188,9 @@ class TicketController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role_id == env('adminRole_id')) return;
+        if ($user->role_id == config('constants.roles.admin')) return;
 
-        if ($user->role_id == env('agentRole_id') && $ticket->agent_id == $user->id) return;
+        if ($user->role_id == config('constants.roles.agent') && $ticket->agent_id == $user->id) return;
 
         if ($ticket->user_id == $user->id) return;
 
@@ -201,7 +201,7 @@ class TicketController extends Controller
     {
         $ticket = Ticket::findOrFail($id);
 
-        if(auth()->user()->role_id != env('adminRole_id')){
+        if(auth()->user()->role_id != config('constants.roles.admin')){
             abort(403);
         }
 
@@ -224,13 +224,13 @@ class TicketController extends Controller
         return Loan::where('loan_id', $loanId)
             ->whereNotNull('agent_id')
             ->join('users', 'users.id', '=', 'loans.agent_id')
-            ->where('users.role_id', env('agentRole_id'))
+            ->where('users.role_id', config('constants.roles.agent'))
             ->select('users.id', 'users.name')
             ->first() 
             ? response()->json([
                 'agent' => Loan::where('loan_id', $loanId)
                     ->join('users', 'users.id', '=', 'loans.agent_id')
-                    ->where('users.role_id', env('agentRole_id'))
+                    ->where('users.role_id', config('constants.roles.agent'))
                     ->select('users.id','users.name')
                     ->first()
             ])
@@ -244,8 +244,8 @@ class TicketController extends Controller
         $user = auth()->user();
 
         if (
-            $user->role_id == env('adminRole_id') ||
-            ($user->role_id == env('agentRole_id') && $ticket->agent_id == $user->id) ||
+            $user->role_id == config('constants.roles.admin') ||
+            ($user->role_id == config('constants.roles.agent') && $ticket->agent_id == $user->id) ||
             ($ticket->user_id == $user->id)
         ) {
             $ticket->update(['status' => 'closed']);
