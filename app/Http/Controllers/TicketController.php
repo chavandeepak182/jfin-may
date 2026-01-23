@@ -10,12 +10,12 @@ use App\Models\TicketMessage;
 
 class TicketController extends Controller
 {
-    public function index()
+   public function index()
 {
     $user = auth()->user();
 
-    $adminRole  = config('constants.roles.admin');
-    $agentRole  = config('constants.roles.agent');
+    $adminRole    = config('constants.roles.admin');
+    $agentRole    = config('constants.roles.agent');
     $customerRole = config('constants.roles.customer');
 
     // Decide layout
@@ -26,18 +26,27 @@ class TicketController extends Controller
     }
 
     if ($user->role_id == $adminRole) {
-        $tickets = Ticket::latest()->paginate(10);
-    }
-    elseif ($user->role_id == $agentRole) {
-        $tickets = Ticket::where('agent_id', $user->id)->latest()->paginate(10);
-    }
-    else {
-        $tickets = Ticket::where('user_id', $user->id)->latest()->paginate(10);
+
+        // Admin: load all relations
+        $tickets = Ticket::with(['user','agent','loan.loanCategory'])
+                        ->latest()
+                        ->paginate(10);
+
+    } elseif ($user->role_id == $agentRole) {
+
+        $tickets = Ticket::where('agent_id', $user->id)
+                        ->latest()
+                        ->paginate(10);
+
+    } else {
+
+        $tickets = Ticket::where('user_id', $user->id)
+                        ->latest()
+                        ->paginate(10);
     }
 
     return view('tickets.index', compact('tickets','layout'));
 }
-
 
 
     public function create()

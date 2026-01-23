@@ -126,6 +126,12 @@
             <thead>
                 <tr>
                     <th>Ticket ID</th>
+
+                    @if(auth()->user()->role_id == config('constants.roles.admin'))
+                        <th>Customer</th>
+                        <th>Assigned Agent</th>
+                    @endif
+
                     <th>Subject</th>
                     <th>Status</th>
                     <th width="110">Action</th>
@@ -136,6 +142,15 @@
             @forelse($tickets as $ticket)
                 <tr>
                     <td>{{ $ticket->ticket_no }}</td>
+
+                    @if(auth()->user()->role_id == config('constants.roles.admin'))
+
+                        <td>{{ $ticket->user->name ?? 'N/A' }}</td>
+
+
+                        <td>{{ $ticket->agent?->name ?? 'Unassigned' }}</td>
+
+                    @endif
 
                     <td>{{ $ticket->subject }}</td>
 
@@ -153,14 +168,17 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4" class="ticket-empty-row">
-                        No tickets found.
-                    </td>
+                    <td colspan="7" class="ticket-empty-row">No tickets found.</td>
                 </tr>
             @endforelse
             </tbody>
 
         </table>
+
+        {{-- Pagination --}}
+        <div style="margin-top:15px;">
+            {{ $tickets->links() }}
+        </div>
 
     </div>
 
