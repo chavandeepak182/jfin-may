@@ -374,8 +374,8 @@
                             <button type="submit" class="btn btn-dark px-4 py-2 rounded-1 uppercase">Login</button>
                         </div>
 
-                        <p class="signup">Don't have an account? <a href="{{ route('registerPage') }}"
-                                style="cursor: pointer;">Sign Up.</a></p>
+                        <!-- <p class="signup">Don't have an account? <a href="{{ route('registerPage') }}"
+                                style="cursor: pointer;">Sign Up.</a></p> -->
                     </form>
                 </div>
             </div>

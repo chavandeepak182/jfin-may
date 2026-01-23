@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
+use Illuminate\Validation\Rule;
+
 
 
 class UsersController extends Controller
@@ -354,19 +356,72 @@ public function updateUserStatus(Request $request)
 // }
 public function insertUser(Request $request)
 {
-    $type = $request->user_type; // customer | agent | cp
+//     $type = $request->user_type; // customer | agent | cp
 
-    // ================= VALIDATION =================
+//     // ================= VALIDATION =================
+//     // $rules = [
+//     //     'full_name' => 'required|string|max:255',
+//     //     'email_id'  => 'required|email|unique:users,email_id',
+//     //     'mobile_no' => 'required|digits:10',
+//     // ];
+// $rules = [
+//     'full_name' => ['required', 'string', 'max:255'],
+//     'email_id'  => [
+//         'required',
+//         'email',
+//         Rule::unique('users', 'email_id')->ignore($request->user_id),
+//     ],
+//     'mobile_no' => ['required', 'regex:/^[6-9]\d{9}$/'],
+//     'dob'       => ['required', 'date', function ($attr, $value, $fail) {
+//         if (Carbon::parse($value)->age < 18) {
+//             $fail('User must be at least 18 years old.');
+//         }
+//     }],
+// ];
+//     // Customer requires full profile
+//     if ($type === 'customer') {
+//         $rules = array_merge($rules, [
+//             'dob'     => 'required|date',
+//             'address' => 'required|string|max:255',
+//             'city'    => 'required|string|max:100',
+//             'state'   => 'required|string|max:100',
+//             'pincode' => 'required|digits:6',
+//         ]);
+//     }
+
+//     $validator = Validator::make($request->all(), $rules);
+
+//     if ($validator->fails()) {
+//         return response()->json([
+//             'status' => 0,
+//             'errors' => $validator->errors()
+//         ], 422);
+//     }
+   $type = $request->user_type; // customer | agent | cp
+
+    // ================= BASE RULES =================
     $rules = [
-        'full_name' => 'required|string|max:255',
-        'email_id'  => 'required|email|unique:users,email_id',
-        'mobile_no' => 'required|digits:10',
+        'full_name' => ['required', 'string', 'max:255'],
+        'email_id'  => [
+            'required',
+            'email',
+            Rule::unique('users', 'email_id'),
+        ],
+        'mobile_no' => ['required', 'regex:/^[6-9]\d{9}$/'],
     ];
 
-    // Customer requires full profile
+    // ================= CUSTOMER RULES =================
     if ($type === 'customer') {
         $rules = array_merge($rules, [
-            'dob'     => 'required|date',
+            'dob' => [
+                'required',
+                'date',
+                function ($attr, $value, $fail) {
+                    if (Carbon::parse($value)->age < 18) {
+                        $fail('Must be at least 18 years old');
+                    }
+                }
+            ],
             'address' => 'required|string|max:255',
             'city'    => 'required|string|max:100',
             'state'   => 'required|string|max:100',
