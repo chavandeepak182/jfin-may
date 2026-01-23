@@ -127,7 +127,7 @@
     <section class="video-section">
         <div class="video-container">
             <video autoplay muted loop playsinline>
-                <source src="{{ asset('theme/dhara-jfin/img/video_new.mp4') }}" type="video/mp4">
+                <source src="{{ asset('theme/dhara-jfin/videos/video_new.mp4') }}" type="video/mp4">
                 <source src="https://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
