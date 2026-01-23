@@ -1,6 +1,7 @@
 @extends($layout)
 
 @section('content')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
 /* ===== Ticket UI Scoped Styles ===== */
@@ -176,9 +177,9 @@
         </table>
 
         {{-- Pagination --}}
-        <div style="margin-top:15px;">
-            {{ $tickets->links() }}
-        </div>
+       <div class="d-flex justify-content-center mt-3">
+    {{ $tickets->links() }}
+</div>
 
     </div>
 
