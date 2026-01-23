@@ -11,28 +11,33 @@ use App\Models\TicketMessage;
 class TicketController extends Controller
 {
     public function index()
-    {
-        $user = auth()->user();
+{
+    $user = auth()->user();
 
-        // Decide layout
-        if ($user->role_id == env('adminRole_id') || $user->role_id == env('agentRole_id')) {
-            $layout = 'layouts.header';
-        } else {
-            $layout = 'frontend.layouts.customer-dash';
-        }
+    $adminRole  = config('constants.roles.admin');
+    $agentRole  = config('constants.roles.agent');
+    $customerRole = config('constants.roles.customer');
 
-        if ($user->role_id == env('adminRole_id')) {
-            $tickets = Ticket::latest()->get();
-        }
-        elseif ($user->role_id == env('agentRole_id')) {
-            $tickets = Ticket::where('agent_id', $user->id)->latest()->get();
-        }
-        else {
-            $tickets = Ticket::where('user_id', $user->id)->latest()->get();
-        }
-
-        return view('tickets.index', compact('tickets','layout'));
+    // Decide layout
+    if ($user->role_id == $adminRole || $user->role_id == $agentRole) {
+        $layout = 'layouts.header';
+    } else {
+        $layout = 'frontend.layouts.customer-dash';
     }
+
+    if ($user->role_id == $adminRole) {
+        $tickets = Ticket::latest()->paginate(10);
+    }
+    elseif ($user->role_id == $agentRole) {
+        $tickets = Ticket::where('agent_id', $user->id)->latest()->paginate(10);
+    }
+    else {
+        $tickets = Ticket::where('user_id', $user->id)->latest()->paginate(10);
+    }
+
+    return view('tickets.index', compact('tickets','layout'));
+}
+
 
 
     public function create()
