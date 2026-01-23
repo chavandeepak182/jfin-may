@@ -30,6 +30,7 @@ use Carbon\Carbon;
 
 
 
+
 class LoanApplicationController extends Controller
 {
 
@@ -3487,6 +3488,18 @@ protected function handleLoanDetails(Request $request, $userId)
     {
         $agent_id = session()->get('user_id');
         $status = $request->input('status');
+          // 🔹 Assigned Agent COUNT
+    // $assignedCount = Loan::where('agent_id', $agent_id)->count();
+    $assignedCount = Loan::where('agent_id', $agent_id)
+    ->whereIn('agent_action', ['pending', 'accepted', 'in process'])
+    ->count();
+        // ✅ ADD THIS
+    $totalCount = DB::table('loans')
+        ->where('agent_id', $agent_id)
+        ->count();
+        $inProcessCount = Loan::where('agent_id', $agent_id)
+        ->where('status', 'in process')
+        ->count();
 
         $query = DB::table('loans')
             ->join('users', 'loans.user_id', '=', 'users.id')
@@ -3509,7 +3522,7 @@ protected function handleLoanDetails(Request $request, $userId)
         }
 
         $data['loans'] = $query->paginate(10)->withQueryString();
-        return view('agent.all-loans', compact('data'));
+        return view('agent.all-loans', compact('data','assignedCount','totalCount','inProcessCount'));
     }
 
     public function loanShow($id)
@@ -3566,6 +3579,119 @@ protected function handleLoanDetails(Request $request, $userId)
         // Return view with loans data
         return view('agent.assigned_loans', compact('loans'));
     }
+
+
+    // ajax
+public function assignedLoansAjax(Request $request)
+{
+    
+    $agent_id = session()->get('user_id');
+    $search = $request->search;
+    
+
+    // 🔹 Assigned Agent COUNT
+    // $assignedCount = Loan::where('agent_id', $agent_id)->count();
+    $assignedCount = Loan::where('agent_id', $agent_id)
+    ->whereIn('agent_action', ['pending', 'accepted', 'in process'])
+    ->count();
+
+
+    // 🔹 Assigned Loans LIST (with search)
+    $loans = Loan::where('agent_id', $agent_id)
+        ->when($search, function ($q) use ($search) {
+            $q->where('loan_reference_id', 'like', "%$search%")
+              ->orWhereHas('user', function ($q2) use ($search) {
+                  $q2->where('name', 'like', "%$search%");
+              })
+              ->orWhereHas('loanCategory', function ($q3) use ($search) {
+                  $q3->where('category_name', 'like', "%$search%");
+              });
+        })
+        ->with(['user', 'loanCategory'])
+        ->orderByDesc('created_at')
+        ->paginate(10);
+
+    return view('agent.partials.assigned_loans_table', compact('loans', 'assignedCount'));
+}
+public function allLoansAjax(Request $request)
+{
+    $agent_id = session()->get('user_id');
+    $search   = $request->search;
+    $status   = $request->status;
+
+    // ✅ TOTAL COUNT (without pagination)
+    $totalCount = Loan::where('agent_id', $agent_id)->count();
+
+    // ✅ FILTERED QUERY
+    $query = Loan::with(['user', 'loanCategory'])
+        ->where('agent_id', $agent_id)
+
+        ->when($search, function ($q) use ($search) {
+            $q->where(function ($sub) use ($search) {
+                $sub->where('loan_reference_id', 'like', "%{$search}%")
+                    ->orWhereHas('user', fn ($q2) =>
+                        $q2->where('name', 'like', "%{$search}%")
+                    )
+                    ->orWhereHas('loanCategory', fn ($q3) =>
+                        $q3->where('category_name', 'like', "%{$search}%")
+                    );
+            });
+        })
+
+        ->when($status, function ($q) use ($status) {
+            $q->where('status', $status);
+        });
+
+    // ✅ FILTERED COUNT
+    $filteredCount = $query->count();
+
+    // ✅ PAGINATED DATA
+    $loans = $query
+        ->orderByDesc('created_at')
+        ->paginate(10)
+        ->withQueryString();
+
+    return view(
+        'agent.partials.all_loans_table',
+        compact('loans', 'totalCount', 'filteredCount')
+    );
+}
+
+public function inProcessLoansAjax(Request $request)
+{
+    $agent_id = session()->get('user_id');
+    $search   = $request->search;
+
+    $query = Loan::with(['user', 'loanCategory'])
+        ->where('agent_id', $agent_id)
+        ->where('status', 'in process');
+
+    // 🔍 Search
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('loan_reference_id', 'like', "%$search%")
+              ->orWhereHas('user', fn($u) => $u->where('name', 'like', "%$search%"))
+              ->orWhereHas('loanCategory', fn($c) => $c->where('category_name', 'like', "%$search%"));
+        });
+    }
+
+    $loans = $query->orderByDesc('created_at')->paginate(10)->withQueryString();
+
+    $inProcessCount = Loan::where('agent_id', $agent_id)
+        ->where('status', 'in process')
+        ->count();
+
+    return view('agent.partials.inprocess_loans_table', compact('loans', 'inProcessCount'));
+}
+
+
+
+
+
+
+
+
+
 
 
     public function acceptLoan(Request $request)

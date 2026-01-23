@@ -15,6 +15,8 @@
 
         <!-- Icon Font Stylesheet -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
 
         <!-- Customized Bootstrap Stylesheet -->
         <link href="{{ asset('theme') }}/frontend/css/bootstrap.min.css" rel="stylesheet">
@@ -31,6 +33,33 @@
                 box-sizing: border-box;
                 font-family: 'Poppins', sans-serif;
             }
+
+            /* Password field wrapper */
+#password_login {
+    position: relative;
+}
+
+/* Password input padding for icon */
+#password_login input {
+    padding-right: 45px;
+}
+
+/* Eye icon styling */
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d;
+    font-size: 18px;
+}
+
+/* Hover effect */
+.password-toggle:hover {
+    color: #000;
+}
+
 
             section {
                 position: relative;
@@ -391,13 +420,20 @@
                                 @enderror
                             </div>
 
-                            <div id="password_login" class="col-12 pb-3">
-                                <input type="password" name="password" class="form-control"
-                                    placeholder="Enter Password">
-                                @error('password')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
+                           <div id="password_login" class="col-12 pb-3">
+                            <input type="password" name="password" id="password" class="form-control"
+                                placeholder="Enter Password">
+
+                            <span class="password-toggle" onclick="togglePassword()">
+                                <i class="bi bi-eye" id="toggleIcon"></i>
+                            </span>
+
+                            @error('password')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+
 
                             <!-- Mobile and OTP Fields (Initially Hidden) -->
                             <div id="mobile_login" class="col-12" style="display: none;">
@@ -420,8 +456,8 @@
                                     class="btn btn-dark px-4 py-2 rounded-1 uppercase">Login</button>
                             </div>
 
-                            <p class="signup">Don't have an account? <a href="{{ route('registerPage') }}"
-                                    style="cursor: pointer;">Sign Up.</a></p>
+                            <!-- <p class="signup">Don't have an account? <a href="{{ route('registerPage') }}"
+                                    style="cursor: pointer;">Sign Up.</a></p> -->
                             <a href="{{ route('forgot') }}" class="float-end text-primary">Forgot Password?</a>
 
                         </form>
@@ -521,6 +557,23 @@
                 });
             });
         </script>
+        <script>
+function togglePassword() {
+    const passwordField = document.getElementById("password");
+    const icon = document.getElementById("toggleIcon");
+
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        icon.classList.remove("bi-eye");
+        icon.classList.add("bi-eye-slash");
+    } else {
+        passwordField.type = "password";
+        icon.classList.remove("bi-eye-slash");
+        icon.classList.add("bi-eye");
+    }
+}
+</script>
+
     </body>
 
     </html>
