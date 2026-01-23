@@ -4569,7 +4569,7 @@ body.menu-open .back-to-top {
             }
     
     .home-feature-cards {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr !important;
         gap: 1.5rem;
     }
     .home-benefit-grid {
@@ -4702,14 +4702,14 @@ body.menu-open .back-to-top {
     }
     .hero-content {
         display: block !important;
-        max-width: 55%;
+        max-width: 100%;
         margin-left: 0;
         padding: 0 5%;
         text-align: left;
         z-index: 10;
     }
     .hero-intro{
-        font-size:0.5rem;
+        font-size:1rem;
     }
 
      .hero h1, .hero p {
@@ -4845,9 +4845,7 @@ body.menu-open .back-to-top {
     .home-section-subtitle {
         font-size: 1rem;
     }
-    .home-feature-cards {
-        grid-template-columns: 1fr;
-    }
+
     .video-hero {
         height: 300px;
         min-height: auto;
@@ -4912,12 +4910,12 @@ body.menu-open .back-to-top {
         gap: 1.5rem;
     }
     .about-page-team-card {
-        height: auto;
+        height: 224.73px;
         max-width: 350px;
         margin: 0 auto 20px;
     }
     .about-page-team-image {
-        height: 350px;
+        height: 224.73px;
     }
     .about-page-social-icon {
         display: none !important;
@@ -4997,6 +4995,12 @@ body.menu-open .back-to-top {
         height: auto;
     }
     
+    .about-page-team-name{
+        font-size:15px;
+    }
+    .about-page-team-designation{
+        font-size:11px;
+    }
     .home-emi-preview-amount {
         font-size: 2rem;
     }
@@ -5030,8 +5034,35 @@ body.menu-open .back-to-top {
     .service-item{
         min-height: 180px;
     }
+     .contact-grid {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
+        }
+        .form-grid {
+            grid-template-columns: 1fr !important;
+            gap: 15px !important;
+        }
+        .form-group.full-width {
+            grid-column: span 1 !important;
+        }
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        .contact-image {
+            display: none !important;
+        }
+        .contact-form {
+            padding: 0 10px !important;
+        }
+        .contact-form h4 {
+            font-size: 1.5rem !important;
+        }
+
     .footer-content {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2,1fr);
         gap: 2rem;
     }
     .footer-bottom .container {
