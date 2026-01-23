@@ -80,6 +80,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatInterface = document.getElementById('chatbot-chat-interface');
     const onboardingForm = document.getElementById('onboarding-form-element');
 
+    // Check for existing user in localStorage
+    const savedUser = localStorage.getItem('jfinserv_user');
+    if (savedUser) {
+        try {
+            const parsedUser = JSON.parse(savedUser);
+            if (parsedUser.name && parsedUser.email && parsedUser.contact) {
+                userProfile = parsedUser;
+                isStarted = true;
+                onboardingScreen.style.display = 'none';
+                chatInterface.style.display = 'flex';
+                
+                // Welcome back message
+                addMessage(`Welcome back, <b>${userProfile.name}</b>! How can I help you further?`, 'bot');
+                addMessage(`
+                    <div class="quick-replies">
+                        <button class="quick-reply" data-query="Home Loan">Home Loan</button>
+                        <button class="quick-reply" data-query="Project Loan">Project Loan</button>
+                        <button class="quick-reply" data-query="MSME Loan">MSME Loan</button>                    
+                        <button class="quick-reply" data-query="Loan Against Property">Loan Against Property</button>
+                        <button class="quick-reply" data-query="Overdraft facility">Overdraft Facility</button>
+                        <button class="quick-reply" data-query="Lease Rental Discounting">Lease Rental Discounting</button>
+                        <button class="quick-reply" data-query="Interest Rates">Interest Rates</button>
+                    </div>
+                `, 'bot');
+            }
+        } catch (e) {
+            console.error('Error parsing saved user:', e);
+            localStorage.removeItem('jfinserv_user');
+        }
+    }
+
     // Handle Onboarding Form Submission
     onboardingForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -93,16 +124,26 @@ document.addEventListener('DOMContentLoaded', () => {
             userProfile.contact = contactInput.value.trim();
             userProfile.email = emailInput.value.trim();
             
+            // Save to localStorage
+            localStorage.setItem('jfinserv_user', JSON.stringify(userProfile));
+            
             isStarted = true;
             onboardingScreen.style.display = 'none';
             chatInterface.style.display = 'flex';
             
+            // Save lead to database
+            saveLeadToDatabase(userProfile);
+            
             // Initial Welcome Message
-            addMessage(`Hello **${userProfile.name}**! Welcome to Jfinserv. How can I assist you with your loan requirements today?`, 'bot');
+            addMessage(`Hello <b>${userProfile.name}</b>! Welcome to Jfinserv. How can I assist you with your loan requirements today?`, 'bot');
             addMessage(`
                 <div class="quick-replies">
                     <button class="quick-reply" data-query="Home Loan">Home Loan</button>
-                    <button class="quick-reply" data-query="MSME Loan">MSME Loan</button>
+                    <button class="quick-reply" data-query="Project Loan">Project Loan</button>
+                    <button class="quick-reply" data-query="MSME Loan">MSME Loan</button>                    
+                    <button class="quick-reply" data-query="Loan Against Property">Loan Against Property</button>
+                    <button class="quick-reply" data-query="Overdraft facility">Overdraft Facility</button>
+                    <button class="quick-reply" data-query="Lease Rental Discounting">Lease Rental Discounting</button>
                     <button class="quick-reply" data-query="Interest Rates">Interest Rates</button>
                 </div>
             `, 'bot');
@@ -139,69 +180,84 @@ document.addEventListener('DOMContentLoaded', () => {
         const q = query.toLowerCase();
         let response = "";
 
-        // General Company Info & Services Portfolio
-        if (q.includes('who are you') || q.includes('about jfinserv') || q.includes('what is jfinserv') || (q.includes('what') && q.includes('provide'))) {
-            response = "Jfinserv is a leading financial services provider based in Pune & PCMC. We specialize in providing customized loan solutions with a focus on transparency, competitive rates, and a seamless digital experience. Our mission is to help individuals and businesses achieve their financial goals through expert guidance.";
-        } else if (q.includes('service') || q.includes('what do you do') || q.includes('loan products') || q.includes('list of loans')) {
-            response = "We offer a wide range of financial services including:<br>• **Home Loans** (New & Top-up)<br>• **MSME / Business Loans**<br>• **Loan Against Property (LAP)**<br>• **Project Finance**<br>• **Lease Rental Discounting (LRD)**<br>• **Overdraft Facilities**<br>Which of these would you like to know more about?";
+        // General Company Info & About Us
+        if (q.includes('who are you') || q.includes('about jfinserv') || q.includes('what is jfinserv') || q.includes('company')) {
+            response = "Jfinserv Consultant India Private Limited is a premier financial services provider based in Pune. We specialize in providing customized loan solutions with transparency and competitive interest rates. With over 250+ disbursed loans and a team of 75+ experts, we are dedicated to empowering your financial journey.";
+        } else if (q.includes('mission') || q.includes('vision') || q.includes('values')) {
+            response = "Our <b>Mission</b> is to be a leading finance company offering secured loans at competitive rates. Our <b>Vision</b> is to deliver innovative, customized solutions for sustainable client growth while upholding excellence and integrity.";
+        } else if (q.includes('partners') || q.includes('banks') || q.includes('nbfc')) {
+            response = "We partner with top nationalized banks and NBFCs including Indian Bank, BOM, PNB, RBL, UBI, BOB, Kotak, Axis, ICICI Bank, and Aditya Birla Capital to get you the best deals.";
+        } else if (q.includes('location') || q.includes('office') || q.includes('where')) {
+            response = "Our head office is located in Pune. We primarily serve clients in the <b>Pune & PCMC</b> region. You can find our exact location on the <a href=\"/contact\" class=\"chat-link\" style=\"color: #00abeb; text-decoration: underline; font-weight: 600;\">Contact Page</a>.";
+        }
+        
+        // Services & Loan Products
+        else if (q.includes('service') || q.includes('what do you do') || q.includes('loan products') || q.includes('list of loans')) {
+            response = "We offer a comprehensive range of financial services:<br>• <b>Home Loans</b> (New, Top-up, Balance Transfer)<br>• <b>MSME / Business Loans</b><br>• <b>Loan Against Property (LAP)</b><br>• <b>Project Finance</b> (Real Estate & Infrastructure)<br>• <b>Lease Rental Discounting (LRD)</b><br>• <b>Overdraft (OD) Facilities</b><br>Which one can I help you with today?";
         }
         
         // Loan Types
         else if (q.includes('home loan')) {
-            response = "Jfinserv offers Home Loans with competitive interest rates starting from **8.5% P.A.** We provide funding for new property purchases, construction, and renovations in Pune & PCMC. Benefits include tenure up to 30 years, quick digital approval, and balance transfer facilities.";
+            response = "Our Home Loans start at competitive interest rates from <b>8.25% - 8.5% P.A.</b> We offer flexible tenures up to <b>30 years</b>, balance transfer facilities, and expert guidance through the technical and legal process. Perfect for new purchases or renovations!";
+            response += `<br><a href="/home-loan" class="quick-reply" style="display: inline-block; margin-top: 10px; background: #295cab; color: white; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-size: 0.8rem;">View Home Loan Page</a>`;
         } else if (q.includes('msme') || q.includes('business loan')) {
-            response = "Our MSME loans are designed to fuel your business growth. We offer both secured and unsecured options with disbursement in just **48-72 hours**. Ideal for machinery purchase, working capital, or business expansion.";
-        } else if (q.includes('lap') || q.includes('loan against property')) {
-            response = "Loan Against Property (LAP) helps you unlock the market value of your residential or commercial asset. We offer high-value loans at lower interest rates (starting ~9.2%*) with tenures up to 20 years.";
-        } else if (q.includes('project loan')) {
-            response = "We provide specialized Project Finance for real estate developers and infrastructure projects. Our team assists with high-quantum funding based on project viability and technical assessment.";
+            response = "Our MSME loans support your business growth, working capital, and equipment needs. We offer swift processing with disbursal typically in <b>48-72 hours</b> and minimal documentation.";
+            response += `<br><a href="/msme-loan" class="quick-reply" style="display: inline-block; margin-top: 10px; background: #295cab; color: white; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-size: 0.8rem;">View MSME Loan Page</a>`;
+        } else if (q.includes('property') || q.includes('lap')) {
+            response = "A <b>Loan Against Property (LAP)</b> lets you unlock the value of your residential or commercial asset. We offer high-value loans at lower rates than personal loans, with tenures up to <b>15-20 years</b>.";
+            response += `<br><a href="/loan-against-property" class="quick-reply" style="display: inline-block; margin-top: 10px; background: #295cab; color: white; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-size: 0.8rem;">View LAP Page</a>`;
+        } else if (q.includes('project loan') || q.includes('construction')) {
+            response = "We specialize in <b>Project Finance</b> for developers and infrastructure companies. We provide funding from land acquisition to completion, with moratorium periods aligned to your construction milestones.";
+            response += `<br><a href="/project-loan" class="quick-reply" style="display: inline-block; margin-top: 10px; background: #295cab; color: white; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-size: 0.8rem;">View Project Loan Page</a>`;
         } else if (q.includes('lease rental') || q.includes('lrd')) {
-            response = "Lease Rental Discounting (LRD) allows you to get a loan against your fixed rental income from long-term leased property. It's a great way to get immediate liquidity at competitive rates.";
-        } 
+            response = "Lease Rental Discounting (LRD) allows you to get immediate liquidity against your fixed rental income from long-term leased properties at very competitive rates.";
+            response += `<br><a href="/lease-rental-discounting" class="quick-reply" style="display: inline-block; margin-top: 10px; background: #295cab; color: white; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-size: 0.8rem;">View LRD Page</a>`;
+        } else if (q.includes('overdraft') || q.includes('od facility')) {
+            response = "We provide Overdraft (OD) facilities to help businesses manage their cash flow efficiently, allowing you to pay interest only on the amount you use.";
+            response += `<br><a href="/overdraft-facility" class="quick-reply" style="display: inline-block; margin-top: 10px; background: #295cab; color: white; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-size: 0.8rem;">View Overdraft Page</a>`;
+        }
         
+        // FAQ - Eligibility & Requirements
+        else if (q.includes('who can apply') || q.includes('eligibility criteria')) {
+            response = "Salaried individuals, self-employed professionals, business owners, and companies can apply, subject to eligibility criteria such as income stability, credit history, and property details.";
+        } else if (q.includes('minimum income') || q.includes('how much salary')) {
+            response = "For salaried individuals, the minimum monthly income is ₹25,000. For self-employed applicants, we require a minimum annual income of ₹3 lakhs. Actual loan amounts depend on your overall profile and credit score.";
+        } else if (q.includes('self-employed') || q.includes('business owner')) {
+            response = "Yes, we welcome applications from self-employed professionals! You'll need to provide ITR for the last 2 years, business proof, and audited financial statements.";
+        } else if (q.includes('tenure') || q.includes('how many years')) {
+            response = "We offer flexible repayment tenures from <b>5 to 30 years</b>. The maximum tenure depends on your age at application and must conclude before you turn 65.";
+        }
+        
+                // FAQ - Documents
+        else if (q.includes('document') || q.includes('what do i need')) {
+            response = "Basic documents include:<br>• <b>KYC</b>: PAN, Aadhaar, address proof.<br>• <b>Income</b>: Salary slips (salaried) or P&L statements/ITR (self-employed).<br>• <b>Banking</b>: Last 6 months bank statements.<br>• <b>Property</b>: Related legal and technical documents.";
+        }
+        
+        // FAQ - Process & Fees
+        else if (q.includes('how long') || q.includes('approval time') || q.includes('process')) {
+            response = "In-principle approval can be received within <b>48 hours</b> of submitting documents. Final approval and disbursal typically take <b>7-10 working days</b>, subject to verification.";
+        } else if (q.includes('fee') || q.includes('charge') || q.includes('cost')) {
+            response = "We maintain complete transparency. Processing fees are typically around <b>0.50%</b> of the loan amount. All other charges like legal or technical fees are disclosed upfront.";
+        } else if (q.includes('prepay') || q.includes('part-payment') || q.includes('foreclose')) {
+            response = "For floating rate home loans, there are <b>zero prepayment charges</b>. You can make part-payments or foreclose anytime without penalty. Fixed-rate loans may have different terms.";
+        }
         // Financial Details
         else if (q.includes('interest') || q.includes('rate')) {
-            response = "Our interest rates are highly competitive: <br>• **Home Loans**: Starting from 8.5% P.A.<br>• **LAP**: Starting from 9.2% P.A.<br>• **MSME Loans**: Tailored based on business profile.<br>*Rates are subject to credit score and eligibility.";
-        } else if (q.includes('eligibility')) {
-            response = "Eligibility is determined by your income, age, employment type, and CIBIL score. We generally require a score of 700+. We offer digital eligibility checks to give you an answer within minutes.";
-        } else if (q.includes('emi') || q.includes('calculate') || q.includes('tenure')) {
-            response = "We offer flexible tenures (up to 30 years for Home Loans). You can use our [EMI Calculator](calculator.html) on the website to plan your monthly outgoings perfectly.";
-        } else if (q.includes('tax benefit') || q.includes('tax save')) {
-            response = "Yes! Home loans offer significant tax benefits under Section 80C (principal) and Section 24(b) (interest) of the Income Tax Act. Our experts can guide you on maximizing these savings.";
-        } else if (q.includes('prepayment') || q.includes('foreclose')) {
-            response = "We offer flexible prepayment and foreclosure options. For floating-rate home loans, there are typically zero foreclosure charges for individual borrowers.";
+                       response = "Our interest rates are industry-leading:<br>• <b>Home Loans</b>: From 8.25% P.A.<br>• <b>LAP</b>: Typically 9.2% - 9.5% P.A.<br>• <b>MSME</b>: Competitive rates based on profile.<br>*Rates depend on your credit score and eligibility.";
+        } else if (q.includes('eligibility') || q.includes('score') || q.includes('cibil')) {
+            response = "Eligibility depends on your income, age, and employment. A CIBIL score of <b>700+</b> is generally preferred. You can use our digital application for a quick eligibility check!";
+        } else if (q.includes('apply') || q.includes('how to')) {
+            response = "Applying is easy! You can apply directly through our <a href=\"/authv3/login\" class=\"chat-link\" style=\"color: #00abeb; text-decoration: underline; font-weight: 600;\">Online Application Portal</a> or visit our <a href=\"/contact\" class=\"chat-link\" style=\"color: #00abeb; text-decoration: underline; font-weight: 600;\">Contact Page</a> to speak with an expert.";
+        } else if (q.includes('contact') || q.includes('phone') || q.includes('call')) {
+            response = "You can reach us by filling out the form on our <a href=\"/contact\" class=\"chat-link\" style=\"color: #00abeb; text-decoration: underline; font-weight: 600;\">Contact Page</a>. Our team will get back to you shortly to assist with your requirements.";
+        } else if (q.includes('why choose') || q.includes('benefit')) {
+            response = "Jfinserv offers competitive interest rates, transparent processes, personalized assistance, and end-to-end support to make your borrowing experience simple and stress-free.";
+        } else if (q.includes('thank') || q.includes('bye')) {
+            response = "You're welcome! Feel free to ask if you have more questions. Have a great day!";
+        } else {
+            response = "I'm not sure I understand that specific query. Would you like to know about our <b>Home Loans</b>, <b>Business Loans</b>, <b>Interest Rates</b>, or <b>About Jfinserv</b>?";
         }
-
-        // Process & Support
-        else if (q.includes('document')) {
-            response = "Standard documents required: <br>1. **KYC**: PAN, Aadhar.<br>2. **Income**: 3 months salary slips / 2 years ITR.<br>3. **Banking**: 6 months bank statements.<br>4. **Property**: Copy of title deeds.";
-        } else if (q.includes('digital') || q.includes('approval') || q.includes('fast')) {
-            response = "We pride ourselves on our 'Digital First' approach. You can get digital in-principle approval quickly through our website, significantly reducing the turnaround time.";
-        } else if (q.includes('pmay') || q.includes('subsidy')) {
-            response = "We assist eligible first-time homebuyers in availing interest subsidies under the Pradhan Mantri Awas Yojana (PMAY), subject to government guidelines.";
-        } else if (q.includes('apply') || q.includes('online') || q.includes('start')) {
-            response = "You can start your application right now by clicking 'Apply Now' in the header or filling out the contact form on our [Home Page](index.html#contact). It's fast and secure.";
-        } else if (q.includes('bank') || q.includes('partner')) {
-            response = "We partner with leading nationalized and private banks to ensure you get the best possible deal and the widest range of loan products.";
-        } else if (q.includes('security') || q.includes('safe') || q.includes('data')) {
-            response = "Your data is 100% secure with us. We use industry-standard encryption and maintain strict confidentiality throughout the loan process.";
-        } else if (q.includes('area') || q.includes('location') || q.includes('pune') || q.includes('pcmc')) {
-            response = "Our primary service areas are **Pune and PCMC**, with our main office in Wakad. We have deep local expertise in these markets.";
-        } else if (q.includes('referral') || q.includes('partner with you')) {
-            response = "We have an active referral program! If you're a real estate agent or a financial consultant, you can partner with us to help your clients get the best financing.";
-        }
-
-        // Expert Escalation (Only when asked)
-        else if (q.includes('expert') || q.includes('talk') || q.includes('contact') || q.includes('call') || q.includes('phone') || q.includes('number') || q.includes('person')) {
-            response = `I'd be happy to connect you with a loan expert, **${userProfile.name}**. I've already noted your contact number (**${userProfile.contact}**). <br><br>Our team will call you within 30 minutes. You can also reach us directly at our Wakad office.`;
-        }
-
-        // Fallback
-        else {
-            response = "I'm here to help with information on Home Loans, MSME Loans, LAP, interest rates, and more. Could you please specify your query? <br><br>If you'd like to speak with a human, you can click below:";
-            response += '<div class="quick-replies"><button class="quick-reply" data-query="Talk to Expert">Talk to Expert</button></div>';
-        }
-
+        
         setTimeout(() => {
             addMessage(response, 'bot');
         }, 500);
@@ -232,4 +288,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     attachQuickReplyListeners();
+
+    async function saveLeadToDatabase(profile) {
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            
+            const response = await fetch('/chatbot-leads', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    name: profile.name,
+                    email: profile.email,
+                    contact: profile.contact
+                })
+            });
+
+            const result = await response.json();
+            console.log('Lead saved:', result);
+        } catch (error) {
+            console.error('Error saving lead:', error);
+        }
+    }
 });
