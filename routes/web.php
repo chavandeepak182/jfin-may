@@ -445,6 +445,7 @@ Route::middleware(['isAdmin'])->group(function () {
 
 
 
+
 // customer bank add fun
 
 
@@ -518,6 +519,15 @@ Route::get('/agent/assigned-loans-ajax', [LoanApplicationController::class, 'ass
     Route::get('/agent/inprocess-loans-ajax', 
     [LoanApplicationController::class, 'inProcessLoansAjax']
 )->name('agent.inprocessLoans.ajax');
+
+Route::get(
+    '/agent/approved-loans-ajax',
+    [LoanApplicationController::class, 'approvedLoansAjax']
+)->name('agent.approvedLoans.ajax');
+Route::get(
+    '/agent/disbursed-loans-ajax',
+    [LoanApplicationController::class, 'disbursedLoansAjax']
+)->name('agent.disbursedLoans.ajax');
 
 
 

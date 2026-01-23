@@ -3500,6 +3500,12 @@ protected function handleLoanDetails(Request $request, $userId)
         $inProcessCount = Loan::where('agent_id', $agent_id)
         ->where('status', 'in process')
         ->count();
+        $approvedCount = Loan::where('agent_id', $agent_id)
+        ->where('status', 'approved')
+        ->count();
+        $disbursedCount = Loan::where('agent_id', $agent_id)
+        ->where('status', 'disbursed')
+        ->count();
 
         $query = DB::table('loans')
             ->join('users', 'loans.user_id', '=', 'users.id')
@@ -3522,7 +3528,7 @@ protected function handleLoanDetails(Request $request, $userId)
         }
 
         $data['loans'] = $query->paginate(10)->withQueryString();
-        return view('agent.all-loans', compact('data','assignedCount','totalCount','inProcessCount'));
+        return view('agent.all-loans', compact('data','assignedCount','totalCount','inProcessCount','approvedCount','disbursedCount'));
     }
 
     public function loanShow($id)
@@ -3683,6 +3689,53 @@ public function inProcessLoansAjax(Request $request)
 
     return view('agent.partials.inprocess_loans_table', compact('loans', 'inProcessCount'));
 }
+public function approvedLoansAjax(Request $request)
+{
+    $agent_id = session()->get('user_id');
+
+    // COUNT (for card, optional)
+    $approvedCount = Loan::where('agent_id', $agent_id)
+        ->where('status', 'approved')
+        ->count();
+
+    // LIST
+    $loans = Loan::with(['user','loanCategory'])
+        ->where('agent_id', $agent_id)
+        ->where('status', 'approved')
+        ->orderByDesc('created_at')
+        ->paginate(10)
+        ->withQueryString();
+
+    return view(
+        'agent.partials.approved_loans_table',
+        compact('loans','approvedCount')
+    );
+}
+public function disbursedLoansAjax(Request $request)
+{
+    $agent_id = session()->get('user_id');
+
+    // 🔹 COUNT
+    $disbursedCount = Loan::where('agent_id', $agent_id)
+        ->where('status', 'disbursed')
+        ->count();
+
+    // 🔹 LIST
+    $loans = Loan::with(['user','loanCategory'])
+        ->where('agent_id', $agent_id)
+        ->where('status', 'disbursed')   // ✅ ONLY CHANGE
+        ->orderByDesc('created_at')
+        ->paginate(10)
+        ->withQueryString();
+
+    return view(
+        'agent.partials.disbursed_loans_table',
+        compact('loans','disbursedCount')
+    );
+}
+
+
+
 
 
 
