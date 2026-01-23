@@ -21,6 +21,30 @@ body {
   background: #f8fafc;
 }
 
+/* password */
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    /* padding-right: 45px; space for eye icon */
+}
+
+.password-wrapper i {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6b7280;
+    font-size: 16px;
+}
+
+.password-wrapper i:hover {
+    color: #3B82F6;
+}
+
+
 
 /* ================= PAGE ================= */
 .auth-page {
@@ -1136,13 +1160,18 @@ header.scrolled .logo img {
               @enderror
           </div>
 
-          <div class="form-field">
-              <label>Password</label>
-              <input type="password" name="password">
-              @error('password')
-                  <small class="text-danger">{{ $message }}</small>
-              @enderror
-          </div>
+         <div class="form-field">
+    <label>Password</label>
+
+    <div class="password-wrapper">
+        <input type="password" name="password" id="passwordInput">
+        <i class="fa-solid fa-eye" id="togglePassword"></i>
+    </div>
+
+    @error('password')
+        <small class="text-danger">{{ $message }}</small>
+    @enderror
+</div>
 
           <button class="btn-primary">Signup & Get OTP</button>
         </form>
@@ -1336,7 +1365,22 @@ function initializeMobileMenu() {
     });
 }
 </script>
+<script>
+document.getElementById('togglePassword').addEventListener('click', function () {
+    const passwordInput = document.getElementById('passwordInput');
+
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        this.classList.remove('fa-eye');
+        this.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        this.classList.remove('fa-eye-slash');
+        this.classList.add('fa-eye');
+    }
+});
+</script>
+w
 </body>
 
 </html>
-

@@ -31,7 +31,7 @@ MIS Dashboard
                     <li class="breadcrumb-item active" aria-current="page">MIS Dashboard</li>
                 </ol>
             </nav> -->
-            <a href="{{ route('loanbanks') }}"  class="text-decoration-none">
+            <!-- <a href="{{ route('loanbanks') }}"  class="text-decoration-none">
                         <div class="custom-btn" style="height:50px; width:190px; 
                             background: linear-gradient(135deg, #ff512f, #dd2476); 
                             border-radius:12px; display:flex; align-items:center; 
@@ -40,7 +40,7 @@ MIS Dashboard
                             transition:transform 0.2s ease, box-shadow 0.2s ease;">
                             <span>All LOAN BANK </span>
                         </div>
-                    </a>
+                    </a> -->
 
             <div class="d-flex ms-auto">
                 <form method="GET" action="{{ route('mis.index') }}" class="d-flex align-items-center">

@@ -109,6 +109,16 @@
             </a>
         @endif
 
+        {{-- ================= TOOLS (Mis) ================= --}}
+   @if(in_array($role_id, [2, 4]))
+    <a href="{{ route('mis.index') }}" class="nav-item">
+        <i class="fas fa-chart-line"></i>
+        <span>MIS</span>
+    </a>
+@endif
+
+
+
         {{-- ================= MLM (ADDED) ================= --}}
         @if($role_id == 4)
             <a href="{{ route('admin.tree.show') }}" class="nav-item">
@@ -116,12 +126,13 @@
                 <span>MLM</span>
             </a>
         @endif
-        @if ($role_id == 4)
+   @if (in_array($role_id, [2, 4]))
     <a href="{{ route('tickets.index') }}" class="nav-item">
-        <i class="fas fa-project-diagram"></i>
+        <i class="fas fa-question-circle"></i>
         <span>My Queries</span>
     </a>
 @endif
+
 
         {{-- ================= COMMISSION ================= --}}
 <!-- @if($role_id == 4)
