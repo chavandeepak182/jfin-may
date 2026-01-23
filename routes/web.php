@@ -24,6 +24,7 @@ use App\Http\Controllers\MisController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\PropertyTakerController;
+use App\Http\Controllers\ChatbotLeadController;
 use Illuminate\Support\Facades\Route;
 use App\Exports\EligibilityExport;
 use App\Http\Controllers\NotificationController;
@@ -541,6 +542,7 @@ Route::get('/export-eligibility', function () {
 
 //enquiry form
 Route::get('enquiry', [EnquiryController::class, 'showForm'])->name('enquiry.form');
+Route::post('/chatbot-leads', [ChatbotLeadController::class, 'store'])->name('chatbot.leads.store');
 Route::post('enquiry', [EnquiryController::class, 'store'])->name('enquiry.store');
 //register 
 Route::post('register', [UsersController::class, 'register'])->name('register');

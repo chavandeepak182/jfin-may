@@ -880,7 +880,7 @@ header.scrolled .logo img {
         position: absolute;
         top: 80px;
         left: 0;
-        background-color: var(--white);
+        background-color: #fff;
         box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         padding: 1.5rem 0;
         z-index: 100;
@@ -955,8 +955,8 @@ header.scrolled .logo img {
         width: 25px;
         height: 3px;
         margin: 5px auto;
-        background-color: var(--black);
-        transition: var(--transition);
+        background-color: #1a1a1a;
+        transition:  all 0.3s ease;
     }
 
     .cta-nav {
@@ -987,29 +987,29 @@ header.scrolled .logo img {
 <header>
     <nav class="container">
         <div class="logo">
-            <a href="{{ url('/dhara') }}">
+            <a href="{{ url('/') }}">
                 <img src="{{ asset('theme/dhara-jfin/img/logo.jpg') }}" alt="Jfinserv Logo">
             </a>
         </div>
 
         <ul class="nav-links">
-            <li><a href="{{ url('/dhara') }}">Home</a></li>
-            <li><a href="{{ url('/dharaabout') }}">About Us</a></li>
+            <li><a href="{{ url('/') }}">Home</a></li>
+            <li><a href="{{ url('/about') }}">About Us</a></li>
             <!-- <li><a href="{{ url('/dhara-services') }}">Services</a></li>
               -->
             <li class="dropdown">
-                <a href="{{ url('/dhara-services') }}">Services</a>
+                <a href="{{ url('/services') }}">Services</a>
                 <ul class="dropdown-menu">
-                    <li><a href="{{ url('/dhara-homeloan') }}">Home Loan</a></li>
-                    <li><a href="{{ url('/dhara-propertyloan') }}">Loan Against Property</a></li>
-                    <li><a href="{{ url('/dhara-projectloan') }}">Project Loan</a></li>
-                    <li><a href="{{ url('/dhara-overdraftloan') }}">Overdraft Facility</a></li>
-                    <li><a href="{{ url('/dhara-msmeloan') }}">MSME Loan</a></li>
-                    <li><a href="{{ url('/dhara-lease-rental-discount-loan') }}">Lease Rental Discounting</a></li>
+                    <li><a href="{{ url('/home-loan') }}">Home Loan</a></li>
+                    <li><a href="{{ url('/loan-against-property') }}">Loan Against Property</a></li>
+                    <li><a href="{{ url('/project-loan') }}">Project Loan</a></li>
+                    <li><a href="{{ url('/overdraft-facility') }}">Overdraft Facility</a></li>
+                    <li><a href="{{ url('/msme-loan') }}">MSME Loan</a></li>
+                    <li><a href="{{ url('/lease-rental-discounting') }}">Lease Rental Discounting</a></li>
                 </ul>
             </li>
-            <li><a href="{{ url('/dhara-calculator') }}">Calculator</a></li>
-            <li><a href="{{ url('/dhara-contact') }}">Contact</a></li>
+            <li><a href="{{ url('/eligibility-calculator') }}">Calculator</a></li>
+            <li><a href="{{ url('/contact') }}">Contact</a></li>
         </ul>
 
         <div class="menu-toggle" id="mobile-menu">
@@ -1020,7 +1020,7 @@ header.scrolled .logo img {
 
             <div class="cta-nav">
 
-    <a href="{{ route('applyNow') }}" class="header-apply btn-sign btn-primary-sign">
+    <a href="{{ route('authv3.login.form') }}" class="header-apply btn-sign btn-primary-sign">
         Apply Now
     </a>
 
@@ -1038,8 +1038,8 @@ header.scrolled .logo img {
             <li class="has-submenu">
                 <a href="javascript:void(0)"><i class="fa-solid fa-caret-down"></i> Client</a>
                 <ul class="sub-menu">
-                    <li><a href="{{ route('property.login') }}"><i class="fa-solid fa-building"></i> Property</a></li>
                     <li><a href="{{ route('authv3.login.form') }}"><i class="fa-solid fa-coins"></i> Finance</a></li>
+                    <li><a href="{{ route('property.login') }}"><i class="fa-solid fa-building"></i> Property</a></li>
                 </ul>
             </li>
         </ul>
@@ -1059,7 +1059,7 @@ header.scrolled .logo img {
 
     <ul class="nav-menu">
         <li class="mobile-cta-item-new">
-            <a href="{{ url('/dhara') }}#dharacontact" class="mobile-apply-btn">
+            <a href="{{ route('authv3.login.form') }}" class="mobile-apply-btn">
                 <i class="fas fa-file-alt"></i>
                 Apply Now
             </a>
@@ -1074,41 +1074,41 @@ header.scrolled .logo img {
 
         <li class="has-submenu" id="signInMenu" style="display: none;">
             <ul class="submenu signin-submenu active">
-                <li><a href="javascript:void(0)">Employee</a></li>
-                <li><a href="javascript:void(0)">Channel Partner</a></li>
+                <li><a href="{{ route('login') }}">Employee</a></li>
+                <li><a href="{{ route('login') }}">Channel Partner</a></li>
                 <li class="has-submenu">
                     <a href="javascript:void(0)" id="clientToggle">
                         <span>Client</span>
                         <i class="fas fa-chevron-right"></i>
                     </a>
                     <ul class="submenu nested-submenu" id="clientSubmenu">
-                        <li><a href="#">Property</a></li>
-                        <li><a href="#">Finance</a></li>
+                        <li><a href="{{ route('authv3.login.form') }}">Finance</a></li>
+                        <li><a href="{{ route('property.login') }}">Property</a></li>
                     </ul>
                 </li>
             </ul>
         </li>
 
-        <li><a href="{{ url('/dhara') }}">Home</a></li>
-        <li><a href="{{ url('/dharaabout') }}">About Us</a></li>
+        <li><a href="{{ url('/') }}">Home</a></li>
+        <li><a href="{{ url('/about') }}">About Us</a></li>
         
         <li class="has-submenu">
-            <a href="{{ url('/dhara-services') }}" id="servicesToggle">
+            <a href="{{ url('/services') }}" id="servicesToggle">
                 <span>Services</span>
                 <i class="fas fa-chevron-right"></i>
             </a>
             <ul class="submenu" id="servicesSubmenu">
-                <li><a href="{{ url('/dhara-homeloan') }}">Home Loan</a></li>
-                <li><a href="{{ url('/dhara-propertyloan') }}">Loan Against Property</a></li>
-                <li><a href="{{ url('/dhara-projectloan') }}">Project Loan</a></li>
-                <li><a href="{{ url('/dhara-overdraftloan') }}">Overdraft Facility</a></li>
-                <li><a href="{{ url('/dhara-msmeloan') }}">MSME Loan</a></li>
-                <li><a href="{{ url('/dhara-lease-rental-discount-loan') }}">Lease Rental Discounting</a></li>
+                <li><a href="{{ url('/home-loan') }}">Home Loan</a></li>
+                <li><a href="{{ url('/loan-against-property') }}">Loan Against Property</a></li>
+                <li><a href="{{ url('/project-loan') }}">Project Loan</a></li>
+                <li><a href="{{ url('/overdraft-facility') }}">Overdraft Facility</a></li>
+                <li><a href="{{ url('/msme-loan') }}">MSME Loan</a></li>
+                <li><a href="{{ url('/lease-rental-discounting') }}">Lease Rental Discounting</a></li>
             </ul>
         </li>
 
-        <li><a href="{{ url('/dhara-calculator') }}">Calculator</a></li>
-        <li><a href="{{ url('/dhara-contact') }}">Contact</a></li>
+        <li><a href="{{ url('/eligibility-calculator') }}">Calculator</a></li>
+        <li><a href="{{ url('/contact') }}">Contact</a></li>
     </ul>
 </div>
 <div class="auth-page">
@@ -1178,10 +1178,10 @@ header.scrolled .logo img {
 
         <div class="auth-divider">OR</div>
 
-        <a href="{{ route('authv3.google.login') }}" class="social-btn google-btn">
+        <!-- <a href="{{ route('authv3.google.login') }}" class="social-btn google-btn">
           <i class="fab fa-google"></i>
           <span>Sign up with Google</span>
-        </a>
+        </a> -->
 
 
         <div class="auth-footer-link">

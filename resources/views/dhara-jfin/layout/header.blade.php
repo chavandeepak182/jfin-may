@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Jfinserv | Financial Services in Pune | Lowest Loan Interest</title>
 
     <!-- Local CSS -->
@@ -30,8 +31,6 @@
         <ul class="nav-links">
             <li><a href="{{ url('/') }}">Home</a></li>
             <li><a href="{{ url('/about') }}">About Us</a></li>
-            <!-- <li><a href="{{ url('/dhara-services') }}">Services</a></li>
-              -->
             <li class="dropdown">
                 <a href="{{ url('/services') }}">Services</a>
                 <ul class="dropdown-menu">
