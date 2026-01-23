@@ -427,7 +427,12 @@ body.modal-open {
 
                             <div class="form-group col-lg-4">
                                 <label for="recipient-name" class="col-form-label">Date of Birth:</label>
-                                <input type="date" class="form-control" id="dob" name="dob">
+                                <input type="date"
+       class="form-control"
+       id="dob"
+       name="dob"
+       max="{{ \Carbon\Carbon::now()->subYears(18)->format('Y-m-d') }}">
+
                             </div>
 
                             <div class="form-group col-lg-4">
@@ -609,10 +614,32 @@ $(document).on('click', '.delete-user', function () {
                         swal("Error", res.error ?? "Delete failed", "error");
                     }
                 },
-                error: function (xhr) {
-                    console.log(xhr.responseText);
-                    swal("Error", "Server error occurred", "error");
-                }
+               error: function (xhr) {
+
+    // clear old errors
+    $('.text-danger').text('');
+
+    if (xhr.status === 422) {
+        let errors = xhr.responseJSON.errors;
+
+        if (errors.dob) {
+            $('#dob_error').text(errors.dob[0]);
+        }
+
+        if (errors.full_name) {
+            $('#full_name').after('<small class="text-danger">'+errors.full_name[0]+'</small>');
+        }
+
+        if (errors.email_id) {
+            $('#email_id').after('<small class="text-danger">'+errors.email_id[0]+'</small>');
+        }
+
+        if (errors.mobile_no) {
+            $('#mobile_no').after('<small class="text-danger">'+errors.mobile_no[0]+'</small>');
+        }
+    }
+}
+
             });
         }
 
@@ -659,6 +686,34 @@ $(document).on('click', '.load-list', function () {
 
 <script>
 let currentType = 'customer'; // default
+</script>
+<script>
+function isAbove18(dob) {
+    let today = new Date();
+    let birthDate = new Date(dob);
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    let monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+
+    return age >= 18;
+}
+
+$(document).on('submit', '#addUser', function (e) {
+
+    let dob = $('#dob').val();
+
+    if (dob) {
+        if (!isAbove18(dob)) {
+            e.preventDefault();
+            swal("Validation Error", "User must be at least 18 years old.", "error");
+            return false;
+        }
+    }
+});
 </script>
 
   

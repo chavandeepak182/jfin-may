@@ -96,7 +96,7 @@
         @csrf
 
         {{-- ================= ADMIN UI ================= --}}
-        @if(auth()->user()->role_id == env('adminRole_id'))
+        @if(auth()->user()->role_id == config('constants.roles.admin'))
 
         <div class="ticket-row">
 
@@ -130,7 +130,7 @@
 
 
         {{-- ================= CUSTOMER UI ================= --}}
-        @if(auth()->user()->role_id == env('customerRole'))
+        @if(auth()->user()->role_id == config('constants.roles.customer'))
 
         <div class="ticket-form-group">
             <label>Select Your Loan</label>
@@ -147,7 +147,7 @@
         @endif
 
         <!-- for agent -->
-         @if(auth()->user()->role_id == env('agentRole_id'))
+         @if(auth()->user()->role_id == config('constants.roles.agent'))
 
             <div class="ticket-row">
 

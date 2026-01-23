@@ -270,10 +270,11 @@ Route::get('/verify-otp', function () {
     return view('auth-v2.verify_otp');
 });
 
-Route::post('/login-email-v2', [AuthV2Controller::class, 'loginWithEmail'])
-    ->name('login.email.v2');
 
-    Route::get('/logout', [AuthV2Controller::class, 'logout']);
+
+
+
+    // Route::get('/logout', [AuthV2Controller::class, 'logout']);
 
 
 // blog
@@ -398,6 +399,8 @@ Route::middleware(['isUserOrAdmin'])->group(function () {
     Route::get('/myloans', [UsersController::class, 'myloans'])->name('loan.myloans');
     Route::get('/loans-list', [UsersController::class, 'myLoanList'])->name('loans.loans-list');
     Route::get('/mypersonal', [UsersController::class, 'mydetails'])->name('loan.mypersonal');
+    Route::get('/get-cities/{stateId}', [UsersController::class, 'getCities']);
+
     Route::get('/myprofessional', [UsersController::class, 'myprofessional'])->name('loan.myprofessional');
     Route::get('/myeducation', [UsersController::class, 'myeducation'])->name('loan.myeducation');
     Route::get('/mydocuments', [UsersController::class, 'mydocuments'])->name('loan.mydocuments');
@@ -508,6 +511,16 @@ Route::get(
     [LoanApplicationController::class, 'ajaxRejectedLoans']
 )->name('loan.ajax.rejected');
 
+// agent ajax through
+Route::get('/agent/assigned-loans-ajax', [LoanApplicationController::class, 'assignedLoansAjax'])
+    ->name('agent.assignedLoans.ajax');
+    Route::get('/agent/all-loans-ajax', [LoanApplicationController::class, 'allLoansAjax'])
+    ->name('agent.allLoans.ajax');
+    Route::get('/agent/inprocess-loans-ajax', 
+    [LoanApplicationController::class, 'inProcessLoansAjax']
+)->name('agent.inprocessLoans.ajax');
+
+
 
 
 
@@ -556,7 +569,7 @@ Route::get('/get-user-by-id', [UsersController::class, 'getUserById'])
     Route::get('admin/addUser', [UsersController::class, 'addUser'])->name('addUser');
     Route::get('admin/allUsers', [UsersController::class, 'allUsers'])->name('allUsers');  
     Route::post('/update-user-status', [UsersController::class, 'updateUserStatus'])->name('updateUserStatus');
-    Route::post('admin/assignAgent', [LoanApplicationController::class, 'assignAgent'])->name('assignAgent');
+    Route::post('admin/s', [LoanApplicationController::class, 'assignAgent'])->name('assignAgent');
 Route::post('/loan/restore', [LoanApplicationController::class, 'restoreLoan'])
     ->name('loan.restore');
 

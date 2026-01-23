@@ -7,6 +7,7 @@
                     <th>Customer Name</th>
                     <th>Loan Category</th>
                     <th>Amount</th>
+                     <th>Status</th>
                     <th>Tenure</th>
                     <th>Action</th>
                 </tr>
@@ -19,6 +20,8 @@
                         <td>{{ $loan->user_name ?? 'N/A' }}</td>
                         <td>{{ $loan->loan_category_name ?? 'N/A' }}</td>
                         <td>₹ {{ number_format($loan->amount) }}</td>
+                        <td>{{ ucfirst($loan->status) }}</td>
+
                         <td>{{ $loan->tenure }}</td>
                         <td>
                             <a class="btn btn-primary btn-xs"
