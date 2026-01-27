@@ -34,10 +34,14 @@ class Loan extends Model
         'agent_action',
     ];
 
-    public function loanCategory()
-    {
-        return $this->belongsTo(LoanCategory::class, 'loan_category_id', 'loan_category_id');
-    }
+  public function loanCategory()
+{
+    return $this->belongsTo(
+        LoanCategory::class,
+        'loan_category_id',
+        'loan_category_id'
+    );
+}
 
     public function user()
     {
