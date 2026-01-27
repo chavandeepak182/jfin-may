@@ -43,7 +43,7 @@
                                 <div class="metric-icon purple"><i class="fas fa-dollar-sign"></i></div>
                                 <div class="metric-content">
                                     <h3>Total Loans</h3>
-                                    <div class="metric-value">10</div>
+                                    <div class="metric-value">{{ $totalCount }}</div>
                                     <div class="metric-change positive">
                             <i class="fas fa-arrow-up"></i>
                             <span>+12.5%</span>
@@ -59,7 +59,7 @@
                                 <div class="metric-icon yellow"><i class="fas fa-bullhorn"></i></div>
                                 <div class="metric-content">
                                     <h3>Total MIS</h3>
-                                    <div class="metric-value">13</div>
+                                    <div class="metric-value">1</div>
                                     <div class="metric-change positive">
                             <i class="fas fa-arrow-up"></i>
                             <span>+8.2%</span>
