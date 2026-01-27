@@ -8,6 +8,8 @@ class LoanCategory extends Model
     protected $table = 'loan_category'; // Ensure this matches your loan_category table name
     protected $primaryKey = 'loan_category_id'; // Ensure this matches your primary key column
     protected $fillable = ['category_name'];
+    public $timestamps = false;
+    
     public function loans()
     {
         return $this->hasMany(Loan::class, 'loan_category_id', 'loan_category_id');
