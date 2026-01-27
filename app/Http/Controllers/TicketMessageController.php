@@ -32,9 +32,9 @@ class TicketMessageController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role_id == env('adminRole_id')) return;
+        if ($user->role_id == config('constants.roles.admin')) return;
 
-        if ($user->role_id == env('agentRole_id') && $ticket->agent_id == $user->id) return;
+        if ($user->role_id == config('constants.roles.agent') && $ticket->agent_id == $user->id) return;
 
         if ($ticket->user_id == $user->id) return;
 
