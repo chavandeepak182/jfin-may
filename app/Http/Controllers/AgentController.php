@@ -295,11 +295,15 @@ class AgentController extends Controller
         $assignedLoans = DB::table('loans')
             ->where('agent_id', $userId)
             ->count();
+              // TOTAL COUNT for agent dashboard
+    $totalCount = DB::table('loans')
+        ->where('agent_id', $userId)
+        ->count();
 
         // Debugging: Check if assignedLoans is retrieved
         Log::info('Assigned Loans Count: ' . $assignedLoans);
 
-        return view('agent.agentDashboard', compact('walletBalance', 'assignedLoans'));
+        return view('agent.agentDashboard', compact('walletBalance', 'assignedLoans','totalCount'));
     }
     public function edit($id)
     {
@@ -574,6 +578,7 @@ class AgentController extends Controller
                 'loans.agent_action'
             )
             ->paginate(10); // Adjust the pagination limit if necessary
+            
 
         return view('agent.mis', compact('data'));
     }
