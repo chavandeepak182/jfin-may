@@ -358,7 +358,9 @@ Route::post('userLogin', [FrontendController::class, 'userLogin'])->name('userLo
 // Route::post('submit-otp', [AdminController::class, 'postVerifyOtp'])->name('submit-otp');
 
 
-Route::get('logout', [FrontendController::class, 'logout'])->name('logout');
+// Route::get('logout', [FrontendController::class, 'logout'])->name('logout');
+Route::post('/logout', [FrontendController::class, 'logout'])->name('logout');
+
 Route::get('forgot', [FrontendController::class, 'forgot'])->name('forgot');
 Route::get('/activate', [FrontendController::class, 'activate'])->name('activate')->middleware('throttle:6,1');;
 
