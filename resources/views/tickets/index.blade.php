@@ -130,6 +130,7 @@
 
                     @if(auth()->user()->role_id == config('constants.roles.admin'))
                         <th>Customer</th>
+                        <th>Loan Category</th>
                         <th>Assigned Agent</th>
                     @endif
 
@@ -147,6 +148,9 @@
                     @if(auth()->user()->role_id == config('constants.roles.admin'))
 
                         <td>{{ $ticket->user->name ?? 'N/A' }}</td>
+                         <td>
+                            {{ $ticket->loan?->loanCategory?->category_name ?? 'N/A' }}
+                        </td>
 
 
                         <td>{{ $ticket->agent?->name ?? 'Unassigned' }}</td>
