@@ -40,6 +40,10 @@ require __DIR__.'/auth.php';
 // dashbord path
 Route::get('/admin/customers', action: [UsersController::class, 'adminCustomer'])->name('admin.customers');
 // update user
+// reset pass user
+Route::post('/admin/reset-password', [UsersController::class, 'resetPassword'])
+     ->name('admin.reset.password');
+
 
 Route::post('/admin/user/update-status',
     [UsersController::class, 'updateUserStatus']

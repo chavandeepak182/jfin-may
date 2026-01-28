@@ -11,6 +11,6 @@ class MisExport implements FromCollection
     */
     public function collection()
     {
-        return MIS::all();
+        return Mis::all();
     }
 }
