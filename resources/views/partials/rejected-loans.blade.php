@@ -1,3 +1,5 @@
+<!-- <pre>{{ print_r($loans->items(), true) }}</pre> -->
+
 <div class="card-body">
     <div class="table-responsive">
         <table class="table table-striped">
