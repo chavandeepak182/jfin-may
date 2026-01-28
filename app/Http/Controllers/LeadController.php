@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\EstimatedFile;
 use App\Models\MonthlyPL;
+use App\Models\LoanBankDetail;
+use Carbon\Carbon;
+use App\Exports\MonthlyPLFormattedExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MonthlyPLWithEstimatedExport;
 
 
 class LeadController extends Controller {

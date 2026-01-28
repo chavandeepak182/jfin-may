@@ -17,7 +17,29 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
   background: #f8fafc;
 }
+    /* password */
+    .password-wrapper {
+  position: relative;
+}
 
+.password-wrapper input {
+  width: 100%;
+  padding-right: 45px; /* space for eye icon */
+}
+
+.password-wrapper i {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+.password-wrapper i:hover {
+  color: #3B82F6;
+}
 /* ================= PAGE ================= */
 .auth-page {
   min-height: 100vh;

@@ -11,7 +11,7 @@
 @else
     <span style="color:green;font-weight:bold;">Ticket Closed</span>
 @endif
-<h2>Ticket: {{ $ticket->ticket_no }}</h2>
+<h2 class="text-dark">Ticket: {{ $ticket->ticket_no }}</h2>
 <p>{{ $ticket->subject }}</p>
 
 <hr>

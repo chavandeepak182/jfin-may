@@ -14,6 +14,14 @@
     align-items: center;
     justify-content: center;
 }
+.personal-details-form input::placeholder {
+    color: #9ca3af;
+}
+input[type="password"]::placeholder {
+    color: #6b7280;
+    font-size: 13px;
+}
+
 
 /* ===== Container ===== */
 .modal-container,
@@ -313,7 +321,7 @@ body.modal-open {
                                     <th> Email ID </th>
                                     <th> Mobile Number </th>
                                     <th> Pan No. </th>
-                                    <th> Status </th>
+                                    <!-- <th> Status </th> -->
                                     <th> Action </th>
                                 </tr>
                             </thead>
@@ -334,7 +342,7 @@ body.modal-open {
                                         <td>{{ $user->email_id }}</td>
                                         <td>{{ $user->profile->mobile_no ?? '-' }}</td>
                                         <td>{{ $user->profile->pan_number ?? ''}}</td>
-                                        <td>
+                                        <!-- <td>
                                             <label>
                                                 <input type="radio" name="status_{{ $user->id }}" value="1"
                                                     onclick="updateStatus({{ $user->id }}, 1)"
@@ -347,7 +355,7 @@ body.modal-open {
                                                     {{ $user->is_email_verify == 0 ? 'checked' : '' }}>
                                                 Inactive
                                             </label>
-                                        </td>
+                                        </td> -->
                                         <td>
                                            <button type="button"
                                                     class="btn btn-primary btn-xs edit-user"
@@ -361,6 +369,11 @@ body.modal-open {
                                                 data-id="{{ $user->id }}">
                                             <i class="fa fa-trash"></i>
                                         </button>
+                                        <button type="button"
+                                            class="btn btn-warning btn-xs reset-password"
+                                            data-id="{{ $user->id }}">
+                                        <i class="fa fa-key"></i>
+                                    </button>
 
                                         </td>
                                     </tr>
@@ -414,6 +427,12 @@ body.modal-open {
                             <div class="form-group col-lg-4">
                                 <label for="recipient-name" class="col-form-label">Password:</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
+                                                                <small class="text-muted">
+                                    Leave blank to keep existing password
+                                </small>
+                                 <!-- <input type="password" class="form-control"
+       name="password"
+       placeholder="Leave blank to keep existing password"> -->
                             </div>
                         </div>
                         <input type="hidden" id="user_type" name="user_type" value="customer">
@@ -443,14 +462,24 @@ body.modal-open {
 
                         <div class="row">
                             <div class="form-group col-lg-4">
-                                <label for="recipient-name" class="col-form-label">City:</label>
-                                <input type="text" class="form-control" id="city" name="city">
+                                <label class="col-form-label">State</label>
+                                <select class="form-control" id="state" name="state" required>
+                                    <option value="">-- Select State --</option>
+                                    @foreach($states as $state)
+                                        <option value="{{ $state->id }}">
+                                            {{ $state->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="form-group col-lg-4">
-                                <label for="recipient-name" class="col-form-label">State:</label>
-                                <input type="text" class="form-control" id="state" name="state">
+                                <label class="col-form-label">City</label>
+                                <select class="form-control" id="city" name="city" required>
+                                    <option value="">-- Select City --</option>
+                                </select>
                             </div>
+
 
                             <div class="form-group col-lg-4">
                                 <label for="recipient-name" class="col-form-label">Pincode:</label>
@@ -473,7 +502,51 @@ body.modal-open {
             </div>
         </div>
     </div>
-  
+  <div class="modal fade" id="resetPasswordModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Reset Password</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <form id="resetPasswordForm">
+          @csrf
+
+          <input type="hidden" id="reset_user_id">
+
+          <div class="mb-3">
+    <label>New Password</label>
+
+    <div class="input-group">
+        <input type="password"
+               class="form-control"
+               id="new_password"
+               placeholder="Enter new password"
+               required
+               minlength="6">
+
+        <span class="input-group-text"
+              style="cursor:pointer"
+              id="toggleNewPassword">
+            <i class="fa fa-eye"></i>
+        </span>
+    </div>
+</div>
+
+
+          <button type="submit" class="btn btn-primary">
+            Update Password
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
 
 @endsection
@@ -498,10 +571,14 @@ $(document).on('click', '.edit-user', function () {
             $('#full_name').val(res.name);
             $('#email_id').val(res.email_id);
             $('#mobile_no').val(res.mobile_no);
+             $('#password').val(res.password);
             $('#dob').val(res.dob);
             $('#address').val(res.address);
-            $('#city').val(res.city);
-            $('#state').val(res.state);
+           // ✅ SET STATE FIRST
+    $('#state').val(res.state);
+
+    // ✅ LOAD CITY & SELECT IT
+    loadCities(res.state, res.city);
             $('#pincode').val(res.pincode);
 
             $('#submitUserBtn').text('Update');
@@ -715,6 +792,105 @@ $(document).on('submit', '#addUser', function (e) {
     }
 });
 </script>
+<script>
+    $(document).on('click', '.reset-password', function () {
+    let userId = $(this).data('id');
 
+    $('#reset_user_id').val(userId);
+    $('#new_password').val('');
+
+    $('#resetPasswordModal').modal('show');
+});
+$('#resetPasswordForm').on('submit', function (e) {
+    e.preventDefault();
+
+    $.ajax({
+        url: "{{ route('admin.reset.password') }}",
+        type: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",
+            user_id: $('#reset_user_id').val(),
+            password: $('#new_password').val()
+        },
+        success: function (res) {
+            swal("Success", res.msg, "success");
+            $('#resetPasswordModal').modal('hide');
+        },
+        error: function () {
+            swal("Error", "Password reset failed", "error");
+        }
+    });
+});
+$('#toggleNewPassword').on('click', function () {
+
+    let input = $('#new_password');
+    let icon  = $(this).find('i');
+
+    if (input.attr('type') === 'password') {
+        input.attr('type', 'text');
+        icon.removeClass('fa-eye').addClass('fa-eye-slash');
+    } else {
+        input.attr('type', 'password');
+        icon.removeClass('fa-eye-slash').addClass('fa-eye');
+    }
+});
+
+
+</script>
+<script>$('#state').on('change', function () {
+
+    let stateId = $(this).val();
+    $('#city').html('<option value="">Loading...</option>');
+
+    if (!stateId) {
+        $('#city').html('<option value="">-- Select City --</option>');
+        return;
+    }
+
+    $.ajax({
+        url: '/get-cities/' + stateId,
+        type: 'GET',
+        success: function (cities) {
+
+            let options = '<option value="">-- Select City --</option>';
+
+            cities.forEach(function (city) {
+                options += `<option value="${city.id}">
+                                ${city.city}
+                            </option>`;
+            });
+
+            $('#city').html(options);
+        }
+    });
+});
+</script>
+<script>function loadCities(stateId, selectedCity = null) {
+
+    $('#city').html('<option value="">Loading...</option>');
+
+    $.ajax({
+        url: '/get-cities/' + stateId,
+        type: 'GET',
+        success: function (cities) {
+
+            let options = '<option value="">-- Select City --</option>';
+
+            cities.forEach(function (city) {
+                options += `<option value="${city.id}">
+                                ${city.city}
+                            </option>`;
+            });
+
+            $('#city').html(options);
+
+            // ✅ Select city on edit
+            if (selectedCity) {
+                $('#city').val(selectedCity);
+            }
+        }
+    });
+}
+</script>
   
 @endsection

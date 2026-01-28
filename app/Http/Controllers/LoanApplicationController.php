@@ -273,7 +273,9 @@ public function loanlist()
         ->whereNotNull('loan_reference_id')
         ->count();
 
-    $rejectedLoans = Loan::where('status', 'rejected')->count();
+    $rejectedLoans = DB::table('loans')
+    ->where('status', 'rejected')
+    ->count();
     $pendingLoansCount = DB::table('loans')
     ->where(function ($query) {
         $query->whereNull('agent_id')
@@ -1952,11 +1954,12 @@ public function ajaxRejectedLoans()
             'loans.loan_reference_id',
             'loans.amount',
             'loans.tenure',
+              'loans.status', // ✅ ADD THIS
             'users.name as user_name',
             'loan_category.category_name as loan_category_name'
         )
         ->where('loans.status', 'rejected')
-        ->where('loans.agent_id', $agent_id)
+        
         ->orderByDesc('loans.created_at')
         ->paginate(10);
 
