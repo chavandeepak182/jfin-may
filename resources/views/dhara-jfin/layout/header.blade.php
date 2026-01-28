@@ -70,12 +70,52 @@
                 <a href="{{ route('login') }}"><i class="fa-regular fa-handshake"></i> Channel Partner</a>
             </li>
             <li class="has-submenu">
-                <a href="javascript:void(0)"><i class="fa-solid fa-caret-down"></i> Client</a>
-                <ul class="sub-menu">
-                    <li><a href="{{ route('authv3.login.form') }}"><i class="fa-solid fa-coins"></i> Finance</a></li>
-                    <li><a href="{{ route('property.login') }}"><i class="fa-solid fa-building"></i> Property</a></li>
-                </ul>
+    <a href="javascript:void(0)">
+        <i class="fa-solid fa-caret-down"></i> Client
+    </a>
+
+    <ul class="sub-menu">
+
+        {{-- IF USER IS LOGGED IN --}}
+        @if(Session::has('role_id'))
+
+            <li>
+                <a href="/my-profile">
+                    <i class="fa-solid fa-chart-line"></i> Dashboard
+                </a>
             </li>
+
+         <li>
+    <form method="POST" action="{{ route('logout') }}" class="logout-form">
+        @csrf
+        <button type="submit" class="dropdown-link logout-link">
+            <i class="fas fa-sign-out-alt" style="margin-left:16px"></i>
+            <span style="margin-left:16px;"> <b>Logout</b></span>
+        </button>
+    </form>
+</li>
+
+
+        {{-- IF USER IS NOT LOGGED IN --}}
+        @else
+
+            <li>
+                <a href="{{ route('authv3.login.form') }}">
+                    <i class="fa-solid fa-coins"></i> Finance
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('property.login') }}">
+                    <i class="fa-solid fa-building"></i> Property
+                </a>
+            </li>
+
+        @endif
+
+    </ul>
+</li>
+
         </ul>
     </div>
 
@@ -253,3 +293,21 @@ function initializeMobileMenu() {
     });
 }
 </script>
+<style>.logout-form button {
+    background: none;
+    border: none;
+    padding: 0;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+.logout-link {
+    width: 100%;
+    text-align: left;
+}
+
+.logout-link:hover {
+    background-color: #f3f4f6; /* same as dropdown hover */
+}
+
+</style>

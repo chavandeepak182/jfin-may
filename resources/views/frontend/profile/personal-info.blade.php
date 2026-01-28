@@ -67,15 +67,18 @@
                 <div class="card-body">
                     @if($profile)
 
-                    <h6 class="fw-bold mb-2">
-    <span class="text-dark">Name:</span>
-    <span class="text-dark">{{ $user->name ?? '—' }}</span>
-</h6>
+                   <div class="d-flex gap-4 align-items-center">
+                        <h6 class="fw-bold mb-0">
+                            <span class="text-muted fw-semibold">Name:</span>
+                            <span class="text-dark">{{ $user->name ?? '—' }}</span>
+                        </h6>
 
+                        <p class="mb-0" style="margin-left:100px">
+                            <span class="text-muted fw-semibold">Email:</span>
+                            <span class="text-dark">{{ $user->email_id ?? '—' }}</span>
+                        </p>
+                    </div>
 
-                    <p class="mb-0">
-                        <span class="text-muted fw-semibold">Email:</span> {{ $user->email_id ?? '—' }}
-                    </p>
 
 
                         <div class="row g-3">

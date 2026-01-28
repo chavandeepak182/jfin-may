@@ -222,7 +222,7 @@
 
                 <div class="analytics-bottom">
                     <div class="analytics-value">
-                        {{ $referralLeads->count() }}
+                       {{ $referralLeads->total() }}
                     </div>
                 </div>
 

@@ -36,6 +36,8 @@ class UsersController extends Controller
 
 public function adminCustomer(Request $request)
 {
+    $states = DB::table('states')->orderBy('name')->get();
+
     /* ===================== COUNTS ===================== */
     $totalCustomers = DB::table('users')
         ->where('role_id', 1)
@@ -92,7 +94,8 @@ public function adminCustomer(Request $request)
         'totalCustomers',
         'totalEmployees',
         'totalChannelPartners',
-        'users'
+        'users',
+        'states'  
     ));
 }
 
@@ -186,6 +189,7 @@ public function updateUserStatus(Request $request)
     ]);
     }
 
+    
 
 
 // public function insertUser(Request $request)
@@ -518,6 +522,7 @@ public function getUserById(Request $request)
             'users.name',
             'users.email_id',
             'users.mobile_no',
+            'users.password',
             'profile.dob',
             'profile.residence_address as address',
             'profile.city',
@@ -535,6 +540,26 @@ public function getUserById(Request $request)
 
     return response()->json($user);
 }
+
+// reset pass
+public function resetPassword(Request $request)
+{
+    $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'password' => 'required|min:6'
+    ]);
+
+    User::where('id', $request->user_id)
+        ->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+    return response()->json([
+        'status' => 1,
+        'msg' => 'Password reset successfully'
+    ]);
+}
+
 
 public function loadListByType(Request $request)
 {
