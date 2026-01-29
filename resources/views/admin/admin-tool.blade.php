@@ -484,7 +484,7 @@
 
 
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
-        <h4>Monthly P&amp;L</h4>
+        <h4 style="color:#000">Monthly P&amp;L</h4>
 
       
     </div>

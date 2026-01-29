@@ -776,7 +776,7 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
                                             </div>
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="headingTwo">
-                                                    @if ($professional->profession_type == 'salaried')
+                                                   @if (optional($professional)->profession_type === 'salaried')
                                                         <button class="accordion-button collapsed" type="button"
                                                             data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                                                             aria-expanded="false" aria-controls="collapseTwo">
@@ -794,7 +794,8 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
                                                     aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                                     <div class="accordion-body rounded">
                                                         <div class="row g-3">
-                                                            @if ($professional->profession_type == 'salaried')
+                                                            @if (optional($professional)->profession_type === 'salaried')
+
 
                                                                 @foreach (['light_bill', 'rent_agreement'] as $docType)
                                                                     <div class="col-md-6">
@@ -862,7 +863,8 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
                                                     aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                                     <div class="accordion-body">
                                                         <div class="row g-3">
-                                                            @if ($professional->profession_type == 'salaried')
+                                                           @if (optional($professional)->profession_type === 'salaried')
+
 
                                                                 @foreach (['salary_slip', 'form_16'] as $docType)
                                                                     <div class="col-md-6">
@@ -918,7 +920,8 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
                                                     </div>
                                                 </div>
                                             </div>
-                                            @if ($professional->profession_type == 'salaried')
+                                            @if (optional($professional)->profession_type === 'salaried')
+
 
                                                 <div class="accordion-item">
                                                     <h2 class="accordion-header" id="headingFour">
@@ -973,7 +976,9 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
                                                     aria-labelledby="headingFive" data-bs-parent="#accordionExample">
                                                     <div class="accordion-body">
                                                         <div class="row g-3">
-                                                            @if ($professional->profession_type == 'salaried')
+                                                            
+                                                            @if (optional($professional)->profession_type === 'salaried')
+
                                                                 @foreach (['bank_statement', 'qualification_proof'] as $docType)
                                                                     <div class="col-md-6">
                                                                         <div class="form-floating">

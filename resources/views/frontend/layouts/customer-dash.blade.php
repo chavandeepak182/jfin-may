@@ -247,14 +247,14 @@
                 <ul class="navbar-nav ms-auto align-items-center">
 
                     {{-- Messages --}}
-                    <li class="nav-item me-2">
+                    <!-- <li class="nav-item me-2">
                         <a class="nav-icon" href="{{ route('messages.index') }}">
                             <div class="position-relative">
                                 <i data-feather="mail"></i>
                                 <span class="indicator" id="mailbox-count">0</span>
                             </div>
                         </a>
-                    </li>
+                    </li> -->
 
                     {{-- Notifications --}}
                     <li class="nav-item dropdown me-2">
