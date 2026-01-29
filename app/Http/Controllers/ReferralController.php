@@ -483,12 +483,14 @@ public function userWalletbalance()
 
 public function submitInviteReferral(Request $request)
 {
-    $request->validate([
+      $request->validate([
         'name'         => 'required|string|max:255',
-        'mobile'       => 'required|digits:10',
+        'mobile'       => ['required', 'regex:/^[6-9][0-9]{9}$/'],
         'email'        => 'nullable|email',
         'product_type' => 'required',
         'other_remark' => 'nullable|string|max:255',
+    ], [
+        'mobile.regex' => 'Please enter a valid 10-digit Indian mobile number.'
     ]);
 
     /* ✅ DUPLICATE CHECK */

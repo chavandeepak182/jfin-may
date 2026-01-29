@@ -284,36 +284,65 @@
 
                 <div class="mb-3">
                     <label class="form-label">Friend Name</label>
-                    <input type="text" name="name" class="form-control" required>
+                    <input type="text"
+                        name="name"
+                        value="{{ old('name') }}"
+                        class="form-control"
+                        required>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Mobile Number</label>
-                    <input type="text" name="mobile" class="form-control" maxlength="10" required>
-                </div>
+             <div class="mb-3">
+                            <label class="form-label">Mobile Number</label>
+
+                            {{-- ERROR MESSAGE ABOVE INPUT --}}
+                            @error('mobile')
+                                <div class="alert alert-danger py-1 mb-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                            <input type="text"
+                                name="mobile"
+                                value="{{ old('mobile') }}"
+                                class="form-control @error('mobile') is-invalid @enderror"
+                                maxlength="10"
+                                placeholder="Enter mobile number">
+                        </div>
 
                 <div class="mb-3">
                     <label class="form-label">Email (Optional)</label>
-                    <input type="email" name="email" class="form-control">
+                    <input type="email"
+       name="email"
+       value="{{ old('email') }}"
+       class="form-control">
+
                 </div>
 
-                <div class="mb-3">
+             <div class="mb-3">
                     <label class="form-label">Product Type</label>
                     <select name="product_type" id="productType" class="form-select" required>
                         <option value="">Select Product</option>
+
                         @foreach($loanCategories as $category)
-                            <option value="{{ $category->loan_category_id }}">
+                            <option value="{{ $category->loan_category_id }}"
+                                {{ old('product_type') == $category->loan_category_id ? 'selected' : '' }}>
                                 {{ $category->category_name }}
                             </option>
                         @endforeach
-                        <option value="other">Other</option>
+
+                        <option value="other" {{ old('product_type') == 'other' ? 'selected' : '' }}>
+                            Other
+                        </option>
                     </select>
                 </div>
-
-                <div class="mb-3 d-none" id="otherRemarkBox">
+                <div class="mb-3 {{ old('product_type') == 'other' ? '' : 'd-none' }}" id="otherRemarkBox">
                     <label class="form-label">Please Specify</label>
-                    <input type="text" name="other_remark" class="form-control">
+                    <input type="text"
+                        name="other_remark"
+                        value="{{ old('other_remark') }}"
+                        class="form-control">
                 </div>
+
 
                 <button class="btn btn-primary fw-bold">Send Invite</button>
             </form>
@@ -444,6 +473,20 @@ document.addEventListener('change', async function (e) {
     dropdown.selectedIndex = 0;
 });
 </script>
+@if ($errors->has('mobile'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const inviteTabBtn = document.querySelector(
+        'button[data-bs-target="#inviteReferralTab"]'
+    );
+
+    if (inviteTabBtn) {
+        inviteTabBtn.click();
+    }
+});
+</script>
+@endif
+
 @endsection
 
 

@@ -67,7 +67,7 @@
                 <div class="card-body">
                     @if($profile)
 
-                   <div class="d-flex gap-4 align-items-center">
+                   <div class="d-flex gap-4 align-items-center mt-2">
                         <h6 class="fw-bold mb-0">
                             <span class="text-muted fw-semibold">Name:</span>
                             <span class="text-dark">{{ $user->name ?? '—' }}</span>
@@ -75,14 +75,15 @@
 
                         <p class="mb-0" style="margin-left:100px">
                             <span class="text-muted fw-semibold">Email:</span>
-                            <span class="text-dark">{{ $user->email_id ?? '—' }}</span>
+                            <!-- <span class="text-dark">{{ $user->email_id ?? '—' }}</span> -->
+                            <div class="section-value">{{ $user->email_id ?? '—' }}</div>
                         </p>
                     </div>
 
 
 
-                        <div class="row g-3">
-                            <div class="col-sm-6">
+                        <div class="row g-3 mt-2">
+                            <div class="col-sm-6 ">
                                 <small class="text-muted">Mobile</small>
                                 <div class="section-value">{{ $profile->mobile_no ?? '—' }}</div>
                             </div>
@@ -95,7 +96,7 @@
                             </div>
 
 
-                            <div class="col-sm-6">
+                            <div class="col-sm-6 mt-3">
                                 <small class="text-muted">Date of Birth</small>
                                 <div class="section-value">{{ $profile->dob ?? '—' }}</div>
                             </div>
@@ -105,7 +106,7 @@
                                 <div class="section-value">{{ $profile->marital_status ?? '—' }}</div>
                             </div>
 
-                            <div class="col-12 mt-2">
+                            <div class="col-12 mt-3">
                                 <small class="text-muted">Residential Address</small>
                                 <div class="section-value">
                                    {{ $profile->residence_address ?? '—' }},
