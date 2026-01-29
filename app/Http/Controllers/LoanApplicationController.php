@@ -222,10 +222,17 @@ public function index(Request $request)
         }
 
         // Fetch related profile details
-        $profile = DB::selectOne(
-            'SELECT * FROM profile WHERE user_id = ?',
-            [$loan->user_id]
-        );
+       $profile = DB::selectOne(
+    'SELECT 
+        p.*,
+        c.city AS city_name,
+        s.name AS state_name
+     FROM profile p
+     LEFT JOIN cities c ON c.id = p.city
+     LEFT JOIN states s ON s.id = p.state
+     WHERE p.user_id = ?',
+    [$loan->user_id]
+);
 
         // Fetch related professional details
         $professional = DB::selectOne(
@@ -1165,22 +1172,55 @@ public function loanlist()
 public function update(Request $request)
 {
     try {
+        $loan = Loan::where('loan_id', $request->loan_id)->firstOrFail();
+
 
         // ===============================
         // VALIDATION (UNCHANGED)
         // ===============================
-        $validated = $request->validate([
-            'loan_id' => 'required|integer',
-            'status' => 'required|string',
-            'loan_category_id' => 'required|integer',
-            'amount' => 'required|numeric',
-            'amount_approved' => ['required_if:status,disbursed', 'nullable', 'numeric', 'min:0'],
-            'tenure' => 'required|integer',
-            'in_principle' => 'nullable|string',
-            'remarks' => 'nullable|string',
-            'sanction_letter' => 'nullable|file|mimes:pdf,doc,docx',
-            'documents.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120'
-        ]);
+        // $validated = $request->validate([
+        //     'loan_id' => 'required|integer',
+        //     'status' => 'required|string',
+        //     'loan_category_id' => 'required|integer',
+        //     'amount' => 'required|numeric',
+        //     'amount_approved' => ['required_if:status,disbursed', 'nullable', 'numeric', 'min:0'],
+        //     'tenure' => 'required|integer',
+        //     'in_principle' => 'nullable|string',
+        //     'remarks' => 'nullable|string',
+        //     // 'sanction_letter' => 'nullable|file|mimes:pdf,doc,docx',
+        //     'documents.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120'
+        // ]);
+        $rules = [
+    'loan_id'           => 'required|integer',
+    'status'            => 'required|string',
+    'loan_category_id'  => 'required|integer',
+    'amount'            => 'required|numeric',
+    'amount_approved'   => 'required_if:status,disbursed|nullable|numeric|min:0',
+    'tenure'            => 'required|integer',
+    'in_principle'      => 'nullable|string',
+    'remarks'           => 'nullable|string',
+    'documents.*'       => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120',
+];
+           // ===============================
+        // 🔴 SANCTION LETTER CONDITION (ONLY FOR DISBURSED)
+        // ===============================
+        if (
+            $request->status === 'disbursed'
+            && !$request->hasFile('sanction_letter')
+            && empty($loan->sanction_letter)
+        ) {
+            $rules['sanction_letter'] = 'required|file|mimes:pdf,doc,docx';
+        } else {
+            $rules['sanction_letter'] = 'nullable|file|mimes:pdf,doc,docx';
+        }
+        $request->validate(
+    $rules,
+    [
+        'sanction_letter.required' =>
+            'Please upload the sanction letter before disbursing the loan.'
+    ]
+);
+
 
         DB::transaction(function () use ($request) {
 

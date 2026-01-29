@@ -94,13 +94,13 @@
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">City</label>
-                                <input type="text" class="form-control" value="{{ $profile->city ?? 'N/A' }}" readonly />
+                               <input type="text" class="form-control" value="{{ $profile->city_name ?? 'N/A' }}" readonly />
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">State</label>
-                                <input type="text" class="form-control" value="{{ $profile->state ?? 'N/A' }}" readonly />
+                                <input type="text" class="form-control" value="{{ $profile->state_name ?? 'N/A' }}" readonly />
                             </div>
                         </div>
                         <div class="col-lg-6">
