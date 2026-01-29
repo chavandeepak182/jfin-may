@@ -157,8 +157,8 @@ public function index(Request $request)
     // 🔹 CARD STATUS FILTER (NEW)
     if ($request->filled('card')) {
         switch ($request->card) {
-            case 'inprocess':
-                $query->where('status', 'inprocess');
+            case 'in process':
+                $query->where('status', 'in process');
                 break;
 
             case 'approved':
@@ -184,7 +184,7 @@ public function index(Request $request)
 
     // COUNTS (as it is)
     $totalLoans      = \App\Models\Loan::count();
-    $inProcessLoans  = \App\Models\Loan::where('status','inprocess')->count();
+    $inProcessLoans  = \App\Models\Loan::where('status','in process')->count();
     $approvedLoans   = \App\Models\Loan::where('status','approved')->count();
     $disbursedLoans  = \App\Models\Loan::where('status','disbursed')->count();
     $rejectedLoans   = \App\Models\Loan::where('status','rejected')->count();
@@ -1580,19 +1580,40 @@ public function update(Request $request)
 
 public function showForm(Request $request)
 {
+    /* =========================================================
+       🔴 ADMIN: NEW APPLICATION RESET (FIRST LOAD ONLY)
+       ========================================================= */
+    if (session('role_id') == 4 && !$request->has('current_step')) {
+
+        Log::info('ADMIN clicked NEW LOAN APPLICATION', [
+            'admin_id'            => session('user_id'),
+            'old_selected_user_id'=> session('selected_user_id'),
+            'old_current_loan_id' => session('current_loan_id'),
+        ]);
+
+        session()->forget([
+            'selected_user_id',
+            'current_loan_id',
+            'loan_reference_id',
+            'loan_category_id',
+            'bank_id',
+            'is_loan',
+        ]);
+
+        Log::info('ADMIN loan session CLEARED successfully');
+    }
+
+    /* ========================================================= */
+
     $currentStep = $request->input('current_step', 1);
-    // Decide layout based on panel
-// Decide layout based on role
-$layout = 'frontend.layouts.header'; // default = customer
 
-if (session('role_id') == 4) {
-    // Admin
-    $layout = 'layouts.header';
-}
+    /* ---------------- LAYOUT ---------------- */
+    $layout = 'frontend.layouts.header';
+    if (session('role_id') == 4) {
+        $layout = 'layouts.header';
+    }
 
-
-
-    // ✅ Validation rules (only when form is submitted)
+    /* ---------------- VALIDATION ---------------- */
     if ($request->isMethod('post')) {
 
         $rules = [
@@ -1602,7 +1623,6 @@ if (session('role_id') == 4) {
             'email'     => ['required', 'email'],
             'name'      => ['required', 'string', 'max:255'],
             'state_id'  => ['required', 'integer', 'exists:states,id'],
-            // Add more if needed
         ];
 
         $messages = [
@@ -1620,80 +1640,121 @@ if (session('role_id') == 4) {
             'state_id.required'  => 'Please select your state.',
         ];
 
-        $validatedData = $request->validate($rules, $messages);
+        $request->validate($rules, $messages);
     }
 
-    // --- Your existing code below ---
+    /* ---------------- COMMON DATA ---------------- */
 
     $loanCategories = DB::table('loan_category')->get();
-    $loanBanks = DB::table('loan_bank_details')->get();
-    $userId = session('user_id');
-    
+    $loanBanks      = DB::table('loan_bank_details')->get();
 
+    $userId = session('user_id');
     if (!$userId) {
-        return redirect()->route('login')->withErrors('User session expired. Please log in again.');
+        return redirect()->route('login')
+            ->withErrors('User session expired. Please log in again.');
     }
 
-   Log::info('Loan session check', [
-    'session_loan_id' => session('current_loan_id'),
-    'db_disbursed_loan' => Loan::where('user_id', $userId)
-        ->where('status', 'disbursed')
-        ->value('loan_id')
-]);
+    Log::info('Loan session check', [
+        'admin_id'         => $userId,
+        'current_step'     => $currentStep,
+        'selected_user_id' => session('selected_user_id'),
+        'current_loan_id'  => session('current_loan_id'),
+        'db_disbursed_loan'=> Loan::where('user_id', $userId)
+            ->where('status', 'disbursed')
+            ->value('loan_id'),
+    ]);
+
+    /* ---------------- ADMIN USER LIST ---------------- */
 
     $loanUsers = collect();
 
-// if (session('role_id') == 4) {
-//     $loanUsers = User::join('otp', 'otp.user_id', '=', 'users.id')
-//         ->where('users.role_id', 1)
-//         ->where('otp.is_verify', 1)
-//         ->select(
-//             'users.id',
-//             'users.name',
-//             'users.email_id'
-//         )
-//         ->distinct()
-//         ->get();
-// }
-if (session('role_id') == 4) {
-    $loanUsers = User::join('otp', 'otp.user_id', '=', 'users.id')
-        ->where('users.role_id', 1)
-        ->where('otp.is_verify', 1)
-        ->select(
-            'users.id',
-            'users.name',
-            'users.email_id',
-            'users.mobile_no'   // ✅ ADD THIS
-        )
-        ->distinct()
-        ->get();
-}
+    if (session('role_id') == 4) {
+        $loanUsers = User::join('otp', 'otp.user_id', '=', 'users.id')
+            ->where('users.role_id', 1)
+            ->where('otp.is_verify', 1)
+            ->select(
+                'users.id',
+                'users.name',
+                'users.email_id',
+                'users.mobile_no'
+            )
+            ->distinct()
+            ->get();
+    }
 
+    /* =========================================================
+       🔐 USER DATA LOADING CONTROL
+       ========================================================= */
 
-    $profile       = DB::table('profile')->where('user_id', $userId)->latest('profile_id')->first();
-    $professional  = DB::table('professional_details')->where('user_id', $userId)->latest('professional_id')->first();
-    $education     = DB::table('education_details')->where('user_id', $userId)->latest('edu_id')->first();
-    $documents     = DB::table('documents')->where('user_id', $userId)->latest('document_id')->get();
-    $existingLoans = DB::table('existing_loan')->where('user_id', $userId)->latest('existing_loan_id')->get();
+    $selectedUserId   = session('selected_user_id');
+    $canLoadUserData  = true;
 
-    $loan = Loan::where('user_id', $userId)
-        ->whereNotIn('status', ['disbursed', 'rejected'])
-        ->first();
+    if (session('role_id') == 4 && !$selectedUserId) {
+        $canLoadUserData = false;
+    }
 
-    $hasExistingLoan = !is_null($existingLoans);
-    $user  = User::with('loans')->where('id', $userId)->first();
-    $states = DB::table('states')->get();
+    Log::info('User data load decision', [
+        'role_id'          => session('role_id'),
+        'selected_user_id' => $selectedUserId,
+        'canLoadUserData'  => $canLoadUserData,
+    ]);
+
+    /* ---------------- USER RELATED TABLES ---------------- */
+
+    $effectiveUserId = $selectedUserId ?? $userId;
+
+    $profile = $canLoadUserData
+        ? DB::table('profile')->where('user_id', $effectiveUserId)->latest('profile_id')->first()
+        : null;
+
+    $professional = $canLoadUserData
+        ? DB::table('professional_details')->where('user_id', $effectiveUserId)->latest('professional_id')->first()
+        : null;
+
+    $education = $canLoadUserData
+        ? DB::table('education_details')->where('user_id', $effectiveUserId)->latest('edu_id')->first()
+        : null;
+
+    $documents = $canLoadUserData
+        ? DB::table('documents')->where('user_id', $effectiveUserId)->latest('document_id')->get()
+        : collect();
+
+    $existingLoans = $canLoadUserData
+        ? DB::table('existing_loan')->where('user_id', $effectiveUserId)->latest('existing_loan_id')->get()
+        : collect();
+
+    /* ---------------- LOAN ---------------- */
+
+    $loan = $canLoadUserData
+        ? Loan::where('user_id', $effectiveUserId)
+            ->whereNotIn('status', ['disbursed', 'rejected'])
+            ->first()
+        : null;
+
+    $hasExistingLoan = $canLoadUserData && $existingLoans->count() > 0;
+
+    /* ---------------- USER MODEL ---------------- */
+
+    $user = $canLoadUserData
+        ? User::with('loans')->where('id', $effectiveUserId)->first()
+        : null;
+
+    /* ---------------- COMMON ---------------- */
+
+    $states  = DB::table('states')->get();
     $is_loan = Session::get('is_loan');
 
-    // ✅ Completed steps logic
+    /* ---------------- COMPLETED STEPS (UNCHANGED) ---------------- */
+
     $completedSteps = [];
 
-if ($profile && $currentStep > 1)        $completedSteps[] = 1;
-if ($professional && $currentStep > 2)   $completedSteps[] = 2;
-if ($education && $currentStep > 3)      $completedSteps[] = 3;
-if ($documents->count() > 0 && $currentStep > 4) $completedSteps[] = 4;
-if ($loan && $currentStep > 5)           $completedSteps[] = 5;
+    if ($profile && $currentStep > 1)                $completedSteps[] = 1;
+    if ($professional && $currentStep > 2)           $completedSteps[] = 2;
+    if ($education && $currentStep > 3)              $completedSteps[] = 3;
+    if ($documents->count() > 0 && $currentStep > 4) $completedSteps[] = 4;
+    if ($loan && $currentStep > 5)                   $completedSteps[] = 5;
 
+    /* ---------------- VIEW ---------------- */
 
     return view('frontend.professional-info', compact(
         'currentStep',
@@ -1714,6 +1775,8 @@ if ($loan && $currentStep > 5)           $completedSteps[] = 5;
         'completedSteps'
     ));
 }
+
+
 
 
 
@@ -1766,8 +1829,8 @@ public function ajaxList(Request $request)
 
     if ($type === 'pending') {
         $query->whereNull('assigned_to');
-    } elseif ($type === 'inprocess') {
-        $query->where('status', 'inprocess');
+    } elseif ($type === 'in process') {
+        $query->where('status', 'in process');
     } elseif ($type === 'approved') {
         $query->where('status', 'approved');
     } elseif ($type === 'disbursed') {
@@ -2165,95 +2228,95 @@ public function ajaxRejectedLoans()
     //     }
     // }
     public function handleStep(Request $request)
-{
-    $sessionUserId   = session('user_id');
-    $sessionUserRole = session('role_id');
+    {
+        $sessionUserId   = session('user_id');
+        $sessionUserRole = session('role_id');
 
-    if (!$sessionUserId) {
-        return redirect()->route('login')
-            ->withErrors('User session expired. Please log in again.');
-    }
+        if (!$sessionUserId) {
+            return redirect()->route('login')
+                ->withErrors('User session expired. Please log in again.');
+        }
 
-    $currentStep = (int) $request->input('current_step');
+        $currentStep = (int) $request->input('current_step');
 
-    try {
+        try {
 
-        /* ---------------- ADMIN USER SELECTION (STEP 1) ---------------- */
-        if ($sessionUserRole == 4 && $currentStep == 1) {
-            $selectedUserId = $request->input('user_id');
-            if (!$selectedUserId) {
-                return redirect()->back()->withErrors('Please select a user.');
+            /* ---------------- ADMIN USER SELECTION (STEP 1) ---------------- */
+            if ($sessionUserRole == 4 && $currentStep == 1) {
+                $selectedUserId = $request->input('user_id');
+                if (!$selectedUserId) {
+                    return redirect()->back()->withErrors('Please select a user.');
+                }
+                session(['selected_user_id' => $selectedUserId]);
             }
-            session(['selected_user_id' => $selectedUserId]);
-        }
 
-        /* ---------------- USER ID RESOLUTION ---------------- */
-        if ($sessionUserRole == 4) {
-            $userId = session('selected_user_id');
-            if (!$userId) {
-                return redirect()->route('loan.form', ['current_step' => 1])
-                    ->withErrors('User not selected. Please select a user in Step 1.');
-            }
-        } else {
-            $userId = $sessionUserId;
-        }
-
-        /* ---------------- PREVIOUS BUTTON ---------------- */
-        if ($request->has('previous')) {
-            return redirect()->route('loan.form', [
-                'current_step' => max(1, $currentStep - 1)
-            ]);
-        }
-
-        /* ---------------- NEXT BUTTON ---------------- */
-        if ($request->has('next')) {
-
-            switch ($currentStep) {
-
-                case 1:
-                    $this->handlePersonalDetails($request, $userId);
-                    break;
-
-                case 2:
-                    $this->handleProfessionalDetails($request, $userId);
-                    break;
-
-                case 3:
-                    // ✅ FIX: Step-3 is Upload Documents
-                    $this->handleDocumentUpload($request, $userId);
-                    break;
-
-                case 4:
-                    // ✅ FIX: Step-4 is Loan Details
-                    $this->handleLoanDetails($request, $userId);
-                    return redirect()->route('loan.thankyou');
-
-                default:
+            /* ---------------- USER ID RESOLUTION ---------------- */
+            if ($sessionUserRole == 4) {
+                $userId = session('selected_user_id');
+                if (!$userId) {
                     return redirect()->route('loan.form', ['current_step' => 1])
-                        ->withErrors('Invalid step. Please restart the application.');
+                        ->withErrors('User not selected. Please select a user in Step 1.');
+                }
+            } else {
+                $userId = $sessionUserId;
             }
 
-            // ✅ MOVE TO NEXT STEP
-            return redirect()->route('loan.form', [
-                'current_step' => $currentStep + 1
+            /* ---------------- PREVIOUS BUTTON ---------------- */
+            if ($request->has('previous')) {
+                return redirect()->route('loan.form', [
+                    'current_step' => max(1, $currentStep - 1)
+                ]);
+            }
+
+            /* ---------------- NEXT BUTTON ---------------- */
+            if ($request->has('next')) {
+
+                switch ($currentStep) {
+
+                    case 1:
+                        $this->handlePersonalDetails($request, $userId);
+                        break;
+
+                    case 2:
+                        $this->handleProfessionalDetails($request, $userId);
+                        break;
+
+                    case 3:
+                        // ✅ FIX: Step-3 is Upload Documents
+                        $this->handleDocumentUpload($request, $userId);
+                        break;
+
+                    case 4:
+                        // ✅ FIX: Step-4 is Loan Details
+                        $this->handleLoanDetails($request, $userId);
+                        return redirect()->route('loan.thankyou');
+
+                    default:
+                        return redirect()->route('loan.form', ['current_step' => 1])
+                            ->withErrors('Invalid step. Please restart the application.');
+                }
+
+                // ✅ MOVE TO NEXT STEP
+                return redirect()->route('loan.form', [
+                    'current_step' => $currentStep + 1
+                ]);
+            }
+
+            return redirect()->back()->withErrors('Invalid action.');
+
+        } catch (\Exception $e) {
+            Log::error('Loan Step Error', [
+                'message' => $e->getMessage(),
+                'step'    => $currentStep,
+                'user'    => $userId
             ]);
+
+            // return redirect()->back()
+            //     ->withErrors('Something went wrong. Please try again.');
+            return redirect()->back();
+
         }
-
-        return redirect()->back()->withErrors('Invalid action.');
-
-    } catch (\Exception $e) {
-        Log::error('Loan Step Error', [
-            'message' => $e->getMessage(),
-            'step'    => $currentStep,
-            'user'    => $userId
-        ]);
-
-        // return redirect()->back()
-        //     ->withErrors('Something went wrong. Please try again.');
-         return redirect()->back();
-
     }
-}
 
 
 
@@ -3180,7 +3243,26 @@ protected function handleDocumentUpload(Request $request, $userId)
             ->whereNotIn('status', ['disbursed', 'rejected'])
             ->first();
 
-    if (!$loan) return;
+   if (!$loan) {
+    // ✅ CREATE DRAFT LOAN FOR FIRST TIME
+   $loanCategoryId = Session::get('loan_category_id');
+    $bankId = Session::get('bank_id');
+
+    if (!$loanCategoryId || !$bankId) {
+        throw new \Exception('Loan category or bank missing before document upload');
+    }
+
+    $loan = Loan::create([
+        'user_id'           => $userId,
+    'loan_reference_id' => $this->generateLoanReferenceId(),
+    'loan_category_id'  => $loanCategoryId,   // ✅ REQUIRED
+    'bank_id'           => $bankId,            // ✅ REQUIRED
+    'status'            => 'draft',
+]);
+
+    Session::put('current_loan_id', $loan->loan_id);
+}
+
 
     /* ===============================
        STEP 3: UPLOAD DOCUMENTS
@@ -3236,6 +3318,13 @@ protected function handleDocumentUpload(Request $request, $userId)
 
 protected function handleLoanDetails(Request $request, $userId)
 {
+    Log::info('DEBUG ADMIN LOAN SESSION', [
+    'role_id' => session('role_id'),
+    'user_id_used' => $userId,
+    'loan_category_id' => Session::get('loan_category_id'),
+    'bank_id' => Session::get('bank_id'),
+    'current_loan_id' => Session::get('current_loan_id'),
+]);
     DB::beginTransaction();
 
     try {
@@ -3283,16 +3372,20 @@ protected function handleLoanDetails(Request $request, $userId)
          * 🔹 CHECK EXISTING LOAN IN SESSION
          * -------------------------------------------------
          */
-        $existingLoanId = Session::get('current_loan_id');
-        $loan = null;
+       $existingLoanId = Session::get('current_loan_id');
+$loan = null;
 
-        if ($existingLoanId) {
-            $loan = Loan::find($existingLoanId);
-        }
-        if ($loan && in_array($loan->status, ['disbursed', 'rejected'])) {
-                    Session::forget('current_loan_id');
-                    $loan = null; // force new loan creation
-                }
+if ($existingLoanId) {
+    $loan = Loan::where('loan_id', $existingLoanId)
+        ->where('user_id', $userId)   // 🔥 CRITICAL FIX
+        ->first();
+}
+
+// If loan exists but belongs to another user → ignore it
+if ($loan && in_array($loan->status, ['disbursed', 'rejected'])) {
+    Session::forget('current_loan_id');
+    $loan = null;
+}
         /**
          * -------------------------------------------------
          * 🔹 CREATE OR UPDATE LOAN
@@ -3362,11 +3455,17 @@ protected function handleLoanDetails(Request $request, $userId)
 
     public function submitLoanApplication(Request $request)
     {
-        $userId = session('user_id');
+        $userId = session('user_id'); // default = customer
 
-        if (!$userId) {
-            return redirect()->route('login')->withErrors('User session expired. Please log in again.');
-        }
+// ✅ ADMIN FLOW FIX
+if (session('role_id') == 4) {
+    $userId = session('selected_user_id'); // customer selected by admin
+}
+
+         if (!$userId) {
+        return redirect()->route('login')
+            ->withErrors('User / Customer session missing.');
+    }
 
         DB::beginTransaction();
         try {

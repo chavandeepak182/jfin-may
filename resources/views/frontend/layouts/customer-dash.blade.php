@@ -191,12 +191,12 @@
                     </li>
 
                     <!-- Properties -->
-                    <li class="sidebar-item">
+                    <!-- <li class="sidebar-item">
                         <a class="sidebar-link" href="#">
                             <i class="fas fa-building"></i>
                             <span class="align-middle">Properties</span>
                         </a>
-                    </li>
+                    </li> -->
 
                     <!-- Refer & Earn -->
                     <li class="sidebar-item {{ Request::is('user/walletbalance*') ? 'active' : '' }}">
