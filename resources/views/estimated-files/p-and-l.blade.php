@@ -75,34 +75,110 @@
 
         {{-- SALARY --}}
         <h6>Salary / Incentive / Broker</h6>
-        <div class="row g-3">
+        <!-- <div class="row g-3">
+            <label>Staff Cost</label>
             <input class="form-control calc col" id="staff_cost" placeholder="Staff Cost">
+            <label>Staff Incentive</label>
             <input class="form-control calc col" id="staff_incentive" placeholder="Staff Incentive">
+            <label>Broker Commission</label>
             <input class="form-control calc col" id="broker_commission" placeholder="Broker Commission">
+            <label> Total</label>
             <input class="form-control col" id="salary_total" placeholder="Total" readonly>
-        </div>
+        </div> -->
+        <div class="row g-3 align-items-end">
+
+    <div class="col-md-3">
+        <label class="form-label">Staff Cost</label>
+        <input class="form-control calc" id="staff_cost" placeholder="Staff Cost">
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Staff Incentive</label>
+        <input class="form-control calc" id="staff_incentive" placeholder="Staff Incentive">
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Broker Commission</label>
+        <input class="form-control calc" id="broker_commission" placeholder="Broker Commission">
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Total</label>
+        <input class="form-control" id="salary_total" placeholder="Total" readonly>
+    </div>
+
+</div>
+
 
         <hr>
 
         {{-- ADMIN --}}
         <h6>Administration / Overheads</h6>
-        <div class="row g-3">
+        <!-- <div class="row g-3">
             <input class="form-control calc col" id="rental" placeholder="Rental">
             <input class="form-control calc col" id="opex" placeholder="OPEX">
             <input class="form-control col" id="admin_overheads" placeholder="Total" readonly>
-        </div>
+        </div> -->
+        <div class="row g-3">
+
+    <div class="col">
+        <label class="form-label">Rental</label>
+        <input class="form-control calc" id="rental" placeholder="Rental">
+    </div>
+
+    <div class="col">
+        <label class="form-label">OPEX</label>
+        <input class="form-control calc" id="opex" placeholder="OPEX">
+    </div>
+
+    <div class="col">
+        <label class="form-label">Total</label>
+        <input class="form-control" id="admin_overheads" placeholder="Total" readonly>
+    </div>
+
+</div>
+
 
         <hr>
 
         {{-- COST --}}
         <h6>Cost</h6>
-        <div class="row g-3">
+        <!-- <div class="row g-3">
             <input class="form-control calc col" id="cso_cost" placeholder="CSO Cost">
             <input class="form-control calc col" id="admin_fixed_cost" placeholder="Admin Cost">
             <input class="form-control calc col" id="travel_cost" placeholder="Travel">
             <input class="form-control col" id="tds" placeholder="TDS (5%)" readonly>
             <input class="form-control col" id="cost_total" placeholder="Total Cost" readonly>
-        </div>
+        </div> -->
+        <div class="row g-3">
+
+    <div class="col">
+        <label class="form-label">CSO Cost</label>
+        <input class="form-control calc" id="cso_cost" placeholder="CSO Cost">
+    </div>
+
+    <div class="col">
+        <label class="form-label">Admin Cost</label>
+        <input class="form-control calc" id="admin_fixed_cost" placeholder="Admin Cost">
+    </div>
+
+    <div class="col">
+        <label class="form-label">Travel</label>
+        <input class="form-control calc" id="travel_cost" placeholder="Travel">
+    </div>
+
+    <div class="col">
+        <label class="form-label">TDS (5%)</label>
+        <input class="form-control" id="tds" placeholder="TDS (5%)" readonly>
+    </div>
+
+    <div class="col">
+        <label class="form-label">Total Cost</label>
+        <input class="form-control" id="cost_total" placeholder="Total Cost" readonly>
+    </div>
+
+</div>
+
         <div class="row g-3 mt-3">
     <div class="col-md-3">
         <label>Total Cost</label>
@@ -113,11 +189,30 @@
         <hr>
 
         {{-- FINAL --}}
-        <div class="row g-3">
+        <!-- <div class="row g-3">
             <input class="form-control col" id="net_profit" placeholder="Net Profit" readonly>
             <input class="form-control calc col" id="manager_pl" placeholder="Manager P&L">
             <input class="form-control col" id="net_company" placeholder="Net To Company" readonly>
-        </div>
+        </div> -->
+        <div class="row g-3">
+
+    <div class="col">
+        <label class="form-label">Net Profit</label>
+        <input class="form-control" id="net_profit" placeholder="Net Profit" readonly>
+    </div>
+
+    <div class="col">
+        <label class="form-label">Manager P&amp;L</label>
+        <input class="form-control calc" id="manager_pl" placeholder="Manager P&L">
+    </div>
+
+    <div class="col">
+        <label class="form-label">Net To Company</label>
+        <input class="form-control" id="net_company" placeholder="Net To Company" readonly>
+    </div>
+
+</div>
+
 
     </div>
     <button class="btn btn-primary" id="savePL">
