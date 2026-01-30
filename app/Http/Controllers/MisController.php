@@ -74,10 +74,20 @@ private function authorizeMIS($mis)
     $roleId = session()->get('role_id');
     $userId = session()->get('user_id');
 
-    if ($roleId == env('adminRole_id')) return true;
-    if ($roleId == env('agentRole_id') && $mis->created_by == $userId) return true;
+    // Admin → full access
+    if ($roleId == config('constants.roles.admin')) {
+        return true;
+    }
 
-    abort(403);
+    // Agent → only own records
+    if (
+        $roleId == config('constants.roles.agent') &&
+        (int) $mis->created_by === (int) $userId
+    ) {
+        return true;
+    }
+
+    abort(403, 'Unauthorized MIS access');
 }
 
 
