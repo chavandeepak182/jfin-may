@@ -220,7 +220,7 @@
 </button>
 </div>
 @push('scripts')
-<script>
+<!-- <script>
 /* ================= GLOBAL HELPERS ================= */
 function v(id){
     return parseFloat(document.getElementById(id)?.value) || 0;
@@ -321,7 +321,133 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
 });
+</script> -->
+<script>
+/* ================= GLOBAL HELPERS ================= */
+function v(id) {
+    return parseFloat(document.getElementById(id)?.value) || 0;
+}
+
+/* ================= DOM READY ================= */
+document.addEventListener('DOMContentLoaded', function () {
+
+    let isSaving = false; // 🔒 prevent duplicate save
+
+    function calculatePL() {
+
+        const revenueTotal = v('gross_revenue') + v('insurance');
+        revenue_total.value = revenueTotal.toFixed(2);
+
+        const salaryTotal = v('staff_cost') + v('staff_incentive') + v('broker_commission');
+        salary_total.value = salaryTotal.toFixed(2);
+
+        const adminOverheads = v('rental') + v('opex');
+        admin_overheads.value = adminOverheads.toFixed(2);
+
+        const tds = v('gross_revenue') * 0.05;
+        document.getElementById('tds').value = tds.toFixed(2);
+
+        const cost = v('cso_cost') + v('admin_fixed_cost') + v('travel_cost') + tds;
+        cost_total.value = cost.toFixed(2);
+
+        const totalCost = salaryTotal + adminOverheads + cost;
+        document.getElementById('total_cost').value = totalCost.toFixed(2);
+
+        const netProfit = revenueTotal - totalCost;
+        net_profit.value = netProfit.toFixed(2);
+
+        net_company.value = (netProfit - v('manager_pl')).toFixed(2);
+    }
+
+    /* FETCH GROSS REVENUE */
+    fetchPL.addEventListener('click', function () {
+        fetch(`{{ route('monthlyPL.grossRevenue') }}?month=${pl_month.value}&year=${pl_year.value}`)
+            .then(res => res.json())
+            .then(d => {
+                gross_revenue.value = d.gross;
+                calculatePL();
+            });
+    });
+
+    /* AUTO CALC */
+    document.querySelectorAll('.calc').forEach(el =>
+        el.addEventListener('input', calculatePL)
+    );
+
+    /* SAVE BUTTON */
+    const saveBtn = document.getElementById('savePL');
+
+    saveBtn.onclick = function () {
+
+        if (isSaving) return;
+        isSaving = true;
+        saveBtn.disabled = true; // 🔒 hard lock button
+
+        const payload = {
+            _token: '{{ csrf_token() }}',
+            month: pl_month.value,
+            year: pl_year.value,
+
+            gross_revenue: v('gross_revenue'),
+            insurance: v('insurance'),
+            revenue_total: v('revenue_total'),
+
+            staff_cost: v('staff_cost'),
+            staff_incentive: v('staff_incentive'),
+            broker_commission: v('broker_commission'),
+            salary_total: v('salary_total'),
+
+            rental: v('rental'),
+            opex: v('opex'),
+            admin_overheads: v('admin_overheads'),
+
+            cso_cost: v('cso_cost'),
+            admin_fixed_cost: v('admin_fixed_cost'),
+            travel_cost: v('travel_cost'),
+            tds: v('tds'),
+            cost_total: v('cost_total'),
+
+            total_cost: v('total_cost'),
+            net_profit: v('net_profit'),
+            manager_pl: v('manager_pl'),
+            net_company: v('net_company')
+        };
+
+        fetch('{{ route('monthlyPL.store') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(() => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Monthly P&L added successfully',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                window.location.href = "{{ route('admin.bank') }}";
+            });
+        })
+        .catch(() => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Something went wrong'
+            });
+            saveBtn.disabled = false;
+            isSaving = false;
+        });
+    };
+
+});
 </script>
+>
+
+
 @endpush
 
 @endsection
