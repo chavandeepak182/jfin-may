@@ -105,7 +105,7 @@
         @if($role_id == 4)
             <a href="{{ route('admin.bank') }}" class="nav-item">
                 <i class="fas fa-wrench"></i>
-                <span>Master</span>
+                <span>Revenue Breakdown</span>
             </a>
         @endif
 

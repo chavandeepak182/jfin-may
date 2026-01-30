@@ -141,35 +141,7 @@
 </div>
 
     <div class="row g-4">
-                    <div class="col-xl-3 col-lg-4 col-md-6"> 
-                    <div class="analytics-card"
-                        onclick="showLoanBanks()"
-                        style="cursor:pointer;">
-
-                        <div class="analytics-row">
-                            <div class="analytics-icon icon-green">
-                                <i class="fas fa-university"></i>
-                            </div>
-
-                            <div class="analytics-content">
-                                <div class="analytics-title">All Loan Banks</div>
-
-                                <div class="analytics-bottom">
-                                    <div class="analytics-value">
-                                        {{ $loanbanks->total() }}
-                                    </div>
-                                </div>
-
-                                <div class="analytics-bottom">
-                                    <div class="analytics-growth">
-                                        +22.5% from last month
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-            </div> 
+            
 
 
 
@@ -236,6 +208,36 @@
                 </div>
             </div>
             </div> 
+                   <div class="col-xl-3 col-lg-4 col-md-6"> 
+                    <div class="analytics-card"
+                        onclick="showLoanBanks()"
+                        style="cursor:pointer;">
+
+                        <div class="analytics-row">
+                            <div class="analytics-icon icon-green">
+                                <i class="fas fa-university"></i>
+                            </div>
+
+                            <div class="analytics-content">
+                                <div class="analytics-title">All Banks</div>
+
+                                <div class="analytics-bottom">
+                                    <div class="analytics-value">
+                                        {{ $loanbanks->total() }}
+                                    </div>
+                                </div>
+
+                                <div class="analytics-bottom">
+                                    <div class="analytics-growth">
+                                        +22.5% from last month
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+            </div> 
+
                    <!--commistion  -->
                    <div class="col-xl-3 col-lg-4 col-md-6">
     <a href="{{ route('allCommission') }}" style="text-decoration:none; color:inherit;">
