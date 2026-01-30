@@ -386,7 +386,8 @@ MIS Dashboard
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
@@ -404,22 +405,60 @@ function searchMIS() {
         rows[i].style.display = name.includes(input) ? "" : "none";
     }
 }
-
 $('#addMISRecord').on('submit', function (e) {
     e.preventDefault();
+
     $.ajax({
         url: "{{ route('mis.store') }}",
-        method: "POST",
+        type: "POST",
         data: new FormData(this),
         processData: false,
         contentType: false,
-        success: function (data) {
-            if (data.status === 'success') {
-                swal("Success", data.message, "success").then(() => {
+
+        success: function (response) {
+
+            if (response.status === true) {
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: response.message,
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    $('#addMISView').modal('hide');
                     location.reload();
                 });
+
             } else {
-                swal("Error", data.message, "error");
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message || 'Something went wrong'
+                });
+
+            }
+        },
+
+        error: function (xhr) {
+
+            if (xhr.status === 422) {
+                let firstError = Object.values(xhr.responseJSON.errors)[0][0];
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: firstError
+                });
+
+            } else {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Server error occurred'
+                });
+
             }
         }
     });
