@@ -3409,15 +3409,22 @@ if ($loan && in_array($loan->status, ['disbursed', 'rejected'])) {
 
         } else {
 
-            // Update existing loan
-            $loan->update([
-                'loan_category_id' => $loan_category_id,
-                'bank_id'          => $bank_id,
-                'amount'           => $validated['amount'],
-                'tenure'           => $validated['tenure'],
-                'referral_user_id' => $referralUserId,
-            ]);
-        }
+        // Update existing loan
+        $loan->update([
+            'loan_category_id' => $loan_category_id,
+            'bank_id'          => $bank_id,
+            'amount'           => $validated['amount'],
+            'tenure'           => $validated['tenure'],
+            'referral_user_id' => $referralUserId,
+            'status'           => 'in process', // ✅ ADD THIS LINE
+        ]);
+
+        Log::info('Loan moved from draft to in process', [ // ✅ ADD LOG
+            'loan_id' => $loan->loan_id,
+            'old_status' => 'draft',
+            'new_status' => 'in process',
+        ]);
+    }
 
         /**
          * -------------------------------------------------
@@ -3446,9 +3453,13 @@ if ($loan && in_array($loan->status, ['disbursed', 'rejected'])) {
 
     protected function generateLoanReferenceId()
 {
-    $latestLoan = Loan::orderBy('loan_id', 'desc')->first();
-    $nextNumber = $latestLoan ? $latestLoan->loan_id + 1 : 1;
-    return 'JFIN' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    do {
+        $reference = 'JFIN' . random_int(100000, 999999);
+    } while (
+        Loan::where('loan_reference_id', $reference)->exists()
+    );
+
+    return $reference;
 }
 
 
