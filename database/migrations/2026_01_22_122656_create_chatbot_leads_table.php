@@ -13,9 +13,6 @@ return new class extends Migration
     {
         Schema::create('chatbot_leads', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email');
-            $table->string('contact');
             $table->timestamps();
         });
     }
