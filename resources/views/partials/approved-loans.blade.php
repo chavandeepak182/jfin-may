@@ -31,12 +31,11 @@
                         <td>{{ ucfirst($loan->status) }}</td>
 
                         <td>
-                            <a class="btn btn-primary btn-xs"
-                               href="{{ route('agent.loan.view', $loan->loan_id) }}">
+                            <a class="btn btn-primary btn-xs view" title="View" href="{{ route('loan.view', ['id' => $loan->loan_id]) }}">
                                 <i class="fa fa-eye"></i>
                             </a>
 
-                            <a class="btn btn-warning btn-xs"
+                            <!-- <a class="btn btn-warning btn-xs"
                                href="{{ route('agent.editLoan', $loan->loan_id) }}">
                                 <i class="fa fa-edit"></i>
                             </a>
@@ -44,7 +43,7 @@
                             <button class="btn btn-danger btn-xs"
                                 onclick="deleteLoan('{{ $loan->loan_id }}')">
                                 <i class="fa fa-trash"></i>
-                            </button>
+                            </button> -->
                         </td>
                     </tr>
                 @empty
