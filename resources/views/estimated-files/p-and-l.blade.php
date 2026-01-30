@@ -122,12 +122,12 @@
         <div class="row g-3">
 
     <div class="col">
-        <label class="form-label">Rental</label>
+        <label class="form-label">Office Rental</label>
         <input class="form-control calc" id="rental" placeholder="Rental">
     </div>
 
     <div class="col">
-        <label class="form-label">OPEX</label>
+        <label class="form-label">Operation Expense</label>
         <input class="form-control calc" id="opex" placeholder="OPEX">
     </div>
 
