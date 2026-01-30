@@ -9,7 +9,7 @@
     {{-- MAIN CONTENT --}}
     <section class="video-hero">
         <video id="videobcg" preload="auto" autoplay="true" loop="loop" muted="muted" volume="0">
-        <source src="{{ asset('theme/dhara-jfin/img/jfinserv_banner_services_1.mp4') }}" type="video/mp4">
+        <source src="{{ asset('theme/dhara-jfin/videos/home_loan_banner.mp4') }}" type="video/mp4">
         </video>
     <div class="video-banner-overlay">
         <div class="video-overlay-content">
@@ -23,7 +23,7 @@
 </section>
 
     <section class="finserv-wrapper">
-        <div class="container">
+        <div class="container-tab">
             <div class="finserv-header">
                 <h4 class="finserv-eyebrow">Our Features</h4>
                 <h2 class="finserv-trusted" style="color:#295cab;">Finance Your <strong style="color:#00abeb">Dream</strong> Home</h2>
@@ -73,7 +73,7 @@
     
     <!-- overview section  -->
     <section class="home-section">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-section-header">
                 <h2 class="finserv-trusted" style="color:#295cab;">Why Choose Our <strong style="color:#00abeb">Home</strong> Loan?</h2>
                 <p class="home-section-subtitle">
@@ -115,7 +115,7 @@
 
     <!-- benefits section  -->
     <section class="home-section home-benefits-section">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-section-header">
                 <h2 class="finserv-trusted" style="color:#295cab;">Our Home Loan <strong style="color:#00abeb">Benefits</strong></h2>
                 <p class="home-section-subtitle">
@@ -190,7 +190,7 @@
     <!-- eligibiity and docs  -->
 
     <section class="home-section" id="home-eligibility">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-section-header">
                 <h2 class="finserv-trusted" style="color:#295cab;">Eligibility <strong style="color:#00abeb">&</strong> Documents</h2>
                 <p class="home-section-subtitle">
@@ -511,7 +511,7 @@
 
     <!-- emi  -->
     <section class="home-section home-emi-preview-section" id="emi">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-emi-preview-container">
                 <div class="home-emi-preview-content">
                     <h2 class="home-section-title">Calculate Your Home Loan EMI</h2>
@@ -551,7 +551,7 @@
     <!-- faqs  -->
 
     <section class="home-section">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-section-header">
                 <h2 class="home-section-title">Frequently Asked Questions</h2>
                 <p class="home-section-subtitle">

@@ -18,7 +18,7 @@
 </section>
 
         <section class="about-section-main">
-            <div class="container">
+            <div class="container-tab">
                 <div class="about-grid">
                     <div class="about-content-left">
                         <h4>About Our Company</h4>
@@ -65,7 +65,7 @@
             </div>
         </section>
         <section class="mission-vision-section">
-            <div class="container">
+            <div class="container-tab">
                 <div class="mission-vision-grid">
                     <div class="mission-vision-image">
                         <img src="{{asset('theme/dhara-jfin/img/mision.jpg')}}" alt="Mission Vision Values">
@@ -94,7 +94,7 @@
         </section>
 
         <section class="awards-section">
-            <div class="container">
+            <div class="container-tab">
                 <div class="section-header">
                     <h4 class="finserv-eyebrow" style="color:#295cab;">Our Awards</h4>
                     <h2 class="finserv-trusted" style="color:#295cab;">Top Corporate <strong style="color:#00abeb">Recognitions</strong></h2>

@@ -41,6 +41,7 @@
                     <li><a href="{{ url('/lease-rental-discounting') }}">Lease Rental Discounting</a></li>
                 </ul>
             </li>
+            <li><a href="{{ url('/properties') }}">Properties</a></li>
             <li><a href="{{ url('/eligibility-calculator') }}">Calculator</a></li>
             <li><a href="{{ url('/contact') }}">Contact</a></li>
         </ul>
@@ -179,7 +180,7 @@
                 <li><a href="{{ url('/lease-rental-discounting') }}">Lease Rental Discounting</a></li>
             </ul>
         </li>
-
+        <li><a href="{{ url('/properties') }}">Properties</a></li>
         <li><a href="{{ url('/eligibility-calculator') }}">Calculator</a></li>
         <li><a href="{{ url('/contact') }}">Contact</a></li>
     </ul>

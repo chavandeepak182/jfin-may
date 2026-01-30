@@ -17,7 +17,7 @@
 
     <!-- PRODUCT OVERVIEW -->
     <section class="finserv-wrapper">
-        <div class="container">
+        <div class="container-tab">
             <div class="finserv-header">
                 <h4 class="finserv-eyebrow" >Product Overview</h4>
                 <h2 class="finserv-trusted" style="color:#295cab;">
@@ -55,7 +55,7 @@
 
     <!-- WHY LRD -->
     <section class="home-section">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-section-header">
                 <h2 class="finserv-trusted" style="color:#295cab;">
                     Why Choose <strong style="color:#00abeb">Lease Rental Discounting</strong>?
@@ -96,7 +96,7 @@
 
     <!-- BENEFITS -->
     <section class="home-section home-benefits-section">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-section-header">
                 <h2 class="finserv-trusted" style="color:#295cab;">
                     Lease Rental Discounting <strong style="color:#00abeb">Benefits</strong>
@@ -149,7 +149,7 @@
 
     <!-- ELIGIBILITY & DOCUMENTS -->
     <section class="home-section" id="home-eligibility">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-section-header">
                 <h2 class="home-section-title">Eligibility & Documents</h2>
                 <p class="home-section-subtitle">
@@ -314,7 +314,7 @@
 
     <!-- faqs  -->
     <section class="home-section">
-    <div class="container">
+    <div class="container-tab">
         <div class="home-section-header">
             <h2 class="home-section-title">Frequently Asked Questions</h2>
             <p class="home-section-subtitle">
