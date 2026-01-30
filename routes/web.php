@@ -34,6 +34,7 @@ use App\Http\Controllers\MonthlyPLController;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketMessageController;
+use App\Http\Controllers\VisitEnquiryController;
 
 
 require __DIR__.'/auth.php';
@@ -131,6 +132,9 @@ Route::get('/privacy-policy',function () {
 
 Route::get('/terms-and-conditions',function () {
     return view('dhara-jfin.terms_and_cond');
+    });
+    Route::get('/prop',function () {
+    return view('dhara-jfin.properties');
     });
 // Route::get('terms-and-conditions', [FrontendController::class, 'TermCondView']);
 
@@ -342,8 +346,19 @@ Route::get('test', [FrontendController::class, 'TestView']);
 Route::get('registration', [FrontendController::class, 'RegisterView']);
 Route::get('myprofile', [FrontendController::class, 'ProfileView']);
 Route::get('emi-calculator', [FrontendController::class, 'CalculatorView']);
-// Route::get('properties', [FrontendController::class, 'properties'])->name('properties');
-Route::get('property-details/{property_id}', [FrontendController::class, 'PropDetailsView']);
+Route::get('properties', [FrontendController::class, 'properties'])->name('properties');
+// Route::get('property-details/{property_id}', [FrontendController::class, 'PropDetailsView']);
+Route::get('/property-details/{id}', function ($id) {
+    $property = DB::table('properties')->where('properties_id', $id)->first();
+
+    if ($property && isset($property->slug)) {
+        $slugAndId = $property->slug . '-' . $property->properties_id;
+        return redirect("/$slugAndId", 301);
+    }
+
+    abort(404);
+});
+Route::get('/{slugAndId}', [FrontendController::class, 'PropDetailsView'])->name('property.details');
 Route::get('referral-program', [FrontendController::class, 'ReferralsView']);
 
 Route::post('search_properties', [FrontendController::class, 'search_properties'])->name('search_properties');
@@ -562,7 +577,8 @@ Route::post('/chatbot-leads', [ChatbotLeadController::class, 'store'])->name('ch
 Route::post('enquiry', [EnquiryController::class, 'store'])->name('enquiry.store');
 //register 
 Route::post('register', [UsersController::class, 'register'])->name('register');
-
+Route::post('/visit-enquiry-submit', [VisitEnquiryController::class, 'store'])
+    ->name('visit.enquiry.submit');
 
 Route::middleware('isAdmin')->group(function () {
 Route::post('admin/insertUser',[UsersController::class,'insertUser'])->name('insertUser');
