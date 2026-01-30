@@ -163,7 +163,7 @@ public function signupSubmit(Request $request)
         return view('authv3.verify_otp');
     }
 
-   public function verifyOtp(Request $request)
+ public function verifyOtp(Request $request)
 {
     $request->validate([
         'otp' => 'required|digits_between:4,6',
@@ -177,25 +177,17 @@ public function signupSubmit(Request $request)
     }
 
     $otpRow = Otp::where('user_id', $userId)
+        ->where('otp', $request->otp)
         ->where('is_verify', 0)
         ->where('expires_at', '>=', now())
         ->latest()
         ->first();
 
     if (!$otpRow) {
-        return back()->withErrors(['otp' => 'OTP expired or not found']);
+        return back()->withErrors(['otp' => 'Invalid or expired OTP']);
     }
 
     try {
-        $apiKey = env('TWO_FACTOR_API_KEY');
-
-        $url = "https://2factor.in/API/V1/{$apiKey}/SMS/VERIFY/{$otpRow->session_id}/{$request->otp}";
-
-        $response = Http::timeout(15)->get($url)->json();
-
-        if (($response['Status'] ?? '') !== 'Success') {
-            return back()->withErrors(['otp' => 'Invalid OTP']);
-        }
 
         // ✅ mark verified
         $otpRow->update(['is_verify' => 1]);
@@ -252,7 +244,7 @@ public function signupSubmit(Request $request)
     //         'expires_at'=> now()->addMinutes(5),
     //     ]);
     // }
- private function generateOtp($userId)
+private function generateOtp($userId)
 {
     $user = User::find($userId);
     if (!$user) return false;
@@ -264,7 +256,11 @@ public function signupSubmit(Request $request)
 
         $templateName = "Register";
 
-        $url = "https://2factor.in/API/V1/{$apiKey}/SMS/{$mobile}/AUTOGEN/{$templateName}";
+        // generate otp
+        $otp = rand(100000, 999999);
+
+        // NEW OFFICIAL ENDPOINT
+        $url = "https://2factor.in/API/V1/{$apiKey}/SMS/{$mobile}/{$otp}/{$templateName}";
 
         $response = Http::timeout(20)->get($url);
 
@@ -284,23 +280,16 @@ public function signupSubmit(Request $request)
             return false;
         }
 
-        $sessionId = $json['Details'];
-
-        if (!$sessionId) {
-            \Log::error("Session ID missing from 2Factor response");
-            return false;
-        }
-
         // delete old
         Otp::where('user_id', $userId)->delete();
 
         // insert new
         Otp::create([
             'user_id'    => $userId,
-            'otp'        => null,           // AUTOGEN
-            'session_id' => $sessionId,     // IMPORTANT
+            'otp'        => $otp,        // REAL OTP
+            'session_id' => null,        // NOT USED ANYMORE
             'is_verify'  => 0,
-            'expires_at' => now()->addMinutes(5),
+            'expires_at' => now()->addMinutes(10),
         ]);
 
         return true;
@@ -310,7 +299,6 @@ public function signupSubmit(Request $request)
         return false;
     }
 }
-
 
 public function loginWithEmail(Request $request)
 {
