@@ -170,7 +170,7 @@
 
                             <div class="d-flex justify-content-between">
                                 <span class="fw-bold">Last Payout</span>
-                                <span class="fw-bold text-success">₹450.00</span>
+                                <span class="fw-bold text-success">₹000.00</span>
                             </div>
 
                             <small class="text-muted d-block mt-2">
