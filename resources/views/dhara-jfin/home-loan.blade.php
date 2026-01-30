@@ -9,13 +9,13 @@
     {{-- MAIN CONTENT --}}
     <section class="video-hero">
         <video id="videobcg" preload="auto" autoplay="true" loop="loop" muted="muted" volume="0">
-        <source src="{{ asset('theme/dhara-jfin/videos/home_loan_banner.mp4') }}" type="video/mp4">
+        <source src="{{ asset('theme/dhara-jfin/img/jfinserv_banner_services_1.mp4') }}" type="video/mp4">
         </video>
     <div class="video-banner-overlay">
         <div class="video-overlay-content">
             <h1>Secure Your Dream Home with <span>Jfinserv</span></h1>
             <p>Tailored loan solutions for every stage of life</p>
-            <a href="{{ route('authv3.login.form') }}" class="btn-primary">
+            <a href="{{ url('/apply') }}" class="btn-primary">
                 Apply Now
             </a>
         </div>
@@ -56,7 +56,7 @@
                 <div class="about-content-right">
                     <div class="about-image-wrapper">
                         <img
-                            src="{{asset('theme/dhara-jfin/img/home-loan-page.jpg')}}"
+                            src="https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
                             alt="Home Loan"
                         >
                     </div>
@@ -64,7 +64,7 @@
             </div>
        
             <div class="about-content-button" style="margin-top: 2rem;">
-                        <a href="{{ route('authv3.login.form') }}" class="btn btn-primary-hero" style="padding:1rem 3rem; font-size:1.5rem;">
+                        <a href="#" class="btn btn-primary-hero" style="padding:1rem 3rem; font-size:1.5rem;">
                             Apply Now
                         </a>
                     </div>
@@ -85,7 +85,7 @@
                 Whether you're buying your first home, upgrading to a larger property, or investing in real estate, our home loan solutions are designed to make your journey smooth and stress-free.
             </p>
 
-            <div class="home-feature-cards" style="grid-template-columns:repeat(3,1fr);">
+            <div class="home-feature-cards" style="grid-template-columns: repeat(3, 1fr);">
                 <div class="home-feature-card">
                     <div class="home-feature-icon">💰</div>
                     <h3 class="home-feature-title">Competitive Interest Rates</h3>
@@ -358,6 +358,36 @@
     </details>
 </div>
 
+
+                    <!-- <div class="home-documents-section">
+                        <h3>📄 Required Documents</h3>
+                        <ul class="home-document-list">
+                            <li class="home-document-item">
+                                <span class="home-document-icon">📋</span>
+                                <span>PAN Card & Aadhaar Card</span>
+                            </li>
+                            <li class="home-document-item">
+                                <span class="home-document-icon">📋</span>
+                                <span>Business proof (GST, Shop Act license)</span>
+                            </li>
+                            <li class="home-document-item">
+                                <span class="home-document-icon">📋</span>
+                                <span>IT returns with computation (last 2 years)</span>
+                            </li>
+                            <li class="home-document-item">
+                                <span class="home-document-icon">📋</span>
+                                <span>Bank statements (last 12 months)</span>
+                            </li>
+                            <li class="home-document-item">
+                                <span class="home-document-icon">📋</span>
+                                <span>Balance sheet & P&L statements</span>
+                            </li>
+                            <li class="home-document-item">
+                                <span class="home-document-icon">📋</span>
+                                <span>Property documents</span>
+                            </li>
+                        </ul>
+                    </div> -->
                 </div>
             </div>
 
@@ -443,6 +473,37 @@
                         </details>
 
                     </div>
+
+
+                    <!-- <div class="home-documents-section">
+                        <h3>📄 Required Documents</h3>
+                        <ul class="home-document-list">
+                            <li class="home-document-item">
+                                <span class="home-document-icon">📋</span>
+                                <span>Valid passport & visa copy</span>
+                            </li>
+                            <li class="home-document-item">
+                                <span class="home-document-icon">📋</span>
+                                <span>PAN Card & Aadhaar Card</span>
+                            </li>
+                            <li class="home-document-item">
+                                <span class="home-document-icon">📋</span>
+                                <span>Employment contract/offer letter</span>
+                            </li>
+                            <li class="home-document-item">
+                                <span class="home-document-icon">📋</span>
+                                <span>Last 6 months' salary slips</span>
+                            </li>
+                            <li class="home-document-item">
+                                <span class="dhome-ocument-icon">📋</span>
+                                <span>NRE/NRO account statements</span>
+                            </li>
+                            <li class="home-document-item">
+                                <span class="home-document-icon">📋</span>
+                                <span>Property documents & POA (if applicable)</span>
+                            </li>
+                        </ul>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -452,37 +513,14 @@
     <section class="home-section home-emi-preview-section" id="emi">
         <div class="container">
             <div class="home-emi-preview-container">
-                    <div class="home-emi-preview-content">
-                        <h2 class="home-section-title">Calculate Your Home Loan EMI</h2>
-                        <p class="home-section-subtitle">
-                            Get an instant estimate of your monthly payments and plan your finances better
-                        </p>
-                        
-                        <div class="home-emi-simple-calc">
-                            <div class="home-emi-inputs">
-                                <div class="home-emi-input-group">
-                                    <label>Loan Amount (₹)</label>
-                                    <input type="number" id="preview-loan" value="2500000">
-                                </div>
-                                <div class="home-emi-input-group">
-                                    <label>Tenure (Years)</label>
-                                    <input type="number" id="preview-tenure" value="20">
-                                </div>
-                                <div class="home-emi-input-group">
-                                    <label>Interest Rate (%)</label>
-                                    <input type="number" id="preview-interest" value="8.5" step="0.1">
-                                </div>
-                            </div>
-                            
-                            <div class="home-emi-result">
-                                <div class="home-emi-result-text">
-                                    <span class="home-emi-result-label">Estimated Monthly EMI</span>
-                                    <span id="preview-emi-amount" class="home-emi-result-value">₹21,696</span>
-                                </div>
-                                <a href="{{url('/eligibility-calculator')}}" class="home-btn home-btn-primary">Detailed Calculator →</a>
-                            </div>
-                        </div>
-                    </div>
+                <div class="home-emi-preview-content">
+                    <h2 class="home-section-title">Calculate Your Home Loan EMI</h2>
+                    <p class="home-section-subtitle">
+                        Get an instant estimate of your monthly payments and plan your finances better
+                    </p>
+                    
+                    <a href="{{url('/dhara-calculator')}}#eligibility" class="home-btn home-btn-primary home-btn-large">Calculate Detailed EMI →</a>
+                </div>
 
                 <div class="home-emi-preview-card">
                     <div class="home-emi-preview-title">Sample EMI Breakdown</div>
@@ -609,6 +647,18 @@
                     </div>
                 </div>
                 </div>
+
+                <!-- Application Process Category -->
+                <!-- <div class="home-faq-category"> -->
+                    <!-- <h3 class="home-faq-category-title">Application Process</h3> -->
+                    
+                    
+
+                <!-- Interest Rates Category -->
+                <!-- <div class="home-faq-category"> -->
+                    <!-- <h3 class="home-faq-category-title">Interest Rates & Charges</h3> -->
+                    
+                    
                 </div>
             </div>
         </div>
@@ -702,27 +752,6 @@
             card.style.transform = 'translateY(20px)';
             card.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
             observer.observe(card);
-        });
-
-        // Simple EMI Preview Calculator Logic
-        function updatePreviewEMI() {
-            const loan = parseFloat(document.getElementById('preview-loan').value) || 0;
-            const tenure = parseFloat(document.getElementById('preview-tenure').value) || 0;
-            const rate = parseFloat(document.getElementById('preview-interest').value) || 0;
-
-            if (loan > 0 && tenure > 0 && rate > 0) {
-                const monthlyRate = rate / 12 / 100;
-                const months = tenure * 12;
-                const emi = (loan * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
-                document.getElementById('preview-emi-amount').innerText = '₹' + Math.round(emi).toLocaleString('en-IN');
-            } else {
-                document.getElementById('preview-emi-amount').innerText = '₹0';
-            }
-        }
-
-        ['preview-loan', 'preview-tenure', 'preview-interest'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.addEventListener('input', updatePreviewEMI);
         });
     </script>
 
