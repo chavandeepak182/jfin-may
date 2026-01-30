@@ -1078,7 +1078,7 @@
                     </div>
 
                     <div class="property-location">
-                        <i class="fa-solid fa-location-dot"></i> {{ $location }}
+                        <i class="fa-solid fa-location-dot"></i>     {{ $location }}
                     </div>
 
                     <div class="property-specs">
