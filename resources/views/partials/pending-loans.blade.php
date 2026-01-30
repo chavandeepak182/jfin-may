@@ -10,7 +10,7 @@
                             <th>Tenure</th>
                             <th>Assign To</th>
                             <th>Agent Status</th>
-                            <th>Action</th>
+                            <!-- <th>Action</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -46,7 +46,7 @@
                                     </form>
                                 </td>
                                 <td>{{ ucfirst($loan->agent_action) ?? 'Pending' }}</td>
-                                <td>
+                                <!-- <td>
                                     <a class="btn btn-primary btn-xs edit" title="Edit"
                                         href="{{ route('editLoan', ['id' => $loan->loan_id]) }}">
                                         <i class="fa fa-edit"></i>
@@ -55,7 +55,7 @@
                                         onclick="deleteLoan('{{ $loan->loan_id }}')">
                                         <i class="fa fa-trash"></i>
                                     </button>
-                                </td>
+                                </td> -->
                             </tr>
                         @endforeach
                     </tbody>

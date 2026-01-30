@@ -245,7 +245,13 @@
                                     <div id="sanctionLetterBox" class="section mb-4" style="display: none;">
                                         <h3 class="h4 mb-2"><strong>Sanction Letter</strong></h4>
                                             <div class="form-group">
+                                                
+
                                                 <label for="sanction_letter">Upload Sanction Letter:</label>
+                                                                <small id="sanctionLetterError"
+                                                                    class="text-danger d-none mt-1">
+                                                                    Please upload the sanction letter before disbursing the loan.
+                                                                </small>
                                                 <input type="file" class="form-control" id="sanction_letter"
                                                     name="sanction_letter">
                                                                                                 @if ($loan->sanction_letter)
@@ -433,6 +439,23 @@ $(document).ready(function () {
     $('#editLoanForm').on('submit', function (e) {
         e.preventDefault();
 
+        const status = $('#status').val();
+        const newFile = $('#sanction_letter').val();
+        const hasExistingFile = "{{ $loan->sanction_letter ? 'yes' : '' }}";
+
+        // ✅ ONLY WHEN DISBURSED
+        if (
+            status === 'disbursed' &&
+            !newFile &&
+            !hasExistingFile
+        ) {
+            $('#sanctionLetterError').removeClass('d-none');
+            $('#sanction_letter').focus();
+            return false; // ⛔ stop submit
+        } else {
+            $('#sanctionLetterError').addClass('d-none');
+        }
+
         let formData = new FormData(this);
         let btn = $(this).find('button[type="submit"]');
 
@@ -447,7 +470,8 @@ $(document).ready(function () {
 
             success: function (response) {
                 Swal.fire({
-                    title: response.msg,
+                    title: response.msg || 'Loan updated successfully',
+
                     icon: 'success',
                     confirmButtonText: 'OK'
                 }).then(() => {
@@ -473,6 +497,7 @@ $(document).ready(function () {
 
 });
 </script>
+
 
 
     <script>

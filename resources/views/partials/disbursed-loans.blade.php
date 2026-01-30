@@ -42,7 +42,7 @@
                                 <i class="fa fa-eye"></i>
                             </a>
 
-                            <a class="btn btn-warning btn-sm"
+                            <!-- <a class="btn btn-warning btn-sm"
                                href="{{ route('editLoan', $loan->loan_id) }}">
                                 <i class="fa fa-edit"></i>
                             </a>
@@ -50,7 +50,7 @@
                             <button class="btn btn-danger btn-sm"
                                 onclick="deleteLoan('{{ $loan->loan_id }}')">
                                 <i class="fa fa-trash"></i>
-                            </button>
+                            </button> -->
                         </td>
                     </tr>
                 @empty
