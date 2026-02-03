@@ -85,9 +85,9 @@
 
                         <td>
                             <a href="{{ route('monthlyPL.show', $pl->id) }}"
-   class="btn btn-sm btn-primary">
-    <i class="bi bi-eye"></i> View
-</a>
+                            class="btn btn-sm btn-primary">
+                                <i class="bi bi-eye"></i> View
+                            </a>
 
                             {{-- EXPORT EXCEL --}}
                             <a href="{{ route('monthlyPL.exportFormatted', $pl->id) }}"

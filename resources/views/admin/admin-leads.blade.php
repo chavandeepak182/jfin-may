@@ -1306,6 +1306,74 @@ $(document).off('submit', '#addUser').on('submit', '#addUser', function (e) {
     });
 });
 </script>
+<!-- validation mis -->
+ <script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    /* ===========================
+       Helper: show inline message
+    ============================ */
+    function attachValidator(inputId, type, message) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+
+        const msg = document.createElement('small');
+        msg.className = 'text-danger';
+        msg.style.display = 'none';
+        msg.innerText = message;
+        input.after(msg);
+
+        input.addEventListener('input', function () {
+
+            let invalid = false;
+
+            if (type === 'number') {
+                invalid = /[^0-9]/.test(this.value);
+                this.value = this.value.replace(/[^0-9]/g, '');
+            }
+
+            if (type === 'text') {
+                invalid = /[^a-zA-Z\s]/.test(this.value);
+                this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+            }
+
+            if (type === 'amount') {
+                invalid = /[^0-9.]/.test(this.value);
+                this.value = this.value.replace(/[^0-9.]/g, '');
+
+                if ((this.value.match(/\./g) || []).length > 1) {
+                    this.value = this.value.slice(0, -1);
+                }
+            }
+
+            msg.style.display = invalid ? 'block' : 'none';
+        });
+    }
+
+    /* ===========================
+       Apply field rules
+    ============================ */
+
+    attachValidator('name', 'text', 'Only letters allowed');
+    attachValidator('branch_name', 'text', 'Only letters allowed');
+    attachValidator('bm_name', 'text', 'Only letters allowed');
+    attachValidator('city', 'text', 'Only letters allowed');
+
+    attachValidator('contact', 'number', 'Only numbers allowed');
+
+    attachValidator('amount', 'amount', 'Only numeric value allowed');
+
+    /* ===========================
+       Login date – no future
+    ============================ */
+    const loginDate = document.getElementById('login_date');
+    if (loginDate) {
+        const today = new Date().toISOString().split('T')[0];
+        loginDate.setAttribute('max', today);
+    }
+
+});
+</script>
 
 <!-- mis add -->
  <script>

@@ -51,7 +51,8 @@ Route::get('/get-cities/{state_id}', function ($state_id) {
 
 require __DIR__.'/auth.php';
 // dashbord path
-Route::get('/admin/customers', action: [UsersController::class, 'adminCustomer'])->name('admin.customers');
+Route::get('/admin/customers', [UsersController::class, 'adminCustomer'])
+    ->name('admin.customers');
 // update user
 // reset pass user
 Route::post('/admin/reset-password', [UsersController::class, 'resetPassword'])
