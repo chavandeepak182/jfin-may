@@ -65,7 +65,12 @@ public function loanbankslist(Request $request)
         $grossRevenue = (clone $query)->sum('estimate_revenue');
     }
 
-$estimatedFiles = $query->orderBy('id', 'desc')->paginate(10);
+// $estimatedFiles = $query->orderBy('id', 'desc')->paginate(10);
+$estimatedFiles = $query
+    ->orderBy('id', 'desc')
+    ->paginate(10)
+    ->withQueryString();
+
     // ================= MONTHLY P&L =================
     $pls = MonthlyPL::orderBy('year', 'desc')
                 ->orderBy('month', 'desc')

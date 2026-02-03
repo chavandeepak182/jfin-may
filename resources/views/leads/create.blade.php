@@ -11,7 +11,7 @@
                 <li class="breadcrumb-item active" aria-current="page">Add New Lead</li>
             </ol>
         </nav>
-        <a href="{{ route('leads.index') }}" class="btn btn-primary float-right rounded"><i class="fa fa-arrow-left"></i> Back</a>
+        <a href="{{ route('admin.listlead') }}" class="btn btn-primary float-right rounded"><i class="fa fa-arrow-left"></i> Back</a>
         <!-- Search Bar -->
         <!-- <div class="d-flex ms-auto">
             <input type="text" id="search" class="form-control" placeholder="Search..." onkeyup="searchLead()">

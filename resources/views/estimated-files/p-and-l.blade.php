@@ -18,7 +18,7 @@
             </ol>
         </nav>
 
-        <a href="{{ route('estimatedFile.index') }}" class="btn btn-light border">
+        <a href="{{ route('monthlyPL.list') }}" class="btn btn-light border">
             Back
         </a>
     </div>
@@ -429,7 +429,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 text: 'Monthly P&L added successfully',
                 confirmButtonText: 'OK'
             }).then(() => {
-                window.location.href = "{{ route('admin.bank') }}";
+                window.location.href = "{{ route('monthlyPL.list') }}";
             });
         })
         .catch(() => {
@@ -445,7 +445,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 </script>
->
+
 
 
 @endpush

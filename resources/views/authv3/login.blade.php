@@ -1089,6 +1089,7 @@ function toggleLogin(type){
   <input type="radio" name="loginType" checked onclick="toggleLogin('email')">
   Email Login
 </label>
+
 <label>
   <input type="radio" name="loginType" onclick="toggleLogin('otp')">
   OTP Login
@@ -1131,7 +1132,9 @@ function toggleLogin(type){
 New user?
 <a href="{{ route('authv3.signup.form') }}">Create Account</a>
 </div>
-
+<div style="text-align:right; margin-top:8px;">
+    <a href="{{ route('authv3.forgot.form') }}">Forgot Password?</a>
+</div>
 </div>
 </div>
 

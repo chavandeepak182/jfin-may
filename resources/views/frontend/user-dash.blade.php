@@ -165,46 +165,54 @@
 		<div class="row g-4">
 
 			<!-- My Loans -->
-				<div class="col-md-6 col-xl-3">
-					<div class="dashboard-card bg-blue">
-						<span class="badge-change">+2.5%</span>
+			<div class="col-md-6 col-xl-3">
+    <a href="{{ route('loans.loans-list') }}" class="text-decoration-none">
+        <div class="dashboard-card bg-blue">
+            <span class="badge-change">+2.5%</span>
 
-						<div class="icon-box mb-3">
-							<i data-feather="credit-card"></i>
-						</div>
+            <div class="icon-box mb-3">
+                <i data-feather="credit-card"></i>
+            </div>
 
-						<h6>My Loans</h6>
-						<h2>{{ $loanCount }}</h2>
-					</div>
-				</div>
+            <h6>My Loans</h6>
+            <h2>{{ $loanCount }}</h2>
+        </div>
+    </a>
+</div>
 
-				<!-- Disbursed Loans -->
-				<div class="col-md-6 col-xl-3">
-					<div class="dashboard-card bg-purple">
-						<span class="badge-change">+4.5%</span>
+<!-- Disbursed Loans -->
+<div class="col-md-6 col-xl-3">
+    <a href="{{ route('loans.loans-list') }}" class="text-decoration-none">
+        <div class="dashboard-card bg-purple">
+            <span class="badge-change">+4.5%</span>
 
-						<div class="icon-box mb-3">
-							<i data-feather="users"></i>
-						</div>
+            <div class="icon-box mb-3">
+                <i data-feather="users"></i>
+            </div>
 
-						<h6>Disbursed Loans</h6>
-						<h2>{{ $disbursedLoanCount }}</h2>
-					</div>
-				</div>
+            <h6>Disbursed Loans</h6>
+            <h2>{{ $disbursedLoanCount }}</h2>
+        </div>
+    </a>
+</div>
+
 
 			<!-- Earnings -->
-			<div class="col-md-6 col-xl-3">
-				<div class="dashboard-card bg-orange">
-					<span class="badge-change">+1.2%</span>
+		<div class="col-md-6 col-xl-3">
+    <a href="{{ route('user.walletbalance') }}" class="text-decoration-none">
+        <div class="dashboard-card bg-orange">
+            <span class="badge-change">+1.2%</span>
 
-					<div class="icon-box mb-3">
-						<i data-feather="briefcase"></i>
-					</div>
+            <div class="icon-box mb-3">
+                <i data-feather="briefcase"></i>
+            </div>
 
-					<h6>Total Earnings</h6>
-					<h2>₹{{ number_format($walletBalance, 0) }}</h2>
-				</div>
-			</div>
+            <h6>Total Earnings</h6>
+            <h2>₹{{ number_format($walletBalance, 0) }}</h2>
+        </div>
+    </a>
+</div>
+
 
 			<!-- Referral Code -->
 			<div class="col-md-6 col-xl-3">
