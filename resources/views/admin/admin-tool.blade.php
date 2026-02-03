@@ -339,6 +339,13 @@
  <div id="loanBankSection" class="card mt-5" style="display:none;">
     <div class="card-body">
         <div class="table-responsive">
+            <div class="mb-3">
+    <input type="text"
+           id="bankSearch"
+           class="form-control"
+           placeholder="Search bank name, IFSC, branch, manager, mobile...">
+</div>
+
             <table id="example" class="table table-striped">
                 <thead>
                     <tr>
@@ -602,10 +609,12 @@
                 @endforelse
                 </tbody>
             </table>
+             <!-- ✅ pagination INSIDE section -->
+        {{ $pls->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div> 
-{{ $pls->links('pagination::bootstrap-5') }}
+
 
 <script>
 function showMonthlyPL() {
@@ -800,7 +809,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<script>
+<!-- <script>
 document.getElementById('addBank').addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -830,7 +839,7 @@ document.getElementById('addBank').addEventListener('submit', function (e) {
         }
     });
 });
-</script>
+</script> -->
 <script>
 function deleteBank(bankId) {
 
@@ -880,6 +889,175 @@ function openEditBankModal(btn) {
     let modal = new bootstrap.Modal(document.getElementById('addBankView'));
     modal.show();
 }
+</script>
+<!-- validation bank -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('addBank');
+    if (!form) return;
+
+    const bankInput    = form.querySelector('[name="bank_name"]');
+    const branchInput  = form.querySelector('[name="branch_name"]');
+    const managerInput = form.querySelector('[name="manager_name"]');
+    const mobileInput  = form.querySelector('[name="manager_number"]');
+
+    /* ===============================
+       EXISTING BANK NAMES (TABLE)
+    ================================ */
+    let existingBanks = [];
+    document.querySelectorAll('#example tbody tr td:first-child').forEach(td => {
+        existingBanks.push(td.innerText.trim().toLowerCase());
+    });
+
+    /* ===============================
+       HELPER – ERROR MESSAGE
+    ================================ */
+    function errorBelow(input, text) {
+        const small = document.createElement('small');
+        small.className = 'text-danger';
+        small.innerText = text;
+        small.style.display = 'none';
+        input.after(small);
+        return small;
+    }
+
+    const bankErr    = errorBelow(bankInput, 'This bank already exists');
+    const branchErr  = errorBelow(branchInput, 'Only letters allowed');
+    const managerErr = errorBelow(managerInput, 'Only letters allowed');
+    const mobileErr  = errorBelow(mobileInput, 'Mobile number must be 10 digits');
+
+    let isDuplicate = false;
+
+    /* ===============================
+       LETTER-ONLY FIELDS
+    ================================ */
+    function lettersOnly(input, errorEl) {
+        input.addEventListener('input', function () {
+            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+            errorEl.style.display = 'none';
+        });
+    }
+
+    lettersOnly(bankInput, bankErr);
+    lettersOnly(branchInput, branchErr);
+    lettersOnly(managerInput, managerErr);
+
+    /* ===============================
+       DUPLICATE BANK CHECK
+    ================================ */
+    bankInput.addEventListener('input', function () {
+        const val = this.value.trim().toLowerCase();
+        if (existingBanks.includes(val)) {
+            bankErr.style.display = 'block';
+            isDuplicate = true;
+        } else {
+            bankErr.style.display = 'none';
+            isDuplicate = false;
+        }
+    });
+
+    /* ===============================
+       MOBILE – ONLY 10 DIGITS
+    ================================ */
+    mobileInput.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length > 10) {
+            this.value = this.value.slice(0, 10);
+        }
+
+        mobileErr.style.display =
+            this.value.length === 0 || this.value.length === 10
+                ? 'none'
+                : 'block';
+    });
+
+    mobileInput.addEventListener('keydown', function (e) {
+        if (
+            this.value.length >= 10 &&
+            !['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(e.key)
+        ) {
+            e.preventDefault();
+        }
+    });
+
+    /* ===============================
+       SUBMIT
+    ================================ */
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        let hasError = false;
+
+        if (isDuplicate) {
+            bankErr.style.display = 'block';
+            hasError = true;
+        }
+
+        if (mobileInput.value && mobileInput.value.length !== 10) {
+            mobileErr.style.display = 'block';
+            hasError = true;
+        }
+
+        if (hasError) return; // ❌ NO POPUP
+
+        /* ===============================
+           FETCH SUBMIT
+        ================================ */
+        let formData = new FormData(form);
+        let bankId = form.querySelector('[name="bank_id"]').value;
+
+        let url = bankId
+            ? "{{ route('updateBank') }}"
+            : "{{ route('admin.loanbank.store') }}";
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': form.querySelector('[name=_token]').value
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 1) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Bank saved successfully'
+                }).then(() => location.reload());
+            }
+        });
+    });
+
+});
+</script>
+
+<!-- serachbar script -->
+ <script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const searchInput = document.getElementById('bankSearch');
+    const table = document.getElementById('example');
+    if (!searchInput || !table) return;
+
+    const rows = table.querySelectorAll('tbody tr');
+
+    searchInput.addEventListener('keyup', function () {
+        const keyword = this.value.toLowerCase();
+
+        rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+
+            if (text.includes(keyword)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+});
 </script>
 
 
