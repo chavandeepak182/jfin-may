@@ -307,6 +307,102 @@ MIS Dashboard
         </div>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    /* ===============================
+       HELPER: show / hide message
+    =============================== */
+    function toggleMsg(input, msg, show) {
+        if (!msg) return;
+        msg.style.display = show ? 'block' : 'none';
+    }
+
+    /* ===============================
+       NUMBER ONLY – CONTACT
+    =============================== */
+    const contact = document.getElementById('contact');
+    if (contact) {
+        const msg = document.createElement('small');
+        msg.className = 'text-danger';
+        msg.innerText = 'Only numbers allowed';
+        msg.style.display = 'none';
+        contact.after(msg);
+
+        contact.addEventListener('input', function () {
+            if (/[^0-9]/.test(this.value)) {
+                toggleMsg(this, msg, true);
+            } else {
+                toggleMsg(this, msg, false);
+            }
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    }
+
+    /* ===============================
+       CHARACTERS ONLY FIELDS
+    =============================== */
+    const charOnlyFields = ['name', 'branch_name', 'bm_name', 'city'];
+
+    charOnlyFields.forEach(id => {
+        const input = document.getElementById(id);
+        if (!input) return;
+
+        const msg = document.createElement('small');
+        msg.className = 'text-danger';
+        msg.innerText = 'Only letters allowed';
+        msg.style.display = 'none';
+        input.after(msg);
+
+        input.addEventListener('input', function () {
+            if (/[^a-zA-Z\s]/.test(this.value)) {
+                toggleMsg(this, msg, true);
+            } else {
+                toggleMsg(this, msg, false);
+            }
+            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+        });
+    });
+
+    /* ===============================
+       AMOUNT – NUMBER + ONE DECIMAL
+    =============================== */
+    const amount = document.getElementById('amount');
+    if (amount) {
+        const msg = document.createElement('small');
+        msg.className = 'text-danger';
+        msg.innerText = 'Only numbers allowed';
+        msg.style.display = 'none';
+        amount.after(msg);
+
+        amount.addEventListener('input', function () {
+            if (/[^0-9.]/.test(this.value)) {
+                toggleMsg(this, msg, true);
+            } else {
+                toggleMsg(this, msg, false);
+            }
+
+            this.value = this.value.replace(/[^0-9.]/g, '');
+
+            if ((this.value.match(/\./g) || []).length > 1) {
+                this.value = this.value.slice(0, -1);
+            }
+        });
+    }
+
+    /* ===============================
+       LOGIN DATE – FUTURE BLOCK
+    =============================== */
+    const loginDate = document.getElementById('login_date');
+    if (loginDate) {
+        const today = new Date().toISOString().split('T')[0];
+        loginDate.setAttribute('max', today);
+    }
+
+});
+</script>
+
+
 <!-- MIS Details Modal -->
 <div class="modal fade" id="misDetailsModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
