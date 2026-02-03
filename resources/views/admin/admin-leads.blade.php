@@ -32,6 +32,9 @@
     align-items: flex-start;
     gap: 18px;
 }
+.heading-black {
+    color: #000 !important;
+}
 
 .analytics-icon {
     width: 52px;
@@ -261,92 +264,65 @@
 
 <div id="enquiryList" class="card mt-5">
     <div class="card-header">
-        <h4>All Enquiry Leads</h4>
+        <h4 class="heading-black">All Enquiry Leads</h4>
+    </div>
+
+    <!-- 🔍 Search bar -->
+    <div class="px-3 pt-3">
+        <input type="text"
+               id="enquirySearch"
+               class="form-control"
+               placeholder="Search by Admin Name">
     </div>
 
     <div class="card-body">
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Contact</th>
-                    <th>Message</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($enquiries as $enquiry)
-                <tr>
-                    <td>{{ $enquiry->enquiry_id }}</td>
-                    <td>{{ $enquiry->name }}</td>
-                    <td>{{ $enquiry->email }}</td>
-                    <td>{{ $enquiry->contact }}</td>
-                    <td>{{ $enquiry->message }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-        {{ $enquiries->links('pagination::bootstrap-4') }}
-
-
-    </div>
-</div>
-
-<div id="leadsSection" class="card mt-5" style="display:none;">
-    
-
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Lead Source</th>
-                        <th>Follow Up Date</th>
-                        <th>Assigned To</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($leads as $index => $lead)
-                    <tr>
-                        <td>{{ $leads->firstItem() + $index }}</td>
-                        <td>{{ $lead->name }}</td>
-                        <td>{{ $lead->email }}</td>
-                        <td>{{ $lead->phone }}</td>
-                        <td>{{ $lead->lead_source }}</td>
-                        <td>{{ \Carbon\Carbon::parse($lead->follow_up_date)->format('d M Y') }}</td>
-                        <td>{{ $lead->agent->name ?? 'N/A' }}</td>
-                       <td class="d-flex gap-1">
-                                <!-- Edit -->
-                                <a class="btn btn-warning btn-xs" href="{{ route('leads.edit', $lead->id) }}">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-
-                                <!-- Delete -->
-                                <form action="{{ route('leads.destroy', $lead->id) }}" method="POST" class="delete-form">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-xs">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-
-           {{ $leads->links('pagination::bootstrap-4') }}
-
+        <!-- ✅ AJAX content loads here -->
+        <div id="enquiryTableWrapper">
+            @include('admin.partials.enquiry-table')
         </div>
     </div>
 </div>
+
+
+<div id="leadsSection" class="card mt-5" style="display:none;">
+
+    <div class="card-header">
+        <h4 class="heading-black">All Leads</h4>
+    </div>
+
+    <div class="card-body">
+
+        <!-- 🔍 SEARCH BAR -->
+        <div class="row mb-3 g-2">
+            <div class="col-md-4">
+                <input type="text"
+                       id="leadSearchName"
+                       class="form-control"
+                       placeholder="Search by Name">
+            </div>
+
+            <div class="col-md-4">
+                <input type="text"
+                       id="leadSearchMobile"
+                       class="form-control"
+                       placeholder="Search by Mobile Number">
+            </div>
+
+            <div class="col-md-2">
+                <button class="btn btn-secondary w-100" id="resetLeadSearch">
+                    Reset
+                </button>
+            </div>
+        </div>
+
+        <!-- ✅ TABLE LOADS HERE -->
+        <div id="leadsTableWrapper">
+            @include('admin.partials.leads-table')
+        </div>
+
+    </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.delete-form').forEach(form => {
@@ -374,54 +350,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <!-- MIS Table -->
     <div class="card-body">
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Product Type</th>
-                        <th>Amount</th>
-                        <th>City</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($misRecords as $mis)
-                    <tr>
-                        <td>{{ $mis->id }}</td>
-                        <td>{{ $mis->name }}</td>
-                        <td>{{ $mis->email }}</td>
-                        <td>{{ $mis->contact }}</td>
-                        <td>{{ $mis->product_type }}</td>
-                        <td>{{ $mis->amount }}</td>
-                        <td>{{ $mis->city }}</td>
-                        <td class="d-flex gap-1">
-                            <!-- Edit -->
-                            <a href="{{ route('mis.edit', $mis->id) }}" class="btn btn-sm btn-primary">
-                                Edit
-                            </a>
+        <!-- 🔍 MIS SEARCH BAR -->
+<div class="row g-2 mb-3">
+    <div class="col-md-4">
+        <input type="text"
+               id="misSearchName"
+               class="form-control"
+               placeholder="Search by Name">
+    </div>
 
-                            <!-- Delete -->
-                        <button type="button"
-                                class="btn btn-sm btn-danger"
-                                onclick="deleteMIS({{ $mis->id }})"
-                                title="Delete">
-                            <i class="fa fa-trash"></i>
-                        </button>
+    <div class="col-md-4">
+        <input type="text"
+               id="misSearchMobile"
+               class="form-control"
+               placeholder="Search by Mobile">
+    </div>
 
-                        </td>
+    <div class="col-md-2">
+        <button class="btn btn-secondary w-100" id="resetMisSearch">
+            Reset
+        </button>
+    </div>
+</div>
 
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+       <div id="misTableWrapper">
+    @include('admin.partials.mis-table')
+</div>
 
-          {{ $misRecords->links('pagination::bootstrap-4') }}
-
-        </div>
     </div>
 </div>
 
@@ -465,93 +420,84 @@ function deleteMIS(id) {
 <div id="referralLeadsSection" class="card mt-5" style="display:none;">
 
     <div class="card-header">
-        <h4>Referral Leads</h4>
+        <h4 style="color:#000;">Referral Leads</h4>
     </div>
 
     <div class="card-body">
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Referrer</th>
-                    <th>Referrer Mobile</th>
-                    <th>Referral Code</th>
-                    <th>Lead Name</th>
-                    <th>Lead Mobile</th>
-                    <th>Lead Email</th>
-                    <th>Product Type</th>   <!-- ✅ ADDED -->
-                    <th>Status</th>
-                    <th>Action</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
 
-            <tbody>
-            @forelse($referralLeads as $i => $lead)
-                <tr>
-                    <td>{{ $i + 1 }}</td>
-                    <td>{{ $lead->referrer_name }}</td>
-                    <td>{{ $lead->referrer_mobile }}</td>
+        <!-- ✅ SEARCH BAR (STATIC, NEVER AJAX REPLACED) -->
+        <div id="referralSearchBar" class="mb-3">
+            <div class="row g-2">
+                <div class="col-md-4">
+                    <input type="text"
+                           id="referralName"
+                           class="form-control"
+                           placeholder="Search Lead Name">
+                </div>
 
-                    <td>
-                        <span class="fw-bold text-primary">
-                            {{ $lead->referral_code }}
-                        </span>
-                    </td>
+                <div class="col-md-4">
+                    <input type="text"
+                           id="referralMobile"
+                           class="form-control"
+                           placeholder="Search Mobile">
+                </div>
 
-                    <td>{{ $lead->name }}</td>
-                    <td>{{ $lead->mobile }}</td>
-                    <td>{{ $lead->email ?? '-' }}</td>
+                <div class="col-md-2">
+                    <button class="btn btn-secondary w-100"
+                            id="resetReferralSearch">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
 
-                    <!-- ✅ PRODUCT TYPE -->
-                                    <td>
-                    <span class="badge bg-info">
-                        {{ $lead->product_name ?? '-' }}
-                    </span>
-                </td>
+        <!-- ✅ TABLE WILL CHANGE VIA AJAX -->
+        <div id="referralTableWrapper">
+            @include('admin.partials.referral-table')
+        </div>
 
-
-                   <td>
-                                <span class="badge
-                                    {{ $lead->status === 'pending' ? 'bg-warning' : 'bg-success' }}">
-                                    {{ ucfirst($lead->status) }}
-                                </span>
-                            </td>
-                            <td>
-                                @if($lead->status === 'pending')
-                                    <button type="button"
-                                            class="btn btn-success btn-sm create-account-btn"
-                                            data-name="{{ $lead->name }}"
-                                            data-email="{{ $lead->email }}"
-                                            data-mobile="{{ $lead->mobile }}">
-                                        Create Account
-                                    </button>
-                                @else
-                                    <span class="text-muted">Created</span>
-                                @endif
-                            </td>
-                    
-
-                    <td>
-                        {{ \Carbon\Carbon::parse($lead->created_at)->format('d M Y') }}
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="10" class="text-center text-muted">
-                        No referral leads found
-                    </td>
-                </tr>
-            @endforelse
-            </tbody>
-        </table>
-
-        {{ $referralLeads->links('pagination::bootstrap-4') }}
     </div>
 </div>
+<script>
+function loadReferralLeads(page = 1) {
+    $.ajax({
+        url: "{{ route('admin.referral.ajax') }}",
+        type: "GET",
+        data: {
+            name: $('#referralName').val(),
+            mobile: $('#referralMobile').val(),
+            page: page
+        },
+        success: function (res) {
+            $('#referralTableWrapper').html(res.html);
+        }
+    });
+}
 
-</div>
+// live search
+let referralTimer;
+$('#referralName, #referralMobile').on('keyup', function () {
+    clearTimeout(referralTimer);
+    referralTimer = setTimeout(() => {
+        loadReferralLeads();
+    }, 300);
+});
+
+// pagination
+$(document).on('click', '#referralTableWrapper .pagination a', function (e) {
+    e.preventDefault();
+    let page = $(this).attr('href').split('page=')[1];
+    loadReferralLeads(page);
+});
+
+// reset
+$('#resetReferralSearch').on('click', function () {
+    $('#referralName').val('');
+    $('#referralMobile').val('');
+    loadReferralLeads();
+});
+</script>
+
 <!-- create account user model  -->
 <div class="modal fade" id="addUserView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -591,7 +537,7 @@ function deleteMIS(id) {
                         <div class="row">
                             <div class="form-group col-lg-4">
                                 <label for="recipient-name" class="col-form-label">Mobile Number:</label>
-                                <input type="tel" class="form-control" id="mobile_no" name="mobile_no" required>
+                                <input type="tel" class="form-control" id="mobile_no" name="mobile_no" readonly>
                             </div>
 
                             <div class="form-group col-lg-4">
@@ -606,15 +552,24 @@ function deleteMIS(id) {
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-lg-4">
-                                <label for="recipient-name" class="col-form-label">City:</label>
-                                <input type="text" class="form-control" id="city" name="city">
-                            </div>
 
-                            <div class="form-group col-lg-4">
-                                <label for="recipient-name" class="col-form-label">State:</label>
-                                <input type="text" class="form-control" id="state" name="state">
-                            </div>
+                                                <div class="form-group col-lg-4">
+                            <label>State:</label>
+                            <select class="form-control" id="state" name="state">
+                                <option value="">Select State</option>
+                                @foreach($states as $state)
+                                    <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                           <div class="form-group col-lg-4">
+                            <label>City:</label>
+                            <select class="form-control" id="city" name="city">
+                                <option value="">Select City</option>
+                            </select>
+                        </div>
+
+                          
 
                             <div class="form-group col-lg-4">
                                 <label for="recipient-name" class="col-form-label">Pincode:</label>
@@ -1413,6 +1368,153 @@ $('#addMISRecord').on('submit', function (e) {
     });
 });
 </script>
+<!-- serachbar enq.lead -->
+ <script>
+let enquiryTimer;
+
+function loadEnquiries(page = 1) {
+    $.ajax({
+        url: "{{ route('admin.enquiry.ajax') }}",
+        type: "GET",
+        data: {
+            search: $('#enquirySearch').val(),
+            page: page
+        },
+        success: function (res) {
+            $('#enquiryTableWrapper').html(res.html);
+        }
+    });
+}
+
+// 🔍 live search (delegated)
+$(document).on('keyup', '#enquirySearch', function () {
+    clearTimeout(enquiryTimer);
+    enquiryTimer = setTimeout(() => {
+        loadEnquiries();
+    }, 300);
+});
+
+// 📄 pagination with AJAX
+$(document).on('click', '#enquiryTableWrapper .pagination a', function (e) {
+    e.preventDefault();
+    let page = $(this).attr('href').split('page=')[1];
+    loadEnquiries(page);
+});
+</script>
+<!-- serachbar leads -->
+ <script>
+let leadTimer;
+
+// 🔄 Load leads
+function loadLeads(page = 1) {
+    $.ajax({
+        url: "{{ route('admin.leads.ajax') }}",
+        type: "GET",
+        data: {
+            name: $('#leadSearchName').val(),
+            mobile: $('#leadSearchMobile').val(),
+            page: page
+        },
+        success: function (res) {
+            $('#leadsTableWrapper').html(res.html);
+        }
+    });
+}
+
+// 🔍 Live search (Name + Mobile)
+$(document).on('keyup', '#leadSearchName, #leadSearchMobile', function () {
+    clearTimeout(leadTimer);
+    leadTimer = setTimeout(() => {
+        loadLeads();
+    }, 300);
+});
+
+// 📄 Pagination via AJAX
+$(document).on('click', '#leadsTableWrapper .pagination a', function (e) {
+    e.preventDefault();
+    let page = $(this).attr('href').split('page=')[1];
+    loadLeads(page);
+});
+
+// 🔁 Reset search
+$('#resetLeadSearch').on('click', function () {
+    $('#leadSearchName').val('');
+    $('#leadSearchMobile').val('');
+    loadLeads();
+});
+</script>
+
+<!-- mis serachbar -->
+ <script>
+let misTimer;
+
+function loadMIS(page = 1) {
+    $.ajax({
+        url: "{{ route('admin.mis.ajax') }}",
+        type: "GET",
+        data: {
+            name: $('#misSearchName').val(),
+            mobile: $('#misSearchMobile').val(),
+            page: page
+        },
+        success: function (res) {
+            $('#misTableWrapper').html(res.html);
+        }
+    });
+}
+
+// 🔍 Live search
+$(document).on('keyup', '#misSearchName, #misSearchMobile', function () {
+    clearTimeout(misTimer);
+    misTimer = setTimeout(() => {
+        loadMIS();
+    }, 300);
+});
+
+// 📄 Pagination AJAX
+$(document).on('click', '#misTableWrapper .pagination a', function (e) {
+    e.preventDefault();
+    let page = $(this).attr('href').split('page=')[1];
+    loadMIS(page);
+});
+
+// 🔁 Reset
+$('#resetMisSearch').on('click', function () {
+    $('#misSearchName').val('');
+    $('#misSearchMobile').val('');
+    loadMIS();
+});
+</script>
+
+<!-- city dropdon -->
+ <script>
+$('#state').on('change', function () {
+
+    let stateId = $(this).val();
+    $('#city').html('<option value="">Loading...</option>');
+
+    if (!stateId) {
+        $('#city').html('<option value="">Select City</option>');
+        return;
+    }
+
+    $.ajax({
+        url: "{{ url('get-cities') }}/" + stateId,
+        type: "GET",
+        success: function (cities) {
+
+            $('#city').html('<option value="">Select City</option>');
+
+            cities.forEach(city => {
+                $('#city').append(
+                    `<option value="${city.id}">${city.city}</option>`
+                );
+            });
+        }
+    });
+});
+</script>
+
 
 @endsection
 

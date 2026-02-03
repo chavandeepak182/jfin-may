@@ -542,6 +542,8 @@ public function getUserById(Request $request)
 }
 
 // reset pass
+
+// reset pass
 public function resetPassword(Request $request)
 {
     $request->validate([
@@ -561,93 +563,95 @@ public function resetPassword(Request $request)
 }
 
 
-public function loadListByType(Request $request)
-{
-    /* ================= ROLE MAP ================= */
-    $roleMap = [
-        'customer' => 1,
-        'agent'    => 2,
-        'cp'       => 3,
-    ];
+// public function loadListByType(Request $request)
+// {
+//     /* ================= ROLE MAP ================= */
+//     $roleMap = [
+//         'customer' => 1,
+//         'agent'    => 2,
+//         'cp'       => 3,
+//     ];
 
-    $roleId = $roleMap[$request->type] ?? 1;
+//     $roleId = $roleMap[$request->type] ?? 1;
 
-    /* ================= FILTER INPUTS ================= */
-    $search = $request->search;
-    $status = $request->status;
+//     /* ================= FILTER INPUTS ================= */
+//     $search = $request->search;
+//     $status = $request->status;
 
-    /* ================= QUERY ================= */
-    $users = User::with('profile')
-        ->where('role_id', $roleId)
-        ->whereNull('deleted_at')
+//     /* ================= QUERY ================= */
+//     $users = User::with('profile')
+//         ->where('role_id', $roleId)
+//         ->whereNull('deleted_at')
 
-        // 🔍 SEARCH
-        ->when($search, function ($q) use ($search) {
-            $q->where(function ($qq) use ($search) {
-                $qq->where('id', 'like', "%{$search}%")
-                   ->orWhere('name', 'like', "%{$search}%")
-                   ->orWhere('email_id', 'like', "%{$search}%");
-            });
-        })
+//         // 🔍 SEARCH
+//         ->when($search, function ($q) use ($search) {
+//     $q->where(function ($qq) use ($search) {
+//         $qq->where('users.id', 'like', "%{$search}%")
+//            ->orWhere('users.name', 'like', "%{$search}%")
+//            ->orWhere('users.email_id', 'like', "%{$search}%")
+//            ->orWhere('profile.mobile_no', 'like', "%{$search}%");
+//     });
+// })
+
 
         
-        /* 🟢 ACTIVE / 🔴 INACTIVE FILTER */
-       ->when($status !== null && $status !== '', function ($q) use ($status) {
-    if ($status === 'active') {
-        $q->where('otp_verify', 1);
-    } elseif ($status === 'inactive') {
-        $q->where('otp_verify', 0);
-    }
-})
+//         /* 🟢 ACTIVE / 🔴 INACTIVE FILTER */
+//        ->when($status !== null && $status !== '', function ($q) use ($status) {
+//     if ($status === 'active') {
+//         $q->where('otp_verify', 1);
+//     } elseif ($status === 'inactive') {
+//         $q->where('otp_verify', 0);
+//     }
+// })
 
-        ->orderBy('created_at', 'desc')
-        ->paginate(10);
+//         ->orderBy('created_at', 'desc')
+//         ->paginate(10);
 
-    /* ================= HTML BUILD ================= */
-    $html = '';
+//     /* ================= HTML BUILD ================= */
+//     $html = '';
 
-    if ($users->count() === 0) {
-        $html .= '
-            <tr>
-                <td colspan="7" class="text-center text-muted">
-                    No records found
-                </td>
-            </tr>';
-    }
+//     if ($users->count() === 0) {
+//         $html .= '
+//             <tr>
+//                 <td colspan="7" class="text-center text-muted">
+//                     No records found
+//                 </td>
+//             </tr>';
+//     }
 
-    foreach ($users as $user) {
-        $html .= '
-        <tr>
-            <td>'.$user->id.'</td>
-            <td>'.$user->name.'</td>
-            <td>'.$user->email_id.'</td>
-            <td>'.($user->profile->mobile_no ?? '-').'</td>
-            <td>'.($user->profile->pan_number ?? '-').'</td>
-            <td>
-                '.($user->is_email_verify
-                    ? '<span class="badge bg-success">Active</span>'
-                    : '<span class="badge bg-danger">Inactive</span>').'
-            </td>
-            <td>
-                <button class="btn btn-primary btn-xs edit-user"
-                        data-id="'.$user->id.'">
-                    <i class="fa fa-edit"></i>
-                </button>
+//     foreach ($users as $user) {
+//         $html .= '
+//         <tr>
+//             <td>'.$user->id.'</td>
+//             <td>'.$user->name.'</td>
+//             <td>'.$user->email_id.'</td>
+//             <td>'.($user->profile->mobile_no ?? '-').'</td>
+//             <td>'.($user->profile->pan_number ?? '-').'</td>
+//             <td>
+//                 '.($user->is_email_verify
+//                     ? '<span class="badge bg-success">Active</span>'
+//                     : '<span class="badge bg-danger">Inactive</span>').'
+//             </td>
+//             <td>
+//                 <button class="btn btn-primary btn-xs edit-user"
+//                         data-id="'.$user->id.'">
+//                     <i class="fa fa-edit"></i>
+//                 </button>
 
-                <button class="btn btn-danger btn-xs delete-user"
-                        data-id="'.$user->id.'">
-                    <i class="fa fa-trash"></i>
-                </button>
-            </td>
-        </tr>';
-    }
+//                 <button class="btn btn-danger btn-xs delete-user"
+//                         data-id="'.$user->id.'">
+//                     <i class="fa fa-trash"></i>
+//                 </button>
+//             </td>
+//         </tr>';
+//     }
 
-    return response()->json([
-        'html'       => $html,
-        'pagination' => (string) $users->links('pagination::bootstrap-4'),
-        'total'      => $users->total()
-    ]);
-}
+//     return response()->json([
+//         'html'       => $html,
+//         'pagination' => (string) $users->links('pagination::bootstrap-4'),
+//         'total'      => $users->total()
+//     ]);
+// }
 
 
 
@@ -743,6 +747,100 @@ public function loadListByType(Request $request)
     //         return redirect()->back()->with('success', 'Registration Successful! Please check your email for a verification link.');
 
     // }
+
+  
+  public function loadListByType(Request $request)
+{
+    /* ================= ROLE MAP ================= */
+    $roleMap = [
+        'customer' => 1,
+        'agent'    => 2,
+        'cp'       => 3,
+    ];
+
+    $roleId = $roleMap[$request->type] ?? 1;
+
+    /* ================= FILTER INPUTS ================= */
+    $search = $request->search;
+    $status = $request->status;
+
+    /* ================= QUERY ================= */
+    $users = User::leftJoin('profile', 'users.id', '=', 'profile.user_id')
+        ->where('users.role_id', $roleId)
+        ->whereNull('users.deleted_at')
+
+        // 🔍 SEARCH (NO LOGIC CHANGE)
+        ->when($search, function ($q) use ($search) {
+            $q->where(function ($qq) use ($search) {
+                $qq->where('users.id', 'like', "%{$search}%")
+                   ->orWhere('users.name', 'like', "%{$search}%")
+                   ->orWhere('users.email_id', 'like', "%{$search}%")
+                   ->orWhere('profile.mobile_no', 'like', "%{$search}%");
+            });
+        })
+
+        /* 🟢 ACTIVE / 🔴 INACTIVE FILTER */
+        ->when($status !== null && $status !== '', function ($q) use ($status) {
+            if ($status === 'active') {
+                $q->where('users.otp_verify', 1);
+            } elseif ($status === 'inactive') {
+                $q->where('users.otp_verify', 0);
+            }
+        })
+
+        ->select(
+            'users.*',
+            'profile.mobile_no',
+            'profile.pan_number'
+        )
+        ->orderBy('users.created_at', 'desc')
+        ->paginate(10);
+
+    /* ================= HTML BUILD (UNCHANGED) ================= */
+    $html = '';
+
+    if ($users->count() === 0) {
+        $html .= '
+            <tr>
+                <td colspan="7" class="text-center text-muted">
+                    No records found
+                </td>
+            </tr>';
+    }
+
+    foreach ($users as $user) {
+        $html .= '
+        <tr>
+            <td>'.$user->id.'</td>
+            <td>'.$user->name.'</td>
+            <td>'.$user->email_id.'</td>
+            <td>'.($user->mobile_no ?? '-').'</td>
+            <td>'.($user->pan_number ?? '-').'</td>
+            <td>
+                '.($user->is_email_verify
+                    ? '<span class="badge bg-success">Active</span>'
+                    : '<span class="badge bg-danger">Inactive</span>').'
+            </td>
+            <td>
+                <button class="btn btn-primary btn-xs edit-user"
+                        data-id="'.$user->id.'">
+                    <i class="fa fa-edit"></i>
+                </button>
+
+                <button class="btn btn-danger btn-xs delete-user"
+                        data-id="'.$user->id.'">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </td>
+        </tr>';
+    }
+
+    return response()->json([
+        'html'       => $html,
+        'pagination' => (string) $users->links('pagination::bootstrap-4'),
+        'total'      => $users->total()
+    ]);
+}
 
     public function registerUser(Request $request)
     {

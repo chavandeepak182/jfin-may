@@ -163,6 +163,57 @@ public function signupSubmit(Request $request)
         return view('authv3.verify_otp');
     }
 
+//  public function verifyOtp(Request $request)
+// {
+//     $request->validate([
+//         'otp' => 'required|digits_between:4,6',
+//     ]);
+
+//     $userId = session('otp_user_id');
+
+//     if (!$userId) {
+//         return redirect()->route('authv3.login.form')
+//             ->withErrors('Session expired. Please try again.');
+//     }
+
+//     $otpRow = Otp::where('user_id', $userId)
+//         ->where('otp', $request->otp)
+//         ->where('is_verify', 0)
+//         ->where('expires_at', '>=', now())
+//         ->latest()
+//         ->first();
+
+//     if (!$otpRow) {
+//         return back()->withErrors(['otp' => 'Invalid or expired OTP']);
+//     }
+
+//     try {
+
+//         // ✅ mark verified
+//         $otpRow->update(['is_verify' => 1]);
+
+//         // login user
+//         Auth::loginUsingId($userId);
+
+//         User::where('id', $userId)->update([
+//             'last_login_at' => now()
+//         ]);
+
+//         session([
+//             'user_id'  => Auth::id(),
+//             'username' => Auth::user()->name,
+//             'role_id'  => Auth::user()->role_id,
+//         ]);
+
+//         session()->forget('otp_user_id');
+
+//         return $this->redirectByRole(Auth::user());
+
+//     } catch (\Throwable $e) {
+//         \Log::error('OTP verify failed', ['error' => $e->getMessage()]);
+//         return back()->withErrors(['otp' => 'OTP verification failed']);
+//     }
+// }
  public function verifyOtp(Request $request)
 {
     $request->validate([
@@ -205,9 +256,35 @@ public function signupSubmit(Request $request)
             'role_id'  => Auth::user()->role_id,
         ]);
 
-        session()->forget('otp_user_id');
+        $purpose = session('otp_purpose');
 
-        return $this->redirectByRole(Auth::user());
+// mark OTP verified
+$otpRow->update(['is_verify' => 1]);
+
+if ($purpose === 'forgot_password') {
+
+    session()->forget('otp_purpose');
+
+    return redirect()->route('authv3.reset.form');
+}
+
+// NORMAL LOGIN / SIGNUP FLOW
+Auth::loginUsingId($userId);
+
+User::where('id', $userId)->update([
+    'last_login_at' => now()
+]);
+
+session([
+    'user_id'  => Auth::id(),
+    'username' => Auth::user()->name,
+    'role_id'  => Auth::user()->role_id,
+]);
+
+session()->forget('otp_user_id');
+
+return $this->redirectByRole(Auth::user());
+
 
     } catch (\Throwable $e) {
         \Log::error('OTP verify failed', ['error' => $e->getMessage()]);
@@ -421,6 +498,55 @@ private function redirectByRole($user)
 }
 
 
+public function forgotForm()
+{
+    return view('authv3.forgot_password');
+}
+public function forgotSubmit(Request $request)
+{
+    $request->validate([
+        'mobile_no' => 'required|digits:10',
+    ]);
+
+    $user = User::where('mobile_no', $request->mobile_no)->first();
+
+    if (!$user) {
+        return back()->withErrors(['mobile_no' => 'Mobile number not registered']);
+    }
+
+    $this->generateOtp($user->id);
+
+    session()->put('otp_user_id', $user->id);
+    session()->put('otp_purpose', 'forgot_password');
+
+    return redirect()->route('authv3.otp.form')
+        ->with('success', 'OTP sent to reset password');
+}
+public function resetForm()
+{
+    if (!session()->has('otp_user_id')) {
+        return redirect()->route('authv3.login.form');
+    }
+
+    return view('authv3.reset_password');
+}
+public function resetPassword(Request $request)
+{
+    $request->validate([
+        'password' => 'required|min:6|confirmed',
+    ]);
+
+    $userId = session('otp_user_id');
+
+    User::where('id', $userId)->update([
+        'password' => Hash::make($request->password),
+    ]);
+
+    session()->forget('otp_user_id');
+
+    return redirect()->route('authv3.login.form')
+        ->with('success', 'Password reset successfully');
+}
 
 
 

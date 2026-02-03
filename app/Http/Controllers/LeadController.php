@@ -124,9 +124,14 @@ public function leadlist(Request $request)
                 END AS status
             ")
         )
+        
         ->orderBy('rl.created_at', 'desc')
         ->paginate(10);
-
+// ================= STATES (FOR CREATE ACCOUNT MODAL) =================
+$states = DB::table('states')
+            ->select('id', 'name')
+            ->orderBy('name')
+            ->get();
     return view('admin.admin-leads', compact(
         'enquiriesCount',
         'leadsCount',
@@ -140,9 +145,113 @@ public function leadlist(Request $request)
         'estimatedFiles',
         'grossRevenue',
         'pls',
-        'referralLeads'
+        'referralLeads',
+        'states' // ✅ ADD THIS
     ));
 }
+
+// searchbar for referal leads
+public function referralAjax(Request $request)
+{
+    $query = DB::table('referral_leads as rl')
+        ->join('users as u', 'u.id', '=', 'rl.user_id')
+        ->leftJoin('loan_category as lc', 'lc.loan_category_id', '=', 'rl.product_type')
+        ->leftJoin('users as cust', 'cust.email_id', '=', 'rl.email')
+        ->select(
+            'rl.*',
+            'u.name as referrer_name',
+            'u.mobile_no as referrer_mobile',
+            DB::raw("
+                CASE
+                    WHEN rl.product_type IS NULL THEN rl.other_remark
+                    WHEN lc.category_name IS NULL THEN rl.other_remark
+                    ELSE lc.category_name
+                END AS product_name
+            "),
+            DB::raw("
+                CASE
+                    WHEN cust.id IS NOT NULL THEN 'created'
+                    ELSE 'pending'
+                END AS status
+            ")
+        );
+
+    if ($request->filled('name')) {
+        $query->where('rl.name', 'like', '%' . $request->name . '%');
+    }
+
+    if ($request->filled('mobile')) {
+        $query->where('rl.mobile', 'like', '%' . $request->mobile . '%');
+    }
+
+    $referralLeads = $query->orderBy('rl.created_at', 'desc')->paginate(10);
+
+    return response()->json([
+        'html' => view('admin.partials.referral-table', compact('referralLeads'))->render()
+    ]);
+}
+
+// seracbar leads
+public function enquiryAjax(Request $request)
+{
+    $query = DB::table('enquiries');
+
+    if ($request->filled('search')) {
+        $query->where('enquiries.name', 'like', '%' . $request->search . '%');
+    }
+
+    $enquiries = $query
+        ->orderBy('enquiries.created_at', 'desc')
+        ->paginate(10);
+
+    return response()->json([
+        'html' => view('admin.partials.enquiry-table', compact('enquiries'))->render()
+    ]);
+}
+
+public function leadsAjax(Request $request)
+{
+    $query = Lead::with('agent')
+        ->orderBy('created_at', 'desc');
+
+    // 🔍 Search by Name
+    if ($request->filled('name')) {
+        $query->where('name', 'like', '%' . $request->name . '%');
+    }
+
+    // 📱 Search by Mobile
+    if ($request->filled('mobile')) {
+        $query->where('phone', 'like', '%' . $request->mobile . '%');
+    }
+
+    $leads = $query->paginate(10);
+
+    return response()->json([
+        'html' => view('admin.partials.leads-table', compact('leads'))->render()
+    ]);
+}
+public function misAjax(Request $request)
+{
+    $query = MIS::query()->orderBy('created_at', 'desc');
+
+    // 🔍 Name search
+    if ($request->filled('name')) {
+        $query->where('name', 'like', '%' . $request->name . '%');
+    }
+
+    // 📱 Mobile search
+    if ($request->filled('mobile')) {
+        $query->where('contact', 'like', '%' . $request->mobile . '%');
+    }
+
+    $misRecords = $query->paginate(10);
+
+    return response()->json([
+        'html' => view('admin.partials.mis-table', compact('misRecords'))->render()
+    ]);
+}
+
+
 
 
 
