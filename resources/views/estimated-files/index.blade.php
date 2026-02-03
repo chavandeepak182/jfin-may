@@ -120,6 +120,11 @@
                             <td>{{ $row->customer_name }}</td>
                             <td>{{ $row->mobile }}</td>
                             <td>
+                                  <!-- VIEW -->
+                                    <a href="{{ route('estimatedFile.show', $row->id) }}"
+                                    class="btn btn-sm btn-info">
+                                        <i class="bi bi-eye"></i> View
+                                    </a>
                                 <a href="{{ route('estimatedFile.edit', $row->id) }}"
                                    class="btn btn-sm btn-primary">
                                     <i class="bi bi-pencil"></i> Edit

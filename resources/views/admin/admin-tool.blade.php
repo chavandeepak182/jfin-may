@@ -149,7 +149,7 @@
     
 
             <!-- Estimated Files -->
-            <div class="col-xl-3 col-lg-4 col-md-6"> 
+            <!-- <div class="col-xl-3 col-lg-4 col-md-6"> 
                 <div class="analytics-card"
                     onclick="showEstimatedFiles()"
                     style="cursor:pointer;">
@@ -177,9 +177,40 @@
                     </div>
 
                 </div>
-            </div> 
+            </div>  -->
 
 
+            <div class="col-xl-3 col-lg-4 col-md-6">
+    <a href="{{ url('admin/estimated-file') }}" style="text-decoration:none; color:inherit;">
+        <div class="analytics-card" style="cursor:pointer;">
+
+            <div class="analytics-row">
+                <div class="analytics-icon icon-purple">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+
+                <div class="analytics-content">
+                    <div class="analytics-title">Estimated Files</div>
+
+                    <div class="analytics-bottom">
+                        <div class="analytics-value">
+                            {{ $totalEstimatedFiles }}
+                        </div>
+                    </div>
+
+                    <div class="analytics-bottom">
+                        <div class="analytics-growth">
+                            Calculated from records
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </a>
+</div>
+
+<!-- 
             <div class="col-xl-3 col-lg-4 col-md-6">
             <div class="analytics-card"
                 onclick="showMonthlyPL()"
@@ -207,7 +238,38 @@
                     </div>
                 </div>
             </div>
-            </div> 
+            </div>  -->
+
+            <div class="col-xl-3 col-lg-4 col-md-6">
+    <a href="{{ url('admin/monthly-pl-list') }}" style="text-decoration:none; color:inherit;">
+        <div class="analytics-card" style="cursor:pointer;">
+
+            <div class="analytics-row">
+                <div class="analytics-icon icon-blue">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+
+                <div class="analytics-content">
+                    <div class="analytics-title">Monthly P&amp;L</div>
+
+                    <div class="analytics-bottom">
+                        <div class="analytics-value">
+                            {{ $totalMonthlyPL }}
+                        </div>
+                    </div>
+
+                    <div class="analytics-bottom">
+                        <div class="analytics-growth">
+                            Tracked from records
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </a>
+</div>
+
                    <div class="col-xl-3 col-lg-4 col-md-6"> 
                     <div class="analytics-card"
                         onclick="showLoanBanks()"
@@ -399,7 +461,9 @@
 
    
     <div class="p-4 bg-white">
-        <form method="GET" action="{{ route('admin.listlead') }}">
+      <form method="GET" action="{{ route('admin.bank') }}">
+
+
             <div class="row g-3 align-items-end">
 
                 <div class="col-lg-4">
@@ -422,7 +486,7 @@
                         Calculate
                     </button>
 
-                    <a href="{{ route('admin.listlead') }}"
+                    <a href="Route::get('admin/banklist', ...)->name('admin.bank');"
                        class="btn btn-light border">
                         Reset
                     </a>
@@ -479,7 +543,15 @@
     </div>
 
 </div>
-{{ $estimatedFiles->links('pagination::bootstrap-5') }}
+<div id="estimatedFileSection" class="card mt-5" style="display:none;">
+   ...
+   <div class="card-body">
+       <table>...</table>
+
+       {{ $estimatedFiles->links('pagination::bootstrap-5') }}
+   </div>
+</div>
+
 
 
 <div id="monthlyPLSection" class="card mt-5" style="display:none;">
@@ -554,7 +626,8 @@ function hideAllSections() {
 
     const buttons = [
         'addBankBtn',
-        'addEstimatedBtn'
+        'addEstimatedBtn',
+        'addMonthlyBtn'
     ];
 
     sections.forEach(id => {
@@ -567,6 +640,45 @@ function hideAllSections() {
         if (el) el.style.display = 'none';
     });
 }
+
+function showLoanBanks() {
+    hideAllSections();
+    document.getElementById('loanBankSection').style.display = 'block';
+    document.getElementById('addBankBtn').style.display = 'block';
+    localStorage.setItem('activeSection', 'loanbanks');
+}
+
+function showEstimatedFiles() {
+    hideAllSections();
+    document.getElementById('estimatedFileSection').style.display = 'block';
+    document.getElementById('addEstimatedBtn').style.display = 'block';
+    localStorage.setItem('activeSection', 'estimatedfiles');
+}
+
+function showMonthlyPL() {
+    hideAllSections();
+    document.getElementById('monthlyPLSection').style.display = 'block';
+    document.getElementById('addMonthlyBtn').style.display = 'block';
+    localStorage.setItem('activeSection', 'monthlypl');
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const active = localStorage.getItem('activeSection');
+
+    switch (active) {
+        case 'loanbanks':
+            showLoanBanks();
+            break;
+        case 'estimatedfiles':
+            showEstimatedFiles();
+            break;
+        case 'monthlypl':
+            showMonthlyPL();
+            break;
+        default:
+            showLoanBanks();
+    }
+});
 
 /* ================= SHOW LOAN BANKS ================= */
 function showLoanBanks() {

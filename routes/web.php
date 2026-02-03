@@ -31,10 +31,22 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AuthV3\AuthV3Controller;
 use App\Http\Controllers\EstimatedFileController;
 use App\Http\Controllers\MonthlyPLController;
+use Illuminate\View\ViewException;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketMessageController;
 use App\Http\Controllers\VisitEnquiryController;
+
+
+
+// refreal leads city
+Route::get('/get-cities/{state_id}', function ($state_id) {
+    return DB::table('cities')
+        ->where('state_id', $state_id)
+        ->select('id', 'city')
+        ->orderBy('city')
+        ->get();
+})->name('get.cities');
 
 
 require __DIR__.'/auth.php';
@@ -210,6 +222,27 @@ Route::get('/authv3/google/callback', [AuthV3Controller::class, 'handleGoogleCal
 // property
 
 
+
+
+
+// forgot password
+
+
+Route::get('/forgot-password', [AuthV3Controller::class, 'forgotForm'])
+    ->name('authv3.forgot.form');
+
+Route::post('/forgot-password', [AuthV3Controller::class, 'forgotSubmit'])
+    ->name('authv3.forgot.submit');
+
+Route::get('/reset-password', [AuthV3Controller::class, 'resetForm'])
+    ->name('authv3.reset.form');
+
+Route::post('/reset-password', [AuthV3Controller::class, 'resetPassword'])
+    ->name('authv3.reset.submit');
+
+
+
+
 use App\Http\Controllers\AuthV3\PropertyAuthController;
 
 /* ===== PROPERTY AUTH ===== */
@@ -279,6 +312,20 @@ Route::get('/verify-otp', function () {
 });
 
 
+
+// serachbar referal leads 
+Route::get('/admin/referral/ajax',
+    [LeadController::class, 'referralAjax']
+)->name('admin.referral.ajax');
+
+Route::get('/admin/enquiry/ajax', [LeadController::class, 'enquiryAjax'])
+    ->name('admin.enquiry.ajax');
+
+Route::get('/admin/leads/ajax', [LeadController::class, 'leadsAjax'])
+    ->name('admin.leads.ajax');
+
+Route::get('/admin/mis/ajax', [LeadController::class, 'misAjax'])
+    ->name('admin.mis.ajax');
 
 
 
@@ -358,7 +405,7 @@ Route::get('/property-details/{id}', function ($id) {
 
     abort(404);
 });
-Route::get('/{slugAndId}', [FrontendController::class, 'PropDetailsView'])->name('property.details');
+// Route::get('/{slugAndId}', [FrontendController::class, 'PropDetailsView'])->name('property.details');
 Route::get('referral-program', [FrontendController::class, 'ReferralsView']);
 
 Route::post('search_properties', [FrontendController::class, 'search_properties'])->name('search_properties');
@@ -830,6 +877,10 @@ Route::middleware('isAdmin')->group(function () {
         'admin/estimated-file/{id}/edit',
         [EstimatedFileController::class, 'edit']
     )->name('estimatedFile.edit');
+    // View
+    Route::get('/estimated-file/{id}', [EstimatedFileController::class, 'show'])
+    ->name('estimatedFile.show');
+
 
     // Update
     Route::post(
@@ -882,7 +933,9 @@ Route::middleware('isAdmin')->group(function () {
         'admin/monthly-pl/export-formatted/{id}',
         [MonthlyPLController::class, 'exportFormattedExcel']
     )->name('monthlyPL.exportFormatted');
-});
+});Route::get('/monthly-pl/{id}', [MonthlyPLController::class, 'show'])
+     ->name('monthlyPL.show');
+
 Route::get(
     'admin/monthly-pl/export-with-estimated/{id}',
     [MonthlyPLController::class, 'exportWithEstimated']
