@@ -333,6 +333,15 @@ body.modal-open {
         <div class="col-12 grid-margin">
             <div class="card pt-3">
                 <div class="card-body">
+                    <!-- 🔍 SEARCH BAR -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <input type="text"
+                            id="userSearch"
+                            class="form-control"
+                            placeholder="Search by Name or Mobile">
+                    </div>
+                </div>
                     <div class="table-responsive" id="user_table_container">
                         <table id="user_table" class="table">
                             <thead>
@@ -940,5 +949,51 @@ function togglePassword() {
 }
 </script>
 
-  
+  <!-- serach bar -->
+   <script>
+$(document).on('click', '.pagination a', function (e) {
+    e.preventDefault();
+
+    let page = $(this).attr('href').split('page=')[1];
+
+    $.ajax({
+        url: "{{ route('load.list.by.type') }}",
+        type: "GET",
+        data: {
+            type: currentType,
+            search: $('#userSearch').val(),
+            page: page
+        },
+        success: function (res) {
+            $('#user_table_body').html(res.html);
+            $('.dataTables_paginate nav').html(res.pagination);
+        }
+    });
+});
+</script>
+<script>
+let searchTimer = null;
+
+// 🔍 LIVE SEARCH
+$(document).on('keyup', '#userSearch', function () {
+    clearTimeout(searchTimer);
+
+    searchTimer = setTimeout(function () {
+        $.ajax({
+            url: "{{ route('load.list.by.type') }}",
+            type: "GET",
+            data: {
+                type: currentType,
+                search: $('#userSearch').val()
+            },
+            success: function (res) {
+                $('#user_table_body').html(res.html);
+                $('.dataTables_paginate nav').html(res.pagination);
+            }
+        });
+    }, 300); // debounce
+});
+</script>
+
+
 @endsection
