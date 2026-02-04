@@ -35,6 +35,7 @@ use Illuminate\View\ViewException;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketMessageController;
+use App\Http\Controllers\CustomerBookingController;
 use App\Http\Controllers\VisitEnquiryController;
 
 
@@ -956,4 +957,59 @@ Route::middleware(['auth'])->group(function(){
     ->name('tickets.close');
     Route::get('/agent/customers', [TicketController::class,'agentCustomers']);
     Route::get('/agent/user/{id}/loans', [TicketController::class,'agentUserLoans']);
+});
+
+// property booking
+Route::middleware(['auth'])->group(function () {
+
+    /* =======================
+       CUSTOMER ROUTES
+    ======================== */
+    Route::get('/__debug-confirm/{id}', function ($id) {
+    \Log::info('🔥 DEBUG ROUTE HIT', [
+        'id' => $id,
+        'user_id' => auth()->id(),
+    ]);
+    return "DEBUG OK - Booking ID = $id";
+});
+
+    Route::get('customer/properties',
+        [CustomerBookingController::class, 'showProperties']
+    )->name('customer.properties');
+
+    Route::post('customer/book-property',
+        [CustomerBookingController::class, 'store']
+    )->name('customer.book.property');
+
+    Route::post('booking/confirm/{id}',
+        [CustomerBookingController::class, 'customerConfirm']
+    )->name('customer.booking.confirm');
+Route::get('customer/bookings',
+    [CustomerBookingController::class, 'customerBookings']
+)->name('customer.bookings');
+    /* =======================
+       ADMIN ROUTES
+    ======================== */
+    Route::get('admin/property-bookings/{id}',
+    [CustomerBookingController::class, 'adminView']
+)->name('admin.property.booking.view');
+
+    Route::get('admin/property-bookings',
+        [CustomerBookingController::class, 'adminIndex']
+    )->name('admin.property.bookings');
+Route::get('customer/booking/{id}/confirm',
+    [CustomerBookingController::class, 'showConfirmOffer']
+)->name('customer.booking.show.confirm');
+
+    Route::post('admin/booking/review/{id}',
+        [CustomerBookingController::class, 'adminReview']
+    );
+
+    Route::post('admin/booking/offer/{id}',
+        [CustomerBookingController::class, 'adminOffer']
+    );
+
+    Route::post('admin/booking/final/{id}',
+        [CustomerBookingController::class, 'adminFinalSubmit']
+    );
 });
