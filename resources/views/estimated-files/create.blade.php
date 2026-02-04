@@ -56,6 +56,7 @@
                     <div class="mb-3">
                         <label class="form-label">Report Month</label><span class="text-danger">*</span>
                         <input type="month" name="report_month" class="form-control" required>
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -63,6 +64,7 @@
                     <div class="mb-3">
                         <label class="form-label">App/LOS No</label>
                         <input type="text" name="app_no" class="form-control">
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -78,6 +80,7 @@
                     <div class="mb-3">
                         <label class="form-label">BM / CH Name</label>
                         <input type="text" name="bm_ch_name" class="form-control">
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -85,6 +88,7 @@
                     <div class="mb-3">
                         <label class="form-label">Sub Manager</label>
                         <input type="text" name="sub_manager" class="form-control">
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -93,6 +97,7 @@
                     <div class="mb-3">
                         <label class="form-label">Product</label>
                         <input type="text" name="product" class="form-control">
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -100,6 +105,7 @@
                     <div class="mb-3">
                         <label class="form-label">Sub Product</label>
                         <input type="text" name="sub_product" class="form-control">
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -107,7 +113,10 @@
                 <div class="col-lg-8">
                     <div class="mb-3">
                         <label class="form-label">Customer Name</label><span class="text-danger">*</span>
-                        <input type="text" name="customer_name" class="form-control" required>
+                        <input type="text" name="customer_name"
+       oninput="this.value=this.value.replace(/[^a-zA-Z ]/g,'')" class="form-control">
+       <small class="text-danger d-none"></small>
+
                     </div>
                 </div>
 
@@ -123,6 +132,7 @@
                                 </option>
                             @endforeach
                         </select>
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -131,6 +141,7 @@
                     <div class="mb-3">
                         <label class="form-label">Net Amt Disbursed</label>
                         <input type="number" step="0.01" name="net_amt_disbursed" class="form-control">
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -138,6 +149,7 @@
                     <div class="mb-3">
                         <label class="form-label">Estimate Revenue</label>
                         <input type="number" step="0.01" name="estimate_revenue" class="form-control" readonly>
+                        
                     </div>
                 </div>
 
@@ -145,6 +157,7 @@
                     <div class="mb-3">
                         <label class="form-label">Est Net %</label>
                         <input type="number" step="0.01" name="est_net_percent" class="form-control">
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -152,6 +165,7 @@
                     <div class="mb-3">
                         <label class="form-label">DSA Payout %</label>
                         <input type="number" step="0.01" name="dsa_payout_percent" class="form-control">
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -181,6 +195,7 @@
                     <div class="mb-3">
                         <label class="form-label">EMP Name</label>
                         <input type="text" name="emp_name" class="form-control">
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -188,6 +203,7 @@
                     <div class="mb-3">
                         <label class="form-label">EMP Code</label>
                         <input type="text" name="emp_code" class="form-control">
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -195,6 +211,7 @@
                     <div class="mb-3">
                         <label class="form-label">DSA Name</label>
                         <input type="text" name="dsa_name" class="form-control">
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -202,6 +219,7 @@
                     <div class="mb-3">
                         <label class="form-label">DSA Code</label>
                         <input type="text" name="dsa_code" class="form-control">
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -209,7 +227,13 @@
                 <div class="col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Mobile</label>
-                        <input type="text" name="mobile" class="form-control">
+                                            <input type="text"
+                        name="mobile"
+                        maxlength="10"
+                        class="form-control"
+                        placeholder="10 digit mobile"
+                        oninput="onlyNumber(this)">
+<small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -217,6 +241,7 @@
                     <div class="mb-3">
                         <label class="form-label">Email</label>
                         <input type="email" name="email" class="form-control">
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -224,6 +249,7 @@
                     <div class="mb-3">
                         <label class="form-label">Source</label>
                         <input type="text" name="source" class="form-control">
+                        <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -231,14 +257,25 @@
                 <div class="col-lg-6">
                     <div class="mb-3">
                         <label class="form-label">PAN</label>
-                        <input type="text" name="pan" class="form-control">
+                        <input type="text"
+                        name="pan"
+                        maxlength="10"
+                        class="form-control"
+                        placeholder="ABCDE1234F"
+                        oninput="formatPAN(this)"
+                        style="text-transform:uppercase">
+                        <small class="text-danger d-none"></small>
+
+
                     </div>
                 </div>
 
                 <div class="col-lg-6">
                     <div class="mb-3">
                         <label class="form-label">AADHAR</label>
-                        <input type="text" name="aadhaar" class="form-control">
+                        <input type="text" name="aadhaar" maxlength="12"
+       oninput="this.value=this.value.replace(/[^0-9]/g,'')" class="form-control">
+       <small class="text-danger d-none"></small>
                     </div>
                 </div>
 
@@ -247,6 +284,93 @@
     </div>
 </form>
 @push('scripts')
+
+<script>
+document.addEventListener('input', function (e) {
+    const el = e.target;
+    if (!el.classList.contains('form-control')) return;
+
+    const name = el.getAttribute('name');
+    const small = el.parentElement.querySelector('small');
+    if (!small) return;
+
+    const show = (msg) => {
+        small.innerText = msg;
+        small.classList.remove('d-none');
+    };
+
+    const hide = () => {
+        small.innerText = '';
+        small.classList.add('d-none');
+    };
+
+    let oldVal = el.value;
+
+    /* ===== MOBILE ===== */
+    if (name === 'mobile') {
+        el.value = el.value.replace(/[^0-9]/g, '');
+        if (el.value.length > 0 && el.value.length < 10) {
+            show('Mobile must be 10 digits');
+        } else {
+            hide();
+        }
+    }
+
+    /* ===== AADHAAR ===== */
+    else if (name === 'aadhaar') {
+        el.value = el.value.replace(/[^0-9]/g, '');
+        if (el.value.length > 0 && el.value.length < 12) {
+            show('Aadhaar must be 12 digits');
+        } else {
+            hide();
+        }
+    }
+
+    /* ===== PAN ===== */
+    else if (name === 'pan') {
+        el.value = el.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+        const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
+        if (el.value.length === 10 && !panRegex.test(el.value)) {
+            show('PAN format: ABCDE1234F');
+        } else {
+            hide();
+        }
+    }
+
+    /* ===== ONLY TEXT FIELDS ===== */
+    else if (
+        ['customer_name','bm_ch_name','sub_manager','product','sub_product',
+         'emp_name','dsa_name','source'].includes(name)
+    ) {
+        el.value = el.value.replace(/[^a-zA-Z ]/g, '');
+        oldVal !== el.value
+            ? show('Only characters allowed')
+            : hide();
+    }
+
+    /* ===== ALPHANUMERIC ===== */
+    else if (
+        ['app_no','emp_code','dsa_code'].includes(name)
+    ) {
+        el.value = el.value.replace(/[^a-zA-Z0-9]/g, '');
+        oldVal !== el.value
+            ? show('Only letters & numbers allowed')
+            : hide();
+    }
+
+    /* ===== NUMBERS ONLY ===== */
+    else if (
+        ['net_amt_disbursed','est_net_percent','dsa_payout_percent'].includes(name)
+    ) {
+        el.value = el.value.replace(/[^0-9.]/g, '');
+        oldVal !== el.value
+            ? show('Only numbers allowed')
+            : hide();
+    }
+});
+</script>
+
+
 <script>
     function calculateRevenue() {
         let netAmt = parseFloat(document.querySelector('[name="net_amt_disbursed"]').value) || 0;
@@ -268,5 +392,30 @@
     document.querySelector('[name="est_net_percent"]').addEventListener('input', calculateRevenue);
     document.querySelector('[name="dsa_payout_percent"]').addEventListener('input', calculateRevenue);
 </script>
+<script>
+function onlyNumber(el){
+    el.value = el.value.replace(/[^0-9]/g,'');
+}
+
+function onlyText(el){
+    el.value = el.value.replace(/[^a-zA-Z ]/g,'');
+}
+</script>
+<script>
+function formatPAN(el){
+    // remove special chars
+    el.value = el.value.replace(/[^a-zA-Z0-9]/g, '');
+
+    // force CAPITAL
+    el.value = el.value.toUpperCase();
+}
+</script>
+
+<script>
+function onlyNumber(el){
+    el.value = el.value.replace(/[^0-9]/g, '');
+}
+</script>
+
 @endpush
 @endsection
