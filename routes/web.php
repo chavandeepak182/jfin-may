@@ -48,6 +48,7 @@ Route::get('/get-cities/{state_id}', function ($state_id) {
         ->orderBy('city')
         ->get();
 })->name('get.cities');
+use App\Http\Controllers\CustomerBookingController;
 
 
 require __DIR__.'/auth.php';
