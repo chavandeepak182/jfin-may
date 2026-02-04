@@ -821,17 +821,24 @@ public function resetPassword(Request $request)
                     ? '<span class="badge bg-success">Active</span>'
                     : '<span class="badge bg-danger">Inactive</span>').'
             </td>
-            <td>
-                <button class="btn btn-primary btn-xs edit-user"
-                        data-id="'.$user->id.'">
-                    <i class="fa fa-edit"></i>
-                </button>
+          <td>
+    <button class="btn btn-primary btn-xs edit-user"
+            data-id="'.$user->id.'">
+        <i class="fa fa-edit"></i>
+    </button>
 
-                <button class="btn btn-danger btn-xs delete-user"
-                        data-id="'.$user->id.'">
-                    <i class="fa fa-trash"></i>
-                </button>
-            </td>
+   
+
+    <button class="btn btn-danger btn-xs delete-user"
+            data-id="'.$user->id.'">
+        <i class="fa fa-trash"></i>
+    </button>
+     <button class="btn btn-warning btn-xs reset-password"
+            data-id="'.$user->id.'">
+        <i class="fa fa-key"></i>
+    </button
+</td>
+
         </tr>';
     }
 
