@@ -124,9 +124,14 @@ public function leadlist(Request $request)
                 END AS status
             ")
         )
+        
         ->orderBy('rl.created_at', 'desc')
         ->paginate(10);
-
+// ================= STATES (FOR CREATE ACCOUNT MODAL) =================
+$states = DB::table('states')
+            ->select('id', 'name')
+            ->orderBy('name')
+            ->get();
     return view('admin.admin-leads', compact(
         'enquiriesCount',
         'leadsCount',
@@ -140,9 +145,113 @@ public function leadlist(Request $request)
         'estimatedFiles',
         'grossRevenue',
         'pls',
-        'referralLeads'
+        'referralLeads',
+        'states' // ✅ ADD THIS
     ));
 }
+
+// searchbar for referal leads
+public function referralAjax(Request $request)
+{
+    $query = DB::table('referral_leads as rl')
+        ->join('users as u', 'u.id', '=', 'rl.user_id')
+        ->leftJoin('loan_category as lc', 'lc.loan_category_id', '=', 'rl.product_type')
+        ->leftJoin('users as cust', 'cust.email_id', '=', 'rl.email')
+        ->select(
+            'rl.*',
+            'u.name as referrer_name',
+            'u.mobile_no as referrer_mobile',
+            DB::raw("
+                CASE
+                    WHEN rl.product_type IS NULL THEN rl.other_remark
+                    WHEN lc.category_name IS NULL THEN rl.other_remark
+                    ELSE lc.category_name
+                END AS product_name
+            "),
+            DB::raw("
+                CASE
+                    WHEN cust.id IS NOT NULL THEN 'created'
+                    ELSE 'pending'
+                END AS status
+            ")
+        );
+
+    if ($request->filled('name')) {
+        $query->where('rl.name', 'like', '%' . $request->name . '%');
+    }
+
+    if ($request->filled('mobile')) {
+        $query->where('rl.mobile', 'like', '%' . $request->mobile . '%');
+    }
+
+    $referralLeads = $query->orderBy('rl.created_at', 'desc')->paginate(10);
+
+    return response()->json([
+        'html' => view('admin.partials.referral-table', compact('referralLeads'))->render()
+    ]);
+}
+
+// seracbar leads
+public function enquiryAjax(Request $request)
+{
+    $query = DB::table('enquiries');
+
+    if ($request->filled('search')) {
+        $query->where('enquiries.name', 'like', '%' . $request->search . '%');
+    }
+
+    $enquiries = $query
+        ->orderBy('enquiries.created_at', 'desc')
+        ->paginate(10);
+
+    return response()->json([
+        'html' => view('admin.partials.enquiry-table', compact('enquiries'))->render()
+    ]);
+}
+
+public function leadsAjax(Request $request)
+{
+    $query = Lead::with('agent')
+        ->orderBy('created_at', 'desc');
+
+    // 🔍 Search by Name
+    if ($request->filled('name')) {
+        $query->where('name', 'like', '%' . $request->name . '%');
+    }
+
+    // 📱 Search by Mobile
+    if ($request->filled('mobile')) {
+        $query->where('phone', 'like', '%' . $request->mobile . '%');
+    }
+
+    $leads = $query->paginate(10);
+
+    return response()->json([
+        'html' => view('admin.partials.leads-table', compact('leads'))->render()
+    ]);
+}
+public function misAjax(Request $request)
+{
+    $query = MIS::query()->orderBy('created_at', 'desc');
+
+    // 🔍 Name search
+    if ($request->filled('name')) {
+        $query->where('name', 'like', '%' . $request->name . '%');
+    }
+
+    // 📱 Mobile search
+    if ($request->filled('mobile')) {
+        $query->where('contact', 'like', '%' . $request->mobile . '%');
+    }
+
+    $misRecords = $query->paginate(10);
+
+    return response()->json([
+        'html' => view('admin.partials.mis-table', compact('misRecords'))->render()
+    ]);
+}
+
+
 
 
 
@@ -171,24 +280,96 @@ public function leadlist(Request $request)
         }
     
         // Validate the lead data
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:leads',
-            'phone' => 'required',
-            'lead_source' => 'required',
-            'property_type' => 'required',
-            'budget_min' => 'required|numeric',
-            'budget_max' => 'required|numeric',
-            'location_preference' => 'required',
-            'possession_time' => 'required',
-            'property_status' => 'required',
-            'lead_status' => 'required',
-            'lead_score' => 'required|numeric',
-            'assigned_to' => 'required|exists:users,id',
-            'lead_type' => 'required',
-            'financing_status' => 'required',
-        ]);
-    
+        // $request->validate([
+        //     'name' => 'required',
+        //     'email' => 'required|email|unique:leads',
+        //     'phone' => 'required',
+        //     'lead_source' => 'required',
+        //     'property_type' => 'required',
+        //     'budget_min' => 'required|numeric',
+        //     'budget_max' => 'required|numeric',
+        //     'location_preference' => 'required',
+        //     'possession_time' => 'required',
+        //     'property_status' => 'required',
+        //     'lead_status' => 'required',
+        //     'lead_score' => 'required|numeric',
+        //     'assigned_to' => 'required|exists:users,id',
+        //     'lead_type' => 'required',
+        //     'financing_status' => 'required',
+        // ]);
+              $request->validate(
+[
+    // 👤 BASIC DETAILS
+    'name' => [
+        'required',
+        'string',
+        'max:255',
+        'regex:/^[a-zA-Z\s]+$/'
+    ],
+
+    'email' => 'required|email|unique:leads,email',
+
+    'phone' => [
+        'required',
+        'digits:10'
+    ],
+
+    'alternate_phone' => [
+        'nullable',
+        'digits:10'
+    ],
+
+    // 📌 LEAD INFO
+    'lead_source'   => 'required|string',
+    'campaign_name' => 'nullable|string|max:255',
+    'property_type' => 'required|string',
+
+    // 💰 BUDGET
+    'budget_min' => 'required|numeric|min:0',
+    'budget_max' => 'required|numeric|gte:budget_min',
+
+    // 🏠 PROPERTY DETAILS
+    'location_preference' => 'required|string|max:255',
+    'possession_time'     => 'required|string',
+    'property_status'     => 'required|string',
+    'lead_status'         => 'required|string',
+
+    // 👨‍💼 ASSIGNMENT
+    'assigned_to' => 'required|exists:users,id',
+
+    // 📅 DATES
+    'follow_up_date' => 'nullable|date',
+    'closing_date'   => 'nullable|date',
+
+    // 🔢 AVAILABLE UNITS
+    'lead_score' => 'required|integer|min:1',
+
+    // 📝 EXTRA
+    'notes' => 'nullable|string',
+
+    // 🏷 TYPE & FINANCE
+    'lead_type'        => 'required|string',
+    'financing_status' => 'required|string',
+    'loan_provider'    => 'nullable|string|max:255',
+],
+[
+    // ❌ CUSTOM ERROR MESSAGES
+    'name.required' => 'Full Name is required',
+    'name.regex'   => 'Full Name should contain only letters',
+
+    'email.required' => 'Email Address is required',
+    'email.unique'   => 'This email is already registered',
+
+    'phone.required' => 'Phone Number is required',
+    'phone.digits'   => 'Phone Number must be exactly 10 digits',
+
+    'alternate_phone.digits' => 'Alternate Phone must be 10 digits',
+
+    'budget_max.gte' => 'Maximum Budget must be greater than Minimum Budget',
+
+    'lead_score.required' => 'Available Units is required',
+]);
+
         // Create the lead if valid
         Lead::create($request->all());
         return redirect()->route('admin.listlead')->with('success', 'Lead added successfully.');

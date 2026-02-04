@@ -45,14 +45,69 @@ public function exportFormattedExcel($id)
         'P&L_'.$pl->month.'_'.$pl->year.'.xlsx'
     );
 }
-public function list()
+// public function list()
+// {
+//     $pls = MonthlyPL::orderBy('year', 'desc')
+//                     ->orderBy('month', 'desc')
+//                     ->get();
+
+//     return view('estimated-files.list', compact('pls'));
+// }
+public function list(Request $request)
 {
-    $pls = MonthlyPL::orderBy('year', 'desc')
-                    ->orderBy('month', 'desc')
-                    ->get();
+    $pls = MonthlyPL::query();
+
+    if ($request->filled('search')) {
+
+        $search = strtolower(trim($request->search));
+        $parts  = explode(' ', $search);
+
+        $monthMap = [
+            'jan' => 1, 'january' => 1,
+            'feb' => 2, 'february' => 2,
+            'mar' => 3, 'march' => 3,
+            'apr' => 4, 'april' => 4,
+            'may' => 5,
+            'jun' => 6, 'june' => 6,
+            'jul' => 7, 'july' => 7,
+            'aug' => 8, 'august' => 8,
+            'sep' => 9, 'september' => 9,
+            'oct' => 10, 'october' => 10,
+            'nov' => 11, 'november' => 11,
+            'dec' => 12, 'december' => 12,
+        ];
+
+        $month = null;
+        $year  = null;
+
+        foreach ($parts as $part) {
+            if (isset($monthMap[$part])) {
+                $month = $monthMap[$part];
+            }
+
+            if (is_numeric($part) && strlen($part) == 4) {
+                $year = $part;
+            }
+        }
+
+        $pls->where(function ($q) use ($month, $year) {
+            if ($month) {
+                $q->where('month', $month);
+            }
+            if ($year) {
+                $q->where('year', $year);
+            }
+        });
+    }
+
+    $pls = $pls->orderBy('year', 'desc')
+               ->orderBy('month', 'desc')
+               ->get();
 
     return view('estimated-files.list', compact('pls'));
 }
+
+
 public function exportWithEstimated($id)
 {
     $pl = MonthlyPL::findOrFail($id);
@@ -62,4 +117,14 @@ public function exportWithEstimated($id)
         'Monthly_PL_'.$pl->month.'_'.$pl->year.'.xlsx'
     );
 }
+
+
+// show
+public function show($id)
+{
+    $pl = MonthlyPL::findOrFail($id);
+
+    return view('estimated-files.view', compact('pl'));
+}
+
 }

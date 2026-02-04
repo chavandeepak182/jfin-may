@@ -108,6 +108,14 @@ class EstimatedFileController extends Controller
         return view('estimated-files.edit', compact('estimatedFile', 'banks'));
     }
 
+    public function show($id)
+{
+    $estimatedFile = EstimatedFile::findOrFail($id);
+
+    return view('estimated-files.show', compact('estimatedFile'));
+}
+
+
    public function update(Request $request, $id)
     {
         $request->validate([

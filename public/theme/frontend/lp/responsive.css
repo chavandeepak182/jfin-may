@@ -1,0 +1,89 @@
+
+
+@media (min-width: 1300px) {
+  .container{max-width: 1240px;}
+}
+@media (min-width: 1900px) {
+  .container{max-width: 1800px;}
+  .title .brush-mark{width:150px;}
+}
+
+@media (min-height: 1024px) {
+}
+/* Designed & Developed by Sami from ECIS */
+
+@media (min-height: 1280px) {
+}
+
+@media (max-width: 991.9px) {
+  html {
+    font-size: 87.5%;
+  }
+  .logo {width: 133px;}
+}
+
+@media (max-width: 767.9px) {
+  .button-top {
+    width: 30px;
+    height: 30px;
+  }
+  .iti--allow-dropdown input, .iti--allow-dropdown input[type="tel"], .iti--allow-dropdown input[type="text"], .iti--separate-dial-code input, .iti--separate-dial-code input[type="tel"], .iti--separate-dial-code input[type="text"] {
+  padding-right: 118px !important;
+  padding-left: 52px;
+  margin-left: 0;
+}
+.fix-img{bottom: 8%;position: fixed; left: 218px; padding: 0px 5px; z-index: 999;}
+}
+
+@media (max-width: 575.9px) {
+	.bannerText h1{
+  font-size: 21px;
+  text-transform: uppercase;
+}
+.heading h3 {
+  font-weight: 500;
+  font-size: 4vw;
+}
+.bannerText {
+  left: 1rem;
+}
+	
+  .banner{height: 400px;}
+  .heading h2{font-size: 2rem;}
+  .stickyForm {
+    position: static;
+    width: calc(100% - (10px + .5rem) * 2);
+    margin: 1rem auto 0;
+  }
+  .modal-content button.close{right: 10px; top: -20px; box-shadow: 0 0 0 2px var(--body-color);}
+  .button-top {
+    bottom: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+}
+
+@media (max-width: 425px) {
+}
+
+@media (max-width: 375px) {
+}
+
+@media (max-width: 320px) {
+}
+.iti__country-name{color:#333;}
+
+.footer-enquiryBtn a.whatsCall {
+  background: linear-gradient(45deg,#0db634,#015c16);
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  animation: blink 2s infinite alternate;
+}
+
+/* Blinking Animation */
+@keyframes blink {
+    0% { opacity: 1; }
+    100% { opacity: 0.5; }
+}

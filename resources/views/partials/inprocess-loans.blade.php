@@ -26,12 +26,12 @@
                             <a class="btn btn-primary btn-xs view" title="View" href="{{ route('loan.view', ['id' => $loan->loan_id]) }}">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a class="btn btn-primary btn-xs edit" title="Edit" href="{{ route('editLoan', ['id' => $loan->loan_id]) }}">
+                            <!-- <a class="btn btn-primary btn-xs edit" title="Edit" href="{{ route('editLoan', ['id' => $loan->loan_id]) }}">
                                 <i class="fa fa-edit"></i>
                             </a>
                             <button class="btn btn-danger btn-xs delete" title="Delete" onclick="deleteLoan('{{ $loan->loan_id }}')">
                                 <i class="fa fa-trash"></i>
-                            </button>
+                            </button> -->
                         </td>
                     </tr>
                     @endforeach

@@ -70,7 +70,7 @@
                         </a>
 
                         <!-- Total Employees -->
-                        <a href="{{ route('admin.customers') }}" class="metric-link">
+                        <a href="#" class="metric-link">
                             <div class="metric-card">
                                 <div class="metric-icon green"><i class="fas fa-user-tie"></i></div>
                                 <div class="metric-content">
@@ -86,7 +86,7 @@
                         </a>
 
                         <!-- Total Customers -->
-                        <a href="{{ route('admin.customers') }}" class="metric-link">
+                        <a href="#" class="metric-link">
                             <div class="metric-card">
                                 <div class="metric-icon purple"><i class="fas fa-users"></i></div>
                                 <div class="metric-content">
