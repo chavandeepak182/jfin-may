@@ -149,7 +149,7 @@
     
 
             <!-- Estimated Files -->
-            <div class="col-xl-3 col-lg-4 col-md-6"> 
+            <!-- <div class="col-xl-3 col-lg-4 col-md-6"> 
                 <div class="analytics-card"
                     onclick="showEstimatedFiles()"
                     style="cursor:pointer;">
@@ -177,9 +177,40 @@
                     </div>
 
                 </div>
-            </div> 
+            </div>  -->
 
 
+            <div class="col-xl-3 col-lg-4 col-md-6">
+    <a href="{{ url('admin/estimated-file') }}" style="text-decoration:none; color:inherit;">
+        <div class="analytics-card" style="cursor:pointer;">
+
+            <div class="analytics-row">
+                <div class="analytics-icon icon-purple">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+
+                <div class="analytics-content">
+                    <div class="analytics-title">Estimated Files</div>
+
+                    <div class="analytics-bottom">
+                        <div class="analytics-value">
+                            {{ $totalEstimatedFiles }}
+                        </div>
+                    </div>
+
+                    <div class="analytics-bottom">
+                        <div class="analytics-growth">
+                            Calculated from records
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </a>
+</div>
+
+<!-- 
             <div class="col-xl-3 col-lg-4 col-md-6">
             <div class="analytics-card"
                 onclick="showMonthlyPL()"
@@ -207,7 +238,38 @@
                     </div>
                 </div>
             </div>
-            </div> 
+            </div>  -->
+
+            <div class="col-xl-3 col-lg-4 col-md-6">
+    <a href="{{ url('admin/monthly-pl-list') }}" style="text-decoration:none; color:inherit;">
+        <div class="analytics-card" style="cursor:pointer;">
+
+            <div class="analytics-row">
+                <div class="analytics-icon icon-blue">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+
+                <div class="analytics-content">
+                    <div class="analytics-title">Monthly P&amp;L</div>
+
+                    <div class="analytics-bottom">
+                        <div class="analytics-value">
+                            {{ $totalMonthlyPL }}
+                        </div>
+                    </div>
+
+                    <div class="analytics-bottom">
+                        <div class="analytics-growth">
+                            Tracked from records
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </a>
+</div>
+
                    <div class="col-xl-3 col-lg-4 col-md-6"> 
                     <div class="analytics-card"
                         onclick="showLoanBanks()"
@@ -277,6 +339,13 @@
  <div id="loanBankSection" class="card mt-5" style="display:none;">
     <div class="card-body">
         <div class="table-responsive">
+            <div class="mb-3">
+    <input type="text"
+           id="bankSearch"
+           class="form-control"
+           placeholder="Search bank name, IFSC, branch, manager, mobile...">
+</div>
+
             <table id="example" class="table table-striped">
                 <thead>
                     <tr>
@@ -399,7 +468,9 @@
 
    
     <div class="p-4 bg-white">
-        <form method="GET" action="{{ route('admin.listlead') }}">
+      <form method="GET" action="{{ route('admin.bank') }}">
+
+
             <div class="row g-3 align-items-end">
 
                 <div class="col-lg-4">
@@ -422,7 +493,7 @@
                         Calculate
                     </button>
 
-                    <a href="{{ route('admin.listlead') }}"
+                    <a href="Route::get('admin/banklist', ...)->name('admin.bank');"
                        class="btn btn-light border">
                         Reset
                     </a>
@@ -479,7 +550,15 @@
     </div>
 
 </div>
-{{ $estimatedFiles->links('pagination::bootstrap-5') }}
+<div id="estimatedFileSection" class="card mt-5" style="display:none;">
+   ...
+   <div class="card-body">
+       <table>...</table>
+
+       {{ $estimatedFiles->links('pagination::bootstrap-5') }}
+   </div>
+</div>
+
 
 
 <div id="monthlyPLSection" class="card mt-5" style="display:none;">
@@ -530,10 +609,12 @@
                 @endforelse
                 </tbody>
             </table>
+             <!-- ✅ pagination INSIDE section -->
+        {{ $pls->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div> 
-{{ $pls->links('pagination::bootstrap-5') }}
+
 
 <script>
 function showMonthlyPL() {
@@ -554,7 +635,8 @@ function hideAllSections() {
 
     const buttons = [
         'addBankBtn',
-        'addEstimatedBtn'
+        'addEstimatedBtn',
+        'addMonthlyBtn'
     ];
 
     sections.forEach(id => {
@@ -567,6 +649,45 @@ function hideAllSections() {
         if (el) el.style.display = 'none';
     });
 }
+
+function showLoanBanks() {
+    hideAllSections();
+    document.getElementById('loanBankSection').style.display = 'block';
+    document.getElementById('addBankBtn').style.display = 'block';
+    localStorage.setItem('activeSection', 'loanbanks');
+}
+
+function showEstimatedFiles() {
+    hideAllSections();
+    document.getElementById('estimatedFileSection').style.display = 'block';
+    document.getElementById('addEstimatedBtn').style.display = 'block';
+    localStorage.setItem('activeSection', 'estimatedfiles');
+}
+
+function showMonthlyPL() {
+    hideAllSections();
+    document.getElementById('monthlyPLSection').style.display = 'block';
+    document.getElementById('addMonthlyBtn').style.display = 'block';
+    localStorage.setItem('activeSection', 'monthlypl');
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const active = localStorage.getItem('activeSection');
+
+    switch (active) {
+        case 'loanbanks':
+            showLoanBanks();
+            break;
+        case 'estimatedfiles':
+            showEstimatedFiles();
+            break;
+        case 'monthlypl':
+            showMonthlyPL();
+            break;
+        default:
+            showLoanBanks();
+    }
+});
 
 /* ================= SHOW LOAN BANKS ================= */
 function showLoanBanks() {
@@ -688,7 +809,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<script>
+<!-- <script>
 document.getElementById('addBank').addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -718,7 +839,7 @@ document.getElementById('addBank').addEventListener('submit', function (e) {
         }
     });
 });
-</script>
+</script> -->
 <script>
 function deleteBank(bankId) {
 
@@ -768,6 +889,175 @@ function openEditBankModal(btn) {
     let modal = new bootstrap.Modal(document.getElementById('addBankView'));
     modal.show();
 }
+</script>
+<!-- validation bank -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('addBank');
+    if (!form) return;
+
+    const bankInput    = form.querySelector('[name="bank_name"]');
+    const branchInput  = form.querySelector('[name="branch_name"]');
+    const managerInput = form.querySelector('[name="manager_name"]');
+    const mobileInput  = form.querySelector('[name="manager_number"]');
+
+    /* ===============================
+       EXISTING BANK NAMES (TABLE)
+    ================================ */
+    let existingBanks = [];
+    document.querySelectorAll('#example tbody tr td:first-child').forEach(td => {
+        existingBanks.push(td.innerText.trim().toLowerCase());
+    });
+
+    /* ===============================
+       HELPER – ERROR MESSAGE
+    ================================ */
+    function errorBelow(input, text) {
+        const small = document.createElement('small');
+        small.className = 'text-danger';
+        small.innerText = text;
+        small.style.display = 'none';
+        input.after(small);
+        return small;
+    }
+
+    const bankErr    = errorBelow(bankInput, 'This bank already exists');
+    const branchErr  = errorBelow(branchInput, 'Only letters allowed');
+    const managerErr = errorBelow(managerInput, 'Only letters allowed');
+    const mobileErr  = errorBelow(mobileInput, 'Mobile number must be 10 digits');
+
+    let isDuplicate = false;
+
+    /* ===============================
+       LETTER-ONLY FIELDS
+    ================================ */
+    function lettersOnly(input, errorEl) {
+        input.addEventListener('input', function () {
+            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+            errorEl.style.display = 'none';
+        });
+    }
+
+    lettersOnly(bankInput, bankErr);
+    lettersOnly(branchInput, branchErr);
+    lettersOnly(managerInput, managerErr);
+
+    /* ===============================
+       DUPLICATE BANK CHECK
+    ================================ */
+    bankInput.addEventListener('input', function () {
+        const val = this.value.trim().toLowerCase();
+        if (existingBanks.includes(val)) {
+            bankErr.style.display = 'block';
+            isDuplicate = true;
+        } else {
+            bankErr.style.display = 'none';
+            isDuplicate = false;
+        }
+    });
+
+    /* ===============================
+       MOBILE – ONLY 10 DIGITS
+    ================================ */
+    mobileInput.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length > 10) {
+            this.value = this.value.slice(0, 10);
+        }
+
+        mobileErr.style.display =
+            this.value.length === 0 || this.value.length === 10
+                ? 'none'
+                : 'block';
+    });
+
+    mobileInput.addEventListener('keydown', function (e) {
+        if (
+            this.value.length >= 10 &&
+            !['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(e.key)
+        ) {
+            e.preventDefault();
+        }
+    });
+
+    /* ===============================
+       SUBMIT
+    ================================ */
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        let hasError = false;
+
+        if (isDuplicate) {
+            bankErr.style.display = 'block';
+            hasError = true;
+        }
+
+        if (mobileInput.value && mobileInput.value.length !== 10) {
+            mobileErr.style.display = 'block';
+            hasError = true;
+        }
+
+        if (hasError) return; // ❌ NO POPUP
+
+        /* ===============================
+           FETCH SUBMIT
+        ================================ */
+        let formData = new FormData(form);
+        let bankId = form.querySelector('[name="bank_id"]').value;
+
+        let url = bankId
+            ? "{{ route('updateBank') }}"
+            : "{{ route('admin.loanbank.store') }}";
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': form.querySelector('[name=_token]').value
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 1) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Bank saved successfully'
+                }).then(() => location.reload());
+            }
+        });
+    });
+
+});
+</script>
+
+<!-- serachbar script -->
+ <script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const searchInput = document.getElementById('bankSearch');
+    const table = document.getElementById('example');
+    if (!searchInput || !table) return;
+
+    const rows = table.querySelectorAll('tbody tr');
+
+    searchInput.addEventListener('keyup', function () {
+        const keyword = this.value.toLowerCase();
+
+        rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+
+            if (text.includes(keyword)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+});
 </script>
 
 

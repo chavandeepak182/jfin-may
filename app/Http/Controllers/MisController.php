@@ -79,7 +79,7 @@ private function authorizeMIS($mis)
         return true;
     }
 
-    // Agent → only own records
+    // Agent → only own recordsad
     if (
         $roleId == config('constants.roles.agent') &&
         (int) $mis->created_by === (int) $userId
@@ -97,29 +97,103 @@ public function store(Request $request)
 
     try {
 
-        $validatedData = $request->validate([
-            'name'         => 'required|string|max:255',
-            'email'        => 'required|email|max:255|unique:mis,email',
-            'contact'      => 'required|string|max:255',
-            'product_type' => 'required|string|max:255',
-            'bank_name'    => 'required|string|max:255',
-            'occupation'   => 'required|string|max:255',
-            'branch_name'  => 'required|string|max:255',
-            'amount'       => 'required|numeric',
-            'address'      => 'required|string',
-            'city'         => 'required|string|max:255',
-            'bm_name'      => 'nullable|string|max:255',
-            'login_date'   => 'nullable|date',
-            'status'       => 'nullable|string|max:255',
-            'in_principle' => 'nullable|string|max:255',
-            'remark'       => 'nullable|string',
-            'legal'        => 'nullable|string|max:255',
-            'valuation'    => 'nullable|string|max:255',
-            'leads'        => 'nullable|string|max:255',
-            'file_work'    => 'nullable|string|max:255',
-        ]);
+        // $validatedData = $request->validate([
+        //     'name'         => 'required|string|max:255',
+        //     'email'        => 'required|email|max:255|unique:mis,email',
+        //     'contact'      => 'required|string|max:255',
+        //     'product_type' => 'required|string|max:255',
+        //     'bank_name'    => 'required|string|max:255',
+        //     'occupation'   => 'required|string|max:255',
+        //     'branch_name'  => 'required|string|max:255',
+        //     'amount'       => 'required|numeric',
+        //     'address'      => 'required|string',
+        //     'city'         => 'required|string|max:255',
+        //     'bm_name'      => 'nullable|string|max:255',
+        //     'login_date'   => 'nullable|date',
+        //     'status'       => 'nullable|string|max:255',
+        //     'in_principle' => 'nullable|string|max:255',
+        //     'remark'       => 'nullable|string',
+        //     'legal'        => 'nullable|string|max:255',
+        //     'valuation'    => 'nullable|string|max:255',
+        //     'leads'        => 'nullable|string|max:255',
+        //     'file_work'    => 'nullable|string|max:255',
+        // ]);
+       $validatedData = $request->validate([
+    'name' => [
+        'required',
+        'string',
+        'max:255',
+        'regex:/^[a-zA-Z\s]+$/'
+    ],
 
-        $userId = session()->get('user_id');
+    'email' => 'required|email|max:255',
+
+    'contact' => 'required|digits_between:10,12',
+
+    'product_type' => 'required|string',
+    'occupation'   => 'required|string',
+
+    'bank_name'    => 'required|string|max:255',
+
+    'branch_name' => [
+        'required',
+        'string',
+        'max:255',
+        'regex:/^[a-zA-Z\s]+$/'
+    ],
+
+    // 🔒 LOGIN DATE – today or past only
+    'login_date' => [
+        'nullable',
+        'date',
+        'before_or_equal:today'
+    ],
+
+    'status'       => 'required|in:open,processing,closed',
+    'in_principle' => 'nullable|in:yes,no',
+
+    'amount' => 'required|numeric|min:1',
+
+    'city' => [
+        'required',
+        'string',
+        'max:100',
+        'regex:/^[a-zA-Z\s]+$/'
+    ],
+
+    'address' => 'required|string',
+
+],[
+    'name.required'  => 'Name is required',
+    'name.regex'     => 'Name should contain only letters',
+
+    'email.required' => 'Email is required',
+    'email.email'    => 'Enter valid email',
+
+    'contact.required'       => 'Contact number is required',
+    'contact.digits_between' => 'Contact must be 10–12 digits',
+
+    'product_type.required' => 'Product Type is required',
+    'occupation.required'   => 'Occupation is required',
+
+    'bank_name.required'    => 'Bank Name is required',
+
+    'branch_name.required'  => 'Branch Name is required',
+    'branch_name.regex'     => 'Branch Name should contain only letters',
+
+    'login_date.before_or_equal' => 'Login Date cannot be a future date',
+
+    'status.required' => 'Status is required',
+
+    'amount.required' => 'Amount is required',
+    'amount.numeric'  => 'Amount must be numeric',
+
+    'city.required' => 'City is required',
+    'city.regex'    => 'City should contain only letters',
+
+    'address.required' => 'Address is required',
+]);
+   $userId = session()->get('user_id');
 
         if (!$userId) {
             return response()->json([

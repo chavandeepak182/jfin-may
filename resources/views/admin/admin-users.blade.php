@@ -21,6 +21,27 @@ input[type="password"]::placeholder {
     color: #6b7280;
     font-size: 13px;
 }
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d;
+}
+
+.toggle-password:hover {
+    color: #000;
+}
+
 
 
 /* ===== Container ===== */
@@ -312,6 +333,15 @@ body.modal-open {
         <div class="col-12 grid-margin">
             <div class="card pt-3">
                 <div class="card-body">
+                    <!-- 🔍 SEARCH BAR -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <input type="text"
+                            id="userSearch"
+                            class="form-control"
+                            placeholder="Search by Name or Mobile">
+                    </div>
+                </div>
                     <div class="table-responsive" id="user_table_container">
                         <table id="user_table" class="table">
                             <thead>
@@ -425,15 +455,25 @@ body.modal-open {
                               <input type="hidden" id="user_id" name="user_id">
 
                             <div class="form-group col-lg-4">
-                                <label for="recipient-name" class="col-form-label">Password:</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                                                                <small class="text-muted">
-                                    Leave blank to keep existing password
-                                </small>
-                                 <!-- <input type="password" class="form-control"
-       name="password"
-       placeholder="Leave blank to keep existing password"> -->
-                            </div>
+    <label class="col-form-label">Password:</label>
+
+    <div class="password-wrapper">
+        <input type="password"
+               class="form-control"
+               id="password"
+               name="password"
+               placeholder="Leave blank to keep existing password">
+
+        <span class="toggle-password" onclick="togglePassword()">
+            <i class="fa fa-eye" id="eyeIcon"></i>
+        </span>
+    </div>
+
+    <small class="text-muted">
+        Leave blank to keep existing password
+    </small>
+</div>
+
                         </div>
                         <input type="hidden" id="user_type" name="user_type" value="customer">
 
@@ -892,5 +932,68 @@ $('#toggleNewPassword').on('click', function () {
     });
 }
 </script>
-  
+<script>
+function togglePassword() {
+    const password = document.getElementById('password');
+    const icon = document.getElementById('eyeIcon');
+
+    if (password.type === 'password') {
+        password.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        password.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+</script>
+
+  <!-- serach bar -->
+   <script>
+$(document).on('click', '.pagination a', function (e) {
+    e.preventDefault();
+
+    let page = $(this).attr('href').split('page=')[1];
+
+    $.ajax({
+        url: "{{ route('load.list.by.type') }}",
+        type: "GET",
+        data: {
+            type: currentType,
+            search: $('#userSearch').val(),
+            page: page
+        },
+        success: function (res) {
+            $('#user_table_body').html(res.html);
+            $('.dataTables_paginate nav').html(res.pagination);
+        }
+    });
+});
+</script>
+<script>
+let searchTimer = null;
+
+// 🔍 LIVE SEARCH
+$(document).on('keyup', '#userSearch', function () {
+    clearTimeout(searchTimer);
+
+    searchTimer = setTimeout(function () {
+        $.ajax({
+            url: "{{ route('load.list.by.type') }}",
+            type: "GET",
+            data: {
+                type: currentType,
+                search: $('#userSearch').val()
+            },
+            success: function (res) {
+                $('#user_table_body').html(res.html);
+                $('.dataTables_paginate nav').html(res.pagination);
+            }
+        });
+    }, 300); // debounce
+});
+</script>
+
+
 @endsection
