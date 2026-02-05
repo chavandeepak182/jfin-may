@@ -17,7 +17,7 @@
     </section>
 
     <section class="finserv-wrapper">
-        <div class="container">
+        <div class="container-tab">
             <div class="finserv-header">
                 <h4 class="finserv-eyebrow">Product Overview</h4>
                 <h2 class="finserv-trusted" style="color:#295cab;">Fuel Your Business Growth with <strong style="color:#00abeb">MSME Loans</strong></h2>
@@ -51,7 +51,7 @@
     </section>
 
     <section class="home-section">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-section-header">
                 <h2 class="finserv-trusted" style="color:#295cab;">Why Choose Our <strong style="color:#00abeb">MSME</strong> Loan?</h2>
                 <p class="home-section-subtitle">
@@ -93,7 +93,7 @@
     </section>
 
     <section class="home-section home-benefits-section">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-section-header">
                 <h2 class="finserv-trusted" style="color:#295cab;">MSME Loan <strong style="color:#00abeb">Benefits</strong></h2>
                 <p class="home-section-subtitle">
@@ -161,7 +161,7 @@
 
     <!-- eligibility and docs  -->
      <section class="home-section" id="home-eligibility">
-    <div class="container">
+    <div class="container-tab">
         <div class="home-section-header">
             <h2 class="home-section-title">Eligibility & Documents</h2>
             <p class="home-section-subtitle">
@@ -317,7 +317,7 @@
 
     <!-- faqs -->
     <section class="home-section">
-    <div class="container">
+    <div class="container-tab">
         <div class="home-section-header">
             <h2 class="home-section-title">Frequently Asked Questions</h2>
             <p class="home-section-subtitle">

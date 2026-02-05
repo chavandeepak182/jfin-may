@@ -51,7 +51,12 @@ body {
 }
 
 .container {
-    max-width: 1140px; /* More standard container width */
+    max-width: 1400px; /* More standard container width */
+    margin: 0 auto;a
+    padding: 0 1.5rem;
+}
+.container-tab {
+    max-width: 1240px; /* More standard container width */
     margin: 0 auto;
     padding: 0 1.5rem;
 }
