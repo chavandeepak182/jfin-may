@@ -408,6 +408,9 @@ Route::get('/property-details/{id}', function ($id) {
     abort(404);
 });
 // Route::get('/{slugAndId}', [FrontendController::class, 'PropDetailsView'])->name('property.details');
+Route::get('/{slugAndId}', [FrontendController::class, 'PropDetailsView'])
+    ->where('slugAndId', '.*-\d+')
+    ->name('property.details');
 Route::get('referral-program', [FrontendController::class, 'ReferralsView']);
 
 Route::post('search_properties', [FrontendController::class, 'search_properties'])->name('search_properties');
