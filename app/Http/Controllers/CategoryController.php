@@ -371,4 +371,67 @@ private function updateWallet($userId, $amount)
         \Log::info("Updated wallet by adding {$amount} for User ID: {$userId}");
     }
 }
+
+public function distributeMlmAmount($applicantUserId, $mlmAmount)
+{
+    \Log::info("Starting MLM distribution", [
+        'user_id' => $applicantUserId,
+        'amount'  => $mlmAmount
+    ]);
+
+    $applicantCategory = DB::table('categories')
+        ->where('user_id', $applicantUserId)
+        ->first();
+
+    if (!$applicantCategory) {
+        \Log::warning("Category not found for MLM distribution");
+        return;
+    }
+
+    $ancestors = DB::table('categories')
+        ->where('_lft', '<', $applicantCategory->_lft)
+        ->where('_rgt', '>', $applicantCategory->_rgt)
+        ->orderBy('_lft', 'asc')
+        ->get();
+
+    if ($ancestors->isEmpty()) {
+        \Log::info("No ancestors for MLM distribution");
+        return;
+    }
+
+    // 🔥 SPLIT EXACT AMOUNT
+    $share = $mlmAmount / $ancestors->count();
+
+    foreach ($ancestors as $ancestor) {
+
+        if (!$ancestor->user_id) {
+            continue;
+        }
+
+        $wallet = DB::table('wallet')
+            ->where('user_id', $ancestor->user_id)
+            ->first();
+
+        if (!$wallet) {
+            DB::table('wallet')->insert([
+                'user_id' => $ancestor->user_id,
+                'wallet_balance' => $share,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        } else {
+            DB::table('wallet')
+                ->where('user_id', $ancestor->user_id)
+                ->increment('wallet_balance', $share);
+        }
+
+        \Log::info("MLM distributed", [
+            'to_user' => $ancestor->user_id,
+            'amount'  => $share
+        ]);
+    }
+
+    \Log::info("MLM distribution completed");
+}
+
 }

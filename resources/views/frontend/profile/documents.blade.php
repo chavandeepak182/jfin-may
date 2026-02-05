@@ -106,6 +106,13 @@
                             class="d-block text-decoration-none text-muted mb-1">
                                 <i class="fas fa-download me-1"></i> Download
                             </a>
+                                                    <a href="javascript:void(0);"
+                            class="d-block text-decoration-none text-muted mb-1"
+                            data-bs-toggle="modal"
+                            data-bs-target="#replaceDocModal{{ $doc->document_id }}">
+                                <i class="fas fa-sync-alt me-1"></i> Replace
+                            </a>
+
 
                             <!-- <form action="{{ route('loan.deletedocument', $doc->document_id) }}"
                                 method="POST"
@@ -126,6 +133,41 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="replaceDocModal{{ $doc->document_id }}" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <form method="POST"
+              action="{{ route('loan.replaceDocument', $doc->document_id) }}"
+              enctype="multipart/form-data">
+            @csrf
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Replace Document</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p>
+                        Document :
+                        <strong>{{ $doc->document_name }}</strong>
+                    </p>
+
+                    <input type="file"
+                           name="file"
+                           class="form-control"
+                           required>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">
+                        Replace
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
         @empty
             <div class="col-12">
                 <div class="alert alert-light text-center">

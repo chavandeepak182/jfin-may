@@ -365,7 +365,7 @@ body.modal-open {
                                         data-email="{{ $user->email_id }}" 
                                         data-mobile="{{ $user->mobile_no ?? '-' }}" 
                                         data-dob="{{ $user->profile->pan_number ?? '-' }}" 
-                                        data-status="{{ $user->is_email_verify == 1 ? 'Active' : 'Inactive' }}"> {{ $user->name }}
+                                        > {{ $user->name }}
                                         </a>
 
                                         </td>

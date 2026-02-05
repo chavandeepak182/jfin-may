@@ -18,7 +18,10 @@
                 @forelse($loans as $loan)
                     <tr>
                         <td>{{ $loan->loan_reference_id }}</td>
-                        <td>₹ {{ number_format($loan->amount) }}</td>
+                        <td>
+                                ₹ {{ number_format($loan->amount_approved ?? $loan->amount) }}
+                            </td>
+
                         <td>{{ $loan->tenure }}</td>
                         <td>{{ $loan->user_name }}</td>
                         <td>{{ $loan->category_name }}</td>
