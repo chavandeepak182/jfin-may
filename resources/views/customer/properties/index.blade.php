@@ -1,6 +1,7 @@
 @extends('frontend.layouts.customer-dash')
 
 @section('content')
+
 <h2>Available Properties</h2>
 
 @if(session('success'))
@@ -9,7 +10,11 @@
     </div>
 @endif
 
-<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap:20px;">
+<div style="
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap:20px;
+">
 
 @foreach($properties as $property)
 
@@ -28,32 +33,25 @@
         <p><strong>Builder:</strong> {{ $property->builder_name }}</p>
         <p><strong>City:</strong> {{ ucfirst($property->city) }}</p>
         <p><strong>BHK:</strong> {{ $property->select_bhk }}</p>
+
         <p>
             <strong>Price:</strong>
             ₹ {{ number_format($property->s_price) }}
         </p>
 
-        <form method="POST"
-              action="{{ route('customer.book.property') }}"
-              style="margin-top:10px;">
-            @csrf
-
-            <input type="hidden"
-                   name="property_id"
-                   value="{{ $property->properties_id }}">
-
-            <button type="submit"
-                style="
-                    padding:8px 14px;
-                    background:#000;
-                    color:#fff;
-                    border:none;
-                    border-radius:4px;
-                    cursor:pointer;
-                ">
-                Book Property
-            </button>
-        </form>
+        {{-- BOOK → OPEN FORM (NOT DIRECT SUBMIT) --}}
+        <a href="{{ route('customer.property.book.form', $property->properties_id) }}"
+           style="
+                display:inline-block;
+                margin-top:10px;
+                padding:8px 14px;
+                background:#000;
+                color:#fff;
+                text-decoration:none;
+                border-radius:4px;
+           ">
+            Book Property
+        </a>
 
     </div>
 
