@@ -793,7 +793,7 @@
                             </span>
 
                             <img
-                                src="{{ $property->image }}"
+                                src="{{ asset($property->image) }}"
                                 alt="{{ $property->title }}"
                                 loading="lazy"
                             >
