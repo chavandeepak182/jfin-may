@@ -48,7 +48,6 @@ Route::get('/get-cities/{state_id}', function ($state_id) {
         ->orderBy('city')
         ->get();
 })->name('get.cities');
-use App\Http\Controllers\CustomerBookingController;
 
 
 require __DIR__.'/auth.php';
@@ -966,13 +965,15 @@ Route::middleware(['auth'])->group(function () {
     /* =======================
        CUSTOMER ROUTES
     ======================== */
-    Route::get('/__debug-confirm/{id}', function ($id) {
-    \Log::info('🔥 DEBUG ROUTE HIT', [
-        'id' => $id,
-        'user_id' => auth()->id(),
-    ]);
-    return "DEBUG OK - Booking ID = $id";
-});
+    Route::get(
+        'customer/property/{id}/book',
+        [CustomerBookingController::class, 'showBookingForm']
+    )->name('customer.property.book.form');
+
+    Route::post(
+        'customer/property/book/submit',
+        [CustomerBookingController::class, 'submitBookingForm']
+    )->name('customer.property.book.submit');
 
     Route::get('customer/properties',
         [CustomerBookingController::class, 'showProperties']

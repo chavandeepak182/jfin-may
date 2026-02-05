@@ -35,9 +35,9 @@ return [
         ],
     ],
 
-    'twofactor' => [
-    'key'     => env('TWO_FACTOR_API_KEY'),
-    'country' => env('TWO_FACTOR_COUNTRY_CODE', '91'),
+   'twofactor' => [
+    'api_key' => env('TWO_FACTOR_API_KEY'),
+    'sender' => env('TWO_FACTOR_SENDER'),
 ],
 
 'google' => [
