@@ -666,7 +666,7 @@ public function showBlog($slug)
                         ->groupBy('properties_id');
 
                     foreach ($properties as $property) {
-                        $property->image = isset($propertyImages[$property->properties_id])
+                         $property->image = isset($propertyImages[$property->properties_id])
                             ? env('baseURL') . "/" . $propertyImages[$property->properties_id]->first()->image_url
                             : env('baseURL') . "/theme/frontend/img/default.jpg"; // Use default if no image
                     }
