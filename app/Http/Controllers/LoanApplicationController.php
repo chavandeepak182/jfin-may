@@ -2029,6 +2029,8 @@ public function ajaxDisbursedLoans()
             'loans.tenure',
             'loans.status', // ✅ IMPORTANT
             'users.name as user_name',
+            'loans.amount_approved',
+
             'loan_category.category_name'
         )
         ->where('loans.status', 'disbursed')
