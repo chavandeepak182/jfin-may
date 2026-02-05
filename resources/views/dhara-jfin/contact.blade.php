@@ -14,7 +14,7 @@
 </section>
 <!-- Contact Section -->
 <section class="contact-section">
-    <div class="container">
+    <div class="container-tab">
 
         <div class="section-header-contact-page">
             <h1>For Loan Details, Assistance Or Any Queries.</h1>
