@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
+// use Illuminate\Support\Facades\DB;
 
 
 
@@ -411,7 +413,12 @@ public function insertUser(Request $request)
             'email',
             Rule::unique('users', 'email_id'),
         ],
-        'mobile_no' => ['required', 'regex:/^[6-9]\d{9}$/'],
+        // 'mobile_no' => ['required', 'regex:/^[6-9]\d{9}$/'],
+        'mobile_no' => [
+    'required',
+    'regex:/^[6-9]\d{9}$/',
+    Rule::unique('users', 'mobile_no')
+],
     ];
 
     // ================= CUSTOMER RULES =================
@@ -1409,6 +1416,40 @@ public function mydocuments()
     ]);
 
     return view('frontend.profile.documents', compact('documents'));
+}
+
+
+public function replaceDocument(Request $request, $id)
+{
+    $request->validate([
+        'file' => 'required|file|max:5120'
+    ]);
+
+    $doc = DB::table('documents')
+        ->where('document_id', $id)
+        ->first();
+
+    if (!$doc) {
+        return back()->withErrors('Document not found');
+    }
+
+    // 🔴 जुनी file delete
+    if ($doc->file_path && Storage::disk('public')->exists($doc->file_path)) {
+        Storage::disk('public')->delete($doc->file_path);
+    }
+
+    // ✅ नवीन file upload
+    $newPath = $request->file('file')->store('documents', 'public');
+
+    // 🔁 DB update
+    DB::table('documents')
+        ->where('document_id', $id)
+        ->update([
+            'file_path' => $newPath,
+            'updated_at' => now()
+        ]);
+
+    return back()->with('success', 'Document replaced successfully');
 }
    public function updateDocuments(Request $request)
 {

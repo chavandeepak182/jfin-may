@@ -344,6 +344,9 @@ body {
     </ul>
 
 </nav>
+<form id="logout-form" method="POST" action="{{ route('logout') }}" class="d-none">
+    @csrf
+</form>
 
 
             <!-- DESKTOP ACTIONS -->
@@ -409,10 +412,14 @@ body {
                     <span>Dashboard</span>
                 </a>
 
-                <a href="/logout" class="dropdown-link logout-link">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
-                </a>
+               <a href="javascript:void(0);"
+   class="dropdown-link logout-link"
+   onclick="document.getElementById('logout-form').submit();">
+    <i class="fas fa-sign-out-alt"></i>
+    <span>Logout</span>
+</a>
+
+
             @endif
 
         </div>

@@ -474,6 +474,11 @@ Route::middleware(['isUserOrAdmin'])->group(function () {
     Route::get('/myprofessional', [UsersController::class, 'myprofessional'])->name('loan.myprofessional');
     Route::get('/myeducation', [UsersController::class, 'myeducation'])->name('loan.myeducation');
     Route::get('/mydocuments', [UsersController::class, 'mydocuments'])->name('loan.mydocuments');
+    Route::post(
+    '/loan/document/replace/{id}',
+    [UsersController::class, 'replaceDocument']
+)->name('loan.replaceDocument');
+
     Route::delete('/mydocuments/{id}', [UsersController::class, 'deleteDocument'])
     ->name('loan.deletedocument');
 
