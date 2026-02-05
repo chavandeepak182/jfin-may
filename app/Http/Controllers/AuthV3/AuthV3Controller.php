@@ -330,17 +330,20 @@ private function generateOtp($userId)
 
         $apiKey = env('TWO_FACTOR_API_KEY');
         $mobile = "91" . $user->mobile_no;
-
         $templateName = "Register";
 
-        // generate otp
+        // Generate OTP
         $otp = rand(100000, 999999);
 
-        // NEW OFFICIAL ENDPOINT
+        // 2Factor Endpoint
         $url = "https://2factor.in/API/V1/{$apiKey}/SMS/{$mobile}/{$otp}/{$templateName}";
 
-        $response = Http::timeout(20)->get($url);
+        // FORCE IPv4 (fix for server 404)
+        $response = Http::withOptions([
+            'force_ip_resolve' => 'v4'
+        ])->timeout(20)->get($url);
 
+        // Raw log
         \Log::info("OTP API RAW", [
             'status' => $response->status(),
             'body'   => $response->body()
@@ -352,19 +355,28 @@ private function generateOtp($userId)
 
         $json = $response->json();
 
+        // If response is not JSON
+        if (!is_array($json)) {
+            \Log::error("OTP INVALID RESPONSE", [
+                'raw' => $response->body()
+            ]);
+            return false;
+        }
+
+        // If API failed
         if (($json['Status'] ?? '') !== 'Success') {
             \Log::error("OTP API FAILED", $json);
             return false;
         }
 
-        // delete old
+        // Delete old OTPs
         Otp::where('user_id', $userId)->delete();
 
-        // insert new
+        // Insert new OTP
         Otp::create([
             'user_id'    => $userId,
-            'otp'        => $otp,        // REAL OTP
-            'session_id' => null,        // NOT USED ANYMORE
+            'otp'        => $otp,
+            'session_id' => null,
             'is_verify'  => 0,
             'expires_at' => now()->addMinutes(10),
         ]);
@@ -372,7 +384,9 @@ private function generateOtp($userId)
         return true;
 
     } catch (\Throwable $e) {
-        \Log::error("OTP Send Exception", ['error' => $e->getMessage()]);
+        \Log::error("OTP Send Exception", [
+            'error' => $e->getMessage()
+        ]);
         return false;
     }
 }
