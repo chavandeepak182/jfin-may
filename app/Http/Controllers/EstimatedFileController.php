@@ -50,7 +50,9 @@ class EstimatedFileController extends Controller
 {
     $request->validate([
         'report_month'       => 'required|regex:/^\d{4}-\d{2}$/',
-        'customer_name'      => 'required|string|max:150',
+        'customer_name' => 'required|regex:/^[a-zA-Z ]+$/|max:150',
+            'emp_name'      => 'nullable|regex:/^[a-zA-Z ]+$/|max:100',
+            'dsa_name'      => 'nullable|regex:/^[a-zA-Z ]+$/|max:150',
         'bank_id'            => 'required|exists:loan_bank_details,bank_id',
 
         'net_amt_disbursed'  => 'required|numeric|min:0',
@@ -62,14 +64,18 @@ class EstimatedFileController extends Controller
         'sub_manager'        => 'nullable|string|max:100',
         'product'            => 'nullable|string|max:100',
         'sub_product'        => 'nullable|string|max:100',
-        'emp_name'           => 'nullable|string|max:100',
-        'emp_code'           => 'nullable|string|max:50',
-        'dsa_name'           => 'nullable|string|max:150',
-        'dsa_code'           => 'nullable|string|max:50',
+        // 'emp_name'           => 'nullable|string|max:100',
+       'emp_code' => 'nullable|alpha_num|max:50',
+                 'dsa_code' => 'nullable|alpha_num|max:50',
+        // 'dsa_name'           => 'nullable|string|max:150',
+       
         'source'             => 'nullable|string|max:100',
         'mobile'             => 'nullable|string|max:15',
         'email'              => 'nullable|email|max:150',
-        'pan'                => 'nullable|string|max:15',
+       'pan' => [
+    'nullable',
+    'regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/'
+],
         'aadhaar'            => 'nullable|string|max:20',
     ]);
 
@@ -100,6 +106,61 @@ class EstimatedFileController extends Controller
         ->route('estimatedFile.index')
         ->with('success', 'Estimated File Added Successfully');
 }
+
+//     public function store(Request $request)
+// {
+//     $request->validate([
+//         'report_month'       => 'required|regex:/^\d{4}-\d{2}$/',
+//         'customer_name'      => 'required|string|max:150',
+//         'bank_id'            => 'required|exists:loan_bank_details,bank_id',
+
+//         'net_amt_disbursed'  => 'required|numeric|min:0',
+//         'est_net_percent'    => 'required|numeric|min:0',
+//         'dsa_payout_percent' => 'required|numeric|min:0',
+
+//         'app_no'             => 'nullable|string|max:50',
+//         'bm_ch_name'         => 'nullable|string|max:100',
+//         'sub_manager'        => 'nullable|string|max:100',
+//         'product'            => 'nullable|string|max:100',
+//         'sub_product'        => 'nullable|string|max:100',
+//         'emp_name'           => 'nullable|string|max:100',
+//         'emp_code'           => 'nullable|string|max:50',
+//         'dsa_name'           => 'nullable|string|max:150',
+//         'dsa_code'           => 'nullable|string|max:50',
+//         'source'             => 'nullable|string|max:100',
+//         'mobile'             => 'nullable|string|max:15',
+//         'email'              => 'nullable|email|max:150',
+//         'pan'                => 'nullable|string|max:15',
+//         'aadhaar'            => 'nullable|string|max:20',
+//     ]);
+
+//     $data = $request->all();
+
+//     // 📅 Month handling
+//     $data['report_month'] = Carbon::createFromFormat('Y-m', $request->report_month)
+//                                     ->startOfMonth();
+
+//     // 💰 FORMULA CALCULATION (BACKEND)
+//     $netAmt   = $request->net_amt_disbursed;
+//     $netPct   = $request->est_net_percent;
+//     $dsaPct   = $request->dsa_payout_percent;
+
+//     $estimateRevenue   = ($netAmt * $netPct) / 100;
+//     $dsaPayoutAmt      = ($netAmt * $dsaPct) / 100;
+//     $tds               = ($estimateRevenue * 5) / 100;
+//     $netRevenue        = $estimateRevenue - $dsaPayoutAmt - $tds;
+
+//     $data['estimate_revenue']    = round($estimateRevenue, 2);
+//     $data['est_dsa_payout_amt']  = round($dsaPayoutAmt, 2);
+//     $data['tds']                 = round($tds, 2);
+//     $data['net_revenue']         = round($netRevenue, 2);
+
+//     EstimatedFile::create($data);
+
+//     return redirect()
+//         ->route('estimatedFile.index')
+//         ->with('success', 'Estimated File Added Successfully');
+// }
     public function edit($id)
     {
         $estimatedFile = EstimatedFile::findOrFail($id);

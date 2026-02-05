@@ -183,7 +183,16 @@ MIS Dashboard
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label for="contact" class="col-form-label">Contact:</label>
-                            <input type="text" class="form-control" id="contact" name="contact" required>
+                             <input 
+        type="text"
+        class="form-control"
+        id="contact"
+        name="contact"
+        maxlength="10"
+        required
+        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+        placeholder="Enter 10 digit mobile number"
+    >
                         </div>
                         <!-- <div class="form-group col-lg-6">
                             <label for="office_contact" class="col-form-label">Office Contact:</label>

@@ -75,7 +75,7 @@
                                 <div class="metric-icon green"><i class="fas fa-user-tie"></i></div>
                                 <div class="metric-content">
                                     <h3>Total  Customer</h3>
-                                    <div class="metric-value">20</div>
+                                    <div class="metric-value">0</div>
                                     <div class="metric-change negative">
                             <i class="fas fa-arrow-down"></i>
                             <span>-5.1%</span>
@@ -91,7 +91,7 @@
                                 <div class="metric-icon purple"><i class="fas fa-users"></i></div>
                                 <div class="metric-content">
                                     <h3>Active Loans</h3>
-                                    <div class="metric-value">10</div>
+                                    <div class="metric-value">0</div>
                                     <div class="metric-change positive">
                             <i class="fas fa-arrow-up"></i>
                             <span>+15.3%</span>

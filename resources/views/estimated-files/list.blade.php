@@ -90,14 +90,15 @@
                             </a>
 
                             {{-- EXPORT EXCEL --}}
-                            <a href="{{ route('monthlyPL.exportFormatted', $pl->id) }}"
+                            <!-- <a href="{{ route('monthlyPL.exportFormatted', $pl->id) }}"
                                class="btn btn-sm btn-success">
                                 <i class="bi bi-file-earmark-excel"></i> Excel
-                            </a>
+                            </a> -->
                             <a href="{{ route('monthlyPL.exportWithEstimated', $pl->id) }}"
                                 class="btn btn-success btn-sm">
-                                Export Excel (Estimated + P&L)
+                                Export Excel 
                             </a>
+                            <!-- (Estimated + P&L) -->
 
                             {{-- FUTURE: VIEW / EDIT --}}
                             {{-- <a href="#" class="btn btn-sm btn-primary">View</a> --}}
