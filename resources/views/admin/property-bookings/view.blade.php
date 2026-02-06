@@ -27,7 +27,8 @@
 @foreach($booking->items as $item)
     <p>{{ $item->property->title }}</p>
 @endforeach
-
+<h4>Co-Applicant Details</h4>
+<p>{{ $booking->co_name }} | {{ $booking->customer_mobile }} | {{ $booking->customer_email }}</p>
 <hr>
 
 <form method="POST" action="{{ url('admin/booking/offer/'.$booking->id) }}">

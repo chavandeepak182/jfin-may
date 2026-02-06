@@ -14,6 +14,19 @@ use Illuminate\Database\Eloquent\Model;
     'customer_id',
     'admin_id',
     'status',
+        'customer_name',
+    'customer_email',
+    'customer_mobile',
+    'customer_pan',
+
+    'co_name',
+    'co_email',
+    'co_mobile',
+    'co_employment_type',
+    'co_designation',
+    'co_gender',
+    'co_marital_status',
+
 
     'agreement_cost',
     'commission_percentage',
