@@ -26,6 +26,8 @@ use App\Services\CreditScoreService;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cookie;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
+
 
 
 
@@ -2239,95 +2241,63 @@ public function ajaxRejectedLoans()
     //     }
     // }
     public function handleStep(Request $request)
-    {
-        $sessionUserId   = session('user_id');
-        $sessionUserRole = session('role_id');
+{
+    $sessionUserId   = session('user_id');
+    $sessionUserRole = session('role_id');
 
-        if (!$sessionUserId) {
-            return redirect()->route('login')
-                ->withErrors('User session expired. Please log in again.');
-        }
-
-        $currentStep = (int) $request->input('current_step');
-
-        try {
-
-            /* ---------------- ADMIN USER SELECTION (STEP 1) ---------------- */
-            if ($sessionUserRole == 4 && $currentStep == 1) {
-                $selectedUserId = $request->input('user_id');
-                if (!$selectedUserId) {
-                    return redirect()->back()->withErrors('Please select a user.');
-                }
-                session(['selected_user_id' => $selectedUserId]);
-            }
-
-            /* ---------------- USER ID RESOLUTION ---------------- */
-            if ($sessionUserRole == 4) {
-                $userId = session('selected_user_id');
-                if (!$userId) {
-                    return redirect()->route('loan.form', ['current_step' => 1])
-                        ->withErrors('User not selected. Please select a user in Step 1.');
-                }
-            } else {
-                $userId = $sessionUserId;
-            }
-
-            /* ---------------- PREVIOUS BUTTON ---------------- */
-            if ($request->has('previous')) {
-                return redirect()->route('loan.form', [
-                    'current_step' => max(1, $currentStep - 1)
-                ]);
-            }
-
-            /* ---------------- NEXT BUTTON ---------------- */
-            if ($request->has('next')) {
-
-                switch ($currentStep) {
-
-                    case 1:
-                        $this->handlePersonalDetails($request, $userId);
-                        break;
-
-                    case 2:
-                        $this->handleProfessionalDetails($request, $userId);
-                        break;
-
-                    case 3:
-                        // ✅ FIX: Step-3 is Upload Documents
-                        $this->handleDocumentUpload($request, $userId);
-                        break;
-
-                    case 4:
-                        // ✅ FIX: Step-4 is Loan Details
-                        $this->handleLoanDetails($request, $userId);
-                        return redirect()->route('loan.thankyou');
-
-                    default:
-                        return redirect()->route('loan.form', ['current_step' => 1])
-                            ->withErrors('Invalid step. Please restart the application.');
-                }
-
-                // ✅ MOVE TO NEXT STEP
-                return redirect()->route('loan.form', [
-                    'current_step' => $currentStep + 1
-                ]);
-            }
-
-            return redirect()->back()->withErrors('Invalid action.');
-
-        } catch (\Exception $e) {
-            Log::error('Loan Step Error', [
-                'message' => $e->getMessage(),
-                'step'    => $currentStep,
-                'user'    => $userId
-            ]);
-
-            // return redirect()->back()
-            //     ->withErrors('Something went wrong. Please try again.');
-            return redirect()->back();
-
-        }
+    if (!$sessionUserId) {
+        return redirect()->route('login');
     }
+
+    $currentStep = (int) $request->input('current_step');
+
+    // ADMIN user selection
+    if ($sessionUserRole == 4 && $currentStep == 1) {
+        if (!$request->user_id) {
+            return back()->withErrors(['user_id' => 'Please select user']);
+        }
+        session(['selected_user_id' => $request->user_id]);
+    }
+
+    $userId = $sessionUserRole == 4
+        ? session('selected_user_id')
+        : $sessionUserId;
+
+    if ($request->has('previous')) {
+        return redirect()->route('loan.form', [
+            'current_step' => max(1, $currentStep - 1)
+        ]);
+    }
+
+    if ($request->has('next')) {
+
+        switch ($currentStep) {
+            case 1:
+                $this->handlePersonalDetails($request, $userId);
+                break;
+
+            case 2:
+                $this->handleProfessionalDetails($request, $userId);
+                break;
+
+            case 3:
+                $this->handleDocumentUpload($request, $userId);
+                break;
+
+            case 4:
+                $this->handleLoanDetails($request, $userId);
+                return redirect()->route('loan.thankyou');
+        }
+
+        // ✅ ONLY if validation passed
+        return redirect()->route('loan.form', [
+            'current_step' => $currentStep + 1
+        ]);
+    }
+
+    return back();
+}
+
 
 
 
@@ -2515,11 +2485,12 @@ protected function handlePersonalDetails(Request $request, $userId)
                 'regex:/^[A-Za-z ]+$/',
                 'min:3'
             ],
+'pan_number' => [
+    'required',
+    'regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/',
+    Rule::unique('profile', 'pan_number')->ignore($userId, 'user_id'),
+],
 
-            'pan_number' => [
-                'required',
-                'regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/'
-            ],
 'dob' => [
         'required',
         'date',
@@ -2548,6 +2519,8 @@ protected function handlePersonalDetails(Request $request, $userId)
             'mobile_no.digits' => 'Mobile number must be exactly 10 digits.',
             'pan_number.regex' => 'Enter valid PAN number (ABCDE1234F).',
             'pincode.digits' => 'Pincode must be 6 digits.',
+            'pan_number.unique' => 'This PAN number is already registered.',
+
         ]
     );
 
