@@ -7,6 +7,7 @@
 
     <!-- Local CSS -->
     <link rel="stylesheet" href="{{ asset('theme/dhara-jfin/css/styles.css') }}">
+    <script src="{{ asset('theme/dhara-jfin/js/header.js') }}"></script>
 
     <!-- Font Awesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
