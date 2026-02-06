@@ -434,15 +434,7 @@ We simplify construction financing with low rates and an easy online application
     });
 });
 
-    // Sticky header scroll effect
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('.header');
-            if (window.scrollY > 50) {
-                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.boxShadow = 'none';
-            }
-        });
+    
     // Hero Background Carousel
     const heroSlider = document.querySelector('.hero-slider');
     const slides = document.querySelectorAll('.slide');

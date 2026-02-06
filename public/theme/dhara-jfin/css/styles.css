@@ -28,8 +28,7 @@
     --shadow-md: 0 4px 12px rgba(10, 77, 140, 0.12);
     --shadow-lg: 0 12px 28px rgba(10, 77, 140, 0.15);
     --shadow-xl: 0 20px 40px rgba(10, 77, 140, 0.2);
-    --bg-white: #ffffff;
-
+    
 }
 
 * {
@@ -3976,7 +3975,7 @@ body.menu-open .back-to-top {
             from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes slideUpFast  {
+        @keyframes slideUp {
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
