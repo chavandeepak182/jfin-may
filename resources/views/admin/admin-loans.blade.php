@@ -321,7 +321,7 @@ $(document).ready(function () {
             <input type="text"
                    id="loanSearch"
                    class="form-control border-start-0"
-                   placeholder="Search by applicant name...">
+                   placeholder="Search by applicant name and loan type...">
         </div>
     </div>
 </div>
@@ -341,29 +341,25 @@ $(document).ready(function () {
 
     let currentType = 'all';
 
-    function loadLoans(type = 'all', search = '') {
+function loadLoans(type = 'all', search = '') {
 
     currentType = type;
-    let url = "{{ route('loan.ajax.list') }}";
-
-    if (type === 'inprocess') url = "{{ route('loan.ajax.inprocess') }}"; // ✅ ADD THIS
-    if (type === 'pending')   url = "{{ route('loan.ajax.pending') }}";
-    if (type === 'approved')  url = "{{ route('loan.ajax.approved') }}";
-    if (type === 'disbursed') url = "{{ route('loan.ajax.disbursed') }}";
-    if (type === 'rejected')  url = "{{ route('loan.ajax.rejected') }}";
-    if (type === 'trashed')   url = "{{ route('loan.ajax.trashed') }}";
 
     $('#loanListArea').html('<div class="text-center py-4">Loading...</div>');
 
     $.ajax({
-        url: url,
+        url: "{{ route('loan.ajax.list') }}", // ✅ only ONE route
         type: "GET",
-        data: { search: search },
+        data: {
+            search: search,
+            type: type
+        },
         success: function (res) {
             $('#loanListArea').html(res);
         }
     });
 }
+
 
     $('.loan-filter').on('click', function (e) {
         e.preventDefault();
@@ -394,7 +390,8 @@ $(document).on('click', '#loanListArea .pagination a', function (e) {
         url: url,
         type: 'GET',
         data: {
-            search: search
+           search: search,
+             type: currentType
         },
         success: function (res) {
             $('#loanListArea').html(res);

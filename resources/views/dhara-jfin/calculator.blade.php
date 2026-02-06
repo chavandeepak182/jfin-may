@@ -250,15 +250,7 @@
 <script>
         
         // Sticky header scroll effect
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('.header');
-            if (window.scrollY > 50) {
-                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.boxShadow = 'none';
-            }
-        });
-
+      
         // EMI Calculator Logic
         function calculateEMI() {
             const loanAmount = parseFloat(document.getElementById('emi-loan').value);

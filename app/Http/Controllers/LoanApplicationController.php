@@ -1817,20 +1817,30 @@ public function showForm(Request $request)
 
 public function ajaxList(Request $request)
 {
-    $type   = $request->type;
     $search = $request->search;
+    $type   = $request->type;
 
-    $query = Loan::query()
-        ->when($search, function ($q) use ($search) {
+    $query = Loan::query();
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+
+            // Applicant name
             $q->whereHas('user', function ($u) use ($search) {
                 $u->where('name', 'LIKE', "%{$search}%");
+            })
+
+            // Loan category name (Home Loan, Personal Loan)
+            ->orWhereHas('loanCategory', function ($c) use ($search) {
+                $c->where('category_name', 'LIKE', "%{$search}%");
             });
         });
+    }
 
     if ($type === 'pending') {
         $query->whereNull('assigned_to');
-    } elseif ($type === 'in process') {
-        $query->where('status', 'in process');
+    } elseif ($type === 'inprocess') {
+        $query->where('status', 'inprocess');
     } elseif ($type === 'approved') {
         $query->where('status', 'approved');
     } elseif ($type === 'disbursed') {
@@ -1841,12 +1851,11 @@ public function ajaxList(Request $request)
         $query->onlyTrashed();
     }
 
-    $loans = $query->latest()
-        ->paginate(10)
-        ->appends(['search' => $search]);
+    $loans = $query->latest()->paginate(10);
 
     return view('partials.list', compact('loans'));
 }
+
 
 // public function ajaxPendingLoans()
 // {
