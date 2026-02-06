@@ -328,7 +328,7 @@ private function generateOtp($userId)
 
     try {
 
-        $apiKey = env('TWO_FACTOR_API_KEY');
+        $apiKey = config('services.twofactor.api_key');
         $mobile = "91" . $user->mobile_no;
         $templateName = "Register";
 
