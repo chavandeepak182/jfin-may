@@ -9,7 +9,7 @@
     <section id="home" class="hero">
         <div class="hero-slider">
             <div class="slide" style="background-image:  url('{{asset('theme/dhara-jfin/img/loan_banner_new.jpg')}}')">
-                <div class="container hero-content">
+                <div class="container-tab hero-content">
                     <div class="hero-intro">WELCOME TO JFINSERV</div>
                     <h1>Fastest,Secure and <span style="color:#295cab">Easy Loan Process</span></h1>
                     <p>Experience fast,secure loans with competitive rates and personalized support in Pune.Enjoy seamless service and exceptional rewards.</p>
@@ -22,7 +22,7 @@
             </div>
 
             <div class="slide" style="background-image: url('{{asset('theme/dhara-jfin/img/reward_banner.jpg')}}'); background-position:right 10% top 5%;" >
-                <div class="container hero-content">
+                <div class="container-tab hero-content">
                     <div class="hero-intro">TRUSTED FINANCIAL PARTNERS</div>
                     <h1>Unique Reward & <span style="color:#295cab">Earning Opportunity</span></h1>
                     <p>We offer a unique earning opportunity through our referral program, rewarding both your referrals and those made by your friends.</p>
@@ -137,7 +137,7 @@
 
     {{-- ABOUT --}}
     <section id="about" class="about">
-        <div class="container flex">
+        <div class="container-tab flex">
             <div class="about-text">
                 <h2 class="finserv-trusted" style="color:#295cab;">Your <strong style="color:#00abeb">Trusted</strong> Financial Partner</h2>
                 <p>At Jfinserv, we believe that transparency and trust are the pillars of a successful financial relationship.</p>
@@ -196,7 +196,7 @@ We simplify construction financing with low rates and an easy online application
 
     {{-- SERVICES --}}
 <section id="dharaservices" class="services">
-    <div class="container">
+    <div class="container-tab">
 
         <div class="section-header text-center">
             <h2 class="finserv-trusted" style="color:#295cab;">Our Loan <strong style="color:#00abeb">Products</strong></h2>
@@ -234,7 +234,7 @@ We simplify construction financing with low rates and an easy online application
 
     {{-- TESTIMONIALS --}}
 <section id="testimonials" class="testimonials section-padding">
-    <div class="container">
+    <div class="container-tab">
         <div class="section-header text-center">
             <h4 style="color:#295cb3">Testimonials</h4>
             <h2 class="finserv-trusted" style="color:#295cab;">What Our <strong style="color:#00abeb">Clients</strong> Say</h2>
@@ -312,7 +312,7 @@ We simplify construction financing with low rates and an easy online application
     </section>
 
     <section class="home-section">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-section-header">
                 <h2 class="home-section-title">Frequently Asked Questions</h2>
                 <p class="home-section-subtitle">

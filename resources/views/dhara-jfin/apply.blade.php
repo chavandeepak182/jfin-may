@@ -1,7 +1,7 @@
 @include('dhara-jfin.layout.header')
 <main>
 <section>
-    <div class="container">
+    <div class="container-tab">
         <div class="apply-grid">
             <div class="apply-left-grid">
                 <div class="apply-left-content">
@@ -41,7 +41,7 @@
 
 <section class="home-section">
     <!-- Required docs  -->
-     <div class="container">
+     <div class="container-tab">
             <div class="home-section-header">
                     <h2 class="finserv-trusted" style="color:#295cab;">Required Documents</h2>
                     <p>Keep these documents handy for quick approval</p>
