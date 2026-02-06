@@ -793,7 +793,7 @@
                             </span>
 
                             <img
-                                src="{{ $property->image }}"
+                                src="{{ asset($property->image) }}"
                                 alt="{{ $property->title }}"
                                 loading="lazy"
                             >
@@ -1078,7 +1078,7 @@
                     </div>
 
                     <div class="property-location">
-                        <i class="fa-solid fa-location-dot"></i> {{ $location }}
+                        <i class="fa-solid fa-location-dot"></i>     {{ $location }}
                     </div>
 
                     <div class="property-specs">

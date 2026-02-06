@@ -18,7 +18,7 @@
 </section>
 
         <section class="finserv-wrapper">
-            <div class="container">
+            <div class="container-tab">
                 <div class="finserv-header">
                         <h4 class="finserv-eyebrow">Product Overview</h4>
                         <h2 class="finserv-trusted" style="color:#295cab;">Unlock the <strong style="color:#00abeb"> True Value </strong> of Your Property</h2>
@@ -50,7 +50,7 @@
         </section>
 
         <section class="home-section">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-section-header">
                 <h2 class="finserv-trusted" style="color:#295cab;">Why Choose Our <strong style="color:#00abeb">Property</strong> Loan?</h2>
                 <p class="home-section-subtitle">
@@ -95,7 +95,7 @@
 
     <!-- benefits section  -->
     <section class="home-section home-benefits-section">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-section-header">
                 <h2 class="finserv-trusted" style="color:#295cab;">Our Property Loan <strong style="color:#00abeb">Benefits</strong></h2>
                 <p class="home-section-subtitle">
@@ -169,7 +169,7 @@
     <!-- eligibiity and docs  -->
 
     <section class="home-section" id="home-eligibility">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-section-header">
                 <h2 class="home-section-title">Eligibility & Documents</h2>
                 <p class="home-section-subtitle">
@@ -514,7 +514,7 @@
 
     <!-- emi  -->
     <section class="home-section home-emi-preview-section" id="emi">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-emi-preview-container">
                 <div class="home-emi-preview-content">
                     <h2 class="home-section-title">Calculate Your Home Loan EMI</h2>
@@ -554,7 +554,7 @@
     <!-- faqs  -->
 
     <section class="home-section">
-        <div class="container">
+        <div class="container-tab">
             <div class="home-section-header">
                 <h2 class="home-section-title">Frequently Asked Questions</h2>
                 <p class="home-section-subtitle">
