@@ -246,11 +246,17 @@
                                                             oninput="this.value = this.value.toUpperCase()">
                                                         <label for="pan_number">PAN Number</label>
 
-                                                        @error('pan_number')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
+                                                       @error('pan_number')
+                                                                                <div class="text-danger mt-1">{{ $message }}</div>
+                                                                            @enderror
+
                                                     </div>
                                                 </div>
+@if ($errors->has('pan_number'))
+<script>
+    document.getElementById('pan_number').scrollIntoView({ behavior: 'smooth' });
+</script>
+@endif
 
                                            <div class="col-md-4">
                                                 <div class="form-floating">
