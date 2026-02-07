@@ -187,7 +187,7 @@
 
 
     <!-- All MIS -->
-<div class="col-xl-3 col-lg-4 col-md-6">
+<!-- <div class="col-xl-3 col-lg-4 col-md-6">
     <div class="analytics-card"
          onclick="showMISList()"
          style="cursor:pointer;">
@@ -206,7 +206,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
 <!-- Referral Leads -->

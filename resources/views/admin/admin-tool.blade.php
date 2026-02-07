@@ -418,17 +418,20 @@
                     @csrf
 
                     <div class="row">
-                        <div class="form-group col-lg-4">
-                            <label>Bank Name:</label>
+                       <div class="form-group col-lg-4">
+                            <label>
+                                Bank Name <span class="text-danger">*</span>
+                            </label>
                             <input type="text" class="form-control" name="bank_name" required>
                         </div>
+
                         <div class="form-group col-lg-4">
                             <label>IFSC Code:</label>
-                            <input type="text" class="form-control" name="ifsc_code" required>
+                            <input type="text" class="form-control" name="ifsc_code">
                         </div>
                         <div class="form-group col-lg-4">
                             <label>Branch Name:</label>
-                            <input type="text" class="form-control" name="branch_name" required>
+                            <input type="text" class="form-control" name="branch_name">
                         </div>
                     </div>
                     <input type="hidden" name="bank_id" id="bank_id">
