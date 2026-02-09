@@ -1,7 +1,133 @@
 @extends('layouts.header')
 
 @section('content')
+<style>
+.container{
+    padding:0 10px;
+}
+.title{
+    color:#1565C0;  
+    font-size:27px;
+    margin-bottom:20px;
+}
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.section-title::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: #667eea;
+    border-radius: 2px;
+}
+.customer-details{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    background: #f4f7fa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+.info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+}
+.info-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #64748b;
+    letter-spacing: 0.5px;
+}
+.info-value {
+    font-size: 15px;
+    color: #1a202c;
+    font-weight: 500;
+}
+.sub-heading{
+    color:#1565C0;
+    padding-left:10px;
+    font-size:23px;
+}
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2d3748;
+}
+.form-group input {
+    padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 10px;
+            transition: all 0.2s;
+}
+.calculation-panel {
+            background: linear-gradient(135deg, #f8fafc 0%, #e8eef5 100%);
+            padding: 12px 24px 0;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+.calculation-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+    }
+.calculation-row:last-child {
+                border-bottom: none;
+    }
+.calculation-row p {
+            font-size: 14px;
+            color: #4a5568;
+            font-weight: 500; 
+    }
+.calculation-row span{
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+}
+.checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
 
+        .checkbox-wrapper:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        .checkbox-label {
+            font-size: 15px;
+            font-weight: 500;
+            color: #2d3748;
+            cursor: pointer;
+        }
+</style>
 @php
     // Lock everything once customer interaction starts
     $isLocked = in_array($booking->status, [
@@ -10,8 +136,8 @@
         'completed'
     ]);
 @endphp
-
-<h2>Property Booking Review</h2>
+<div class="container">
+<h2 class="title">Property Booking Review</h2>
 
 <p>
     <strong>Status:</strong>
@@ -19,16 +145,26 @@
 </p>
 
 <hr>
-
-<h4>Customer</h4>
-<p>{{ $booking->customer->name }} | {{ $booking->customer->mobile_no }}</p>
-
-<h4>Property</h4>
-@foreach($booking->items as $item)
-    <p>{{ $item->property->title }}</p>
-@endforeach
-<h4>Co-Applicant Details</h4>
-<p>{{ $booking->co_name }} | {{ $booking->customer_mobile }} | {{ $booking->customer_email }}</p>
+<div class="details">
+    <h2 class="section-title">Booking Details</h2>
+    <div class="customer-details">
+        <div class="info-item">
+            <h4 class="info-label">Customer</h4>
+            <p class="info-value">{{ $booking->customer->name }} | {{ $booking->customer->mobile_no }}</p>
+        </div>
+        <div class="info-item">
+            <h4 class="info-label">Property</h4>
+            @foreach($booking->items as $item)
+                <p class="info-value">{{ $item->property->title }}</p>
+            @endforeach
+        </div>
+        <div class="info-item">
+            <h4 class="info-label">Co-Applicant Details</h4>
+            <p class="info-value">{{ $booking->co_name }} | {{ $booking->customer_mobile }} | {{ $booking->customer_email }}</p>
+        </div>
+        
+    </div>
+</div>
 <hr>
 
 <form method="POST" action="{{ url('admin/booking/offer/'.$booking->id) }}">
@@ -37,77 +173,86 @@
 {{-- ===========================
    AGREEMENT & COMMISSION
 =========================== --}}
-
-<h4>Agreement & Commission</h4>
-
-<label>Agreement Cost (₹)</label><br>
-<input type="number" id="agreement_cost" name="agreement_cost"
-       value="{{ $booking->agreement_cost }}"
-       {{ $isLocked ? 'readonly' : 'required' }}>
-<br><br>
-
-<label>Commission %</label><br>
-<input type="number" id="commission_percentage" name="commission_percentage" step="0.01"
-       value="{{ $booking->commission_percentage }}"
-       {{ $isLocked ? 'readonly' : 'required' }}>
-<br><br>
-
-<label>TDS %</label><br>
-<input type="number" id="tds_percentage" name="tds_percentage" step="0.01"
-       value="{{ $booking->tds_percentage }}"
-       {{ $isLocked ? 'readonly' : 'required' }}>
-<br><br>
-
-<label>GST %</label><br>
-<input type="number" id="gst_percentage" name="gst_percentage" step="0.01"
-       value="{{ $booking->gst_percentage }}"
-       {{ $isLocked ? 'readonly' : 'required' }}>
-<br><br>
-
-<label>MLM Amount (₹)</label><br>
-<input type="number" id="mlm_amount" name="mlm_amount"
-       value="{{ $booking->mlm_amount }}"
-       {{ $isLocked ? 'readonly' : 'required' }}>
-
-<hr>
-
-{{-- ===========================
-   SYSTEM CALCULATIONS
-=========================== --}}
-
-<p><strong>Actual Commission:</strong>
-₹ <span id="actual_commission">{{ number_format($booking->actual_commission ?? 0,2) }}</span>
-</p>
-
-<p><strong>TDS Amount:</strong>
-₹ <span id="tds_amount">{{ number_format($booking->tds_amount ?? 0,2) }}</span>
-</p>
-
-<p><strong>GST Amount:</strong>
-₹ <span id="gst_amount">{{ number_format($booking->gst_amount ?? 0,2) }}</span>
-</p>
-
-<p><strong>Net Commission:</strong>
-₹ <span id="net_commission">{{ number_format($booking->net_commission ?? 0,2) }}</span>
-</p>
-
-<p><strong>Offer Pool (50%):</strong>
-₹ <span id="offer_pool">{{ number_format($booking->offer_pool ?? 0,2) }}</span>
-</p>
-
-<p><strong>Company Share (50%):</strong>
-₹ <span id="final_commission">{{ number_format($booking->final_commission ?? 0,2) }}</span>
-</p>
+<div class="section">
+    <h2 class="section-title">Agreement & Commission</h2>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Agreement Cost (₹)</label>
+            <input type="number" id="agreement_cost" name="agreement_cost"
+                value="{{ $booking->agreement_cost }}"
+                {{ $isLocked ? 'readonly' : 'required' }}>
+        </div>
+        <div class="form-group">
+            <label>Commission %</label>
+            <input type="number" id="commission_percentage" name="commission_percentage" step="0.01"
+                   value="{{ $booking->commission_percentage }}"
+                   {{ $isLocked ? 'readonly' : 'required' }}>
+        </div>
+        <div class="form-group">
+            <label>TDS %</label>
+            <input type="number" id="tds_percentage" name="tds_percentage" step="0.01"
+                   value="{{ $booking->tds_percentage }}"
+                   {{ $isLocked ? 'readonly' : 'required' }}>
+        </div>
+        <div class="form-group">
+            <label>GST %</label>
+            <input type="number" id="gst_percentage" name="gst_percentage" step="0.01"
+                   value="{{ $booking->gst_percentage }}"
+                   {{ $isLocked ? 'readonly' : 'required' }}>
+        </div>
+        <div class="form-group">
+            <label>MLM Amount (₹)</label>
+            <input type="number" id="mlm_amount" name="mlm_amount"
+                   value="{{ $booking->mlm_amount }}"
+                   {{ $isLocked ? 'readonly' : 'required' }}>
+        </div>
+    </div>
+</div>
 
 <hr>
+<div class="section">
+    <h2 class="section-title">Calculation Summary</h2>
+    <div class="calculation-panel">
+        <div class="calculation-row">
+            <p><strong>Actual Commission:</strong></p>
+            <span id="actual_commission">₹ {{ number_format($booking->actual_commission ?? 0,2) }}</span>
+            
+        </div>
+        <div class="calculation-row">
+            <p><strong>TDS Amount:</strong></p>
+             <span id="tds_amount">₹ {{ number_format($booking->tds_amount ?? 0,2) }}</span>
+        </div>
+        <div class="calculation-row">   
+            <p><strong>GST Amount:</strong></p>
+             <span id="gst_amount">₹ {{ number_format($booking->gst_amount ?? 0,2) }}</span>
+            
+        </div>
+        <div class="calculation-row">
+            <p><strong>Net Commission:</strong></p>
+             <span id="net_commission">₹ {{ number_format($booking->net_commission ?? 0,2) }}</span>
+            
+        </div>
+        <div class="calculation-row">
+            <p><strong>Offer Pool (50%):</strong></p>
+             <span id="offer_pool">₹ {{ number_format($booking->offer_pool ?? 0,2) }}</span>
+            
+        </div>
+        <div class="calculation-row">
+            <p><strong>Company Share (50%):</strong></p>
+             <span id="final_commission">₹ {{ number_format($booking->final_commission ?? 0,2) }}</span>
+
+        </div>
+    </div>
+</div>
 
 {{-- ===========================
    OFFERS (DYNAMIC)
 =========================== --}}
+<div class="section">
+    <h2 class="section-title">Offers (Optional)</h2>
 
-<h4>Offers (Optional)</h4>
-
-<label>
+    <label class="checkbox-wrapper">
+    
     <input type="checkbox"
            id="enable_offers"
            name="enable_offers"
@@ -115,8 +260,9 @@
            {{ $booking->offers ? 'checked' : '' }}
            {{ $isLocked ? 'disabled' : '' }}
            onchange="toggleOffers()">
-    Enable Offers
+    <span class="checkbox-label">Enable Offers</span>
 </label>
+</div>
 
 <div id="offers_box" style="margin-top:10px; {{ $booking->offers ? '' : 'display:none;' }}">
 
@@ -196,6 +342,7 @@
     </button>
 </form>
 @endif
+</div>
 
 {{-- ===========================
    JS CALCULATIONS

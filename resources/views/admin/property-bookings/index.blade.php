@@ -1,13 +1,42 @@
 @extends('layouts.header')
 
 @section('content')
+<style>
+.title{
+    color:#1565C0;
+    padding-left:10px;  
+    font-size:27px;
+    margin-bottom:20px;
+}
+.prop-table{
+    width:100%;
+    margin:10px;
+    border-radius:10px;
+    border-collapse:seperate;
+    border-spacing:0;
+    /* overflow:hidden; */
+    border: 1px solid #e2e8f0;
+}
+.prop-head{
+    color:#1565C0;
+}
+.prop-cell{
+    padding:10px;
+}
+.head-row{
+    background-color:#f1f5f9;
+    border-bottom:1px solid #e2e8f0;
+}
+.prop-row{
+    border-bottom:1px solid #e2e8f0;
+}
+</style>
+<h2 class="title">Property Bookings</h2>
 
-<h2>Property Bookings</h2>
-
-<table border="1" cellpadding="10" width="100%">
-    <thead>
-        <tr>
-            <th>ID</th>
+<table class="prop-table">
+    <thead class="prop-head">
+        <tr class="head-row">
+            <th class="prop-cell">ID</th>
             <th>Customer</th>
             <th>Property</th>
             <th>Status</th>
@@ -17,12 +46,12 @@
 
     <tbody>
     @forelse($bookings as $booking)
-        <tr>
-            <td>#{{ $booking->id }}</td>
+        <tr class="prop-row">
+            <td class="prop-cell">#{{ $booking->id }}</td>
 
             <td>
                 {{ $booking->customer->name }} <br>
-                {{ $booking->customer->mobile_no }}
+                <!-- {{ $booking->customer->mobile_no }} -->
             </td>
 
             <td>
