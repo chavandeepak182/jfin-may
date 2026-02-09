@@ -755,6 +755,33 @@ class AdminController extends Controller
         }
     }
 
+public function changePasswordForm()
+{
+    if (!Session::get('user_id')) {
+        return redirect('/');
+    }
+    return view('admin.change-password');
+}
+public function updatePassword(Request $request)
+{
+    $request->validate([
+        'current_password' => 'required',
+        'new_password' => 'required|min:6|confirmed',
+    ]);
+
+    $user = User::find(Session::get('user_id'));
+
+    // current password check
+    if (!Hash::check($request->current_password, $user->password)) {
+        return back()->withErrors(['current_password' => 'Current password incorrect']);
+    }
+
+    // update password
+    $user->password = Hash::make($request->new_password);
+    $user->save();
+
+    return back()->with('success', 'Password changed successfully');
+}
 
   
 }
