@@ -40,6 +40,12 @@ use App\Http\Controllers\VisitEnquiryController;
 
 
 
+
+// admin 
+Route::get('/admin/change-password', [AdminController::class, 'changePasswordForm'])->name('admin.change.password');
+Route::post('/admin/change-password', [AdminController::class, 'updatePassword'])->name('admin.update.password');
+
+
 // refreal leads city
 Route::get('/get-cities/{state_id}', function ($state_id) {
     return DB::table('cities')
