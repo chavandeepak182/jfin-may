@@ -181,6 +181,12 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{{ route('customer.properties')}}">
+                           <i class="fas fa-home"></i>
+                            <span class="align-middle">Properties</span>
+                        </a>
+                    </li>
 
                     <!-- Documents -->
                     <li class="sidebar-item">
