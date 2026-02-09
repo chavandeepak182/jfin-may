@@ -63,7 +63,7 @@
                     <p class="text-muted small mb-2">
                         Speak directly with an agent
                     </p>
-                    <p class="fw-semibold mb-3">+91 800 123 4567</p>
+                    <p class="fw-semibold mb-3">+91 738 746 5783</p>
                     <a href="tel:+918001234567" class="btn btn-outline-primary btn-sm">
                         Call Now
                     </a>
@@ -82,7 +82,7 @@
                     <p class="text-muted small mb-2">
                         Send your queries anytime
                     </p>
-                    <p class="fw-semibold mb-3">support@jfinserv.com</p>
+                    <p class="fw-semibold mb-3">contact@jfinserv.com</p>
                     <a href="mailto:support@jfinserv.com" class="btn btn-outline-success btn-sm">
                         Send Email
                     </a>
