@@ -1015,7 +1015,7 @@
 
                         <a href="{{ url($v->slug . '-' . $v->properties_id) }}" target="_blank">
                             <button class="contact-btn">
-                                Contact <span>→</span>
+                                Know More <span>→</span>
                             </button>
                         </a>
                     </div>
