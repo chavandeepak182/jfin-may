@@ -13,6 +13,11 @@ class VisitEnquiry extends Model
         'name',
         'email',
         'phone',
-        'visitedate'
+        'visitedate',
+        'assigned_to'
     ];
+    public function agent()
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
 }
