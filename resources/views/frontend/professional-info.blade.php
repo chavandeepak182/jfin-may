@@ -4,6 +4,15 @@
 
 @section('content')
     <!-- Add Loan Form -->
+     <!-- Select2 CSS (MUST) -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 
 <style>
     .form-floating > .form-select {
@@ -12,6 +21,53 @@
     padding-bottom: 0.625rem;
     margin-bottom: 12px;   /* 👈 adds space between User & Loan */
 }
+/* ✅ Select2 dropdown scroll fix */
+.select2-container .select2-results__options {
+    max-height: 220px !important;
+    overflow-y: auto !important;
+}
+.custom-field {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.custom-label {
+    position: absolute;
+    top: -9px;
+    left: 12px;
+    background: #fff;
+    padding: 0 6px;
+    font-size: 14px;
+    color: #0d6efd;
+    z-index: 3;
+}
+
+.custom-select {
+    height: 56px;
+    padding: 18px 12px 6px 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    
+}
+.select2-container--default .select2-selection--single {
+    height: 56px !important;
+    padding: 18px 12px 6px 12px !important;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    display: flex;
+    margin-bottom: 24px;
+    align-items: center;
+        background-color: #e9ecef;
+}
+
+.select2-selection__rendered {
+    padding: 0 !important;
+}
+
+.select2-selection__arrow {
+    height: 100% !important;
+}
+
 
 </style>
 
@@ -156,26 +212,25 @@
                                         </div>
                                     @endif -->
                                                 @if (session('role_id') == 4)
-                                                                <div class="row g-3">
-                                                                    <div class="col-md-6">
-                                                                        <div class="form-floating">
-                                                                            <select name="user_id" id="user_id" class="form-select" required>
-                                                                                <option value="">Select User</option>
+<div class="col-md-6">
+    <div class="custom-floating">
+        <label class="custom-label">
+            User <span class="text-danger">*</span>
+        </label>
 
-                                                                                @foreach ($loanUsers as $u)
-                                                                                    <option value="{{ $u->id }}"
-                                                                                        data-mobile="{{ $u->mobile_no }}"
-                                                                                        {{ old('user_id', $loan->user_id ?? '') == $u->id ? 'selected' : '' }}>
-                                                                                        {{ $u->name }} ({{ $u->email_id }})
-                                                                                    </option>
-                                                                                @endforeach
-                                                                            </select>
+        <select name="user_id" id="user_id" class="form-select custom-select" required>
+            <option value="">Select User</option>
+            @foreach ($loanUsers as $u)
+                <option value="{{ $u->id }}" data-mobile="{{ $u->mobile_no }}">
+                    {{ $u->name }} ({{ $u->email_id }})
+                </option>
+            @endforeach
+        </select>
+    </div>
+</div>
 
-                                                                            <label>User <span class="text-danger">*</span></label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                @endif
+@endif
+
 
                                     <div class="row g-3">
                                         <div class="col-md-6">
@@ -1201,7 +1256,7 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
             background-color: #0056b3;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery included -->
+     <!-- jQuery included -->
 
     <script>
         $(document).ready(function() {
@@ -1578,7 +1633,23 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 
+<script>
+$(document).ready(function () {
+    $('#user_id').select2({
+        placeholder: "Select User",
+        width: '100%',
+        dropdownAutoWidth: true
+    });
+});
+</script>
 
-
+<script>$(document).ready(function () {
+    $('#user_id').select2({
+        placeholder: "Select User",
+        width: '100%',
+        dropdownAutoWidth: false
+    });
+});
+</script>
 
 @endsection

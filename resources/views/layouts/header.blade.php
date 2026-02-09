@@ -27,6 +27,8 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- jQuery (required for SB Admin 2) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <!-- Bootstrap 4 JS (required for dropdown) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -174,7 +176,12 @@
 
         <div class="dropdown-divider"></div>
 
-     
+      <!-- ✅ CORRECT LOGOUT -->
+        <a class="dropdown-item" href="#"
+           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+            Logout
+        </a>
 
 
         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -194,13 +201,13 @@
 </div>
 
 {{-- JS --}}
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+
 
 <script src="{{ asset('theme/dist-assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 <script src="{{ asset('theme/dist-assets/js/sb-admin-2.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs4.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
 
 @yield('script')

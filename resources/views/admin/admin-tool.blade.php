@@ -419,12 +419,7 @@
 
                     <div class="row">
                        <div class="form-group col-lg-4">
-                            <label>
-                                Bank Name <span class="text-danger">*</span>
-                            </label>
-                            <input type="text" class="form-control" name="bank_name" required>
-                        </div>
-
+ 
                         <div class="form-group col-lg-4">
                             <label>IFSC Code:</label>
                             <input type="text" class="form-control" name="ifsc_code">

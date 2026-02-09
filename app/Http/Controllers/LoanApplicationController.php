@@ -1825,19 +1825,22 @@ public function ajaxList(Request $request)
     $query = Loan::query();
 
     if ($search) {
-        $query->where(function ($q) use ($search) {
+    $query->where(function ($q) use ($search) {
 
-            // Applicant name
-            $q->whereHas('user', function ($u) use ($search) {
-                $u->where('name', 'LIKE', "%{$search}%");
-            })
+        // Applicant name
+        $q->whereHas('user', function ($u) use ($search) {
+            $u->where('name', 'LIKE', "%{$search}%");
+        })
 
-            // Loan category name (Home Loan, Personal Loan)
-            ->orWhereHas('loanCategory', function ($c) use ($search) {
-                $c->where('category_name', 'LIKE', "%{$search}%");
-            });
-        });
-    }
+        // Loan category name
+        ->orWhereHas('loanCategory', function ($c) use ($search) {
+            $c->where('category_name', 'LIKE', "%{$search}%");
+        })
+
+        // Loan Reference ID (NOT loan_id)
+        ->orWhere('loan_reference_id', 'LIKE', "%{$search}%");
+    });
+}
 
     if ($type === 'pending') {
         $query->whereNull('assigned_to');
@@ -1899,9 +1902,16 @@ public function ajaxPendingLoans(Request $request)
                       ->where('loans.agent_action', 'rejected');
                 });
         })
+
+        // 🔍 SAME SEARCH FIELDS
         ->when($search, function ($q) use ($search) {
-            $q->where('users.name', 'LIKE', "%{$search}%");
+            $q->where(function ($sub) use ($search) {
+                $sub->where('users.name', 'LIKE', "%{$search}%")
+                    ->orWhere('loan_category.category_name', 'LIKE', "%{$search}%")
+                    ->orWhere('loans.loan_reference_id', 'LIKE', "%{$search}%");
+            });
         })
+
         ->select(
             'loans.*',
             'users.name as user_name',
@@ -1950,12 +1960,19 @@ public function ajaxInprocessLoans(Request $request)
     $loans = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-        ->where('loans.status', 'in process')          // ✅ correct
-        ->whereNotNull('loans.loan_reference_id')      // ✅ correct
-        ->whereNull('loans.deleted_at')                // ✅ correct
+        ->where('loans.status', 'in process')          
+        ->whereNotNull('loans.loan_reference_id')      
+        ->whereNull('loans.deleted_at')                
+
+        // 🔍 SAME SEARCH LOGIC
         ->when($search, function ($q) use ($search) {
-            $q->where('users.name', 'LIKE', "%{$search}%");
+            $q->where(function ($sub) use ($search) {
+                $sub->where('users.name', 'LIKE', "%{$search}%")
+                    ->orWhere('loan_category.category_name', 'LIKE', "%{$search}%")
+                    ->orWhere('loans.loan_reference_id', 'LIKE', "%{$search}%");
+            });
         })
+
         ->select(
             'loans.*',
             'users.name as user_name',
@@ -1971,6 +1988,8 @@ public function ajaxInprocessLoans(Request $request)
 
 public function ajaxTrashedLoans(Request $request)
 {
+    $search = $request->search;
+
     $loans = \App\Models\Loan::onlyTrashed()
         ->with([
             'user.profile.cityRelation',
@@ -1978,14 +1997,33 @@ public function ajaxTrashedLoans(Request $request)
             'bankDetails'
         ])
         ->whereNotNull('loan_reference_id')
-        ->orderBy('deleted_at', 'desc')
-        ->paginate(10);
 
-    // ❌ NO transform here
-    // Keep Eloquent models for Blade compatibility
+        // 🔍 SAME SEARCH LOGIC
+        ->when($search, function ($q) use ($search) {
+            $q->where(function ($sub) use ($search) {
+
+                // Applicant name
+                $sub->whereHas('user', function ($u) use ($search) {
+                    $u->where('name', 'LIKE', "%{$search}%");
+                })
+
+                // Loan category
+                ->orWhereHas('loanCategory', function ($c) use ($search) {
+                    $c->where('category_name', 'LIKE', "%{$search}%");
+                })
+
+                // Loan Reference ID
+                ->orWhere('loan_reference_id', 'LIKE', "%{$search}%");
+            });
+        })
+
+        ->orderBy('deleted_at', 'desc')
+        ->paginate(10)
+        ->appends(['search' => $search]);
 
     return view('partials.trashed-loans', compact('loans'));
 }
+
 public function restoreLoan(Request $request)
 {
     $loan = \App\Models\Loan::withTrashed()
@@ -2010,26 +2048,42 @@ public function restoreLoan(Request $request)
 
 public function ajaxApprovedLoans(Request $request)
 {
+    $search = $request->search;
+
     $loans = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
         ->where('loans.status', 'approved')
         ->whereNotNull('loans.loan_reference_id')
+
+        // 🔍 SAME SEARCH LOGIC
+        ->when($search, function ($q) use ($search) {
+            $q->where(function ($sub) use ($search) {
+                $sub->where('users.name', 'LIKE', "%{$search}%")
+                    ->orWhere('loan_category.category_name', 'LIKE', "%{$search}%")
+                    ->orWhere('loans.loan_reference_id', 'LIKE', "%{$search}%");
+            });
+        })
+
         ->select(
             'loans.*',
             'users.name as user_name',
-            'loan_category.category_name as loan_category_name' // ✅ FIX
+            'loan_category.category_name as loan_category_name'
         )
         ->orderByDesc('loans.created_at')
-        ->paginate(10);
+        ->paginate(10)
+        ->appends(['search' => $search]);
 
     return view('partials.approved-loans', compact('loans'));
 }
 
 
 
-public function ajaxDisbursedLoans()
+
+public function ajaxDisbursedLoans(Request $request)
 {
+    $search = $request->search;
+
     $loans = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
@@ -2038,21 +2092,30 @@ public function ajaxDisbursedLoans()
             'loans.loan_reference_id',
             'loans.amount',
             'loans.tenure',
-            'loans.status', // ✅ IMPORTANT
+            'loans.status',
             'users.name as user_name',
             'loans.amount_approved',
-
             'loan_category.category_name'
         )
         ->where('loans.status', 'disbursed')
         ->whereNotNull('loans.loan_reference_id')
-        ->orderByDesc('loans.created_at')
-        ->paginate(10);
 
-    // ✅ RETURN PARTIAL VIEW ONLY
+        // 🔍 SAME SEARCH LOGIC
+        ->when($search, function ($q) use ($search) {
+            $q->where(function ($sub) use ($search) {
+                $sub->where('users.name', 'LIKE', "%{$search}%")
+                    ->orWhere('loan_category.category_name', 'LIKE', "%{$search}%")
+                    ->orWhere('loans.loan_reference_id', 'LIKE', "%{$search}%");
+            });
+        })
+
+        ->orderByDesc('loans.created_at')
+        ->paginate(10)
+        ->appends(['search' => $search]);
+
     return view('partials.disbursed-loans', compact('loans'));
 }
-public function ajaxRejectedLoans()
+public function ajaxRejectedLoans(Request $request)
 {
     $role_id  = session()->get('role_id');
     $agent_id = session()->get('user_id');
@@ -2062,6 +2125,8 @@ public function ajaxRejectedLoans()
         abort(403);
     }
 
+    $search = $request->search;
+
     $loans = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
@@ -2070,18 +2135,28 @@ public function ajaxRejectedLoans()
             'loans.loan_reference_id',
             'loans.amount',
             'loans.tenure',
-              'loans.status', // ✅ ADD THIS
+            'loans.status',
             'users.name as user_name',
             'loan_category.category_name as loan_category_name'
         )
         ->where('loans.status', 'rejected')
-        
-        ->orderByDesc('loans.created_at')
-        ->paginate(10);
 
-    // ✅ RETURN PARTIAL VIEW
+        // 🔍 SAME SEARCH LOGIC
+        ->when($search, function ($q) use ($search) {
+            $q->where(function ($sub) use ($search) {
+                $sub->where('users.name', 'LIKE', "%{$search}%")
+                    ->orWhere('loan_category.category_name', 'LIKE', "%{$search}%")
+                    ->orWhere('loans.loan_reference_id', 'LIKE', "%{$search}%");
+            });
+        })
+
+        ->orderByDesc('loans.created_at')
+        ->paginate(10)
+        ->appends(['search' => $search]);
+
     return view('partials.rejected-loans', compact('loans'));
 }
+
 
 
     //CreditReport
@@ -2298,7 +2373,96 @@ public function ajaxRejectedLoans()
     return back();
 }
 
+//  public function handleStep(Request $request)
+//     {
+//         $sessionUserId   = session('user_id');
+//         $sessionUserRole = session('role_id');
 
+//         if (!$sessionUserId) {
+//             return redirect()->route('login')
+//                 ->withErrors('User session expired. Please log in again.');
+//         }
+
+//         $currentStep = (int) $request->input('current_step');
+
+//         try {
+
+//             /* ---------------- ADMIN USER SELECTION (STEP 1) ---------------- */
+//             if ($sessionUserRole == 4 && $currentStep == 1) {
+//                 $selectedUserId = $request->input('user_id');
+//                 if (!$selectedUserId) {
+//                     return redirect()->back()->withErrors('Please select a user.');
+//                 }
+//                 session(['selected_user_id' => $selectedUserId]);
+//             }
+
+//             /* ---------------- USER ID RESOLUTION ---------------- */
+//             if ($sessionUserRole == 4) {
+//                 $userId = session('selected_user_id');
+//                 if (!$userId) {
+//                     return redirect()->route('loan.form', ['current_step' => 1])
+//                         ->withErrors('User not selected. Please select a user in Step 1.');
+//                 }
+//             } else {
+//                 $userId = $sessionUserId;
+//             }
+
+//             /* ---------------- PREVIOUS BUTTON ---------------- */
+//             if ($request->has('previous')) {
+//                 return redirect()->route('loan.form', [
+//                     'current_step' => max(1, $currentStep - 1)
+//                 ]);
+//             }
+
+//             /* ---------------- NEXT BUTTON ---------------- */
+//             if ($request->has('next')) {
+
+//                 switch ($currentStep) {
+
+//                     case 1:
+//                         $this->handlePersonalDetails($request, $userId);
+//                         break;
+
+//                     case 2:
+//                         $this->handleProfessionalDetails($request, $userId);
+//                         break;
+
+//                     case 3:
+//                         // ✅ FIX: Step-3 is Upload Documents
+//                         $this->handleDocumentUpload($request, $userId);
+//                         break;
+
+//                     case 4:
+//                         // ✅ FIX: Step-4 is Loan Details
+//                         $this->handleLoanDetails($request, $userId);
+//                         return redirect()->route('loan.thankyou');
+
+//                     default:
+//                         return redirect()->route('loan.form', ['current_step' => 1])
+//                             ->withErrors('Invalid step. Please restart the application.');
+//                 }
+
+//                 // ✅ MOVE TO NEXT STEP
+//                 return redirect()->route('loan.form', [
+//                     'current_step' => $currentStep + 1
+//                 ]);
+//             }
+
+//             return redirect()->back()->withErrors('Invalid action.');
+
+//         } catch (\Exception $e) {
+//             Log::error('Loan Step Error', [
+//                 'message' => $e->getMessage(),
+//                 'step'    => $currentStep,
+//                 'user'    => $userId
+//             ]);
+
+//             // return redirect()->back()
+//             //     ->withErrors('Something went wrong. Please try again.');
+//             return redirect()->back();
+
+//         }
+//     }
 
 
 
