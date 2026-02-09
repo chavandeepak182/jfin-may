@@ -37,6 +37,7 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketMessageController;
 use App\Http\Controllers\CustomerBookingController;
 use App\Http\Controllers\VisitEnquiryController;
+use App\Http\Controllers\AuthV3\PropertyAuthController;
 
 
 
@@ -245,7 +246,6 @@ Route::post('/reset-password', [AuthV3Controller::class, 'resetPassword'])
 
 
 
-use App\Http\Controllers\AuthV3\PropertyAuthController;
 
 /* ===== PROPERTY AUTH ===== */
 Route::get('/property/login', [PropertyAuthController::class, 'loginForm'])
@@ -374,6 +374,13 @@ Route::middleware('isAdmin')->group(function () {
     Route::get('users/{UserId}/delete', [App\Http\Controllers\UsersController::class, 'destroy']);
 //enquiry
     Route::get('/enquiries', [EnquiryController::class, 'enquiryLead'])->name('enquiries.enquiryLead');
+    Route::get('/book-visit/leads', [VisitEnquiryController::class, 'index'])
+    ->name('bookvisit.leads');
+    Route::post('/book-visit/assign-lead', [VisitEnquiryController::class, 'assign'])
+    ->middleware(['auth'])
+    ->name('bookvisit.assign');
+    
+    
 
 //category
     Route::resource('/category', App\Http\Controllers\CategoryController::class);    
@@ -753,6 +760,7 @@ Route::middleware('isAgent')->group(function () {
     Route::post('agent/reject-loan', [LoanApplicationController::class, 'rejectLoan'])->name('agent.rejectLoan');
     Route::get('agent/referral_earnings', [ReferralController::class, 'referral_earnings'])->name('referral_earnings');
     Route::get('agent/walletbalance', [ReferralController::class, 'walletbalance'])->name('walletbalance');
+    
 
 });
 
@@ -1023,3 +1031,6 @@ Route::get('customer/booking/{id}/confirm',
         [CustomerBookingController::class, 'adminFinalSubmit']
     );
 });
+Route::get('/agent/assigned-leads', [VisitEnquiryController::class, 'agentLeads'])
+    ->middleware('auth')
+    ->name('agent.leads');
