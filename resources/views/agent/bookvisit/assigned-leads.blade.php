@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h3>My Assigned Visit Leads</h3>
+    <h3 style="color:#000;">My Assigned Visit Leads</h3>
 
     <table class="table table-bordered">
         <thead>

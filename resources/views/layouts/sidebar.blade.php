@@ -77,6 +77,14 @@
             </a>
         @endif
 
+        {{-- AGENT --}}
+@if($role_id == 2)
+    <a href="{{ route('agent.leads') }}" class="nav-item">
+        <i class="fas fa-building"></i>
+        <span>Property Assign</span>
+    </a>
+@endif
+
         {{-- ================= PROPERTY ================= --}}
         @if($role_id == 4 || $role_id == env('partnerRole_id'))
             <a href="{{ route('allProperties') }}" class="nav-item">
@@ -84,6 +92,12 @@
                 <span>Property</span>
             </a>
         @endif
+      @if($role_id == 4)
+    <a href="{{ route('admin.property.bookings') }}" class="nav-item">
+        <i class="fas fa-building"></i>
+        <span>Property Application</span>
+    </a>
+@endif
 
         {{-- ================= USERS ================= --}}
         @if($role_id == 4)
@@ -130,6 +144,12 @@
     <a href="{{ route('tickets.index') }}" class="nav-item">
         <i class="fas fa-question-circle"></i>
         <span>My Queries</span>
+    </a>
+@endif
+@if($role_id == 4)
+    <a href="{{ route('admin.change.password') }}" class="nav-item">
+        <i class="fas fa-key"></i>
+        <span>Setting</span>
     </a>
 @endif
 
