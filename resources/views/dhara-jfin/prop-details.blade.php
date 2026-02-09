@@ -1268,7 +1268,7 @@
         <div class="pop-up" id="popup">
             <i class="fa-solid fa-circle-check"></i>
             <h2>Thank You!</h2>
-            <p>Your message has been sent successfully.</p>
+            <p>Our Team will reach out to you shortly.</p>
             <button type="button" onclick="closePopup()">OK</button>
         </div>
 
@@ -1344,7 +1344,7 @@
                         id="phone" 
                         name="phone" 
                         required 
-                        placeholder="(123) 456-7890"
+                        placeholder="(+91) 0123456-789"
                     >
                 </div>
     
