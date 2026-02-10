@@ -342,7 +342,7 @@
             .properties-grid {
                 grid-template-columns: 1fr;
             }
-        
+}
 </style>
 
 <h2 style="color:#1565C0; padding-left:10px;">Available Properties</h2>
@@ -352,89 +352,78 @@
         {{ session('success') }}
     </div>
 @endif
-        <div class="search-filter-section">
-            <div class="search-bar-wrapper">
-                <div class="search-input-group">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" placeholder="Search by locality, project name or developer...">
-                </div>
-                <button class="apply-btn">Search</button>
-            </div>
+       <div class="search-filter-section">
 
-            <div class="main-filters">
-                <div class="filter-group">
-                    <label>Property Type</label>
-                    <select class="filter-select">
-                        <option>All Types</option>
-                        <option>Residential Apartment</option>
-                        <option>Villa / Independent House</option>
-                        <option>Penthouse</option>
-                        <option>Plot / Land</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>BHK Type</label>
-                    <select class="filter-select">
-                        <option>Any BHK</option>
-                        <option>1 BHK</option>
-                        <option>2 BHK</option>
-                        <option>3 BHK</option>
-                        <option>4+ BHK</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Budget Range</label>
-                    <select class="filter-select">
-                        <option>Any Budget</option>
-                        <option>₹40L - ₹60L</option>
-                        <option>₹60L - ₹80L</option>
-                        <option>₹80L - ₹1Cr</option>
-                        <option>₹1Cr - ₹2Cr</option>
-                        <option>Above ₹2Cr</option>
-                    </select>
-                </div>
-                
-            </div>
-
-            <!-- Advanced Expandable Filters -->
-            <div class="advanced-filters" id="advancedFilters">
-                <div class="filter-group">
-                    <label>Possession Status</label>
-                    <div class="filter-checkbox-group">
-                        <div class="filter-chip active">Ready to Move</div>
-                        <div class="filter-chip">Under Construction</div>
-                        <div class="filter-chip">New Launch</div>
-                    </div>
-                </div>
-                <div class="filter-group">
-                    <label>Amenities</label>
-                    <div class="filter-checkbox-group">
-                        <div class="filter-chip">Swimming Pool</div>
-                        <div class="filter-chip">Gym</div>
-                        <div class="filter-chip">Clubhouse</div>
-                        <div class="filter-chip">Parking</div>
-                        <div class="filter-chip">Security</div>
-                    </div>
-                </div>
-                <div class="filter-group">
-                    <label>Area (Sq. Ft.)</label>
-                    <select class="filter-select">
-                        <option>Any Area</option>
-                        <option>500 - 1000</option>
-                        <option>1000 - 1500</option>
-                        <option>1500 - 2000</option>
-                        <option>Above 2000</option>
-                    </select>
-                </div>
-            </div>
+    <!-- SEARCH -->
+    <div class="search-bar-wrapper">
+        <div class="search-input-group">
+            <span class="search-icon">🔍</span>
+            <input 
+                type="text"
+                id="propertySearch"
+                class="form-control"
+                placeholder="Search by locality, project name or developer..."
+            >
         </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="main-filters">
+        <!-- PROPERTY TYPE -->
+<div class="filter-group">
+    <label>Property Type</label>
+    <select id="typeFilter" class="filter-select">
+        <option value="">All Types</option>
+        <option value="residential apartment">Residential Apartment</option>
+        <option value="villa">Villa / Independent House</option>
+        <option value="penthouse">Penthouse</option>
+        <option value="plot">Plot / Land</option>
+    </select>
+</div>
+
+
+        <!-- BHK FILTER -->
+        <div class="filter-group">
+            <label>BHK Type</label>
+            <select id="bhkFilter" class="filter-select">
+                <option value="">Any BHK</option>
+                <option value="1">1 BHK</option>
+                <option value="2">2 BHK</option>
+                <option value="3">3 BHK</option>
+                <option value="4">4+ BHK</option>
+            </select>
+        </div>
+        
+
+        <!-- BUDGET FILTER -->
+        <div class="filter-group">
+            <label>Budget Range</label>
+            <select id="budgetFilter" class="filter-select">
+                <option value="">Any Budget</option>
+                <option value="0-4000000">Below ₹40L</option>
+                <option value="4000000-6000000">₹40L - ₹60L</option>
+                <option value="6000000-8000000">₹60L - ₹80L</option>
+                <option value="8000000-10000000">₹80L - ₹1Cr</option>
+                <option value="10000000-999999999">Above ₹1Cr</option>
+            </select>
+        </div>
+
+    </div>
+</div>
+
     
 
 <div class="properties-grid">
 
 @foreach($properties as $property)
 
-    <div class="property-card">
+   <div class="property-card"
+    data-search="{{ strtolower($property->builder_name.' '.$property->title.' '.$property->address) }}"
+    data-bhk="{{ $property->select_bhk }}"
+    data-price="{{ $property->s_price }}"
+    data-type="{{ strtolower($property->land_type) }}"
+>
+
         <div class="image-container">
             <img
                         src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?" 
@@ -488,5 +477,53 @@
 </div>
 
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const searchInput  = document.getElementById('propertySearch');
+    const bhkFilter    = document.getElementById('bhkFilter');
+    const budgetFilter = document.getElementById('budgetFilter');
+    const typeFilter   = document.getElementById('typeFilter');
+    const cards        = document.querySelectorAll('.property-card');
+
+    function applyFilters() {
+
+        let searchVal = searchInput.value.toLowerCase();
+        let bhkVal    = bhkFilter.value;
+        let typeVal   = typeFilter.value;
+        let budgetVal = budgetFilter.value;
+
+        let minPrice = 0, maxPrice = Infinity;
+        if (budgetVal) {
+            [minPrice, maxPrice] = budgetVal.split('-').map(Number);
+        }
+
+        cards.forEach(card => {
+
+            let text  = card.dataset.search;
+            let bhk   = card.dataset.bhk;
+            let price = parseInt(card.dataset.price);
+            let type  = card.dataset.type;
+
+            let matchSearch = text.includes(searchVal);
+            let matchBhk    = !bhkVal || bhk === bhkVal || (bhkVal === '4' && bhk >= 4);
+            let matchBudget = price >= minPrice && price <= maxPrice;
+            let matchType   = !typeVal || type.includes(typeVal);
+
+            card.style.display =
+                matchSearch && matchBhk && matchBudget && matchType
+                ? 'flex'
+                : 'none';
+        });
+    }
+
+    searchInput.addEventListener('keyup', applyFilters);
+    bhkFilter.addEventListener('change', applyFilters);
+    budgetFilter.addEventListener('change', applyFilters);
+    typeFilter.addEventListener('change', applyFilters);
+});
+</script>
+
+
 
 @endsection
