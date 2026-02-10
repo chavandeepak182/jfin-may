@@ -2,6 +2,9 @@
 
 @section('content')
 <style>
+.section {
+            margin-bottom: 32px;
+        }
 .container{
     padding:0 10px;
 }
@@ -73,13 +76,15 @@
     color: #2d3748;
 }
 .form-group input {
-    padding: 12px 16px;
+    padding: 6px 10px;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
-            font-size: 10px;
+            font-size: 14px;
             transition: all 0.2s;
 }
 .calculation-panel {
+            display:grid;
+            grid-template-columns:1fr 1fr;
             background: linear-gradient(135deg, #f8fafc 0%, #e8eef5 100%);
             padding: 12px 24px 0;
             border-radius: 8px;
@@ -87,18 +92,19 @@
         }
 .calculation-row {
             display: flex;
-            justify-content: space-between;
+            gap:12px;
             align-items: center;
-            padding: 12px 0;
+            padding: 12px 24px;
             border-bottom: 1px solid #e2e8f0;
     }
 .calculation-row:last-child {
                 border-bottom: none;
     }
 .calculation-row p {
+    margin-bottom:0;
             font-size: 14px;
-            color: #4a5568;
-            font-weight: 500; 
+            color: #69707d;
+            font-weight:500;
     }
 .calculation-row span{
     font-size: 16px;
@@ -121,13 +127,211 @@
             border-color: #667eea;
             background: #f0f4ff;
         }
+.add-offer-section{
+    display:flex;
+    justify-content:center;
+}
+.btn-add-offer {
+            width: 100%;
+            padding: 14px 24px;
+            background: white;
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            color: #667eea;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: inherit;
+        }
         .checkbox-label {
             font-size: 15px;
             font-weight: 500;
             color: #2d3748;
             cursor: pointer;
         }
+.offer-table{
+    width:100%;
+    border-collapse: separate;
+    border-spacing: 0 18px;
+}
+.offer-head{
+    border-radius:8px;
+    background-color:#f1f5f9;
+    padding:12px;
+    margin-bottom:20px;
+}
+.offer_row{
+    padding:10px;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom:10px;
+    font-size: 13px;
+    transition: all 0.2s;
+    background: #fff;
+}
+.offer_row input{
+    border:none;
+}
+.offer_row button{
+    padding:6px 12px;
+    border:none;
+    border-radius:6px;
+    cursor: pointer;
+}
+.offer-table tr{
+    margin:10px 0;
+    border
+}
+.submit-btn{
+            text-align:center;
+            margin-top:20px;
+        }
+.btn {
+            padding: 14px 64px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+.offer-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 16px; /* gap between cards */
+}
+
+.offer-item td {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    padding: 18px 20px;
+}
+
+.offer-item td:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+.offer-item td:last-child {
+    border-radius: 0 8px 8px 0;
+    width: 70px;
+    text-align: center;
+}
+
+.offer-item:hover td {
+    border-color: #cbd5e0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* label + input */
+.offer-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.offer-input-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b; 
+    text-transform: uppercase;
+}
+
+.offer-input {
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.offer-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+/* remove btn */
+.offer-remove-btn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #fee2e2;
+    background: #fef2f2;
+    color: #dc2626;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* empty */
+.empty-row td {
+    text-align: center;
+    color: #94a3b8;
+}
+.action-cell{
+    text-align:center;
+}
+.offer-selected{
+    padding:20px 0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    border-radius:6px;
+    background:  linear-gradient(135deg, #d1fae5 0%, #f2fff3 100%);
+    
+}
+.offer-selected h4{
+    color:#2d3748;
+}
+.cashback-p{
+    color: #008000;
+    font-size:20px;
+    margin-bottom:0;
+}
+.final-btn{
+padding:10px 24px; 
+font-size:18px;
+background: linear-gradient(135deg, #00be5d 0%, #005930 100%);
+color:#fff; 
+border-radius:8px;
+}
+.offer-amount-display{
+    padding:12px;
+    width:auto;
+    font-size:20px;
+    background:#
+}
+.selected-offer{
+    width:100%;
+    background:linear-gradient(135deg, #f8fafc 0%, #e8eef5 100%);
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    padding:16px;
+}
+.offer-amt{
+    font-size:20px;
+    margin-bottom:0;
+}
+.final-aprrove-section{
+    margin-top:32px;
+    margin-bottom:20px;
+}
+
 </style>
+
 @php
     // Lock everything once customer interaction starts
     $isLocked = in_array($booking->status, [
@@ -145,7 +349,8 @@
 </p>
 
 <hr>
-<div class="details">
+
+<div class="section">
     <h2 class="section-title">Booking Details</h2>
     <div class="customer-details">
         <div class="info-item">
@@ -165,7 +370,7 @@
         
     </div>
 </div>
-<hr>
+
 
 <form method="POST" action="{{ url('admin/booking/offer/'.$booking->id) }}">
 @csrf
@@ -214,32 +419,32 @@
     <h2 class="section-title">Calculation Summary</h2>
     <div class="calculation-panel">
         <div class="calculation-row">
-            <p><strong>Actual Commission:</strong></p>
-            <span id="actual_commission">₹ {{ number_format($booking->actual_commission ?? 0,2) }}</span>
+            <p>Actual Commission:</p>
+            <span id="actual_commission"> ₹ {{ number_format($booking->actual_commission ?? 0,2) }}</span>
             
         </div>
         <div class="calculation-row">
-            <p><strong>TDS Amount:</strong></p>
-             <span id="tds_amount">₹ {{ number_format($booking->tds_amount ?? 0,2) }}</span>
+            <p>TDS Amount:</p>
+             <span id="tds_amount"> ₹ {{ number_format($booking->tds_amount ?? 0,2) }}</span>
         </div>
         <div class="calculation-row">   
-            <p><strong>GST Amount:</strong></p>
-             <span id="gst_amount">₹ {{ number_format($booking->gst_amount ?? 0,2) }}</span>
+            <p>GST Amount:</p>
+             <span id="gst_amount"> ₹ {{ number_format($booking->gst_amount ?? 0,2) }}</span>
             
         </div>
         <div class="calculation-row">
-            <p><strong>Net Commission:</strong></p>
-             <span id="net_commission">₹ {{ number_format($booking->net_commission ?? 0,2) }}</span>
+            <p>Net Commission:</p>
+             <span id="net_commission"> ₹ {{ number_format($booking->net_commission ?? 0,2) }}</span>
             
         </div>
         <div class="calculation-row">
-            <p><strong>Offer Pool (50%):</strong></p>
-             <span id="offer_pool">₹ {{ number_format($booking->offer_pool ?? 0,2) }}</span>
+            <p>Offer Pool (50%):</p>
+             <span id="offer_pool"> ₹ {{ number_format($booking->offer_pool ?? 0,2) }}</span>
             
         </div>
         <div class="calculation-row">
-            <p><strong>Company Share (50%):</strong></p>
-             <span id="final_commission">₹ {{ number_format($booking->final_commission ?? 0,2) }}</span>
+            <p>Company Share (50%):</p>
+             <span id="final_commission"> ₹ {{ number_format($booking->final_commission ?? 0,2) }}</span>
 
         </div>
     </div>
@@ -264,32 +469,37 @@
 </label>
 </div>
 
-<div id="offers_box" style="margin-top:10px; {{ $booking->offers ? '' : 'display:none;' }}">
-
-    <p><strong>Offer Amount:</strong>
-        ₹ {{ number_format($booking->offer_pool ?? 0,2) }}
-    </p>
-
-    <table border="1" cellpadding="6" width="100%">
+<div class="section" id="offers_box" style="margin-top:10px; {{ $booking->offers ? '' : 'display:none;' }}">
+    <div class="selected-offer">
+        <p class="offer-amt"><strong>Offer Amount:</strong>
+            ₹ {{ number_format($booking->offer_pool ?? 0,2) }}
+        </p>
+    </div>
+    <table class="offer-table">
         <thead>
-            <tr>
+            <tr class="offer-head">
                 <th>Offer Name</th>
-                @if(!$isLocked)<th>Action</th>@endif
+                @if(!$isLocked)<th class="action-cell">Action</th>@endif
             </tr>
         </thead>
         <tbody id="offer_rows">
             @if($booking->offers)
                 @foreach(json_decode($booking->offers,true) as $offer)
-                    <tr>
-                        <td>
-                            <input type="text"
-                                   name="offers[]"
-                                   value="{{ $offer['label'] }}"
-                                   {{ $isLocked ? 'readonly' : '' }}>
+                    <tr class="offer-item">
+                        <td style="padding:0; border:none;">
+                            <div class="offer-input-wrapper">
+                            
+                                <input 
+                                    class="offer-input"
+                                    type="text"
+                                    name="offers[]"
+                                    value="{{ $offer['label'] }}"
+                                    {{ $isLocked ? 'readonly' : '' }}>
+                            </div>
                         </td>
                         @if(!$isLocked)
-                        <td>
-                            <button type="button" onclick="this.closest('tr').remove()">❌</button>
+                        <td class="action-cell">
+                            <button class="offer-remove-btn" type="button" onclick="this.closest('tr').remove()">❌</button>
                         </td>
                         @endif
                     </tr>
@@ -297,18 +507,18 @@
             @endif
         </tbody>
     </table>
+    
+        @if(!$isLocked)
+            <button class="btn-add-offer" type="button" onclick="addOffer()">➕ Add Offer</button>
+        @endif
 
-    @if(!$isLocked)
-        <br>
-        <button type="button" onclick="addOffer()">➕ Add Offer</button>
-    @endif
-</div>
-
+<div class="submit-btn">
 @if(!$isLocked)
-    <br><br>
-    <button type="submit">Submit & Proceed</button>
+    
+    <button class="btn btn-primary" type="submit">Submit & Proceed</button>
+    
 @endif
-
+</div>
 </form>
 
 {{-- ===========================
@@ -316,32 +526,36 @@
 =========================== --}}
 
 @if(in_array($booking->status,['customer_confirmed','completed']))
-<hr>
+<div class="offer-selected">
+    <div>
 <h4>Customer Selected Offer</h4>
-
-<p style="color:green;">
+</div>
+<div>
+<p class="cashback-p">
     ✔ {{ $booking->selected_offer }}
     – ₹ {{ number_format($booking->offer_pool ?? 0,2) }}
 </p>
+</div>
 @endif
-
+</div>
+</div>
 {{-- ===========================
    FINAL SUBMIT
 =========================== --}}
-
+<div class="section">
 @if($booking->status === 'customer_confirmed')
-<hr>
-<h4>Final Approval</h4>
+<h4 class="section-title final-aprrove-section">Final Approval</h4>
 
 <form method="POST"
       action="{{ url('admin/booking/final/'.$booking->id) }}"
       onsubmit="return confirm('Finalize booking and distribute MLM commission?')">
     @csrf
-    <button style="padding:10px 24px; background:#198754; color:#fff; border:none;">
+    <button class="final-btn">
         Final Submit & Complete Booking
     </button>
 </form>
 @endif
+</div>
 </div>
 
 {{-- ===========================
@@ -380,9 +594,12 @@ function toggleOffers() {
 
 function addOffer() {
     let row = `
-        <tr>
-            <td><input type="text" name="offers[]" placeholder="Offer name"></td>
-            <td><button type="button" onclick="this.closest('tr').remove()">❌</button></td>
+        <tr class="offer_item">
+            <td>
+            <div class="offer-input-wrapper">
+                <input class="offer-input" type="text" name="offers[]" placeholder="Enter Offer name"></td>
+            </div>
+            <td class="action-cell"><button class="offer-remove-btn" type="button" onclick="this.closest('tr').remove()">❌</button></td>
         </tr>`;
     offer_rows.insertAdjacentHTML('beforeend', row);
 }
