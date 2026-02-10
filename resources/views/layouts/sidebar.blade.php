@@ -76,14 +76,15 @@
                 <span>Loan Applications</span>
             </a>
         @endif
-
-        {{-- AGENT --}}
-@if($role_id == 2)
-    <a href="{{ route('agent.leads') }}" class="nav-item">
+{{-- PROPERTY ASSIGN – ONLY FOR CP --}}
+@if($role_id == config('constants.roles.partner'))
+    <a href="{{ route('partner.leads') }}" class="nav-item">
         <i class="fas fa-building"></i>
         <span>Property Assign</span>
     </a>
 @endif
+
+
 
         {{-- ================= PROPERTY ================= --}}
         @if($role_id == 4 || $role_id == env('partnerRole_id'))

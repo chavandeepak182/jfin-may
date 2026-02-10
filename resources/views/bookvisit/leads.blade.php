@@ -13,7 +13,7 @@
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Visit Date</th>
-                    <th>Assign To Agent</th>
+                    <th>Assign To CP</th>
                     <th>Created At</th>
                 </tr>
             </thead>
@@ -30,18 +30,21 @@
                                 @csrf
                                 <input type="hidden" name="lead_id" value="{{ $lead->id }}">
 
-                                <select name="agent_id" class="form-control form-control-sm" onchange="this.form.submit()">
-                                    <option value="">-- Select Agent --</option>
-                                    @foreach($agents as $agent)
-                                        <option value="{{ $agent->id }}"
-                                            {{ $lead->assigned_to == $agent->id ? 'selected' : '' }}>
-                                            {{ $agent->name }}
+                                <select name="partner_id"
+                                        class="form-control form-control-sm"
+                                        onchange="this.form.submit()">
+                                    <option value="">-- Select CP --</option>
+
+                                    @foreach($partners as $partner)
+                                        <option value="{{ $partner->id }}"
+                                            {{ $lead->assigned_to == $partner->id ? 'selected' : '' }}>
+                                            {{ $partner->name }}
                                         </option>
                                     @endforeach
                                 </select>
                             </form>
 
-                            @if($lead->agent)
+                            @if($lead->assigned_to)
                                 <small class="text-success">Assigned</small>
                             @else
                                 <small class="text-danger">Unassigned</small>
