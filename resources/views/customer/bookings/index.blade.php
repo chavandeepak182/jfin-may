@@ -1,13 +1,57 @@
 @extends('frontend.layouts.customer-dash')
-
+<style>
+.title{
+    color:#1565C0;
+    padding-left:10px;  
+    font-size:27px;
+    margin-bottom:20px;
+}
+.prop-table{
+    width:100%;
+    margin:10px;
+    border-radius:10px;
+    border-collapse:seperate;
+    border-spacing:0;
+    /* overflow:hidden; */
+    border: 1px solid #e2e8f0;
+}
+.prop-head{
+    color:#1565C0;
+}
+.prop-cell{
+    padding:10px;
+}
+.head-row{
+    background-color:#f1f5f9;
+    border-bottom:1px solid #e2e8f0;
+}
+.prop-row{
+    border-bottom:1px solid #e2e8f0;
+}
+.action-btns{
+    display:inline-block;
+    padding:6px ;
+    background:#1565C0; 
+    color:#fff; 
+    border-radius:4px;
+    text-decoration:none;
+    transition: transform 0.2s ease;
+}
+.action-btns:hover{
+    text-decoration:none;
+    color:#fff;
+    transform: scale(1.05);
+    /* box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3); */
+}
+</style>
 @section('content')
 
-<h3>My Property Bookings</h3>
+<h2 class="title">My Property Bookings</h2>
 
-<table border="1" cellpadding="8" width="100%">
-    <thead>
-        <tr>
-            <th>ID</th>
+<table class="prop-table">
+    <thead class="prop-head">
+        <tr  class="head-row">
+            <th class="prop-cell">ID</th>
             <th>Property</th>
             <th>Status</th>
             <th>Action</th>
@@ -15,8 +59,8 @@
     </thead>
     <tbody>
         @forelse($bookings as $booking)
-            <tr>
-                <td>#{{ $booking->id }}</td>
+            <tr class="prop-row">
+                <td class="prop-cell">#{{ $booking->id }}</td>
 
                 <td>
                     @foreach($booking->items as $item)
@@ -30,13 +74,13 @@
                     {{-- SHOW CONFIRM BUTTON ONLY WHEN OFFER EXISTS --}}
                     @if($booking->status === 'waiting_customer_confirmation')
                         <a href="{{ route('customer.booking.show.confirm',$booking->id) }}"
-                           style="padding:6px 12px; background:#000; color:#fff; text-decoration:none;">
+                        class="action-btns">
                             View & Confirm Offer
                         </a>
 
                     @elseif($booking->status === 'customer_confirmed')
                         <a href="{{ route('customer.booking.show.confirm',$booking->id) }}"
-                           style="padding:6px 12px; background:#198754; color:#fff; text-decoration:none;">
+                        class="action-btns">
                             View Confirmation
                         </a>
 
