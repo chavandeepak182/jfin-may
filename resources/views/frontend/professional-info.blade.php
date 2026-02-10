@@ -1179,12 +1179,19 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
                             <!-- Navigation Buttons -->
                             <div class="row g-3 mt-4">
                                 <div class="col-md-6">
-                                    @if ($currentStep > 1)
+                                    <!-- @if ($currentStep > 1)
                                         <button name="previous" class="btn btn-outline-primary w-100 py-3"
                                             value="previous" type="submit">
                                             <i class="bi bi-arrow-left"></i> Previous
                                         </button>
-                                    @endif
+                                    @endif -->
+                                                                       @if ($currentStep > 1)
+                                <a href="{{ route('loan.form', ['current_step' => $currentStep - 1]) }}"
+                                class="btn btn-outline-primary w-100 py-3">
+                                    <i class="bi bi-arrow-left"></i> Previous
+                                </a>
+                            @endif
+
                                 </div>
                                 <!-- Submit Button -->
                                 <div class="col-md-6">
@@ -1607,30 +1614,28 @@ document.getElementById('pincode').addEventListener('input', function() {
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+$(document).ready(function () {
 
-    const userSelect = document.getElementById('user_id');
-    const phoneInput = document.getElementById('phone');
-
-    if (!userSelect || !phoneInput) return;
-
-    function fillMobile() {
-        const option = userSelect.options[userSelect.selectedIndex];
-        const mobile = option?.dataset.mobile;
+    $('#user_id').on('select2:select', function (e) {
+        const selectedOption = e.params.data.element;
+        const mobile = selectedOption.getAttribute('data-mobile');
 
         if (mobile) {
-            phoneInput.value = mobile;
+            $('#phone').val(mobile);
         }
+    });
+
+    // 🔥 page reload / validation error नंतर auto-fill
+    const selected = $('#user_id').find(':selected');
+    if (selected.length && selected.data('mobile')) {
+        $('#phone').val(selected.data('mobile'));
     }
-
-    // when admin changes user
-    userSelect.addEventListener('change', fillMobile);
-
-    // 🔥 VERY IMPORTANT: auto-fill on page load
-    setTimeout(fillMobile, 200);
 
 });
 </script>
+
+
+
 
 
 <script>
@@ -1638,18 +1643,11 @@ $(document).ready(function () {
     $('#user_id').select2({
         placeholder: "Select User",
         width: '100%',
-        dropdownAutoWidth: true
-    });
-});
-</script>
-
-<script>$(document).ready(function () {
-    $('#user_id').select2({
-        placeholder: "Select User",
-        width: '100%',
         dropdownAutoWidth: false
     });
 });
 </script>
+
+
 
 @endsection

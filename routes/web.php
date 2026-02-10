@@ -1037,6 +1037,9 @@ Route::get('customer/booking/{id}/confirm',
         [CustomerBookingController::class, 'adminFinalSubmit']
     );
 });
-Route::get('/agent/assigned-leads', [VisitEnquiryController::class, 'agentLeads'])
+// Route::get('/agent/assigned-leads', [VisitEnquiryController::class, 'agentLeads'])
+//     ->middleware('auth')
+//     ->name('agent.leads');
+Route::get('/partner/assigned-leads', [VisitEnquiryController::class, 'partnerLeads'])
     ->middleware('auth')
-    ->name('agent.leads');
+    ->name('partner.leads');

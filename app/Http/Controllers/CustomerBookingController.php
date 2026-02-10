@@ -306,19 +306,42 @@ public function showConfirmOffer($id)
 
 
 
-    public function showProperties()
+//     public function showProperties()
+// {
+//     // Ensure only customer accesses this
+//     if (auth()->user()->role_id != config('constants.roles.customer')) {
+//         abort(403);
+//     }
+
+//     $properties = Property::active()
+//         ->orderBy('created_at', 'desc')
+//         ->get();
+
+//     return view('customer.properties.index', compact('properties'));
+// }
+
+public function showProperties(Request $request)
 {
-    // Ensure only customer accesses this
     if (auth()->user()->role_id != config('constants.roles.customer')) {
         abort(403);
     }
 
-    $properties = Property::active()
-        ->orderBy('created_at', 'desc')
-        ->get();
+    $query = Property::active();
+
+    if ($request->search) {
+        $query->where(function ($q) use ($request) {
+            $q->where('builder_name', 'like', '%' . $request->search . '%')
+              ->orWhere('title', 'like', '%' . $request->search . '%')
+              ->orWhere('address', 'like', '%' . $request->search . '%')
+              ->orWhere('s_price', 'like', '%' . $request->search . '%');
+        });
+    }
+
+    $properties = $query->orderBy('created_at', 'desc')->get();
 
     return view('customer.properties.index', compact('properties'));
 }
+
 public function showBookingForm($id)
 {
     if (auth()->user()->role_id != config('constants.roles.customer')) {

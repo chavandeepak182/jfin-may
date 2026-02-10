@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\VisitEnquiry;
@@ -7,24 +8,33 @@ use Illuminate\Http\Request;
 
 class VisitEnquiryController extends Controller
 {
-   public function index()
+    // ================= LIST LEADS (ADMIN + CP) =================
+    public function index()
     {
-        $adminRole = config('constants.roles.admin');
-        $agentRole = config('constants.roles.agent');
+        $adminRole   = config('constants.roles.admin');
+        $partnerRole = config('constants.roles.partner');
 
-       if (!auth()->check() || auth()->user()->role_id != $adminRole) {
-    abort(403);
-}
+        if (
+            !auth()->check() ||
+            !in_array(auth()->user()->role_id, [$adminRole, $partnerRole])
+        ) {
+            abort(403);
+        }
 
-        $leads = VisitEnquiry::with('agent')
-            ->orderBy('created_at', 'desc')
-            ->get();
- // ✅ SAME QUERY COUNT (IMPORTANT)
-    $propertyLeadsCount = $leads->count();
-        $agents = User::where('role_id', $agentRole)->get();
- 
-        return view('bookvisit.leads', compact('leads', 'agents','propertyLeadsCount'));
+        $leads = VisitEnquiry::orderBy('created_at', 'desc')->get();
+        $propertyLeadsCount = $leads->count();
+
+        // ✅ ONLY CP LIST (NOT AGENT)
+        $partners = User::where('role_id', $partnerRole)->get();
+
+        return view('bookvisit.leads', compact(
+            'leads',
+            'partners',
+            'propertyLeadsCount'
+        ));
     }
+
+    // ================= STORE VISIT ENQUIRY =================
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -37,27 +47,42 @@ class VisitEnquiryController extends Controller
         VisitEnquiry::create($validated);
 
         return response()->json([
-            'status' => 'success',
+            'status'  => 'success',
             'message' => 'Visit enquiry submitted successfully'
         ]);
     }
+
+    // ================= ASSIGN TO CP ONLY =================
     public function assign(Request $request)
     {
+        $adminRole   = config('constants.roles.admin');
+        $partnerRole = config('constants.roles.partner');
+
+        // ✅ Only ADMIN can assign to CP
+        if (auth()->user()->role_id != $adminRole) {
+            abort(403);
+        }
+
         $request->validate([
-            'lead_id'  => 'required|exists:visit_enquiry,id',
-            'agent_id' => 'required|exists:users,id',
+            'lead_id'    => 'required|exists:visit_enquiry,id',
+            'partner_id' => 'required|exists:users,id',
         ]);
 
+        // ✅ Ensure selected user is really CP
+        User::where('id', $request->partner_id)
+            ->where('role_id', $partnerRole)
+            ->firstOrFail();
+
         VisitEnquiry::where('id', $request->lead_id)
-            ->update(['assigned_to' => $request->agent_id]);
+            ->update(['assigned_to' => $request->partner_id]);
 
-        return back()->with('success', 'Lead assigned successfully');
+        return back()->with('success', 'Lead assigned to CP successfully');
     }
-    public function agentLeads()
-    {
-        $agentRole = config('constants.roles.agent');
 
-        if (auth()->user()->role_id != $agentRole) {
+    // ================= CP CAN SEE ONLY OWN ASSIGNED LEADS =================
+    public function partnerLeads()
+    {
+        if (auth()->user()->role_id != config('constants.roles.partner')) {
             abort(403);
         }
 
@@ -65,6 +90,7 @@ class VisitEnquiryController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('agent.bookvisit.assigned-leads', compact('leads'));
+        // NEW ✅ (reuse agent view)
+return view('agent.bookvisit.assigned-leads', compact('leads'));
     }
 }
