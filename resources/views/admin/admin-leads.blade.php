@@ -183,6 +183,29 @@
         </div>
     </div>
 </div>
+<div class="col-xl-3 col-lg-4 col-md-6">
+    <div class="analytics-card"
+         onclick="window.location.href='{{ route('bookvisit.leads') }}'"
+         style="cursor:pointer;">
+        <div class="analytics-row">
+            <div class="analytics-icon icon-purple">
+                <i class="fas fa-building"></i>
+            </div>
+            <div class="analytics-content">
+                <div class="analytics-title">Property Leads</div>
+                <div class="analytics-bottom">
+                    <div class="analytics-value">
+                        {{ $propertyLeadsCount ?? 0 }}
+                    </div>
+                    
+                </div>
+                <div class="analytics-bottom">
+                    <div class="analytics-growth">Updated recently</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

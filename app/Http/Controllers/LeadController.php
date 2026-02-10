@@ -15,6 +15,8 @@ use Carbon\Carbon;
 use App\Exports\MonthlyPLFormattedExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MonthlyPLWithEstimatedExport;
+use App\Models\VisitEnquiry;
+
 
 
 class LeadController extends Controller {
@@ -61,7 +63,9 @@ public function leadlist(Request $request)
     $leadsCount          = DB::table('leads')->count();
     $totalEstimatedFiles = EstimatedFile::count();
     $totalMonthlyPL      = MonthlyPL::count();
+    $propertyLeadsCount = VisitEnquiry::count();
 
+    
     // ================= LISTS =================
     $enquiries = DB::table('enquiries')->paginate(10);
     $leads     = Lead::with('agent')->paginate(10);
@@ -135,6 +139,7 @@ $states = DB::table('states')
     return view('admin.admin-leads', compact(
         'enquiriesCount',
         'leadsCount',
+         'propertyLeadsCount', 
         'totalEstimatedFiles',
         'totalMonthlyPL',
         'enquiries',

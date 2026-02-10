@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\VisitEnquiry;
-use APp\Models\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class VisitEnquiryController extends Controller
@@ -12,17 +12,18 @@ class VisitEnquiryController extends Controller
         $adminRole = config('constants.roles.admin');
         $agentRole = config('constants.roles.agent');
 
-        if (auth()->user()->role_id != $adminRole) {
-            abort(403);
-        }
+       if (!auth()->check() || auth()->user()->role_id != $adminRole) {
+    abort(403);
+}
 
         $leads = VisitEnquiry::with('agent')
             ->orderBy('created_at', 'desc')
             ->get();
-
+ // ✅ SAME QUERY COUNT (IMPORTANT)
+    $propertyLeadsCount = $leads->count();
         $agents = User::where('role_id', $agentRole)->get();
-
-        return view('bookvisit.leads', compact('leads', 'agents'));
+ 
+        return view('bookvisit.leads', compact('leads', 'agents','propertyLeadsCount'));
     }
     public function store(Request $request)
     {
