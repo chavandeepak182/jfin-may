@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mt-4">
-    <h3 class="mb-4">Book Visit Leads</h3>
+    <h3 class="mb-4" style="color:#000;">Book Visit Leads</h3>
 
     @if($leads->count())
         <table class="table table-bordered table-striped">
