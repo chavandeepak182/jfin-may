@@ -24,8 +24,8 @@ class Property extends Model
     public function scopeActive($query)
     {
         return $query
-            ->where('is_active', 1)
-            ->whereNull('is_deleted');
+        ->where('is_active', 1)
+        ->where('is_deleted', 0);
     }
     
 }
