@@ -168,7 +168,6 @@
     color:#002f64;
 }
 </style>
-
 <div class="container">
 
     <h2 class="title">
@@ -178,7 +177,6 @@
         }}
     </h2>
 
-    {{-- STATUS --}}
     <p>
         <strong>Status:</strong>
         {{ ucwords(str_replace('_',' ',$booking->status)) }}
@@ -186,109 +184,275 @@
 
     <hr>
 
-    {{-- PROPERTY INFO --}}
+    {{-- PROPERTY --}}
     <h5 class="section-title">Property</h5>
     <div class="selected-prop">
-        <h3 class="selected-title">SELECTED PROPERTY</h3>
-    @foreach($booking->items as $item)
-        <p class="property-name">{{ $item->property->title ?? 'N/A' }}</p>
-    @endforeach
+        @foreach($booking->items as $item)
+            <p>{{ $item->property->title ?? 'N/A' }}</p>
+        @endforeach
     </div>
+
     <hr>
 
-    {{-- COMMISSION INFO --}}
+    {{-- COMMISSION --}}
     <h5 class="section-title">Commission Summary</h5>
-    <div class="calculation-panel">
-        <div class="calculation-row">
-            <p><strong>Agreement Cost:</strong>
-                ₹ {{ number_format($booking->agreement_cost) }}
-            </p>
-        </div>
-        <div class="calculation-row">
-            <p><strong>Commission %:</strong>
-                {{ $booking->commission_percentage }}%
-            </p>
-        </div>
-        <div class="calculation-row">
-            <p><strong>Actual Commission:</strong>
-                ₹ {{ number_format($booking->actual_commission) }}
-            </p>
-        </div>
-        <div class="calculation-row">
-            <p><strong>Offer Value:</strong>
-                ₹ {{ number_format($booking->offer_pool) }}
-            </p>
-        </div>
-    </div>
+    <p><strong>Offer Value:</strong> ₹ {{ number_format($booking->offer_pool,2) }}</p>
+
     <hr>
 
-    {{-- ===========================
-       CASE 1: CUSTOMER NOT CONFIRMED
-    ============================ --}}
     @if($booking->status === 'waiting_customer_confirmation')
-        
-        @if(!$booking->offers)
-        <div>
-            <p class="offer-title">No offers available.</p>
-        </div>
-        @else
-        <div class="section">
-            <h5 class="offer-title">Select One Offer</h5>
-        </div>
-        <div class="section">
-            <form method="POST"
-                  action="{{ route('customer.booking.confirm',$booking->id) }}">
-                @csrf
-            <div class="offers">
-                @foreach(json_decode($booking->offers,true) as $offer)
-                    <div class="offer-item" style="margin-bottom:10px;">
-                        <label class="offer-name">
-                            <input class="offer-input"
-                                type="radio"
-                                   name="selected_offer"
-                                   value="{{ $offer['label'] }}"
-                                   required>
-                            <strong>{{ $offer['label'] }}</strong></label>
 
-                            <p class="offer-amount">₹ {{ number_format($offer['amount']) }}</p>
+        @php
+            $offers = json_decode($booking->offers, true);
+        @endphp
+
+        @if(!$offers)
+            <p>No offers available.</p>
+        @else
+
+        <form id="confirmForm"
+              method="POST"
+              action="{{ route('customer.booking.confirm',$booking->id) }}">
+            @csrf
+
+            <h5>Select Offer Options</h5>
+
+            <div class="offers">
+
+                @foreach($offers as $mainIndex => $main)
+
+                    <div style="margin-bottom:15px; border:1px solid #ddd; padding:12px; border-radius:6px;">
+
+                        {{-- MAIN --}}
+                        <label>
+                            <input type="checkbox"
+                                   class="main-checkbox"
+                                   data-index="{{ $mainIndex }}"
+                                   data-label="{{ $main['label'] }}"
+                                   data-amount="{{ $main['amount'] }}">
+                            <strong>{{ $main['label'] }}</strong>
+                            – ₹ {{ number_format($main['amount'],2) }}
+                        </label>
+
+                        {{-- SUB ITEMS --}}
+                        @if(!empty($main['items']))
+                            <div style="margin-left:25px; margin-top:8px;">
+                                @foreach($main['items'] as $subIndex => $sub)
+                                    <div>
+                                        <label>
+                                            <input type="checkbox"
+                                                   class="sub-checkbox"
+                                                   data-parent="{{ $mainIndex }}"
+                                                   data-label="{{ $sub['label'] }}"
+                                                   data-amount="{{ $sub['amount'] }}">
+                                            {{ $sub['label'] }}
+                                            – ₹ {{ number_format($sub['amount'],2) }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+
                     </div>
+
                 @endforeach
+
             </div>
-        
-            <div class="confirm-btn">
-                <button class="btn btn-primary" type="submit">
-                    Confirm Selected Offer
-                </button>
-            </div>
-            </form>
-        </div>
+
+            <hr>
+
+            <p>
+                <strong>Total Selected: ₹ 
+                    <span id="selected_total">0.00</span>
+                </strong>
+            </p>
+
+            <button type="submit" class="btn btn-primary">
+                Confirm Selection
+            </button>
+
+        </form>
+
         @endif
 
-    {{-- ===========================
-       CASE 2: CUSTOMER ALREADY CONFIRMED
-    ============================ --}}
     @elseif($booking->status === 'customer_confirmed')
 
         <p style="color:green;">
-            ✔ You have already confirmed your offer.
+            ✔ You have confirmed your selection.
         </p>
 
-        <h2 class="section-title">
-            Selected Offer:</h2>
-            <div class="selected-prop">
-        <p class="selected-offer"><strong>{{ $booking->selected_offer }}</strong>
-            – ₹ {{ number_format($booking->offer_pool) }}
-        </p>
-        </div>
+        @php
+            $selected = json_decode($booking->selected_offer, true);
+        @endphp
 
-        <hr>
-
-        <p class="team-msg">
-            Our team will finalize your booking shortly.
-        </p>
+        @foreach($selected as $item)
+            <p>
+                <strong>{{ $item['label'] }}</strong>
+                – ₹ {{ number_format($item['amount'],2) }}
+            </p>
+        @endforeach
 
     @endif
 
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+    let form = document.getElementById("confirmForm");
+    if(!form) return;
+
+    let offerPool = {{ $booking->offer_pool ?? 0 }};
+    let totalSpan = document.getElementById('selected_total');
+
+    function updateTotal() {
+        let total = 0;
+
+        document.querySelectorAll('.sub-checkbox:checked')
+            .forEach(cb => {
+                total += parseFloat(cb.dataset.amount || 0);
+            });
+
+        // If main has NO sub items
+        document.querySelectorAll('.main-checkbox:checked')
+            .forEach(main => {
+
+                let parent = main.dataset.index;
+
+                let subs = document.querySelectorAll(
+                    '.sub-checkbox[data-parent="'+parent+'"]'
+                );
+
+                if(subs.length === 0){
+                    total += parseFloat(main.dataset.amount || 0);
+                }
+            });
+
+        totalSpan.innerText = total.toFixed(2);
+        return total;
+    }
+
+    /* MAIN CLICK */
+    document.querySelectorAll('.main-checkbox')
+        .forEach(main => {
+            main.addEventListener('change', function(){
+
+                let index = this.dataset.index;
+
+                let subs = document.querySelectorAll(
+                    '.sub-checkbox[data-parent="'+index+'"]'
+                );
+
+                subs.forEach(s => s.checked = this.checked);
+
+                updateTotal();
+            });
+        });
+
+    /* SUB CLICK */
+    document.querySelectorAll('.sub-checkbox')
+        .forEach(sub => {
+            sub.addEventListener('change', function(){
+
+                let parent = this.dataset.parent;
+
+                let subs = document.querySelectorAll(
+                    '.sub-checkbox[data-parent="'+parent+'"]'
+                );
+
+                let main = document.querySelector(
+                    '.main-checkbox[data-index="'+parent+'"]'
+                );
+
+                let allChecked = true;
+                subs.forEach(s => {
+                    if(!s.checked) allChecked = false;
+                });
+
+                if(main) main.checked = allChecked;
+
+                updateTotal();
+            });
+        });
+
+    /* SUBMIT */
+    form.addEventListener("submit", function(e){
+
+        let total = updateTotal();
+
+        if(total !== offerPool){
+            alert("Total selected amount must equal ₹ " + offerPool.toFixed(2));
+            e.preventDefault();
+            return;
+        }
+
+        document.querySelectorAll('.dynamic-input')
+            .forEach(el => el.remove());
+
+        let index = 0;
+
+        // SUB ITEMS
+        document.querySelectorAll('.sub-checkbox:checked')
+            .forEach(cb => {
+
+                let labelInput = document.createElement("input");
+                labelInput.type = "hidden";
+                labelInput.name = "selected_items["+index+"][label]";
+                labelInput.value = cb.dataset.label;
+                labelInput.classList.add("dynamic-input");
+
+                let amountInput = document.createElement("input");
+                amountInput.type = "hidden";
+                amountInput.name = "selected_items["+index+"][amount]";
+                amountInput.value = cb.dataset.amount;
+                amountInput.classList.add("dynamic-input");
+
+                form.appendChild(labelInput);
+                form.appendChild(amountInput);
+
+                index++;
+            });
+
+        // MAIN WITHOUT SUBS
+        document.querySelectorAll('.main-checkbox:checked')
+            .forEach(main => {
+
+                let parent = main.dataset.index;
+
+                let subs = document.querySelectorAll(
+                    '.sub-checkbox[data-parent="'+parent+'"]'
+                );
+
+                if(subs.length === 0){
+
+                    let labelInput = document.createElement("input");
+                    labelInput.type = "hidden";
+                    labelInput.name = "selected_items["+index+"][label]";
+                    labelInput.value = main.dataset.label;
+                    labelInput.classList.add("dynamic-input");
+
+                    let amountInput = document.createElement("input");
+                    amountInput.type = "hidden";
+                    amountInput.name = "selected_items["+index+"][amount]";
+                    amountInput.value = main.dataset.amount;
+                    amountInput.classList.add("dynamic-input");
+
+                    form.appendChild(labelInput);
+                    form.appendChild(amountInput);
+
+                    index++;
+                }
+            });
+
+        if(index === 0){
+            alert("Please select at least one option.");
+            e.preventDefault();
+        }
+
+    });
+
+});
+</script>
+
+
 
 @endsection
