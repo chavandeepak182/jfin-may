@@ -62,7 +62,7 @@
                 <i class="fas fa-home"></i>
                 <span>Agent Dashboard</span>
             </a>
-        @elseif($role_id == env('partnerRole_id'))
+        @elseif($role_id == config('constants.roles.partner'))
             <a href="{{ route('partnerDashboard') }}" class="nav-item">
                 <i class="fas fa-home"></i>
                 <span>CP Dashboard</span>
@@ -87,7 +87,7 @@
 
 
         {{-- ================= PROPERTY ================= --}}
-        @if($role_id == 4 || $role_id == env('partnerRole_id'))
+        @if($role_id == 4 || $role_id == config('constants.roles.partner'))
             <a href="{{ route('allProperties') }}" class="nav-item">
                 <i class="fas fa-building"></i>
                 <span>Property</span>

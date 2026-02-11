@@ -274,7 +274,7 @@
                     
                     <div class="form-group">
                         <label for="customerEmail">Email Address <span class="required">*</span></label>
-                        <input type="email" id="customerEmail" name="customer_email" value="{{ $customer->email }}" placeholder="Enter email address" required>
+                        <input type="email" id="customerEmail" name="customer_email" value="{{ $customer->email_id }}" readonly>
                     </div>
                     
                     <div class="form-group">
