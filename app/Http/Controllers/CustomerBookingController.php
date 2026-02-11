@@ -350,8 +350,11 @@ public function showBookingForm($id)
 
     $property = Property::where('properties_id', $id)->firstOrFail();
     $customer = auth()->user();
+    $profile = DB::table('profile')
+                ->where('user_id', $customer->id)
+                ->first();
 
-    return view('customer.property-book-form', compact('property','customer'));
+    return view('customer.property-book-form', compact('property','customer','profile'));
 }
 public function submitBookingForm(Request $request)
 {
@@ -360,8 +363,10 @@ public function submitBookingForm(Request $request)
     }
 
     $request->validate([
-        'property_id' => 'required|exists:properties,properties_id',
+        // only active properties can be booked
+        'property_id' => 'required|exists:properties,properties_id,is_active,1',
 
+        // still validating (even if readonly)
         'customer_name'   => 'required|string|max:255',
         'customer_email'  => 'required|email',
         'customer_mobile' => 'required|string|max:20',
@@ -369,25 +374,34 @@ public function submitBookingForm(Request $request)
         'co_name' => 'nullable|string|max:255',
         'co_email' => 'nullable|email',
         'co_mobile' => 'nullable|string|max:20',
-        'co_employment_type' => 'nullable|in:salaried,self_employed',
+
+        // fixed values to match form
+        'co_employment_type' => 'nullable|in:salaried,self-employed,business,professional',
         'co_designation' => 'nullable|string|max:255',
         'co_gender' => 'nullable|in:male,female,other',
-        'co_marital_status' => 'nullable|in:single,married',
+        'co_marital_status' => 'nullable|in:single,married,divorced,widowed',
     ]);
 
     DB::transaction(function () use ($request) {
 
+        $user = auth()->user();
+
+        // fetch PAN from profile table
+        $profile = DB::table('profile')
+            ->where('user_id', $user->id)
+            ->first();
+
         $booking = PropertyBooking::create([
-            'customer_id' => auth()->id(),
+            'customer_id' => $user->id,
             'status'      => 'pending_admin_review',
 
-            // customer snapshot
-            'customer_name'   => $request->customer_name,
-            'customer_email'  => $request->customer_email,
-            'customer_mobile' => $request->customer_mobile,
-            'customer_pan'    => $request->customer_pan,
+            // customer snapshot from DB (not from form)
+            'customer_name'   => $user->name,
+            'customer_email'  => $user->email_id,
+            'customer_mobile' => $user->mobile_no,
+            'customer_pan'    => $profile->pan_number ?? null,
 
-            // co-applicant
+            // co-applicant from form
             'co_name' => $request->co_name,
             'co_email' => $request->co_email,
             'co_mobile' => $request->co_mobile,
