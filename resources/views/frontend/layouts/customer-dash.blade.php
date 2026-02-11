@@ -96,6 +96,7 @@
     margin-left: auto;
 }
 
+
 /* Dropdown arrow */
 .sidebar-link .fa-angle-down {
     margin-left: auto;
@@ -181,12 +182,35 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="sidebar-item">
+                    <!-- <li class="sidebar-item">
                         <a class="sidebar-link" href="{{ route('customer.properties')}}">
                            <i class="fas fa-home"></i>
                             <span class="align-middle">Properties</span>
                         </a>
-                    </li>
+                    </li> -->
+                    <!-- property -->
+                     <!-- Property Dropdown -->
+                            <li class="sidebar-item {{ Request::is('customer/properties*') || Request::is('customer/bookings*') ? 'active' : '' }}">
+                                <a class="sidebar-link" href="#" data-bs-toggle="collapse" data-bs-target="#property-dropdown" aria-expanded="false">
+                                    <i class="fas fa-building"></i>
+                                    <span class="align-middle">
+                                        Property <i class="fas fa-angle-down ms-1"></i>
+                                    </span>
+                                </a>
+                                <ul class="collapse {{ Request::is('customer/properties*') || Request::is('customer/bookings*') ? 'show' : '' }}" id="property-dropdown">
+                                    <li>
+                                        <a class="sidebar-link" href="{{ route('customer.properties') }}">
+                                            Property
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="sidebar-link" href="{{ route('customer.bookings') }}">
+                                            Property Application
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
 
                     <!-- Documents -->
                     <li class="sidebar-item">

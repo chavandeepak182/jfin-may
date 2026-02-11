@@ -362,26 +362,39 @@ public function submitBookingForm(Request $request)
         abort(403);
     }
 
-    $request->validate([
-        // only active properties can be booked
-        'property_id' => 'required|exists:properties,properties_id,is_active,1',
+    // $request->validate([
+    //     'property_id' => 'required|exists:properties,properties_id',
 
-        // still validating (even if readonly)
-        'customer_name'   => 'required|string|max:255',
-        'customer_email'  => 'required|email',
-        'customer_mobile' => 'required|string|max:20',
+    //     'customer_name'   => 'required|string|max:255',
+    //     'customer_email'  => 'required|email',
+    //     'customer_mobile' => 'required|string|max:20',
 
-        'co_name' => 'nullable|string|max:255',
-        'co_email' => 'nullable|email',
-        'co_mobile' => 'nullable|string|max:20',
+    //     'co_name' => 'nullable|string|max:255',
+    //     'co_email' => 'nullable|email',
+    //     'co_mobile' => 'nullable|string|max:20',
+    //     'co_employment_type' => 'nullable|in:salaried,self_employed',
+    //     'co_designation' => 'nullable|string|max:255',
+    //     'co_gender' => 'nullable|in:male,female,other',
+    //     'co_marital_status' => 'nullable|in:single,married',
+    // ]);
+$request->validate([
+    'property_id' => 'required|exists:properties,properties_id',
 
-        // fixed values to match form
-        'co_employment_type' => 'nullable|in:salaried,self-employed,business,professional',
-        'co_designation' => 'nullable|string|max:255',
-        'co_gender' => 'nullable|in:male,female,other',
-        'co_marital_status' => 'nullable|in:single,married,divorced,widowed',
-    ]);
+    // CUSTOMER
+    'customer_name'   => ['required','regex:/^[A-Za-z ]+$/','max:255'],
+    'customer_email'  => 'required|email|max:255',
+    'customer_mobile' => 'required|digits:10',
+    'customer_pan'    => ['nullable','regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/'],
 
+    // CO-APPLICANT
+    'co_name'         => ['nullable','regex:/^[A-Za-z ]+$/','max:255'],
+    'co_email'        => 'nullable|email|max:255',
+    'co_mobile'       => 'nullable|digits:10',
+    'co_employment_type' => 'nullable|in:salaried,self-employed,business,professional',
+    'co_designation'  => 'nullable|string|max:255',
+    'co_gender'       => 'nullable|in:male,female,other',
+    'co_marital_status' => 'nullable|in:single,married,divorced,widowed',
+]);
     DB::transaction(function () use ($request) {
 
         $user = auth()->user();
