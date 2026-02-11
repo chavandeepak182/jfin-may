@@ -476,41 +476,78 @@ border-radius:8px;
         </p>
     </div>
     <table class="offer-table">
-        <thead>
-            <tr class="offer-head">
-                <th>Offer Name</th>
-                @if(!$isLocked)<th class="action-cell">Action</th>@endif
-            </tr>
-        </thead>
-        <tbody id="offer_rows">
-            @if($booking->offers)
-                @foreach(json_decode($booking->offers,true) as $offer)
-                    <tr class="offer-item">
-                        <td style="padding:0; border:none;">
-                            <div class="offer-input-wrapper">
-                            
-                                <input 
-                                    class="offer-input"
-                                    type="text"
-                                    name="offers[]"
-                                    value="{{ $offer['label'] }}"
-                                    {{ $isLocked ? 'readonly' : '' }}>
-                            </div>
-                        </td>
-                        @if(!$isLocked)
-                        <td class="action-cell">
-                            <button class="offer-remove-btn" type="button" onclick="this.closest('tr').remove()">❌</button>
-                        </td>
-                        @endif
-                    </tr>
-                @endforeach
+    <thead>
+        <tr class="offer-head">
+            <th>Main Offer</th>
+            <th>Amount</th>
+            @if(!$isLocked)<th>Action</th>@endif
+        </tr>
+    </thead>
+    <tbody id="offer_rows">
+
+    @if($booking->offers)
+        @foreach(json_decode($booking->offers,true) as $i => $offer)
+        <tr class="offer-item">
+            <td>
+                <input class="offer-input"
+                       type="text"
+                       name="offers[{{ $i }}][label]"
+                       value="{{ $offer['label'] }}"
+                       {{ $isLocked ? 'readonly' : '' }}>
+            </td>
+
+            <td>
+                <input class="offer-input"
+                       type="number"
+                       name="offers[{{ $i }}][amount]"
+                       value="{{ $offer['amount'] }}"
+                       {{ $isLocked ? 'readonly' : '' }}>
+            </td>
+
+            @if(!$isLocked)
+            <td class="action-cell">
+                <button type="button"
+                        class="offer-remove-btn"
+                        onclick="this.closest('tr').remove()">❌</button>
+            </td>
             @endif
-        </tbody>
-    </table>
-    
-        @if(!$isLocked)
-            <button class="btn-add-offer" type="button" onclick="addOffer()">➕ Add Offer</button>
+        </tr>
+
+        {{-- SUB ITEMS --}}
+        @if(!empty($offer['items']))
+            @foreach($offer['items'] as $j => $sub)
+            <tr>
+                <td style="padding-left:40px;">
+                    <input class="offer-input"
+                           type="text"
+                           name="offers[{{ $i }}][items][{{ $j }}][label]"
+                           value="{{ $sub['label'] }}"
+                           {{ $isLocked ? 'readonly' : '' }}>
+                </td>
+                <td>
+                    <input class="offer-input"
+                           type="number"
+                           name="offers[{{ $i }}][items][{{ $j }}][amount]"
+                           value="{{ $sub['amount'] }}"
+                           {{ $isLocked ? 'readonly' : '' }}>
+                </td>
+                <td></td>
+            </tr>
+            @endforeach
         @endif
+
+        @endforeach
+    @endif
+
+    </tbody>
+</table>
+
+@if(!$isLocked)
+<button type="button" class="btn-add-offer" onclick="addMainOffer()">
+    ➕ Add Main Offer
+</button>
+@endif
+
 
 <div class="submit-btn">
 @if(!$isLocked)
@@ -537,8 +574,7 @@ border-radius:8px;
 </p>
 </div>
 @endif
-</div>
-</div>
+
 {{-- ===========================
    FINAL SUBMIT
 =========================== --}}
@@ -563,7 +599,14 @@ border-radius:8px;
 =========================== --}}
 @if(!$isLocked)
 <script>
+
+let offerIndex = {{ $booking->offers ? count(json_decode($booking->offers,true)) : 0 }};
+
+/* =========================
+   CALCULATION
+========================= */
 function recalc() {
+
     let cost = +agreement_cost.value || 0;
     let percent = +commission_percentage.value || 0;
     let tds = +tds_percentage.value || 0;
@@ -574,36 +617,173 @@ function recalc() {
     let tdsAmt = actual * tds / 100;
     let gstAmt = actual * gst / 100;
     let net = actual - tdsAmt - gstAmt;
-    let remaining = net - mlm;
-    let pool = remaining / 2;
+
+    let offerPool = net / 2;
+    let companyShare = net / 2;
+
+    let finalOfferPool = offerPool - mlm;
+    if (finalOfferPool < 0) finalOfferPool = 0;
 
     actual_commission.innerText = actual.toFixed(2);
     tds_amount.innerText = tdsAmt.toFixed(2);
     gst_amount.innerText = gstAmt.toFixed(2);
     net_commission.innerText = net.toFixed(2);
-    offer_pool.innerText = pool.toFixed(2);
-    final_commission.innerText = pool.toFixed(2);
+    offer_pool.innerText = finalOfferPool.toFixed(2);
+    final_commission.innerText = companyShare.toFixed(2);
+
+    window.finalOfferPoolAmount = finalOfferPool;
 }
 
 ['agreement_cost','commission_percentage','tds_percentage','gst_percentage','mlm_amount']
 .forEach(id => document.getElementById(id)?.addEventListener('input', recalc));
 
 function toggleOffers() {
-    offers_box.style.display = enable_offers.checked ? 'block' : 'none';
+
+    let box = document.getElementById('offers_box');
+    let checkbox = document.getElementById('enable_offers');
+
+    if (!box || !checkbox) return;
+
+    box.style.display = checkbox.checked ? 'block' : 'none';
 }
 
-function addOffer() {
-    let row = `
-        <tr class="offer_item">
-            <td>
-            <div class="offer-input-wrapper">
-                <input class="offer-input" type="text" name="offers[]" placeholder="Enter Offer name"></td>
-            </div>
-            <td class="action-cell"><button class="offer-remove-btn" type="button" onclick="this.closest('tr').remove()">❌</button></td>
-        </tr>`;
-    offer_rows.insertAdjacentHTML('beforeend', row);
+/* =========================
+   ADD MAIN OFFER
+========================= */
+function addMainOffer() {
+
+    let fixedAmount = window.finalOfferPoolAmount || 0;
+
+    let html = `
+    <tr class="offer-main" data-offer="${offerIndex}">
+        <td>
+            <input class="offer-input"
+                type="text"
+                name="offers[${offerIndex}][label]"
+                placeholder="Main Offer Name"
+                required>
+        </td>
+
+        <td>
+            <input class="offer-input"
+                type="number"
+                name="offers[${offerIndex}][amount]"
+                value="${fixedAmount.toFixed(2)}"
+                readonly>
+        </td>
+
+        <td class="action-cell">
+            <button type="button"
+                class="offer-remove-btn"
+                onclick="removeOfferGroup(${offerIndex})">❌</button>
+        </td>
+    </tr>
+
+    <tr class="offer-sub-btn" data-offer="${offerIndex}">
+        <td colspan="3" style="padding-left:30px;">
+            <button type="button"
+                onclick="addSubItem(${offerIndex})"
+                class="btn-add-offer">
+                ➕ Add Sub Item
+            </button>
+        </td>
+    </tr>
+    `;
+
+    document.getElementById('offer_rows')
+        .insertAdjacentHTML('beforeend', html);
+
+    offerIndex++;
 }
+
+
+/* =========================
+   ADD SUB ITEM
+========================= */
+function addSubItem(parentIndex) {
+
+    let buttonRow = document.querySelector(
+        'tr.offer-sub-btn[data-offer="'+parentIndex+'"]'
+    );
+
+    if (!buttonRow) return;
+
+    let subCount = document.querySelectorAll(
+        'tr.sub-item[data-parent="'+parentIndex+'"]'
+    ).length;
+
+    let html = `
+    <tr class="sub-item" data-parent="${parentIndex}">
+        <td style="padding-left:60px;">
+            <input class="offer-input"
+                type="text"
+                name="offers[${parentIndex}][items][${subCount}][label]"
+                placeholder="Sub Item Name"
+                required>
+        </td>
+
+        <td>
+            <input class="offer-input"
+                type="number"
+                name="offers[${parentIndex}][items][${subCount}][amount]"
+                placeholder="Amount"
+                required>
+        </td>
+
+        <td>
+            <button type="button"
+                class="offer-remove-btn"
+                onclick="this.closest('tr').remove()">❌</button>
+        </td>
+    </tr>
+    `;
+
+    buttonRow.insertAdjacentHTML('afterend', html);
+}
+
+
+/* =========================
+   REMOVE ENTIRE OFFER GROUP
+========================= */
+function removeOfferGroup(index) {
+
+    document.querySelectorAll('[data-offer="'+index+'"]')
+        .forEach(el => el.remove());
+}
+
+
+/* =========================
+   VALIDATE TOTAL SPLIT
+========================= */
+document.querySelector("form").addEventListener("submit", function(e){
+
+    if (!enable_offers.checked) return;
+
+    let finalOfferPool = window.finalOfferPoolAmount || 0;
+
+    let allSubInputs = document.querySelectorAll('[name*="[items]"][name$="[amount]"]');
+
+    let total = 0;
+
+    allSubInputs.forEach(function(input){
+        total += parseFloat(input.value) || 0;
+    });
+
+    if (Math.round(total) !== Math.round(finalOfferPool)) {
+
+        alert(
+            "Sub items total must equal Offer Pool amount (₹ " +
+            finalOfferPool.toFixed(2) + ")"
+        );
+
+        e.preventDefault();
+    }
+});
+
+recalc();
+toggleOffers();
 </script>
 @endif
+
 
 @endsection
