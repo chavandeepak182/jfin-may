@@ -350,8 +350,11 @@ public function showBookingForm($id)
 
     $property = Property::where('properties_id', $id)->firstOrFail();
     $customer = auth()->user();
+    $profile = DB::table('profile')
+                ->where('user_id', $customer->id)
+                ->first();
 
-    return view('customer.property-book-form', compact('property','customer'));
+    return view('customer.property-book-form', compact('property','customer','profile'));
 }
 public function submitBookingForm(Request $request)
 {
@@ -394,17 +397,24 @@ $request->validate([
 ]);
     DB::transaction(function () use ($request) {
 
+        $user = auth()->user();
+
+        // fetch PAN from profile table
+        $profile = DB::table('profile')
+            ->where('user_id', $user->id)
+            ->first();
+
         $booking = PropertyBooking::create([
-            'customer_id' => auth()->id(),
+            'customer_id' => $user->id,
             'status'      => 'pending_admin_review',
 
-            // customer snapshot
-            'customer_name'   => $request->customer_name,
-            'customer_email'  => $request->customer_email,
-            'customer_mobile' => $request->customer_mobile,
-            'customer_pan'    => $request->customer_pan,
+            // customer snapshot from DB (not from form)
+            'customer_name'   => $user->name,
+            'customer_email'  => $user->email_id,
+            'customer_mobile' => $user->mobile_no,
+            'customer_pan'    => $profile->pan_number ?? null,
 
-            // co-applicant
+            // co-applicant from form
             'co_name' => $request->co_name,
             'co_email' => $request->co_email,
             'co_mobile' => $request->co_mobile,
