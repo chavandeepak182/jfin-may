@@ -262,22 +262,22 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="customerName">Full Name <span class="required">*</span></label>
-                        <input type="text" id="customerName" name="customer_name" value="{{ $customer->name }}" placeholder="Enter full name" required>
+                        <input type="text" id="customerName" name="customer_name" value="{{ $customer->name }}" readonly>
                     </div>
                     
                     <div class="form-group">
                         <label for="customerEmail">Email Address <span class="required">*</span></label>
-                        <input type="email" id="customerEmail" name="customer_email" value="{{ $customer->email }}" placeholder="Enter email address" required>
+                        <input type="email" id="customerEmail" name="customer_email" value="{{ $customer->email_id }}" readonly>
                     </div>
                     
                     <div class="form-group">
                         <label for="customerMobile">Mobile Number <span class="required">*</span></label>
-                        <input type="tel" id="customerMobile" name="customer_mobile" value="{{ $customer->mobile }}" placeholder="Enter 10-digit mobile number" required>
+                        <input type="tel" id="customerMobile" name="customer_mobile" value="{{ $customer->mobile_no }}" readonly>
                     </div>
                     
                     <div class="form-group">
                         <label for="customerPan">PAN Number</label>
-                        <input type="text" id="customerPan" name="customer_pan" value="{{ $customer->pan_no }}" placeholder="Enter PAN (Optional)" maxlength="10">
+                        <input type="text" id="customerPan" name="customer_pan" value="{{ $profile->pan_number }}" maxlength="10" readonly>
                     </div>
                 </div>
 

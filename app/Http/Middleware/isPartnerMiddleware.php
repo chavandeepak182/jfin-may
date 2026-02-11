@@ -13,14 +13,19 @@ class IsPartnerMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+     public function handle(Request $request, Closure $next): Response
     {
-       
-        $role_id = session()->get('role_id');
-       if( $role_id == env('partnerRole_id') || $role_id == 4 ){
-        return $next($request);
-       }
-       return redirect('/')->with('error', 'You are not the authorized user to access this page');
-        
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        $roleId = (int) auth()->user()->role_id;
+
+        // allow partner (3) and admin (4) if needed
+        if ($roleId === 3 || $roleId === 4) {
+            return $next($request);
+        }
+
+        abort(403, 'Unauthorized');
     }
 }
