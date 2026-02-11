@@ -15,7 +15,7 @@
         <div class="video-overlay-content">
             <h1>Secure Your Dream Home with <span>Jfinserv</span></h1>
             <p>Tailored loan solutions for every stage of life</p>
-            <a href="{{ url('/apply') }}" class="btn-primary">
+            <a href="{{ route('authv3.login.form') }}" class="btn-primary">
                 Apply Now
             </a>
         </div>

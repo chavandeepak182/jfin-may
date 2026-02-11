@@ -262,7 +262,14 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="customerName">Full Name <span class="required">*</span></label>
-                        <input type="text" id="customerName" name="customer_name" value="{{ $customer->name }}" placeholder="Enter full name" required>
+                        <!-- <input type="text" id="customerName" name="customer_name" value="{{ $customer->name }}" placeholder="Enter full name" required> -->
+                    <input type="text" id="customerName" name="customer_name"
+                        value="{{ $customer->name }}"
+                        placeholder="Enter full name"
+                        required
+                        pattern="[A-Za-z ]+"
+                        title="Only letters allowed">
+
                     </div>
                     
                     <div class="form-group">
@@ -272,13 +279,33 @@
                     
                     <div class="form-group">
                         <label for="customerMobile">Mobile Number <span class="required">*</span></label>
-                        <input type="tel" id="customerMobile" name="customer_mobile" value="{{ $customer->mobile }}" placeholder="Enter 10-digit mobile number" required>
+                        <!-- <input type="tel" id="customerMobile" name="customer_mobile" value="{{ $customer->mobile }}" placeholder="Enter 10-digit mobile number" required> -->
+                                        <input type="tel"
+                                            id="customerMobile"
+                                            name="customer_mobile"
+                                            value="{{ $customer->mobile }}"
+                                            placeholder="Enter 10-digit mobile number"
+                                            required
+                                            pattern="[0-9]{10}"
+                                            maxlength="10"
+                                            inputmode="numeric"
+                                            title="Enter valid 10 digit mobile number">
                     </div>
                     
                     <div class="form-group">
                         <label for="customerPan">PAN Number</label>
-                        <input type="text" id="customerPan" name="customer_pan" value="{{ $customer->pan_no }}" placeholder="Enter PAN (Optional)" maxlength="10">
-                    </div>
+                        <!-- <input type="text" id="customerPan" name="customer_pan" value="{{ $customer->pan_no }}" placeholder="Enter PAN (Optional)" maxlength="10"> -->
+                    
+                                            <input type="text"
+                            id="customerPan"
+                            name="customer_pan"
+                            value="{{ $customer->pan_no }}"
+                            placeholder="Enter PAN (Optional)"
+                            maxlength="10"
+                            pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+                            style="text-transform: uppercase;"
+                            title="Enter valid PAN (Example: ABCDE1234F)">
+    </div>
                 </div>
 
                 <!-- Co-Applicant Details -->
@@ -286,7 +313,12 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="coApplicantName">Full Name</label>
-                        <input type="text" id="coApplicantName" name="co_name" placeholder="Enter full name">
+                        <!-- <input type="text" id="coApplicantName" name="co_name" placeholder="Enter full name"> -->
+                                                <input type="text"
+                            id="coApplicantName"
+                            name="co_name"
+                            pattern="[A-Za-z ]+"
+                            title="Only letters allowed">
                     </div>
                     
                     <div class="form-group">
@@ -296,7 +328,15 @@
                     
                     <div class="form-group">
                         <label for="coApplicantMobile">Mobile Number</label>
-                        <input type="tel" id="coApplicantMobile" name="co_mobile" placeholder="Enter 10-digit mobile number">
+                        <!-- <input type="tel" id="coApplicantMobile" name="co_mobile" placeholder="Enter 10-digit mobile number"> -->
+                         <input type="tel"
+                                id="coApplicantMobile"
+                                name="co_mobile"
+                                pattern="[0-9]{10}"
+                                maxlength="10"
+                                inputmode="numeric"
+                                title="Enter valid 10 digit mobile number">
+
                     </div>
                     
                     <div class="form-group">
@@ -409,5 +449,30 @@
 </button>
 
 </form> -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Force uppercase PAN
+    document.getElementById("customerPan").addEventListener("input", function () {
+        this.value = this.value.toUpperCase();
+    });
+
+    // Allow only letters in name fields
+    document.querySelectorAll("#customerName, #coApplicantName").forEach(function (input) {
+        input.addEventListener("input", function () {
+            this.value = this.value.replace(/[^A-Za-z ]/g, '');
+        });
+    });
+
+    // Allow only numbers in mobile fields
+    document.querySelectorAll("#customerMobile, #coApplicantMobile").forEach(function (input) {
+        input.addEventListener("input", function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    });
+
+});
+</script>
+
 
 @endsection
