@@ -104,23 +104,24 @@ public function adminOffer(Request $request, $id)
         abort(403);
     }
 
-    $request->validate([
+    $validated = $request->validate([
         'agreement_cost'        => 'required|numeric|min:1',
         'commission_percentage' => 'required|numeric|min:0|max:100',
+        'tds_percentage'        => 'required|numeric|min:0|max:100',
+        'gst_percentage'        => 'required|numeric|min:0|max:100',
+        'mlm_amount'            => 'required|numeric|min:0',
 
-        'tds_percentage' => 'required|numeric|min:0|max:100',
-        'gst_percentage' => 'required|numeric|min:0|max:100',
-        'mlm_amount'     => 'required|numeric|min:0',
-
-        'offers'   => 'nullable|array',
-        'offers.*' => 'required|string|max:255',
+        'offers' => 'nullable|array',
+        'offers.*.label' => 'required|string|max:255',
+        'offers.*.amount' => 'required|numeric|min:0',
+        'offers.*.items' => 'nullable|array',
+        'offers.*.items.*.label' => 'required|string|max:255',
+        'offers.*.items.*.amount' => 'required|numeric|min:0',
     ]);
 
     $booking = PropertyBooking::findOrFail($id);
 
-    /* =====================
-       CALCULATIONS
-    ====================== */
+    /* ================= CALCULATION ================= */
 
     $actualCommission = $request->agreement_cost *
         ($request->commission_percentage / 100);
@@ -130,49 +131,68 @@ public function adminOffer(Request $request, $id)
 
     $netCommission = $actualCommission - $tdsAmount - $gstAmount;
 
-    $remainingAfterMlm = $netCommission - $request->mlm_amount;
+    $offerPool = $netCommission / 2;
+    $companyShare = $netCommission / 2;
 
-    if ($remainingAfterMlm < 0) {
-        throw new \Exception('MLM amount exceeds commission');
+    $finalOfferPool = $offerPool - $request->mlm_amount;
+
+    if ($finalOfferPool < 0) {
+        return back()->withErrors('MLM amount exceeds offer pool');
     }
 
-    $offerPool   = $remainingAfterMlm / 2;
-    $companyShare = $remainingAfterMlm / 2;
-
-    /* =====================
-       BUILD OFFERS
-    ====================== */
+    /* ================= BUILD OFFERS ================= */
 
     $offers = [];
 
     if ($request->offers) {
-        foreach ($request->offers as $label) {
+
+        foreach ($request->offers as $mainOffer) {
+
+            $subTotal = 0;
+            $items = [];
+
+            if (!empty($mainOffer['items'])) {
+
+                foreach ($mainOffer['items'] as $sub) {
+                    $subTotal += $sub['amount'];
+
+                    $items[] = [
+                        'label'  => $sub['label'],
+                        'amount' => $sub['amount'],
+                    ];
+                }
+
+                if ($subTotal != $mainOffer['amount']) {
+                    return back()->withErrors(
+                        'Sub items total must equal main offer amount'
+                    );
+                }
+            }
+
             $offers[] = [
-                'label'  => $label,
-                'amount' => $offerPool,
+                'label'  => $mainOffer['label'],
+                'amount' => $mainOffer['amount'],
+                'items'  => $items
             ];
         }
     }
 
-    /* =====================
-       SAVE
-    ====================== */
+    /* ================= SAVE ================= */
 
     $booking->update([
         'agreement_cost'        => $request->agreement_cost,
         'commission_percentage' => $request->commission_percentage,
-
-        'tds_percentage' => $request->tds_percentage,
-        'gst_percentage' => $request->gst_percentage,
+        'tds_percentage'        => $request->tds_percentage,
+        'gst_percentage'        => $request->gst_percentage,
 
         'actual_commission' => $actualCommission,
         'tds_amount'        => $tdsAmount,
         'gst_amount'        => $gstAmount,
+        'net_commission'    => $netCommission,
 
-        'net_commission' => $netCommission,
-        'mlm_amount'     => $request->mlm_amount,
+        'mlm_amount'        => $request->mlm_amount,
 
-        'offer_pool'        => $offerPool,
+        'offer_pool'        => $finalOfferPool,
         'final_commission'  => $companyShare,
 
         'offers' => !empty($offers) ? json_encode($offers) : null,
@@ -184,8 +204,11 @@ public function adminOffer(Request $request, $id)
 
     return redirect()
         ->route('admin.property.bookings')
-        ->with('success', 'Offer saved and sent to customer');
+        ->with('success', 'Offer sent to customer');
 }
+
+
+
 
 
 
@@ -201,23 +224,95 @@ public function adminOffer(Request $request, $id)
 
     return view('customer.bookings.index', compact('bookings'));
 }
-   public function customerConfirm(Request $request, $id)
+ public function customerConfirm(Request $request, $id)
 {
-    $request->validate([
-        'selected_offer' => 'required|in:cashback,furniture'
+    \Log::info('CUSTOMER CONFIRM HIT', [
+        'booking_id' => $id,
+        'auth_id' => auth()->id(),
+        'input' => $request->all()
     ]);
 
-    $booking = PropertyBooking::where('id',$id)
-        ->where('customer_id',auth()->id())
-        ->firstOrFail();
+    try {
 
-    $booking->update([
-        'selected_offer' => $request->selected_offer,
-        'status' => 'customer_confirmed'
-    ]);
+        /* =========================
+           VALIDATION
+        ========================== */
+        $validated = $request->validate([
+            'selected_items' => 'required|array',
+            'selected_items.*.label' => 'required|string',
+            'selected_items.*.amount' => 'required|numeric|min:0',
+        ]);
 
-    return redirect()->back()->with('success','Offer confirmed');
+        \Log::info('VALIDATION PASSED');
+
+        /* =========================
+           FETCH BOOKING
+        ========================== */
+        $booking = PropertyBooking::where('id', $id)
+            ->where('customer_id', auth()->id())
+            ->where('status', 'waiting_customer_confirmation')
+            ->first();
+
+        if (!$booking) {
+            \Log::error('BOOKING NOT FOUND OR STATUS INVALID');
+            return back()->withErrors('Booking not found or already confirmed.');
+        }
+
+        \Log::info('BOOKING FOUND', [
+            'status' => $booking->status,
+            'offer_pool' => $booking->offer_pool
+        ]);
+
+        /* =========================
+           CALCULATE TOTAL
+        ========================== */
+        $total = 0;
+
+        foreach ($request->selected_items as $item) {
+            $total += $item['amount'];
+        }
+
+        \Log::info('TOTAL CALCULATED', [
+            'selected_total' => $total,
+            'expected_total' => $booking->offer_pool
+        ]);
+
+        if (round($total, 2) != round($booking->offer_pool, 2)) {
+
+            \Log::error('TOTAL MISMATCH');
+
+            return back()->withErrors(
+                'Selected total must equal ₹ ' . $booking->offer_pool
+            );
+        }
+
+        /* =========================
+           UPDATE BOOKING
+        ========================== */
+        $booking->update([
+            'selected_offer' => json_encode($request->selected_items),
+            'status' => 'customer_confirmed'
+        ]);
+
+        \Log::info('BOOKING UPDATED SUCCESSFULLY');
+
+        return redirect()
+            ->route('customer.bookings')
+            ->with('success', 'Offer confirmed successfully');
+
+    } catch (\Exception $e) {
+
+        \Log::error('CUSTOMER CONFIRM ERROR', [
+            'message' => $e->getMessage(),
+            'line' => $e->getLine(),
+            'file' => $e->getFile()
+        ]);
+
+        return back()->withErrors('Something went wrong.');
+    }
 }
+
+
 
     /* ===========================
        ADMIN – FINAL SUBMIT
@@ -299,7 +394,8 @@ public function showConfirmOffer($id)
     $booking = PropertyBooking::with(['items.property'])
         ->where('id', $id)
         ->where('customer_id', auth()->id())
-        ->firstOrFail(); // ❗ no status filter
+        ->where('status','waiting_customer_confirmation')
+        ->firstOrFail();
 
     return view('customer.booking-confirm', compact('booking'));
 }
