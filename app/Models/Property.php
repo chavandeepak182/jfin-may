@@ -22,10 +22,10 @@ class Property extends Model
      * Soft delete safe scope
      */
     public function scopeActive($query)
-{
-    return $query
-        ->where('is_active', 1)
-        ->whereNull('is_deleted');
-}
+    {
+        return $query
+        ->where('is_active', 1);
+        
+    }
     
 }
