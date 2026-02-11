@@ -183,8 +183,8 @@
                             @csrf
                             <input type="hidden" name="current_step" value="{{ $currentStep }}">
                             <input type="hidden" name="is_loan" value="{{ $is_loan }}">
-                            <input type="hidden" name="loan_category_id" value="{{ session('loan_category_id', '') }}">
-                            <input type="hidden" name="bank_id" value="{{ session('bank_id', '') }}">
+                            <!-- <input type="hidden" name="loan_category_id" value="{{ session('loan_category_id', '') }}"> -->
+                            <!-- <input type="hidden" name="bank_id" value="{{ session('bank_id', '') }}"> -->
 
                             <!-- Personal Details -->
                             @if ($currentStep == 1)
@@ -221,9 +221,14 @@
         <select name="user_id" id="user_id" class="form-select custom-select" required>
             <option value="">Select User</option>
             @foreach ($loanUsers as $u)
-                <option value="{{ $u->id }}" data-mobile="{{ $u->mobile_no }}">
+                <!-- <option value="{{ $u->id }}" data-mobile="{{ $u->mobile_no }}">
                     {{ $u->name }} ({{ $u->email_id }})
-                </option>
+                </option> -->
+                <option value="{{ $u->id }}"
+    data-mobile="{{ $u->mobile_no }}"
+    {{ old('user_id', session('selected_user_id')) == $u->id ? 'selected' : '' }}>
+    {{ $u->name }} ({{ $u->email_id }})
+</option>
             @endforeach
         </select>
     </div>
@@ -239,10 +244,14 @@
                                                     required>
                                                     <option value="">Select Loan Category</option>
                                                     @foreach ($loanCategories as $category)
-                                                        <option value="{{ $category->loan_category_id }}"
+                                                        <!-- <option value="{{ $category->loan_category_id }}"
                                                             {{ old('loan_category_id', $loan->loan_category_id ?? '') == $category->loan_category_id ? 'selected' : '' }}>
                                                             {{ $category->category_name }}
-                                                        </option>
+                                                        </option> -->
+                                                                                                            <option value="{{ $category->loan_category_id }}"
+                                                        {{ old('loan_category_id', session('loan_category_id', $loan->loan_category_id ?? '')) == $category->loan_category_id ? 'selected' : '' }}>
+                                                        {{ $category->category_name }}
+                                                    </option>
                                                     @endforeach
                                                 </select>
                                                 <label for="loan_category">Loan  <span
@@ -255,10 +264,14 @@
                                                 <select name="bank_id" id="bank_id" class="form-control" required>
                                                     <option value="">Select Bank</option>
                                                     @foreach ($loanBanks as $bank)
-                                                        <option value="{{ $bank->bank_id }}"
+                                                        <!-- <option value="{{ $bank->bank_id }}"
                                                             {{ old('bank_id', $loan->bank_id ?? '') == $bank->bank_id ? 'selected' : '' }}>
                                                             {{ $bank->bank_name }}
-                                                        </option>
+                                                        </option> -->
+                                                        <option value="{{ $bank->bank_id }}"
+                                                                        {{ old('bank_id', session('bank_id', $loan->bank_id ?? '')) == $bank->bank_id ? 'selected' : '' }}>
+                                                                        {{ $bank->bank_name }}
+                                                                    </option>
                                                     @endforeach
                                                 </select>
                                                 <label for="bank_name">Bank Name <span class="text-danger">*</span></label>

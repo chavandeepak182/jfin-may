@@ -9,12 +9,12 @@
     }
 @endphp
 <style>
-    .properties-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 30px;
-            margin-top: 20px;
-        }
+   .properties-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 20px;
+}
         .property-card {
             display:flex;
             flex-direction: column;
