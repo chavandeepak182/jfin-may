@@ -8,7 +8,7 @@
         </video>
     <div class="video-banner-overlay">
         <div class="video-overlay-content">
-            <h1>Fuel Your Construction Projects with <span>Jfinserv</span></h1>
+            <h1>Fuel Your Projects with <span>Jfinserv</span></h1>
             <p>Tailored financial solutions for large-scale construction and infrastructure projects.</p>
             <a href="{{ route('authv3.login.form') }}" class="btn-primary">
                 Apply Now
