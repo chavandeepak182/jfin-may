@@ -93,4 +93,18 @@ class VisitEnquiryController extends Controller
         // NEW ✅ (reuse agent view)
 return view('agent.bookvisit.assigned-leads', compact('leads'));
     }
+    public function partnerPendingLeads()
+{
+    if (auth()->user()->role_id != config('constants.roles.partner')) {
+        abort(403);
+    }
+
+    $leads = VisitEnquiry::where('assigned_to', auth()->id())
+        ->where('status', 'pending')   // ✅ Filter added
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    return view('agent.bookvisit.assigned-leads', compact('leads'));
+}
+
 }

@@ -1043,3 +1043,8 @@ Route::get('customer/booking/{id}/confirm',
 Route::get('/partner/assigned-leads', [VisitEnquiryController::class, 'partnerLeads'])
     ->middleware('auth')
     ->name('partner.leads');
+    Route::get('/partner/pending-leads', 
+    [VisitEnquiryController::class, 'partnerPendingLeads'])
+    ->middleware('auth')
+    ->name('partner.pending.leads');
+
