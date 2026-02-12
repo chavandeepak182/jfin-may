@@ -304,28 +304,187 @@
 
                     <div class="home-documents-section">
                         <h3>📄 Required Documents</h3>
-                        <ul class="home-document-list">
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>Income Documents: Duly attested</span>
+                        <div class="home-document-list">
+                            <!-- KYC / PAN / Net Worth -->
+                            <details>
+                                <summary>Application / KYC / Address / Employment</summary>
+                                <ul>
+                                    <li>Application form</li>
+                                    <li>KYC Applicant and Co-Applicant (Aadhar Card, Pan Card And Passport size Photo)</li>
+                                    <li>Address proof-(Rent Agreement/Light bill/ Gas book)</li>
+                                    <li>Employee Proof –Employee ID Card, Appointment/Offer letter, Appraisal/Increment letter</li>
+                                </ul>
+                            </details>
+
+                            <!-- Income / Banking / Tax -->
+                            <details>
+                                <summary>Income / Banking / Tax</summary>
+                                <ul>
+                                    <li>Latest Salary Slip latest 6 month.</li>
+                                    <li>Latest 1 year salary account statement.</li>
+                                    <li>Form-16 last 3 years</li>
+                                </ul>
+                            </details>
+
+                            <!-- Premises / Ownership -->
+                            <details>
+                                <summary>Existing Loan (If Any)</summary>
+                                <ul>
+                                    <li>If Existing loan: All Loan Sanction letter and soa</li>
+                                    <li>If Closed: NOC.</li>
+                                </ul>
+                            </details>
+
+                            <!-- Banking / Stock -->
+                            <details>
+                                <summary>Property documents</summary>
+                                <ul>
+                                    <li>Agreement to sale/sale deed.</li>
+                                    <li>Index 2 (Suchi kramank 2).</li>
+                                    <li>Commencement (permission) certificate.</li>
+                                    <li>Completion Certificate/ Occupancy (OC).</li>
+                                    <li>Sanctioned plan (blue print).</li>
+                                    <li>Payment receipt. (if token amount given)</li>
+                                    <li>Floor plan.</li>
+                                    <li>Search report.</li>
+                                    <li>RR (Registration Receipt)</li>
+                                    <li>NA order</li>
+                                    <li>RERA Certificate.</li>
+                                    <li>Share Certificate</li>
+                                    <li>Society registration certificate</li>
+                                    <li>Latest Electricity bill.</li>
+                                    <li>Property Tax Receipt</li>
+                                    <li>Or BUILDER MASTER FILE</li>
+                                </ul>
+                            </details>
+
+                            <!-- In case of Take over loan  -->
+                            <details>
+                                <summary>In case of Take over loan </summary>
+                                <ul>
+                                    <li>List of documents(lod)</li>
+                                    <li>Sanction Letter </li>
+                                    <li>Fore closer letter </li>
+                                    <li>Account statement from date of sanction.</li>
+                                </ul>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Self-Employed Tab -->
+            <div class="home-tab-content" id="self-employed-property">
+                <div class="home-eligibility-grid">
+                    <div class="home-eligibility-section">
+                        <h3>✓ Eligibility Criteria</h3>
+                        <ul class="home-checklist">
+                            <li class="home-checklist-item">
+                                <span class="home-checklist-icon">✓</span>
+                                <span>Age: 21 to 65 years at loan maturity</span>
                             </li>
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>Form 16</span>
+                            <li class="home-checklist-item">
+                                <span class="home-checklist-icon">✓</span>
+                                <span>Business vintage: Minimum 3 years</span>
                             </li>
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>Form 26AS</span>
+                            <li class="home-checklist-item">
+                                <span class="home-checklist-icon">✓</span>
+                                <span>Annual income: Minimum ₹3 lakhs</span>
                             </li>
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>Bank statement of last 6 months</span>
+                            <li class="home-checklist-item">
+                                <span class="home-checklist-icon">✓</span>
+                                <span>ITR filing: Last 2 years mandatory</span>
                             </li>
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>Offer letter</span>
+                            <li class="home-checklist-item">
+                                <span class="home-checklist-icon">✓</span>
+                                <span>Credit score: 700 or above preferred</span>
                             </li>
                         </ul>
+                    </div>
+
+
+                    <!-- self employed  -->
+
+                    <div class="home-documents-section">
+                        <h3>📄 Required Documents</h3>
+                        <div class="home-document-list">
+                            <!-- KYC / PAN / Net Worth -->
+                            <details>
+                                <summary>KYC / Address </summary>
+                                <ul>
+                                    <li>KYC Applicant and Co-Applicant (Pan Card, Aadhar Cardand Passport size Photo)</li>
+                                    <li>Passport</li>
+                                    <li>Address proof- (Rent Agreement/Light bill/ Gas book)</li>
+                                </ul>
+                            </details>
+
+                            <!-- Business Proof / GST -->
+                            <details>
+                                <summary>Business Proof / GST</summary>
+                                <ul>
+                                    <li>Business Proof–Pan Card, Shop Act, Udhyam Aadhar, MSME Certificate</li>
+                                    <li>If PVT LTD (Certificate of Incorporation, MOA and AOA)</li>
+                                    <li>If Partnership firm- (All Directors KYC and Partnership deed)</li>
+                                    <li>If Self Employed Professional (License and Degree Certificate)</li>
+                                    <li>Gst Certificate (If Applicable) and GSTR-3B Latest 1 year.</li>
+                                </ul>
+                            </details>
+
+                            <!-- Premises / Ownership -->
+                            <details>
+                                <summary>ITR / Financials / Banking</summary>
+                                <ul>
+                                    <li>ITR Latest 3 years with Acknowledgement, Computation of Income, Profit and loss, Balance Sheet, All Schedules.</li>
+                                    <li>If Turnover is above 1 cr then Audited ITR.</li>
+                                    <li>All account bank statement latest 1 year (Current and Saving both)</li>
+                                </ul>
+                            </details>
+
+                            <!-- Banking / Stock -->
+                            <details>
+                                <summary>If Existing loan</summary>
+                                <ul>
+                                    <li>All Loan Sanction letter and SOA</li>
+                                    <li>If Closed NOC.</li>
+                                </ul>
+                            </details>
+
+                            <!-- In case of Take over loan  -->
+                            <details>
+                                <summary>Property documents</summary>
+                                <ul>
+                                    <li>Agreement to sale/sale deed</li>
+                                    <li>Index 2 (Suchi kramank 2)</li>
+                                    <li>Commencement (permission) certificate</li>
+                                    <li>Completion Certificate/Occupancy (OC)</li>
+                                    <li>Sanctioned plan (blue print)</li>
+                                    <li>Payment receipt. (if token amount given)</li>
+                                    <li>Floor plan</li>
+                                    <li>RR (Registration Receipt)</li>
+                                    <li>NA order</li>
+                                    <li>RERA Certificate</li>
+                                </ul>
+                            </details>
+                            <details>
+                                <summary>If Resale </summary>
+                                <ul>
+                                    <li>Share Certificate. </li>
+                                    <li>Society registration certificate.</li>
+                                    <li>Latest Electricity bill. </li>
+                                    <li>Latest Property Tax Receipt. </li>
+                                    <li>Or BUILDER MASTER FILE </li>
+                                </ul>
+                            </details>
+                            <details>
+                                <summary> In case of take over loan </summary>
+                                <ul>
+                                    <li>List of documents(LOD) </li>
+                                    <li>Sanction Letter </li>
+                                    <li>Fore closer Letter </li>
+                                    <li>Account statement from date of sanction. </li>
+                                </ul>
+                            </details>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -490,6 +490,7 @@
             border-radius: 20px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
             margin-bottom: 3rem;
+            margin-top:2rem;
         }
 
         .search-bar-wrapper {
@@ -680,12 +681,21 @@
             <button class="apply-btn">Apply Now</button>
         </nav>
     </header> -->
-
-    <section class="container">
-        <div class="section-header">
-            <h2>Find Your Dream Property</h2>
-            <p>Search across prime locations and premium collections</p>
+    <section class="video-hero">
+            <video id="videobcg" preload="auto" autoplay="true" loop="loop" muted="muted" volume="0">
+            <source src="{{ asset('theme/dhara-jfin/videos/properties_banner.mp4') }}" type="video/mp4">
+            </video>
+        <div class="video-banner-overlay">
+            <div class="video-overlay-content">
+                <h1>Find Your Dream Property with <span>Jfinserv</span></h1>
+                <p>Search across prime locations and premium collections</p>
+                <a href="{{ url('/apply') }}" class="btn-primary">
+                    Apply Now
+                </a>
+            </div>
         </div>
+    </section>
+    <section class="container">
 
         <!-- Search and Filter Section -->
         <div class="search-filter-section">
