@@ -203,13 +203,33 @@ public function updateUserStatus(Request $request)
 }
 
     public function partnerDashboard()
-    {
-        if (!empty(Session::get('role_id'))) {
-            return view('partner.partnerDashboard');
-        }else{
-            return redirect('/');
-        }
+{
+    if (!empty(Session::get('role_id'))) {
+
+        // Total Properties
+        $totalProperties = DB::table('properties')->count();
+
+        // Pending Properties (is_active = 0)
+        $pendingProperties = DB::table('properties')
+                                ->where('is_active', 0)
+                                ->count();
+
+        // ✅ Pending Applications (not assigned yet)
+        $pendingApplications = DB::table('visit_enquiry')
+    ->where('assigned_to', Session::get('user_id'))
+    ->count();
+
+        return view('partner.partnerDashboard', compact(
+            'totalProperties',
+            'pendingProperties',
+            'pendingApplications'
+        ));
+
+    } else {
+        return redirect('/');
     }
+}
+ 
 
        
 }
