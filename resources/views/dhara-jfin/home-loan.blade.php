@@ -42,7 +42,7 @@
                 <div class="about-content-left">
             
                     <ul class="home-checklist">
-                        <li class="home-checklist-item"><i class="fas fa-check"></i> Competitive Interest Rates starting from 8.5% P.A.</li>
+                        <li class="home-checklist-item"><i class="fas fa-check"></i> Competitive Interest Rates starting from 7.10% (as per CIBIL score).</li>
                         <li class="home-checklist-item"><i class="fas fa-check"></i> Flexible Repayment Tenure up to 30 years</li>
                         <li class="home-checklist-item"><i class="fas fa-check"></i> Quick Approval and Seamless Processing</li>
                         <li class="home-checklist-item"><i class="fas fa-check"></i> Minimal Documentation and Transparent Fees</li>
@@ -90,7 +90,7 @@
                     <div class="home-feature-icon">💰</div>
                     <h3 class="home-feature-title">Competitive Interest Rates</h3>
                     <p class="home-feature-description">
-                        Enjoy industry-leading rates starting from just 8.25% p.a. with flexible rate options to suit your financial goals.
+                        Enjoy industry-leading rates starting from 7.10% (as per CIBIL score).
                     </p>
                 </div>
 
@@ -235,32 +235,71 @@
 
                     <div class="home-documents-section">
                         <h3>📄 Required Documents</h3>
-                        <ul class="home-document-list">
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>PAN Card & Aadhaar Card</span>
-                            </li>
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>Last 3 months' salary slips</span>
-                            </li>
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>Last 6 months' bank statements</span>
-                            </li>
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>Form 16 / IT returns (last 2 years)</span>
-                            </li>
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>Property documents (sale deed, agreement)</span>
-                            </li>
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>Passport-size photographs</span>
-                            </li>
-                        </ul>
+                        <div class="home-document-list">
+                            <!-- KYC / PAN / Net Worth -->
+                            <details>
+                                <summary>Application / KYC / Address / Employment</summary>
+                                <ul>
+                                    <li>Application form</li>
+                                    <li>KYC Applicant and Co-Applicant (Aadhar Card, Pan Card And Passport size Photo)</li>
+                                    <li>Address proof-(Rent Agreement/Light bill/ Gas book)</li>
+                                    <li>Employee Proof –Employee ID Card, Appointment/Offer letter, Appraisal/Increment letter</li>
+                                </ul>
+                            </details>
+
+                            <!-- Income / Banking / Tax -->
+                            <details>
+                                <summary>Income / Banking / Tax</summary>
+                                <ul>
+                                    <li>Latest Salary Slip latest 6 month.</li>
+                                    <li>Latest 1 year salary account statement.</li>
+                                    <li>Form-16 last 3 years</li>
+                                </ul>
+                            </details>
+
+                            <!-- Premises / Ownership -->
+                            <details>
+                                <summary>Existing Loan (If Any)</summary>
+                                <ul>
+                                    <li>If Existing loan: All Loan Sanction letter and soa</li>
+                                    <li>If Closed: NOC.</li>
+                                </ul>
+                            </details>
+
+                            <!-- Banking / Stock -->
+                            <details>
+                                <summary>Property documents</summary>
+                                <ul>
+                                    <li>Agreement to sale/sale deed.</li>
+                                    <li>Index 2 (Suchi kramank 2).</li>
+                                    <li>Commencement (permission) certificate.</li>
+                                    <li>Completion Certificate/ Occupancy (OC).</li>
+                                    <li>Sanctioned plan (blue print).</li>
+                                    <li>Payment receipt. (if token amount given)</li>
+                                    <li>Floor plan.</li>
+                                    <li>Search report.</li>
+                                    <li>RR (Registration Receipt)</li>
+                                    <li>NA order</li>
+                                    <li>RERA Certificate.</li>
+                                    <li>Share Certificate</li>
+                                    <li>Society registration certificate</li>
+                                    <li>Latest Electricity bill.</li>
+                                    <li>Property Tax Receipt</li>
+                                    <li>Or BUILDER MASTER FILE</li>
+                                </ul>
+                            </details>
+
+                            <!-- In case of Take over loan  -->
+                            <details>
+                                <summary>In case of Take over loan </summary>
+                                <ul>
+                                    <li>List of documents(lod)</li>
+                                    <li>Sanction Letter </li>
+                                    <li>Fore closer letter </li>
+                                    <li>Account statement from date of sanction.</li>
+                                </ul>
+                            </details>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -298,96 +337,86 @@
                     <!-- self employed  -->
 
                     <div class="home-documents-section">
-                    <h3>📄 Required Documents</h3>
-
-                    <!-- Identity & Personal -->
-                    <details>
-            <summary>Identity & Personal Documents</summary>
-            <ul>
-                <li>PAN Card</li>
-            </ul>
-        </details>
-        
-        <!-- Business Constitution -->
-        <details>
-            <summary>Business Constitution Documents</summary>
-            <ul>
-                <li>Partnership Deed (if applicable)</li>
-                <li>Memorandum of Association (MOA)</li>
-                <li>Article of Association (AOA)</li>
-                <li>SEBI Registration Certificate (if applicable)</li>
-            </ul>
-        </details>
-        
-        <!-- Business & Trade Licenses -->
-        <details>
-            <summary>Business & Trade Licenses</summary>
-            <ul>
-                <li>Trade License</li>
-                <li>Import Export Code (IEC)</li>
-                <li>Registration Certificate of Establishment (Shops, Factories, etc.)</li>
-                <li>Professional Practice License (Doctors, Consultants, etc.)</li>
-            </ul>
-        </details>
-        
-        <!-- Financial Statements -->
-        <details>
-            <summary>Financial Statements</summary>
-            <ul>
-                <li>Financial Statements audited by a Chartered Accountant</li>
-                <li>Balance Sheet</li>
-                <li>Profit &amp; Loss Account Statement</li>
-            </ul>
-        </details>
-
-    <!-- Banking & Address Proof -->
-    <details>
-        <summary>Banking & Address Proof</summary>
-        <ul>
-            <li>Last 6 Months Bank Account Statement</li>
-            <li>Business Address Proof</li>
-        </ul>
-    </details>
-    
-    <!-- ROC -->
-    <details>
-        <summary>Company Registration</summary>
-        <ul>
-            <li>ROC Registration Certificate</li>
-        </ul>
-    </details>
-</div>
-
-
-                    <!-- <div class="home-documents-section">
                         <h3>📄 Required Documents</h3>
-                        <ul class="home-document-list">
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>PAN Card & Aadhaar Card</span>
-                            </li>
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>Business proof (GST, Shop Act license)</span>
-                            </li>
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>IT returns with computation (last 2 years)</span>
-                            </li>
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>Bank statements (last 12 months)</span>
-                            </li>
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>Balance sheet & P&L statements</span>
-                            </li>
-                            <li class="home-document-item">
-                                <span class="home-document-icon">📋</span>
-                                <span>Property documents</span>
-                            </li>
-                        </ul>
-                    </div> -->
+                        <div class="home-document-list">
+                            <!-- KYC / PAN / Net Worth -->
+                            <details>
+                                <summary>KYC / Address </summary>
+                                <ul>
+                                    <li>KYC Applicant and Co-Applicant (Pan Card, Aadhar Cardand Passport size Photo)</li>
+                                    <li>Passport</li>
+                                    <li>Address proof- (Rent Agreement/Light bill/ Gas book)</li>
+                                </ul>
+                            </details>
+
+                            <!-- Business Proof / GST -->
+                            <details>
+                                <summary>Business Proof / GST</summary>
+                                <ul>
+                                    <li>Business Proof–Pan Card, Shop Act, Udhyam Aadhar, MSME Certificate</li>
+                                    <li>If PVT LTD (Certificate of Incorporation, MOA and AOA)</li>
+                                    <li>If Partnership firm- (All Directors KYC and Partnership deed)</li>
+                                    <li>If Self Employed Professional (License and Degree Certificate)</li>
+                                    <li>Gst Certificate (If Applicable) and GSTR-3B Latest 1 year.</li>
+                                </ul>
+                            </details>
+
+                            <!-- Premises / Ownership -->
+                            <details>
+                                <summary>ITR / Financials / Banking</summary>
+                                <ul>
+                                    <li>ITR Latest 3 years with Acknowledgement, Computation of Income, Profit and loss, Balance Sheet, All Schedules.</li>
+                                    <li>If Turnover is above 1 cr then Audited ITR.</li>
+                                    <li>All account bank statement latest 1 year (Current and Saving both)</li>
+                                </ul>
+                            </details>
+
+                            <!-- Banking / Stock -->
+                            <details>
+                                <summary>If Existing loan</summary>
+                                <ul>
+                                    <li>All Loan Sanction letter and SOA</li>
+                                    <li>If Closed NOC.</li>
+                                </ul>
+                            </details>
+
+                            <!-- In case of Take over loan  -->
+                            <details>
+                                <summary>Property documents</summary>
+                                <ul>
+                                    <li>Agreement to sale/sale deed</li>
+                                    <li>Index 2 (Suchi kramank 2)</li>
+                                    <li>Commencement (permission) certificate</li>
+                                    <li>Completion Certificate/Occupancy (OC)</li>
+                                    <li>Sanctioned plan (blue print)</li>
+                                    <li>Payment receipt. (if token amount given)</li>
+                                    <li>Floor plan</li>
+                                    <li>RR (Registration Receipt)</li>
+                                    <li>NA order</li>
+                                    <li>RERA Certificate</li>
+                                </ul>
+                            </details>
+                            <details>
+                                <summary>If Resale </summary>
+                                <ul>
+                                    <li>Share Certificate. </li>
+                                    <li>Society registration certificate.</li>
+                                    <li>Latest Electricity bill. </li>
+                                    <li>Latest Property Tax Receipt. </li>
+                                    <li>Or BUILDER MASTER FILE </li>
+                                </ul>
+                            </details>
+                            <details>
+                                <summary> In case of take over loan </summary>
+                                <ul>
+                                    <li>List of documents(LOD) </li>
+                                    <li>Sanction Letter </li>
+                                    <li>Fore closer Letter </li>
+                                    <li>Account statement from date of sanction. </li>
+                                </ul>
+                            </details>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -594,7 +623,7 @@
                         </div>
                         <div class="home-faq-answer">
                             <div class="home-faq-answer-content">
-                                Our home loan interest rates start from 8.25% p.a. The actual rate offered to you will depend on factors like your credit score, income, loan amount, tenure, and employment profile. Customers with excellent credit scores and strong financials may qualify for lower rates.
+                                Our home loan interest rates start from 7.10% (as per CIBIL score). The actual rate offered to you will depend on factors like your credit score, income, loan amount, tenure, and employment profile. Customers with excellent credit scores and strong financials may qualify for lower rates.
                             </div>
                         </div>
                     </div>
