@@ -7,7 +7,7 @@
         </video>
         <div class="video-banner-overlay">
             <div class="video-overlay-content">
-                <h1>Empower Your Business with <span>Jfinserv</span> MSME Loans</h1>
+                <h1>Empower Your Business with <span>Jfinserv</span></h1>
                 <p>Flexible financial solutions to support working capital, expansion & growth.</p>
                 <a href="{{ route('authv3.login.form') }}" class="btn-primary">
                     Apply Now
@@ -171,9 +171,8 @@
 
         <div class="home-tabs">
             <button class="home-tab active" data-tab="for-all-applicants">For all Applicants</button>
-            <button class="home-tab" data-tab="salaried-property">Salaried Individuals</button>
-            <button class="home-tab" data-tab="self-employed-property">Self-Employed Individuals</button>
-            <button class="home-tab" data-tab="nri-applicants">NRI Applicants</button>
+            <button class="home-tab" data-tab="salaried-property">Machine Purchase</button>
+            <button class="home-tab" data-tab="self-employed-property">Machine Purchase and Constructions</button>
         </div>
 
         <!-- COMMON ELIGIBILITY (SAME IN ALL TABS) -->
@@ -210,20 +209,71 @@
 
                 <div class="home-documents-section">
                     <h3>📄 Required Documents</h3>
-                    <ul class="home-document-list">
-                        <li class="home-document-item">
-                            <span class="home-document-icon">📋</span>
-                            <span>KYC documents (Identity & Address Proof)</span>
-                        </li>
-                        <li class="home-document-item">
-                            <span class="home-document-icon">📋</span>
-                            <span>Business registration proof (GST / MSME / Shop Act)</span>
-                        </li>
-                        <li class="home-document-item">
-                            <span class="home-document-icon">📋</span>
-                            <span>Last 6 months bank statements</span>
-                        </li>
-                    </ul>
+                    <div class="home-document-list">
+                    <!-- KYC / PAN / Net Worth -->
+                    <details>
+                        <summary>KYC / PAN / Net Worth</summary>
+                        <ul>
+                            <li>PAN/Aadhar/KYC (All Borrower/Directors/Guarantor)</li>
+                            <li>Pan Card of firm in case of partnership firm/Company</li>
+                            <li>CA certified Net Worth of company, directors / Partners & Guarantors</li>
+                        </ul>
+                    </details>
+
+                    <!-- Business Constitution -->
+                    <details>
+                        <summary>Business Constitution Documents</summary>
+                        <ul>
+                            <li>ΑΟΑ&ΜΟA in case of PVT LTD Company</li>
+                            <li>Partnership Deed in case of Partnership firm</li>
+                            <li>Udyam Registration Certificate</li>
+                            <li>GST Certificate if any</li>
+                            <li>Shop Act/Grampanchyat NOC</li>
+                            <li>Other permission/License if any</li>
+                        </ul>
+                    </details>
+
+                    <!-- Premises / Ownership -->
+                    <details>
+                        <summary>Premises / Ownership</summary>
+                        <ul>
+                            <li>Latest Electricity Bill of unit</li>
+                            <li>Copy of rent agreement in case the activity site is on rental otherwise Ownership Proof</li>
+                            <li>Latest 7/12, Index II confirming ownership</li>
+                        </ul>
+                    </details>
+
+                    <!-- Banking / Stock -->
+                    <details>
+                        <summary>Banking / Stock</summary>
+                        <ul>
+                            <li>Current And CC Account Statement maintained with other Bank Last 1 year</li>
+                            <li>Latest Stock Statement with age wise Debtor and Creditor</li>
+                        </ul>
+                    </details>
+
+                    <!-- Financials / GST / Tax -->
+                    <details>
+                        <summary>Financials / GST / Tax</summary>
+                        <ul>
+                            <li>GSTR 3B last 1 years from last filed and GSTR 9 last 1 years</li>
+                            <li>ITR with computation of last 3 years of firm & All directors</li>
+                            <li>Provisional/estimated B/S along with P&L and all Annexure</li>
+                            <li>Last 3 years B/S P&L and all Annexure</li>
+                        </ul>
+                    </details>
+
+                    <!-- Business Profile / Orders / Projections -->
+                    <details>
+                        <summary>Business Profile / Orders / Projections</summary>
+                        <ul>
+                            <li>Projected Balance Sheet for next 5 years in CC & 7 years in TL</li>
+                            <li>Contract agreement</li>
+                            <li>Brief Business profile along with 5 buyers, 5 suppliers details</li>
+                            <li>Work Order in Hands</li>
+                        </ul>
+                    </details>
+                    </div>
                 </div>
 
             </div>
@@ -245,12 +295,71 @@
 
                 <div class="home-documents-section">
                     <h3>📄 Required Documents</h3>
-                    <ul class="home-document-list">
-                        <li class="home-document-item"><span class="home-document-icon">📋</span><span>Form 16</span></li>
-                        <li class="home-document-item"><span class="home-document-icon">📋</span><span>Last 3 months salary slips</span></li>
-                        <li class="home-document-item"><span class="home-document-icon">📋</span><span>Employment proof</span></li>
-                        <li class="home-document-item"><span class="home-document-icon">📋</span><span>Last 6 months bank statements</span></li>
-                    </ul>
+                    <div class="home-document-list">
+                    <!-- KYC / PAN / Net Worth -->
+                    <details>
+                        <summary>KYC / PAN / Net Worth</summary>
+                        <ul>
+                            <li>PAN/Aadhar/KYC (All Borrower/Directors/Guarantor)</li>
+                            <li>Pan Card of firm in case of partnership firm/Company</li>
+                            <li>CA certified Net Worth of company, directors / Partners & Guarantors</li>
+                        </ul>
+                    </details>
+
+                    <!-- Business Constitution -->
+                    <details>
+                        <summary>Business Constitution Documents</summary>
+                        <ul>
+                            <li>ΑΟΑ&ΜΟA in case of PVT LTD Company</li>
+                            <li>Partnership Deed in case of Partnership firm</li>
+                            <li>Udyam Registration Certificate</li>
+                            <li>GST Certificate if any</li>
+                            <li>Shop Act/Grampanchyat NOC</li>
+                            <li>Other permission/License if any</li>
+                        </ul>
+                    </details>
+
+                    <!-- Premises / Ownership -->
+                    <details>
+                        <summary>Premises / Ownership</summary>
+                        <ul>
+                            <li>Latest Electricity Bill of unit</li>
+                            <li>Copy of rent agreement in case the activity site is on rental otherwise Ownership Proof</li>
+                            <li>Latest 7/12, Index II confirming ownership</li>
+                        </ul>
+                    </details>
+
+                    <!-- Banking / Stock -->
+                    <details>
+                        <summary>Banking / Stock</summary>
+                        <ul>
+                            <li>Current And CC Account Statement maintained with other Bank Last 1 year</li>
+                            <li>Latest Stock Statement with age wise Debtor and Creditor</li>
+                        </ul>
+                    </details>
+
+                    <!-- Financials / GST / Tax -->
+                    <details>
+                        <summary>Financials / GST / Tax</summary>
+                        <ul>
+                            <li>GSTR 3B last 1 years from last filed and GSTR 9 last 1 years</li>
+                            <li>ITR with computation of last 3 years of firm & All directors</li>
+                            <li>Provisional/estimated B/S along with P&L and all Annexure</li>
+                            <li>Last 3 years B/S P&L and all Annexure</li>
+                        </ul>
+                    </details>
+
+                    <!-- Business Profile / Orders / Projections -->
+                    <details>
+                        <summary>Business Profile / Orders / Projections</summary>
+                        <ul>
+                            <li>Projected Balance Sheet for next 5 years in CC & 7 years in TL</li>
+                            <li>Contract agreement</li>
+                            <li>Brief Business profile along with 5 buyers, 5 suppliers details</li>
+                            <li>Work Order in Hands</li>
+                        </ul>
+                    </details>
+                    </div>
                 </div>
 
             </div>
@@ -272,44 +381,75 @@
 
                 <div class="home-documents-section">
                     <h3>📄 Required Documents</h3>
-                    <ul class="home-document-list">
-                        <li class="home-document-item"><span class="home-document-icon">📋</span><span>Income Tax Returns (Last 2–3 years)</span></li>
-                        <li class="home-document-item"><span class="home-document-icon">📋</span><span>Audited Financial Statements</span></li>
-                        <li class="home-document-item"><span class="home-document-icon">📋</span><span>Current account bank statements (6 months)</span></li>
-                        <li class="home-document-item"><span class="home-document-icon">📋</span><span>Business registration proof</span></li>
-                    </ul>
+                    <div class="home-document-list">
+                    <!-- KYC / PAN / Net Worth -->
+                    <details>
+                        <summary>KYC / PAN / Net Worth</summary>
+                        <ul>
+                            <li>PAN/Aadhar/KYC (All Borrower/Directors/Guarantor)</li>
+                            <li>Pan Card of firm in case of partnership firm/Company</li>
+                            <li>CA certified Net Worth of company, directors / Partners & Guarantors</li>
+                        </ul>
+                    </details>
+
+                    <!-- Business Constitution -->
+                    <details>
+                        <summary>Business Constitution Documents</summary>
+                        <ul>
+                            <li>ΑΟΑ&ΜΟA in case of PVT LTD Company</li>
+                            <li>Partnership Deed in case of Partnership firm</li>
+                            <li>Udyam Registration Certificate</li>
+                            <li>GST Certificate if any</li>
+                            <li>Shop Act/Grampanchyat NOC</li>
+                            <li>Other permission/License if any</li>
+                        </ul>
+                    </details>
+
+                    <!-- Premises / Ownership -->
+                    <details>
+                        <summary>Premises / Ownership</summary>
+                        <ul>
+                            <li>Latest Electricity Bill of unit</li>
+                            <li>Copy of rent agreement in case the activity site is on rental otherwise Ownership Proof</li>
+                            <li>Latest 7/12, Index II confirming ownership</li>
+                        </ul>
+                    </details>
+
+                    <!-- Banking / Stock -->
+                    <details>
+                        <summary>Banking / Stock</summary>
+                        <ul>
+                            <li>Current And CC Account Statement maintained with other Bank Last 1 year</li>
+                            <li>Latest Stock Statement with age wise Debtor and Creditor</li>
+                        </ul>
+                    </details>
+
+                    <!-- Financials / GST / Tax -->
+                    <details>
+                        <summary>Financials / GST / Tax</summary>
+                        <ul>
+                            <li>GSTR 3B last 1 years from last filed and GSTR 9 last 1 years</li>
+                            <li>ITR with computation of last 3 years of firm & All directors</li>
+                            <li>Provisional/estimated B/S along with P&L and all Annexure</li>
+                            <li>Last 3 years B/S P&L and all Annexure</li>
+                        </ul>
+                    </details>
+
+                    <!-- Business Profile / Orders / Projections -->
+                    <details>
+                        <summary>Business Profile / Orders / Projections</summary>
+                        <ul>
+                            <li>Projected Balance Sheet for next 5 years in CC & 7 years in TL</li>
+                            <li>Contract agreement</li>
+                            <li>Brief Business profile along with 5 buyers, 5 suppliers details</li>
+                            <li>Work Order in Hands</li>
+                        </ul>
+                    </details>
+                    </div>
                 </div>
 
             </div>
         </div>
-
-        <!-- NRI -->
-        <div class="home-tab-content" id="nri-applicants">
-            <div class="home-eligibility-grid">
-
-                <div class="home-eligibility-section">
-                    <h3>✓ Eligibility Criteria</h3>
-                    <ul class="home-checklist">
-                        <li class="home-checklist-item"><span class="home-checklist-icon">✓</span><span>Overseas individual owning or running an MSME in India.</span></li>
-                        <li class="home-checklist-item"><span class="home-checklist-icon">✓</span><span>Stable overseas income with repayment capacity.</span></li>
-                        <li class="home-checklist-item"><span class="home-checklist-icon">✓</span><span>Good credit profile.</span></li>
-                        <li class="home-checklist-item"><span class="home-checklist-icon">✓</span><span>Valid legal documentation.</span></li>
-                    </ul>
-                </div>
-
-                <div class="home-documents-section">
-                    <h3>📄 Required Documents</h3>
-                    <ul class="home-document-list">
-                        <li class="home-document-item"><span class="home-document-icon">📋</span><span>Valid Passport & Visa copy</span></li>
-                        <li class="home-document-item"><span class="home-document-icon">📋</span><span>Overseas employment contract</span></li>
-                        <li class="home-document-item"><span class="home-document-icon">📋</span><span>NRE / NRO bank statements</span></li>
-                        <li class="home-document-item"><span class="home-document-icon">📋</span><span>Power of Attorney (if applicable)</span></li>
-                    </ul>
-                </div>
-
-            </div>
-        </div>
-
     </div>
 </section>
 
