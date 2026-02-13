@@ -5,7 +5,12 @@
 @endsection
 @section('content')
 @parent
-<form id="addNewProperty">
+<form id="addNewProperty"
+      method="POST"
+      action="{{ route('insertProperty') }}"
+      enctype="multipart/form-data">
+
+
     @csrf
     <div class="card-header py-3">
         <div class="d-flex justify-content-between align-items-center">
@@ -17,7 +22,8 @@
                 </ol>
             </nav>
 
-            <div class="hstack gap-3"><button class="btn btn-light border btn-icon-text"
+            <div class="hstack gap-3"><button type="button" class="btn btn-light border btn-icon-text"
+
         onclick="window.location.href='{{ route('allProperties') }}'">
     <i class="bi bi-x"></i>
     <span class="text">Cancel</span>
@@ -128,19 +134,9 @@
                     <div class="col-lg-3">
                         <div class="mb-3">
                             <label class="form-label">Select BHK</label>
-                            <select class="form-control" name="select_bhk">
-                                <option>Select BHK</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="2 & 3">2 & 3</option>
-                                <option value="2,3 & 4">2,3 & 4</option>
-                                <option value="3 & 4">3 & 4</option>
-                                <option value="3,4 & 5">3,4 & 5</option>
-                            </select> 
+                           <select class="form-control" name="select_bhk" id="bhkDropdown">
+    <option value="">Select BHK</option>
+</select>
                         </div>
                     </div>
 
@@ -399,43 +395,36 @@ document.getElementById("property_images").addEventListener("change", function(e
 <script>   
 $('#addNewProperty').on('submit',function(e){
     e.preventDefault();
-    $.ajax({               
-        url:"{{Route('insertProperty')}}", 
-        method:"POST",                             
-        data:new FormData(this) ,
+
+    console.log("AJAX starting...");   // 👈 add this
+
+    $.ajax({
+        url:"{{Route('insertProperty')}}",
+        method:"POST",
+        data:new FormData(this),
         processData:false,
         dataType:'json',
         contentType:false,
-        beforeSend:function(){
-            $(document).find('span.error-text').text('');
-        },
-        success:function(data){   
-            if(data.status == 0){
-                
-                $.each(data.error,function(prefix,val){
-                    $('span.'+prefix+'_error').text(val[0]);
-                    swal("Oh noes!", val[0], "error");
-                });                      
-            }else if(data.status == 2){
-                document.getElementById("skill_title_error["+data.id+"]").innerHTML =data.msg;
-                // console.log(data); console.log('skill_title_error['+data.id+']');
-                // return false;
-            }else{
-                $('#addNewProperty').get(0).reset();   
-                swal({
-                    title: data.msg,
-                    text: "",
-                    type: "success",
-                    icon: "success",
-                    showConfirmButton: true
-                }).then(function(){
-                    location.reload();
-                });
-                    
-            }
+       success:function(data){
+    console.log("AJAX Success:", data);
+
+    if(data.status == 1){
+        swal({
+            title: "Success!",
+            text: data.msg,
+            icon: "success",
+            button: "OK"
+        }).then(function(){
+            window.location.href = "{{ route('allProperties') }}";
+        });
+    }
+},
+
+        error:function(xhr){
+            console.log("AJAX Error:", xhr);   // 👈 add this
         }
     });
-}); 
+});
 
 function deletePropertie(id)
 	{
@@ -515,4 +504,34 @@ document.querySelector('input[name="s_price"]').addEventListener('input', functi
 });
 
 </script>
+<script>
+document.getElementById('propertyType').addEventListener('change', function() {
+
+    var propertyTypeId = this.value;
+    var bhkDropdown = document.getElementById('bhkDropdown');
+    bhkDropdown.innerHTML = '';
+
+    var defaultOption = document.createElement("option");
+    defaultOption.text = "Select BHK";
+    defaultOption.value = "";
+    bhkDropdown.appendChild(defaultOption);
+
+    // Mapping Property Type ID to BHK options
+    var bhkOptions = {
+        1: ['1', '2', '3', '4', '5', '6'],   // Residential
+        2: [],                                // Commercial (No BHK)
+        3: []                                 // Plot (No BHK)
+    };
+
+    if (bhkOptions.hasOwnProperty(propertyTypeId)) {
+        bhkOptions[propertyTypeId].forEach(function(bhk) {
+            var option = document.createElement("option");
+            option.text = bhk + " BHK";
+            option.value = bhk;
+            bhkDropdown.appendChild(option);
+        });
+    }
+});
+</script>
+
 @endsection

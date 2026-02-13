@@ -385,13 +385,16 @@
         <!-- BHK FILTER -->
         <div class="filter-group">
             <label>BHK Type</label>
-            <select id="bhkFilter" class="filter-select">
-                <option value="">Any BHK</option>
-                <option value="1">1 BHK</option>
-                <option value="2">2 BHK</option>
-                <option value="3">3 BHK</option>
-                <option value="4">4+ BHK</option>
-            </select>
+           <select id="bhkFilter" class="filter-select">
+    <option value="">Any BHK</option>
+    <option value="1">1 BHK</option>
+    <option value="2">2 BHK</option>
+    <option value="3">3 BHK</option>
+    <option value="4">4 BHK</option>
+    <option value="5">5 BHK</option>
+    <option value="6">6 BHK</option>
+</select>
+
         </div>
         
 
@@ -425,11 +428,10 @@
 >
 
         <div class="image-container">
-            <img
-                        src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?" 
-                        alt="{{ $property->builder_name }}" 
-                        class="property-image"
-                    >
+                   <img src="{{ $property->image ? asset($property->image) : 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6' }}" 
+     class="property-image">
+
+
         </div>
         <div class="property-details">
                 <div class="property-name-grid">
@@ -506,7 +508,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let type  = card.dataset.type;
 
             let matchSearch = text.includes(searchVal);
-            let matchBhk    = !bhkVal || bhk === bhkVal || (bhkVal === '4' && bhk >= 4);
+           let matchBhk = !bhkVal || parseInt(bhk) === parseInt(bhkVal);
             let matchBudget = price >= minPrice && price <= maxPrice;
             let matchType   = !typeVal || type.includes(typeVal);
 
