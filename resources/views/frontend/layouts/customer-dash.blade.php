@@ -84,6 +84,16 @@
 .sidebar-item.active > .sidebar-link i {
     color: #ffffff !important;
 }
+#property-dropdown {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+#property-dropdown li {
+    list-style: none;
+}
+
 
 /* Badge (notification count like FINMATE) */
 .sidebar-link .badge {
