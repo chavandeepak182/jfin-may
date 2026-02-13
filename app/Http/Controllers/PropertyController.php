@@ -42,7 +42,8 @@ public function insertProperty(Request $request)
         $p->title = $request->property_title;
         $p->property_type_id = $request->property_type;
         $p->builder_name = $request->builder_name;
-        $p->property_details = $request->property_description;
+        $p->property_details = $request->description;
+
         $p->address = $request->property_address;
 
         // Handle Locality
@@ -79,6 +80,18 @@ public function insertProperty(Request $request)
         // Handle nearby locations
         $nearby_locations = $request->input('nearby', []); // Default to empty array if null
         $p->nearby_locations = json_encode($nearby_locations);
+       
+            $p->is_active = 0;
+            $p->is_deleted = 0;
+            $p->image = '';
+                $p->slug = '';
+                $p->meta_title = '';
+                $p->meta_description = '';
+                $p->meta_keywords = '';
+                $p->short_description = '';
+                $p->maps_url = '';
+                $p->schema_markup = '';
+
 
         // Save the property record
         $p->save();
@@ -92,7 +105,7 @@ public function insertProperty(Request $request)
 
                 // Insert into `property_images` table
                 DB::table('property_images')->insert([
-                    'properties_id' => $p->id,
+                    'properties_id' => $p->properties_id,
                     'image_url' => $image_path,
                     'is_featured' => 0, // Default to non-featured
                     'created_at' => now(),
@@ -106,11 +119,10 @@ public function insertProperty(Request $request)
         
         return response()->json(['status' => 1, 'msg' => 'Property added successfully']);
         
-
-    } catch (\Exception $e) {
-        DB::rollback();
-        return response()->json(['status' => 0, 'msg' => $e->getMessage()]);
-    }
+}catch (\Exception $e) {
+    DB::rollback();
+    return response($e->getMessage(), 500);
+}
 }
 
 // count dashboard

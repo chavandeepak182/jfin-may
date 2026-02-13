@@ -41,14 +41,14 @@ class PropertyAuthController extends Controller
         if ($user) {
 
             // Already property user
-            if ($user->role_id == 2) {
+            if ($user->role_id == 1) {
                 return back()->withErrors([
                     'mobile_no' => 'You already have a Property account'
                 ]);
             }
 
             // Upgrade finance → property
-            $user->update(['role_id' => 2]);
+            $user->update(['role_id' => 1]);
 
         } else {
 
@@ -58,7 +58,7 @@ class PropertyAuthController extends Controller
                 'mobile_no' => $request->mobile_no,
                 'email_id'  => $request->email_id,
                 'password'  => Hash::make($request->password),
-                'role_id'   => 2,
+                'role_id'   => 1,
             ]);
         }
 
@@ -128,8 +128,8 @@ class PropertyAuthController extends Controller
 
         session()->forget('property_otp_user_id');
 
-        return redirect('/properties')
-            ->with('success', 'Login successful');
+       return redirect()->route('customer.properties')
+    ->with('success', 'Login successful');
     }
 
     /* ================= GENERATE + SEND OTP ================= */
