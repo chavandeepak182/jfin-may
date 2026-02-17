@@ -345,7 +345,7 @@
                                                             placeholder="Phone"
                                                             maxlength="10"
                                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
-                                                            required>
+                                                            required readonly>
 
                                                     <label for="phone">Phone <span class="text-danger">*</span></label>
                                                     <span id="phone-error" class="text-danger" style="font-size: 13px;"></span>
