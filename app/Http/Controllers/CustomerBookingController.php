@@ -8,6 +8,8 @@ use App\Models\PropertyBooking;
 use App\Models\PropertyBookingItem;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\CategoryController;
+use App\Models\PropertyController;
+
 
 class CustomerBookingController extends Controller
 {
@@ -434,8 +436,12 @@ public function showProperties(Request $request)
     }
 
     $properties = $query->orderBy('created_at', 'desc')->get();
+        // ✅ Correct Line
+    $categories = DB::table('property_category')->get();
 
-    return view('customer.properties.index', compact('properties'));
+
+
+    return view('customer.properties.index', compact('properties','categories'));
 }
 
 public function showBookingForm($id)
