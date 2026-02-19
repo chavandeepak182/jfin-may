@@ -283,7 +283,7 @@
                                         <input type="tel"
                                             id="customerMobile"
                                             name="customer_mobile"
-                                            value="{{ $customer->mobile }}"
+                                            value="{{ $customer->mobile_no }}"
                                             placeholder="Enter 10-digit mobile number"
                                             required
                                             pattern="[0-9]{10}"

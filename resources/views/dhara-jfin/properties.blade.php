@@ -655,7 +655,73 @@
         .property-card:nth-child(2) { animation-delay: 0.2s; }
         .property-card:nth-child(3) { animation-delay: 0.3s; }
         .property-card:nth-child(4) { animation-delay: 0.4s; }
+        
     </style>
+          <style>
+/* HERO SEARCH BOX DESIGN */
+
+.hero-search-wrapper {
+    margin-top: -60px;
+    position: relative;
+    z-index: 5;
+}
+
+.hero-search-box {
+    background: linear-gradient(135deg, #8fb0e8, #7aa0dd);
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.hero-search-top {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.hero-search-top input {
+    flex: 1;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+}
+
+.hero-search-top button {
+    background: #4c5fd7;
+    color: white;
+    border: none;
+    padding: 0 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.hero-search-top button:hover {
+    background: #3649c5;
+}
+
+.hero-search-filters {
+    display: flex;
+    gap: 15px;
+}
+
+.hero-search-filters select {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: none;
+    font-size: 13px;
+}
+
+@media (max-width:768px){
+    .hero-search-top,
+    .hero-search-filters{
+        flex-direction: column;
+    }
+}
+</style>
     @php
     function formatPrice($price) {
         if ($price >= 10000000) return '₹' . round($price / 10000000, 2) . ' Cr';
@@ -689,94 +755,81 @@
             <div class="video-overlay-content">
                 <h1>Find Your Dream Property with <span>Jfinserv</span></h1>
                 <p>Search across prime locations and premium collections</p>
-                <a href="{{ url('/apply') }}" class="btn-primary">
+                <!-- <a href="{{ url('/apply') }}" class="btn-primary">
                     Apply Now
-                </a>
+                </a> -->
             </div>
         </div>
     </section>
     <section class="container">
 
         <!-- Search and Filter Section -->
-        <div class="search-filter-section">
-            <div class="search-bar-wrapper">
-                <div class="search-input-group">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" placeholder="Search by locality, project name or developer...">
-                </div>
-                <button class="apply-btn">Search</button>
-            </div>
+       <form method="GET" action="{{ route('properties') }}">
+ 
 
-            <div class="main-filters">
-                <div class="filter-group">
-                    <label>Property Type</label>
-                    <select class="filter-select">
-                        <option>All Types</option>
-                        <option>Residential Apartment</option>
-                        <option>Villa / Independent House</option>
-                        <option>Penthouse</option>
-                        <option>Plot / Land</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>BHK Type</label>
-                    <select class="filter-select">
-                        <option>Any BHK</option>
-                        <option>1 BHK</option>
-                        <option>2 BHK</option>
-                        <option>3 BHK</option>
-                        <option>4+ BHK</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Budget Range</label>
-                    <select class="filter-select">
-                        <option>Any Budget</option>
-                        <option>₹40L - ₹60L</option>
-                        <option>₹60L - ₹80L</option>
-                        <option>₹80L - ₹1Cr</option>
-                        <option>₹1Cr - ₹2Cr</option>
-                        <option>Above ₹2Cr</option>
-                    </select>
-                </div>
-                
-            </div>
 
-            <!-- Advanced Expandable Filters -->
-            <div class="advanced-filters" id="advancedFilters">
-                <div class="filter-group">
-                    <label>Possession Status</label>
-                    <div class="filter-checkbox-group">
-                        <div class="filter-chip active">Ready to Move</div>
-                        <div class="filter-chip">Under Construction</div>
-                        <div class="filter-chip">New Launch</div>
-                    </div>
-                </div>
-                <div class="filter-group">
-                    <label>Amenities</label>
-                    <div class="filter-checkbox-group">
-                        <div class="filter-chip">Swimming Pool</div>
-                        <div class="filter-chip">Gym</div>
-                        <div class="filter-chip">Clubhouse</div>
-                        <div class="filter-chip">Parking</div>
-                        <div class="filter-chip">Security</div>
-                    </div>
-                </div>
-                <div class="filter-group">
-                    <label>Area (Sq. Ft.)</label>
-                    <select class="filter-select">
-                        <option>Any Area</option>
-                        <option>500 - 1000</option>
-                        <option>1000 - 1500</option>
-                        <option>1500 - 2000</option>
-                        <option>Above 2000</option>
-                    </select>
-                </div>
-            </div>
+<div class="container hero-search-wrapper">
+<form method="GET" action="{{ route('properties') }}">
+    <div class="hero-search-box">
+
+        <!-- TOP SEARCH BAR -->
+        <div class="hero-search-top">
+            <input type="text"
+                   name="search"
+                   value="{{ request('search') }}"
+                   placeholder="Search by locality, project name or developer...">
+
+            <button type="submit">Search</button>
         </div>
-    </section>
+
+        <!-- FILTER ROW -->
+        <div class="hero-search-filters">
+
+            <select name="type">
+                <option value="">Property Type</option>
+                @foreach($data['category'] as $cat)
+                    <option value="{{ $cat->pid }}"
+                        {{ request('type') == $cat->pid ? 'selected' : '' }}>
+                        {{ $cat->category_name }}
+                    </option>
+                @endforeach
+            </select>
+
+            <select name="bhk">
+                <option value="">BHK Type</option>
+                @for($i=1;$i<=6;$i++)
+                    <option value="{{ $i }}"
+                        {{ request('bhk') == $i ? 'selected' : '' }}>
+                        {{ $i }} BHK
+                    </option>
+                @endfor
+            </select>
+
+            <select name="budget">
+                <option value="">Budget Range</option>
+                <option value="40-60">₹40L - ₹60L</option>
+                <option value="60-80">₹60L - ₹80L</option>
+                <option value="80-100">₹80L - ₹1Cr</option>
+                <option value="100-200">₹1Cr - ₹2Cr</option>
+                <option value="200+">Above ₹2Cr</option>
+            </select>
+
+        </div>
+
+    </div>
+</form>
+</div>
+
+        </form>
+        </section>
     <!-- Properties by Localities -->
     <!-- Properties by Localities -->
+@if(!request()->filled('search') 
+    && !request()->filled('bhk') 
+    && !request()->filled('budget') 
+    && !request()->filled('type') 
+    && count($data['selectedLocalities']) > 0)
+
 <section class="container">
     <div class="section-header">
         <h2>Properties by Localities</h2>
@@ -785,45 +838,51 @@
 
     <div class="localities-grid">
         @foreach($data['selectedLocalities'] as $localityData)
-            <div class="locality-card">
-                <!-- Locality Title -->
-                <h3 class="locality-title">
-                    {{ $localityData['locality'] }}
-                </h3>
+            @if(count($localityData['properties']) > 0)
+                <div class="locality-card">
 
-                <!-- Properties Grid -->
-                <div class="properties-mini-grid">
-                    @foreach($localityData['properties'] as $property)
-                        <a href="{{ url($property->slug . '-' . $property->properties_id) }}"
-                           target="_blank"
-                           class="mini-property">
+                    <h3 class="locality-title">
+                        {{ $localityData['locality'] }}
+                    </h3>
 
-                            <span class="mini-developer">
-                                {{ $property->builder_name }}
-                            </span>
+                    <div class="properties-mini-grid">
+                        @foreach($localityData['properties'] as $property)
+                            <a href="{{ url($property->slug . '-' . $property->properties_id) }}"
+                               target="_blank"
+                               class="mini-property">
 
-                            <img
-                                src="{{ asset($property->image) }}"
-                                alt="{{ $property->title }}"
-                                loading="lazy"
-                            >
-
-                            <span class="mini-name">
-                                {{ $property->title }}
-                            </span>
-
-                            @if(!empty($property->location))
-                                <span class="mini-location">
-                                    {{ $property->location }}
+                                <span class="mini-developer">
+                                    {{ $property->builder_name }}
                                 </span>
-                            @endif
-                        </a>
-                    @endforeach
+
+                                <img
+                                    src="{{ asset($property->image ?? 'default.jpg') }}"
+                                    alt="{{ $property->title }}"
+                                    loading="lazy"
+                                >
+
+                                <span class="mini-name">
+                                    {{ $property->title }}
+                                </span>
+
+                                @if(!empty($property->localities))
+                                    <span class="mini-location">
+                                        {{ $property->localities }}
+                                    </span>
+                                @endif
+
+                            </a>
+                        @endforeach
+                    </div>
+
                 </div>
-            </div>
+            @endif
         @endforeach
     </div>
 </section>
+
+@endif
+
 
 
     <!-- Curated Collections -->
@@ -954,7 +1013,13 @@
 
 
     <!-- Featured Properties -->
-    <section class="container">
+@if(!request()->filled('search') 
+    && !request()->filled('bhk') 
+    && !request()->filled('budget') 
+    && !request()->filled('type') 
+    && count($data['featuredProperties']) > 0)
+
+<section class="container">
     <div class="section-header">
         <h2>Featured Properties</h2>
         <p>Explore the most exclusive properties</p>
@@ -962,17 +1027,22 @@
 
     <div class="properties-grid">
         @foreach($data['featuredProperties'] as $v)
+
             @php
-                $img = env('baseURL') . '/' . $v->image;
+                $img = $v->image 
+                    ? env('baseURL') . '/' . $v->image 
+                    : asset('theme/frontend/img/default.jpg');
+
                 $title = $v->title;
                 $builder = $v->builder_name;
-                $location = $v->localities . ', ' . $v->city;
+                $location = ($v->localities ?? '') . ', ' . ($v->city ?? '');
                 $bhk = $v->select_bhk;
                 $area = $v->area;
-                $price =formatPrice($v->s_price);
+                $price = formatPrice($v->s_price);
             @endphp
 
             <div class="property-card">
+
                 <!-- Image -->
                 <div class="property-image-wrapper">
                     <img
@@ -1019,7 +1089,7 @@
                     </div>
 
                     <div class="property-footer">
-                        <div class="property-price price-format" data-price="{{ $price }}">
+                        <div class="property-price">
                             {{ $price }}
                         </div>
 
@@ -1030,10 +1100,14 @@
                         </a>
                     </div>
                 </div>
+
             </div>
         @endforeach
     </div>
 </section>
+
+@endif
+
 
 
     <!-- All Properties -->

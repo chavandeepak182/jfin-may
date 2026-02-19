@@ -7,8 +7,8 @@
 @parent
 <form id="addNewProperty"
       method="POST"
-      action="{{ route('insertProperty') }}"
       enctype="multipart/form-data">
+
 
 
     @csrf
@@ -101,7 +101,7 @@
                             value="{{ old('area') }}" 
                             class="form-control @error('area') is-invalid @enderror" 
                             placeholder="Carpet Area" 
-                            required
+                            
                         />
                         @error('area')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -121,7 +121,7 @@
                                         value="{{ old('builtup_area') }}" 
                                         class="form-control @error('builtup_area') is-invalid @enderror" 
                                         placeholder="Enter Built-up Area" 
-                                        required
+                                        
                                         oninput="this.value = this.value.replace(/[^0-9.]/g, '');"
                                     />
                                     @error('builtup_area')
@@ -132,72 +132,83 @@
 
 
                     <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label">Select BHK</label>
-                           <select class="form-control" name="select_bhk" id="bhkDropdown">
-    <option value="">Select BHK</option>
-</select>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Select BHK</label>
+                        <select class="form-control" name="select_bhk" required>
+                            <option value="">Select BHK</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="2 & 3">2 & 3</option>
+                            <option value="2,3 & 4">2,3 & 4</option>
+                            <option value="3 & 4">3 & 4</option>
+                            <option value="3,4 & 5">3,4 & 5</option>
+                        </select>
                     </div>
+                </div>
+
 
                     <div class="col-lg-3">
                         <div class="mb-3">
-                            <label class="form-label">Bedrooms</label><span class="text-danger">*</span>
-                            <select class="form-control" name="beds">
-                                <option>Select beds</option>
-                                <option value="No">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                            </select> 
-                        </div>
+    <label class="form-label">Bedrooms</label>
+    <select class="form-control" name="beds">
+        <option value="">Select beds</option>
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+    </select> 
+</div>
+
                     </div>
 
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label">Bathrooms</label><span class="text-danger">*</span>
-                            <select class="form-control" name="baths">
-                                <option>Select baths</option>
-                                <option value="No">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>                                                
-                            </select> 
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label">Balconies</label><span class="text-danger">*</span>
-                            <select class="form-control" name="balconies">
-                                <option>Select balconies</option>
-                                <option value="No">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>                                                
-                            </select> 
-                        </div>
-                    </div>
+                   <div class="col-lg-3">
+    <div class="mb-3">
+        <label class="form-label">Bathrooms</label>
+        <select class="form-control" name="baths">
+            <option value="">Select baths</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>                                                
+        </select> 
+    </div>
+</div>
+                  <div class="col-lg-3">
+    <div class="mb-3">
+        <label class="form-label">Balconies</label>
+        <select class="form-control" name="balconies">
+            <option value="">Select balconies</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>                                                
+        </select> 
+    </div>
+</div>
 
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label">Parking</label><span class="text-danger">*</span>
-                            <select class="form-control" name="parking">
-                                <option>Select parking</option>
-                                <option value="No">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>                                                
-                            </select> 
-                        </div>  
-                    </div>
+<div class="col-lg-3">
+    <div class="mb-3">
+        <label class="form-label">Parking</label>
+        <select class="form-control" name="parking">
+            <option value="">Select parking</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>                                                
+        </select> 
+    </div>
+</div>
 
                     <div class="col-lg-12">
                         <div class="position-relative pb-15 form-group">
@@ -209,7 +220,11 @@
                     <div class="col-lg-4">
                         <div class="mb-3">
                             <label class="form-label">Property Address</label>
-                            <input type="text" name="property_address" class="form-control" placeholder="Full Address" required />
+                            <!-- <input type="text" name="property_address" class="form-control" placeholder="Full Address" required /> -->
+                        <input type="text" name="property_address" 
+       id="property_address"
+       class="form-control" 
+       placeholder="Full Address" required />
                         </div>
                     </div>
 
@@ -233,21 +248,47 @@
 
                     <!-- Latitude -->
                     <div class="col-lg-6">
-                        <div class="mb-3">
-                            <label class="form-label">Latitude</label><span class="text-danger">*</span>
-                            <input type="text" name="latitude" class="form-control" placeholder="Ex: 1.462260" required>
-                            <small><a class="form-hint" href="https://www.latlong.net/" target="_blank" rel="nofollow"> Go here to get Latitude from address.</a></small>
-                        </div>
-                    </div>
+    <div class="mb-3">
+        <label>Latitude *</label>
+        <input type="text" name="latitude" id="latitude"
+               class="form-control" readonly required>
+    </div>
+</div>
+
+<div class="col-lg-6">
+    <div class="mb-3">
+        <label>Longitude *</label>
+        <input type="text" name="longitude" id="longitude"
+               class="form-control" readonly required>
+    </div>
+</div>
+<script>
+document.getElementById("property_address").addEventListener("blur", function () {
+
+    let address = this.value;
+
+    if(address.length < 5) return;
+
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${address}`)
+        .then(response => response.json())
+        .then(data => {
+
+            if(data.length > 0){
+                document.getElementById("latitude").value = data[0].lat;
+                document.getElementById("longitude").value = data[0].lon;
+            } else {
+                alert("Location not found. Please enter correct address.");
+            }
+
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+});
+</script>
+
                     
-                    <!-- Longitude -->
-                    <div class="col-lg-6">
-                        <div class="mb-3">
-                            <label class="form-label">Longitude</label><span class="text-danger">*</span>
-                            <input type="text" name="longitude" class="form-control" placeholder="Ex: 1.462260" required>
-                            <small><a class="form-hint" href="https://www.latlong.net/" target="_blank" rel="nofollow"> Go here to get Longitude from address.</a></small>
-                        </div>
-                    </div>
 
                     <!-- Nearby Location 1 -->
                     <div class="col-lg-4">
@@ -390,7 +431,27 @@ document.getElementById("property_images").addEventListener("change", function(e
 @section('script')
 @parent
 
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
+
+<!-- Summernote JS -->
+ <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs4.min.js"></script>
+
+
+<script>
+$(document).ready(function() {
+    $('#summernote').summernote({
+        height: 250,
+        placeholder: 'Enter property description...',
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link']],
+            ['view', ['fullscreen', 'codeview']]
+        ]
+    });
+});
+</script>
 
 <script>   
 $('#addNewProperty').on('submit',function(e){
@@ -504,34 +565,6 @@ document.querySelector('input[name="s_price"]').addEventListener('input', functi
 });
 
 </script>
-<script>
-document.getElementById('propertyType').addEventListener('change', function() {
 
-    var propertyTypeId = this.value;
-    var bhkDropdown = document.getElementById('bhkDropdown');
-    bhkDropdown.innerHTML = '';
-
-    var defaultOption = document.createElement("option");
-    defaultOption.text = "Select BHK";
-    defaultOption.value = "";
-    bhkDropdown.appendChild(defaultOption);
-
-    // Mapping Property Type ID to BHK options
-    var bhkOptions = {
-        1: ['1', '2', '3', '4', '5', '6'],   // Residential
-        2: [],                                // Commercial (No BHK)
-        3: []                                 // Plot (No BHK)
-    };
-
-    if (bhkOptions.hasOwnProperty(propertyTypeId)) {
-        bhkOptions[propertyTypeId].forEach(function(bhk) {
-            var option = document.createElement("option");
-            option.text = bhk + " BHK";
-            option.value = bhk;
-            bhkDropdown.appendChild(option);
-        });
-    }
-});
-</script>
 
 @endsection
