@@ -48,10 +48,10 @@ public function insertProperty(Request $request)
 
         // Handle Locality
         $locality = DB::table('localities')->where('id', $request->localitie)->value('name');
-        $p->localities = $locality;
+        $p->localities = $locality ?? '';
 
         // Handle Property Status (save selected ID, not NULL)
-        $p->property_status = $request->property_status;
+       $p->property_status = $request->property_status ?? '';
 
         // Handle Amenities
         $amenities = $request->input('amenities', []); // Default to empty array if null
@@ -60,13 +60,13 @@ public function insertProperty(Request $request)
         $p->creator_id = $request->creator_id;
         $p->price_range_id = $request->price_range;
         $p->contact = $request->contact_number;
-        $p->area = $request->area;
+        $p->area = $request->area ?? '';
         $p->builtup_area = $request->builtup_area;
         $p->beds = $request->beds;
         $p->baths = $request->baths;
         $p->balconies = $request->balconies;
         $p->parking = $request->parking;
-        $p->city = $request->city;
+        $p->city = $request->city ?? y;
         $p->email = $request->email_id;
         $p->select_bhk = $request->select_bhk;
         $p->s_price = $request->s_price;
@@ -208,29 +208,28 @@ private function handleFileUpload(Request $request, $inputName, $folder)
 // }
 
 
-public function allProperties()
+public function allProperties(Request $request)
 {
     /* ================= SESSION ================= */
     $role_id = Session::get('role_id');
     $user_id = Session::get('user_id');
 
+    /* ================= STATUS FILTER (NEW ADD) ================= */
+    $status = $request->status ?? 'all';
+
     /* ================= COUNTS ================= */
 
-    // Total Properties
     $properties = DB::table('properties')->count();
 
-    // Pending Properties
     $totalPendingProperties = DB::table('properties')
         ->where('is_active', 0)
         ->count();
 
-    // ✅ Total Property Takers
     $totalPropertyTakers = PropertyTaker::count();
-     $agents = $agents = User::all();
+    $agents = User::all();
 
     /* ================= PROPERTIES LIST ================= */
-
-    $query = DB::table('properties')
+$query = DB::table('properties')
         ->leftJoin('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
         ->leftJoin('property_category', 'properties.property_type_id', '=', 'property_category.pid')
         ->select(
@@ -240,12 +239,22 @@ public function allProperties()
             'property_category.category_name'
         );
 
-    // ✅ Agent ला फक्त त्याच्याच properties
+    /* ================= STATUS CONDITION (NEW ADD) ================= */
+if ($status == 'pending') {
+    $query->where('properties.is_active', 0);
+}
+
+if ($status == 'verified') {
+    $query->where('properties.is_active', 1);
+}
+
+    /* ================= ROLE FILTER ================= */
+
     if ($role_id == 3) {
         $query->where('properties.creator_id', $user_id);
     }
 
-    $data['allProperties'] = $query->paginate(10);
+    $data['allProperties'] = $query->paginate(10)->withQueryString();
 
     /* ================= PROPERTY TAKERS LIST ================= */
 
@@ -259,9 +268,11 @@ public function allProperties()
         'totalPendingProperties',
         'totalPropertyTakers',
         'propertyTakers',
-        'agents'
+        'agents',
+        'status'   // ✅ THIS LINE ADD
     ));
 }
+
     public function pendingProperties()
     {
             $data['allProperties'] = DB::table('properties')
