@@ -64,6 +64,8 @@ JFS | Add Property
     </div>
 </div> -->
 
+
+
 @php
     $status = request('status', 'all'); // all | pending
 @endphp
@@ -72,6 +74,7 @@ JFS | Add Property
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
 
 <div class="properties-page">
+
 
     <!-- ================= PAGE HEADER ================= -->
     <div class="page-header">
@@ -99,7 +102,9 @@ JFS | Add Property
     <!-- ================= STATS CARDS ================= -->
     <div class="property-stats-grid">
 
-        <div class="property-stat-card card-toggle active" data-section="properties">
+        <div class="property-stat-card card-toggle {{ $status == 'all' ? 'active' : '' }}" 
+     data-section="properties">
+
             <div class="property-stat-icon blue"><i class="fas fa-building"></i></div>
             <div class="property-stat-content">
                 <h3>Total Properties</h3>
@@ -108,7 +113,9 @@ JFS | Add Property
             </div>
         </div>
 
-        <div class="property-stat-card card-toggle" data-section="pending">
+       <div class="property-stat-card card-toggle {{ $status == 'pending' ? 'active' : '' }}" 
+     data-section="pending">
+
             <div class="property-stat-icon orange"><i class="fas fa-clock"></i></div>
             <div class="property-stat-content">
                 <h3>Pending Verification</h3>
@@ -117,14 +124,15 @@ JFS | Add Property
             </div>
         </div>
 
-        <div class="property-stat-card card-toggle" data-section="takers">
+        <!-- <div class="property-stat-card card-toggle {{ $status == 'takers' ? 'active' : '' }}" 
+     data-section="takers">
             <div class="property-stat-icon green"><i class="fas fa-user"></i></div>
             <div class="property-stat-content">
                 <h3>Property Takers</h3>
                 <div class="property-stat-value">{{ $totalPropertyTakers }}</div>
                 <span class="property-stat-status">Last 24 Hours</span>
             </div>
-        </div>
+        </div> -->
         <div class="property-stat-card card-toggle" data-section="takers">
             <div class="property-stat-icon blue">
                 <i class="fas fa-dollar-sign"></i>
@@ -166,7 +174,9 @@ JFS | Add Property
     </div>
 
     <!-- ================= PROPERTIES TABLE ================= -->
-    <div id="propertiesSection">
+    <div id="propertiesSection" 
+     style="{{ $status == 'takers' ? 'display:none;' : '' }}">
+
 
         <div class="card shadow mb-4">
             <div class="card-body table-responsive">
@@ -228,7 +238,9 @@ JFS | Add Property
 
         {{-- SAME PAGE – ORIGINAL TAKER LIST --}}
         <!-- ================= PROPERTY TAKERS TABLE ================= -->
-<div id="takersSection" style="display:none">
+<div id="takersSection" 
+     style="{{ $status == 'takers' ? '' : 'display:none;' }}">
+
 
     <div class="card shadow mb-4">
         <div class="card-body">
@@ -315,68 +327,33 @@ JFS | Add Property
 
 <!-- ================= JS ================= -->
 <script>
-let currentStatus = 'all';
 
-const propertiesSection = document.getElementById('propertiesSection');
-const takersSection = document.getElementById('takersSection');
-const propertyAddBtn = document.getElementById('propertyAddBtn');
-const takerAddBtn = document.getElementById('takerAddBtn');
-const filterBox = document.getElementById('propertyFilters');
 
-const rows = document.querySelectorAll('#propertiesTable tbody tr');
-const searchInput = document.getElementById('propertySearch');
-const typeSelect = document.getElementById('propertyType');
-const filterBtns = document.querySelectorAll('.property-filter-btn');
+   document.addEventListener("DOMContentLoaded", function () {
 
-/* CARD CLICK */
-document.querySelectorAll('.card-toggle').forEach(card=>{
-    card.onclick=()=>{
-        document.querySelectorAll('.card-toggle').forEach(c=>c.classList.remove('active'));
-        card.classList.add('active');
+    document.querySelectorAll('.card-toggle').forEach(card => {
+        card.addEventListener('click', function () {
 
-        const section = card.dataset.section;
+            const section = this.dataset.section;
 
-        if(section === 'takers'){
-            propertiesSection.style.display='none';
-            takersSection.style.display='block';
-            propertyAddBtn.style.display='none';
-            takerAddBtn.style.display='block';
-            filterBox.style.display='none';
-        }else{
-            takersSection.style.display='none';
-            propertiesSection.style.display='block';
-            propertyAddBtn.style.display='block';
-            takerAddBtn.style.display='none';
-            filterBox.style.display='flex';
-            currentStatus = section === 'pending' ? 'pending' : 'all';
-            applyFilters();
-        }
-    }
-});
+            if(section === 'takers'){
+                window.location.href = "{{ route('allProperties') }}?status=takers";
+            }
+            else if(section === 'pending'){
+                window.location.href = "{{ route('allProperties') }}?status=pending";
+            }
+            else{
+                window.location.href = "{{ route('allProperties') }}?status=all";
+            }
 
-/* FILTERS */
-filterBtns.forEach(btn=>{
-    btn.onclick=()=>{
-        filterBtns.forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        currentStatus = btn.dataset.status;
-        applyFilters();
-    }
-});
-searchInput.onkeyup=applyFilters;
-typeSelect.onchange=applyFilters;
-
-function applyFilters(){
-    const q=searchInput.value.toLowerCase();
-    const type=typeSelect.value;
-    rows.forEach(row=>{
-        const okStatus=currentStatus==='all'||row.dataset.status===currentStatus;
-        const okType=type==='all'||row.dataset.type===type;
-        const okSearch=row.innerText.toLowerCase().includes(q);
-        row.style.display=(okStatus&&okType&&okSearch)?'':'none';
+        });
     });
-}
+
+});
 </script>
+
+
+
 
 <div class="modal fade" id="addPropertyTakerView" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-scrollable">

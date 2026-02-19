@@ -370,7 +370,7 @@
     <!-- FILTERS -->
     <div class="main-filters">
         <!-- PROPERTY TYPE -->
-<div class="filter-group">
+<!-- <div class="filter-group">
     <label>Property Type</label>
     <select id="typeFilter" class="filter-select">
         <option value="">All Types</option>
@@ -378,6 +378,19 @@
         <option value="villa">Villa / Independent House</option>
         <option value="penthouse">Penthouse</option>
         <option value="plot">Plot / Land</option>
+    </select>
+</div> -->
+<div class="filter-group">
+    <label>Property Type</label>
+    <select id="typeFilter" class="filter-select">
+        <option value="">All Types</option>
+
+        @foreach($categories as $category)
+            <option value="{{ strtolower($category->category_name) }}">
+                {{ $category->category_name }}
+            </option>
+        @endforeach
+
     </select>
 </div>
 

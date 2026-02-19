@@ -191,42 +191,26 @@
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
 <script>   
-    function activateProperty(id)
-	{
-		$.ajax({
-            url:"{{Route('activate')}}", 
-            type: 'post',
-            dataType: 'json',
-            data: {
-                'propertie_id': id,               
-                '_token': '{{ csrf_token() }}',
-                },
-            success: function (response) {
-                // console.log(response);
-                if(response.status == 0){
-                    swal({
-                        title: response.error,
-                        text: "",
-                        type: "success",
-                        icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){ 
-                        location.reload();
-                    });
-                }else{
-                    swal({
-                        title: response.msg,
-                        text: "",
-                        type: "success",
-                        icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){ 
-                        window.location.href = "/partner/pendingProperties";
-                    });
-                }                           
-            }
-        });      
-	}
+   function activateProperty(id)
+{
+    $.ajax({
+        url: "{{ route('activate.property') }}",
+        type: "POST",
+        data: {
+            propertie_id: id,
+            _token: "{{ csrf_token() }}"
+        },
+        success: function(response){
+            swal({
+                title: response.msg,
+                icon: "success"
+            }).then(function(){
+                window.location.href = "{{ route('allProperties') }}";
+            });
+        }
+    });
+}
+
 
 </script>
 
