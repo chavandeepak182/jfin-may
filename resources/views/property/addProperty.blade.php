@@ -402,11 +402,21 @@ document.getElementById("property_images").addEventListener("change", function(e
 </select>
 
             <div class="mb-4">
-                <label class="form-label"><strong>Rera No.</strong></label><span class="text-danger">*</span>
-                <input type="text" name="rera" class="form-control" placeholder="Ex: P5XXXXXXXX14" required />
-                <span class="text-danger error-text jixname2_err"></span>   
-            </div>    
-                                                    
+    <label class="form-label"><strong>Rera No.</strong></label>
+    <span class="text-danger">*</span>
+
+    <input type="text"
+           name="rera"
+           class="form-control"
+           placeholder="Ex: P52100012345"
+           pattern="^P[0-9]{10,15}$"
+           title="RERA number must start with P followed by 10 to 15 digits"
+           required />
+
+    <small class="text-danger">
+        Please enter proper RERA format (Example: P52100012345)
+    </small>
+</div>                                
 
             <div class=" mb-4">
                 <label for="amenities"><strong>Select Amenities:</strong></label><br>
