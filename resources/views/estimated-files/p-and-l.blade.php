@@ -7,6 +7,58 @@
 
 @section('content')
 @parent
+<style>
+    .abbr {
+    position: relative;
+    cursor: pointer;
+}
+
+/* Tooltip Box */
+.abbr::after {
+    content: attr(data-title);
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    
+    background: #1e293b;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    white-space: nowrap;
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+/* Small Arrow */
+.abbr::before {
+    content: "";
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    border-width: 6px;
+    border-style: solid;
+    border-color: #1e293b transparent transparent transparent;
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Hover Effect */
+.abbr:hover::after,
+.abbr:hover::before {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+</style>
 
 <div class="card-header py-3">
     <div class="d-flex justify-content-between align-items-center">
@@ -168,7 +220,7 @@
     </div>
 
     <div class="col">
-        <label class="form-label">TDS (5%)</label>
+        <label class="form-label"><span class="abbr" data-title=" Tax Deducted at Source">TDS (5%)</span></label>
         <input class="form-control" id="tds" placeholder="TDS (5%)" readonly>
     </div>
 
