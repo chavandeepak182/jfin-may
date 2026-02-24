@@ -7,7 +7,62 @@
 
 @section('content')
 @parent
+<style>
+    .abbr {
+    position: relative;
+    cursor: pointer;
+}
 
+/* Tooltip Box */
+.abbr::after {
+    content: attr(data-title);
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    
+    background: #1e293b;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    white-space: nowrap;
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+/* Small Arrow */
+.abbr::before {
+    content: "";
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    border-width: 6px;
+    border-style: solid;
+    border-color: #1e293b transparent transparent transparent;
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Hover Effect */
+.abbr:hover::after,
+.abbr:hover::before {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+.fa-circle-info{
+    width:12px;
+    height:12px;
+}
+</style>
 <form method="POST" action="{{ route('estimatedFile.store') }}">
     @csrf
 
@@ -62,7 +117,7 @@
 
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label">App/LOS No</label>
+                        <label class="form-label"><span class="abbr" data-title="Application / Loan Origination System Number"><i class="fa-solid fa-circle-info"></i>App/LOS No</span></label>
                         <input type="text" name="app_no" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -78,7 +133,7 @@
                 <!-- MANAGEMENT -->
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label">BM / CH Name</label>
+                        <label class="form-label"><span class="abbr" data-title="Branch Manager / Channel Head Name">BM / CH Name</span></label>
                         <input type="text" name="bm_ch_name" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -86,7 +141,7 @@
 
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label">Sub Manager</label>
+                        <label class="form-label"><span class="abbr" data-title="Subordinate Manager">Sub Manager</span></label>
                         <input type="text" name="sub_manager" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -95,7 +150,7 @@
                 <!-- PRODUCT -->
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label">Product</label>
+                        <label class="form-label"><span class="abbr" data-title=" Type of financial product">Product</span></label>
                         <input type="text" name="product" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -103,7 +158,7 @@
 
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label">Sub Product</label>
+                        <label class="form-label"><span class="abbr" data-title=" Sub-category of product">Sub Product</span></label>
                         <input type="text" name="sub_product" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -139,7 +194,7 @@
                 <!-- FINANCIALS -->
                 <div class="col-lg-3">
                     <div class="mb-3">
-                        <label class="form-label">Net Amt Disbursed</label>
+                        <label class="form-label"><span class="abbr" data-title=" Net Amount Disbursed">Net Amt Disbursed</span</label>
                         <input type="number" step="0.01" name="net_amt_disbursed" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -155,7 +210,7 @@
 
                 <div class="col-lg-3">
                     <div class="mb-3">
-                        <label class="form-label">Est Net %</label>
+                        <label class="form-label"><span class="abbr" data-title=" Estimated Net Percentage">Est Net %</span></label>
                         <input type="number" step="0.01" name="est_net_percent" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -163,7 +218,7 @@
 
                 <div class="col-lg-3">
                     <div class="mb-3">
-                        <label class="form-label">DSA Payout %</label>
+                        <label class="form-label"><span class="abbr" data-title=" Estimated Net Percentage">DSA Payout %</span></label>
                         <input type="number" step="0.01" name="dsa_payout_percent" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -171,14 +226,14 @@
 
                 <div class="col-lg-3">
                     <div class="mb-3">
-                        <label class="form-label">Est DSA Payout Amt</label>
+                        <label class="form-label"><span class="abbr" data-title=" Estimated Direct Selling Agent Payout Amount">Est DSA Payout Amt</span></label>
                         <input type="number" step="0.01" name="est_dsa_payout_amt" class="form-control" readonly>
                     </div>
                 </div>
 
                 <div class="col-lg-3">
                     <div class="mb-3">
-                        <label class="form-label">TDS</label>
+                        <label class="form-label"><span class="abbr" data-title="Tax Deducted at Source">TDS</span></label>
                         <input type="number" step="0.01" name="tds" class="form-control" readonly>
                     </div>
                 </div>
@@ -193,7 +248,7 @@
                 <!-- EMP / DSA -->
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label">EMP Name</label>
+                        <label class="form-label"><span class="abbr" data-title="Employee Name">EMP Name</span></label>
                         <input type="text" name="emp_name" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -201,7 +256,7 @@
 
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label">EMP Code</label>
+                        <label class="form-label"><span class="abbr" data-title="Employee Code">EMP Code</span></label>
                         <input type="text" name="emp_code" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -209,7 +264,7 @@
 
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label">DSA Name</label>
+                        <label class="form-label"><span class="abbr" data-title="Direct Selling Agent Name">DSA Name</span></label>
                         <input type="text" name="dsa_name" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -217,7 +272,7 @@
 
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label">DSA Code</label>
+                        <label class="form-label"><span class="abbr" data-title="Direct Selling Agent Code">DSA Code</span></label>
                         <input type="text" name="dsa_code" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -247,7 +302,7 @@
 
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label">Source</label>
+                        <label class="form-label"><span class="abbr" data-title="Lead Source">Source</span></label>
                         <input type="text" name="source" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -256,7 +311,7 @@
                 <!-- KYC -->
                 <div class="col-lg-6">
                     <div class="mb-3">
-                        <label class="form-label">PAN</label>
+                        <label class="form-label"><span class="abbr" data-title="permanent Account Number">PAN</span></label>
                         <input type="text"
                         name="pan"
                         maxlength="10"

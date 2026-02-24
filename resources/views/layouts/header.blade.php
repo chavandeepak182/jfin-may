@@ -17,7 +17,7 @@
     <link href="{{ asset('theme/dist-assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <!-- FIX: Load same Bootstrap CSS as customer -->
 <link href="{{ asset('theme/frontend/css/bootstrap.min.css') }}" rel="stylesheet">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="{{ asset('theme/dist-assets/css/sb-admin-3.css') }}" rel="stylesheet">
 
     <!-- Summernote -->
