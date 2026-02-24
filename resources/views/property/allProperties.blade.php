@@ -159,7 +159,23 @@ JFS | Add Property
                 <span class="property-stat-status">Tracked from Records</span>
             </div>
         </div>
+ <div class="property-stat-card card-toggle {{ $status == 'verified' ? 'active' : '' }}" 
+     data-section="verified">
 
+    <div class="property-stat-icon green">
+        <i class="fas fa-check-circle"></i>
+    </div>
+
+    <div class="property-stat-content">
+        <h3>Verified Properties</h3>
+        <div class="property-stat-value">
+            {{ $totalVerifiedProperties }}
+        </div>
+        <span class="property-stat-status">
+            Active Listings
+        </span>
+    </div>
+</div>
        <div class="property-stat-card card-toggle {{ $status == 'pending' ? 'active' : '' }}" 
      data-section="pending">
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Property;
+use App\Models\PropertyCategory;
 use App\Models\PropertyBooking;
 use App\Models\PropertyBookingItem;
 use Illuminate\Support\Facades\DB;
@@ -424,7 +425,8 @@ public function showProperties(Request $request)
         abort(403);
     }
 
-    $query = Property::active();
+    // $query = Property::active();
+    $query = Property::with('category')->active();
 
     if ($request->search) {
         $query->where(function ($q) use ($request) {
