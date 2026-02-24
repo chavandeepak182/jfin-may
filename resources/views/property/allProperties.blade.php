@@ -70,8 +70,55 @@ JFS | Add Property
     $status = request('status', 'all'); // all | pending
 @endphp
 
+
 <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet"/>
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet"/>
+<style>
+
+    .search-row{
+    display:flex;
+    gap:15px;
+    width:100%;
+}
+
+.search-box,
+.type-box{
+    flex:1;   /* both same width */
+}
+
+.search-box{
+    position:relative;
+}
+
+.search-box i{
+    position:absolute;
+    left:15px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#6c757d;
+}
+
+.search-box input,
+.type-box select{
+    width:100%;
+    height:45px;
+    padding:10px 15px 10px 40px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    outline:none;
+    transition:0.3s;
+}
+
+.type-box select{
+    padding-left:15px; /* icon padding remove */
+}
+
+.search-box input:focus,
+.type-box select:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 2px rgba(37,99,235,0.1);
+}
+</style>
 
 <div class="properties-page">
 
@@ -149,30 +196,34 @@ JFS | Add Property
     </div>
 
     <!-- ================= FILTERS ================= -->
-    <div class="property-filters-section" id="propertyFilters">
+<div class="search-wrapper">
+    <form id="searchForm" method="GET" action="{{ route('allProperties') }}">
+        <input type="hidden" name="status" value="{{ request('status','all') }}">
 
-        <div class="property-filter-buttons">
-            <button class="property-filter-btn active" data-status="all">All Properties</button>
-            <button class="property-filter-btn" data-status="verified">Verified</button>
-            <button class="property-filter-btn" data-status="pending">Pending</button>
-        </div>
+        <div class="search-row">
 
-        <div class="property-search-section">
-            <div class="property-search-box">
+            <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" id="propertySearch" placeholder="Search properties...">
+                <input type="text"
+                       name="search"
+                       id="searchInput"
+                       value="{{ request('search') }}"
+                       placeholder="Search by title, builder or address...">
             </div>
 
-            <select id="propertyType" class="property-type-filter">
-                <option value="all">All Types</option>
-                <option value="Residential">Residential</option>
-                <option value="Commercial">Commercial</option>
-                <option value="Industrial">Industrial</option>
-            </select>
+            <div class="type-box">
+                <select name="type" id="typeFilter">
+                    <option value="all">All Types</option>
+                    <option value="Residential" {{ request('type')=='Residential'?'selected':'' }}>Residential</option>
+                    <option value="Commercial" {{ request('type')=='Commercial'?'selected':'' }}>Commercial</option>
+                    <option value="Industrial" {{ request('type')=='Industrial'?'selected':'' }}>Industrial</option>
+                </select>
+            </div>
+
         </div>
-
-    </div>
-
+    </form>
+</div>
+<br><br>
     <!-- ================= PROPERTIES TABLE ================= -->
     <div id="propertiesSection" 
      style="{{ $status == 'takers' ? 'display:none;' : '' }}">
@@ -327,20 +378,18 @@ JFS | Add Property
 
 <!-- ================= JS ================= -->
 <script>
-
-
-   document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelectorAll('.card-toggle').forEach(card => {
         card.addEventListener('click', function () {
 
             const section = this.dataset.section;
 
-            if(section === 'takers'){
-                window.location.href = "{{ route('allProperties') }}?status=takers";
-            }
-            else if(section === 'pending'){
+            if(section === 'pending'){
                 window.location.href = "{{ route('allProperties') }}?status=pending";
+            }
+            else if(section === 'verified'){
+                window.location.href = "{{ route('allProperties') }}?status=verified";
             }
             else{
                 window.location.href = "{{ route('allProperties') }}?status=all";
@@ -524,6 +573,28 @@ document.getElementById('source_by').addEventListener('change', function () {
 
     document.getElementById('builder_input').style.display =
         this.value === 'Builder' ? 'block' : 'none';
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+    const searchInput = document.getElementById("searchInput");
+    const typeFilter = document.getElementById("typeFilter");
+    const form = document.getElementById("searchForm");
+
+    let timer;
+
+    searchInput.addEventListener("keyup", function(){
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            form.submit();
+        }, 600); // 600ms delay
+    });
+
+    typeFilter.addEventListener("change", function(){
+        form.submit();
+    });
+
 });
 </script>
 
