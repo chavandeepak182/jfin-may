@@ -502,10 +502,22 @@ public function insertUser(Request $request)
 
         DB::commit();
 
-        return response()->json([
-            'status' => 1,
-            'msg'    => ucfirst($type) . ' added successfully'
-        ]);
+        // return response()->json([
+        //     'status' => 1,
+        //     'msg'    => ucfirst($type) . ' added successfully'
+        // ]);
+        $label = 'Customer';
+
+if ($type === 'agent') {
+    $label = 'Employee';   // 🔥 change here
+} elseif ($type === 'cp') {
+    $label = 'Channel Partner';
+}
+
+return response()->json([
+    'status' => 1,
+    'msg' => $label . ' added successfully'
+]);
 
     } catch (\Exception $e) {
 

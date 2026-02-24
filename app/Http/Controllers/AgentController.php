@@ -122,7 +122,7 @@ class AgentController extends Controller
 
         DB::commit();
 
-        return response()->json(['status' => 1, 'msg' => 'Agent added successfully']);
+        return response()->json(['status' => 1, 'msg' => 'Employee added successfully']);
 
     } catch (\Exception $e) {
         DB::rollBack();
