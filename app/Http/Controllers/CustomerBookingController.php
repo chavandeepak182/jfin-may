@@ -280,13 +280,20 @@ public function adminOffer(Request $request, $id)
             'expected_total' => $booking->offer_pool
         ]);
 
-        if (round($total, 2) != round($booking->offer_pool, 2)) {
-
-            \Log::error('TOTAL MISMATCH');
-
+        if ($total > $booking->offer_pool) {
             return back()->withErrors(
-                'Selected total must equal ₹ ' . $booking->offer_pool
+                'Selected amount cannot exceed ₹ '.$booking->offer_pool
             );
+        }
+
+        $remaining = $booking->offer_pool - $total;
+
+        // If remaining exists → add cashback automatically
+        if ($remaining > 0) {
+            $request->selected_items[] = [
+                'label' => 'Cashback',
+                'amount' => $remaining
+            ];
         }
 
         /* =========================
