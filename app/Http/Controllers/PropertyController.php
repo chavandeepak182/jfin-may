@@ -233,6 +233,9 @@ public function allProperties(Request $request)
 
     $totalPropertyTakers = PropertyTaker::count();
     $agents = User::all();
+    $totalVerifiedProperties = DB::table('properties')
+    ->where('is_active', 1)
+    ->count();
 
     /* ================= PROPERTIES LIST ================= */
 $query = DB::table('properties')
@@ -289,6 +292,7 @@ $data['allProperties'] = $query->paginate(10)->withQueryString();
         'totalPropertyTakers',
         'propertyTakers',
         'agents',
+        'totalVerifiedProperties', // 👈 ADD
         'status'   // ✅ THIS LINE ADD
     ));
 }

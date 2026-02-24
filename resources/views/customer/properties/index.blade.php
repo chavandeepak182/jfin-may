@@ -455,7 +455,7 @@
     data-search="{{ strtolower($property->builder_name.' '.$property->title.' '.$property->address) }}"
     data-bhk="{{ $property->select_bhk }}"
     data-price="{{ $property->s_price }}"
-    data-type="{{ strtolower($property->land_type) }}"
+   data-type="{{ strtolower($property->category->category_name ?? '') }}"
 >
 
         <div class="image-container">
