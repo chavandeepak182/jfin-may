@@ -379,7 +379,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
         let total = updateTotal();
 
-        if(total !== offerPool){
+        if(total > offerPool){
             alert("Total selected amount must equal ₹ " + offerPool.toFixed(2));
             e.preventDefault();
             return;
