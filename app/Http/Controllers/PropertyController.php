@@ -32,6 +32,11 @@ class PropertyController extends Controller
 
 public function insertProperty(Request $request)
 {
+    $request->validate([
+    'rera' => ['required', 'regex:/^P[0-9]{10,15}$/']
+], [
+    'rera.regex' => 'Please enter proper RERA format (Example: P52100012345)'
+]);
     $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 
     DB::beginTransaction();
@@ -210,6 +215,7 @@ private function handleFileUpload(Request $request, $inputName, $folder)
 
 public function allProperties(Request $request)
 {
+    
     /* ================= SESSION ================= */
     $role_id = Session::get('role_id');
     $user_id = Session::get('user_id');
@@ -230,33 +236,47 @@ public function allProperties(Request $request)
 
     /* ================= PROPERTIES LIST ================= */
 $query = DB::table('properties')
-        ->leftJoin('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
-        ->leftJoin('property_category', 'properties.property_type_id', '=', 'property_category.pid')
-        ->select(
-            'properties.*',
-            'price_range.from_price',
-            'price_range.to_price',
-            'property_category.category_name'
-        );
+    ->leftJoin('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
+    ->leftJoin('property_category', 'properties.property_type_id', '=', 'property_category.pid')
+    ->select(
+        'properties.*',
+        'price_range.from_price',
+        'price_range.to_price',
+        'property_category.category_name'
+    );
 
-    /* ================= STATUS CONDITION (NEW ADD) ================= */
-if ($status == 'pending') {
+/* ================= STATUS FILTER ================= */
+if ($request->status == 'pending') {
     $query->where('properties.is_active', 0);
 }
 
-if ($status == 'verified') {
+if ($request->status == 'verified') {
     $query->where('properties.is_active', 1);
 }
 
-    /* ================= ROLE FILTER ================= */
+/* ================= SEARCH FILTER ================= */
+if ($request->search) {
+    $search = $request->search;
 
-    if ($role_id == 3) {
-        $query->where('properties.creator_id', $user_id);
-    }
+    $query->where(function ($q) use ($search) {
+        $q->where('properties.title', 'like', "%$search%")
+          ->orWhere('properties.builder_name', 'like', "%$search%")
+          ->orWhere('properties.address', 'like', "%$search%");
+    });
+}
 
-    $data['allProperties'] = $query->paginate(10)->withQueryString();
+/* ================= TYPE FILTER ================= */
+if ($request->type && $request->type != 'all') {
+    $query->where('property_category.category_name', $request->type);
+}
 
-    /* ================= PROPERTY TAKERS LIST ================= */
+/* ================= ROLE FILTER ================= */
+if ($role_id == 3) {
+    $query->where('properties.creator_id', $user_id);
+}
+
+$data['allProperties'] = $query->paginate(10)->withQueryString();
+// =========== PROPERTY TAKERS LIST ================= */
 
     $propertyTakers = PropertyTaker::orderBy('id', 'desc')->paginate(10);
 
