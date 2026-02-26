@@ -112,6 +112,7 @@ public function adminOffer(Request $request, $id)
         'commission_percentage' => 'required|numeric|min:0|max:100',
         'tds_percentage'        => 'required|numeric|min:0|max:100',
         'gst_percentage'        => 'required|numeric|min:0|max:100',
+        'offers.*.items.*.description' => 'nullable|string',
         'mlm_amount'            => 'required|numeric|min:0',
 
         'offers' => 'nullable|array',
@@ -159,10 +160,11 @@ public function adminOffer(Request $request, $id)
                 foreach ($mainOffer['items'] as $sub) {
                     $subTotal += $sub['amount'];
 
-                    $items[] = [
-                        'label'  => $sub['label'],
-                        'amount' => $sub['amount'],
-                    ];
+                            $items[] = [
+                'label'       => $sub['label'],
+                'description' => $sub['description'] ?? null,
+                'amount'      => $sub['amount'],
+            ];
                 }
 
                 if ($subTotal != $mainOffer['amount']) {
