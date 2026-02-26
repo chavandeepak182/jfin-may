@@ -266,7 +266,7 @@
                     <input type="text" id="customerName" name="customer_name"
                         value="{{ $customer->name }}"
                         placeholder="Enter full name"
-                        required
+                        required readonly
                         pattern="[A-Za-z ]+"
                         title="Only letters allowed">
 
@@ -285,7 +285,7 @@
                                             name="customer_mobile"
                                             value="{{ $customer->mobile_no }}"
                                             placeholder="Enter 10-digit mobile number"
-                                            required
+                                            required readonly
                                             pattern="[0-9]{10}"
                                             maxlength="10"
                                             inputmode="numeric"
@@ -304,7 +304,7 @@
                             maxlength="10"
                             pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
                             style="text-transform: uppercase;"
-                            title="Enter valid PAN (Example: ABCDE1234F)">
+                            title="Enter valid PAN (Example: ABCDE1234F)" readonly>
     </div>
                 </div>
 

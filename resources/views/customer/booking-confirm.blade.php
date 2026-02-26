@@ -167,6 +167,13 @@
     text-align:center;
     color:#002f64;
 }
+
+.offers img{
+    max-width:100%;
+    height:auto;
+    border-radius:8px;
+    margin-top:8px;
+}
 </style>
 <div class="container">
 
@@ -237,19 +244,31 @@
                         {{-- SUB ITEMS --}}
                         @if(!empty($main['items']))
                             <div style="margin-left:25px; margin-top:8px;">
-                                @foreach($main['items'] as $subIndex => $sub)
-                                    <div>
-                                        <label>
-                                            <input type="checkbox"
-                                                   class="sub-checkbox"
-                                                   data-parent="{{ $mainIndex }}"
-                                                   data-label="{{ $sub['label'] }}"
-                                                   data-amount="{{ $sub['amount'] }}">
-                                            {{ $sub['label'] }}
-                                            – ₹ {{ number_format($sub['amount'],2) }}
-                                        </label>
-                                    </div>
-                                @endforeach
+                              @foreach($main['items'] as $subIndex => $sub)
+
+    <div style="margin-bottom:15px; padding:10px; border:1px solid #e2e8f0; border-radius:8px;">
+
+        <label style="display:flex; gap:8px; align-items:center;">
+            <input type="checkbox"
+                   class="sub-checkbox"
+                   data-parent="{{ $mainIndex }}"
+                   data-label="{{ $sub['label'] }}"
+                   data-amount="{{ $sub['amount'] }}">
+
+            <strong>{{ $sub['label'] }}</strong>
+            – ₹ {{ number_format($sub['amount'],2) }}
+        </label>
+
+        {{-- DESCRIPTION + IMAGE --}}
+        @if(!empty($sub['description']))
+            <div style="margin-top:8px; padding:10px; background:#f8fafc; border-radius:6px;">
+                {!! $sub['description'] !!}
+            </div>
+        @endif
+
+    </div>
+
+@endforeach
                             </div>
                         @endif
 
