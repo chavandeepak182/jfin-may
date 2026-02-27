@@ -56,11 +56,16 @@
 .abbr:hover::before {
     opacity: 1;
     visibility: visible;
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-15%) translateY(0);
 }
 .fa-circle-info{
     width:12px;
     height:12px;
+}
+.hover-msg{
+    font-size:12px;
+    color:#827fc7;
+    margin-bottom:0;
 }
 </style>
 <form method="POST" action="{{ route('estimatedFile.store') }}">
@@ -80,6 +85,7 @@
                         Add Estimated File
                     </li>
                 </ol>
+                <p class="hover-msg">Please Hover on the labels to know more about them.</p>
             </nav>
 
             <!-- Buttons -->
@@ -117,7 +123,7 @@
 
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title="Application / Loan Origination System Number"><i class="fa-solid fa-circle-info"></i>App/LOS No</span></label>
+                        <label class="form-label"><span class="abbr" data-title="Application / Loan Origination System Number">App/LOS No</span></label>
                         <input type="text" name="app_no" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
