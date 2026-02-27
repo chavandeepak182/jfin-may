@@ -327,16 +327,31 @@ document.getElementById("property_address").addEventListener("blur", function ()
                     </div>
                 
                     <div class="col-lg-6">
-                        <div class="mb-3">
-                            <label class="form-label">Contact Number</label>
-                            <input type="tel" class="form-control jixlink2" name="contact_number" placeholder="Contact Number">
-                            <span class="text-danger error-text jixlink2_err"></span>
-                        </div>
+                       <div class="mb-3">
+    <label class="form-label">Contact Number</label>
+    <input type="tel" 
+           class="form-control jixlink2" 
+           name="contact_number" 
+           placeholder="Contact Number"
+           maxlength="10"
+           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10);">
+           
+    <span class="text-danger error-text jixlink2_err"></span>
+</div>
                     </div>
                 </div>
             </div>
         </div>
-
+<script>
+document.querySelector("form").addEventListener("submit", function(e) {
+    let mobile = document.querySelector("input[name='contact_number']").value;
+    
+    if (mobile.length !== 10) {
+        e.preventDefault();
+        alert("Contact Number must be exactly 10 digits");
+    }
+});
+</script>
         <!-- Right side -->
         <div class="col-lg-3 bg-light p-4">
            <div class="mb-4">

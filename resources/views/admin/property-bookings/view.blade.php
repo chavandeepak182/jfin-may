@@ -1,6 +1,11 @@
 @extends('layouts.header')
 
 @section('content')
+<!-- Summernote CSS -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+
+<!-- Summernote JS -->
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
 <style>
 .section {
             margin-bottom: 32px;
@@ -330,6 +335,102 @@ border-radius:8px;
     margin-bottom:20px;
 }
 
+.offer-description-box{
+    margin-top:8px;
+    padding:12px;
+    background:#f8fafc;
+    border-radius:8px;
+    border:1px solid #e2e8f0;
+    max-height:160px;
+    overflow:auto;
+    font-size:14px;
+}
+
+.offer-description-box img{
+    max-width:100%;
+    height:auto;
+}
+/* ready to final css */
+.final-card{
+    margin-top:30px;
+    padding:28px;
+    background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+    border-radius:14px;
+    border:1px solid #bbf7d0;
+    box-shadow:0 8px 25px rgba(0,0,0,0.06);
+}
+
+.final-header{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:20px;
+}
+
+.success-icon{
+    width:50px;
+    height:50px;
+    background:#16a34a;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.final-header h3{
+    margin:0;
+    font-size:20px;
+    color:#065f46;
+}
+
+.sub-text{
+    margin:0;
+    font-size:13px;
+    color:#047857;
+}
+
+.selected-item-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 16px;
+    background:#ffffff;
+    border-radius:8px;
+    margin-bottom:10px;
+    border:1px solid #e5e7eb;
+    transition:0.2s;
+}
+
+.selected-item-row:hover{
+    transform:translateY(-2px);
+    box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+
+.item-name{
+    font-weight:600;
+    color:#1f2937;
+    text-transform:capitalize;
+}
+
+.item-amount{
+    font-weight:700;
+    color:#059669;
+    font-size:16px;
+}
+
+.total-row{
+    margin-top:18px;
+    padding-top:14px;
+    border-top:2px dashed #bbf7d0;
+    display:flex;
+    justify-content:space-between;
+    font-size:17px;
+    font-weight:700;
+    color:#065f46;
+}
 </style>
 
 @php
@@ -507,8 +608,9 @@ border-radius:8px;
             @if(!$isLocked)
             <td class="action-cell">
                 <button type="button"
-                        class="offer-remove-btn"
-                        onclick="this.closest('tr').remove()">❌</button>
+    class="offer-remove-btn"
+    onclick="removeSubItem(this, ${parentIndex})">❌</button>
+                </td>
             </td>
             @endif
         </tr>
@@ -516,23 +618,32 @@ border-radius:8px;
         {{-- SUB ITEMS --}}
         @if(!empty($offer['items']))
             @foreach($offer['items'] as $j => $sub)
-            <tr>
-                <td style="padding-left:40px;">
-                    <input class="offer-input"
-                           type="text"
-                           name="offers[{{ $i }}][items][{{ $j }}][label]"
-                           value="{{ $sub['label'] }}"
-                           {{ $isLocked ? 'readonly' : '' }}>
-                </td>
-                <td>
-                    <input class="offer-input"
-                           type="number"
-                           name="offers[{{ $i }}][items][{{ $j }}][amount]"
-                           value="{{ $sub['amount'] }}"
-                           {{ $isLocked ? 'readonly' : '' }}>
-                </td>
-                <td></td>
-            </tr>
+          <tr>
+    <td style="padding-left:40px;">
+
+        <!-- NAME -->
+        <input class="offer-input"
+               type="text"
+               value="{{ $sub['label'] }}"
+               readonly>
+
+        <!-- DESCRIPTION SHOW -->
+       @if(!empty($sub['description']))
+<div class="offer-description-box">
+    {!! $sub['description'] !!}
+</div>
+@endif
+
+    </td>
+
+    <td>
+        <input class="offer-input"
+               type="number"
+               value="{{ $sub['amount'] }}"
+               readonly>
+    </td>
+    <td></td>
+</tr>
             @endforeach
         @endif
 
@@ -563,16 +674,43 @@ border-radius:8px;
 =========================== --}}
 
 @if(in_array($booking->status,['customer_confirmed','completed']))
-<div class="offer-selected">
-    <div>
-<h4>Customer Selected Offer</h4>
+
+@php
+    $selectedOffers = json_decode($booking->selected_offer, true);
+@endphp
+
+<div class="final-card">
+
+    <div class="final-header">
+        <div class="success-icon">✔</div>
+        <div>
+            <h3>Customer Selected Offer</h3>
+            <p class="sub-text">Selection confirmed successfully</p>
+        </div>
+    </div>
+
+    @if($selectedOffers)
+        @php $total = 0; @endphp
+
+        @foreach($selectedOffers as $item)
+            @php $total += $item['amount']; @endphp
+
+            <div class="selected-item-row">
+                <span class="item-name">{{ $item['label'] }}</span>
+                <span class="item-amount">
+                    ₹ {{ number_format($item['amount'],2) }}
+                </span>
+            </div>
+        @endforeach
+
+        <div class="total-row">
+            <span>Total Selected</span>
+            <span>₹ {{ number_format($total,2) }}</span>
+        </div>
+    @endif
+
 </div>
-<div>
-<p class="cashback-p">
-    ✔ {{ $booking->selected_offer }}
-    – ₹ {{ number_format($booking->offer_pool ?? 0,2) }}
-</p>
-</div>
+
 @endif
 
 {{-- ===========================
@@ -678,6 +816,22 @@ function addMainOffer() {
                 onclick="removeOfferGroup(${offerIndex})">❌</button>
         </td>
     </tr>
+    <tr class="offer-summary" data-summary="${offerIndex}">
+    <td colspan="3" style="padding-left:60px;">
+        <div style="display:flex; justify-content:space-between; font-weight:600;">
+            <span>Total of Sub Items: ₹ 
+                <span class="sub-total" data-parent="${offerIndex}">0.00</span>
+            </span>
+
+            <span style="color:green;">
+                Remaining Cashback: ₹ 
+                <span class="remaining-cashback" data-parent="${offerIndex}">
+                    ${fixedAmount.toFixed(2)}
+                </span>
+            </span>
+        </div>
+    </td>
+</tr>
 
     <tr class="offer-sub-btn" data-offer="${offerIndex}">
         <td colspan="3" style="padding-left:30px;">
@@ -712,45 +866,74 @@ function addSubItem(parentIndex) {
         'tr.sub-item[data-parent="'+parentIndex+'"]'
     ).length;
 
+   
     let html = `
-    <tr class="sub-item" data-parent="${parentIndex}">
-        <td style="padding-left:60px;">
-            <input class="offer-input"
-                type="text"
-                name="offers[${parentIndex}][items][${subCount}][label]"
-                placeholder="Sub Item Name"
-                required>
-        </td>
+<tr class="sub-item" data-parent="${parentIndex}">
+<td colspan="3">
 
-        <td>
-            <input class="offer-input"
-                type="number"
-                name="offers[${parentIndex}][items][${subCount}][amount]"
-                placeholder="Amount"
-                required>
-        </td>
+<div style="display:flex; gap:20px; align-items:flex-start; width:100%;">
 
-        <td>
-            <button type="button"
-                class="offer-remove-btn"
-                onclick="this.closest('tr').remove()">❌</button>
-        </td>
-    </tr>
-    `;
+    <!-- LEFT SIDE (Name + Description) -->
+    <div style="flex:2; display:flex; flex-direction:column; gap:10px;">
 
-    buttonRow.insertAdjacentHTML('afterend', html);
+        <!-- NAME -->
+        <input class="offer-input"
+            type="text"
+            name="offers[${parentIndex}][items][${subCount}][label]"
+            placeholder="Sub Item Name"
+            required>
+
+        <!-- DESCRIPTION -->
+        <textarea class="offer-input summernote"
+            name="offers[${parentIndex}][items][${subCount}][description]"
+            placeholder="Description"
+            style="width:100%;"></textarea>
+
+    </div>
+
+    <!-- AMOUNT -->
+    <div style="flex:1;">
+        <input class="offer-input sub-amount"
+            type="number"
+            name="offers[${parentIndex}][items][${subCount}][amount]"
+            placeholder="Amount"
+            oninput="updateSubTotals(${parentIndex})"
+            required>
+    </div>
+
+    <!-- DELETE BUTTON -->
+    <div style="display:flex; align-items:center;">
+        <button type="button"
+            class="offer-remove-btn"
+            onclick="removeSubItem(this, ${parentIndex})">❌</button>
+    </div>
+
+</div>
+
+</td>
+</tr>
+`;
+
+buttonRow.insertAdjacentHTML('afterend', html);
+initSummernote();
 }
-
 
 /* =========================
    REMOVE ENTIRE OFFER GROUP
 ========================= */
 function removeOfferGroup(index) {
 
-    document.querySelectorAll('[data-offer="'+index+'"]')
+    // remove main row + summary + button row
+    document.querySelectorAll('[data-offer="'+index+'"], [data-summary="'+index+'"]')
         .forEach(el => el.remove());
-}
 
+    // remove all sub items of that main offer
+    document.querySelectorAll('tr.sub-item[data-parent="'+index+'"]')
+        .forEach(el => el.remove());
+
+    // reset totals
+    updateSubTotals(index);
+}
 
 /* =========================
    VALIDATE TOTAL SPLIT
@@ -782,8 +965,89 @@ document.querySelector("form").addEventListener("submit", function(e){
 
 recalc();
 toggleOffers();
+function updateSubTotals(parentIndex) {
+
+    let finalOfferPool = window.finalOfferPoolAmount || 0;
+
+    let inputs = document.querySelectorAll(
+        'tr.sub-item[data-parent="'+parentIndex+'"] input[name$="[amount]"]'
+    );
+
+    let total = 0;
+
+    inputs.forEach(function(input){
+        total += parseFloat(input.value) || 0;
+    });
+
+    // ❌ If total exceeds pool
+   if (total > finalOfferPool) {
+
+    alert("Offer amount exceeded! Max allowed ₹ " + finalOfferPool.toFixed(2));
+
+    let lastInput = document.activeElement;
+
+    if (lastInput && lastInput.classList.contains('sub-amount')) {
+
+        let currentVal = parseFloat(lastInput.value) || 0;
+
+        // remove only excess part
+        let allowed = finalOfferPool - (total - currentVal);
+
+        lastInput.value = allowed > 0 ? allowed.toFixed(2) : 0;
+    }
+
+    total = finalOfferPool;
+}
+
+    // ✅ Update total
+    let totalEl = document.querySelector(
+        '.sub-total[data-parent="'+parentIndex+'"]'
+    );
+
+    if (totalEl) totalEl.innerText = total.toFixed(2);
+
+    // ✅ Remaining
+    let remaining = finalOfferPool - total;
+
+    let remainEl = document.querySelector(
+        '.remaining-cashback[data-parent="'+parentIndex+'"]'
+    );
+
+    if (remainEl) remainEl.innerText = remaining.toFixed(2);
+}
+function removeSubItem(button, parentIndex) {
+
+    // row remove
+    button.closest('tr').remove();
+
+    // total update
+    updateSubTotals(parentIndex);
+}
+function initSummernote() {
+    $('.summernote').summernote({
+        height: 100,
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline']],
+            ['para', ['ul', 'ol']],
+            ['insert', ['link']],
+            ['view', ['codeview']]
+        ]
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    initSummernote();
+});
+
 </script>
+
+
 @endif
 
 
 @endsection
+
+
+
+
+  

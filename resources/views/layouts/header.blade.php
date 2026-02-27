@@ -56,7 +56,7 @@
         }
         #content-wrapper {
             flex: 1;
-            height: 100vh;
+            min-height: 100vh;   /* height nahi */
             overflow-y: auto;
             overflow-x: hidden;
             background-color: #f8f9fc;
