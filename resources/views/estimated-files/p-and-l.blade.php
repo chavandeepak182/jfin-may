@@ -13,6 +13,7 @@
     cursor: pointer;
 }
 
+
 /* Tooltip Box */
 .abbr::after {
     content: attr(data-title);
@@ -56,7 +57,7 @@
 .abbr:hover::before {
     opacity: 1;
     visibility: visible;
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-15%) translateY(0);
 }
 </style>
 
@@ -205,7 +206,7 @@
         <div class="row g-3">
 
     <div class="col">
-        <label class="form-label">CSO Cost</label>
+        <label class="form-label"><span class="abbr" data-title="Customer Service Operations Cost">CSO Cost</span></label>
         <input class="form-control calc" id="cso_cost" placeholder="CSO Cost">
     </div>
 
