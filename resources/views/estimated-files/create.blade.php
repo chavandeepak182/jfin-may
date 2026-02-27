@@ -139,7 +139,7 @@
                 <!-- MANAGEMENT -->
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title="Branch Manager / Channel Head Name">BM / CH Name</span></label>
+                        <label class="form-label"><span class="abbr" data-title="Branch Manager / Channel Head Name">BM / CH Name</span></label><span class="text-danger">*</span>
                         <input type="text" name="bm_ch_name" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -147,7 +147,7 @@
 
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title="Subordinate Manager">Sub Manager</span></label>
+                        <label class="form-label"><span class="abbr" data-title="Subordinate Manager">Sub Manager</span></label><span class="text-danger">*</span>
                         <input type="text" name="sub_manager" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -156,7 +156,7 @@
                 <!-- PRODUCT -->
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title=" Type of financial product">Product</span></label>
+                        <label class="form-label"><span class="abbr" data-title=" Type of financial product">Product</span></label><span class="text-danger">*</span>
                         <input type="text" name="product" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -164,7 +164,7 @@
 
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title=" Sub-category of product">Sub Product</span></label>
+                        <label class="form-label"><span class="abbr" data-title=" Sub-category of product">Sub Product</span></label><span class="text-danger">*</span>
                         <input type="text" name="sub_product" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -200,7 +200,7 @@
                 <!-- FINANCIALS -->
                 <div class="col-lg-3">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title=" Net Amount Disbursed">Net Amt Disbursed</span</label>
+                        <label class="form-label"><span class="abbr" data-title=" Net Amount Disbursed">Net Amt Disbursed</span></label><span class="text-danger">*</span>
                         <input type="number" step="0.01" name="net_amt_disbursed" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -208,7 +208,7 @@
 
                 <div class="col-lg-3">
                     <div class="mb-3">
-                        <label class="form-label">Estimate Revenue</label>
+                        <label class="form-label">Estimate Revenue</label><span class="text-danger">*</span>
                         <input type="number" step="0.01" name="estimate_revenue" class="form-control" readonly>
                         
                     </div>
@@ -216,7 +216,7 @@
 
                 <div class="col-lg-3">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title=" Estimated Net Percentage">Est Net %</span></label>
+                        <label class="form-label"><span class="abbr" data-title=" Estimated Net Percentage">Est Net %</span></label><span class="text-danger">*</span>
                         <input type="number" step="0.01" name="est_net_percent" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -224,7 +224,7 @@
 
                 <div class="col-lg-3">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title=" Estimated Net Percentage">DSA Payout %</span></label>
+                        <label class="form-label"><span class="abbr" data-title=" Estimated Net Percentage">DSA Payout %</span></label><span class="text-danger">*</span>
                         <input type="number" step="0.01" name="dsa_payout_percent" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -232,21 +232,21 @@
 
                 <div class="col-lg-3">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title=" Estimated Direct Selling Agent Payout Amount">Est DSA Payout Amt</span></label>
+                        <label class="form-label"><span class="abbr" data-title=" Estimated Direct Selling Agent Payout Amount">Est DSA Payout Amt</span></label><span class="text-danger">*</span>
                         <input type="number" step="0.01" name="est_dsa_payout_amt" class="form-control" readonly>
                     </div>
                 </div>
 
                 <div class="col-lg-3">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title="Tax Deducted at Source">TDS</span></label>
+                        <label class="form-label"><span class="abbr" data-title="Tax Deducted at Source">TDS</span></label><span class="text-danger">*</span>
                         <input type="number" step="0.01" name="tds" class="form-control" readonly>
                     </div>
                 </div>
 
                 <div class="col-lg-3">
                     <div class="mb-3">
-                        <label class="form-label">Net Revenue</label>
+                        <label class="form-label">Net Revenue</label><span class="text-danger">*</span>
                         <input type="number" step="0.01" name="net_revenue" class="form-control" readonly>
                     </div>
                 </div>
@@ -254,7 +254,7 @@
                 <!-- EMP / DSA -->
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title="Employee Name">EMP Name</span></label>
+                        <label class="form-label"><span class="abbr" data-title="Employee Name">EMP Name</span></label><span class="text-danger">*</span>
                         <input type="text" name="emp_name" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -262,7 +262,7 @@
 
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title="Employee Code">EMP Code</span></label>
+                        <label class="form-label"><span class="abbr" data-title="Employee Code">EMP Code</span></label><span class="text-danger">*</span>
                         <input type="text" name="emp_code" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -270,7 +270,7 @@
 
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title="Direct Selling Agent Name">DSA Name</span></label>
+                        <label class="form-label"><span class="abbr" data-title="Direct Selling Agent Name">DSA Name</span></label><span class="text-danger">*</span>
                         <input type="text" name="dsa_name" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -278,7 +278,7 @@
 
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title="Direct Selling Agent Code">DSA Code</span></label>
+                        <label class="form-label"><span class="abbr" data-title="Direct Selling Agent Code">DSA Code</span></label><span class="text-danger">*</span>
                         <input type="text" name="dsa_code" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -287,7 +287,7 @@
                 <!-- CONTACT -->
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label">Mobile</label>
+                        <label class="form-label">Mobile</label><span class="text-danger">*</span>
                                             <input type="text"
                         name="mobile"
                         maxlength="10"
@@ -300,7 +300,7 @@
 
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label">Email</label>
+                        <label class="form-label">Email</label><span class="text-danger">*</span>
                         <input type="email" name="email" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -308,7 +308,7 @@
 
                 <div class="col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title="Lead Source">Source</span></label>
+                        <label class="form-label"><span class="abbr" data-title="Lead Source">Source</span></label><span class="text-danger">*</span>
                         <input type="text" name="source" class="form-control">
                         <small class="text-danger d-none"></small>
                     </div>
@@ -317,7 +317,7 @@
                 <!-- KYC -->
                 <div class="col-lg-6">
                     <div class="mb-3">
-                        <label class="form-label"><span class="abbr" data-title="permanent Account Number">PAN</span></label>
+                        <label class="form-label"><span class="abbr" data-title="permanent Account Number">PAN</span></label><span class="text-danger">*</span>
                         <input type="text"
                         name="pan"
                         maxlength="10"
