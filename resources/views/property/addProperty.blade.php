@@ -94,7 +94,7 @@
 
                                         <div class="col-lg-3">
                                             <div class="mb-3">
-                        <label class="form-label">Carpet area <span class="text-danger">*</span></label>
+                        <label class="form-label">Carpet area </label>
                         <input 
                             type="text" 
                             name="area" 
@@ -114,7 +114,7 @@
 
                     <div class="col-lg-3"> 
                                 <div class="mb-3">
-                                    <label class="form-label">Built-up Area <span class="text-danger">*</span></label>
+                                    <label class="form-label">Built-up Area </label>
                                     <input 
                                         type="text" 
                                         name="builtup_area" 
