@@ -120,6 +120,8 @@ public function adminOffer(Request $request, $id)
         'offers.*.amount' => 'required|numeric|min:0',
         'offers.*.items' => 'nullable|array',
         'offers.*.items.*.label' => 'required|string|max:255',
+        
+'offers.*.items.*.image' => 'nullable|string',
         'offers.*.items.*.amount' => 'required|numeric|min:0',
     ]);
 
@@ -160,11 +162,12 @@ public function adminOffer(Request $request, $id)
                 foreach ($mainOffer['items'] as $sub) {
                     $subTotal += $sub['amount'];
 
-                            $items[] = [
-                'label'       => $sub['label'],
-                'description' => $sub['description'] ?? null,
-                'amount'      => $sub['amount'],
-            ];
+                           $items[] = [
+    'label'       => $sub['label'],
+    'description' => $sub['description'] ?? null,
+    'image'       => $sub['image'] ?? null,
+    'amount'      => $sub['amount'],
+];
                 }
 
                 if ($subTotal != $mainOffer['amount']) {
@@ -229,99 +232,73 @@ public function adminOffer(Request $request, $id)
 
     return view('customer.bookings.index', compact('bookings'));
 }
- public function customerConfirm(Request $request, $id)
+public function customerConfirm(Request $request, $id)
 {
-    \Log::info('CUSTOMER CONFIRM HIT', [
-        'booking_id' => $id,
-        'auth_id' => auth()->id(),
-        'input' => $request->all()
+    $validated = $request->validate([
+        'selected_items' => 'required|array',
+        'selected_items.*.label' => 'required|string',
+        'selected_items.*.amount' => 'required|numeric|min:0',
+        'selected_items.*.description' => 'nullable|string',
+        'selected_items.*.image' => 'nullable|string',
     ]);
 
-    try {
+    $booking = PropertyBooking::where('id', $id)
+        ->where('customer_id', auth()->id())
+        ->firstOrFail();
 
-        /* =========================
-           VALIDATION
-        ========================== */
-        $validated = $request->validate([
-            'selected_items' => 'required|array',
-            'selected_items.*.label' => 'required|string',
-            'selected_items.*.amount' => 'required|numeric|min:0',
-        ]);
-
-        \Log::info('VALIDATION PASSED');
-
-        /* =========================
-           FETCH BOOKING
-        ========================== */
-        $booking = PropertyBooking::where('id', $id)
-            ->where('customer_id', auth()->id())
-            ->where('status', 'waiting_customer_confirmation')
-            ->first();
-
-        if (!$booking) {
-            \Log::error('BOOKING NOT FOUND OR STATUS INVALID');
-            return back()->withErrors('Booking not found or already confirmed.');
-        }
-
-        \Log::info('BOOKING FOUND', [
-            'status' => $booking->status,
-            'offer_pool' => $booking->offer_pool
-        ]);
-
-        /* =========================
-           CALCULATE TOTAL
-        ========================== */
-        $total = 0;
-
-        foreach ($request->selected_items as $item) {
-            $total += $item['amount'];
-        }
-
-        \Log::info('TOTAL CALCULATED', [
-            'selected_total' => $total,
-            'expected_total' => $booking->offer_pool
-        ]);
-
-        if ($total > $booking->offer_pool) {
-            return back()->withErrors(
-                'Selected amount cannot exceed ₹ '.$booking->offer_pool
-            );
-        }
-
-        $remaining = $booking->offer_pool - $total;
-
-        // If remaining exists → add cashback automatically
-        if ($remaining > 0) {
-            $request->selected_items[] = [
-                'label' => 'Cashback',
-                'amount' => $remaining
-            ];
-        }
-
-        /* =========================
-           UPDATE BOOKING
-        ========================== */
-        $booking->update([
-            'selected_offer' => json_encode($request->selected_items),
-            'status' => 'customer_confirmed'
-        ]);
-
-        \Log::info('BOOKING UPDATED SUCCESSFULLY');
-
+    if ($booking->status !== 'waiting_customer_confirmation') {
         return redirect()
             ->route('customer.bookings')
-            ->with('success', 'Offer confirmed successfully');
-
-    } catch (\Exception $e) {
-
-        \Log::error('CUSTOMER CONFIRM ERROR', [
-            'message' => $e->getMessage(),
-            'line' => $e->getLine(),
-            'file' => $e->getFile()
-        ]);
-
-        return back()->withErrors('Something went wrong.');
+            ->with('error', 'Offer already confirmed.');
     }
+
+    // Calculate total selected
+    $total = collect($request->selected_items)->sum(function ($item) {
+        return floatval($item['amount']);
+    });
+
+    if ($total > $booking->offer_pool) {
+        return back()->withErrors(
+            'Selected amount cannot exceed ₹ ' . $booking->offer_pool
+        );
+    }
+
+    $remaining = $booking->offer_pool - $total;
+
+    // Clean selected items
+    $selectedItems = collect($request->selected_items)
+        ->filter(function ($item) {
+            return floatval($item['amount']) > 0;
+        })
+      ->map(function ($item) {
+    return [
+        'label' => $item['label'],
+        'amount' => floatval($item['amount']),
+        'description' => $item['description'] ?? null,
+        'image' => $item['image'] ?? null
+    ];
+})
+        ->values()
+        ->toArray();
+
+    // Add cashback if remaining
+    if ($remaining > 0) {
+        $selectedItems[] = [
+            'label' => 'Cashback',
+            'amount' => $remaining,
+            'description' => 'Remaining cashback amount',
+            'image' => null
+        ];
+    }
+
+    $booking->update([
+        'selected_offer' => json_encode($selectedItems),
+        'status' => 'customer_confirmed'
+    ]);
+
+    return redirect()
+        ->route('customer.bookings')
+        ->with('success', 'Offer confirmed successfully');
 }
 
 
@@ -391,26 +368,26 @@ public function adminOffer(Request $request, $id)
 }
 
 
-public function showConfirmOffer($id)
-{
-    \Log::info('CUSTOMER CONFIRM PAGE HIT', [
-        'booking_id' => $id,
-        'auth_id' => auth()->id(),
-        'role_id' => auth()->user()->role_id
-    ]);
+// public function showConfirmOffer($id)
+// {
+//     \Log::info('CUSTOMER CONFIRM PAGE HIT', [
+//         'booking_id' => $id,
+//         'auth_id' => auth()->id(),
+//         'role_id' => auth()->user()->role_id
+//     ]);
 
-    if (auth()->user()->role_id != config('constants.roles.customer')) {
-        abort(403);
-    }
+//     if (auth()->user()->role_id != config('constants.roles.customer')) {
+//         abort(403);
+//     }
 
-    $booking = PropertyBooking::with(['items.property'])
-        ->where('id', $id)
-        ->where('customer_id', auth()->id())
-        ->where('status','waiting_customer_confirmation')
-        ->firstOrFail();
+//     $booking = PropertyBooking::with(['items.property'])
+//         ->where('id', $id)
+//         ->where('customer_id', auth()->id())
+//         ->where('status','waiting_customer_confirmation')
+//         ->firstOrFail();
 
-    return view('customer.booking-confirm', compact('booking'));
-}
+//     return view('customer.booking-confirm', compact('booking'));
+// }
 
 
 
@@ -427,6 +404,21 @@ public function showConfirmOffer($id)
 
 //     return view('customer.properties.index', compact('properties'));
 // }
+
+
+public function showConfirmOffer($id)
+{
+    if (auth()->user()->role_id != config('constants.roles.customer')) {
+        abort(403);
+    }
+
+    $booking = PropertyBooking::with(['items.property'])
+        ->where('id', $id)
+        ->where('customer_id', auth()->id())
+        ->firstOrFail();
+
+    return view('customer.booking-confirm', compact('booking'));
+}
 
 public function showProperties(Request $request)
 {

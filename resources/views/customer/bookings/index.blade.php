@@ -70,24 +70,41 @@
 
                 <td>{{ ucwords(str_replace('_',' ',$booking->status)) }}</td>
 
-                <td>
-                    {{-- SHOW CONFIRM BUTTON ONLY WHEN OFFER EXISTS --}}
-                    @if($booking->status === 'waiting_customer_confirmation')
-                        <a href="{{ route('customer.booking.show.confirm',$booking->id) }}"
-                        class="action-btns">
-                            View & Confirm Offer
-                        </a>
+               <td>
 
-                    @elseif($booking->status === 'customer_confirmed')
-                        <a href="{{ route('customer.booking.show.confirm',$booking->id) }}"
-                        class="action-btns">
-                            View Confirmation
-                        </a>
+@if($booking->status === 'waiting_customer_confirmation')
 
-                    @else
-                        <span style="color:gray;">Completed</span>
-                    @endif
-                </td>
+<a href="{{ route('customer.booking.show.confirm',$booking->id) }}"
+class="action-btns">
+View & Confirm Offer
+</a>
+
+@elseif($booking->status === 'customer_confirmed')
+
+<a href="{{ route('customer.booking.show.confirm',$booking->id) }}"
+class="action-btns">
+View Confirmation
+</a>
+
+@elseif($booking->status === 'completed')
+
+<span style="color:green;font-weight:600;">
+✔ Action Completed
+</span>
+<br>
+
+<a href="{{ route('customer.booking.show.confirm',$booking->id) }}"
+class="action-btns" style="margin-top:5px;">
+View
+</a>
+
+@else
+
+<span style="color:gray;">Pending Admin Review</span>
+
+@endif
+
+</td>
             </tr>
         @empty
             <tr>

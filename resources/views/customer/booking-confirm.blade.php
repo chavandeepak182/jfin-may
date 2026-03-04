@@ -1,3 +1,4 @@
+
 @extends('frontend.layouts.customer-dash')
 
 @section('content')
@@ -9,6 +10,19 @@
 }
 .section{
     margin-bottom:20px;
+}
+.offer-title{
+    color: #000 !important;
+}
+h5 {
+    color: #000 !important;
+}
+h2 {
+    color: #000 !important;
+}
+
+label {
+    color: #000 !important;
 }
 .section-title {
     font-size: 18px;
@@ -56,6 +70,11 @@
     font-weight: 600;
     color: #2d3748;
 }
+h4
+{
+    color:#000;
+}
+
 .selected-prop{
     width:100%;
     background:linear-gradient(135deg, #f8fafc 0%, #ddecfb 100%);
@@ -216,6 +235,13 @@
         @if(!$offers)
             <p>No offers available.</p>
         @else
+        @if($errors->any())
+    <div style="background:red;color:white;padding:10px;">
+        @foreach($errors->all() as $error)
+            <p>{{ $error }}</p>
+        @endforeach
+    </div>
+@endif
 
         <form id="confirmForm"
               method="POST"
@@ -232,14 +258,18 @@
 
                         {{-- MAIN --}}
                         <label>
-                            <input type="checkbox"
-                                   class="main-checkbox"
-                                   data-index="{{ $mainIndex }}"
-                                   data-label="{{ $main['label'] }}"
-                                   data-amount="{{ $main['amount'] }}">
-                            <strong>{{ $main['label'] }}</strong>
-                            – ₹ {{ number_format($main['amount'],2) }}
-                        </label>
+    <input type="checkbox"
+class="main-checkbox"
+data-index="{{ $mainIndex }}"
+data-label="{{ strtolower($main['label']) }}">
+
+    <strong>{{ $main['label'] }}</strong>
+    – ₹ 
+    <span class="main-amount"
+          id="main_amount_{{ $mainIndex }}">
+        {{ number_format($main['amount'],2) }}
+    </span>
+</label>
 
                         {{-- SUB ITEMS --}}
                         @if(!empty($main['items']))
@@ -248,16 +278,43 @@
 
     <div style="margin-bottom:15px; padding:10px; border:1px solid #e2e8f0; border-radius:8px;">
 
-        <label style="display:flex; gap:8px; align-items:center;">
-            <input type="checkbox"
-                   class="sub-checkbox"
-                   data-parent="{{ $mainIndex }}"
-                   data-label="{{ $sub['label'] }}"
-                   data-amount="{{ $sub['amount'] }}">
+       <label style="display:flex; gap:8px; align-items:center;">
 
-            <strong>{{ $sub['label'] }}</strong>
-            – ₹ {{ number_format($sub['amount'],2) }}
-        </label>
+<input type="checkbox"
+class="sub-checkbox"
+data-parent="{{ $mainIndex }}"
+data-label="{{ $sub['label'] }}"
+data-amount="{{ $sub['amount'] }}"
+data-id="{{ $mainIndex }}_{{ $subIndex }}">
+
+<input type="hidden"
+name="selected_items[{{ $mainIndex }}_{{ $subIndex }}][label]"
+value="{{ $sub['label'] }}"
+disabled>
+
+<input type="hidden"
+name="selected_items[{{ $mainIndex }}_{{ $subIndex }}][description]"
+value="{{ $sub['description'] ?? '' }}"
+disabled>
+
+<input type="hidden"
+name="selected_items[{{ $mainIndex }}_{{ $subIndex }}][image]"
+value="{{ $sub['image'] ?? '' }}"
+disabled>
+
+<input type="hidden"
+name="selected_items[{{ $mainIndex }}_{{ $subIndex }}][amount]"
+value="{{ $sub['amount'] }}"
+disabled>
+
+<strong>{{ $sub['label'] }}</strong>
+– ₹ {{ number_format($sub['amount'],2) }}
+
+</label>
+        <div class="remaining-display" 
+     id="remaining_for_{{ $mainIndex }}_{{ $subIndex }}" 
+     style="color:#004181; font-weight:600; margin-top:6px;">
+</div>
 
         {{-- DESCRIPTION + IMAGE --}}
         @if(!empty($sub['description']))
@@ -284,7 +341,15 @@
                 <strong>Total Selected: ₹ 
                     <span id="selected_total">0.00</span>
                 </strong>
+                <p>
+    <strong>Remaining Cashback: ₹ 
+        <span id="remaining_cashback">
+            {{ number_format($booking->offer_pool,2) }}
+        </span>
+    </strong>
+</p>
             </p>
+            
 
             <button type="submit" class="btn btn-primary">
                 Confirm Selection
@@ -294,8 +359,7 @@
 
         @endif
 
-    @elseif($booking->status === 'customer_confirmed')
-
+   @elseif($booking->status === 'customer_confirmed' || $booking->status === 'completed')
         <p style="color:green;">
             ✔ You have confirmed your selection.
         </p>
@@ -304,12 +368,33 @@
             $selected = json_decode($booking->selected_offer, true);
         @endphp
 
-        @foreach($selected as $item)
-            <p>
-                <strong>{{ $item['label'] }}</strong>
-                – ₹ {{ number_format($item['amount'],2) }}
-            </p>
-        @endforeach
+@foreach($selected as $item)
+
+<div style="border:1px solid #ddd;padding:20px;border-radius:10px;margin-bottom:20px;">
+
+<h3 style="margin-bottom:10px;color:#000;">
+{{ ucfirst($item['label']) }}
+</h3>
+
+@if(!empty($item['image']))
+<div style="margin-bottom:10px;">
+<img src="{{ $item['image'] }}" style="max-width:250px;border-radius:8px;">
+</div>
+@endif
+
+@if(!empty($item['description']))
+<div style="margin-bottom:10px;">
+{!! $item['description'] !!}
+</div>
+@endif
+
+<p style="font-size:18px;color:green;font-weight:600;">
+₹ {{ number_format($item['amount'],2) }}
+</p>
+
+</div>
+
+@endforeach
 
     @endif
 
@@ -317,161 +402,169 @@
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
-    let form = document.getElementById("confirmForm");
-    if(!form) return;
-
     let offerPool = {{ $booking->offer_pool ?? 0 }};
     let totalSpan = document.getElementById('selected_total');
+    let remainingSpan = document.getElementById('remaining_cashback');
 
-    function updateTotal() {
-        let total = 0;
+  function update(triggered = null){
 
-        document.querySelectorAll('.sub-checkbox:checked')
-            .forEach(cb => {
-                total += parseFloat(cb.dataset.amount || 0);
-            });
+    let selectedSubs = document.querySelectorAll('.sub-checkbox:checked');
 
-        // If main has NO sub items
-        document.querySelectorAll('.main-checkbox:checked')
-            .forEach(main => {
+    let subTotal = 0;
 
-                let parent = main.dataset.index;
+    selectedSubs.forEach(cb => {
+        subTotal += Number(cb.dataset.amount);
+    });
 
-                let subs = document.querySelectorAll(
-                    '.sub-checkbox[data-parent="'+parent+'"]'
-                );
+    // 🚨 Limit check
+    if(subTotal > offerPool){
 
-                if(subs.length === 0){
-                    total += parseFloat(main.dataset.amount || 0);
-                }
-            });
+        alert("Offer limit exceeded. You only have ₹" + offerPool);
 
-        totalSpan.innerText = total.toFixed(2);
-        return total;
+        if(triggered){
+            triggered.checked = false;
+        }
+
+        selectedSubs = document.querySelectorAll('.sub-checkbox:checked');
+
+        subTotal = 0;
+        selectedSubs.forEach(cb => {
+            subTotal += Number(cb.dataset.amount);
+        });
     }
 
-    /* MAIN CLICK */
-    document.querySelectorAll('.main-checkbox')
-        .forEach(main => {
-            main.addEventListener('change', function(){
+    let remaining = offerPool - subTotal;
 
-                let index = this.dataset.index;
+    if(remaining < 0){
+        remaining = 0;
+    }
 
-                let subs = document.querySelectorAll(
-                    '.sub-checkbox[data-parent="'+index+'"]'
-                );
+    totalSpan.innerText = subTotal.toFixed(2);
 
-                subs.forEach(s => s.checked = this.checked);
+    remainingSpan.innerHTML =
+        "<span style='color:green;font-weight:700;'>₹ "
+        + remaining.toFixed(2) +
+        "</span>";
 
-                updateTotal();
-            });
-        });
+    // clear old
+    document.querySelectorAll('.remaining-display')
+        .forEach(div => div.innerHTML = "");
 
-    /* SUB CLICK */
+    // show remaining under last selected item
+    if(selectedSubs.length > 0){
+
+        let last = selectedSubs[selectedSubs.length - 1];
+        let id = last.dataset.id;
+
+        let displayDiv = document.getElementById("remaining_for_" + id);
+
+        if(displayDiv){
+            displayDiv.innerHTML =
+                "<span style='color:green;font-weight:700;'>Remaining Cashback: ₹ "
+                + remaining.toFixed(2) +
+                "</span>";
+        }
+    }
+
+    // enable disable hidden inputs
+document.querySelectorAll('.sub-checkbox').forEach(cb => {
+
+let id = cb.dataset.id;
+
+let labelInput = document.querySelector(
+'input[name="selected_items['+id+'][label]"]'
+);
+
+let amountInput = document.querySelector(
+'input[name="selected_items['+id+'][amount]"]'
+);
+
+let descriptionInput = document.querySelector(
+'input[name="selected_items['+id+'][description]"]'
+);
+
+let imageInput = document.querySelector(
+'input[name="selected_items['+id+'][image]"]'
+);
+
+if(labelInput) labelInput.disabled = !cb.checked;
+if(amountInput) amountInput.disabled = !cb.checked;
+if(descriptionInput) descriptionInput.disabled = !cb.checked;
+if(imageInput) imageInput.disabled = !cb.checked;
+
+});
+}
     document.querySelectorAll('.sub-checkbox')
         .forEach(sub => {
             sub.addEventListener('change', function(){
-
-                let parent = this.dataset.parent;
-
-                let subs = document.querySelectorAll(
-                    '.sub-checkbox[data-parent="'+parent+'"]'
-                );
-
-                let main = document.querySelector(
-                    '.main-checkbox[data-index="'+parent+'"]'
-                );
-
-                let allChecked = true;
-                subs.forEach(s => {
-                    if(!s.checked) allChecked = false;
-                });
-
-                if(main) main.checked = allChecked;
-
-                updateTotal();
+                update(this);
             });
         });
 
-    /* SUBMIT */
-    form.addEventListener("submit", function(e){
+    update();
 
-        let total = updateTotal();
+    // Prevent main change if sub selected
+   
 
-        if(total > offerPool){
-            alert("Total selected amount must equal ₹ " + offerPool.toFixed(2));
-            e.preventDefault();
-            return;
-        }
+});
+</script>
+<script>
+    document.querySelectorAll('.main-checkbox').forEach(main => {
 
-        document.querySelectorAll('.dynamic-input')
-            .forEach(el => el.remove());
+    main.addEventListener('change', function(){
 
-        let index = 0;
+        let label = this.dataset.label.toLowerCase();
 
-        // SUB ITEMS
-        document.querySelectorAll('.sub-checkbox:checked')
-            .forEach(cb => {
+        // If Cashback selected
+        if(label.includes('cashback') && this.checked){
 
-                let labelInput = document.createElement("input");
-                labelInput.type = "hidden";
-                labelInput.name = "selected_items["+index+"][label]";
-                labelInput.value = cb.dataset.label;
-                labelInput.classList.add("dynamic-input");
-
-                let amountInput = document.createElement("input");
-                amountInput.type = "hidden";
-                amountInput.name = "selected_items["+index+"][amount]";
-                amountInput.value = cb.dataset.amount;
-                amountInput.classList.add("dynamic-input");
-
-                form.appendChild(labelInput);
-                form.appendChild(amountInput);
-
-                index++;
-            });
-
-        // MAIN WITHOUT SUBS
-        document.querySelectorAll('.main-checkbox:checked')
-            .forEach(main => {
-
-                let parent = main.dataset.index;
-
-                let subs = document.querySelectorAll(
-                    '.sub-checkbox[data-parent="'+parent+'"]'
-                );
-
-                if(subs.length === 0){
-
-                    let labelInput = document.createElement("input");
-                    labelInput.type = "hidden";
-                    labelInput.name = "selected_items["+index+"][label]";
-                    labelInput.value = main.dataset.label;
-                    labelInput.classList.add("dynamic-input");
-
-                    let amountInput = document.createElement("input");
-                    amountInput.type = "hidden";
-                    amountInput.name = "selected_items["+index+"][amount]";
-                    amountInput.value = main.dataset.amount;
-                    amountInput.classList.add("dynamic-input");
-
-                    form.appendChild(labelInput);
-                    form.appendChild(amountInput);
-
-                    index++;
+            // uncheck all other main offers
+            document.querySelectorAll('.main-checkbox').forEach(cb=>{
+                if(cb !== this){
+                    cb.checked = false;
                 }
             });
 
-        if(index === 0){
-            alert("Please select at least one option.");
-            e.preventDefault();
+            // disable sub items
+            document.querySelectorAll('.sub-checkbox').forEach(sub=>{
+                sub.checked = false;
+                sub.disabled = true;
+            });
+
+            remainingSpan.innerHTML =
+                "<span style='color:green;font-weight:700;'>₹ "
+                + offerPool.toFixed(2) +
+                "</span>";
+        }
+
+        else if(!label.includes('cashback') && this.checked){
+
+            // uncheck cashback
+            document.querySelectorAll('.main-checkbox').forEach(cb=>{
+                if(cb.dataset.label.includes('cashback')){
+                    cb.checked = false;
+                }
+            });
+
+            // enable sub items
+            document.querySelectorAll('.sub-checkbox').forEach(sub=>{
+                sub.disabled = false;
+            });
+
+        }
+
+        // if everything unchecked
+        if(!document.querySelector('.main-checkbox:checked')){
+
+            document.querySelectorAll('.sub-checkbox').forEach(sub=>{
+                sub.disabled = false;
+            });
+
         }
 
     });
 
 });
 </script>
-
-
-
 @endsection
+  
