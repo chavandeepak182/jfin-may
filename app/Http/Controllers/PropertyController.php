@@ -213,89 +213,175 @@ private function handleFileUpload(Request $request, $inputName, $folder)
 // }
 
 
+// public function allProperties(Request $request)
+// {
+    
+//     /* ================= SESSION ================= */
+//     $role_id = Session::get('role_id');
+//     $user_id = Session::get('user_id');
+
+//     /* ================= STATUS FILTER (NEW ADD) ================= */
+//     $status = $request->status ?? 'all';
+
+//     /* ================= COUNTS ================= */
+
+//     $properties = DB::table('properties')->count();
+
+//     $totalPendingProperties = DB::table('properties')
+//         ->where('is_active', 0)
+//         ->count();
+
+//     $totalPropertyTakers = PropertyTaker::count();
+//     $agents = User::all();
+//     $totalVerifiedProperties = DB::table('properties')
+//     ->where('is_active', 1)
+//     ->count();
+
+//     /* ================= PROPERTIES LIST ================= */
+// $query = DB::table('properties')
+//     ->leftJoin('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
+//     ->leftJoin('property_category', 'properties.property_type_id', '=', 'property_category.pid')
+//     ->select(
+//         'properties.*',
+//         'price_range.from_price',
+//         'price_range.to_price',
+//         'property_category.category_name'
+//     );
+
+// /* ================= STATUS FILTER ================= */
+// if ($request->status == 'pending') {
+//     $query->where('properties.is_active', 0);
+// }
+
+// if ($request->status == 'verified') {
+//     $query->where('properties.is_active', 1);
+// }
+
+// /* ================= SEARCH FILTER ================= */
+// if ($request->search) {
+//     $search = $request->search;
+
+//     $query->where(function ($q) use ($search) {
+//         $q->where('properties.title', 'like', "%$search%")
+//           ->orWhere('properties.builder_name', 'like', "%$search%")
+//           ->orWhere('properties.address', 'like', "%$search%");
+//     });
+// }
+
+// /* ================= TYPE FILTER ================= */
+// if ($request->type && $request->type != 'all') {
+//     $query->where('property_category.category_name', $request->type);
+// }
+
+// /* ================= ROLE FILTER ================= */
+// if ($role_id == 3) {
+//     $query->where('properties.creator_id', $user_id);
+// }
+
+// $data['allProperties'] = $query->paginate(10)->withQueryString();
+// // =========== PROPERTY TAKERS LIST ================= */
+
+//     $propertyTakers = PropertyTaker::orderBy('id', 'desc')->paginate(10);
+
+//     /* ================= VIEW ================= */
+
+//     return view('property.allProperties', compact(
+//         'data',
+//         'properties',
+//         'totalPendingProperties',
+//         'totalPropertyTakers',
+//         'propertyTakers',
+//         'agents',
+//         'totalVerifiedProperties', // 👈 ADD
+//         'status'   // ✅ THIS LINE ADD
+//     ));
+// }
+
 public function allProperties(Request $request)
 {
-    
     /* ================= SESSION ================= */
     $role_id = Session::get('role_id');
     $user_id = Session::get('user_id');
 
-    /* ================= STATUS FILTER (NEW ADD) ================= */
-    $status = $request->status ?? 'all';
+    /* ================= STATUS ================= */
+ $status = $request->get('status', 'all');
+
+if (!in_array($status, ['all', 'pending', 'verified'])) {
+    $status = 'all';
+}
 
     /* ================= COUNTS ================= */
-
     $properties = DB::table('properties')->count();
 
     $totalPendingProperties = DB::table('properties')
         ->where('is_active', 0)
         ->count();
 
-    $totalPropertyTakers = PropertyTaker::count();
-    $agents = User::all();
     $totalVerifiedProperties = DB::table('properties')
-    ->where('is_active', 1)
-    ->count();
+        ->where('is_active', 1)
+        ->count();
 
-    /* ================= PROPERTIES LIST ================= */
-$query = DB::table('properties')
-    ->leftJoin('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
-    ->leftJoin('property_category', 'properties.property_type_id', '=', 'property_category.pid')
-    ->select(
-        'properties.*',
-        'price_range.from_price',
-        'price_range.to_price',
-        'property_category.category_name'
-    );
+    
 
-/* ================= STATUS FILTER ================= */
-if ($request->status == 'pending') {
-    $query->where('properties.is_active', 0);
-}
+    /* ================= QUERY ================= */
+    $query = DB::table('properties')
+        ->leftJoin('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
+        ->leftJoin('property_category', 'properties.property_type_id', '=', 'property_category.pid')
+        ->select(
+            'properties.*',
+            'price_range.from_price',
+            'price_range.to_price',
+            'property_category.category_name'
+        );
 
-if ($request->status == 'verified') {
-    $query->where('properties.is_active', 1);
-}
+    /* ================= STATUS FILTER ================= */
+    if ($status == 'pending') {
+        $query->where('properties.is_active', 0);
+    }
 
-/* ================= SEARCH FILTER ================= */
-if ($request->search) {
-    $search = $request->search;
+    if ($status == 'verified') {
+        $query->where('properties.is_active', 1);
+    }
 
-    $query->where(function ($q) use ($search) {
-        $q->where('properties.title', 'like', "%$search%")
-          ->orWhere('properties.builder_name', 'like', "%$search%")
-          ->orWhere('properties.address', 'like', "%$search%");
-    });
-}
+    /* ================= SEARCH ================= */
+    if ($request->search) {
+        $search = $request->search;
 
-/* ================= TYPE FILTER ================= */
-if ($request->type && $request->type != 'all') {
-    $query->where('property_category.category_name', $request->type);
-}
+        $query->where(function ($q) use ($search) {
+            $q->where('properties.title', 'like', "%$search%")
+              ->orWhere('properties.builder_name', 'like', "%$search%")
+              ->orWhere('properties.address', 'like', "%$search%");
+        });
+    }
 
-/* ================= ROLE FILTER ================= */
-if ($role_id == 3) {
-    $query->where('properties.creator_id', $user_id);
-}
+    /* ================= TYPE FILTER ================= */
+    if ($request->type && $request->type != 'all') {
+        $query->where('property_category.category_name', $request->type);
+    }
 
-$data['allProperties'] = $query->paginate(10)->withQueryString();
-// =========== PROPERTY TAKERS LIST ================= */
+    /* ================= ROLE FILTER ================= */
+    if ($role_id == 3) {
+        $query->where('properties.creator_id', $user_id);
+    }
 
-    $propertyTakers = PropertyTaker::orderBy('id', 'desc')->paginate(10);
+   $data['allProperties'] = $query->paginate(10);
 
-    /* ================= VIEW ================= */
+    /* ================= PROPERTY TAKERS ================= */
+   
 
+    /* ================= RETURN VIEW ================= */
     return view('property.allProperties', compact(
         'data',
         'properties',
         'totalPendingProperties',
-        'totalPropertyTakers',
-        'propertyTakers',
-        'agents',
-        'totalVerifiedProperties', // 👈 ADD
-        'status'   // ✅ THIS LINE ADD
+       
+        
+        
+        'totalVerifiedProperties',
+        'status'
     ));
 }
+
 
     public function pendingProperties()
     {

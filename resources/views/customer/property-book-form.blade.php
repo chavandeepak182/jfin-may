@@ -304,7 +304,7 @@
                             maxlength="10"
                             pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
                             style="text-transform: uppercase;"
-                            title="Enter valid PAN (Example: ABCDE1234F)" readonly>
+                            title="Enter valid PAN (Example: ABCDE1234F)">
     </div>
                 </div>
 
