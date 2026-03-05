@@ -43,7 +43,10 @@
                 </ol>
             </nav>
             <div class="hstack gap-3">
-                <button class="btn btn-light border btn-icon-text"><i class="bi bi-x"></i> <span class="text">Cancel</span></button>
+                <button type="button" class="btn btn-light border btn-icon-text"
+                onclick="window.location.href='/partner/allProperties'">
+                    <i class="bi bi-x"></i> <span class="text">Cancel</span>
+                </button>
                 <!-- <button type="submit" class="btn btn-primary btn-icon-text"><i class="bi bi-save"></i> <span class="text">Update</span></button> -->
                 <input type="submit" class="btn btn-primary btn-icon-text" value="Update">
             </div>

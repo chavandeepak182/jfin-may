@@ -26,6 +26,8 @@ use App\Services\CreditScoreService;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cookie;
 use Carbon\Carbon;
+use App\Models\States;   // ✅ add
+use App\Models\Cities;    // ✅ add
 use Illuminate\Validation\Rule;
 
 
@@ -342,10 +344,31 @@ public function loanlist()
 
         $applyingUser = User::find($loan->user_id);
         $loanCategories = LoanCategory::all();
+        // ✅ NEW
+          $states = States::all();
 
-        // Pass all data to the view
-        return view('admin.edit-loan', compact('loan', 'loanCategories', 'profile', 'documents', 'professional', 'education', 'agents', 'applyingUser'));
+$state = States::where('name', $profile->state)->first();
+
+$cities = [];
+
+if ($state) {
+    $cities = Cities::where('state_id', $state->id)->get();
+}
+
+return view('admin.edit-loan', compact(
+    'loan',
+    'loanCategories',
+    'profile',
+    'documents',
+    'professional',
+    'education',
+    'agents',
+    'applyingUser',
+    'states',
+    'cities'
+));
     }
+    
 
     // public function loanedit($id)
     // {

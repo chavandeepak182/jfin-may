@@ -42,6 +42,17 @@
             height: 100%;
             object-fit: cover;
         }
+        .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+#salaryFields,
+#selfFields{
+    display: contents;
+}
 
         .property-image .badge {
             position: absolute;
@@ -376,6 +387,73 @@
                         </select>
                     </div>
                 </div>
+                <h3 class="section-title">Professional Details</h3>
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>Profession Type</label>
+<select name="profession_type" id="professionType">
+<option value="">Select</option>
+<option value="salaried">Salaried</option>
+<option value="self_employed">Self Employed</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Company Name</label>
+<input type="text" name="company_name">
+</div>
+
+<div class="form-group">
+<label>Designation</label>
+<input type="text" name="designation">
+</div>
+
+<div class="form-group">
+<label>Industry</label>
+<input type="text" name="industry">
+</div>
+
+<div class="form-group">
+<label>Experience (Years)</label>
+<input type="number" name="experience_year">
+</div>
+
+<div class="form-group full-width">
+<label>Company Address</label>
+<input type="text" name="company_address">
+</div>
+
+<div id="salaryFields">
+
+<div class="form-group">
+<label>Net Salary</label>
+<input type="number" name="netsalary">
+</div>
+
+<div class="form-group">
+<label>Gross Salary</label>
+<input type="number" name="gross_salary">
+</div>
+
+</div>
+
+<div id="selfFields">
+
+<div class="form-group">
+<label>Business Establish Date</label>
+<input type="date" name="business_establish_date">
+</div>
+
+<div class="form-group">
+<label>Self Income</label>
+<input type="number" name="selfincome">
+</div>
+
+</div>
+
+</div>
                 <!-- Submit Section -->
         <div class="submit-section">
             <button type="submit" class="submit-btn">Submit Booking</button>
@@ -386,7 +464,37 @@
         
     </div>
 
+<script>
 
+document.addEventListener("DOMContentLoaded", function(){
+
+let profession = document.getElementById("professionType");
+
+let salaryFields = document.getElementById("salaryFields");
+let selfFields = document.getElementById("selfFields");
+
+salaryFields.style.display = "none";
+selfFields.style.display = "none";
+
+profession.addEventListener("change", function(){
+
+let value = this.value;
+
+salaryFields.style.display = "none";
+selfFields.style.display = "none";
+
+if(value === "salaried"){
+salaryFields.style.display = "contents";
+}
+
+if(value === "self_employed"){
+selfFields.style.display = "contents";
+}
+
+});
+
+});
+</script>
 <!-- <h3>Property Booking Form</h3>
 
 <form method="POST" action="{{ route('customer.property.book.submit') }}">
