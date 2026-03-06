@@ -99,23 +99,41 @@
                                         <textarea class="form-control" id="residence_address" name="residence_address">{{ old('residence_address', $profile->residence_address ?? '') }}</textarea>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="city">City:</label>
-                                        <input type="text" class="form-control" id="city" name="city"
-                                        value="{{ old('city', $profile->cityRelation->city ?? '') }}">
+                           
+                               <div class="col-md-4">
+    <div class="form-group">
+        <label for="state">State:</label>
+        <select class="form-control" id="state" name="state">
+<option value="">Select State</option>
 
+@foreach($states as $state)
+<option value="{{ $state->id }}"
+{{ old('state', $profile->state ?? '') == $state->id ? 'selected' : '' }}>
+{{ $state->name }}
+</option>
+@endforeach
 
-                                    </div>
+</select>
+    </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="state">State:</label>
-                                       <input type="text" class="form-control" id="state" name="state"
-                                        value="{{ old('state', $profile->stateRelation->name ?? '') }}">
 
-                                    </div>
-                                </div>
+                                <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="city">City:</label>
+                                   <select class="form-control" id="city" name="city">
+                                        <option value="">Select City</option>
+
+                                        @foreach($cities as $city)
+                                        <option value="{{ $city->id }}"
+                                        {{ old('city', $profile->city ?? '') == $city->id ? 'selected' : '' }}>
+                                        {{ $city->city }}
+                                        </option>
+                                        @endforeach
+
+                                        </select>        
+ </div>
+                            </div>
+                            
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="pincode">Pincode:</label>
@@ -578,4 +596,60 @@ $(document).ready(function () {
             toggleSanctionLetterBox(this.value);
         });
     </script>
+<script>
+$(document).ready(function(){
+
+    function loadCities(state_id, selected_city = null){
+
+        if(state_id){
+
+            $.ajax({
+                url: "/get-cities/" + state_id,
+                type: "GET",
+                success: function(data){
+
+                    let cityDropdown = $('#city');
+                    cityDropdown.empty();
+
+                    cityDropdown.append('<option value="">Select City</option>');
+
+                    $.each(data, function(index, city){
+
+                        let selected = '';
+
+                        if(selected_city == city.id){
+                            selected = 'selected';
+                        }
+
+                        cityDropdown.append(
+                            '<option value="'+city.id+'" '+selected+'>'+city.city+'</option>'
+                        );
+
+                    });
+
+                }
+            });
+
+        }
+
+    }
+
+    // ✅ page load
+    let state_id = $('#state').val();
+    let selected_city = "{{ $profile->city }}";
+
+    loadCities(state_id, selected_city);
+
+    // ✅ state change
+    $('#state').on('change', function(){
+
+        let state_id = $(this).val();
+
+        loadCities(state_id);
+
+    });
+
+});
+</script>
+
 @endsection

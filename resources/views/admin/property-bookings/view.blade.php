@@ -431,6 +431,10 @@ border-radius:8px;
     font-weight:700;
     color:#065f46;
 }
+h2{
+    color:#000;
+}
+
 </style>
 
 @php
