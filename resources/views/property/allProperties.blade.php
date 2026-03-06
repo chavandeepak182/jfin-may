@@ -196,17 +196,25 @@ JFS | Add Property
                             <td>{{ $p->address }}</td>
                             <td>{{ $p->from_price }} to {{ $p->to_price }}</td>
                             <td>
-                                <a class="btn btn-primary btn-xs" href="{{ url('viewDetails/'.$p->properties_id) }}">
-                                    <i class="fa fa-eye"></i>
-                                </a>
-                                <a class="btn btn-primary btn-xs" href="{{ url('editProperty/'.$p->properties_id) }}">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <button class="btn btn-danger btn-xs"
-                                    onclick="deletePropertie('{{ $p->properties_id }}')">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>
+    <div class="d-flex gap-2">
+
+        <a class="btn btn-info btn-sm"
+           href="{{ url('viewDetails/'.$p->properties_id) }}">
+            <i class="fa fa-eye"></i>
+        </a>
+
+        <a class="btn btn-warning btn-sm"
+           href="{{ url('editProperty/'.$p->properties_id) }}">
+            <i class="fa fa-edit"></i>
+        </a>
+
+        <button class="btn btn-danger btn-sm"
+            onclick="deletePropertie('{{ $p->properties_id }}')">
+            <i class="fa fa-trash"></i>
+        </button>
+
+    </div>
+</td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -311,6 +319,43 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 
 });
+</script>
+<script>
+function deletePropertie(id){
+
+    swal({
+        title: "Are you sure?",
+        text: "Delete this property?",
+        icon: "warning",
+        buttons: ["Cancel","Delete Property"],
+        dangerMode: true,
+    }).then((willDelete) => {
+
+        if (willDelete) {
+
+            $.ajax({
+                url: "{{ route('deletePropertie') }}",
+                type: "POST",
+                data: {
+                    propertie_id: id,   // ✅ important
+                    _token: "{{ csrf_token() }}"
+                },
+
+                success:function(data){
+
+                    swal(data.msg, "", "success")
+                    .then(()=>{
+                        location.reload();
+                    });
+
+                }
+
+            });
+
+        }
+
+    });
+}
 </script>
 
 @endsection

@@ -499,6 +499,17 @@ $request->validate([
     'co_designation'  => 'nullable|string|max:255',
     'co_gender'       => 'nullable|in:male,female,other',
     'co_marital_status' => 'nullable|in:single,married,divorced,widowed',
+    // professional
+    'profession_type' => 'nullable|string|max:100',
+    'company_name' => 'nullable|string|max:255',
+    'experience_year' => 'nullable|numeric',
+    'company_address' => 'nullable|string|max:500',
+    'industry' => 'nullable|string|max:255',
+    'designation' => 'nullable|string|max:255',
+    'netsalary' => 'nullable|numeric',
+    'gross_salary' => 'nullable|numeric',
+    'business_establish_date' => 'nullable|date',
+    'selfincome' => 'nullable|numeric',
 ]);
     DB::transaction(function () use ($request) {
 
@@ -533,7 +544,26 @@ $request->validate([
             'property_booking_id' => $booking->id,
             'property_id' => $request->property_id
         ]);
-    });
+        DB::table('professional_details')->insert([
+
+        'user_id' => $user->id,
+        'loan_id' => null,
+
+        'profession_type' => $request->profession_type,
+        'company_name' => $request->company_name,
+        'experience_year' => $request->experience_year,
+        'company_address' => $request->company_address,
+        'industry' => $request->industry,
+        'designation' => $request->designation,
+        'netsalary' => $request->netsalary,
+        'gross_salary' => $request->gross_salary,
+        'business_establish_date' => $request->business_establish_date,
+        'selfincome' => $request->selfincome,
+
+        'created_at' => now(),
+        'updated_at' => now()
+        ]);
+            });
 
     return redirect()
         ->route('customer.bookings')

@@ -71,7 +71,7 @@ public function insertProperty(Request $request)
         $p->baths = $request->baths;
         $p->balconies = $request->balconies;
         $p->parking = $request->parking;
-        $p->city = $request->city ?? y;
+        $p->city = $request->city ?? '';
         $p->email = $request->email_id;
         $p->select_bhk = $request->select_bhk;
         $p->s_price = $request->s_price;
@@ -99,26 +99,42 @@ public function insertProperty(Request $request)
 
 
         // Save the property record
-        $p->save();
+$p->save();
 
-        // Save multiple images in the `property_images` table
-        if ($request->hasFile('property_images')) {
-            foreach ($request->file('property_images') as $property_image) {
-                $image_name = substr(str_shuffle($permitted_chars), 0, 8) . time() . '.' . $property_image->extension();
-                $image_path = "property_photos/" . $image_name;
-                $property_image->move(public_path('property_photos'), $image_name); // ✅ Fixed move path
+if ($request->hasFile('property_images')) {
 
-                // Insert into `property_images` table
-                DB::table('property_images')->insert([
-                    'properties_id' => $p->properties_id,
-                    'image_url' => $image_path,
-                    'is_featured' => 0, // Default to non-featured
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
+    $images = $request->file('property_images');
+
+    foreach ($images as $key => $image) {
+
+        $image_name = uniqid().'_'.$image->getClientOriginalName();
+
+        $destination = public_path('property_photos');
+
+        if (!file_exists($destination)) {
+            mkdir($destination, 0755, true);
         }
 
+        $image->move($destination, $image_name);
+
+        $path = 'property_photos/'.$image_name;
+
+        // first image as main property image
+        if ($key == 0) {
+            DB::table('properties')
+                ->where('properties_id',$p->properties_id)
+                ->update(['image'=>$path]);
+        }
+
+        DB::table('property_images')->insert([
+            'properties_id' => $p->properties_id,
+            'image_url' => $path,
+            'is_featured' => 0,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+    }
+}
         // Commit transaction if successful
         DB::commit();
         
@@ -126,7 +142,7 @@ public function insertProperty(Request $request)
         
 }catch (\Exception $e) {
     DB::rollback();
-    return response($e->getMessage(), 500);
+    dd($e->getMessage());
 }
 }
 
@@ -563,7 +579,7 @@ if (!in_array($status, ['all', 'pending', 'verified'])) {
 
           
             if($propertie){
-                return response()->json(['status'=>1,'msg'=>'Propertie deleted successfully !']);
+                return response()->json(['status'=>1,'msg'=>'Property deleted successfully !']);
             }
         }catch (\Exception $e) {
             DB::rollback();            
