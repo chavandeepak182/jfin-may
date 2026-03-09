@@ -147,7 +147,7 @@
 
 {{-- ASSIGNED --}}
 <div class="col-md-3">
-    <label>Assigned Agent *</label>
+    <label>Assigned Employee *</label>
     <select name="assigned_to" class="form-control" required>
         @foreach($agents as $agent)
             <option value="{{ $agent->id }}" {{ old('assigned_to')==$agent->id?'selected':'' }}>

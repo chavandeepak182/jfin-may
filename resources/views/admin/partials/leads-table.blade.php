@@ -16,7 +16,71 @@
             @forelse($leads as $index => $lead)
                 <tr>
                     <td>{{ $leads->firstItem() + $index }}</td>
-                    <td>{{ $lead->name }}</td>
+                    <!-- <td>{{ $lead->name }}</td> -->
+                     <td>
+        <a href="#" class="lead-name" data-bs-toggle="modal" data-bs-target="#leadModal{{ $lead->id }}">
+            {{ $lead->name }}
+        </a>
+
+        <!-- Modal -->
+        <div class="modal fade" id="leadModal{{ $lead->id }}" tabindex="-1" aria-labelledby="leadModalLabel{{ $lead->id }}" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="leadModalLabel{{ $lead->id }}">Lead Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Full Name</th>
+                        <td>{{ $lead->name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>{{ $lead->email }}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone</th>
+                        <td>{{ $lead->phone }}</td>
+                    </tr>
+                    <tr>
+                        <th>Lead Source</th>
+                        <td>{{ $lead->lead_source }}</td>
+                    </tr>
+                    <tr>
+                        <th>Interested In</th>
+                        <td>{{ $lead->interested_in ?? 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Budget</th>
+                        <td>{{ $lead->budget ?? 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Lead Status</th>
+                        <td>{{ $lead->lead_status ?? 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Assigned Employee</th>
+                        <td>{{ $lead->agent->name ?? 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Notes</th>
+                        <td>{{ $lead->notes ?? 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Follow Up Date</th>
+                        <td>{{ \Carbon\Carbon::parse($lead->follow_up_date)->format('d M Y') }}</td>
+                    </tr>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </td>
                     <td>{{ $lead->email }}</td>
                     <td>{{ $lead->phone }}</td>
                     <td>{{ $lead->lead_source }}</td>
