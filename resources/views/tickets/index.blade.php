@@ -131,7 +131,7 @@
                     @if(auth()->user()->role_id == config('constants.roles.admin'))
                         <th>Customer</th>
                         <th>Loan Category</th>
-                        <th>Assigned Agent</th>
+                        <th>Assigned Employee</th>
                     @endif
 
                     <th>Subject</th>

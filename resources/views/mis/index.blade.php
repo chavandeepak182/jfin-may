@@ -570,29 +570,54 @@ $('#addMISRecord').on('submit', function (e) {
 });
 
 function deleteRecord(id) {
-    swal({
+
+    Swal.fire({
         title: "Are you sure?",
         text: "Once deleted, this record cannot be recovered!",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    }).then((willDelete) => {
-        if (willDelete) {
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
             $.ajax({
                 url: "{{ route('mis.delete') }}",
-                method: "POST",
-                data: { _token: "{{ csrf_token() }}", id: id },
-                success: function (data) {
-                    swal("Deleted", data.message, "success").then(() => location.reload());
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id
                 },
+
+                success: function (data) {
+
+                    Swal.fire(
+                        "Deleted!",
+                        data.message,
+                        "success"
+                    ).then(() => {
+                        location.reload();
+                    });
+
+                },
+
                 error: function () {
-                    swal("Error", "Unable to delete the record. Try again later.", "error");
+
+                    Swal.fire(
+                        "Error!",
+                        "Unable to delete the record.",
+                        "error"
+                    );
+
                 }
             });
+
         }
+
     });
 }
-
 $('#exportExcel').on('click', function() {
     window.location.href = '{{ route('mis.exportExcel') }}';
 });

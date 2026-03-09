@@ -13,7 +13,7 @@
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Visit Date</th>
-                    <th>Assign To CP</th>
+                    <th>Assign To Employee</th>
                     <th>Created At</th>
                 </tr>
             </thead>
