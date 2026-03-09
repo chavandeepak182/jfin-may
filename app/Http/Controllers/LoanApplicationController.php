@@ -1944,7 +1944,12 @@ public function ajaxPendingLoans(Request $request)
         ->paginate(10)
         ->appends(['search' => $search]);
 
-    $agents = DB::table('users')->where('role_id', 2)->get();
+    // $agents = DB::table('users')->where('role_id', 2)->get();
+    $agents = DB::table('users')
+    ->where('role_id', 2)
+    ->where('is_email_verify', 1)
+    ->whereNull('deleted_at')
+    ->get();
 
     return view('partials.pending-loans', compact('pendingLoans', 'agents'));
 }
