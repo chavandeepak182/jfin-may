@@ -658,6 +658,8 @@ Route::get('/get-user-by-id', [UsersController::class, 'getUserById'])
     Route::get('/admin/load-list-by-type', 
     [App\Http\Controllers\UsersController::class, 'loadListByType']
 )->name('load.list.by.type');
+Route::post('/admin/update-employee-status', [UsersController::class,'updateEmployeeStatus'])
+    ->name('admin.update.employee.status');
 
 
 
