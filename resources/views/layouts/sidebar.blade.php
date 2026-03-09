@@ -43,11 +43,12 @@
 <aside class="sidebar">
 
     <div class="sidebar-header">
-        <div class="logo">
-            <i class="fas fa-shield-dollar"></i>
-        </div>
-        <h2>JFinserv Admin Panel</h2>
+    <div class="logo">
+        <img src="{{ asset('theme/dhara-jfin/img/logo.jpg') }}" alt="JFinserv Logo" style="    height: 31px;
+    margin-left: 147px;">
     </div>
+    <!-- <h2>JFinserv Admin Panel</h2> -->
+</div>
 
     <nav class="sidebar-nav">
 
