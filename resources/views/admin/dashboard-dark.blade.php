@@ -497,7 +497,7 @@ body {
 .logo {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    /* background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); */
     border-radius: 8px;
     display: flex;
     align-items: center;
