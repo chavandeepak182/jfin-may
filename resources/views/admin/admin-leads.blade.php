@@ -1380,7 +1380,7 @@ document.addEventListener('DOMContentLoaded', function () {
     attachValidator('name', 'text', 'Only letters allowed');
     attachValidator('branch_name', 'text', 'Only letters allowed');
     attachValidator('bm_name', 'text', 'Only letters allowed');
-    attachValidator('city', 'text', 'Only letters allowed');
+    // attachValidator('city', 'text', 'Only letters allowed');
 
     attachValidator('contact', 'number', 'Only numbers allowed');
 

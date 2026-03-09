@@ -155,7 +155,7 @@ JFS | Add Property
                     <option value="all">All Types</option>
                     <option value="Residential" {{ request('type')=='Residential'?'selected':'' }}>Residential</option>
                     <option value="Commercial" {{ request('type')=='Commercial'?'selected':'' }}>Commercial</option>
-                    <option value="Industrial" {{ request('type')=='Industrial'?'selected':'' }}>Industrial</option>
+                    <option value="rent" {{ request('type')=='rent'?'selected':'' }}>Rent</option>
                 </select>
             </div>
 
