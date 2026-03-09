@@ -356,10 +356,9 @@ body.modal-open {
                                 </tr>
                             </thead>
                             <tbody id="user_table_body">
-                                
-                               @foreach ($users as $user)
-<tr>
-    <td>{{ $loop->iteration + ($users->currentPage() - 1) * $users->perPage() }}</td>
+                                @foreach ($users as $user)
+                                    <tr>
+                                        <td>{{ $user->id }}</td>
                                         <td><a href="javascript:void(0);" 
                                         class="user-link" 
                                         data-name="{{ $user->name }}" 
@@ -673,10 +672,9 @@ $(document).off('submit', '#addUser').on('submit', '#addUser', function (e) {
                         url: "{{ route('load.list.by.type') }}",
                         type: "GET",
                         data: { type: currentType },
-success: function (res) {
-    $('#user_table_body').html(res.html);
-    $('.dataTables_paginate nav').html(res.pagination); // refresh pagination
-}
+                        success: function (res) {
+                            $('#user_table_body').html(res.html);
+                        }
                     });
                 });
             } else {
@@ -766,18 +764,18 @@ $(document).on('click', '.delete-user', function () {
 });
 </script>
 <script>
-
-
-   $(document).on('click', '.load-list', function () {
+$(document).on('click', '.load-list', function () {
 
     $('.overview-link').removeClass('active');
     $(this).addClass('active');
 
     let type = $(this).data('type');
-    currentType = type;
+    currentType = type; // 🔥 STORE CURRENT TYPE
 
+    // Update hidden input
     $('#user_type').val(type);
 
+    // Change Add button + modal title
     if (type === 'customer') {
         $('#openAddModal').text('Add Customer');
         $('#exampleModalLabel').text('Add New Customer');
@@ -791,23 +789,15 @@ $(document).on('click', '.delete-user', function () {
         $('#exampleModalLabel').text('Add New Channel Partner');
     }
 
+    // Load table data
     $.ajax({
         url: "{{ route('load.list.by.type') }}",
         type: "GET",
-        data: { 
-            type: type,
-            page: 1 // 🔥 reset page when switching list
-        },
+        data: { type: type },
         success: function (res) {
-
             $('#user_table_body').html(res.html);
-
-            // 🔥 THIS FIXES THE ISSUE
-            $('.dataTables_paginate nav').html(res.pagination);
-
         }
     });
-
 });
 </script>
 
@@ -841,44 +831,6 @@ $(document).on('submit', '#addUser', function (e) {
         }
     }
 });
-</script>
-<script>
-    function updateStatus(userId, status)
-{
-    $.ajax({
-        url: "{{ route('admin.update.employee.status') }}",
-        type: "POST",
-        data: {
-            _token: "{{ csrf_token() }}",
-            user_id: userId,
-            status: status
-        },
-        success: function(res){
-
-            swal("Success", "Employee status changed successfully", "success")
-            .then(() => {
-
-                // reload employee list
-                $.ajax({
-                    url: "{{ route('load.list.by.type') }}",
-                    type: "GET",
-                    data: {
-                        type: 'agent'
-                    },
-                    success: function(res){
-                        $('#user_table_body').html(res.html);
-                        $('.dataTables_paginate nav').html(res.pagination);
-                    }
-                });
-
-            });
-
-        },
-        error: function(){
-            swal("Error", "Status update failed", "error");
-        }
-    });
-}
 </script>
 <script>
     $(document).on('click', '.reset-password', function () {
@@ -1002,7 +954,7 @@ function togglePassword() {
 $(document).on('click', '.pagination a', function (e) {
     e.preventDefault();
 
-    let page = new URL($(this).attr('href')).searchParams.get('page');
+    let page = $(this).attr('href').split('page=')[1];
 
     $.ajax({
         url: "{{ route('load.list.by.type') }}",

@@ -768,7 +768,7 @@ public function resetPassword(Request $request)
     // }
 
   
-public function loadListByType(Request $request)
+  public function loadListByType(Request $request)
 {
     /* ================= ROLE MAP ================= */
     $roleMap = [
@@ -788,6 +788,7 @@ public function loadListByType(Request $request)
         ->where('users.role_id', $roleId)
         ->whereNull('users.deleted_at')
 
+        // 🔍 SEARCH (NO LOGIC CHANGE)
         ->when($search, function ($q) use ($search) {
             $q->where(function ($qq) use ($search) {
                 $qq->where('users.id', 'like', "%{$search}%")
@@ -797,6 +798,7 @@ public function loadListByType(Request $request)
             });
         })
 
+        /* 🟢 ACTIVE / 🔴 INACTIVE FILTER */
         ->when($status !== null && $status !== '', function ($q) use ($status) {
             if ($status === 'active') {
                 $q->where('users.otp_verify', 1);
@@ -813,7 +815,7 @@ public function loadListByType(Request $request)
         ->orderBy('users.created_at', 'desc')
         ->paginate(10);
 
-    /* ================= HTML BUILD ================= */
+    /* ================= HTML BUILD (UNCHANGED) ================= */
     $html = '';
 
     if ($users->count() === 0) {
@@ -825,13 +827,10 @@ public function loadListByType(Request $request)
             </tr>';
     }
 
-    $srNo = $users->firstItem();
-
     foreach ($users as $user) {
-
         $html .= '
         <tr>
-           <td>'.$srNo++.'</td>
+            <td>'.$user->id.'</td>
             <td>'.$user->name.'</td>
             <td>'.$user->email_id.'</td>
             <td>'.($user->mobile_no ?? '-').'</td>
@@ -841,50 +840,24 @@ public function loadListByType(Request $request)
                     ? '<span class="badge bg-success">Active</span>'
                     : '<span class="badge bg-danger">Inactive</span>').'
             </td>
-            <td>
+          <td>
+    <button class="btn btn-primary btn-xs edit-user"
+            data-id="'.$user->id.'">
+        <i class="fa fa-edit"></i>
+    </button>
 
-                <button class="btn btn-primary btn-xs edit-user"
-                        data-id="'.$user->id.'">
-                    <i class="fa fa-edit"></i>
-                </button>
+   
 
-                <button class="btn btn-warning btn-xs reset-password"
-                        data-id="'.$user->id.'">
-                    <i class="fa fa-key"></i>
-                </button>';
+    <button class="btn btn-danger btn-xs delete-user"
+            data-id="'.$user->id.'">
+        <i class="fa fa-trash"></i>
+    </button>
+     <button class="btn btn-warning btn-xs reset-password"
+            data-id="'.$user->id.'">
+        <i class="fa fa-key"></i>
+    </button
+</td>
 
-        /* Employee Status Change (Role = Agent) */
-        if ($roleId == 2) {
-
-            $html .= '
-
-                <label class="ms-2">
-                    <input type="radio"
-                           name="status_'.$user->id.'"
-                           value="1"
-                           '.($user->is_email_verify ? 'checked' : '').'
-                           onclick="updateStatus('.$user->id.',1)"> Active
-                </label>
-
-                <label>
-                    <input type="radio"
-                           name="status_'.$user->id.'"
-                           value="0"
-                           '.(!$user->is_email_verify ? 'checked' : '').'
-                           onclick="updateStatus('.$user->id.',0)"> Inactive
-                </label>';
-
-        } else {
-
-            $html .= '
-                <button class="btn btn-danger btn-xs delete-user"
-                        data-id="'.$user->id.'">
-                    <i class="fa fa-trash"></i>
-                </button>';
-        }
-
-        $html .= '
-            </td>
         </tr>';
     }
 
@@ -892,19 +865,6 @@ public function loadListByType(Request $request)
         'html'       => $html,
         'pagination' => (string) $users->links('pagination::bootstrap-4'),
         'total'      => $users->total()
-    ]);
-}
-public function updateEmployeeStatus(Request $request)
-{
-    $user = User::find($request->user_id);
-
-    if($user){
-        $user->is_email_verify = $request->status;
-        $user->save();
-    }
-
-    return response()->json([
-        'success' => true
     ]);
 }
 
