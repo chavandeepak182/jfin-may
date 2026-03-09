@@ -1,6 +1,24 @@
 @extends('layouts.header')
 
 @section('content')
+<style>
+    .form-group{
+margin-bottom:18px;
+}
+
+.card-body{
+border-radius:10px;
+}
+
+.form-control{
+height:40px;
+font-size:14px;
+}
+
+textarea.form-control{
+height:90px;
+}
+</style>
 <div class="card-header py-3">
     <div class="d-flex justify-content-between align-items-center">
         <!-- Breadcrumb -->
@@ -11,7 +29,7 @@
                 <li class="breadcrumb-item active" aria-current="page">Edit Details</li>
             </ol>
         </nav>
-        <a href="{{ route('leads.index') }}" class="btn btn-primary float-right rounded"><i class="fa fa-arrow-left"></i> Back</a>
+        <a href="{{ route('admin.listlead') }}" class="btn btn-primary float-right rounded"><i class="fa fa-arrow-left"></i> Back</a>
         <!-- Search Bar -->
         <!-- <div class="d-flex ms-auto">
             <input type="text" id="search" class="form-control" placeholder="Search..." onkeyup="searchLead()">
@@ -23,7 +41,7 @@
         @csrf
         @method('PUT')
 
-        <div class="form-row">
+        <div class="row">
             <div class="form-group col-md-3">
                 <label>Full Name *</label>
                 <input type="text" name="name" class="form-control" value="{{ old('name', $lead->name) }}" required>
