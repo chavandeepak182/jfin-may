@@ -1918,6 +1918,7 @@ public function ajaxPendingLoans(Request $request)
     $pendingLoans = DB::table('loans')
         ->leftJoin('users', 'loans.user_id', '=', 'users.id')
         ->leftJoin('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+
         ->where(function ($query) {
             $query->whereNull('loans.agent_id')
                 ->orWhere(function ($q) {
@@ -1926,7 +1927,6 @@ public function ajaxPendingLoans(Request $request)
                 });
         })
 
-        // 🔍 SAME SEARCH FIELDS
         ->when($search, function ($q) use ($search) {
             $q->where(function ($sub) use ($search) {
                 $sub->where('users.name', 'LIKE', "%{$search}%")
@@ -1940,18 +1940,23 @@ public function ajaxPendingLoans(Request $request)
             'users.name as user_name',
             'loan_category.category_name as category_name'
         )
+
         ->orderByDesc('loans.created_at')
         ->paginate(10)
         ->appends(['search' => $search]);
 
-    // $agents = DB::table('users')->where('role_id', 2)->get();
     $agents = DB::table('users')
-    ->where('role_id', 2)
-    ->where('is_email_verify', 1)
-    ->whereNull('deleted_at')
-    ->get();
+        ->where('role_id', 2)
+        ->where('is_email_verify', 1)
+        ->whereNull('deleted_at')
+        ->get();
 
-    return view('partials.pending-loans', compact('pendingLoans', 'agents'));
+    // 🔥 IMPORTANT FIX FOR AJAX PAGINATION
+    if ($request->ajax()) {
+        return view('partials.pending-loans', compact('pendingLoans', 'agents'))->render();
+    }
+
+    return view('admin.pending-loans', compact('pendingLoans', 'agents'));
 }
 
 
