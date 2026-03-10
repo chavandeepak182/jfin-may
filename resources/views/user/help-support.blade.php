@@ -34,13 +34,13 @@
             Find answers about loan applications, property bookings, or account settings.
         </p>
 
-        <div class="d-flex justify-content-center">
+        <!-- <div class="d-flex justify-content-center">
             <div class="input-group" style="max-width:500px;">
                 <input type="text" class="form-control"
                        placeholder="Ask a question...">
                 <button class="btn btn-primary px-4">Search</button>
             </div>
-        </div>
+        </div> -->
 
         <small class="text-muted d-block mt-3">
             <strong>Popular:</strong> Repayment · Booking · Profile

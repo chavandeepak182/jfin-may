@@ -198,7 +198,14 @@ body.modal-open {
   color: inherit;
   display: block;
 }
+.overview-icon i{
+    color: #fff;
+    font-size: 32px;
+}
 
+.teal{
+background: linear-gradient(135deg,#06b6d4,#0e7490);
+}
 .overview-link:hover,
 .overview-link:focus,
 .overview-link:active {
@@ -300,23 +307,51 @@ body.modal-open {
 </a>
 
 <!-- ================= ACTIVE USERS (OPTIONAL) ================= -->
-<a href="javascript:void(0)" class="overview-link">
+<a href="javascript:void(0)"
+   class="overview-link load-list"
+   data-type="active">
 
-  <div class="overview-card purple">
+<div class="overview-card teal">
 
-    <div class="overview-icon">
-      <i class="fas fa-circle"></i>
-    </div>
+<div class="overview-icon">
+<i class="fas fa-user-check"></i>
+</div>
 
-    <div class="overview-content">
-      <h3 style="font-size:28px;">Active Customer</h3>
-      <p style="font-size:20px;">10</p>
-      <span class="overview-status">Live Users</span>
-    </div>
+<div class="overview-content">
+<h3 style="font-size:28px;color:#fff">Active Customer</h3>
 
-  </div>
+<p style="font-size:20px;color:#fff">
+{{ $activeCustomers }}
+</p>
+
+<span class="overview-status" style="color:#fff">Active Loan Users</span>
+
+</div>
+</div>
 </a>
+<!-- ================= OUR CUSTOMERS ================= -->
+<!-- <a href="javascript:void(0)"
+   class="overview-link load-list"
+   data-type="our">
 
+<div class="overview-card blue">
+
+<div class="overview-icon">
+<i class="fas fa-user-check"></i>
+</div>
+
+<div class="overview-content">
+<h3 style="font-size:28px;">Our Customers</h3>
+
+<p style="font-size:20px;">
+{{ $ourCustomers }}
+</p>
+
+<span class="overview-status">Disbursed Loan Customers</span>
+
+</div>
+</div>
+</a> -->
 </div>
 
                 </div>
@@ -356,9 +391,10 @@ body.modal-open {
                                 </tr>
                             </thead>
                             <tbody id="user_table_body">
-                                @foreach ($users as $user)
-                                    <tr>
-                                        <td>{{ $user->id }}</td>
+                                
+                               @foreach ($users as $user)
+<tr>
+    <td>{{ $loop->iteration + ($users->currentPage() - 1) * $users->perPage() }}</td>
                                         <td><a href="javascript:void(0);" 
                                         class="user-link" 
                                         data-name="{{ $user->name }}" 
@@ -672,9 +708,10 @@ $(document).off('submit', '#addUser').on('submit', '#addUser', function (e) {
                         url: "{{ route('load.list.by.type') }}",
                         type: "GET",
                         data: { type: currentType },
-                        success: function (res) {
-                            $('#user_table_body').html(res.html);
-                        }
+success: function (res) {
+    $('#user_table_body').html(res.html);
+    $('.dataTables_paginate nav').html(res.pagination); // refresh pagination
+}
                     });
                 });
             } else {
@@ -764,18 +801,18 @@ $(document).on('click', '.delete-user', function () {
 });
 </script>
 <script>
-$(document).on('click', '.load-list', function () {
+
+
+   $(document).on('click', '.load-list', function () {
 
     $('.overview-link').removeClass('active');
     $(this).addClass('active');
 
     let type = $(this).data('type');
-    currentType = type; // 🔥 STORE CURRENT TYPE
+    currentType = type;
 
-    // Update hidden input
     $('#user_type').val(type);
 
-    // Change Add button + modal title
     if (type === 'customer') {
         $('#openAddModal').text('Add Customer');
         $('#exampleModalLabel').text('Add New Customer');
@@ -788,16 +825,28 @@ $(document).on('click', '.load-list', function () {
         $('#openAddModal').text('Add Channel Partner');
         $('#exampleModalLabel').text('Add New Channel Partner');
     }
+    else if (type === 'active') {
+    $('#openAddModal').text('Active Customers');
+    $('#exampleModalLabel').text('Active Customers');
+}
 
-    // Load table data
     $.ajax({
         url: "{{ route('load.list.by.type') }}",
         type: "GET",
-        data: { type: type },
+        data: { 
+            type: type,
+            page: 1 // 🔥 reset page when switching list
+        },
         success: function (res) {
+
             $('#user_table_body').html(res.html);
+
+            // 🔥 THIS FIXES THE ISSUE
+            $('.dataTables_paginate nav').html(res.pagination);
+
         }
     });
+
 });
 </script>
 
@@ -831,6 +880,44 @@ $(document).on('submit', '#addUser', function (e) {
         }
     }
 });
+</script>
+<script>
+    function updateStatus(userId, status)
+{
+    $.ajax({
+        url: "{{ route('admin.update.employee.status') }}",
+        type: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",
+            user_id: userId,
+            status: status
+        },
+        success: function(res){
+
+            swal("Success", "Employee status changed successfully", "success")
+            .then(() => {
+
+                // reload employee list
+                $.ajax({
+                    url: "{{ route('load.list.by.type') }}",
+                    type: "GET",
+                    data: {
+                        type: 'agent'
+                    },
+                    success: function(res){
+                        $('#user_table_body').html(res.html);
+                        $('.dataTables_paginate nav').html(res.pagination);
+                    }
+                });
+
+            });
+
+        },
+        error: function(){
+            swal("Error", "Status update failed", "error");
+        }
+    });
+}
 </script>
 <script>
     $(document).on('click', '.reset-password', function () {
@@ -954,7 +1041,7 @@ function togglePassword() {
 $(document).on('click', '.pagination a', function (e) {
     e.preventDefault();
 
-    let page = $(this).attr('href').split('page=')[1];
+    let page = new URL($(this).attr('href')).searchParams.get('page');
 
     $.ajax({
         url: "{{ route('load.list.by.type') }}",
