@@ -328,20 +328,12 @@
 
                                            <div class="col-md-4">
                                                 <div class="form-floating">
-                                                    <!-- <input type="text"
-                                                        class="form-control"
-                                                        id="phone"
-                                                        name="mobile_no"
-                                                        value="{{ old('mobile_no', $profile->mobile_no ?? $user->mobile_no) }}"
-                                                        placeholder="Phone"
-                                                        maxlength="10"
-                                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
-                                                        required> -->
+                                                  
                                                         <input type="text"
                                                             class="form-control"
                                                             id="phone"
                                                             name="mobile_no"
-                                                            value="{{ old('mobile_no', $profile->mobile_no ?? $user->mobile_no ?? '') }}"
+                                                            value="{{ old('mobile_no', optional($profile)->mobile_no) }}"
                                                             placeholder="Phone"
                                                             maxlength="10"
                                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
