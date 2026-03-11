@@ -659,7 +659,10 @@ Route::get('/get-user-by-id', [UsersController::class, 'getUserById'])
     [App\Http\Controllers\UsersController::class, 'loadListByType']
 )->name('load.list.by.type');
 Route::post('/admin/update-employee-status', [UsersController::class,'updateEmployeeStatus'])
-    ->name('admin.update.employee.status');
+    ->name('admin.update.employee.status')
+    ;
+    Route::post('/update-property-status',[PropertyController::class,'updatePropertyStatus'])
+    ->name('updatePropertyStatus');
 
 
 
