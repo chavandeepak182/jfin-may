@@ -24,6 +24,21 @@ input[type="password"]::placeholder {
 .password-wrapper {
     position: relative;
 }
+.teal{
+background: linear-gradient(135deg,#06b6d4,#0e7490);
+color:#fff;
+}
+
+.teal .overview-icon i{
+color:#fff;
+font-size:32px;
+}
+
+.teal .overview-content h3,
+.teal .overview-content p,
+.teal .overview-content span{
+color:#fff;
+}
 
 .password-wrapper input {
     padding-right: 40px;
@@ -198,14 +213,7 @@ body.modal-open {
   color: inherit;
   display: block;
 }
-.overview-icon i{
-    color: #fff;
-    font-size: 32px;
-}
 
-.teal{
-background: linear-gradient(135deg,#06b6d4,#0e7490);
-}
 .overview-link:hover,
 .overview-link:focus,
 .overview-link:active {
@@ -307,6 +315,28 @@ background: linear-gradient(135deg,#06b6d4,#0e7490);
 </a>
 
 <!-- ================= ACTIVE USERS (OPTIONAL) ================= -->
+<!-- <a href="javascript:void(0)"
+   class="overview-link load-list"
+   data-type="active">
+
+<div class="overview-card purple">
+
+<div class="overview-icon">
+<i class="fas fa-circle"></i>
+</div>
+
+<div class="overview-content">
+<h3 style="font-size:28px;">Active Customer</h3>
+
+<p style="font-size:20px;">
+{{ $activeCustomers }}
+</p>
+
+<span class="overview-status">Active Loan Users</span>
+
+</div>
+</div>
+</a> -->
 <a href="javascript:void(0)"
    class="overview-link load-list"
    data-type="active">
@@ -318,17 +348,18 @@ background: linear-gradient(135deg,#06b6d4,#0e7490);
 </div>
 
 <div class="overview-content">
-<h3 style="font-size:28px;color:#fff">Active Customer</h3>
+<h3 style="font-size:28px;">Active Customer</h3>
 
-<p style="font-size:20px;color:#fff">
+<p style="font-size:20px;">
 {{ $activeCustomers }}
 </p>
 
-<span class="overview-status" style="color:#fff">Active Loan Users</span>
+<span class="overview-status">Active Loan Users</span>
 
 </div>
 </div>
 </a>
+
 <!-- ================= OUR CUSTOMERS ================= -->
 <!-- <a href="javascript:void(0)"
    class="overview-link load-list"
@@ -352,6 +383,7 @@ background: linear-gradient(135deg,#06b6d4,#0e7490);
 </div>
 </div>
 </a> -->
+
 </div>
 
                 </div>
@@ -1081,6 +1113,39 @@ $(document).on('keyup', '#userSearch', function () {
     }, 300); // debounce
 });
 </script>
+<script>
 
+function updateStatus(userId, status)
+{
+    $.ajax({
+        url: "{{ route('admin.update.employee.status') }}",
+        type: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",
+            user_id: userId,
+            status: status
+        },
+        success: function(res){
+
+            let label = "User";
+
+            if(currentType === 'customer'){
+                label = "Customer";
+            }
+            else if(currentType === 'agent'){
+                label = "Employee";
+            }
+            else if(currentType === 'cp'){
+                label = "Channel Partner";
+            }
+
+            swal("Success", label + " status updated successfully", "success")
+            .then(() => location.reload());
+
+        }
+    });
+}
+
+</script>
 
 @endsection

@@ -942,7 +942,6 @@ public function loadListByType(Request $request)
     ];
 
     $type = $request->type;
-    $hideAction = ($type === 'our');
     $roleId = $roleMap[$type] ?? 1;
 
     /* ================= FILTER INPUTS ================= */
@@ -1057,33 +1056,17 @@ public function loadListByType(Request $request)
 
         if($type !== 'active'){
 
-         if(!$hideAction){
+            $html .= '
 
-$html .= '
-<td>
+                <button class="btn btn-primary btn-xs edit-user"
+                        data-id="'.$user->id.'">
+                    <i class="fa fa-edit"></i>
+                </button>
 
-<button class="btn btn-primary btn-xs edit-user"
-data-id="'.$user->id.'">
-<i class="fa fa-edit"></i>
-</button>
-
-<button class="btn btn-warning btn-xs reset-password"
-data-id="'.$user->id.'">
-<i class="fa fa-key"></i>
-</button>
-
-<button class="btn btn-danger btn-xs delete-user"
-data-id="'.$user->id.'">
-<i class="fa fa-trash"></i>
-</button>
-
-</td>';
-
-}else{
-
-$html .= '<td>-</td>';
-
-}
+                <button class="btn btn-warning btn-xs reset-password"
+                        data-id="'.$user->id.'">
+                    <i class="fa fa-key"></i>
+                </button>';
         }
 
         /* ================= EMPLOYEE STATUS ================= */
@@ -1113,10 +1096,23 @@ $html .= '<td>-</td>';
             if($type !== 'active'){
 
                 $html .= '
-                    <button class="btn btn-danger btn-xs delete-user"
-                            data-id="'.$user->id.'">
-                        <i class="fa fa-trash"></i>
-                    </button>';
+                    <label>
+<input type="radio"
+       name="status_'.$user->id.'"
+       value="1"
+       '.($user->is_email_verify ? 'checked' : '').'
+       onclick="updateStatus('.$user->id.',1)">
+Active
+</label>
+
+<label>
+<input type="radio"
+       name="status_'.$user->id.'"
+       value="0"
+       '.(!$user->is_email_verify ? 'checked' : '').'
+       onclick="updateStatus('.$user->id.',0)">
+Inactive
+</label>';
             }
         }
 
@@ -1144,6 +1140,158 @@ public function updateEmployeeStatus(Request $request)
         'success' => true
     ]);
 }
+
+
+// public function loadListByType(Request $request)
+// {
+    
+//     /* ================= ROLE MAP ================= */
+//    $roleMap = [
+//     'customer' => 1,
+//     'agent'    => 2,
+//     'cp'       => 3,
+// ];
+//    $type = $request->type;
+// $roleId = $roleMap[$type] ?? 1;
+
+//     /* ================= FILTER INPUTS ================= */
+//     $search = $request->search;
+//     $status = $request->status;
+
+    
+//     /* ================= QUERY ================= */
+//    /* ================= QUERY ================= */
+
+// if ($type === 'active') {
+
+//     $users = User::leftJoin('profile', 'users.id', '=', 'profile.user_id')
+//         ->whereIn('users.id', function ($q) {
+//             $q->select('user_id')
+//               ->from('loans')
+//               ->where('status', '!=', 'disbursed');
+//         })
+//         ->whereNull('users.deleted_at')
+//         ->select(
+//             'users.*',
+//             'profile.mobile_no',
+//             'profile.pan_number'
+//         )
+//         ->orderBy('users.created_at', 'desc')
+//         ->paginate(10);
+
+// } else {
+
+//     $users = User::leftJoin('profile', 'users.id', '=', 'profile.user_id')
+//         ->where('users.role_id', $roleId)
+//         ->whereNull('users.deleted_at')
+
+//         ->when($search, function ($q) use ($search) {
+//             $q->where(function ($qq) use ($search) {
+//                 $qq->where('users.id', 'like', "%{$search}%")
+//                    ->orWhere('users.name', 'like', "%{$search}%")
+//                    ->orWhere('users.email_id', 'like', "%{$search}%")
+//                    ->orWhere('profile.mobile_no', 'like', "%{$search}%");
+//             });
+//         })
+
+//         ->when($status !== null && $status !== '', function ($q) use ($status) {
+//             if ($status === 'active') {
+//                 $q->where('users.otp_verify', 1);
+//             } elseif ($status === 'inactive') {
+//                 $q->where('users.otp_verify', 0);
+//             }
+//         })
+
+//         ->select(
+//             'users.*',
+//             'profile.mobile_no',
+//             'profile.pan_number'
+//         )
+//         ->orderBy('users.created_at', 'desc')
+//         ->paginate(10);
+
+// }
+//     /* ================= HTML BUILD ================= */
+//     $html = '';
+
+//     if ($users->count() === 0) {
+//         $html .= '
+//             <tr>
+//                 <td colspan="7" class="text-center text-muted">
+//                     No records found
+//                 </td>
+//             </tr>';
+//     }
+
+//     $srNo = $users->firstItem();
+
+//     foreach ($users as $user) {
+
+//         $html .= '
+//         <tr>
+//            <td>'.$srNo++.'</td>
+//             <td>'.$user->name.'</td>
+//             <td>'.$user->email_id.'</td>
+//             <td>'.($user->mobile_no ?? '-').'</td>
+//             <td>'.($user->pan_number ?? '-').'</td>
+//             <td>
+//                 '.($user->is_email_verify
+//                     ? '<span class="badge bg-success">Active</span>'
+//                     : '<span class="badge bg-danger">Inactive</span>').'
+//             </td>
+//             <td>
+
+//                 <button class="btn btn-primary btn-xs edit-user"
+//                         data-id="'.$user->id.'">
+//                     <i class="fa fa-edit"></i>
+//                 </button>
+
+//                 <button class="btn btn-warning btn-xs reset-password"
+//                         data-id="'.$user->id.'">
+//                     <i class="fa fa-key"></i>
+//                 </button>';
+
+//         /* Employee Status Change (Role = Agent) */
+//         if ($roleId == 2) {
+
+//             $html .= '
+
+//                 <label class="ms-2">
+//                     <input type="radio"
+//                            name="status_'.$user->id.'"
+//                            value="1"
+//                            '.($user->is_email_verify ? 'checked' : '').'
+//                            onclick="updateStatus('.$user->id.',1)"> Active
+//                 </label>
+
+//                 <label>
+//                     <input type="radio"
+//                            name="status_'.$user->id.'"
+//                            value="0"
+//                            '.(!$user->is_email_verify ? 'checked' : '').'
+//                            onclick="updateStatus('.$user->id.',0)"> Inactive
+//                 </label>';
+
+//         } else {
+
+//             $html .= '
+//                 <button class="btn btn-danger btn-xs delete-user"
+//                         data-id="'.$user->id.'">
+//                     <i class="fa fa-trash"></i>
+//                 </button>';
+//         }
+
+//         $html .= '
+//             </td>
+//         </tr>';
+//     }
+
+//     return response()->json([
+//         'html'       => $html,
+//         'pagination' => (string) $users->links('pagination::bootstrap-4'),
+//         'total'      => $users->total()
+//     ]);
+// }
 
     public function registerUser(Request $request)
     {

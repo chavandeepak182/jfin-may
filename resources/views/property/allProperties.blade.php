@@ -207,11 +207,21 @@ JFS | Add Property
            href="{{ url('editProperty/'.$p->properties_id) }}">
             <i class="fa fa-edit"></i>
         </a>
+@if($p->is_active == 1)
 
-        <button class="btn btn-danger btn-sm"
-            onclick="deletePropertie('{{ $p->properties_id }}')">
-            <i class="fa fa-trash"></i>
-        </button>
+<button class="btn btn-success btn-sm"
+        onclick="updatePropertyStatus('{{ $p->properties_id }}',0)">
+    Active
+</button>
+
+@else
+
+<button class="btn btn-secondary btn-sm"
+        onclick="updatePropertyStatus('{{ $p->properties_id }}',1)">
+    Inactive
+</button>
+
+@endif
 
     </div>
 </td>
@@ -355,6 +365,46 @@ function deletePropertie(id){
         }
 
     });
+}
+function updatePropertyStatus(id,status){
+
+    let msg = status == 1 ? "Activate this property?" : "Mark property as inactive?";
+
+    swal({
+        title: "Are you sure?",
+        text: msg,
+        icon: "warning",
+        buttons: ["Cancel","Yes"],
+    }).then((confirm) => {
+
+        if(confirm){
+
+            $.ajax({
+
+                url: "{{ route('updatePropertyStatus') }}",
+                type: "POST",
+
+                data:{
+                    property_id:id,
+                    status:status,
+                    _token:"{{ csrf_token() }}"
+                },
+
+                success:function(res){
+
+                    swal(res.msg,"","success")
+                    .then(()=>{
+                        location.reload();
+                    });
+
+                }
+
+            });
+
+        }
+
+    });
+
 }
 </script>
 
