@@ -237,9 +237,10 @@
         <div class="container-fluid nav-bar px-0 px-lg-4 py-lg-0">
             <div class="container-fluid">
                 <nav class="navbar navbar-expand-lg navbar-light">
-                    <a href="{{ asset('') }}" class="navbar-brand p-0">
-                        <img src="{{ asset('theme') }}/frontend/img/logo-white.svg" alt="Logo" class="w-100">
-                    </a>
+                   <a href="{{ asset('') }}" class="navbar-brand p-0">
+    <img src="{{ asset('theme/frontend/img/logo_header.png') }}" alt="Logo" class="w-100" style="    height: 43px;
+    width: 249px;">
+</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarCollapse">
                         <span class="fa fa-bars"></span>
