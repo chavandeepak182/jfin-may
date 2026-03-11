@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 <div class="about-content-button" style="margin-top: 2rem;">
-                            <a href="{{ url('/dhara-contact') }}" class="btn btn-primary-hero" style="padding:1rem 3rem; font-size:1.5rem;">Enquire Now</a>
+                            <a href="{{ url('/contact') }}" class="btn btn-primary-hero" style="padding:1rem 3rem; font-size:1.5rem;">Enquire Now</a>
                 </div>
             </div>
         </section>
@@ -513,7 +513,7 @@
                         Get an instant estimate of your monthly payments and plan your finances better
                     </p>
                     
-                    <a href="{{url('/dhara-calculator')}}#eligibility" class="home-btn home-btn-primary home-btn-large">Calculate Detailed EMI →</a>
+                    <a href="{{ url('/eligibility-calculator') }}" class="home-btn home-btn-primary home-btn-large">Calculate Detailed EMI →</a>
                 </div>
 
                 <div class="home-emi-preview-card">

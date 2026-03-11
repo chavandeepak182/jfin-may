@@ -48,7 +48,7 @@
             </div>
 
             <div class="about-content-button" style="margin-top: 2rem;">
-                <a href="{{ url('/dhara-contact') }}" class="btn btn-primary-hero"
+                <a href="{{ url('/contact') }}" class="btn btn-primary-hero"
                    style="padding:1rem 3rem; font-size:1.5rem;">
                     Enquire Now
                 </a>
