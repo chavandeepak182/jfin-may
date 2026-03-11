@@ -397,7 +397,24 @@ if (!in_array($status, ['all', 'pending', 'verified'])) {
         'status'
     ));
 }
+public function updatePropertyStatus(Request $request)
+{
 
+    $property_id = $request->property_id;
+    $status = $request->status;
+
+    DB::table('properties')
+        ->where('properties_id',$property_id)
+        ->update([
+            'is_active'=>$status
+        ]);
+
+    return response()->json([
+        'status'=>1,
+        'msg'=>'Property status updated successfully'
+    ]);
+
+}
 
     public function pendingProperties()
     {

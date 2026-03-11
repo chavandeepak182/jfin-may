@@ -1697,6 +1697,8 @@ public function showForm(Request $request)
         $loanUsers = User::join('otp', 'otp.user_id', '=', 'users.id')
             ->where('users.role_id', 1)
             ->where('otp.is_verify', 1)
+            ->where('users.is_email_verify', 1) // ✅ ACTIVE USERS ONLY
+        ->whereNull('users.deleted_at') // ✅ ignore deleted users
             ->select(
                 'users.id',
                 'users.name',
