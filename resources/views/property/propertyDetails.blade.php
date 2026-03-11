@@ -24,16 +24,33 @@
                     <li class="breadcrumb-item active" aria-current="page">Property Details</li>
                 </ol>
             </nav>
-            <?php
-                if($v->is_active == 0){ ?>
-                <div class="hstack gap-3">
-                    <button type="button" class="btn btn-light btn-icon-text border"
-onclick="window.location.href='{{ route('allProperties') }}'">
-    <i class="bi bi-x"></i> <span class="text">Cancel</span>
-</button>
-                    <button type="submit" class="btn btn-primary btn-icon-text" onclick="activateProperty('{{$v->properties_id}}')"><i class="bi bi-save"></i> <span class="text">Activate</span></button> 
-                </div>
-            <?php } ?>
+           <?php if($v->is_active == 0){ ?>
+    
+    <div class="hstack gap-3">
+        <!-- Cancel Button -->
+        <button type="button" class="btn btn-light btn-icon-text border"
+            onclick="window.location.href='{{ route('allProperties') }}'">
+            <i class="bi bi-x"></i> <span class="text">Cancel</span>
+        </button>
+
+        <!-- Activate Button -->
+        <button type="submit" class="btn btn-primary btn-icon-text"
+            onclick="activateProperty('{{$v->properties_id}}')">
+            <i class="bi bi-save"></i> <span class="text">Activate</span>
+        </button>
+    </div>
+
+<?php } else { ?>
+
+    <div class="hstack gap-3">
+        <!-- Back Button -->
+        <button type="button" class="btn btn-secondary btn-icon-text"
+            onclick="window.location.href='{{ route('allProperties') }}'">
+            <i class="bi bi-arrow-left"></i> <span class="text">Back</span>
+        </button>
+    </div>
+
+<?php } ?>
         </div>
     </div>
     

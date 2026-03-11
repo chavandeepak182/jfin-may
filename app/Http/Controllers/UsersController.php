@@ -50,11 +50,23 @@ public function adminCustomer(Request $request)
         ->where('role_id', 2)
         ->whereNull('deleted_at')
         ->count();
+        
 
     $totalChannelPartners = DB::table('users')
         ->where('role_id', 3)
         ->whereNull('deleted_at')
         ->count();
+        $activeCustomers = DB::table('loans')
+    ->where('status', '!=', 'disbursed')
+    ->whereNull('deleted_at')
+    ->distinct()
+    ->count('user_id');
+    $ourCustomers = DB::table('loans')
+    ->where('status', 'disbursed')
+    ->whereNull('deleted_at')
+    ->distinct()
+    ->count('user_id');
+    
 
     /* ===================== FILTERS ===================== */
     $search = $request->search;
@@ -96,6 +108,8 @@ public function adminCustomer(Request $request)
         'totalCustomers',
         'totalEmployees',
         'totalChannelPartners',
+        'activeCustomers',
+        'ourCustomers',
         'users',
         'states'  
     ));
@@ -777,16 +791,15 @@ public function loadListByType(Request $request)
         'cp'       => 3,
     ];
 
-    $roleId = $roleMap[$request->type] ?? 1;
+    $type = $request->type;
+    $hideAction = ($type === 'our');
+    $roleId = $roleMap[$type] ?? 1;
 
     /* ================= FILTER INPUTS ================= */
     $search = $request->search;
     $status = $request->status;
 
     /* ================= QUERY ================= */
-    $users = User::leftJoin('profile', 'users.id', '=', 'profile.user_id')
-        ->where('users.role_id', $roleId)
-        ->whereNull('users.deleted_at')
 
         ->when($search, function ($q) use ($search) {
             $q->where(function ($qq) use ($search) {
@@ -805,11 +818,22 @@ public function loadListByType(Request $request)
             }
         })
 
+    } 
+    elseif ($type === 'our') {
+
+    $users = User::leftJoin('profile', 'users.id', '=', 'profile.user_id')
+        ->whereIn('users.id', function ($q) {
+            $q->select('user_id')
+              ->from('loans')
+              ->where('status', 'disbursed');
+        })
+        ->whereNull('users.deleted_at')
         ->select(
             'users.*',
             'profile.mobile_no',
             'profile.pan_number'
         )
+        ->distinct()
         ->orderBy('users.created_at', 'desc')
         ->paginate(10);
 

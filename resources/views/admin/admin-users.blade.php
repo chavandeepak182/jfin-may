@@ -198,7 +198,14 @@ body.modal-open {
   color: inherit;
   display: block;
 }
+.overview-icon i{
+    color: #fff;
+    font-size: 32px;
+}
 
+.teal{
+background: linear-gradient(135deg,#06b6d4,#0e7490);
+}
 .overview-link:hover,
 .overview-link:focus,
 .overview-link:active {
@@ -300,23 +307,51 @@ body.modal-open {
 </a>
 
 <!-- ================= ACTIVE USERS (OPTIONAL) ================= -->
-<a href="javascript:void(0)" class="overview-link">
+<a href="javascript:void(0)"
+   class="overview-link load-list"
+   data-type="active">
 
-  <div class="overview-card purple">
+<div class="overview-card teal">
 
-    <div class="overview-icon">
-      <i class="fas fa-circle"></i>
-    </div>
+<div class="overview-icon">
+<i class="fas fa-user-check"></i>
+</div>
 
-    <div class="overview-content">
-      <h3 style="font-size:28px;">Active Customer</h3>
-      <p style="font-size:20px;">10</p>
-      <span class="overview-status">Live Users</span>
-    </div>
+<div class="overview-content">
+<h3 style="font-size:28px;color:#fff">Active Customer</h3>
 
-  </div>
+<p style="font-size:20px;color:#fff">
+{{ $activeCustomers }}
+</p>
+
+<span class="overview-status" style="color:#fff">Active Loan Users</span>
+
+</div>
+</div>
 </a>
+<!-- ================= OUR CUSTOMERS ================= -->
+<!-- <a href="javascript:void(0)"
+   class="overview-link load-list"
+   data-type="our">
 
+<div class="overview-card blue">
+
+<div class="overview-icon">
+<i class="fas fa-user-check"></i>
+</div>
+
+<div class="overview-content">
+<h3 style="font-size:28px;">Our Customers</h3>
+
+<p style="font-size:20px;">
+{{ $ourCustomers }}
+</p>
+
+<span class="overview-status">Disbursed Loan Customers</span>
+
+</div>
+</div>
+</a> -->
 </div>
 
                 </div>
@@ -790,6 +825,10 @@ $(document).on('click', '.delete-user', function () {
         $('#openAddModal').text('Add Channel Partner');
         $('#exampleModalLabel').text('Add New Channel Partner');
     }
+    else if (type === 'active') {
+    $('#openAddModal').text('Active Customers');
+    $('#exampleModalLabel').text('Active Customers');
+}
 
     $.ajax({
         url: "{{ route('load.list.by.type') }}",
