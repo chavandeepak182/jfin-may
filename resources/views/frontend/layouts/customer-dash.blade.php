@@ -272,7 +272,7 @@
             </a>
 
             {{-- Search --}}
-            <form class="d-none d-md-inline-block">
+            <!-- <form class="d-none d-md-inline-block">
                 <div class="input-group input-group-sm">
                     <span class="input-group-text bg-light border-0">
                         <i data-feather="search"></i>
@@ -281,7 +281,7 @@
                         class="form-control border-0 bg-light"
                         placeholder="Search...">
                 </div>
-            </form>
+            </form> -->
 
             <div class="navbar-collapse collapse">
                 <ul class="navbar-nav ms-auto align-items-center">

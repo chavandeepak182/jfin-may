@@ -337,47 +337,103 @@ $(document).ready(function () {
     </div>
 </div>
 <script>
-$(document).ready(function () {
 
-    let currentType = 'all';
+var currentType = 'all';   // GLOBAL variable
+
+$(document).ready(function () {
 
     function loadLoans(type = 'all', search = '') {
 
-    currentType = type;
-    let url = "{{ route('loan.ajax.list') }}";
+        currentType = type;
 
-    if (type === 'inprocess') url = "{{ route('loan.ajax.inprocess') }}"; // ✅ ADD THIS
-    if (type === 'pending')   url = "{{ route('loan.ajax.pending') }}";
-    if (type === 'approved')  url = "{{ route('loan.ajax.approved') }}";
-    if (type === 'disbursed') url = "{{ route('loan.ajax.disbursed') }}";
-    if (type === 'rejected')  url = "{{ route('loan.ajax.rejected') }}";
-    if (type === 'trashed')   url = "{{ route('loan.ajax.trashed') }}";
+        let url = "{{ route('loan.ajax.list') }}";
+
+        if (type === 'inprocess') url = "{{ route('loan.ajax.inprocess') }}";
+        if (type === 'pending')   url = "{{ route('loan.ajax.pending') }}";
+        if (type === 'approved')  url = "{{ route('loan.ajax.approved') }}";
+        if (type === 'disbursed') url = "{{ route('loan.ajax.disbursed') }}";
+        if (type === 'rejected')  url = "{{ route('loan.ajax.rejected') }}";
+        if (type === 'trashed')   url = "{{ route('loan.ajax.trashed') }}";
+
+        $('#loanListArea').html('<div class="text-center py-4">Loading...</div>');
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                search: search,
+                type: type
+            },
+            success: function (res) {
+
+                $('#loanListArea').html(res);
+
+            },
+            error: function () {
+
+                $('#loanListArea').html('<div class="text-danger text-center py-4">Failed to load loans</div>');
+
+            }
+        });
+
+    }
+
+    // CARD CLICK FILTER
+    $('.loan-filter').on('click', function (e) {
+
+        e.preventDefault();
+
+        $('.loan-card').removeClass('active');
+        $(this).find('.loan-card').addClass('active');
+
+        loadLoans($(this).data('type'), $('#loanSearch').val());
+
+    });
+
+    // SEARCH
+    $('#loanSearch').on('keyup', function () {
+
+        loadLoans(currentType, $(this).val());
+
+    });
+
+    // LOAD DEFAULT
+    loadLoans('all');
+
+});
+
+
+// PAGINATION CLICK
+$(document).on('click', '#loanListArea .pagination a', function (e) {
+
+    e.preventDefault();
+
+    let url = $(this).attr('href');
+    let search = $('#loanSearch').val();
 
     $('#loanListArea').html('<div class="text-center py-4">Loading...</div>');
 
     $.ajax({
         url: url,
-        type: "GET",
-        data: { search: search },
+        type: 'GET',
+        data: {
+            search: search,
+            type: currentType
+        },
         success: function (res) {
+
             $('#loanListArea').html(res);
+
+        },
+        error: function () {
+
+            $('#loanListArea').html('<div class="text-danger text-center py-4">Pagination failed</div>');
+
         }
     });
-}
 
-    $('.loan-filter').on('click', function (e) {
-        e.preventDefault();
-        loadLoans($(this).data('type'), $('#loanSearch').val());
-    });
-
-    // Search typing
-    $('#loanSearch').on('keyup', function () {
-        loadLoans(currentType, $(this).val());
-    });
-
-    // Load all by default
-    loadLoans('all');
 });
+
 </script>
 
 
