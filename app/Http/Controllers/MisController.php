@@ -42,7 +42,7 @@ class MisController extends Controller
     $query = MIS::query()->latest();
 
     // 🔐 Agent restriction
-    if ($roleId == env('agentRole_id')) {
+    if ($roleId == config('constants.roles.agent')) {
         $query->where('created_by', $userId);
     }
 
@@ -69,6 +69,39 @@ class MisController extends Controller
 
     return view('mis.index', compact('misRecords', 'banks'));
 }
+// public function index(Request $request)
+// {
+//     $user = auth()->user();
+
+//     $query = Mis::query()->latest();
+
+//     // Agent restriction
+//     if ($user->role_id == config('constants.roles.agent')) {
+//         $query->where('created_by', $user->id);
+//     }
+
+//     if ($request->filled(['from_date', 'to_date'])) {
+//         $query->whereBetween('created_at', [
+//             $request->from_date . ' 00:00:00',
+//             $request->to_date . ' 23:59:59'
+//         ]);
+//     }
+
+//     if ($request->filled('search')) {
+//         $search = $request->search;
+
+//         $query->where(function ($q) use ($search) {
+//             $q->where('name', 'like', "%{$search}%")
+//               ->orWhere('email', 'like', "%{$search}%")
+//               ->orWhere('contact', 'like', "%{$search}%");
+//         });
+//     }
+
+//     $banks = LoanBank::all();
+//     $misRecords = $query->paginate(10)->withQueryString();
+
+//     return view('mis.index', compact('misRecords', 'banks'));
+// }
 private function authorizeMIS($mis)
 {
     $roleId = session()->get('role_id');
