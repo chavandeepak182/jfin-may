@@ -50,8 +50,9 @@
             <td class="prop-cell">#{{ $booking->id }}</td>
 
             <td>
-                {{ $booking->customer->name }} <br>
-                <!-- {{ $booking->customer->mobile_no }} -->
+                {{ optional($booking->customer)->name ?? 'N/A' }} <br>
+                
+                  {{ optional($booking->customer)->mobile_no ?? 'N/A' }}
             </td>
 
             <td>

@@ -60,7 +60,7 @@
                 </td>
             </tr>
             <tr>
-                <th class="bg-light">Assigned Agent</th>
+                <th class="bg-light">Assigned Employee</th>
                 <td>{{ $lead->agent->name ?? 'N/A' }}</td>
             </tr>
             <tr>
