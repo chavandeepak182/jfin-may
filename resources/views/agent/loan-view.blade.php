@@ -50,7 +50,7 @@
                 <input type="text" class="form-control" id="loan_reference_id" value="{{ $loan->loan_reference_id }}" readonly>
             </div>
             <div class="col-md-4">
-                <label for="agent" class="form-label">Assigned Agent:</label>
+                <label for="agent" class="form-label">Assigned Employee:</label>
                 <input type="text" class="form-control" id="agent" value="{{ $loan->agent->name ?? 'Not Assigned' }}" readonly>
             </div>
             <div class="col-md-4">
