@@ -1014,7 +1014,7 @@ public function loadListByType(Request $request)
 
             ->select(
                 'users.*',
-                'profile.mobile_no',
+                DB::raw('COALESCE(profile.mobile_no, users.mobile_no) as mobile_no'),
                 'profile.pan_number'
             )
             ->orderBy('users.created_at', 'desc')

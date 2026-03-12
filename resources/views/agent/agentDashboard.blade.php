@@ -59,7 +59,7 @@
                                 <div class="metric-icon yellow"><i class="fas fa-bullhorn"></i></div>
                                 <div class="metric-content">
                                     <h3>Total MIS</h3>
-                                    <div class="metric-value">1</div>
+                                    <div class="metric-value">{{ $totalMis }}</div>
                                     <div class="metric-change positive">
                             <i class="fas fa-arrow-up"></i>
                             <span>+8.2%</span>
