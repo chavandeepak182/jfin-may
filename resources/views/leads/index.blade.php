@@ -110,7 +110,7 @@ JFS | Leads
                         <td>{{ $lead->lead_status ?? 'N/A' }}</td>
                     </tr>
                     <tr>
-                        <th>Assigned Agent</th>
+                        <th>Assigned Employee</th>
                         <td>{{ $lead->agent->name ?? 'N/A' }}</td>
                     </tr>
                     <tr>
