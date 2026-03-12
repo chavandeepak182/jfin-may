@@ -299,11 +299,15 @@ class AgentController extends Controller
     $totalCount = DB::table('loans')
         ->where('agent_id', $userId)
         ->count();
+           // ✅ TOTAL MIS COUNT (created by this agent)
+    $totalMis = DB::table('mis')
+        ->where('created_by', $userId)
+        ->count();
 
         // Debugging: Check if assignedLoans is retrieved
         Log::info('Assigned Loans Count: ' . $assignedLoans);
 
-        return view('agent.agentDashboard', compact('walletBalance', 'assignedLoans','totalCount'));
+        return view('agent.agentDashboard', compact('walletBalance', 'assignedLoans','totalCount','totalMis'));
     }
     public function edit($id)
     {

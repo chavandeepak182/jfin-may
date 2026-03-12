@@ -438,7 +438,7 @@ body.modal-open {
 
                                         </td>
                                         <td>{{ $user->email_id }}</td>
-                                        <td>{{ $user->profile->mobile_no ?? '-' }}</td>
+<td>{{ $user->profile->mobile_no ?? $user->mobile_no ?? '-' }}</td>
                                         <td>{{ $user->profile->pan_number ?? ''}}</td>
                                         <!-- <td>
                                             <label>
