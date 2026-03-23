@@ -13,13 +13,15 @@ class IsUserOrAdminMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
-    {
-            $role_id = session()->get('role_id');
-    //    dd(env('adminRole_id'));
-       if($role_id == 4 || $role_id == 1){
+   public function handle(Request $request, Closure $next)
+{
+    $role_id = session()->get('role_id');
+
+    if ($role_id == 4 || $role_id == 1 || $role_id == 2) {
         return $next($request);
-       }
-       return redirect('/')->with('error', 'You are not the authorized user to access this page');
     }
+
+    return redirect('/')
+        ->with('error','You are not authorized to access this page');
+}
 }

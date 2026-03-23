@@ -173,14 +173,25 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="city">City:</label>
-                            <input type="text" class="form-control" id="city" name="city" value="{{ old('city', $profile->cityRelation->city ?? '') }}">
+                            <label for="state">State:</label>
+                           <select id="state" name="state" class="form-control">
+    <option value="">Select State</option>
+    @foreach($states as $state)
+        <option value="{{ $state->id }}"
+            {{ old('state', $profile->state ?? '') == $state->id ? 'selected' : '' }}>
+            {{ $state->name }}
+        </option>
+    @endforeach
+</select>
                         </div>
                     </div>
+
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="state">State:</label>
-                            <input type="text" class="form-control" id="state" name="state" value="{{ old('state', $profile->stateRelation->name ?? '') }}">
+                            <label for="city">City:</label>
+                           <select id="city" name="city" class="form-control">
+    <option value="">Select City</option>
+</select>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -326,29 +337,35 @@
 
         documentSection.appendChild(newRow);
     }
+function toggleRemarkBox(value) {
 
-    function toggleRemarkBox(status) {
     const remarkBox = document.getElementById('remarkBox');
-    remarkBox.style.display = (status === 'approved' || status === 'rejected' || status === 'disbursed' || status === 'document pending') ? 'block' : 'none';
-
-    // Show or hide the Approved Amount input field
     const approvedAmountBox = document.getElementById('approvedAmountBox');
-    approvedAmountBox.style.display = (status === 'disbursed' || status === 'approved') ? 'block' : 'none';
+    const approvedAmountInput = document.getElementById('amountApproved');
 
-    // Add or remove the 'required' attribute dynamically for client-side validation
-    const approvedAmountInput = document.getElementById('amount_approved');
-    if (status === 'disbursed') {
-        approvedAmountInput.setAttribute('required', 'required');
+    if (['rejected','approved','in process','disbursed','document pending'].includes(value)) {
+        remarkBox.style.display = 'block';
     } else {
+        remarkBox.style.display = 'none';
+    }
+
+    if (['approved','disbursed'].includes(value)) {
+        approvedAmountBox.style.display = 'block';
+        approvedAmountInput.setAttribute('required','required');
+    } else {
+        approvedAmountBox.style.display = 'none';
         approvedAmountInput.removeAttribute('required');
     }
 }
-
 function toggleSanctionLetterBox(status) {
-    const sanctionLetterBox = document.getElementById('sanctionLetterBox');
-    sanctionLetterBox.style.display = (status === 'approved') ? 'block' : 'none';
-}
 
+    if (status === 'approved' || status === 'disbursed') {
+        document.getElementById('sanctionLetterBox').style.display = 'block';
+    } else {
+        document.getElementById('sanctionLetterBox').style.display = 'none';
+    }
+
+}
 // Initialize the form based on current status
 document.addEventListener('DOMContentLoaded', function() {
     const currentStatus = document.getElementById('status').value;
@@ -361,7 +378,124 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('status').addEventListener('change', function() {
     toggleSanctionLetterBox(this.value);
 });
+document.addEventListener('DOMContentLoaded', function(){
 
+    const status = document.getElementById('status').value;
+
+    toggleRemarkBox(status);
+    toggleSanctionLetterBox(status);
+
+});
+
+</script>
+<script>
+$(document).ready(function () {
+
+    $('#editLoanForm').on('submit', function (e) {
+        e.preventDefault();
+
+        const status = $('#status').val();
+        const newFile = $('#sanction_letter').val();
+        const hasExistingFile = "{{ $loan->sanction_letter ? 'yes' : '' }}";
+
+        // Only when disbursed
+        if (status === 'disbursed' && !newFile && !hasExistingFile) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Sanction Letter Required',
+                text: 'Please upload sanction letter before disbursing loan'
+            });
+            return false;
+        }
+
+        let formData = new FormData(this);
+        let btn = $(this).find('button[type="submit"]');
+
+        btn.prop('disabled', true);
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+
+            success: function (response) {
+
+                Swal.fire({
+                    icon: 'success',
+                    title: response.msg || 'Loan Updated Successfully',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+
+                    window.location.href = "{{ route('agent.allAgentLoans') }}";
+
+                });
+
+            },
+
+            error: function (xhr) {
+
+                let msg = 'Something went wrong';
+
+                if (xhr.responseJSON?.msg) {
+                    msg = xhr.responseJSON.msg;
+                }
+
+                Swal.fire('Error', msg, 'error');
+            },
+
+            complete: function () {
+                btn.prop('disabled', false);
+            }
+        });
+
+    });
+
+});
+</script>
+<script>
+$(document).ready(function(){
+
+    let selectedState = $('#state').val();
+    let selectedCity = "{{ old('city', $profile->city ?? '') }}";
+
+    function loadCities(state_id, selectedCity = null) {
+
+        if(state_id){
+            $.ajax({
+                url: '/get-cities/' + state_id,
+                type: 'GET',
+                success: function(data){
+
+                    $('#city').empty();
+                    $('#city').append('<option value="">Select City</option>');
+
+                    $.each(data, function(key, value){
+
+                        let selected = (selectedCity == value.id) ? 'selected' : '';
+
+                        $('#city').append(
+                            `<option value="${value.id}" ${selected}>${value.city}</option>`
+                        );
+                    });
+
+                }
+            });
+        }
+    }
+
+    // 👉 PAGE LOAD (FIX YOUR ISSUE)
+    if(selectedState){
+        loadCities(selectedState, selectedCity);
+    }
+
+    // 👉 ON CHANGE
+    $('#state').on('change', function(){
+        loadCities($(this).val());
+    });
+
+});
 </script>
 
 @endsection

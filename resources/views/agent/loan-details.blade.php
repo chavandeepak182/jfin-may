@@ -85,16 +85,17 @@
                             <input type="text" class="form-control" value="{{ $profile->residence_address ?? 'N/A' }}" readonly />
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="mb-3">
-                            <label class="form-label">City</label>
-                            <input type="text" class="form-control" value="{{ $profile->city ?? 'N/A' }}" readonly />
-                        </div>
-                    </div>
+                   
                     <div class="col-lg-6">
                         <div class="mb-3">
                             <label class="form-label">State</label>
-                            <input type="text" class="form-control" value="{{ $profile->state ?? 'N/A' }}" readonly />
+                            <input type="text" class="form-control" value="{{ $profile->stateRelation->name ?? 'N/A' }}"" readonly />
+                        </div>
+                    </div>
+                     <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label class="form-label">City</label>
+                            <input type="text" class="form-control"value="{{ $profile->cityRelation->city ?? 'N/A' }}" readonly />
                         </div>
                     </div>
                     <div class="col-lg-6">

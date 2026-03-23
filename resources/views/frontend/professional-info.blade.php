@@ -211,30 +211,30 @@
                                             </div>
                                         </div>
                                     @endif -->
-                                                @if (session('role_id') == 4)
-<div class="col-md-6">
-    <div class="custom-floating">
-        <label class="custom-label">
-            User <span class="text-danger">*</span>
-        </label>
+                                                @if (in_array(session('role_id'), [4,2]))
+                                                    <div class="col-md-6">
+                                                        <div class="custom-floating">
+                                                            <label class="custom-label">
+                                                                User <span class="text-danger">*</span>
+                                                            </label>
 
-        <select name="user_id" id="user_id" class="form-select custom-select" required>
-            <option value="">Select User</option>
-            @foreach ($loanUsers as $u)
-                <!-- <option value="{{ $u->id }}" data-mobile="{{ $u->mobile_no }}">
-                    {{ $u->name }} ({{ $u->email_id }})
-                </option> -->
-                <option value="{{ $u->id }}"
-    data-mobile="{{ $u->mobile_no }}"
-    {{ old('user_id', session('selected_user_id')) == $u->id ? 'selected' : '' }}>
-    {{ $u->name }} ({{ $u->email_id }})
-</option>
-            @endforeach
-        </select>
-    </div>
-</div>
+                                                            <select name="user_id" id="user_id" class="form-select custom-select" required>
+                                                                <option value="">Select User</option>
+                                                                @foreach ($loanUsers as $u)
+                                                                    <!-- <option value="{{ $u->id }}" data-mobile="{{ $u->mobile_no }}">
+                                                                        {{ $u->name }} ({{ $u->email_id }})
+                                                                    </option> -->
+                                                                    <option value="{{ $u->id }}"
+                                                        data-mobile="{{ $u->mobile_no }}"
+                                                        {{ old('user_id', session('selected_user_id')) == $u->id ? 'selected' : '' }}>
+                                                        {{ $u->name }} ({{ $u->email_id }})
+                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
 
-@endif
+                                                 @endif
 
 
                                     <div class="row g-3">
@@ -320,23 +320,24 @@
 
                                                     </div>
                                                 </div>
-@if ($errors->has('pan_number'))
-<script>
-    document.getElementById('pan_number').scrollIntoView({ behavior: 'smooth' });
-</script>
-@endif
+                                            @if ($errors->has('pan_number'))
+                                            <script>
+                                                document.getElementById('pan_number').scrollIntoView({ behavior: 'smooth' });
+                                            </script>
+                                            @endif
 
                                            <div class="col-md-4">
                                                 <div class="form-floating">
-                                                    <input type="text"
-    class="form-control"
-    id="phone"
-    name="mobile_no"
-    value="{{ old('mobile_no', optional($profile)->mobile_no ?? optional($user)->mobile_no ?? '') }}"
-    placeholder="Phone"
-    maxlength="10"
-    oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
-    required readonly>
+                                                <input type="text"
+                                                class="form-control"
+                                                id="phone"
+                                                name="mobile_no"
+                                                value="{{ session('role_id') == 1 ? old('mobile_no', optional($profile)->mobile_no ?? optional($user)->mobile_no ?? '') : old('mobile_no') }}"
+                                                placeholder="Phone"
+                                                maxlength="10"
+                                                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
+                                                required
+                                                readonly>
 
                                                     <label for="phone">Phone <span class="text-danger">*</span></label>
                                                     <span id="phone-error" class="text-danger" style="font-size: 13px;"></span>

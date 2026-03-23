@@ -17,41 +17,41 @@
                             @endif
                         </tr>
                     </thead>
-                    <tbody>
-                      @foreach ($loans as $loan)
+                  <tbody>
+@foreach ($loans as $loan)
+<tr>
+    <td>{{ $loan->loan_reference_id }}</td>
+    <td>{{ optional($loan->user)->name }}</td>
+    <td>{{ optional($loan->loanCategory)->category_name }}</td>
+    <td>{{ $loan->amount }}</td>
+    <td>{{ $loan->tenure }}</td>
+    <td>{{ $loan->agent_action ? ucfirst($loan->agent_action) : 'Pending' }}</td>
 
-                            <tr>
-                                <td>{{ $loan->loan_reference_id }}</td>
-                                <td>{{ optional($loan->user)->name }}</td>
-                                <td>{{ optional($loan->loanCategory)->category_name }}</td>
-                                <td>{{ $loan->amount }}</td>
-                                <td>{{ $loan->tenure }}</td>
-                                <td>{{ ucfirst($loan->agent_action) ?? 'Pending' }}</td>
-                                @if (session()->get('role_id') == 2)
-                                    <td>
-                                        <a class="btn btn-primary btn-xs view" title="View"
-                                            href="{{ route('agent.loan.view', ['id' => $loan->loan_id]) }}">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                        @if ($loan->status !== 'disbursed')
-                                            <a class="btn btn-primary btn-xs edit" title="Edit"
-                                                href="{{ route('agent.editLoan', ['id' => $loan->loan_id]) }}">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                        @else
-                                            <button class="btn btn-secondary btn-xs edit" title="Cannot Edit" disabled>
-                                                <i class="fa fa-edit"></i>
-                                            </button>
-                                        @endif
-                                        <button class="btn btn-danger btn-xs delete" title="Delete"
-                                            onclick="deleteLoan('{{ $loan->loan_id }}')">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
-                                @endif
-                            </tr>
-                        @endforeach
-                    </tbody>
+    @if (session()->get('role_id') == 2)
+    <td>
+        <!-- View -->
+        <a class="btn btn-primary btn-xs view"
+           href="{{ route('agent.loan.view',$loan->loan_id) }}">
+           <i class="fa fa-eye"></i>
+        </a>
+
+        <!-- Edit -->
+        <a class="btn btn-warning btn-xs edit"
+           href="{{ route('agent.editLoan',$loan->loan_id) }}">
+           <i class="fa fa-edit"></i>
+        </a>
+
+        <!-- Delete -->
+        <button class="btn btn-danger btn-xs delete"
+            onclick="deleteLoan('{{ $loan->loan_id }}')">
+            <i class="fa fa-trash"></i>
+        </button>
+    </td>
+    @endif
+
+</tr>
+@endforeach
+</tbody>
                     <tfoot>
                         <tr>
                             <th>Loan ID</th>

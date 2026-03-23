@@ -17,6 +17,8 @@ use App\Models\Activity;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Log;
 use App\Models\PropertyTaker;
+use App\Models\States;
+use App\Models\Cities;
 
 
 class PropertyController extends Controller
@@ -27,8 +29,20 @@ class PropertyController extends Controller
         $data['category'] = DB::table('property_category')->get();
         $data['localities'] = DB::table('localities')->get();
         $data['property_status'] = DB::table('property_status')->get();
+         // ✅ ADD THIS LINE
+    $data['states'] = States::all();
         return view('property.addProperty',compact('data'));
     }
+
+
+        public function getCities(Request $request)
+{
+    $cities = DB::table('cities')
+        ->where('state_id',$request->state_id)
+        ->get();
+
+    return response()->json($cities);
+}
 
 public function insertProperty(Request $request)
 {
@@ -71,7 +85,15 @@ public function insertProperty(Request $request)
         $p->baths = $request->baths;
         $p->balconies = $request->balconies;
         $p->parking = $request->parking;
-        $p->city = $request->city ?? '';
+      // SAVE IDS
+
+$p->state_id = $request->state_id ?? null;
+$p->city_id = $request->city_id ?? null;
+$p->locality_id = $request->area_id ?? null;
+
+// SAVE NAMES (optional but good)
+$p->city = DB::table('cities')->where('id', $request->city)->value('city');
+$p->localities = DB::table('localities')->where('id', $request->localitie)->value('name');
         $p->email = $request->email_id;
         $p->select_bhk = $request->select_bhk;
         $p->s_price = $request->s_price;
@@ -103,9 +125,7 @@ $p->save();
 
 if ($request->hasFile('property_images')) {
 
-    $images = $request->file('property_images');
-
-    foreach ($images as $key => $image) {
+    foreach ($request->file('property_images') as $key => $image) {
 
         $image_name = uniqid().'_'.$image->getClientOriginalName();
 
@@ -119,11 +139,10 @@ if ($request->hasFile('property_images')) {
 
         $path = 'property_photos/'.$image_name;
 
-        // first image as main property image
+        // Save main image
         if ($key == 0) {
-            DB::table('properties')
-                ->where('properties_id',$p->properties_id)
-                ->update(['image'=>$path]);
+            $p->image = $path;
+            $p->save();
         }
 
         DB::table('property_images')->insert([
@@ -376,9 +395,9 @@ if (!in_array($status, ['all', 'pending', 'verified'])) {
     }
 
     /* ================= ROLE FILTER ================= */
-    if ($role_id == 3) {
-        $query->where('properties.creator_id', $user_id);
-    }
+    // if ($role_id == 3) {
+    //     $query->where('properties.creator_id', $user_id);
+    // }
 
    $data['allProperties'] = $query->paginate(10);
 
@@ -470,6 +489,12 @@ public function updatePropertyStatus(Request $request)
             dd($e->getMessage());
         }
     }
+    public function getAreas($city_id)
+{
+    return DB::table('localities')
+        ->where('city_id', $city_id)
+        ->get();
+}
 
     public function editProperty($property_id) {
         $data['range'] = DB::table('price_range')->get();
@@ -484,6 +509,8 @@ public function updatePropertyStatus(Request $request)
         $data['property_images'] = DB::table('property_images')
                                       ->where('properties_id', $property_id)
                                       ->get();
+        $data['states'] = States::all();
+        $data['localities'] = DB::table('localities')->get();
     
         return view('property.editProperty', compact('data'));
     }
@@ -517,37 +544,55 @@ public function updatePropertyStatus(Request $request)
             // Keep the old boucher if no new one is uploaded
             $property_voucher = $old_boucher;
         }
+        
     
         // Update property details in the database
-        $updateProperty = [
-            'title' => $request->property_title,
-            'property_type_id' => $request->property_type_id,
-            'builder_name' => $request->builder_name,
-            's_price' => $request->s_price,
-            'select_bhk' => $request->select_bhk,
-            'property_details' => $request->property_description,
-            'address' => $request->property_address,
-            'email' => $request->email_id,
-            'contact' => $request->contact_number,
-            'price_range_id' => $request->price_range,
-            'creator_id' => $request->creator_id,
-            // 'image' => $property_image,
-            'boucher' => $property_voucher,
-            'facilities' => $request->amenities,
-            'area' => $request->area,
-            'builtup_area' => $request->builtup_area,
-            'city' => $request->city,
-            'rera' => $request->rera,
-            'beds' => $request->beds,
-            'baths' => $request->baths,
-            'balconies' => $request->balconies,
-            'parking' => $request->parking,
-            'localities' => $request->localities,
-            'location' => $request->location,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
-            'land_type' => $request->land_type,
-        ];
+       $updateProperty = [
+
+    'title' => $request->property_title,
+    'property_type_id' => $request->property_type_id,
+    'builder_name' => $request->builder_name,
+    's_price' => $request->s_price,
+    'select_bhk' => $request->select_bhk,
+    'property_details' => $request->property_description,
+    'address' => $request->property_address,
+    'email' => $request->email_id,
+    'contact' => $request->contact_number,
+    'price_range_id' => $request->price_range,
+    'creator_id' => $request->creator_id,
+
+    // ✅ IMAGE SAVE
+    'image' => $property_image_name,
+
+    'boucher' => $property_voucher,
+
+    // ✅ FIX amenities
+    'facilities' => implode(',', $request->amenities ?? []),
+
+    'area' => $request->area,
+    'builtup_area' => $request->builtup_area,
+
+    // ✅ FIX IDs (IMPORTANT)
+    'state_id' => $request->state_id,
+    'city_id' => $request->city_id ?? $request->city,
+    'locality_id' => $request->area_id ?? $request->localitie,
+
+    // ✅ SAVE NAMES
+    'city' => DB::table('cities')->where('id', $request->city_id ?? $request->city)->value('city'),
+
+    'localities' => DB::table('localities')->where('id', $request->area_id ?? $request->localitie)->value('name'),
+
+    'rera' => $request->rera,
+    'beds' => $request->beds,
+    'baths' => $request->baths,
+    'balconies' => $request->balconies,
+    'parking' => $request->parking,
+
+    'location' => $request->location,
+    'latitude' => $request->latitude,
+    'longitude' => $request->longitude,
+    'land_type' => $request->land_type,
+];
     
         try {
             // Activity logs

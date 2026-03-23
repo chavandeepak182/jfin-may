@@ -244,11 +244,12 @@ public function signupSubmit(Request $request)
         $otpRow->update(['is_verify' => 1]);
 
         // login user
-        Auth::loginUsingId($userId);
+      Auth::loginUsingId($userId);
 
-        User::where('id', $userId)->update([
-            'last_login_at' => now()
-        ]);
+User::where('id', $userId)->update([
+    'last_login_at' => now(),
+    'is_email_verify' => 1
+]);
 
         session([
             'user_id'  => Auth::id(),
