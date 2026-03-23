@@ -1,24 +1,37 @@
 <?php
-
 namespace App\Services;
 
-use App\Mail\GenericNotificationMail;
-use App\Models\NotificationLog;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\LoanNotificationMail;
 
 class NotificationService
+{public static function send($users, $title, $message)
 {
-public function send($userId, $title, $description, $url = null)
-{
-    NotificationLog::create([
-        'user_id' => $userId,
-        'title' => $title,
-        'description' => $description,
-        'url' => $url,
-        'seen_by_user' => 0,
-    ]);
+    // ✅ Convert single user to array
+    if (!is_array($users)) {
+        $users = [$users];
+    }
+
+    foreach ($users as $user) {
+
+        // If user_id passed instead of object
+        if (is_numeric($user)) {
+            $user = \App\Models\User::find($user);
+        }
+
+        if (!$user) continue;
+
+        if ($user->email_id) {
+
+            \Log::info('Sending Email', [
+                'user_id' => $user->id,
+                'email' => $user->email_id
+            ]);
+
+            \Mail::to($user->email_id)
+                ->send(new \App\Mail\LoanNotificationMail($title, $message));
+        }
+    }
 }
-
-
 }
