@@ -109,7 +109,7 @@ public function leadlist(Request $request)
     $referralLeads = DB::table('referral_leads as rl')
         ->join('users as u', 'u.id', '=', 'rl.user_id')
         ->leftJoin('loan_category as lc', 'lc.loan_category_id', '=', 'rl.product_type')
-        ->leftJoin('users as cust', 'cust.email_id', '=', 'rl.email')
+        ->leftJoin('users as cust', 'cust.mobile_no', '=', 'rl.mobile')
         ->select(
             'rl.*',
             'u.name as referrer_name',
@@ -121,12 +121,12 @@ public function leadlist(Request $request)
                     ELSE lc.category_name
                 END AS product_name
             "),
-             DB::raw("
-                CASE
-                    WHEN cust.id IS NOT NULL THEN 'created'
-                    ELSE 'pending'
-                END AS status
-            ")
+            DB::raw("
+    CASE
+        WHEN cust.id IS NOT NULL THEN 'completed'
+        ELSE 'pending'
+    END AS status
+")
         )
         
         ->orderBy('rl.created_at', 'desc')
@@ -161,7 +161,7 @@ public function referralAjax(Request $request)
     $query = DB::table('referral_leads as rl')
         ->join('users as u', 'u.id', '=', 'rl.user_id')
         ->leftJoin('loan_category as lc', 'lc.loan_category_id', '=', 'rl.product_type')
-        ->leftJoin('users as cust', 'cust.email_id', '=', 'rl.email')
+       ->leftJoin('users as cust', 'cust.mobile_no', '=', 'rl.mobile')
         ->select(
             'rl.*',
             'u.name as referrer_name',
@@ -173,12 +173,12 @@ public function referralAjax(Request $request)
                     ELSE lc.category_name
                 END AS product_name
             "),
-            DB::raw("
-                CASE
-                    WHEN cust.id IS NOT NULL THEN 'created'
-                    ELSE 'pending'
-                END AS status
-            ")
+           DB::raw("
+    CASE
+        WHEN cust.id IS NOT NULL THEN 'completed'
+        ELSE 'pending'
+    END AS status
+")
         );
 
     if ($request->filled('name')) {

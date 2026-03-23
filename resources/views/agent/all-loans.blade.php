@@ -152,11 +152,12 @@
              <!-- Header -->
    <div class="page-header">
     <h1>Loan Applications</h1>
-<!-- 
-    <a href="../loan-application" class="btn-new-application">
+    <!-- <a href="{{ route('loan.form') }}" class="btn-new-application"></a> -->
+
+    <a href="{{ route('loan.form') }}" class="btn-new-application">
         <i class="fas fa-user-plus"></i>
         New Application
-    </a> -->
+    </a>
 </div>
 
 <div class="row g-4 pt-4">

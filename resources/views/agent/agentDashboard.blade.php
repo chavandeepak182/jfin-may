@@ -35,14 +35,14 @@
 
             <!-- ================= ROW 1 : METRICS ================= -->
             <div class="row pt-5 pb-4">
-                <div class="col-12">
-                    <div class="metrics-grid">
+                
+                    <div class="col-md-6">
                         <!-- Total Loans -->
                         <a href="{{ route('agent.allAgentLoans') }}" class="metric-link">
                             <div class="metric-card">
                                 <div class="metric-icon purple"><i class="fas fa-dollar-sign"></i></div>
                                 <div class="metric-content">
-                                    <h3>Total Loans</h3>
+                                    <h3 style="font-size:28px;color:#6a6464;font-weight: 700;">Total Loans</h3>
                                     <div class="metric-value">{{ $totalCount }}</div>
                                     <div class="metric-change positive">
                             <i class="fas fa-arrow-up"></i>
@@ -53,12 +53,15 @@
                             </div>
                         </a>
 
+                    </div>    
+                        
                         <!-- Total Leads -->
+                    <div class="col-md-6">
                         <a href="{{ route('mis.index') }}" class="metric-link">
                             <div class="metric-card">
                                 <div class="metric-icon yellow"><i class="fas fa-bullhorn"></i></div>
                                 <div class="metric-content">
-                                    <h3>Total MIS</h3>
+                                    <h3 style="font-size:28px;color:#6a6464;    font-weight: 700;">Total MIS</h3>
                                     <div class="metric-value">{{ $totalMis }}</div>
                                     <div class="metric-change positive">
                             <i class="fas fa-arrow-up"></i>
@@ -69,39 +72,9 @@
                             </div>
                         </a>
 
-                        <!-- Total Employees -->
-                        <a href="#" class="metric-link">
-                            <div class="metric-card">
-                                <div class="metric-icon green"><i class="fas fa-user-tie"></i></div>
-                                <div class="metric-content">
-                                    <h3>Total  Customer</h3>
-                                    <div class="metric-value">0</div>
-                                    <div class="metric-change negative">
-                            <i class="fas fa-arrow-down"></i>
-                            <span>-5.1%</span>
-                            <span class="metric-subtext">23 less than previous month</span>
-                        </div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <!-- Total Customers -->
-                        <a href="#" class="metric-link">
-                            <div class="metric-card">
-                                <div class="metric-icon purple"><i class="fas fa-users"></i></div>
-                                <div class="metric-content">
-                                    <h3>Active Loans</h3>
-                                    <div class="metric-value">0</div>
-                                    <div class="metric-change positive">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>+15.3%</span>
-                            <span class="metric-subtext">+1,124 new this month</span>
-                        </div>
-                                </div>
-                            </div>
-                        </a>
+                      
                     </div>
-                </div>
+                
             </div>
 
             <!-- ================= ROW 2 : CHARTS ================= -->
@@ -138,167 +111,14 @@
             <!-- ================= ROW 3 : ALL LOANS + QUICK ACTIONS ================= -->
            <div class="row mb-4">
 
-    <!-- All Loans -->
-    <div class="col-md-8">
-        <div class="table-card-large">
-            <div class="table-header-large">
-                <h3>All Loans</h3>
-            </div>
+    
 
-            <div class="table-container-large">
-                <table class="loans-table">
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox"></th>
-                            <th>CUSTOMER</th>
-                            <th>LOAN TYPE</th>
-                            <th>CREDIT SCORE</th>
-                            <th>AMOUNT</th>
-                            <th>BANKS</th>
-                            <th>STATUS</th>
-                            <th>ACTIONS</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>
-                                <div class="customer-cell">
-                                    <div class="customer-avatar">AM</div>
-                                    <div class="customer-info">
-                                        <div class="customer-name">Amit Mehta</div>
-                                        <div class="customer-id">#LN1001</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>Home Loan</td>
-                            <td>
-                                <div class="credit-score-cell">
-                                    <span class="credit-score-value">780</span>
-                                    <span class="credit-score-label good">Good</span>
-                                    <div class="credit-score-bar">
-                                        <div class="credit-score-fill good"></div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>₹5,00,000</td>
-                            <td>HDFC Bank</td>
-                            <td><span class="status-badge approved">Approved</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <i class="fas fa-eye"></i>
-                                    <i class="fas fa-edit"></i>
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>
-                                <div class="customer-cell">
-                                    <div class="customer-avatar">RS</div>
-                                    <div class="customer-info">
-                                        <div class="customer-name">Rahul Sharma</div>
-                                        <div class="customer-id">#LN1002</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>Personal Loan</td>
-                            <td>
-                                <div class="credit-score-cell">
-                                    <span class="credit-score-value">650</span>
-                                    <span class="credit-score-label average">Average</span>
-                                    <div class="credit-score-bar">
-                                        <div class="credit-score-fill average"></div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>₹2,00,000</td>
-                            <td>ICICI Bank</td>
-                            <td><span class="status-badge pending">Pending</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <i class="fas fa-eye"></i>
-                                    <i class="fas fa-edit"></i>
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </div>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="col-md-4">
-        <div class="quick-actions-card">
-            <h3>Quick Actions</h3>
-            <div class="actions-grid">
-                <button class="action-btn"><i class="fas fa-plus"></i> New Application</button>
-                <button class="action-btn"><i class="fas fa-file-export"></i> Export Report</button>
-                <button class="action-btn"><i class="fas fa-user-plus"></i> Add Customer</button>
-                <button class="action-btn"><i class="fas fa-envelope"></i> Send Notice</button>
-            </div>
-        </div>
-    </div>
+  
 
 </div>
 
             <!-- ================= ROW 4 : RECENT ACTIVITY ================= -->
-            <div class="row mb-5" style="margin-top: -333px;">
-                <div class="col-md-4 offset-md-8">
-                     <div class="activity-card">
-                        <h3>Recent Activity</h3>
-                        <div class="activity-list">
-                            <div class="activity-item">
-                                <div class="activity-icon approved">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Loan approved for Michael Chen</div>
-                                    <div class="activity-desc">Business loan of $120,000 approved</div>
-                                    <div class="activity-time">2 hours ago</div>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon payment">
-                                    <i class="fas fa-dollar-sign"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Payment received from Sarah Johnson</div>
-                                    <div class="activity-desc">Monthly installment of $1,250</div>
-                                    <div class="activity-time">5 hours ago</div>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon application">
-                                    <i class="fas fa-file-alt"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">New application submitted</div>
-                                    <div class="activity-desc">Emily Rodriguez applied for home loan</div>
-                                    <div class="activity-time">8 hours ago</div>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon customer">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">New customer registered</div>
-                                    <div class="activity-desc">David Thompson completed profile</div>
-                                    <div class="activity-time">1 day ago</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+          
         </div>
     </div>
 </div>
@@ -709,9 +529,9 @@ body {
 /* Metrics Grid */
 .metrics-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* only 2 cards */
     gap: 24px;
-    margin-bottom: 32px;
+    width: 100%;
 }
 
 .metric-card {
@@ -719,12 +539,14 @@ body {
     border-radius: 12px;
     padding: 24px;
     display: flex;
-    align-items: flex-start;
     gap: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
 
+    width: 100%;          /* ✅ take full column width */
+    margin-left: 0;       /* ❌ REMOVE this */
+    height: auto;         /* flexible height */
+
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
 .metric-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -758,9 +580,9 @@ body {
 }
 
 .metric-content h3 {
-    font-size: 14px;
-    color: var(--text-secondary);
-    font-weight: 500;
+    font-size: 23px;
+    color: #000;
+    font-weight: 600;
     margin-bottom: 8px;
 }
 

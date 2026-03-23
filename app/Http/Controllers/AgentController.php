@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use App\Models\States;
+use App\Models\Cities;
 
 class AgentController extends Controller
 {
@@ -31,7 +33,12 @@ class AgentController extends Controller
     {
         return view('agent.addAgent');
     }
-
+    
+public function getCities($state_id)
+{
+    $cities = Cities::where('state_id', $state_id)->get();
+    return response()->json($cities);
+}
     public function allAgents()
     {
         $data['allAgents'] = DB::table('users')
@@ -309,34 +316,122 @@ class AgentController extends Controller
 
         return view('agent.agentDashboard', compact('walletBalance', 'assignedLoans','totalCount','totalMis'));
     }
-    public function edit($id)
-    {
+//  public function edit($id)
+// {
+//     $loan = Loan::with(['user','loanCategory'])
+//         ->where('loan_id',$id)
+//         ->first();
 
-        $loan = Loan::with(['user', 'loanCategory'])->where('loan_id', $id)->first();
+//     if(!$loan){
+//         return redirect()
+//             ->route('agent.allAgentLoans')
+//             ->with('error','Loan not found');
+//     }
 
-        if (!$loan) {
-            return redirect()->route('agent.allAgentLoans')->with('error', 'Loan not found');
-        }
+//     // Profile with relations
+//     $profile = Profile::with(['cityRelation','stateRelation'])
+//         ->where('user_id',$loan->user_id)
+//         ->first();
 
-        // Fetch related data
-        $profile = Profile::with('cityRelation', 'stateRelation')->where('user_id', $loan->user_id)->first();
-        $professional = Professional::where('user_id', $loan->user_id)->first();
-        $education = Education::where('user_id', $loan->user_id)->first();
+//     $professional = Professional::where('user_id',$loan->user_id)->first();
+//     $education = Education::where('user_id',$loan->user_id)->first();
 
-        // Fetch all users with role_id 2 (agents) and loan categories
-        $agents = User::join('role_user', 'users.id', '=', 'role_user.user_id')
-            ->where('role_user.role_id', 2)
-            ->select('users.id', 'users.name')
-            ->get();
+//     // Documents
+//     $documents = DB::table('documents')
+//         ->where('user_id',$loan->user_id)
+//         ->get();
 
-        $applyingUser = User::find($loan->user_id);
-        $loanCategories = LoanCategory::all();
+//     // Agents
+//     $agents = User::join('role_user','users.id','=','role_user.user_id')
+//         ->where('role_user.role_id',2)
+//         ->select('users.id','users.name')
+//         ->get();
 
-        // Fetch existing documents
-        $documents = DB::table('documents')->where('user_id', $loan->user_id)->get();
-        return view('agent.edit-loan', compact('loan', 'loanCategories', 'profile', 'professional', 'education', 'agents', 'applyingUser', 'documents'));
-    }
+//     $applyingUser = User::find($loan->user_id);
+
+//     $loanCategories = LoanCategory::all();
+
+//     // States
+//     $states = States::all();
+
+//     // Find selected state
+//     $state = States::find($profile->state);
+
+//    $cities = Cities::where('state_id', $profile->state)->get();
+
+//     return view(
+//         'agent.edit-loan',
+//         compact(
+//             'loan',
+//             'loanCategories',
+//             'profile',
+//             'documents',
+//             'professional',
+//             'education',
+//             'agents',
+//             'applyingUser',
+//             'states',
+//             'cities'
+//         )
+//     );
+// }
     //view loan
+
+
+
+    public function edit($id)
+{
+    $loan = Loan::with(['user','loanCategory'])
+        ->where('loan_id',$id)
+        ->first();
+
+    if(!$loan){
+        return redirect()
+            ->route('agent.allAgentLoans')
+            ->with('error','Loan not found');
+    }
+
+    $profile = Profile::with(['cityRelation','stateRelation'])
+        ->where('user_id',$loan->user_id)
+        ->first();
+
+    $professional = Professional::where('user_id',$loan->user_id)->first();
+    $education = Education::where('user_id',$loan->user_id)->first();
+
+    $documents = DB::table('documents')
+        ->where('user_id',$loan->user_id)
+        ->get();
+
+    $agents = User::join('role_user','users.id','=','role_user.user_id')
+        ->where('role_user.role_id',2)
+        ->select('users.id','users.name')
+        ->get();
+
+    $applyingUser = User::find($loan->user_id);
+
+    $loanCategories = LoanCategory::all();
+
+    $states = States::all();
+
+    // ✅ FIXED
+    $cities = Cities::where('state_id', $profile->state)->get();
+
+    return view(
+        'agent.edit-loan',
+        compact(
+            'loan',
+            'loanCategories',
+            'profile',
+            'documents',
+            'professional',
+            'education',
+            'agents',
+            'applyingUser',
+            'states',
+            'cities'
+        )
+    );
+}
     public function view($id)
     {
         // Fetch loan details along with related user and category information
@@ -354,10 +449,9 @@ class AgentController extends Controller
         }
 
         // Fetch related profile details
-        $profile = DB::selectOne(
-            'SELECT * FROM profile WHERE user_id = ?',
-            [$loan->user_id]
-        );
+      $profile = Profile::with(['cityRelation','stateRelation'])
+    ->where('user_id', $loan->user_id)
+    ->first();
 
         // Fetch related professional details
         $professional = DB::selectOne(
@@ -415,7 +509,7 @@ class AgentController extends Controller
                     'new_status' => $newStatus,
                 ]);
 
-                $loan->update([
+               $loan->update([
                     'loan_category_id' => $request->input('loan_category_id'),
                     'amount' => $request->input('amount'),
                     'tenure' => $request->input('tenure'),
@@ -424,6 +518,21 @@ class AgentController extends Controller
                     'in_principle' => $request->input('in_principle'),
                     'amount_approved' => $request->input('amount_approved'),
                 ]);
+
+                // ✅ ADD THIS BLOCK
+                $profile = Profile::where('user_id', $loan->user_id)->first();
+
+                if ($profile) {
+                    $profile->update([
+                        'city' => $request->city,
+                        'state' => $request->state,
+                        'mobile_no' => $request->mobile_no,
+                        'marital_status' => $request->marital_status,
+                        'dob' => $request->dob,
+                        'residence_address' => $request->residence_address,
+                        'pincode' => $request->pincode,
+                    ]);
+                }
 
                 if ($request->hasFile('sanction_letter')) {
                     $sanctionPath = $request->file('sanction_letter')->store('sanction_letters', 'public');
@@ -604,10 +713,10 @@ class AgentController extends Controller
         }
 
         // Fetch related profile details
-        $profile = DB::selectOne(
-            'SELECT * FROM profile WHERE user_id = ?',
-            [$loan->user_id]
-        );
+       $profile = Profile::with(['cityRelation','stateRelation'])
+    ->where('user_id', $loan->user_id)
+    ->first();
+        
 
         // Fetch related professional details
         $professional = DB::selectOne(

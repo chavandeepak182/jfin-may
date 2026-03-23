@@ -1145,6 +1145,25 @@ function updateStatus(userId, status)
         }
     });
 }
+$(document).ready(function () {
+
+    currentType = 'customer'; // default
+
+    // trigger same API as click
+    $.ajax({
+        url: "{{ route('load.list.by.type') }}",
+        type: "GET",
+        data: {
+            type: 'customer',
+            page: 1
+        },
+        success: function (res) {
+            $('#user_table_body').html(res.html);
+            $('.dataTables_paginate nav').html(res.pagination);
+        }
+    });
+
+});
 
 </script>
 
