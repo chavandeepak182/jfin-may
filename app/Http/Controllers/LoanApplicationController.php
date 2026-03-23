@@ -1196,140 +1196,143 @@ return view('admin.edit-loan', compact(
 
 public function update(Request $request)
 {
-    try {
-        $loan = Loan::where('loan_id', $request->loan_id)->firstOrFail();
-
-
-        // ===============================
-        // VALIDATION (UNCHANGED)
-        // ===============================
-        // $validated = $request->validate([
-        //     'loan_id' => 'required|integer',
-        //     'status' => 'required|string',
-        //     'loan_category_id' => 'required|integer',
-        //     'amount' => 'required|numeric',
-        //     'amount_approved' => ['required_if:status,disbursed', 'nullable', 'numeric', 'min:0'],
-        //     'tenure' => 'required|integer',
-        //     'in_principle' => 'nullable|string',
-        //     'remarks' => 'nullable|string',
-        //     // 'sanction_letter' => 'nullable|file|mimes:pdf,doc,docx',
-        //     'documents.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120'
-        // ]);
-        $rules = [
-    'loan_id'           => 'required|integer',
-    'status'            => 'required|string',
-    'loan_category_id'  => 'required|integer',
-    'amount'            => 'required|numeric',
-    'amount_approved'   => 'required_if:status,disbursed|nullable|numeric|min:0',
-    'tenure'            => 'required|integer',
-    'in_principle'      => 'nullable|string',
-    'remarks'           => 'nullable|string',
-    'documents.*'       => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120',
-];
-           // ===============================
-        // 🔴 SANCTION LETTER CONDITION (ONLY FOR DISBURSED)
-        // ===============================
-        if (
-            $request->status === 'disbursed'
-            && !$request->hasFile('sanction_letter')
-            && empty($loan->sanction_letter)
-        ) {
-            $rules['sanction_letter'] = 'required|file|mimes:pdf,doc,docx';
-        } else {
-            $rules['sanction_letter'] = 'nullable|file|mimes:pdf,doc,docx';
-        }
-        $request->validate(
-    $rules,
-    [
-        'sanction_letter.required' =>
-            'Please upload the sanction letter before disbursing the loan.'
-    ]
-);
-
-
-        DB::transaction(function () use ($request) {
-
-            // ===============================
-            // FETCH LOAN
-            // ===============================
+        try {
             $loan = Loan::where('loan_id', $request->loan_id)->firstOrFail();
-            $oldStatus = $loan->status;
-            $newStatus = $request->status;
 
-            Log::info('Loan status update', [
-                'loan_id' => $loan->loan_id,
-                'old_status' => $oldStatus,
-                'new_status' => $newStatus,
-            ]);
 
             // ===============================
-            // UPDATE LOAN BASIC DETAILS
+            // VALIDATION (UNCHANGED)
             // ===============================
-            $loan->loan_category_id = $request->loan_category_id;
-            $loan->amount = $request->amount;
-            $loan->tenure = $request->tenure;
-            $loan->status = $newStatus;
-            $loan->remarks = $request->remarks;
-            $loan->in_principle = $request->in_principle;
-            $loan->amount_approved = $request->amount_approved;
-            $loan->save();
+            // $validated = $request->validate([
+            //     'loan_id' => 'required|integer',
+            //     'status' => 'required|string',
+            //     'loan_category_id' => 'required|integer',
+            //     'amount' => 'required|numeric',
+            //     'amount_approved' => ['required_if:status,disbursed', 'nullable', 'numeric', 'min:0'],
+            //     'tenure' => 'required|integer',
+            //     'in_principle' => 'nullable|string',
+            //     'remarks' => 'nullable|string',
+            //     // 'sanction_letter' => 'nullable|file|mimes:pdf,doc,docx',
+            //     'documents.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120'
+            // ]);
+            $rules = [
+        'loan_id'           => 'required|integer',
+        'status'            => 'required|string',
+        'loan_category_id'  => 'required|integer',
+        'amount'            => 'required|numeric',
+        'amount_approved'   => 'required_if:status,disbursed|nullable|numeric|min:0',
+        'tenure'            => 'required|integer',
+        'in_principle'      => 'nullable|string',
+        'remarks'           => 'nullable|string',
+        'documents.*'       => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120',
+    ];
+            // ===============================
+            // 🔴 SANCTION LETTER CONDITION (ONLY FOR DISBURSED)
+            // ===============================
+            if (
+                $request->status === 'disbursed'
+                && !$request->hasFile('sanction_letter')
+                && empty($loan->sanction_letter)
+            ) {
+                $rules['sanction_letter'] = 'required|file|mimes:pdf,doc,docx';
+            } else {
+                $rules['sanction_letter'] = 'nullable|file|mimes:pdf,doc,docx';
+            }
+            $request->validate(
+        $rules,
+        [
+            'sanction_letter.required' =>
+                'Please upload the sanction letter before disbursing the loan.'
+        ]
+    );
 
-            // ===============================
-            // SAVE REMARKS
-            // ===============================
-            if ($request->remarks) {
-                DB::table('loan_remarks')->insert([
+
+            DB::transaction(function () use ($request) {
+
+                // ===============================
+                // FETCH LOAN
+                // ===============================
+                $loan = Loan::where('loan_id', $request->loan_id)->firstOrFail();
+                $oldStatus = $loan->status;
+                $newStatus = $request->status;
+
+                Log::info('Loan status update', [
                     'loan_id' => $loan->loan_id,
-                    'agent_id' => session()->get('user_id'),
-                    'status' => $newStatus,
-                    'remarks' => $request->remarks,
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'old_status' => $oldStatus,
+                    'new_status' => $newStatus,
                 ]);
-            }
 
-            // ===============================
-            // SANCTION LETTER UPLOAD
-            // ===============================
-            if ($request->hasFile('sanction_letter')) {
-
-                if ($loan->sanction_letter && Storage::disk('public')->exists($loan->sanction_letter)) {
-                    Storage::disk('public')->delete($loan->sanction_letter);
-                }
-
-                $file = $request->file('sanction_letter');
-                $filename = uniqid() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('sanction_letters', $filename, 'public');
-
-                $loan->sanction_letter = $path;
+                // ===============================
+                // UPDATE LOAN BASIC DETAILS
+                // ===============================
+                $loan->loan_category_id = $request->loan_category_id;
+                $loan->amount = $request->amount;
+                $loan->tenure = $request->tenure;
+                $loan->status = $newStatus;
+                $loan->remarks = $request->remarks;
+                $loan->in_principle = $request->in_principle;
+                $loan->amount_approved = $request->amount_approved;
                 $loan->save();
-            }
 
-            // ===============================
-            // DOCUMENT UPLOADS
-            // ===============================
-            if ($request->hasFile('documents')) {
-                foreach ($request->file('documents') as $index => $document) {
-
-                    $name = $request->document_name[$index] ?? $document->getClientOriginalName();
-                    $path = $document->store('documents', 'public');
-
-                    Document::create([
-                        'user_id' => $loan->user_id,
+                // ===============================
+                // SAVE REMARKS
+                // ===============================
+                if ($request->remarks) {
+                    DB::table('loan_remarks')->insert([
                         'loan_id' => $loan->loan_id,
-                        'document_name' => $name,
-                        'file_path' => $path,
+                        'agent_id' => session()->get('user_id'),
+                        'status' => $newStatus,
+                        'remarks' => $request->remarks,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
                 }
-            }
 
-            // ===============================
-            // EMAIL & EVENT (UNCHANGED)
-            // ===============================
-            if ($oldStatus !== $newStatus) {
+                // ===============================
+                // SANCTION LETTER UPLOAD
+                // ===============================
+                if ($request->hasFile('sanction_letter')) {
 
+                    if ($loan->sanction_letter && Storage::disk('public')->exists($loan->sanction_letter)) {
+                        Storage::disk('public')->delete($loan->sanction_letter);
+                    }
+
+                    $file = $request->file('sanction_letter');
+                    $filename = uniqid() . '_' . $file->getClientOriginalName();
+                    $path = $file->storeAs('sanction_letters', $filename, 'public');
+
+                    $loan->sanction_letter = $path;
+                    $loan->save();
+                }
+
+                // ===============================
+                // DOCUMENT UPLOADS
+                // ===============================
+                if ($request->hasFile('documents')) {
+                    foreach ($request->file('documents') as $index => $document) {
+
+                        $name = $request->document_name[$index] ?? $document->getClientOriginalName();
+                        $path = $document->store('documents', 'public');
+
+                        Document::create([
+                            'user_id' => $loan->user_id,
+                            'loan_id' => $loan->loan_id,
+                            'document_name' => $name,
+                            'file_path' => $path,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+                }
+
+                // ===============================
+                // EMAIL & EVENT (UNCHANGED)
+                // ===============================
+                if ($oldStatus !== $newStatus) {
+
+                // ===============================
+                // EVENT (optional - keep if needed)
+                // ===============================
                 event(new LoanStatusUpdated(
                     $loan->loan_reference_id,
                     auth()->id(),
@@ -1338,82 +1341,95 @@ public function update(Request $request)
                     $loan->user_id
                 ));
 
-                $customer = $loan->user;
-                app(UsersController::class)->temail(
-                    $customer->email_id,
-                    $customer->name,
-                    "Your loan status has been updated to: {$newStatus}. Remarks: {$request->remarks}",
-                    4
-                );
-            }
+                // ===============================
+                // 🔥 NEW NOTIFICATION SYSTEM
+                // ===============================
+                $title = "Loan Status Updated";
 
-            // ==================================================
-            // DISBURSED LOGIC (CORRECTED & FINAL)
-            // ==================================================
-            if ($newStatus === 'disbursed') {
+                $message = "Loan {$loan->loan_reference_id} is now {$newStatus}. Remarks: {$request->remarks}";
 
-                $childUserId = $loan->user_id;
-                $childName = $loan->user->name;
+                $users = [];
 
-                // -------------------------------
-                // MLM INSERTION (ONLY ONCE)
-                // -------------------------------
-                $existsInMLM = DB::table('categories')
-                    ->where('user_id', $childUserId)
-                    ->exists();
+// Customer
+if ($loan->user) {
+    $users[] = $loan->user;
+}
 
-                if (!$existsInMLM) {
-
-                    $parentUserId = null;
-
-                    if ($loan->referral_user_id) {
-                        $referralUser = User::find($loan->referral_user_id);
-                        if ($referralUser) {
-                            $parentUserId = $referralUser->id;
-                        }
-                    }
-
-                    if (!$parentUserId) {
-                        $parentNode = app(CategoryController::class)->findNextAvailableNode();
-                        if ($parentNode) {
-                            $parentUserId = $parentNode->user_id;
-                        }
-                    }
-
-                    if ($parentUserId) {
-                        app(CategoryController::class)
-                            ->addNode($parentUserId, $childName, $childUserId);
-                    }
-                }
-
-                // -------------------------------
-                // COMMISSION (EVERY LOAN)
-                // -------------------------------
-                $childCategory = DB::table('categories')
-                    ->where('user_id', $childUserId)
-                    ->first();
-
-                if ($childCategory) {
-                    app(CategoryController::class)
-                        ->commissionDistribution($childUserId, $loan->amount_approved);
-                }
-            }
-        });
-
-        return redirect()->back()->with('success', 'Loan updated successfully!');
-
-    } catch (\Exception $e) {
-
-        Log::error('Error updating loan', ['exception' => $e->getMessage()]);
-
-        if ($request->expectsJson()) {
-            return response()->json(['status' => 0, 'msg' => $e->getMessage()]);
-        }
-
-        return redirect()->back()
-            ->withErrors(['error' => $e->getMessage()])
-            ->withInput();
+// Agent
+if ($loan->agent_id) {
+    $agent = \App\Models\User::find($loan->agent_id);
+    if ($agent) {
+        $users[] = $agent;
     }
+}}
+
+                // ==================================================
+                // DISBURSED LOGIC (CORRECTED & FINAL)
+                // ==================================================
+                if ($newStatus === 'disbursed') {
+
+                    $childUserId = $loan->user_id;
+                    $childName = $loan->user->name;
+
+                    // -------------------------------
+                    // MLM INSERTION (ONLY ONCE)
+                    // -------------------------------
+                    $existsInMLM = DB::table('categories')
+                        ->where('user_id', $childUserId)
+                        ->exists();
+
+                    if (!$existsInMLM) {
+
+                        $parentUserId = null;
+
+                        if ($loan->referral_user_id) {
+                            $referralUser = User::find($loan->referral_user_id);
+                            if ($referralUser) {
+                                $parentUserId = $referralUser->id;
+                            }
+                        }
+
+                        if (!$parentUserId) {
+                            $parentNode = app(CategoryController::class)->findNextAvailableNode();
+                            if ($parentNode) {
+                                $parentUserId = $parentNode->user_id;
+                            }
+                        }
+
+                        if ($parentUserId) {
+                            app(CategoryController::class)
+                                ->addNode($parentUserId, $childName, $childUserId);
+                        }
+                    }
+
+                    // -------------------------------
+                    // COMMISSION (EVERY LOAN)
+                    // -------------------------------
+                    $childCategory = DB::table('categories')
+                        ->where('user_id', $childUserId)
+                        ->first();
+
+                    if ($childCategory) {
+                        app(CategoryController::class)
+                            ->commissionDistribution($childUserId, $loan->amount_approved);
+                    }
+                }
+            });
+
+            return redirect()->back()->with('success', 'Loan updated successfully!');
+
+        } catch (\Exception $e) {
+
+            Log::error('Error updating loan', ['exception' => $e->getMessage()]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['status' => 0, 'msg' => $e->getMessage()]);
+            }
+
+            return redirect()->back()
+                ->withErrors(['error' => $e->getMessage()])
+                ->withInput();
+        }
 }
 
 

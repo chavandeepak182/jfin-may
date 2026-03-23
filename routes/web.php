@@ -144,7 +144,7 @@ Route::get('/services',function () {
 Route::get('/contact',function () {
     return view('dhara-jfin.contact');
     });
-// Route::get('contact', [FrontendController::class, 'ContactView']);
+ Route::get('emailtest', [FrontendController::class, 'emailtest']);
 
 Route::get('/privacy-policy',function () {
     return view('dhara-jfin.privacy');
