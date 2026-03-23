@@ -153,62 +153,62 @@
 
                     <div class="col-lg-3">
                         <div class="mb-3">
-    <label class="form-label">Bedrooms</label>
-    <select class="form-control" name="beds">
-        <option value="">Select beds</option>
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-    </select> 
-</div>
+                        <label class="form-label">Bedrooms</label>
+                        <select class="form-control" name="beds">
+                            <option value="">Select beds</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                        </select> 
+                    </div>
 
                     </div>
 
                    <div class="col-lg-3">
-    <div class="mb-3">
-        <label class="form-label">Bathrooms</label>
-        <select class="form-control" name="baths">
-            <option value="">Select baths</option>
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>                                                
-        </select> 
-    </div>
-</div>
+                    <div class="mb-3">
+                        <label class="form-label">Bathrooms</label>
+                        <select class="form-control" name="baths">
+                            <option value="">Select baths</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>                                                
+                        </select> 
+                    </div>
+                </div>
                   <div class="col-lg-3">
-    <div class="mb-3">
-        <label class="form-label">Balconies</label>
-        <select class="form-control" name="balconies">
-            <option value="">Select balconies</option>
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>                                                
-        </select> 
-    </div>
-</div>
+                    <div class="mb-3">
+                        <label class="form-label">Balconies</label>
+                        <select class="form-control" name="balconies">
+                            <option value="">Select balconies</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>                                                
+                        </select> 
+                    </div>
+                </div>
 
-<div class="col-lg-3">
-    <div class="mb-3">
-        <label class="form-label">Parking</label>
-        <select class="form-control" name="parking">
-            <option value="">Select parking</option>
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>                                                
-        </select> 
-    </div>
-</div>
+                    <div class="col-lg-3">
+                        <div class="mb-3">
+                            <label class="form-label">Parking</label>
+                            <select class="form-control" name="parking">
+                                <option value="">Select parking</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>                                                
+                            </select> 
+                        </div>
+                    </div>
 
                     <div class="col-lg-12">
                         <div class="position-relative pb-15 form-group">
@@ -222,71 +222,93 @@
                             <label class="form-label">Property Address</label>
                             <!-- <input type="text" name="property_address" class="form-control" placeholder="Full Address" required /> -->
                         <input type="text" name="property_address" 
-       id="property_address"
-       class="form-control" 
-       placeholder="Full Address" required />
-                        </div>
-                    </div>
+                            id="property_address"
+                            class="form-control" 
+                            placeholder="Full Address" required />
+                                                </div>
+                                            </div>
 
-                    <div class="col-lg-4">
+                  
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+
+                        <label class="form-label">State</label><span class="text-danger">*</span>
+
+                        <select name="state_id" id="state" class="form-control" required>
+
+                        <option value="">Select State</option>
+
+                        @foreach($data['states'] as $state)
+                        <option value="{{ $state->id }}">{{ $state->name }}</option>
+                        @endforeach
+
+                        </select>
+
+                        </div>
+                        </div>
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+
+                    <label class="form-label">City</label><span class="text-danger">*</span>
+
+                    <select name="city" id="city" class="form-control" required>
+
+                    <option value="">Select City</option>
+
+                    </select>
+
+                    </div>
+                    </div>
+                     <div class="col-lg-4">
                         <div class="mb-3">
                             <label class="form-label">Area in City</label>
-                            <select name="localitie" class="form-control" required>
-                                <option value="">Select Locality</option>
-                                @foreach($data['localities'] as $locality)
-                                    <option value="{{ $locality->id }}">{{ $locality->name }}</option>
-                                @endforeach
+                            <select name="area_id" id="area" class="form-control" >
+                                <option value="">Select Area</option>
                             </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="mb-3">
-                            <label class="form-label">City</label><span class="text-danger">*</span>
-                            <input type="text" name="city" class="form-control" placeholder="City" required />
                         </div>
                     </div>
 
                     <!-- Latitude -->
                     <div class="col-lg-6">
-    <div class="mb-3">
-        <label>Latitude *</label>
-        <input type="text" name="latitude" id="latitude"
-               class="form-control" readonly required>
-    </div>
-</div>
+                        <div class="mb-3">
+                            <label>Latitude *</label>
+                            <input type="text" name="latitude" id="latitude"
+                                class="form-control" readonly required>
+                        </div>
+                    </div>
 
-<div class="col-lg-6">
-    <div class="mb-3">
-        <label>Longitude *</label>
-        <input type="text" name="longitude" id="longitude"
-               class="form-control" readonly required>
-    </div>
-</div>
-<script>
-document.getElementById("property_address").addEventListener("blur", function () {
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label>Longitude *</label>
+                            <input type="text" name="longitude" id="longitude"
+                                class="form-control" readonly required>
+                        </div>
+                    </div>
+                    <script>
+                    document.getElementById("property_address").addEventListener("blur", function () {
 
-    let address = this.value;
+                        let address = this.value;
 
-    if(address.length < 5) return;
+                        if(address.length < 5) return;
 
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${address}`)
-        .then(response => response.json())
-        .then(data => {
+                        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${address}`)
+                            .then(response => response.json())
+                            .then(data => {
 
-            if(data.length > 0){
-                document.getElementById("latitude").value = data[0].lat;
-                document.getElementById("longitude").value = data[0].lon;
-            } else {
-                alert("Location not found. Please enter correct address.");
-            }
+                                if(data.length > 0){
+                                    document.getElementById("latitude").value = data[0].lat;
+                                    document.getElementById("longitude").value = data[0].lon;
+                                } else {
+                                    alert("Location not found. Please enter correct address.");
+                                }
 
-        })
-        .catch(error => {
-            console.log(error);
-        });
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
 
-});
-</script>
+                    });
+                    </script>
 
                     
 
@@ -342,16 +364,16 @@ document.getElementById("property_address").addEventListener("blur", function ()
                 </div>
             </div>
         </div>
-<script>
-document.querySelector("form").addEventListener("submit", function(e) {
-    let mobile = document.querySelector("input[name='contact_number']").value;
-    
-    if (mobile.length !== 10) {
-        e.preventDefault();
-        alert("Contact Number must be exactly 10 digits");
-    }
-});
-</script>
+                        <script>
+                        document.querySelector("form").addEventListener("submit", function(e) {
+                            let mobile = document.querySelector("input[name='contact_number']").value;
+                            
+                            if (mobile.length !== 10) {
+                                e.preventDefault();
+                                alert("Contact Number must be exactly 10 digits");
+                            }
+                        });
+                        </script>
         <!-- Right side -->
         <div class="col-lg-3 bg-light p-4">
            <div class="mb-4">
@@ -587,6 +609,79 @@ document.querySelector('input[name="area"]').addEventListener('input', function(
 });
 document.querySelector('input[name="s_price"]').addEventListener('input', function () {
     this.value = this.value.replace(/[^0-9]/g, '');
+});
+
+$('#state').change(function(){
+
+    var state_id = $(this).val();
+
+    if(state_id){
+
+        $.ajax({
+
+            url:"{{ route('getCities') }}",
+
+            type:"POST",
+
+            data:{
+                state_id:state_id,
+                _token:"{{ csrf_token() }}"
+            },
+
+            success:function(data){
+
+                $('#city').html('<option value="">Select City</option>');
+
+                $.each(data,function(key,value){
+
+                    $('#city').append(
+    '<option value="'+value.id+'">'+value.city+'</option>'
+);
+
+                });
+
+            }
+
+        });
+
+    }
+
+});
+// CITY → AREA
+$('#city').change(function(){
+
+    var city_id = $(this).val();
+
+    $('#area').html('<option>Loading...</option>');
+
+    if(city_id){
+
+        $.ajax({
+            url: '/get-areas/' + city_id,
+            type: 'GET',
+
+            success: function(data){
+
+                $('#area').html('<option value="">Select Area</option>');
+
+                $.each(data, function(key, value){
+
+                    $('#area').append(
+                        '<option value="'+value.id+'">'+value.name+'</option>'
+                    );
+
+                });
+
+            },
+
+            error:function(err){
+                console.log("Area error:", err);
+            }
+
+        });
+
+    }
+
 });
 
 </script>

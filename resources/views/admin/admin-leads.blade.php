@@ -675,6 +675,7 @@ $(document).off('submit', '#addUser').on('submit', '#addUser', function (e) {
                     $('#addUserView').modal('hide');
                     $('#addUser')[0].reset();
                     $('#user_id').val('');
+                    loadReferralLeads(); // 🔥 THIS LINE ADD
                     $('#submitUserBtn').text('Save').prop('disabled', false);
 
                     // reload current list

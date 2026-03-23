@@ -371,13 +371,13 @@ body {
     <a href="#"
        class="user-avatar dropdown-toggle"
        data-bs-toggle="dropdown"
-       title="{{ Session::has('role_id') ? auth()->user()->name : 'Login' }}">
+     title="{{ session('username') ?? 'Login' }}">
 
-        @if(Session::has('role_id'))
-            {{ auth()->user()->name }}
-        @else
-            Login
-        @endif
+@if(session()->has('user_id'))
+    {{ session('username') ?? 'User' }}
+@else
+    Login
+@endif
     </a>
 
         <div class="dropdown-menu dropdown-menu-end user-dropdown">

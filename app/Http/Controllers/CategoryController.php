@@ -28,20 +28,50 @@ class CategoryController extends Controller
 /**
  * Build a hierarchical tree from a flat dataset.
  */
+// private function buildTree($categories, $parentId = null)
+// {
+//     $tree = [];
+//     foreach ($categories as $category) {
+//         if ($category->parent_id == $parentId) {
+//             $children = $this->buildTree($categories, $category->user_id);
+//             $tree[] = [
+//                 'id' => $category->id,
+//                 'name' => $category->name,
+//                 'user_id' => $category->user_id,
+//                 'children' => $children,
+//             ];
+//         }
+//     }
+//     return $tree;
+// }
+
+
 private function buildTree($categories, $parentId = null)
 {
     $tree = [];
+
     foreach ($categories as $category) {
         if ($category->parent_id == $parentId) {
+
+            // 🔹 Fetch user details
+            $user = DB::table('users')
+                ->where('id', $category->user_id)
+                ->select('id', 'email_id', 'mobile_no')
+                ->first();
+
             $children = $this->buildTree($categories, $category->user_id);
+
             $tree[] = [
                 'id' => $category->id,
                 'name' => $category->name,
                 'user_id' => $category->user_id,
+                'email' => $user->email_id ?? '',
+                'mobile' => $user->mobile_no ?? '',
                 'children' => $children,
             ];
         }
     }
+
     return $tree;
 }
     public function store(Request $request)

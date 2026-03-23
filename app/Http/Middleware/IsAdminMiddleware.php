@@ -13,14 +13,16 @@ class IsAdminMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
-    {
-       $role_id = session()->get('role_id');
-    //    dd(env('adminRole_id'));
-       if($role_id == 4){
+  public function handle(Request $request, Closure $next): Response
+{
+   
+    $role_id = session()->get('role_id');
+
+    if ($role_id == 4) { // admin
         return $next($request);
-       }
-       return redirect('/')->with('error', 'You are not the authorized user to access this page');
-        
     }
+
+    return redirect()->route('login')
+        ->with('error', 'You are not authorized');
+}
 }

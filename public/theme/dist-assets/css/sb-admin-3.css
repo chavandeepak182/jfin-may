@@ -403,9 +403,9 @@ body {
 }
 
 .metric-content h3 {
-    font-size: 14px;
-    color: var(--text-secondary);
-    font-weight: 500;
+    font-size: 23px;
+    color: #000;
+    font-weight: 600;
     margin-bottom: 8px;
 }
 
