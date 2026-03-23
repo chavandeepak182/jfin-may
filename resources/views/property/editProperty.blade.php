@@ -148,17 +148,38 @@
                                 <textarea name="property_address" class="form-control" rows="1" style="resize:none" maxlength="250" value="" >{{ $v->address }}</textarea>
                             </div>
                         </div>
+                        <!-- STATE -->
                         <div class="col-lg-4">
                             <div class="mb-3">
-                                <label class="form-label">Area in City</label>
-                                <input type="text" name="localities" class="form-control" placeholder="Localities" value="{{ $v->localities }}" />
+                                <label class="form-label">State</label>
+                                <select name="state_id" id="state" class="form-control" required>
+                                    <option value="">Select State</option>
+                                    @foreach($data['states'] as $state)
+                                        <option value="{{ $state->id }}"
+                                            {{ $state->id == ($v->state_id ?? '') ? 'selected' : '' }}>
+                                            {{ $state->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
+
+                        <!-- CITY -->
                         <div class="col-lg-4">
                             <div class="mb-3">
                                 <label class="form-label">City</label>
-                                <input type="text" name="city" class="form-control" placeholder="City" value="{{ $v->city }}" />
+                                <select name="city_id" id="city" class="form-control" required>
+                                    <option value="">Select City</option>
+                                </select>
                             </div>
+                        </div>
+
+                        <!-- AREA -->
+                      <div class="mb-3">
+                            <label class="form-label">Area in City</label>
+                        <select name="area_id" id="area" class="form-control">
+                            <option value="">Select Area</option>
+                        </select>
                         </div>
                         <div class="col-lg-6">
                             <div class="mb-3">
@@ -310,6 +331,110 @@ function getImgData() {
             }
         });
     }); 
+    // STATE → CITY
+$('#state').on('change', function () {
+
+    let stateId = $(this).val();
+
+    $('#city').html('<option>Loading...</option>');
+    $('#area').html('<option>Select Area</option>');
+
+    if (!stateId) return;
+
+    $.ajax({
+        url: '/get-cities/' + stateId,
+        type: 'GET',
+        success: function (res) {
+
+            let options = '<option value="">Select City</option>';
+
+            res.forEach(function (city) {
+                options += `<option value="${city.id}">${city.city}</option>`;
+            });
+
+            $('#city').html(options);
+        }
+    });
+});
+
+
+// CITY → AREA
+$('#city').on('change', function () {
+
+    let cityId = $(this).val();
+
+    $('#area').html('<option>Loading...</option>');
+
+    if (!cityId) return;
+
+    $.ajax({
+        url: '/get-areas/' + cityId,
+        type: 'GET',
+        success: function (res) {
+
+            let options = '<option value="">Select Area</option>';
+
+            res.forEach(function (area) {
+                options += `<option value="${area.id}">${area.name}</option>`;
+            });
+
+            $('#area').html(options);
+        }
+    });
+});
+$(document).ready(function () {
+
+    let stateId = "{{ $v->state_id }}";
+    let cityId  = "{{ $v->city_id }}";
+    let areaId  = "{{ $v->locality_id ?? '' }}";
+
+    if (stateId) {
+        loadCities(stateId, cityId, areaId);
+    }
+
+});
+
+function loadCities(stateId, selectedCity = null, selectedArea = null) {
+
+    $.ajax({
+        url: '/get-cities/' + stateId,
+        type: 'GET',
+        success: function (cities) {
+
+            let options = '<option value="">Select City</option>';
+
+            cities.forEach(function (city) {
+                let selected = city.id == selectedCity ? 'selected' : '';
+                options += `<option value="${city.id}" ${selected}>${city.city}</option>`;
+            });
+
+            $('#city').html(options);
+
+            if (selectedCity) {
+                loadAreas(selectedCity, selectedArea);
+            }
+        }
+    });
+}
+
+function loadAreas(cityId, selectedArea = null) {
+
+    $.ajax({
+        url: '/get-areas/' + cityId,
+        type: 'GET',
+        success: function (areas) {
+
+            let options = '<option value="">Select Area</option>';
+
+            areas.forEach(function (area) {
+                let selected = (parseInt(area.id) === parseInt(selectedArea)) ? 'selected' : '';
+                options += `<option value="${area.id}" ${selected}>${area.name}</option>`;
+            });
+
+            $('#area').html(options);
+        }
+    });
+}
  </script>
 
 @endsection

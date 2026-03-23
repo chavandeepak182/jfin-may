@@ -1624,7 +1624,7 @@ public function showForm(Request $request)
     /* =========================================================
        🔴 ADMIN: NEW APPLICATION RESET (FIRST LOAD ONLY)
        ========================================================= */
-    if (session('role_id') == 4 && !$request->has('current_step')) {
+    if (in_array(session('role_id'), [2,4]) && !$request->has('current_step')) {
 
         Log::info('ADMIN clicked NEW LOAN APPLICATION', [
             'admin_id'            => session('user_id'),
@@ -1650,7 +1650,7 @@ public function showForm(Request $request)
 
     /* ---------------- LAYOUT ---------------- */
     $layout = 'frontend.layouts.header';
-    if (session('role_id') == 4) {
+   if (in_array(session('role_id'), [2,4])) {   // agent + admin
         $layout = 'layouts.header';
     }
 
@@ -1708,8 +1708,7 @@ public function showForm(Request $request)
     /* ---------------- ADMIN USER LIST ---------------- */
 
     $loanUsers = collect();
-
-    if (session('role_id') == 4) {
+if (in_array(session('role_id'), [2,4])) {   // agent + admin
         $loanUsers = User::join('otp', 'otp.user_id', '=', 'users.id')
             ->where('users.role_id', 1)
             ->where('otp.is_verify', 1)
@@ -1732,9 +1731,9 @@ public function showForm(Request $request)
     $selectedUserId   = session('selected_user_id');
     $canLoadUserData  = true;
 
-    if (session('role_id') == 4 && !$selectedUserId) {
-        $canLoadUserData = false;
-    }
+  if (in_array(session('role_id'), [2,4]) && !$selectedUserId) {
+    $canLoadUserData = false;
+}
 
     Log::info('User data load decision', [
         'role_id'          => session('role_id'),
@@ -2378,17 +2377,25 @@ public function ajaxRejectedLoans(Request $request)
     $currentStep = (int) $request->input('current_step');
 
     // ADMIN user selection
-    if ($sessionUserRole == 4 && $currentStep == 1) {
+    if (in_array($sessionUserRole,[2,4]) && $currentStep == 1) {
         if (!$request->user_id) {
             return back()->withErrors(['user_id' => 'Please select user']);
         }
         session(['selected_user_id' => $request->user_id]);
     }
+if (in_array($sessionUserRole,[2,4])) {
 
-    $userId = $sessionUserRole == 4
-        ? session('selected_user_id')
-        : $sessionUserId;
+    $userId = session('selected_user_id');
 
+    if (!$userId) {
+        return redirect()->back()->withErrors([
+            'user_id' => 'Please select a customer first.'
+        ]);
+    }
+
+} else {
+    $userId = $sessionUserId;
+}
     if ($request->has('previous')) {
         return redirect()->route('loan.form', [
             'current_step' => max(1, $currentStep - 1)
@@ -3593,16 +3600,19 @@ if ($loan && in_array($loan->status, ['disbursed', 'rejected'])) {
         if (!$loan) {
 
             // First-time loan creation
-            $loan = Loan::create([
-                'user_id'            => $userId,
-                'loan_reference_id'  => $this->generateLoanReferenceId(),
-                'loan_category_id'   => $loan_category_id,
-                'bank_id'            => $bank_id,
-                'amount'             => $validated['amount'],
-                'tenure'             => $validated['tenure'],
-                'referral_user_id'   => $referralUserId,
-                'status'             => 'in process',
-            ]);
+  $loan = Loan::create([
+    'user_id' => $userId,
+    'loan_reference_id' => $this->generateLoanReferenceId(),
+    'loan_category_id' => $loan_category_id,
+    'bank_id' => $bank_id,
+    'amount' => $validated['amount'],
+    'tenure' => $validated['tenure'],
+    'referral_user_id' => $referralUserId,
+    'status' => 'in process',
+
+    // IMPORTANT
+    'agent_id' => session('role_id') == 2 ? session('user_id') : null,
+]);
 
             Session::put('current_loan_id', $loan->loan_id);
 
@@ -3610,13 +3620,15 @@ if ($loan && in_array($loan->status, ['disbursed', 'rejected'])) {
 
         // Update existing loan
         $loan->update([
-            'loan_category_id' => $loan_category_id,
-            'bank_id'          => $bank_id,
-            'amount'           => $validated['amount'],
-            'tenure'           => $validated['tenure'],
-            'referral_user_id' => $referralUserId,
-            'status'           => 'in process', // ✅ ADD THIS LINE
-        ]);
+    'loan_category_id' => $loan_category_id,
+    'bank_id' => $bank_id,
+    'amount' => $validated['amount'],
+    'tenure' => $validated['tenure'],
+    'referral_user_id' => $referralUserId,
+    'status' => 'in process',
+
+    'agent_id' => session('role_id') == 2 ? session('user_id') : $loan->agent_id,
+]);
 
         Log::info('Loan moved from draft to in process', [ // ✅ ADD LOG
             'loan_id' => $loan->loan_id,
@@ -3846,23 +3858,33 @@ if (session('role_id') == 4) {
     ->whereIn('agent_action', ['pending', 'accepted', 'in process'])
     ->count();
         // ✅ ADD THIS
-    $totalCount = DB::table('loans')
-        ->where('agent_id', $agent_id)
-        ->count();
-        $inProcessCount = Loan::where('agent_id', $agent_id)
-        ->where('status', 'in process')
-        ->count();
-        $approvedCount = Loan::where('agent_id', $agent_id)
-        ->where('status', 'approved')
-        ->count();
-        $disbursedCount = Loan::where('agent_id', $agent_id)
-        ->where('status', 'disbursed')
-        ->count();
+   
+
+$totalCount = Loan::where('agent_id', $agent_id)
+    ->where('agent_action', 'accepted')
+    ->whereNull('deleted_at')
+    ->count();
+
+$inProcessCount = Loan::where('agent_id', $agent_id)
+    ->where('agent_action', 'accepted')
+    ->where('status', 'in process')
+    ->count();
+
+$approvedCount = Loan::where('agent_id', $agent_id)
+    ->where('agent_action', 'accepted')
+    ->where('status', 'approved')
+    ->count();
+
+$disbursedCount = Loan::where('agent_id', $agent_id)
+    ->where('agent_action', 'accepted')
+    ->where('status', 'disbursed')
+    ->count();
 
         $query = DB::table('loans')
             ->join('users', 'loans.user_id', '=', 'users.id')
             ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
             ->where('loans.agent_id', $agent_id)
+->where('loans.agent_action', 'accepted')
             ->orderByDesc('loans.created_at')
             ->select(
                 'loans.loan_id',
@@ -3977,12 +3999,15 @@ public function allLoansAjax(Request $request)
     $search   = $request->search;
     $status   = $request->status;
 
-    // ✅ TOTAL COUNT (without pagination)
-    $totalCount = Loan::where('agent_id', $agent_id)->count();
+    // ✅ TOTAL COUNT
+    $totalCount = Loan::where('agent_id', $agent_id)
+        ->where('agent_action', 'accepted')
+        ->count();
 
-    // ✅ FILTERED QUERY
+    // ✅ QUERY
     $query = Loan::with(['user', 'loanCategory'])
         ->where('agent_id', $agent_id)
+        ->where('agent_action', 'accepted') // 🔥 FIX
 
         ->when($search, function ($q) use ($search) {
             $q->where(function ($sub) use ($search) {
@@ -4003,9 +4028,8 @@ public function allLoansAjax(Request $request)
     // ✅ FILTERED COUNT
     $filteredCount = $query->count();
 
-    // ✅ PAGINATED DATA
-    $loans = $query
-        ->orderByDesc('created_at')
+    // ✅ PAGINATION
+    $loans = $query->orderByDesc('created_at')
         ->paginate(10)
         ->withQueryString();
 
@@ -4085,7 +4109,6 @@ public function disbursedLoansAjax(Request $request)
         compact('loans','disbursedCount')
     );
 }
-
 
 
 

@@ -14,46 +14,87 @@ class ProfileController extends Controller
     /**
      * Show logged-in user's profile
      */
-    public function showProfile()
-    {
-        $userId = session('user_id');
+//     public function showProfile()
+//     {
+//        $userId = session()->get('user_id');
 
-        if (!$userId) {
-            return redirect('/')->with('error', 'No user ID in session.');
-        }
+// if (!$userId) {
+//     return redirect()->route('login')->with('error', 'Session expired. Please login again.');
+// }
 
-        // ✅ Join cities & states for readable names
-        $user = DB::table('users')->where('id', $userId)->first();
+//         // ✅ Join cities & states for readable names
+//         $user = DB::table('users')->where('id', $userId)->first();
 
-        $profile = DB::table('profile')
-    ->leftJoin('cities', 'profile.city', '=', 'cities.id')
-    ->leftJoin('states', 'profile.state', '=', 'states.id')
-    ->select('profile.*', 'cities.city as city_name', 'states.name as state_name')
-    ->where('profile.user_id', $userId)
-    ->first();
+//         $profile = DB::table('profile')
+//     ->leftJoin('cities', 'profile.city', '=', 'cities.id')
+//     ->leftJoin('states', 'profile.state', '=', 'states.id')
+//     ->select('profile.*', 'cities.city as city_name', 'states.name as state_name')
+//     ->where('profile.user_id', $userId)
+//     ->first();
 
-        if ($user && $profile) {
-            return view('admin.profile', compact('user', 'profile'));
-        }
+//        if ($user) {
+//             return view('admin.profile', compact('user', 'profile'));
+//         }
 
-        return redirect('/')->with('error', 'User or profile information not found.');
-    }
+//         return redirect('/')->with('error', 'User or profile information not found.');
+//     }
 
     /**
      * Show edit form
      */
+
+    public function showProfile()
+{
+    $userId = session()->get('user_id');
+
+    if (!$userId) {
+        return redirect()->route('login')->with('error', 'Session expired. Please login again.');
+    }
+
+    // Get user
+    $user = DB::table('users')->where('id', $userId)->first();
+
+    if (!$user) {
+        return redirect('/')->with('error', 'User not found.');
+    }
+
+    // Get profile
+    $profile = DB::table('profile')
+        ->leftJoin('cities', 'profile.city', '=', 'cities.id')
+        ->leftJoin('states', 'profile.state', '=', 'states.id')
+        ->select('profile.*', 'cities.city as city_name', 'states.name as state_name')
+        ->where('profile.user_id', $userId)
+        ->first();
+
+    // ✅ Auto create profile if not exists
+    if (!$profile) {
+        DB::table('profile')->insert([
+            'user_id' => $userId,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        // fetch again
+        $profile = DB::table('profile')
+            ->leftJoin('cities', 'profile.city', '=', 'cities.id')
+            ->leftJoin('states', 'profile.state', '=', 'states.id')
+            ->select('profile.*', 'cities.city as city_name', 'states.name as state_name')
+            ->where('profile.user_id', $userId)
+            ->first();
+    }
+
+    return view('admin.profile', compact('user', 'profile'));
+}
     public function editProfile()
     {
-        $userId = session('user_id');
+       $userId = session()->get('user_id');
 
-        if (!$userId) {
-            return redirect('/')->with('error', 'No user ID in session.');
-        }
-
+if (!$userId) {
+    return redirect()->route('login')->with('error', 'Session expired. Please login again.');
+}
         $user = DB::table('users')->where('id', $userId)->first();
         $profile = DB::table('profile')->where('user_id', $userId)->first();
-
-        if ($user && $profile) {
+if ($user) {
             return view('admin.profile-edit', compact('user', 'profile'));
         }
 
@@ -65,11 +106,11 @@ class ProfileController extends Controller
      */
    public function updateProfile(Request $request)
 {
-    $userId = session('user_id');
+    $userId = session()->get('user_id');
 
-    if (!$userId) {
-        return redirect()->route('login')->with('error', 'You need to login first.');
-    }
+if (!$userId) {
+    return redirect()->route('login')->with('error', 'Session expired. Please login again.');
+}
 
     // ✅ Validation rules
     $request->validate([

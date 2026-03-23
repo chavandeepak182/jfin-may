@@ -529,6 +529,9 @@ Route::middleware(['isAdmin'])->group(function () {
 
     Route::post('admin/updateLoan', [LoanApplicationController::class, 'update'])
         ->name('admin.updateLoan');
+        Route::get('admin/profile/edit', [ProfileController::class, 'editProfile'])->name('admin.profile.edit');
+Route::post('admin/profile/update', [ProfileController::class, 'updateProfile'])->name('admin.profile.update');
+Route::get('admin/profile', [ProfileController::class, 'showProfile'])->name('admin.profile');
 
 });
 
@@ -622,10 +625,10 @@ Route::get(
 )->name('agent.disbursedLoans.ajax');
 
 
+Route::post('/get-cities',[PropertyController::class,'getCities'])->name('getCities');
+Route::get('/get-cities/{state_id}', [AgentController::class, 'getCities']);
 
-
-
-
+Route::get('/get-areas/{city_id}', [PropertyController::class, 'getAreas']);
 
 //export
 Route::get('/export-eligibility', function () {
@@ -739,9 +742,7 @@ Route::post('/loan/restore', [LoanApplicationController::class, 'restoreLoan'])
 
 //admin user profile
 
-Route::get('admin/profile/edit', [ProfileController::class, 'editProfile'])->name('admin.profile.edit');
-Route::post('admin/profile/update', [ProfileController::class, 'updateProfile'])->name('admin.profile.update');
-Route::get('admin/profile', [ProfileController::class, 'showProfile'])->name('admin.profile');
+
 //customer register
 Route::get('/register', function () {
     return view('register'); // Make sure this points to your registration view

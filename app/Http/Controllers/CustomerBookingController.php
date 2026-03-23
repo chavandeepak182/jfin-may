@@ -235,7 +235,7 @@ public function adminOffer(Request $request, $id)
 public function customerConfirm(Request $request, $id)
 {
     $validated = $request->validate([
-        'selected_items' => 'required|array',
+        'selected_items' => 'nullable|string',
         'selected_items.*.label' => 'required|string',
         'selected_items.*.amount' => 'required|numeric|min:0',
         'selected_items.*.description' => 'nullable|string',
