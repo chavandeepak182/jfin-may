@@ -38,6 +38,7 @@ use App\Http\Controllers\TicketMessageController;
 use App\Http\Controllers\CustomerBookingController;
 use App\Http\Controllers\VisitEnquiryController;
 use App\Http\Controllers\AuthV3\PropertyAuthController;
+use App\Http\Controllers\PriceRangeController;
 
 
 
@@ -1053,4 +1054,16 @@ Route::get('/partner/assigned-leads', [VisitEnquiryController::class, 'partnerLe
     [VisitEnquiryController::class, 'partnerPendingLeads'])
     ->middleware('auth')
     ->name('partner.pending.leads');
+
+    //price range
+    Route::middleware(['isAdmin'])->group(function () {
+
+    Route::get('admin/price-range', [PriceRangeController::class, 'index']);
+    Route::get('admin/price-range/create', [PriceRangeController::class, 'create']);
+    Route::post('admin/price-range/store', [PriceRangeController::class, 'store']);
+    Route::get('admin/price-range/edit/{id}', [PriceRangeController::class, 'edit']);
+    Route::post('admin/price-range/update/{id}', [PriceRangeController::class, 'update']);
+    Route::get('admin/price-range/delete/{id}', [PriceRangeController::class, 'destroy']);
+
+});
 
