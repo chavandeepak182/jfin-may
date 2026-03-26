@@ -63,6 +63,8 @@ class CustomerBookingController extends Controller
 
     return view('admin.property-bookings.index', compact('bookings'));
 }
+
+
     public function adminReview(Request $request, $id)
     {
         $request->validate([
@@ -232,12 +234,193 @@ public function adminOffer(Request $request, $id)
 
     return view('customer.bookings.index', compact('bookings'));
 }
+// public function customerConfirm(Request $request, $id)
+// {
+//   $validated = $request->validate([
+//     'selected_items' => 'nullable|array', // ✅ change this
+//     'selected_items.*.label' => 'required|string',
+//     'selected_items.*.amount' => 'required|numeric|min:0',
+//     'selected_items.*.description' => 'nullable|string',
+//     'selected_items.*.image' => 'nullable|string',
+// ]);
+//     $booking = PropertyBooking::where('id', $id)
+//         ->where('customer_id', auth()->id())
+//         ->firstOrFail();
+
+//     if ($booking->status !== 'waiting_customer_confirmation') {
+//         return redirect()
+//             ->route('customer.bookings')
+//             ->with('error', 'Offer already confirmed.');
+//     }
+
+//     // Calculate total selected
+//     $total = collect($request->selected_items)->sum(function ($item) {
+//         return floatval($item['amount']);
+//     });
+
+//     if ($total > $booking->offer_pool) {
+//         return back()->withErrors(
+//             'Selected amount cannot exceed ₹ ' . $booking->offer_pool
+//         );
+//     }
+
+//     $remaining = $booking->offer_pool - $total;
+
+//     // Clean selected items
+//     $selectedItems = collect($request->selected_items)
+//         ->filter(function ($item) {
+//             return floatval($item['amount']) > 0;
+//         })
+//       ->map(function ($item) {
+//     return [
+//         'label' => $item['label'],
+//         'amount' => floatval($item['amount']),
+//         'description' => $item['description'] ?? null,
+//         'image' => $item['image'] ?? null
+//     ];
+// })
+//         ->values()
+//         ->toArray();
+
+//     // Add cashback if remaining
+//     if ($remaining > 0) {
+//         $selectedItems[] = [
+//             'label' => 'Cashback',
+//             'amount' => $remaining,
+//             'description' => 'Remaining cashback amount',
+//             'image' => null
+//         ];
+//     }
+
+//     $booking->update([
+//         'selected_offer' => json_encode($selectedItems),
+//         'status' => 'customer_confirmed'
+//     ]);
+
+//     return redirect()
+//         ->route('customer.bookings')
+//         ->with('success', 'Offer confirmed successfully');
+// }
+
+
+
+// public function customerConfirm(Request $request, $id)
+// {
+//     $validated = $request->validate([
+//         'selected_items' => 'nullable|array',
+//        'selected_items.*.label' => 'nullable|string',
+//         'selected_items.*.amount' => 'nullable|numeric|min:0',
+//         'selected_items.*.description' => 'nullable|string',
+//         'selected_items.*.image' => 'nullable|string',
+//     ]);
+
+//     $booking = PropertyBooking::where('id', $id)
+//         ->where('customer_id', auth()->id())
+//         ->firstOrFail();
+
+//     if ($booking->status !== 'waiting_customer_confirmation') {
+//         return redirect()
+//             ->route('customer.bookings')
+//             ->with('error', 'Offer already confirmed.');
+//     }
+
+//     /* ===============================
+//        ✅ CASHBACK ONLY CASE HANDLE
+//     =============================== */
+//     if (empty($request->selected_items)) {
+
+//         $selectedItems = [
+//             [
+//                 'label' => 'Cashback',
+//                 'amount' => $booking->offer_pool,
+//                 'description' => 'Full cashback selected',
+//                 'image' => null
+//             ]
+//         ];
+
+//         $booking->update([
+//             'selected_offer' => json_encode($selectedItems),
+//             'status' => 'customer_confirmed'
+//         ]);
+
+//         return redirect()
+//             ->route('customer.bookings')
+//             ->with('success', 'Cashback confirmed successfully');
+//     }
+
+//     /* ===============================
+//        REMOVE ZERO AMOUNT ITEMS
+//     =============================== */
+//     $selectedCollection = collect($request->selected_items)
+//         ->filter(function ($item) {
+//             return floatval($item['amount']) > 0;
+//         });
+
+//     // ❗ IMPORTANT: at least 1 item required
+//     if ($selectedCollection->isEmpty()) {
+//         return back()->withErrors('Please select at least one offer item');
+//     }
+
+//     /* ===============================
+//        CALCULATE TOTAL
+//     =============================== */
+//     $total = $selectedCollection->sum(function ($item) {
+//         return floatval($item['amount']);
+//     });
+
+//     if ($total > $booking->offer_pool) {
+//         return back()->withErrors(
+//             'Selected amount cannot exceed ₹ ' . $booking->offer_pool
+//         );
+//     }
+
+//     $remaining = $booking->offer_pool - $total;
+
+//     /* ===============================
+//        FORMAT DATA
+//     =============================== */
+//     $selectedItems = $selectedCollection
+//         ->map(function ($item) {
+//             return [
+//                 'label' => $item['label'],
+//                 'amount' => floatval($item['amount']),
+//                 'description' => $item['description'] ?? null,
+//                 'image' => $item['image'] ?? null
+//             ];
+//         })
+//         ->values()
+//         ->toArray();
+
+//     /* ===============================
+//        ADD CASHBACK (ONLY IF SOME SELECTED)
+//     =============================== */
+//     if ($remaining > 0) {
+//         $selectedItems[] = [
+//             'label' => 'Cashback',
+//             'amount' => $remaining,
+//             'description' => 'Remaining cashback amount',
+//             'image' => null
+//         ];
+//     }
+
+//     /* ===============================
+//        SAVE
+//     =============================== */
+//     $booking->update([
+//         'selected_offer' => json_encode($selectedItems),
+//         'status' => 'customer_confirmed'
+//     ]);
+
+//     return redirect()
+//         ->route('customer.bookings')
+//         ->with('success', 'Offer confirmed successfully');
+// }
 public function customerConfirm(Request $request, $id)
 {
     $validated = $request->validate([
-        'selected_items' => 'nullable|string',
-        'selected_items.*.label' => 'required|string',
-        'selected_items.*.amount' => 'required|numeric|min:0',
+        'selected_items' => 'nullable|array',
+        'selected_items.*.label' => 'nullable|string',
+        'selected_items.*.amount' => 'nullable|numeric|min:0',
         'selected_items.*.description' => 'nullable|string',
         'selected_items.*.image' => 'nullable|string',
     ]);
@@ -252,8 +435,48 @@ public function customerConfirm(Request $request, $id)
             ->with('error', 'Offer already confirmed.');
     }
 
-    // Calculate total selected
-    $total = collect($request->selected_items)->sum(function ($item) {
+    /* ===============================
+       FILTER (FIXED 🔥)
+    =============================== */
+    $selectedCollection = collect($request->selected_items)
+        ->filter(function ($item) {
+            return floatval($item['amount']) > 0;
+        });
+
+    /* ===============================
+       ❌ NO SELECTION
+    =============================== */
+   if ($selectedCollection->isEmpty()) {
+
+    // 👉 cashback only case
+    if ($booking->offer_pool > 0) {
+
+        $selectedItems = [
+            [
+                'label' => 'Cashback',
+                'amount' => $booking->offer_pool,
+                'description' => 'Full cashback selected',
+                'image' => null
+            ]
+        ];
+
+        $booking->update([
+            'selected_offer' => json_encode($selectedItems),
+            'status' => 'customer_confirmed'
+        ]);
+
+        return redirect()
+            ->route('customer.bookings')
+            ->with('success', 'Cashback confirmed successfully');
+    }
+
+    return back()->withErrors('Please select at least one offer item');
+}
+
+    /* ===============================
+       TOTAL
+    =============================== */
+    $total = $selectedCollection->sum(function ($item) {
         return floatval($item['amount']);
     });
 
@@ -265,23 +488,24 @@ public function customerConfirm(Request $request, $id)
 
     $remaining = $booking->offer_pool - $total;
 
-    // Clean selected items
-    $selectedItems = collect($request->selected_items)
-        ->filter(function ($item) {
-            return floatval($item['amount']) > 0;
+    /* ===============================
+       FORMAT (FIXED 🔥)
+    =============================== */
+    $selectedItems = $selectedCollection
+        ->map(function ($item) {
+            return [
+                'label' => $item['label'] ?? 'Cashback',
+                'amount' => floatval($item['amount']),
+                'description' => $item['description'] ?? null,
+                'image' => $item['image'] ?? null
+            ];
         })
-      ->map(function ($item) {
-    return [
-        'label' => $item['label'],
-        'amount' => floatval($item['amount']),
-        'description' => $item['description'] ?? null,
-        'image' => $item['image'] ?? null
-    ];
-})
         ->values()
         ->toArray();
 
-    // Add cashback if remaining
+    /* ===============================
+       ADD CASHBACK
+    =============================== */
     if ($remaining > 0) {
         $selectedItems[] = [
             'label' => 'Cashback',
@@ -291,6 +515,9 @@ public function customerConfirm(Request $request, $id)
         ];
     }
 
+    /* ===============================
+       SAVE
+    =============================== */
     $booking->update([
         'selected_offer' => json_encode($selectedItems),
         'status' => 'customer_confirmed'
@@ -300,12 +527,6 @@ public function customerConfirm(Request $request, $id)
         ->route('customer.bookings')
         ->with('success', 'Offer confirmed successfully');
 }
-
-
-
-    /* ===========================
-       ADMIN – FINAL SUBMIT
-    ============================*/
   public function adminFinalSubmit($id)
 {
     if (auth()->user()->role_id != config('constants.roles.admin')) {
@@ -367,7 +588,6 @@ public function customerConfirm(Request $request, $id)
         ->with('success', 'Booking finalized successfully');
 }
 
-
 // public function showConfirmOffer($id)
 // {
 //     \Log::info('CUSTOMER CONFIRM PAGE HIT', [
@@ -426,9 +646,9 @@ public function showProperties(Request $request)
         abort(403);
     }
 
-    // $query = Property::active();
     $query = Property::with('category')->active();
 
+    /* ================= SEARCH ================= */
     if ($request->search) {
         $query->where(function ($q) use ($request) {
             $q->where('builder_name', 'like', '%' . $request->search . '%')
@@ -439,13 +659,28 @@ public function showProperties(Request $request)
     }
 
     $properties = $query->orderBy('created_at', 'desc')->get();
-        // ✅ Correct Line
+
+    /* ================= IMAGE LOGIC ADD ================= */
+    $propertyImages = DB::table('property_images')
+        ->whereIn('properties_id', $properties->pluck('properties_id'))
+        ->select('properties_id', 'image_url')
+        ->orderBy('is_featured', 'DESC')
+        ->get()
+        ->groupBy('properties_id');
+
+    foreach ($properties as $property) {
+        $property->image = isset($propertyImages[$property->properties_id])
+            ? $propertyImages[$property->properties_id]->first()->image_url
+            : 'default.jpg';
+    }
+
+    /* ================= CATEGORY ================= */
     $categories = DB::table('property_category')->get();
-
-
 
     return view('customer.properties.index', compact('properties','categories'));
 }
+
+
 
 public function showBookingForm($id)
 {
@@ -569,4 +804,44 @@ $request->validate([
         ->route('customer.bookings')
         ->with('success','Property booking submitted successfully');
 }
+
+
+public function adminEdit($id)
+{
+    if (auth()->user()->role_id != config('constants.roles.admin')) {
+        abort(403);
+    }
+
+    $booking = PropertyBooking::with(['customer','items.property'])
+        ->findOrFail($id);
+
+    // ❌ LOCK after customer confirm
+    if (in_array($booking->status, ['customer_confirmed','completed'])) {
+        return redirect()->back()->with('error','Cannot edit after customer confirmation');
+    }
+
+   return view('customer.properties.edit', compact('booking'));
+}
+public function adminUpdate(Request $request, $id)
+{
+    $booking = PropertyBooking::findOrFail($id);
+
+    // ❌ LOCK
+    if (in_array($booking->status, ['customer_confirmed','completed'])) {
+        return redirect()->back()->with('error','Editing not allowed');
+    }
+
+    $booking->update([
+        'agreement_cost' => $request->agreement_cost,
+        'commission_percentage' => $request->commission_percentage,
+        'tds_percentage' => $request->tds_percentage,
+        'gst_percentage' => $request->gst_percentage,
+        'mlm_amount' => $request->mlm_amount,
+        'offers' => $request->offers ? json_encode($request->offers) : null,
+    ]);
+
+    return redirect()->route('admin.property.bookings')
+        ->with('success','Booking updated successfully');
+}
+
 }

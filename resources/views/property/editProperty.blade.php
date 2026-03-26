@@ -42,6 +42,7 @@
                     <li class="breadcrumb-item active" aria-current="page">Update Property Details</li>
                 </ol>
             </nav>
+            
             <div class="hstack gap-3">
                 <button type="button" class="btn btn-light border btn-icon-text"
                 onclick="window.location.href='/partner/allProperties'">
@@ -140,8 +141,19 @@
                             <div class="position-relative pb-15 form-group">
                             <label for="description">Description</label>
                             <textarea name="description" id="summernote" class="form-control"></textarea>
-                        </div>
-                        </div>
+                                                        </div>
+                                                        </div>
+                                                        <script>
+                                                       $(document).ready(function () {
+
+    $('#summernote').summernote({
+        height: 200
+    });
+
+    // ✅ SET VALUE AFTER INIT
+   $('#summernote').summernote('code', {!! json_encode($v->property_details) !!});
+
+});</script>
                         <div class="col-lg-4">
                             <div class="mb-3">
                                 <label class="form-label">Property Address</label>
@@ -152,7 +164,7 @@
                         <div class="col-lg-4">
                             <div class="mb-3">
                                 <label class="form-label">State</label>
-                                <select name="state_id" id="state" class="form-control" required>
+                                <select name="state_id" id="state" class="form-control">
                                     <option value="">Select State</option>
                                     @foreach($data['states'] as $state)
                                         <option value="{{ $state->id }}"
@@ -168,7 +180,7 @@
                         <div class="col-lg-4">
                             <div class="mb-3">
                                 <label class="form-label">City</label>
-                                <select name="city_id" id="city" class="form-control" required>
+                                <select name="city_id" id="city" class="form-control">
                                     <option value="">Select City</option>
                                 </select>
                             </div>
@@ -210,6 +222,7 @@
                     </div>
                 </div>
             </div>
+            
             <!-- Right side -->
             <div class="col-lg-4 pb-3 bg-light">
                 <div class="card-body">
@@ -268,9 +281,22 @@
     </div> 
 </form>   
 <?php } ?>
-            
+     
 @endsection
 @section('script')
+<script>
+$(document).ready(function () {
+
+    let stateId = "{{ $v->state_id }}";
+    let cityId  = "{{ $v->city_id }}";
+    let areaId  = "{{ $v->locality_id }}";
+
+    console.log("STATE:", stateId);
+    console.log("CITY:", cityId);
+    console.log("AREA:", areaId);
+
+});
+</script>
 @parent
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
@@ -331,110 +357,64 @@ function getImgData() {
             }
         });
     }); 
-    // STATE → CITY
-$('#state').on('change', function () {
-
-    let stateId = $(this).val();
-
-    $('#city').html('<option>Loading...</option>');
-    $('#area').html('<option>Select Area</option>');
-
-    if (!stateId) return;
-
-    $.ajax({
-        url: '/get-cities/' + stateId,
-        type: 'GET',
-        success: function (res) {
-
-            let options = '<option value="">Select City</option>';
-
-            res.forEach(function (city) {
-                options += `<option value="${city.id}">${city.city}</option>`;
-            });
-
-            $('#city').html(options);
-        }
-    });
-});
 
 
-// CITY → AREA
-$('#city').on('change', function () {
-
-    let cityId = $(this).val();
-
-    $('#area').html('<option>Loading...</option>');
-
-    if (!cityId) return;
-
-    $.ajax({
-        url: '/get-areas/' + cityId,
-        type: 'GET',
-        success: function (res) {
-
-            let options = '<option value="">Select Area</option>';
-
-            res.forEach(function (area) {
-                options += `<option value="${area.id}">${area.name}</option>`;
-            });
-
-            $('#area').html(options);
-        }
-    });
-});
+ </script>
+<script>
 $(document).ready(function () {
 
     let stateId = "{{ $v->state_id }}";
     let cityId  = "{{ $v->city_id }}";
-    let areaId  = "{{ $v->locality_id ?? '' }}";
+    let areaId  = "{{ $v->locality_id }}";
 
     if (stateId) {
         loadCities(stateId, cityId, areaId);
     }
 
+    $('#state').change(function () {
+        let stateId = $(this).val();
+        if (stateId) loadCities(stateId);
+    });
+
+    $('#city').change(function () {
+        let cityId = $(this).val();
+        if (cityId) loadAreas(cityId);
+    });
+
 });
 
 function loadCities(stateId, selectedCity = null, selectedArea = null) {
 
-    $.ajax({
-        url: '/get-cities/' + stateId,
-        type: 'GET',
-        success: function (cities) {
+    $.get('/get-cities/' + stateId, function (cities) {
 
-            let options = '<option value="">Select City</option>';
+        let options = '<option value="">Select City</option>';
 
-            cities.forEach(function (city) {
-                let selected = city.id == selectedCity ? 'selected' : '';
-                options += `<option value="${city.id}" ${selected}>${city.city}</option>`;
-            });
+        $.each(cities, function (i, city) {
+           let selected = (parseInt(city.id) === parseInt(selectedCity)) ? 'selected' : '';
+            options += `<option value="${city.id}" ${selected}>${city.city}</option>`;
+        });
 
-            $('#city').html(options);
+        $('#city').html(options);
 
-            if (selectedCity) {
-                loadAreas(selectedCity, selectedArea);
-            }
+        if (selectedCity) {
+            loadAreas(selectedCity, selectedArea);
         }
     });
 }
-
 function loadAreas(cityId, selectedArea = null) {
 
-    $.ajax({
-        url: '/get-areas/' + cityId,
-        type: 'GET',
-        success: function (areas) {
+    $.get('/get-areas/' + cityId, function (areas) {
 
-            let options = '<option value="">Select Area</option>';
+        let options = '<option value="">Select Area</option>';
 
-            areas.forEach(function (area) {
-                let selected = (parseInt(area.id) === parseInt(selectedArea)) ? 'selected' : '';
-                options += `<option value="${area.id}" ${selected}>${area.name}</option>`;
-            });
+        $.each(areas, function (i, area) {
+           let selected = (parseInt(area.id) === parseInt(selectedArea)) ? 'selected' : '';
+            options += `<option value="${area.id}" ${selected}>${area.name}</option>`;
+        });
 
-            $('#area').html(options);
-        }
+        $('#area').html(options);
     });
 }
- </script>
+</script>
 
 @endsection
