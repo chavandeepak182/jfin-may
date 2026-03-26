@@ -133,7 +133,7 @@
 
                     <div class="col-lg-3">
                     <div class="mb-3">
-                        <label class="form-label">Select BHK</label>
+                        <label class="form-label">Select BHK</label><span class="text-danger">*</span>
                         <select class="form-control" name="select_bhk" required>
                             <option value="">Select BHK</option>
                             <option value="1">1</option>
@@ -251,7 +251,7 @@
 
                     <label class="form-label">City</label><span class="text-danger">*</span>
 
-                    <select name="city" id="city" class="form-control" required>
+                    <select name="city_id" id="city" class="form-control" required>
 
                     <option value="">Select City</option>
 
@@ -341,39 +341,69 @@
                     </div>
 
                     <div class="col-lg-6">
-                        <div class="mb-3">
-                            <label class="form-label">Email ID</label>
-                            <input type="email" class="form-control jixlink2" name="email_id" placeholder="Email ID">
-                            <span class="text-danger error-text jixlink2_err"></span>
-                        </div>
-                    </div>
-                
-                    <div class="col-lg-6">
-                       <div class="mb-3">
-    <label class="form-label">Contact Number</label>
-    <input type="tel" 
-           class="form-control jixlink2" 
-           name="contact_number" 
-           placeholder="Contact Number"
-           maxlength="10"
-           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10);">
-           
-    <span class="text-danger error-text jixlink2_err"></span>
+    <div class="mb-3">
+        <label class="form-label">Email ID</label>
+
+        <input type="email" 
+            class="form-control" 
+            name="email_id" 
+            id="email"
+            placeholder="Email ID">
+
+        <small id="email_error" class="text-danger d-block mt-1"></small>
+    </div>
 </div>
-                    </div>
+
+
+<div class="col-lg-6">
+    <div class="mb-3">
+        <label class="form-label">Contact Number</label>
+
+        <input type="tel" 
+            class="form-control" 
+            name="contact_number" 
+            id="contact"
+            placeholder="Contact Number"
+            maxlength="10">
+
+        <small id="contact_error" class="text-danger d-block mt-1"></small>
+    </div>
+</div>
                 </div>
             </div>
         </div>
-                        <script>
-                        document.querySelector("form").addEventListener("submit", function(e) {
-                            let mobile = document.querySelector("input[name='contact_number']").value;
-                            
-                            if (mobile.length !== 10) {
-                                e.preventDefault();
-                                alert("Contact Number must be exactly 10 digits");
-                            }
-                        });
-                        </script>
+                       <script>
+/* ================= CONTACT VALIDATION ================= */
+document.getElementById("contact").addEventListener("input", function () {
+
+    let value = this.value.replace(/[^0-9]/g, '');
+    this.value = value;
+
+    let error = document.getElementById("contact_error");
+
+    if (value.length < 10) {
+        error.innerText = "Contact number must be 10 digits";
+    } else {
+        error.innerText = "";
+    }
+});
+
+
+/* ================= EMAIL VALIDATION ================= */
+document.getElementById("email").addEventListener("input", function () {
+
+    let value = this.value;
+    let error = document.getElementById("email_error");
+
+    let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(value)) {
+        error.innerText = "Please enter a valid email address";
+    } else {
+        error.innerText = "";
+    }
+});
+</script>
         <!-- Right side -->
         <div class="col-lg-3 bg-light p-4">
            <div class="mb-4">
@@ -619,14 +649,8 @@ $('#state').change(function(){
 
         $.ajax({
 
-            url:"{{ route('getCities') }}",
-
-            type:"POST",
-
-            data:{
-                state_id:state_id,
-                _token:"{{ csrf_token() }}"
-            },
+            url: '/get-cities/' + state_id, // ✅ FIX
+            type: 'GET', // ✅ FIX
 
             success:function(data){
 
@@ -635,11 +659,15 @@ $('#state').change(function(){
                 $.each(data,function(key,value){
 
                     $('#city').append(
-    '<option value="'+value.id+'">'+value.city+'</option>'
-);
+                        '<option value="'+value.id+'">'+value.city+'</option>'
+                    );
 
                 });
 
+            },
+
+            error:function(err){
+                console.log("City error:", err);
             }
 
         });

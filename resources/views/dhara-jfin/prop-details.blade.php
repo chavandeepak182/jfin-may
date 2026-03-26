@@ -1336,17 +1336,20 @@
                 </div>
     
                 <div class="form-group">
-                    <label for="phone">
-                        Phone Number <span class="required">*</span>
-                    </label>
-                    <input 
-                        type="tel" 
-                        id="phone" 
-                        name="phone" 
-                        required 
-                        placeholder="(+91) 0123456-789"
-                    >
-                </div>
+    <label for="phone">
+        Phone Number <span class="required">*</span>
+    </label>
+    <input 
+        type="tel" 
+        id="phone" 
+        name="phone" 
+        required 
+        placeholder="Enter 10 digit mobile number"
+        pattern="[0-9]{10}" 
+        maxlength="10"
+        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+    >
+</div>
     
                 <div class="form-group">
                     <label>

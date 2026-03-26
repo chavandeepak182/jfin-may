@@ -38,10 +38,16 @@ use App\Http\Controllers\TicketMessageController;
 use App\Http\Controllers\CustomerBookingController;
 use App\Http\Controllers\VisitEnquiryController;
 use App\Http\Controllers\AuthV3\PropertyAuthController;
+use App\Http\Controllers\StakeholderController;
 
 
 
+Route::middleware('isStakeholder')->group(function () {
 
+    Route::get('stakeholder/dashboard', [StakeholderController::class, 'dashboard'])
+        ->name('stakeholder.dashboard');
+
+});
 // admin 
 Route::get('/admin/change-password', [AdminController::class, 'changePasswordForm'])->name('admin.change.password');
 Route::post('/admin/change-password', [AdminController::class, 'updatePassword'])->name('admin.update.password');
@@ -435,7 +441,7 @@ Route::get('professional-detail', [FrontendController::class, 'ProfessionalDetai
 
 //user routes
 Route::get('login', [AdminController::class, 'loginView'])->name('login');
-Route::post('userLogin', [FrontendController::class, 'userLogin'])->name('userLogin');
+Route::post('a', [FrontendController::class, 'userLogin'])->name('userLogin');
 
 // Route::get('verify-otp', [AdminController::class, 'verifyOtp'])->name('verify-otp');
 
@@ -1038,6 +1044,11 @@ Route::get('customer/booking/{id}/confirm',
     Route::post('admin/booking/offer/{id}',
         [CustomerBookingController::class, 'adminOffer']
     );
+    Route::get('admin/booking/edit/{id}', [CustomerBookingController::class, 'adminEdit'])
+    ->name('admin.booking.edit');
+
+Route::post('admin/booking/update/{id}', [CustomerBookingController::class, 'adminUpdate'])
+    ->name('admin.booking.update');
 
     Route::post('admin/booking/final/{id}',
         [CustomerBookingController::class, 'adminFinalSubmit']

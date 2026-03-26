@@ -498,12 +498,32 @@ $user->update([
 
 private function redirectByRole($user)
 {
-    // ✅ ADMIN
+    // ADMIN
     if ($user->role_id == 4) {
         return redirect('/admin/dashboard');
     }
 
-    // ✅ FINANCE / CUSTOMER
+    // AGENT
+    if ($user->role_id == 2) {
+        return redirect('/agent/agentDashboard');
+    }
+
+    // PARTNER
+    if ($user->role_id == 3) {
+        return redirect('/partner/partnerDashboard');
+    }
+
+    // BROKER
+    if ($user->role_id == 5) {
+        return redirect('/broker/allLoansApplications');
+    }
+
+    // ✅ STAKEHOLDER (ADD THIS)
+    if ($user->role_id == 6) {
+        return redirect('/stakeholder/dashboard');
+    }
+
+    // CUSTOMER
     if ($user->role_id == 1) {
         return redirect('/loans-list');
     }
@@ -511,7 +531,6 @@ private function redirectByRole($user)
     // fallback
     return redirect('/');
 }
-
 
 public function forgotForm()
 {

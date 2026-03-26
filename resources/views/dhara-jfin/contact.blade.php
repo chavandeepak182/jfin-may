@@ -46,10 +46,19 @@
                             <input type="email" name="email" value="{{ old('email') }}" required>
                         </div>
 
-                        <div class="form-group">
-                            <label>Your Phone</label>
-                            <input type="text" name="contact" value="{{ old('contact') }}" required>
-                        </div>
+                      <div class="form-group">
+    <label>Your Phone</label>
+    <input 
+        type="tel" 
+        name="contact" 
+        value="{{ old('contact') }}" 
+        required
+        maxlength="10"
+        pattern="[0-9]{10}"
+        placeholder="Enter 10 digit mobile number"
+        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+    >
+</div>
 
                         <div class="form-group">
                             <label>Enquiry Type</label>
