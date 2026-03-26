@@ -53,7 +53,7 @@
     <nav class="sidebar-nav">
 
         {{-- ================= DASHBOARD ================= --}}
-        @if($role_id == 4)
+        @if($role_id == 4 || $role_id == 6)
             <a href="{{ route('dashboard') }}" class="nav-item">
                 <i class="fas fa-home"></i>
                 <span>Dashboard</span>

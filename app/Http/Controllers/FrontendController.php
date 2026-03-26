@@ -241,14 +241,14 @@ public function showBlog($slug)
 
 
 
-
-            $redirectRoutes = [
-                5 => 'allLoansApplications',
-                4 => 'dashboard',
-                2 => 'agentDashboard',
-                3 => 'partnerDashboard',
-                1 => 'loans.loans-list',
-            ];
+$redirectRoutes = [
+    5 => 'allLoansApplications',
+    4 => 'dashboard',
+    2 => 'agentDashboard',
+    3 => 'partnerDashboard',
+    6 => 'stakeholder.dashboard', // ✅ ADD THIS
+    1 => 'loans.loans-list',
+];
 
             if (array_key_exists($user->role_id, $redirectRoutes)) {
                 return redirect()->route($redirectRoutes[$user->role_id]);
