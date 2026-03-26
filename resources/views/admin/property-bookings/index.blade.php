@@ -65,17 +65,21 @@
                 {{ ucwords(str_replace('_',' ',$booking->status)) }}
             </td>
 
-            <td>
-                {{-- Review / Final --}}
-                <a href="{{ route('admin.property.booking.view', $booking->id) }}">
-                    View
-                </a>
+           <td>
+    <a href="{{ route('admin.property.booking.view', $booking->id) }}">
+        View
+    </a>
 
-                {{-- Quick badge --}}
-                @if($booking->status === 'customer_confirmed')
-                    <span style="color:green;">(Ready for Final)</span>
-                @endif
-            </td>
+    @if(!in_array($booking->status, ['customer_confirmed','completed']))
+        <a href="{{ route('admin.booking.edit', $booking->id) }}" style="margin-left:8px;">
+            Edit
+        </a>
+    @endif
+
+    @if($booking->status === 'customer_confirmed')
+        <span style="color:green;">(Locked)</span>
+    @endif
+</td>
         </tr>
     @empty
         <tr>

@@ -459,10 +459,8 @@
 >
 
         <div class="image-container">
-                   <img 
-    src="{{ $property->image ? asset($property->image) : 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6' }}" 
-    class="property-image"
->
+                   <img src="{{ $property->image ? asset($property->image) : 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6' }}" 
+     class="property-image">
 
 
         </div>

@@ -247,6 +247,18 @@ h4
               method="POST"
               action="{{ route('customer.booking.confirm',$booking->id) }}">
             @csrf
+            <div style="
+    background: linear-gradient(135deg, #fff7ed 0%, #fffbeb 100%);
+    border: 1px solid #fed7aa;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #9a3412;
+    font-weight: 500;
+">
+    ⚠️ If no offer is selected, the amount will automatically be treated as <b>Cashback</b>.
+</div>
 
             <h5>Select Offer Options</h5>
 
@@ -406,105 +418,213 @@ document.addEventListener("DOMContentLoaded", function(){
     let totalSpan = document.getElementById('selected_total');
     let remainingSpan = document.getElementById('remaining_cashback');
 
-  function update(triggered = null){
+    /* =========================
+       UPDATE FUNCTION
+    ========================= */
+function update(triggered = null){
 
-    let selectedSubs = document.querySelectorAll('.sub-checkbox:checked');
+    let total = 0;
 
-    let subTotal = 0;
+    let anyMainSelected = document.querySelector('.main-checkbox:checked');
 
-    selectedSubs.forEach(cb => {
-        subTotal += Number(cb.dataset.amount);
-    });
+    if(anyMainSelected){
 
-    // 🚨 Limit check
-    if(subTotal > offerPool){
+        let index = anyMainSelected.dataset.index;
 
+        let subCheckboxes = document.querySelectorAll(
+            '.sub-checkbox[data-parent="'+index+'"]'
+        );
+
+        let anySubChanged = false;
+
+        subCheckboxes.forEach(sub => {
+            if(!sub.checked){
+                anySubChanged = true;
+            }
+        });
+
+        if(anySubChanged){
+            // ✅ sub-items calculation
+            subCheckboxes.forEach(sub => {
+                if(sub.checked){
+                    total += Number(sub.dataset.amount);
+                }
+            });
+        }
+        else{
+            // ✅ full main amount
+            let mainAmount = document.getElementById('main_amount_' + index)
+                .innerText.replace(/,/g,'');
+
+            total = Number(mainAmount);
+        }
+
+    } else {
+
+        // only sub-items selected
+        document.querySelectorAll('.sub-checkbox:checked').forEach(cb => {
+            total += Number(cb.dataset.amount);
+        });
+    }
+
+    if(total > offerPool){
         alert("Offer limit exceeded. You only have ₹" + offerPool);
 
         if(triggered){
             triggered.checked = false;
         }
 
-        selectedSubs = document.querySelectorAll('.sub-checkbox:checked');
-
-        subTotal = 0;
-        selectedSubs.forEach(cb => {
-            subTotal += Number(cb.dataset.amount);
-        });
+        return update();
     }
 
-    let remaining = offerPool - subTotal;
+    let remaining = offerPool - total;
 
     if(remaining < 0){
         remaining = 0;
     }
 
-    totalSpan.innerText = subTotal.toFixed(2);
+    totalSpan.innerText = total.toFixed(2);
 
     remainingSpan.innerHTML =
         "<span style='color:green;font-weight:700;'>₹ "
         + remaining.toFixed(2) +
         "</span>";
-
-    // clear old
-    document.querySelectorAll('.remaining-display')
-        .forEach(div => div.innerHTML = "");
-
-    // show remaining under last selected item
-    if(selectedSubs.length > 0){
-
-        let last = selectedSubs[selectedSubs.length - 1];
-        let id = last.dataset.id;
-
-        let displayDiv = document.getElementById("remaining_for_" + id);
-
-        if(displayDiv){
-            displayDiv.innerHTML =
-                "<span style='color:green;font-weight:700;'>Remaining Cashback: ₹ "
-                + remaining.toFixed(2) +
-                "</span>";
-        }
-    }
-
-    // enable disable hidden inputs
-document.querySelectorAll('.sub-checkbox').forEach(cb => {
-
-let id = cb.dataset.id;
-
-let labelInput = document.querySelector(
-'input[name="selected_items['+id+'][label]"]'
-);
-
-let amountInput = document.querySelector(
-'input[name="selected_items['+id+'][amount]"]'
-);
-
-let descriptionInput = document.querySelector(
-'input[name="selected_items['+id+'][description]"]'
-);
-
-let imageInput = document.querySelector(
-'input[name="selected_items['+id+'][image]"]'
-);
-
-if(labelInput) labelInput.disabled = !cb.checked;
-if(amountInput) amountInput.disabled = !cb.checked;
-if(descriptionInput) descriptionInput.disabled = !cb.checked;
-if(imageInput) imageInput.disabled = !cb.checked;
-
-});
 }
-    document.querySelectorAll('.sub-checkbox')
-        .forEach(sub => {
-            sub.addEventListener('change', function(){
-                update(this);
-            });
+/* =========================
+       SUB CHECKBOX CHANGE
+    ========================= */
+    document.querySelectorAll('.sub-checkbox').forEach(sub => {
+        sub.addEventListener('change', function(){
+            update(this);
+        });
+    });
+
+    /* =========================
+       MAIN CHECKBOX CHANGE
+    ========================= */
+    document.querySelectorAll('.main-checkbox').forEach(main => {
+
+        main.addEventListener('change', function(){
+
+            let index = this.dataset.index;
+            let label = this.dataset.label.toLowerCase();
+
+            let subCheckboxes = document.querySelectorAll(
+                '.sub-checkbox[data-parent="'+index+'"]'
+            );
+
+            // 👉 Cashback selected
+            if(label.includes('cashback') && this.checked){
+
+                // uncheck all other main
+                document.querySelectorAll('.main-checkbox').forEach(cb=>{
+                    if(cb !== this){
+                        cb.checked = false;
+                    }
+                });
+
+                // disable all subs
+                document.querySelectorAll('.sub-checkbox').forEach(sub=>{
+                    sub.checked = false;
+                    sub.disabled = true;
+                });
+            }
+            else{
+
+                // uncheck cashback
+                document.querySelectorAll('.main-checkbox').forEach(cb=>{
+                    if(cb.dataset.label.includes('cashback')){
+                        cb.checked = false;
+                    }
+                });
+
+                // enable subs
+                document.querySelectorAll('.sub-checkbox').forEach(sub=>{
+                    sub.disabled = false;
+                });
+
+                // main select → auto select subs
+                subCheckboxes.forEach(sub => {
+                    sub.checked = this.checked;
+                });
+            }
+
+            update(this);
         });
 
+    });
+
+    /* =========================
+       INITIAL LOAD
+    ========================= */
     update();
 
-    // Prevent main change if sub selected
-   
+});
+
+
+// ENABLE / DISABLE HIDDEN INPUTS
+document.querySelectorAll('.sub-checkbox').forEach(cb => {
+
+    let id = cb.dataset.id;
+
+    let labelInput = document.querySelector(
+        'input[name="selected_items['+id+'][label]"]'
+    );
+
+    let amountInput = document.querySelector(
+        'input[name="selected_items['+id+'][amount]"]'
+    );
+
+    let descriptionInput = document.querySelector(
+        'input[name="selected_items['+id+'][description]"]'
+    );
+
+    let imageInput = document.querySelector(
+        'input[name="selected_items['+id+'][image]"]'
+    );
+
+    if(labelInput) labelInput.disabled = !cb.checked;
+    if(amountInput) amountInput.disabled = !cb.checked;
+    if(descriptionInput) descriptionInput.disabled = !cb.checked;
+    if(imageInput) imageInput.disabled = !cb.checked;
+
+});
+document.getElementById('confirmForm').addEventListener('submit', function(){
+
+    document.querySelectorAll('.sub-checkbox').forEach(cb => {
+
+        let id = cb.dataset.id;
+
+        let labelInput = document.querySelector(
+            'input[name="selected_items['+id+'][label]"]'
+        );
+
+        let amountInput = document.querySelector(
+            'input[name="selected_items['+id+'][amount]"]'
+        );
+
+        let descriptionInput = document.querySelector(
+            'input[name="selected_items['+id+'][description]"]'
+        );
+
+        let imageInput = document.querySelector(
+            'input[name="selected_items['+id+'][image]"]'
+        );
+
+        // ✅ ONLY checked items enable kara
+        if(cb.checked){
+            if(labelInput) labelInput.disabled = false;
+            if(amountInput) amountInput.disabled = false;
+            if(descriptionInput) descriptionInput.disabled = false;
+            if(imageInput) imageInput.disabled = false;
+        }else{
+            if(labelInput) labelInput.disabled = true;
+            if(amountInput) amountInput.disabled = true;
+            if(descriptionInput) descriptionInput.disabled = true;
+            if(imageInput) imageInput.disabled = true;
+        }
+
+    });
 
 });
 </script>
@@ -564,6 +684,22 @@ if(imageInput) imageInput.disabled = !cb.checked;
 
     });
 
+});
+document.querySelectorAll('.main-checkbox').forEach(main => {
+    main.addEventListener('change', function(){
+
+        let index = this.dataset.index;
+
+        let subCheckboxes = document.querySelectorAll(
+            '.sub-checkbox[data-parent="'+index+'"]'
+        );
+
+        subCheckboxes.forEach(sub => {
+            sub.checked = this.checked;
+        });
+
+        update(); // call existing function
+    });
 });
 </script>
 @endsection
