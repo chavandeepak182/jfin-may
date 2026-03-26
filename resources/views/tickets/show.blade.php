@@ -31,10 +31,20 @@
 
 <hr>
 
+@if($ticket->status != 'closed')
+
 <form method="POST" action="{{ route('tickets.message',$ticket->id) }}">
-@csrf
-<textarea name="message" rows="3" style="width:100%" required></textarea>
-<br>
-<button type="submit">Send</button>
+    @csrf
+    <textarea name="message" rows="3" style="width:100%" required></textarea>
+    <br>
+    <button type="submit">Send</button>
 </form>
+
+@else
+
+<div style="margin-top:10px;padding:10px;background:#fee2e2;color:#991b1b;border-radius:6px;">
+    This ticket is closed. You cannot reply.
+</div>
+
+@endif
 @endsection

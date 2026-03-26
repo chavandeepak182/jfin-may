@@ -9,24 +9,29 @@ use App\Models\TicketMessage;
 class TicketMessageController extends Controller
 {
     public function sendMessage(Request $request, $ticketId)
-    {
-        $request->validate([
-            'message' => 'required'
-        ]);
+{
+    $request->validate([
+        'message' => 'required'
+    ]);
 
-        $ticket = Ticket::findOrFail($ticketId);
+    $ticket = Ticket::findOrFail($ticketId);
 
-        $this->authorizeTicket($ticket);
+    $this->authorizeTicket($ticket);
 
-        TicketMessage::create([
-            'ticket_id' => $ticket->id,
-            'sender_id' => auth()->id(),
-            'sender_role' => auth()->user()->role_id,
-            'message' => $request->message
-        ]);
-
-        return back();
+    // ✅ BLOCK if ticket is closed
+    if ($ticket->status == 'closed') {
+        return back()->with('error', 'Ticket is closed. You cannot reply.');
     }
+
+    TicketMessage::create([
+        'ticket_id'   => $ticket->id,
+        'sender_id'   => auth()->id(),
+        'sender_role' => auth()->user()->role_id,
+        'message'     => $request->message
+    ]);
+
+    return back()->with('success', 'Message sent');
+}
 
     private function authorizeTicket(Ticket $ticket)
     {
