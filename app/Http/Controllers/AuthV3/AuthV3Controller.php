@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
 
 
 class AuthV3Controller extends Controller
@@ -23,107 +24,6 @@ class AuthV3Controller extends Controller
         return view('authv3.signup');
     }
 
-//   public function signupSubmit(Request $request)
-// {
-//     $request->validate([
-//         'name'      => 'required|string|max:255',
-//         'mobile_no' => 'required|digits:10|unique:users,mobile_no',
-//         'email_id'  => 'required|email|unique:users,email_id',
-//         'password'  => 'required|min:6',
-//     ]);
-
-//     $user = User::create([
-//         'name'      => $request->name,
-//         'email_id'  => $request->email_id,
-//         'mobile_no' => $request->mobile_no,
-//         'password'  => Hash::make($request->password), // ✅ REAL PASSWORD
-//         'role_id'   => 1,
-//     ]);
-
-//     // OTP flow stays SAME
-//     $this->generateOtp($user->id);
-//     session()->put('otp_user_id', $user->id);
-
-//     return redirect()->route('authv3.otp.form')
-//         ->with('success', 'OTP sent to your mobile');
-// }
-
-
-    /* ================= LOGIN ================= */
-
-
-public function signupSubmit(Request $request)
-{
-    $request->validate(
-        [
-            'name' => [
-                'required',
-                'regex:/^[a-zA-Z\s]+$/',
-                'max:255',
-            ],
-            'mobile_no' => [
-                'required',
-                'digits:10',
-            ],
-            'email_id' => [
-                'required',
-                'email',
-            ],
-            'password' => [
-                'required',
-                'min:6',
-            ],
-        ],
-        [
-            'name.required'      => 'Full name is required',
-            'name.regex'         => 'Name can contain only letters and spaces',
-            'mobile_no.required' => 'Mobile number is required',
-            'mobile_no.digits'   => 'Mobile number must be exactly 10 digits',
-            'email_id.required'  => 'Email address is required',
-            'email_id.email'     => 'Please enter a valid email address',
-            'password.required'  => 'Password is required',
-            'password.min'       => 'Password must be at least 6 characters',
-        ]
-    );
-
-    $user = User::where('mobile_no', $request->mobile_no)
-                ->orWhere('email_id', $request->email_id)
-                ->first();
-
-    if ($user) {
-
-        if ($user->role_id == 1) {
-            return back()
-                ->withErrors(['mobile_no' => 'You already have a Finance account'])
-                ->withInput();
-        }
-
-        $user->update([
-            'role_id' => 1
-        ]);
-
-    } else {
-
-        do {
-            $referralCode = Str::upper(Str::random(8));
-        } while (User::where('referral_code', $referralCode)->exists());
-
-        $user = User::create([
-            'name'          => $request->name,
-            'email_id'      => $request->email_id,
-            'mobile_no'     => $request->mobile_no,
-            'password'      => Hash::make($request->password),
-            'role_id'       => 1,
-            'referral_code' => $referralCode,
-        ]);
-    }
-
-    $this->generateOtp($user->id);
-    session()->put('otp_user_id', $user->id);
-
-    return redirect()->route('authv3.otp.form')
-        ->with('success', 'OTP sent to your mobile');
-}
 
     public function loginForm()
     {
@@ -163,57 +63,6 @@ public function signupSubmit(Request $request)
         return view('authv3.verify_otp');
     }
 
-//  public function verifyOtp(Request $request)
-// {
-//     $request->validate([
-//         'otp' => 'required|digits_between:4,6',
-//     ]);
-
-//     $userId = session('otp_user_id');
-
-//     if (!$userId) {
-//         return redirect()->route('authv3.login.form')
-//             ->withErrors('Session expired. Please try again.');
-//     }
-
-//     $otpRow = Otp::where('user_id', $userId)
-//         ->where('otp', $request->otp)
-//         ->where('is_verify', 0)
-//         ->where('expires_at', '>=', now())
-//         ->latest()
-//         ->first();
-
-//     if (!$otpRow) {
-//         return back()->withErrors(['otp' => 'Invalid or expired OTP']);
-//     }
-
-//     try {
-
-//         // ✅ mark verified
-//         $otpRow->update(['is_verify' => 1]);
-
-//         // login user
-//         Auth::loginUsingId($userId);
-
-//         User::where('id', $userId)->update([
-//             'last_login_at' => now()
-//         ]);
-
-//         session([
-//             'user_id'  => Auth::id(),
-//             'username' => Auth::user()->name,
-//             'role_id'  => Auth::user()->role_id,
-//         ]);
-
-//         session()->forget('otp_user_id');
-
-//         return $this->redirectByRole(Auth::user());
-
-//     } catch (\Throwable $e) {
-//         \Log::error('OTP verify failed', ['error' => $e->getMessage()]);
-//         return back()->withErrors(['otp' => 'OTP verification failed']);
-//     }
-// }
  public function verifyOtp(Request $request)
 {
     $request->validate([
@@ -562,7 +411,192 @@ public function resetPassword(Request $request)
     return redirect()->route('authv3.login.form')
         ->with('success', 'Password reset successfully');
 }
+// for mobile application
+public function apiSignup(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|regex:/^[a-zA-Z\s]+$/|max:255',
+        'mobile_no' => 'required|digits:10',
+        'email_id' => 'required|email',
+        'password' => 'required|min:6',
+    ]);
 
+    if ($validator->fails()) {
+        return response()->json(['status'=>false,'errors'=>$validator->errors()],422);
+    }
+
+    $user = User::where('mobile_no',$request->mobile_no)
+        ->orWhere('email_id',$request->email_id)->first();
+
+    if ($user) {
+        if ($user->role_id == 1) {
+            return response()->json([
+                'status'=>false,
+                'message'=>'Already registered'
+            ],409);
+        }
+
+        $user->update(['role_id'=>1]);
+
+    } else {
+
+        do {
+            $referralCode = Str::upper(Str::random(8));
+        } while (User::where('referral_code',$referralCode)->exists());
+
+        $user = User::create([
+            'name'=>$request->name,
+            'email_id'=>$request->email_id,
+            'mobile_no'=>$request->mobile_no,
+            'password'=>Hash::make($request->password),
+            'role_id'=>1,
+            'referral_code'=>$referralCode,
+        ]);
+    }
+
+    $this->generateOtp($user->id);
+
+    return response()->json([
+        'status'=>true,
+        'message'=>'OTP sent',
+        'user_id'=>$user->id
+    ]);
+}
+public function apiLoginWithEmail(Request $request)
+{
+    $request->validate([
+        'email_id'=>'required|email',
+        'password'=>'required'
+    ]);
+
+    $user = User::where('email_id',$request->email_id)->first();
+
+    if (!$user || !Hash::check($request->password,$user->password)) {
+        return response()->json([
+            'status'=>false,
+            'message'=>'Invalid credentials'
+        ],401);
+    }
+
+    $user->update(['last_login_at'=>now()]);
+
+    return response()->json([
+        'status'=>true,
+        'message'=>'Login successful',
+        'data'=>$user
+    ]);
+}
+public function apiSendLoginOtp(Request $request)
+{
+    $request->validate([
+        'mobile_no'=>'required|digits:10'
+    ]);
+
+    $user = User::where('mobile_no',$request->mobile_no)->first();
+
+    if (!$user) {
+        return response()->json([
+            'status'=>false,
+            'message'=>'User not found'
+        ],404);
+    }
+
+    $this->generateOtp($user->id);
+
+    return response()->json([
+        'status'=>true,
+        'message'=>'OTP sent',
+        'user_id'=>$user->id
+    ]);
+}
+public function apiVerifyOtp(Request $request)
+{
+    $request->validate([
+        'user_id'=>'required',
+        'otp'=>'required|digits_between:4,6'
+    ]);
+
+    $otpRow = Otp::where('user_id',$request->user_id)
+        ->where('otp',$request->otp)
+        ->where('is_verify',0)
+        ->where('expires_at','>=',now())
+        ->latest()
+        ->first();
+
+    if (!$otpRow) {
+        return response()->json([
+            'status'=>false,
+            'message'=>'Invalid or expired OTP'
+        ],400);
+    }
+
+    $otpRow->update(['is_verify'=>1]);
+
+    $user = User::find($request->user_id);
+
+    $user->update([
+        'last_login_at'=>now(),
+        'is_email_verify'=>1
+    ]);
+
+    return response()->json([
+        'status'=>true,
+        'message'=>'OTP verified',
+        'data'=>$user
+    ]);
+}
+public function apiResendOtp(Request $request)
+{
+    $request->validate([
+        'user_id'=>'required'
+    ]);
+
+    $this->generateOtp($request->user_id);
+
+    return response()->json([
+        'status'=>true,
+        'message'=>'OTP resent'
+    ]);
+}
+public function apiForgotPassword(Request $request)
+{
+    $request->validate([
+        'mobile_no'=>'required|digits:10'
+    ]);
+
+    $user = User::where('mobile_no',$request->mobile_no)->first();
+
+    if (!$user) {
+        return response()->json([
+            'status'=>false,
+            'message'=>'User not found'
+        ],404);
+    }
+
+    $this->generateOtp($user->id);
+
+    return response()->json([
+        'status'=>true,
+        'message'=>'OTP sent for reset',
+        'user_id'=>$user->id
+    ]);
+}
+public function apiResetPassword(Request $request)
+{
+    $request->validate([
+        'user_id'=>'required',
+        'password'=>'required|min:6|confirmed'
+    ]);
+
+    User::where('id',$request->user_id)->update([
+        'password'=>Hash::make($request->password)
+    ]);
+
+    return response()->json([
+        'status'=>true,
+        'message'=>'Password reset successful'
+    ]);
+}
 
 
 
