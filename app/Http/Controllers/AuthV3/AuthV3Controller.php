@@ -306,6 +306,78 @@ public function loginWithOtp(Request $request)
     return redirect()->route('authv3.otp.form')
         ->with('success', 'OTP sent to your mobile');
 }
+public function signupSubmit(Request $request)
+{
+    $request->validate(
+        [
+            'name' => [
+                'required',
+                'regex:/^[a-zA-Z\s]+$/',
+                'max:255',
+            ],
+            'mobile_no' => [
+                'required',
+                'digits:10',
+            ],
+            'email_id' => [
+                'required',
+                'email',
+            ],
+            'password' => [
+                'required',
+                'min:6',
+            ],
+        ],
+        [
+            'name.required'      => 'Full name is required',
+            'name.regex'         => 'Name can contain only letters and spaces',
+            'mobile_no.required' => 'Mobile number is required',
+            'mobile_no.digits'   => 'Mobile number must be exactly 10 digits',
+            'email_id.required'  => 'Email address is required',
+            'email_id.email'     => 'Please enter a valid email address',
+            'password.required'  => 'Password is required',
+            'password.min'       => 'Password must be at least 6 characters',
+        ]
+    );
+
+    $user = User::where('mobile_no', $request->mobile_no)
+                ->orWhere('email_id', $request->email_id)
+                ->first();
+
+    if ($user) {
+
+        if ($user->role_id == 1) {
+            return back()
+                ->withErrors(['mobile_no' => 'You already have a Finance account'])
+                ->withInput();
+        }
+
+        $user->update([
+            'role_id' => 1
+        ]);
+
+    } else {
+
+        do {
+            $referralCode = Str::upper(Str::random(8));
+        } while (User::where('referral_code', $referralCode)->exists());
+
+        $user = User::create([
+            'name'          => $request->name,
+            'email_id'      => $request->email_id,
+            'mobile_no'     => $request->mobile_no,
+            'password'      => Hash::make($request->password),
+            'role_id'       => 1,
+            'referral_code' => $referralCode,
+        ]);
+    }
+
+    $this->generateOtp($user->id);
+    session()->put('otp_user_id', $user->id);
+
+    return redirect()->route('authv3.otp.form')
+        ->with('success', 'OTP sent to your mobile');
+}
 
 
 public function redirectToGoogle()

@@ -1041,6 +1041,8 @@ Route::get('customer/booking/{id}/confirm',
     Route::post('admin/booking/review/{id}',
         [CustomerBookingController::class, 'adminReview']
     );
+    Route::post('/admin/check-referral', [CustomerBookingController::class, 'checkReferral'])
+    ->name('admin.check.referral');
 
     Route::post('admin/booking/offer/{id}',
         [CustomerBookingController::class, 'adminOffer']

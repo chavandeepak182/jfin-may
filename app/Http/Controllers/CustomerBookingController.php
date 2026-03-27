@@ -527,19 +527,108 @@ public function customerConfirm(Request $request, $id)
         ->route('customer.bookings')
         ->with('success', 'Offer confirmed successfully');
 }
-  public function adminFinalSubmit($id)
+//   public function adminFinalSubmit($id)
+// {
+//     if (auth()->user()->role_id != config('constants.roles.admin')) {
+//         abort(403);
+//     }
+
+//     DB::transaction(function () use ($id) {
+
+//         $booking = PropertyBooking::with('customer')->findOrFail($id);
+
+//         if ($booking->status !== 'customer_confirmed') {
+//             throw new \Exception('Booking not ready for final submit');
+//         }
+
+//         $customer = $booking->customer;
+
+//         $categoryController = app(\App\Http\Controllers\CategoryController::class);
+
+//         /* =========================
+//            ADD USER TO MLM (ONCE)
+//         ========================= */
+
+//         $alreadyInMlm = DB::table('categories')
+//             ->where('user_id', $customer->id)
+//             ->exists();
+
+//         if (!$alreadyInMlm) {
+
+//             $categoryController->store(
+//                 new \Illuminate\Http\Request([
+//                     'parent_user_id' => $customer->refer_user_id ?? null,
+//                     'user_id'        => $customer->id,
+//                     'category'       => $customer->name,
+//                 ])
+//             );
+//         }
+
+//         /* =========================
+//            DISTRIBUTE MLM AMOUNT
+//            (EVERY BOOKING)
+//         ========================= */
+
+//         $categoryController->distributeMlmAmount(
+//             $customer->id,
+//             $booking->mlm_amount
+//         );
+
+//         /* =========================
+//            COMPLETE BOOKING
+//         ========================= */
+
+//         $booking->update([
+//             'status' => 'completed'
+//         ]);
+//     });
+
+//     return redirect()
+//         ->route('admin.property.bookings')
+//         ->with('success', 'Booking finalized successfully');
+// }
+public function adminFinalSubmit(Request $request, $id)
 {
     if (auth()->user()->role_id != config('constants.roles.admin')) {
         abort(403);
     }
 
-    DB::transaction(function () use ($id) {
+    \Log::info('ADMIN FINAL SUBMIT HIT', [
+        'booking_id' => $id,
+        'referral_code' => $request->referral_code
+    ]);
+
+    /* =========================
+       GET REFERRAL USER (OPTIONAL)
+    ========================= */
+    $refUser = null;
+
+    if ($request->filled('referral_code')) {
+
+        $refUser = \App\Models\User::where('referral_code', $request->referral_code)->first();
+
+        \Log::info('REFERRAL CHECK', [
+            'code' => $request->referral_code,
+            'found_user_id' => $refUser?->id
+        ]);
+
+        // ❌ Invalid referral → stop
+        if (!$refUser) {
+            return back()->withErrors('Invalid referral code');
+        }
+    }
+
+    DB::transaction(function () use ($id, $refUser) {
 
         $booking = PropertyBooking::with('customer')->findOrFail($id);
 
         if ($booking->status !== 'customer_confirmed') {
             throw new \Exception('Booking not ready for final submit');
         }
+
+        \Log::info('BOOKING READY FOR FINAL', [
+            'booking_id' => $booking->id
+        ]);
 
         $customer = $booking->customer;
 
@@ -548,26 +637,37 @@ public function customerConfirm(Request $request, $id)
         /* =========================
            ADD USER TO MLM (ONCE)
         ========================= */
-
         $alreadyInMlm = DB::table('categories')
             ->where('user_id', $customer->id)
             ->exists();
 
         if (!$alreadyInMlm) {
 
+            \Log::info('ADDING USER TO MLM', [
+                'customer_id' => $customer->id,
+                'parent_user_id' => $refUser ? $refUser->id : null
+            ]);
+
             $categoryController->store(
                 new \Illuminate\Http\Request([
-                    'parent_user_id' => $customer->refer_user_id ?? null,
+                    'parent_user_id' => $refUser ? $refUser->id : null,
                     'user_id'        => $customer->id,
                     'category'       => $customer->name,
                 ])
             );
+        } else {
+            \Log::info('USER ALREADY IN MLM', [
+                'customer_id' => $customer->id
+            ]);
         }
 
         /* =========================
            DISTRIBUTE MLM AMOUNT
-           (EVERY BOOKING)
         ========================= */
+        \Log::info('START MLM DISTRIBUTION', [
+            'user_id' => $customer->id,
+            'amount' => $booking->mlm_amount
+        ]);
 
         $categoryController->distributeMlmAmount(
             $customer->id,
@@ -577,9 +677,12 @@ public function customerConfirm(Request $request, $id)
         /* =========================
            COMPLETE BOOKING
         ========================= */
-
         $booking->update([
             'status' => 'completed'
+        ]);
+
+        \Log::info('BOOKING COMPLETED', [
+            'booking_id' => $booking->id
         ]);
     });
 
@@ -717,35 +820,35 @@ public function submitBookingForm(Request $request)
     //     'co_gender' => 'nullable|in:male,female,other',
     //     'co_marital_status' => 'nullable|in:single,married',
     // ]);
-$request->validate([
-    'property_id' => 'required|exists:properties,properties_id',
+    $request->validate([
+        'property_id' => 'required|exists:properties,properties_id',
 
-    // CUSTOMER
-    'customer_name'   => ['required','regex:/^[A-Za-z ]+$/','max:255'],
-    'customer_email'  => 'required|email|max:255',
-    'customer_mobile' => 'required|digits:10',
-    'customer_pan'    => ['nullable','regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/'],
+        // CUSTOMER
+        'customer_name'   => ['required','regex:/^[A-Za-z ]+$/','max:255'],
+        'customer_email'  => 'required|email|max:255',
+        'customer_mobile' => 'required|digits:10',
+        'customer_pan'    => ['nullable','regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/'],
 
-    // CO-APPLICANT
-    'co_name'         => ['nullable','regex:/^[A-Za-z ]+$/','max:255'],
-    'co_email'        => 'nullable|email|max:255',
-    'co_mobile'       => 'nullable|digits:10',
-    'co_employment_type' => 'nullable|in:salaried,self-employed,business,professional',
-    'co_designation'  => 'nullable|string|max:255',
-    'co_gender'       => 'nullable|in:male,female,other',
-    'co_marital_status' => 'nullable|in:single,married,divorced,widowed',
-    // professional
-    'profession_type' => 'nullable|string|max:100',
-    'company_name' => 'nullable|string|max:255',
-    'experience_year' => 'nullable|numeric',
-    'company_address' => 'nullable|string|max:500',
-    'industry' => 'nullable|string|max:255',
-    'designation' => 'nullable|string|max:255',
-    'netsalary' => 'nullable|numeric',
-    'gross_salary' => 'nullable|numeric',
-    'business_establish_date' => 'nullable|date',
-    'selfincome' => 'nullable|numeric',
-]);
+        // CO-APPLICANT
+        'co_name'         => ['nullable','regex:/^[A-Za-z ]+$/','max:255'],
+        'co_email'        => 'nullable|email|max:255',
+        'co_mobile'       => 'nullable|digits:10',
+        'co_employment_type' => 'nullable|in:salaried,self-employed,business,professional',
+        'co_designation'  => 'nullable|string|max:255',
+        'co_gender'       => 'nullable|in:male,female,other',
+        'co_marital_status' => 'nullable|in:single,married,divorced,widowed',
+        // professional
+        'profession_type' => 'nullable|string|max:100',
+        'company_name' => 'nullable|string|max:255',
+        'experience_year' => 'nullable|numeric',
+        'company_address' => 'nullable|string|max:500',
+        'industry' => 'nullable|string|max:255',
+        'designation' => 'nullable|string|max:255',
+        'netsalary' => 'nullable|numeric',
+        'gross_salary' => 'nullable|numeric',
+        'business_establish_date' => 'nullable|date',
+        'selfincome' => 'nullable|numeric',
+    ]);
     DB::transaction(function () use ($request) {
 
         $user = auth()->user();
@@ -842,6 +945,27 @@ public function adminUpdate(Request $request, $id)
 
     return redirect()->route('admin.property.bookings')
         ->with('success','Booking updated successfully');
+}
+public function checkReferral(Request $request)
+{
+    $request->validate([
+        'referral_code' => 'required|string'
+    ]);
+
+    $user = \App\Models\User::where('referral_code', $request->referral_code)->first();
+
+    if (!$user) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Invalid referral code'
+        ]);
+    }
+
+    return response()->json([
+        'status' => true,
+        'name' => $user->name,
+        'user_id' => $user->id
+    ]);
 }
 
 }
