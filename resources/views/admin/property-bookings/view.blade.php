@@ -729,6 +729,19 @@ h2{
       action="{{ url('admin/booking/final/'.$booking->id) }}"
       onsubmit="return confirm('Finalize booking and distribute MLM commission?')">
     @csrf
+    <div style="margin-bottom:15px;">
+        <label>Referral Code (Optional)</label>
+
+        <div style="display:flex; gap:10px;">
+            <input type="text" id="referral_code" name="referral_code" placeholder="Enter referral code">
+
+            <button type="button" onclick="checkReferral()" class="btn btn-secondary">
+                Check
+            </button>
+        </div>
+
+        <p id="referral_result" style="margin-top:8px;"></p>
+    </div>
     <button class="final-btn">
         Final Submit & Complete Booking
     </button>
@@ -1049,7 +1062,45 @@ document.addEventListener("DOMContentLoaded", function() {
 
 @endif
 
+<script>
+window.checkReferral = function () {
 
+    let code = document.getElementById('referral_code').value;
+
+    if (!code) {
+        alert("Enter referral code");
+        return;
+    }
+
+    fetch("{{ route('admin.check.referral') }}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        },
+        body: JSON.stringify({
+            referral_code: code
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        let box = document.getElementById('referral_result');
+
+        if (data.status) {
+            box.innerHTML = "✅ User: <strong>" + data.name + "</strong>";
+            box.style.color = "green";
+
+            document.getElementById('finalBtn').disabled = false;
+        } else {
+            box.innerHTML = "❌ " + data.message;
+            box.style.color = "red";
+
+            document.getElementById('finalBtn').disabled = true;
+        }
+    });
+};
+</script>
 @endsection
 
 
