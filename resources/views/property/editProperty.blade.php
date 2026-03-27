@@ -57,7 +57,7 @@
     <!-- Begin Page Content -->     
     <div class="container-fluid bg-white">
         <input type="hidden" name="creator_id" value=" {{ Session::get('user_id') }}" />
-        <input type="hidden" name="propertie_id" value=" {{ $v->properties_id }}" />              
+<input type="hidden" name="propertie_id" value="{{ $v->properties_id }}" />
 
         <!-- Main content -->
         <div class="row">
@@ -151,7 +151,7 @@
     });
 
     // ✅ SET VALUE AFTER INIT
-   $('#summernote').summernote('code', {!! json_encode($v->property_details) !!});
+   $('#summernote').summernote('code', {!! json_encode(base64_decode($v->property_details)) !!});
 
 });</script>
                         <div class="col-lg-4">
@@ -302,7 +302,7 @@ $(document).ready(function () {
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
 
 <script>
-    const chooseFile = document.getElementById("choose-file");
+   let chooseFile = document.getElementById("choose-file");
     const imgPreview = document.getElementById("img-preview");
 
 chooseFile.addEventListener("change", function () {
@@ -325,38 +325,38 @@ function getImgData() {
 </script>
 
 <script>   
-    $('#editProperty').on('submit',function(e){
-        e.preventDefault();
-        $.ajax({               
-            url:"{{Route('updatePropertie')}}", 
-            method:"POST",                             
-            data:new FormData(this) ,
-            processData:false,
-            dataType:'json',
-            contentType:false,
-            beforeSend:function(){
-                $(document).find('span.error-text').text('');
-            },
-            success:function(data){              
-                if(data.status == 0){
-                    $.each(data.error,function(prefix,val){
-                        $('span.'+prefix+'_error').text(val[0]);
-                    });                      
-                }else{
-                    swal({
-                        title: data.msg,
-                        text: "",
-                        type: "success",
-                        icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){
-                        window.location.href = "/partner/allProperties";
-                    });
-                        
-                }
+$('#editProperty').on('submit',function(e){
+    e.preventDefault();
+
+    $('textarea[name=description]').val($('#summernote').summernote('code'));
+
+    $.ajax({               
+        url:"{{Route('updatePropertie')}}", 
+        method:"POST",                             
+        data:new FormData(this),
+        processData:false,
+        contentType:false,
+
+        beforeSend:function(){
+            console.log("FORM SUBMIT");
+        },
+
+        success:function(data){              
+            console.log(data);
+
+            if(data.status == 0){
+                alert(data.msg);
+            }else{
+                swal({
+                    title: data.msg,
+                    icon: "success"
+                }).then(function(){
+                    window.location.href = "/partner/allProperties";
+                });
             }
-        });
-    }); 
+        }
+    });
+});
 
 
  </script>
