@@ -58,7 +58,7 @@ public function insertProperty(Request $request)
         $p->title = $request->property_title;
         $p->property_type_id = $request->property_type;
         $p->builder_name = $request->builder_name;
-        $p->property_details = $request->description;
+        $p->property_details = base64_encode($request->description);
 
         $p->address = $request->property_address;
         $p->state_id = $request->state_id;
@@ -600,7 +600,7 @@ $area_id = $request->area_id;
         'builder_name' => $request->builder_name,
         's_price' => $request->s_price,
         'select_bhk' => $request->select_bhk,
-        'property_details' => $request->description,
+       'property_details' => base64_encode($request->description),
         'address' => $request->property_address,
 
         'email' => $request->email_id,
@@ -618,7 +618,7 @@ $area_id = $request->area_id;
         // ✅ AMENITIES SAFE
         'facilities' => is_array($request->amenities) ? implode(',', $request->amenities) : '',
 
-        'area' => $request->area,
+        'area' => !empty($request->area) ? $request->area : '',
         'builtup_area' => $request->builtup_area,
 
         // ✅ LOCATION IDs
