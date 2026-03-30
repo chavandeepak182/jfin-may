@@ -4,7 +4,7 @@ use App\Http\Controllers\MlmController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthV2Controller;
 use App\Http\Controllers\AuthV3\AuthV3Controller;
-
+use App\Http\Controllers\UsersController;
 
 
 
@@ -35,6 +35,9 @@ Route::prefix('authv3')->group(function () {
 
     Route::post('/reset-password', [AuthV3Controller::class, 'apiResetPassword']);
 
+});
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/my-profile', [UsersController::class, 'showProfileApi']);
 });
 
 
