@@ -1121,12 +1121,14 @@
                 </div>
 
                 <!-- Description -->
-                <div class="details-section">
-                    <h2 class="section-title"><i class="fas fa-align-left"></i> About Project</h2>
-                    <div class="description-content">
-                        {!! $property_details !!}
-                    </div>
+               <div class="details-section">
+                <h2 class="section-title">
+                    <i class="fas fa-align-left"></i> About Project
+                </h2>
+                <div class="description-content">
+                    {!! base64_decode($property_details) !!}
                 </div>
+            </div>
 
                 <!-- Amenities -->
                 <div class="details-section">

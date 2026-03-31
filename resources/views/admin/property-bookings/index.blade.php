@@ -40,6 +40,7 @@
             <th>Customer</th>
             <th>Property</th>
             <th>Status</th>
+            <th>Assigned CP</th> <!-- ✅ NEW -->
             <th>Action</th>
         </tr>
     </thead>
@@ -64,7 +65,64 @@
             <td>
                 {{ ucwords(str_replace('_',' ',$booking->status)) }}
             </td>
+ <td>
 
+{{-- ================= ADMIN ================= --}}
+@if(auth()->user()->role_id == config('constants.roles.admin'))
+
+    <form method="POST" action="{{ route('admin.assign.cp') }}">
+        @csrf
+        <input type="hidden" name="booking_id" value="{{ $booking->id }}">
+
+        <select name="cp_id" onchange="this.form.submit()" class="form-control">
+            <option value="">-- Select CP --</option>
+
+            @foreach($partners as $cp)
+                <option value="{{ $cp->id }}"
+                    {{ $booking->cp_id == $cp->id ? 'selected' : '' }}>
+                    {{ $cp->name }}
+                </option>
+            @endforeach
+        </select>
+    </form>
+
+    {{-- Status show --}}
+    @if($booking->cp_status == 'pending')
+        <span style="color:orange;">Pending</span>
+    @elseif($booking->cp_status == 'accepted')
+        <span style="color:green;">Accepted</span>
+    @elseif($booking->cp_status == 'rejected')
+        <span style="color:red;">Reassign Required</span>
+    @endif
+
+
+{{-- ================= CP ================= --}}
+@elseif(auth()->user()->role_id == config('constants.roles.partner'))
+
+    @if($booking->cp_status == 'pending')
+
+        <form method="POST" action="{{ route('cp.accept') }}" style="display:inline;">
+            @csrf
+            <input type="hidden" name="id" value="{{ $booking->id }}">
+            <button class="btn btn-success btn-sm">Accept</button>
+        </form>
+
+        <form method="POST" action="{{ route('cp.reject') }}" style="display:inline;">
+            @csrf
+            <input type="hidden" name="id" value="{{ $booking->id }}">
+            <button class="btn btn-danger btn-sm">Reject</button>
+        </form>
+
+    @elseif($booking->cp_status == 'accepted')
+        <span style="color:green;">Accepted</span>
+
+    @elseif($booking->cp_status == 'rejected')
+        <span style="color:red;">Rejected</span>
+    @endif
+
+@endif
+
+</td>
            <td>
     <a href="{{ route('admin.property.booking.view', $booking->id) }}">
         View

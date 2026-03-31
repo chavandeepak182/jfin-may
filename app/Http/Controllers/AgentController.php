@@ -490,7 +490,12 @@ public function getCities($state_id)
                 'status' => 'required|string',
                 'loan_category_id' => 'required|integer',
                 'amount' => 'required|numeric',
-                'amount_approved' => 'nullable|required_if:status,disbursed|numeric|min:0',
+                            'amount_approved' => [
+                        'required_if:status,disbursed',
+                        'numeric',
+                        'min:0',
+                        'max:' . $request->amount   // 🔥 important
+                    ],
                 'tenure' => 'required|integer',
                 'in_principle' => 'nullable|string',
                 'remarks' => 'nullable|string',
