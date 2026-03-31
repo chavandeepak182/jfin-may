@@ -1134,6 +1134,7 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
             <label for="amount">Loan Amount</label>
         </div>
     </div>
+    <input type="hidden" name="is_final_submit" value="1">
 
     <!-- Tenure -->
     <div class="col-md-6">

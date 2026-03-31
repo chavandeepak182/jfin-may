@@ -43,10 +43,14 @@ public function getCities($state_id)
 
 public function insertProperty(Request $request)
 {
-    $request->validate([
-    'rera' => ['required', 'regex:/^P[0-9]{10,15}$/']
+$request->validate([
+    'rera' => ['required', 'regex:/^P[0-9]{10,15}$/'],
+    'property_type' => 'required',
+    'land_type' => 'required',
 ], [
-    'rera.regex' => 'Please enter proper RERA format (Example: P52100012345)'
+    'rera.regex' => 'Please enter proper RERA format (Example: P52100012345)',
+    'property_type.required' => 'Please select Property Type',
+    'land_type.required' => 'Please select Land Type',
 ]);
     $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 
@@ -159,7 +163,10 @@ if ($request->hasFile('property_images')) {
         
 }catch (\Exception $e) {
     DB::rollback();
-    dd($e->getMessage());
+    return response()->json([
+        'status' => 0,
+        'msg' => $e->getMessage()
+    ]);
 }
 }
 
@@ -593,6 +600,7 @@ $area_id = $request->area_id;
     $area_name = DB::table('localities')->where('id', $area_id)->value('name') ?? '';
 
     /* ================= UPDATE DATA ================= */
+    $amenities = $request->input('amenities', []);
     $updateProperty = [
 
         'title' => $request->property_title,
@@ -616,12 +624,13 @@ $area_id = $request->area_id;
         'boucher' => $property_voucher,
 
         // ✅ AMENITIES SAFE
-        'facilities' => is_array($request->amenities) ? implode(',', $request->amenities) : '',
+    //   $amenities = $request->input('amenities', []);
+'facilities' => !empty($amenities) ? implode(', ', $amenities) : $property->facilities,
 
         'area' => !empty($request->area) ? $request->area : '',
         'builtup_area' => $request->builtup_area,
 
-        // ✅ LOCATION IDs
+        // ✅ LOCATION ID
         'state_id' => $request->state_id,
         'city_id' => $city_id,
         'locality_id' => $area_id,

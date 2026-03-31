@@ -6,22 +6,15 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class IsPartnerMiddleware
+class IsAdminOrPartner
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle($request, Closure $next)
-{
-    if(in_array(session('role_id'), [
-        config('constants.roles.admin'),
-        config('constants.roles.partner')
-    ])){
+    public function handle(Request $request, Closure $next): Response
+    {
         return $next($request);
     }
-
-    return redirect('/dashboard');
-}
 }

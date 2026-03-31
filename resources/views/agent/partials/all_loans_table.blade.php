@@ -11,6 +11,7 @@
                             <th>Loan Category</th>
                             <th>Amount</th>
                             <th>Tenure</th>
+                             <th>Status</th>
                             <th>Agent Status</th>
                             @if (session()->get('role_id') == 2)
                                 <th>Action</th>
@@ -18,40 +19,42 @@
                         </tr>
                     </thead>
                   <tbody>
-@foreach ($loans as $loan)
-<tr>
-    <td>{{ $loan->loan_reference_id }}</td>
-    <td>{{ optional($loan->user)->name }}</td>
-    <td>{{ optional($loan->loanCategory)->category_name }}</td>
-    <td>{{ $loan->amount }}</td>
-    <td>{{ $loan->tenure }}</td>
-    <td>{{ $loan->agent_action ? ucfirst($loan->agent_action) : 'Pending' }}</td>
+                        @foreach ($loans as $loan)
+                        <tr>
+                            <td>{{ $loan->loan_reference_id }}</td>
+                            <td>{{ optional($loan->user)->name }}</td>
+                            <td>{{ optional($loan->loanCategory)->category_name }}</td>
+                            <td>{{ $loan->amount }}</td>
+                            <td>{{ $loan->tenure }}</td>
+                            <td>{{ ucfirst($loan->status) }}</td>
+                            <td>{{ $loan->agent_action ? ucfirst($loan->agent_action) : 'Pending' }}</td>
 
-    @if (session()->get('role_id') == 2)
-    <td>
-        <!-- View -->
-        <a class="btn btn-primary btn-xs view"
-           href="{{ route('agent.loan.view',$loan->loan_id) }}">
-           <i class="fa fa-eye"></i>
-        </a>
+                            @if (session()->get('role_id') == 2)
+                            <td>
+                            
 
-        <!-- Edit -->
-        <a class="btn btn-warning btn-xs edit"
-           href="{{ route('agent.editLoan',$loan->loan_id) }}">
-           <i class="fa fa-edit"></i>
-        </a>
+                            <td>
+                            <!-- View (Always visible) -->
+                            <a class="btn btn-primary btn-xs view"
+                            href="{{ route('agent.loan.view',$loan->loan_id) }}">
+                            <i class="fa fa-eye"></i>
+                            </a>
 
-        <!-- Delete -->
-        <button class="btn btn-danger btn-xs delete"
-            onclick="deleteLoan('{{ $loan->loan_id }}')">
-            <i class="fa fa-trash"></i>
-        </button>
-    </td>
-    @endif
+                            <!-- Edit (ONLY if NOT disbursed) -->
+                           @if(trim(strtolower($loan->status)) != 'disbursed')
+                                <a class="btn btn-warning btn-xs edit"
+                                href="{{ route('agent.editLoan',$loan->loan_id) }}">
+                                <i class="fa fa-edit"></i>
+                                </a>
+                            @endif
 
-</tr>
-@endforeach
-</tbody>
+                            <!-- ❌ Delete button COMPLETELY REMOVED -->
+                        </td>
+                            @endif
+
+                        </tr>
+                        @endforeach
+                        </tbody>
                     <tfoot>
                         <tr>
                             <th>Loan ID</th>

@@ -48,22 +48,75 @@ class CustomerBookingController extends Controller
     /* ===========================
        ADMIN – REVIEW & COMMISSION
     ============================*/
-   public function adminIndex()
+public function adminIndex()
 {
-    if (auth()->user()->role_id != config('constants.roles.admin')) {
+    // ✅ Allow Admin + Partner
+    if (!in_array(auth()->user()->role_id, [
+        config('constants.roles.admin'),
+        config('constants.roles.partner')
+    ])) {
         abort(403);
     }
 
-    $bookings = PropertyBooking::with([
-            'customer',
-            'items.property'
-        ])
-        ->orderBy('created_at', 'desc')
-        ->get();
+    $query = PropertyBooking::with([
+        'customer',
+        'items.property'
+    ]);
 
-    return view('admin.property-bookings.index', compact('bookings'));
+    // 🔥 MAIN LOGIC (CP la fakta tyache bookings)
+    if (auth()->user()->role_id == config('constants.roles.partner')) {
+        $query->where('cp_id', auth()->id());
+    }
+
+    $bookings = $query->orderBy('created_at', 'desc')->get();
+
+    // ✅ Only admin la partners pahije (dropdown sathi)
+    $partners = [];
+    if (auth()->user()->role_id == config('constants.roles.admin')) {
+        $partners = \App\Models\User::where('role_id', 3)->get();
+    }
+
+    return view('admin.property-bookings.index', compact('bookings','partners'));
 }
 
+
+public function assignCp(Request $request)
+{
+    $request->validate([
+        'booking_id' => 'required|exists:property_bookings,id',
+        'cp_id' => 'nullable|exists:users,id'
+    ]);
+
+    $booking = PropertyBooking::findOrFail($request->booking_id);
+
+    // ✅ Assign CP
+    $booking->cp_id = $request->cp_id;
+
+    // 🔥 IMPORTANT: reset status when assigning
+    $booking->cp_status = $request->cp_id ? 'pending' : null;
+
+    $booking->save();
+
+    return back()->with('success', 'CP Assigned Successfully');
+}
+public function cpAccept(Request $request)
+{
+    $booking = PropertyBooking::findOrFail($request->id);
+    $booking->cp_status = 'accepted';
+    $booking->save();
+
+    return back();
+}
+
+public function cpReject(Request $request)
+{
+    $booking = PropertyBooking::findOrFail($request->id);
+    $booking->cp_status = 'rejected';
+    $booking->cp_id = null;
+    $booking->save();
+
+    return back();
+}
 
     public function adminReview(Request $request, $id)
     {
@@ -87,16 +140,27 @@ class CustomerBookingController extends Controller
 
         return back()->with('success', 'Commission details saved');
     }
-    public function adminView($id)
+public function adminView($id)
 {
-    if (auth()->user()->role_id != config('constants.roles.admin')) {
+    // ✅ Allow Admin + Partner
+    if (!in_array(auth()->user()->role_id, [
+        config('constants.roles.admin'),
+        config('constants.roles.partner')
+    ])) {
         abort(403);
     }
 
     $booking = PropertyBooking::with([
-            'customer',
-            'items.property'
-        ])->findOrFail($id);
+        'customer',
+        'items.property'
+    ])->findOrFail($id);
+
+    // 🔥 CP la fakta tyach booking disel
+    if (auth()->user()->role_id == config('constants.roles.partner')) {
+        if ($booking->cp_id != auth()->id()) {
+            abort(403);
+        }
+    }
 
     return view('admin.property-bookings.view', compact('booking'));
 }
@@ -105,10 +169,31 @@ class CustomerBookingController extends Controller
     ============================*/
 public function adminOffer(Request $request, $id)
 {
-    if (auth()->user()->role_id != config('constants.roles.admin')) {
+    $user = auth()->user();
+
+    // ✅ Allow Admin + Partner
+    if (!in_array($user->role_id, [
+        config('constants.roles.admin'),
+        config('constants.roles.partner')
+    ])) {
         abort(403);
     }
 
+    $booking = PropertyBooking::findOrFail($id);
+
+    // 🔥 CP la check (only assigned + accepted)
+    if ($user->role_id == config('constants.roles.partner')) {
+
+        if ($booking->cp_id != $user->id) {
+            abort(403); // ❌ not assigned
+        }
+
+        if ($booking->cp_status != 'accepted') {
+            return back()->withErrors('Please accept booking first');
+        }
+    }
+
+    /* ================= VALIDATION ================= */
     $validated = $request->validate([
         'agreement_cost'        => 'required|numeric|min:1',
         'commission_percentage' => 'required|numeric|min:0|max:100',
@@ -122,12 +207,9 @@ public function adminOffer(Request $request, $id)
         'offers.*.amount' => 'required|numeric|min:0',
         'offers.*.items' => 'nullable|array',
         'offers.*.items.*.label' => 'required|string|max:255',
-        
-'offers.*.items.*.image' => 'nullable|string',
+        'offers.*.items.*.image' => 'nullable|string',
         'offers.*.items.*.amount' => 'required|numeric|min:0',
     ]);
-
-    $booking = PropertyBooking::findOrFail($id);
 
     /* ================= CALCULATION ================= */
 
@@ -164,12 +246,12 @@ public function adminOffer(Request $request, $id)
                 foreach ($mainOffer['items'] as $sub) {
                     $subTotal += $sub['amount'];
 
-                           $items[] = [
-    'label'       => $sub['label'],
-    'description' => $sub['description'] ?? null,
-    'image'       => $sub['image'] ?? null,
-    'amount'      => $sub['amount'],
-];
+                    $items[] = [
+                        'label'       => $sub['label'],
+                        'description' => $sub['description'] ?? null,
+                        'image'       => $sub['image'] ?? null,
+                        'amount'      => $sub['amount'],
+                    ];
                 }
 
                 if ($subTotal != $mainOffer['amount']) {
@@ -214,9 +296,8 @@ public function adminOffer(Request $request, $id)
 
     return redirect()
         ->route('admin.property.bookings')
-        ->with('success', 'Offer sent to customer');
+        ->with('success', 'Offer sent successfully');
 }
-
 
 
 
@@ -589,9 +670,12 @@ public function customerConfirm(Request $request, $id)
 // }
 public function adminFinalSubmit(Request $request, $id)
 {
-    if (auth()->user()->role_id != config('constants.roles.admin')) {
-        abort(403);
-    }
+   if (!in_array(auth()->user()->role_id, [
+    config('constants.roles.admin'),
+    config('constants.roles.partner')
+])) {
+    abort(403);
+}
 
     \Log::info('ADMIN FINAL SUBMIT HIT', [
         'booking_id' => $id,
@@ -911,9 +995,12 @@ public function submitBookingForm(Request $request)
 
 public function adminEdit($id)
 {
-    if (auth()->user()->role_id != config('constants.roles.admin')) {
-        abort(403);
-    }
+  if (!in_array(auth()->user()->role_id, [
+    config('constants.roles.admin'),
+    config('constants.roles.partner')
+])) {
+    abort(403);
+}
 
     $booking = PropertyBooking::with(['customer','items.property'])
         ->findOrFail($id);
