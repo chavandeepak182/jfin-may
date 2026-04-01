@@ -600,6 +600,42 @@ public function apiSendLoginOtp(Request $request)
         'user_id'=>$user->id
     ]);
 }
+// public function apiVerifyOtp(Request $request)
+// {
+//     $request->validate([
+//         'user_id'=>'required',
+//         'otp'=>'required|digits_between:4,6'
+//     ]);
+
+//     $otpRow = Otp::where('user_id',$request->user_id)
+//         ->where('otp',$request->otp)
+//         ->where('is_verify',0)
+//         ->where('expires_at','>=',now())
+//         ->latest()
+//         ->first();
+
+//     if (!$otpRow) {
+//         return response()->json([
+//             'status'=>false,
+//             'message'=>'Invalid or expired OTP'
+//         ],400);
+//     }
+
+//     $otpRow->update(['is_verify'=>1]);
+
+//     $user = User::find($request->user_id);
+
+//     $user->update([
+//         'last_login_at'=>now(),
+//         'is_email_verify'=>1
+//     ]);
+
+//     return response()->json([
+//         'status'=>true,
+//         'message'=>'OTP verified',
+//         'data'=>$user
+//     ]);
+// }
 public function apiVerifyOtp(Request $request)
 {
     $request->validate([
@@ -621,6 +657,7 @@ public function apiVerifyOtp(Request $request)
         ],400);
     }
 
+    // ✅ mark verified
     $otpRow->update(['is_verify'=>1]);
 
     $user = User::find($request->user_id);
@@ -630,10 +667,14 @@ public function apiVerifyOtp(Request $request)
         'is_email_verify'=>1
     ]);
 
+    // 🔥 CREATE TOKEN HERE
+    $token = $user->createToken('mobile')->plainTextToken;
+
     return response()->json([
         'status'=>true,
-        'message'=>'OTP verified',
-        'data'=>$user
+        'message'=>'OTP verified successfully',
+        'token'=>$token,
+        'user'=>$user
     ]);
 }
 public function apiResendOtp(Request $request)
