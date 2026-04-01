@@ -2592,4 +2592,80 @@ public function getCities($stateId)
 {
     return view('user.help-support');
 }
+
+//mobile application
+public function showProfileApi(Request $request)
+{
+    $section = $request->query('section', 'personal');
+
+    // Get user from auth (instead of session)
+    $user = auth()->user();
+
+    if (!$user) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Unauthorized'
+        ], 401);
+    }
+
+    $userId = $user->id;
+
+    // Fetch loans
+    $loans = DB::table('loans')->where('user_id', $userId)->get();
+    $loanCount = $loans->count();
+
+    $disbursedLoanCount = DB::table('loans')
+        ->where('user_id', $userId)
+        ->where('status', 'disbursed')
+        ->count();
+
+    // Referral Logic
+    if ($disbursedLoanCount > 0) {
+
+        if (empty($user->referral_code)) {
+
+            $generatedCode = 'REF' . strtoupper(uniqid());
+
+            DB::table('users')
+                ->where('id', $userId)
+                ->update(['referral_code' => $generatedCode]);
+
+            $referralCode = $generatedCode;
+
+        } else {
+            $referralCode = $user->referral_code;
+        }
+
+    } else {
+        $referralCode = 'After Disbursed';
+    }
+
+    // Other Data
+    $profile = DB::table('profile')->where('user_id', $userId)->first();
+    $professionalDetails = DB::table('professional_details')->where('user_id', $userId)->first();
+    $educationalDetails = DB::table('education_details')->where('user_id', $userId)->first();
+    $documents = DB::table('documents')->where('user_id', $userId)->get();
+    $wallet = DB::table('wallet')->where('user_id', $userId)->first();
+
+    $walletBalance = $wallet->wallet_balance ?? 0;
+
+    // Final JSON Response
+    return response()->json([
+        'status' => true,
+        'message' => 'Profile fetched successfully',
+        'data' => [
+            'section' => $section,
+            'user' => $user,
+            'profile' => $profile,
+            'professional_details' => $professionalDetails,
+            'educational_details' => $educationalDetails,
+            'documents' => $documents,
+            'loans' => $loans,
+            'loan_count' => $loanCount,
+            'disbursed_loan_count' => $disbursedLoanCount,
+            'wallet_balance' => $walletBalance,
+            'referral_code' => $referralCode
+        ]
+    ]);
+}
 }
