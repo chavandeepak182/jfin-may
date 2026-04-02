@@ -354,7 +354,7 @@
         newRow.innerHTML = `
             <div class="row">
                 <div class="col-md-12 mb-2">
-                    <input type="text" name="document_names[]" class="form-control" placeholder="Document Name">
+                  <input type="text" name="document_name[]" class="form-control">
                 </div>
                 <div class="col-md-12">
                     <input type="file" name="documents[]" class="form-control">

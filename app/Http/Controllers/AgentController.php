@@ -500,7 +500,7 @@ public function getCities($state_id)
                 'in_principle' => 'nullable|string',
                 'remarks' => 'nullable|string',
                 'sanction_letter' => 'nullable|file|mimes:pdf,doc,docx',
-                'documents.*' => 'nullable|file|mimes:pdf,doc,docx',
+                'documents.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png',
             ]);
 
             DB::transaction(function () use ($request) {
