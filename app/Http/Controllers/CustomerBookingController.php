@@ -1054,5 +1054,41 @@ public function checkReferral(Request $request)
         'user_id' => $user->id
     ]);
 }
+public function assignPartner(Request $request, $id)
+{
+    if (auth()->user()->role_id != config('constants.roles.admin')) {
+        abort(403);
+    }
+
+    $request->validate([
+        'partner_id' => 'required|exists:users,id'
+    ]);
+
+    $booking = PropertyBooking::findOrFail($id);
+
+    $booking->update([
+        'partner_id' => $request->partner_id
+    ]);
+
+    \Log::info('PARTNER ASSIGNED', [
+        'booking_id' => $booking->id,
+        'partner_id' => $request->partner_id
+    ]);
+
+    return back()->with('success', 'Partner assigned successfully');
+}
+public function partnerBookings()
+{
+    if (auth()->user()->role_id != config('constants.roles.partner')) {
+        abort(403);
+    }
+
+    $bookings = PropertyBooking::with(['customer','items.property'])
+        ->where('partner_id', auth()->id())
+        ->orderBy('created_at','desc')
+        ->get();
+
+    return view('partner.bookings.index', compact('bookings'));
+}
 
 }
