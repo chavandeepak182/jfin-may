@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 ];
    protected $fillable = [
     'customer_id',
+    'partner_id',
     'admin_id',
     'status',
         'customer_name',
@@ -61,5 +62,9 @@ use Illuminate\Database\Eloquent\Model;
     {
         return $this->belongsTo(User::class,'customer_id');
     }
+    public function partner()
+{
+    return $this->belongsTo(User::class, 'partner_id');
+}
 }
 
