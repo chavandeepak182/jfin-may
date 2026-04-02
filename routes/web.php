@@ -1056,6 +1056,8 @@ Route::post('admin/booking/update/{id}', [CustomerBookingController::class, 'adm
     Route::post('admin/booking/final/{id}',
         [CustomerBookingController::class, 'adminFinalSubmit']
     );
+    Route::post('/admin/assign-partner/{id}', [CustomerBookingController::class, 'assignPartner'])
+    ->name('admin.assign.partner');
 
     // cp routes
     Route::post('/assign-cp', [CustomerBookingController::class, 'assignCp'])
