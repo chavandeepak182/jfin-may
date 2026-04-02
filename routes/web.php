@@ -632,7 +632,7 @@ Route::get(
 )->name('agent.disbursedLoans.ajax');
 
 
-Route::post('/get-cities',[PropertyController::class,'getCities'])->name('getCities');
+Route::post('/get-cities-property',[PropertyController::class,'getCities'])->name('getCitiesproperty');
 Route::get('/get-cities/{state_id}', [AgentController::class, 'getCities']);
 
 Route::get('/get-areas/{city_id}', [PropertyController::class, 'getAreas']);
@@ -1058,12 +1058,7 @@ Route::post('admin/booking/update/{id}', [CustomerBookingController::class, 'adm
     );
     Route::post('/admin/assign-partner/{id}', [CustomerBookingController::class, 'assignPartner'])
     ->name('admin.assign.partner');
-
-    // cp routes
-    Route::post('/assign-cp', [CustomerBookingController::class, 'assignCp'])
-    ->name('admin.assign.cp');
-    Route::post('/cp/accept', [CustomerBookingController::class, 'cpAccept'])->name('cp.accept');
-Route::post('/cp/reject', [CustomerBookingController::class, 'cpReject'])->name('cp.reject');
+});
 // Route::get('/agent/assigned-leads', [VisitEnquiryController::class, 'agentLeads'])
 //     ->middleware('auth')
 //     ->name('agent.leads');
@@ -1074,28 +1069,16 @@ Route::get('/partner/assigned-leads', [VisitEnquiryController::class, 'partnerLe
     [VisitEnquiryController::class, 'partnerPendingLeads'])
     ->middleware('auth')
     ->name('partner.pending.leads');
-});
 
+    //price range
+    Route::middleware(['isAdmin'])->group(function () {
 
-    
-Route::middleware(['isPartner'])->group(function () {
-
-    Route::get('admin/price-range', [PriceRangeController::class, 'index'])
-        ->name('admin.price.range');
-
-    Route::get('admin/price-range/create', [PriceRangeController::class, 'create'])
-        ->name('admin.price.range.create');
-
-    Route::post('admin/price-range/store', [PriceRangeController::class, 'store'])
-        ->name('admin.price.range.store');
-
-    Route::get('admin/price-range/edit/{id}', [PriceRangeController::class, 'edit'])
-        ->name('admin.price.range.edit');
-
-    Route::post('admin/price-range/update/{id}', [PriceRangeController::class, 'update'])
-        ->name('admin.price.range.update');
-
-    Route::get('admin/price-range/delete/{id}', [PriceRangeController::class, 'destroy'])
-        ->name('admin.price.range.delete');
+    Route::get('admin/price-range', [PriceRangeController::class, 'index']);
+    Route::get('admin/price-range/create', [PriceRangeController::class, 'create']);
+    Route::post('admin/price-range/store', [PriceRangeController::class, 'store']);
+    Route::get('admin/price-range/edit/{id}', [PriceRangeController::class, 'edit']);
+    Route::post('admin/price-range/update/{id}', [PriceRangeController::class, 'update']);
+    Route::get('admin/price-range/delete/{id}', [PriceRangeController::class, 'destroy']);
 
 });
+
