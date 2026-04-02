@@ -416,7 +416,7 @@ $(document).ready(function () {
 
 function loadCities(stateId, selectedCity = null, selectedArea = null) {
 
-    $.get('/get-cities/' + stateId, function (cities) {
+    $.get('/get-cities-property' + stateId, function (cities) {
 
         let options = '<option value="">Select City</option>';
 
