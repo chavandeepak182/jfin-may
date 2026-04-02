@@ -1220,10 +1220,16 @@ public function update(Request $request)
         'status'            => 'required|string',
         'loan_category_id'  => 'required|integer',
         'amount'            => 'required|numeric',
-        'amount_approved'   => 'required_if:status,disbursed|nullable|numeric|min:0',
+            'amount_approved' => [
+        'required_if:status,disbursed',
+        'numeric',
+        'min:0',
+        'max:' . $loan->amount
+    ],
         'tenure'            => 'required|integer',
         'in_principle'      => 'nullable|string',
         'remarks'           => 'nullable|string',
+        
         'documents.*'       => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120',
     ];
             // ===============================
@@ -3439,37 +3445,55 @@ protected function handleDocumentUpload(Request $request, $userId)
         'sanction_letter'              => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
     ]);
 
-    /* ===============================
-       STEP 2: FETCH LOAN
-       =============================== */
+    //* ===============================
+//    STEP 2: FETCH LOAN (SMART FIX)
+//    =============================== */
 
-    $loan = Session::get('current_loan_id')
-        ? Loan::find(Session::get('current_loan_id'))
-        : Loan::where('user_id', $userId)
-            ->whereNotIn('status', ['disbursed', 'rejected'])
-            ->first();
+$loan = null;
 
-   if (!$loan) {
-    // ✅ CREATE DRAFT LOAN FOR FIRST TIME
-   $loanCategoryId = Session::get('loan_category_id');
+// 1. Try session loan
+if (Session::get('current_loan_id')) {
+    $loan = Loan::find(Session::get('current_loan_id'));
+}
+
+// 2. If not found → try DB (latest active loan)
+if (!$loan) {
+    $loan = Loan::where('user_id', $userId)
+        ->whereNotIn('status', ['disbursed', 'rejected'])
+        ->latest()
+        ->first();
+
+    // 👉 found → set session
+    if ($loan) {
+        Session::put('current_loan_id', $loan->loan_id);
+    }
+}
+
+// 3. 🔥 FINAL FIX (NO DRAFT, CREATE ONLY WHEN NEEDED)
+if (!$loan) {
+
+    $loanCategoryId = Session::get('loan_category_id');
     $bankId = Session::get('bank_id');
 
+    // ❌ still no data → block upload
     if (!$loanCategoryId || !$bankId) {
-        throw new \Exception('Loan category or bank missing before document upload');
+        return response()->json([
+            'status' => 0,
+            'msg' => 'Please apply loan first'
+        ]);
     }
 
+    // ✅ CREATE LOAN ONLY NOW (NO DRAFT ISSUE)
     $loan = Loan::create([
-        'user_id'           => $userId,
-    'loan_reference_id' => $this->generateLoanReferenceId(),
-    'loan_category_id'  => $loanCategoryId,   // ✅ REQUIRED
-    'bank_id'           => $bankId,            // ✅ REQUIRED
-    'status'            => 'draft',
-]);
+        'user_id' => $userId,
+        'loan_reference_id' => $this->generateLoanReferenceId(),
+        'loan_category_id' => $loanCategoryId,
+        'bank_id' => $bankId,
+        'status' => 'in process' // 🔥 NOT draft
+    ]);
 
     Session::put('current_loan_id', $loan->loan_id);
 }
-
-
     /* ===============================
        STEP 3: UPLOAD DOCUMENTS
        =============================== */

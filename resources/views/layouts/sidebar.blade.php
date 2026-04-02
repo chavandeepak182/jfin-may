@@ -85,18 +85,24 @@
             </a>
         @endif
                 {{-- ================= PROPERTY ================= --}}
-                @if($role_id == 4 || $role_id == config('constants.roles.partner'))
-                    <a href="{{ route('allProperties') }}" class="nav-item">
-                        <i class="fas fa-building"></i>
-                        <span>Property</span>
-                    </a>
-                @endif
-            @if($role_id == 4)
-            <a href="{{ route('admin.property.bookings') }}" class="nav-item">
-                <i class="fas fa-building"></i>
-                <span>Property Application</span>
-            </a>
-        @endif
+             {{-- ================= PROPERTY ================= --}}
+@if($role_id == 4 || $role_id == config('constants.roles.partner'))
+    <a href="{{ route('allProperties') }}" class="nav-item">
+        <i class="fas fa-building"></i>
+        <span>Property</span>
+    </a>
+
+    <a href="{{ route('admin.price.range') }}" class="nav-item">
+    <i class="fas fa-tags"></i>
+    <span>Property Price Range</span>
+</a>
+@endif
+         @if($role_id == 4 || $role_id == config('constants.roles.partner'))
+    <a href="{{ route('admin.property.bookings') }}" class="nav-item">
+        <i class="fas fa-building"></i>
+        <span>Property Application</span>
+    </a>
+@endif
 
         {{-- ================= USERS ================= --}}
         @if($role_id == 4)

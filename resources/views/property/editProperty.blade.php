@@ -260,21 +260,52 @@
                         <?php } ?>
                     </select>
                 </div>  
-                
+                @php
+$selectedAmenities = !empty($v->facilities) 
+    ? array_map('trim', explode(',', $v->facilities)) 
+    : [];
+@endphp
                 <div class="card-body">
-                    <label for="amenities"><strong>Select Amenities:</strong></label><br>
-                    <input type="checkbox" name="amenities[]" value="WiFi"> WiFi<br>
-                    <input type="checkbox" name="amenities[]" value="Parking"> Parking<br>
-                    <input type="checkbox" name="amenities[]" value="Swimming Pool"> Swimming Pool<br>
-                    <input type="checkbox" name="amenities[]" value="Balcony"> Balcony<br>
-                    <input type="checkbox" name="amenities[]" value="Garden"> Garden<br>
-                    <input type="checkbox" name="amenities[]" value="Security"> Security<br>
-                    <input type="checkbox" name="amenities[]" value="Fitness Center"> Fitness Center<br>
-                    <input type="checkbox" name="amenities[]" value="Air Conditioning"> Air Conditioning<br>
-                    <input type="checkbox" name="amenities[]" value="Central Heating"> Central Heating<br>
-                    <input type="checkbox" name="amenities[]" value="Laundry Room"> Laundry Room<br>
-                    <input type="checkbox" name="amenities[]" value="Pets Allowed"> Pets Allowed<br>
-                    <input type="checkbox" name="amenities[]" value="Spa & Massage"> Spa & Massage<br>
+                    <!-- <label for="amenities"><strong>Select Amenities:</strong></label><br> -->
+                    <div class="card-body">
+    <label><strong>Select Amenities:</strong></label><br>
+
+    <input type="checkbox" name="amenities[]" value="WiFi"
+    {{ in_array('WiFi', $selectedAmenities) ? 'checked' : '' }}> WiFi<br>
+
+    <input type="checkbox" name="amenities[]" value="Parking"
+    {{ in_array('Parking', $selectedAmenities) ? 'checked' : '' }}> Parking<br>
+
+    <input type="checkbox" name="amenities[]" value="Swimming Pool"
+    {{ in_array('Swimming Pool', $selectedAmenities) ? 'checked' : '' }}> Swimming Pool<br>
+
+    <input type="checkbox" name="amenities[]" value="Balcony"
+    {{ in_array('Balcony', $selectedAmenities) ? 'checked' : '' }}> Balcony<br>
+
+    <input type="checkbox" name="amenities[]" value="Garden"
+    {{ in_array('Garden', $selectedAmenities) ? 'checked' : '' }}> Garden<br>
+
+    <input type="checkbox" name="amenities[]" value="Security"
+    {{ in_array('Security', $selectedAmenities) ? 'checked' : '' }}> Security<br>
+
+    <input type="checkbox" name="amenities[]" value="Fitness Center"
+    {{ in_array('Fitness Center', $selectedAmenities) ? 'checked' : '' }}> Fitness Center<br>
+
+    <input type="checkbox" name="amenities[]" value="Air Conditioning"
+    {{ in_array('Air Conditioning', $selectedAmenities) ? 'checked' : '' }}> Air Conditioning<br>
+
+    <input type="checkbox" name="amenities[]" value="Central Heating"
+    {{ in_array('Central Heating', $selectedAmenities) ? 'checked' : '' }}> Central Heating<br>
+
+    <input type="checkbox" name="amenities[]" value="Laundry Room"
+    {{ in_array('Laundry Room', $selectedAmenities) ? 'checked' : '' }}> Laundry Room<br>
+
+    <input type="checkbox" name="amenities[]" value="Pets Allowed"
+    {{ in_array('Pets Allowed', $selectedAmenities) ? 'checked' : '' }}> Pets Allowed<br>
+
+    <input type="checkbox" name="amenities[]" value="Spa & Massage"
+    {{ in_array('Spa & Massage', $selectedAmenities) ? 'checked' : '' }}> Spa & Massage<br>
+</div>
                 </div>
             </div>
         </div>         

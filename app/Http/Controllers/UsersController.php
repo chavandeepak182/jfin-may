@@ -1739,7 +1739,80 @@ public function updateUser(Request $request)
     }
 
     //customer profile
-   public function showProfile(Request $request)
+//    public function showProfile(Request $request)
+// {
+//     $section = $request->query('section', 'personal');
+//     $userId = session('user_id'); // Retrieve user ID from session
+
+//     if (!$userId) {
+//         return redirect()->route('login')->withErrors('User session expired. Please log in again.');
+//     }
+
+//     // Fetch user
+//     $user = DB::table('users')->where('id', $userId)->first();
+
+//     // Fetch loans
+//     $loans = DB::table('loans')->where('user_id', $userId)->get();
+//     $loanCount = $loans->count();
+
+//     $disbursedLoanCount = DB::table('loans')
+//         ->where('user_id', $userId)
+//         ->where('status', 'disbursed')
+//         ->count();
+
+//     /*
+//     |--------------------------------------------------------------------------
+//     | Referral Code Logic
+//     |--------------------------------------------------------------------------
+//     | - Before disbursed loan → show message
+//     | - After disbursed loan → generate & show code
+//     */
+
+//     if ($disbursedLoanCount > 0) {
+
+//         // Generate referral code only once
+//         if (empty($user->referral_code)) {
+
+//             $generatedCode = 'REF' . strtoupper(uniqid());
+
+//             DB::table('users')
+//                 ->where('id', $userId)
+//                 ->update(['referral_code' => $generatedCode]);
+
+//             $referralCode = $generatedCode;
+//         } else {
+//             $referralCode = $user->referral_code;
+//         }
+
+//     } else {
+//         // User registered but no disbursed loan yet
+//        $referralCode = 'After Disbursed';
+
+//     }
+
+//     // Other existing data (NO CHANGE)
+//     $profile = DB::table('profile')->where('user_id', $userId)->first();
+//     $professionalDetails = DB::table('professional_details')->where('user_id', $userId)->first();
+//     $educationalDetails = DB::table('education_details')->where('user_id', $userId)->first();
+//     $documents = DB::table('documents')->where('user_id', $userId)->get();
+//     $wallet = DB::table('wallet')->where('user_id', $userId)->first();
+//     $walletBalance = $wallet->wallet_balance ?? 0;
+
+//     return view('frontend.user-dash', compact(
+//         'section',
+//         'user',
+//         'profile',
+//         'professionalDetails',
+//         'educationalDetails',
+//         'documents',
+//         'loans',
+//         'loanCount',
+//         'disbursedLoanCount',
+//         'walletBalance',
+//         'referralCode'
+//     ));
+// }
+public function showProfile(Request $request)
 {
     $section = $request->query('section', 'personal');
     $userId = session('user_id'); // Retrieve user ID from session
@@ -1760,15 +1833,22 @@ public function updateUser(Request $request)
         ->where('status', 'disbursed')
         ->count();
 
+    /* ===============================
+       🔥 NEW: MLM CHECK ADD
+    =============================== */
+    $mlmAdded = DB::table('categories')
+        ->where('user_id', $userId)
+        ->exists();
+
     /*
     |--------------------------------------------------------------------------
     | Referral Code Logic
     |--------------------------------------------------------------------------
-    | - Before disbursed loan → show message
-    | - After disbursed loan → generate & show code
+    | - Loan disbursed OR MLM added → show referral
+    | - Otherwise → show message
     */
 
-    if ($disbursedLoanCount > 0) {
+    if ($disbursedLoanCount > 0 || $mlmAdded) {
 
         // Generate referral code only once
         if (empty($user->referral_code)) {
@@ -1780,14 +1860,14 @@ public function updateUser(Request $request)
                 ->update(['referral_code' => $generatedCode]);
 
             $referralCode = $generatedCode;
+
         } else {
             $referralCode = $user->referral_code;
         }
 
     } else {
-        // User registered but no disbursed loan yet
-       $referralCode = 'After Disbursed';
-
+        // Before loan disbursed & MLM entry
+        $referralCode = 'After Disbursed or MLM Entry';
     }
 
     // Other existing data (NO CHANGE)

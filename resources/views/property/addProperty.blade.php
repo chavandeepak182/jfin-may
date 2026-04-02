@@ -57,8 +57,8 @@
 
                     <div class="col-lg-6">
                         <div class="mb-3">
-                            <label class="form-label">Land Type</label><span class="text-danger">*</span>
-                            <select class="form-control" name="property_type" id="propertyType">
+                            <label class="form-label">Property Type</label><span class="text-danger">*</span>
+                            <select class="form-control" name="property_type" id="propertyType" required>
                                 <option value="">Select Property Type</option>
                                 <?php foreach($data['category'] as $v) { ?>
                                     <option value="<?php echo $v->pid; ?>"><?php echo $v->category_name; ?></option>
@@ -67,14 +67,14 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-6">
-                        <div class="mb-3">
-                            <label class="form-label">Property Type</label><span class="text-danger">*</span>
-                            <select class="form-control" name="land_type" id="landType">
-                                <option value="">Select Type</option>
-                            </select>
-                        </div>
-                    </div>
+                   <div class="col-lg-6">
+    <div class="mb-3">
+        <label class="form-label">Land Type</label><span class="text-danger">*</span>
+        <select class="form-control" name="land_type" id="landType" required>
+            <option value="">Select Type</option>
+        </select>
+    </div>
+</div>
                             <div class="col-lg-3">
                                         <div class="mb-3">
                                             <label class="form-label">Starting Price</label><span class="text-danger">*</span>
@@ -558,9 +558,25 @@ $('#addNewProperty').on('submit',function(e){
     }
 },
 
-        error:function(xhr){
-            console.log("AJAX Error:", xhr);   // 👈 add this
-        }
+      error:function(xhr){
+    let errors = xhr.responseJSON?.errors;
+
+    if(errors){
+        let allErrors = '';
+
+        Object.keys(errors).forEach(function(key){
+            allErrors += errors[key][0] + '\n';
+        });
+
+        swal({
+            title: "Validation Error",
+            text: allErrors,
+            icon: "error"
+        });
+    } else {
+        swal("Error", "Something went wrong!", "error");
+    }
+}
     });
 });
 
