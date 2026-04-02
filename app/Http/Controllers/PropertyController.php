@@ -34,11 +34,15 @@ class PropertyController extends Controller
         return view('property.addProperty',compact('data'));
     }
 
-public function getCities($state_id)
+public function getCities(Request $request)
 {
-    return DB::table('cities')
+    $state_id = $request->state_id;
+
+    $cities = DB::table('cities')
         ->where('state_id', $state_id)
         ->get();
+
+    return response()->json($cities);
 }
 
 public function insertProperty(Request $request)
