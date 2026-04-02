@@ -81,19 +81,46 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group" id="approvedAmountBox" style="display: none;">
-                        <label for="amount_approved">Approved Amount:<span class="text-danger">*</span></label>
-                        <input
-                            type="number"
-                            class="form-control"
-                            id="amountApproved"
-                            name="amount_approved"
-                            min="0"
-                            step="1"
-                            value="{{ $loan->amount_approved ?? '' }}"
-                            oninput="this.value = this.value < 0 ? 0 : this.value"
-                        >
+                  <div class="form-group" id="approvedAmountBox" style="display: none;">
+                            <label for="amount_approved">
+                                Approved Amount:<span class="text-danger">*</span>
+                            </label>
+
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="amountApproved"
+                                name="amount_approved"
+                                min="0"
+                                max="{{ $loan->amount }}"
+                                step="1"
+                                value="{{ $loan->amount_approved ?? '' }}"
+                            >
+
+                            <small id="amountError" class="text-danger"></small>
                     </div>
+                    <script>
+                    document.querySelector("form").addEventListener("submit", function(e) {
+
+                        let approved = parseFloat(document.getElementById("amountApproved").value);
+                        let maxAmount = {{ $loan->amount ?? 0 }};
+
+                        if (isNaN(approved)) return;
+
+                        if (approved < 0) {
+                            e.preventDefault();
+                            document.getElementById("amountError").innerText =
+                                "Amount cannot be negative";
+                            return;
+                        }
+
+                        if (approved > maxAmount) {
+                            e.preventDefault();
+                            document.getElementById("amountError").innerText =
+                                "Approved amount cannot exceed loan amount";
+                        }
+                    });
+                    </script>
                     <!-- Sanction Letter (Visible only if status is 'approved') -->
                     <div class="col-md-12">
                         <div id="sanctionLetterBox" class="section mb-4" style="display: none;">
@@ -327,7 +354,7 @@
         newRow.innerHTML = `
             <div class="row">
                 <div class="col-md-12 mb-2">
-                    <input type="text" name="document_names[]" class="form-control" placeholder="Document Name">
+                  <input type="text" name="document_name[]" class="form-control">
                 </div>
                 <div class="col-md-12">
                     <input type="file" name="documents[]" class="form-control">

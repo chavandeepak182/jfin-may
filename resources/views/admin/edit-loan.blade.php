@@ -290,17 +290,33 @@
 
                     <div class="form-group" id="approvedAmountBox" style="display: none;">
                         <label for="amount_approved">Approved Amount:<span class="text-danger">*</span></label>
-                        <input
+                                            <input
                             type="number"
                             class="form-control"
                             id="amountApproved"
                             name="amount_approved"
                             min="0"
+                            max="{{ $loan->amount }}"
                             step="1"
                             value="{{ $loan->amount_approved ?? '' }}"
-                            oninput="this.value = this.value < 0 ? 0 : this.value"
                         >
+                        <small id="amountError" class="text-danger"></small>
                     </div>
+                    <script>
+document.querySelector("form").addEventListener("submit", function(e) {
+
+    let approved = parseFloat(document.getElementById("amountApproved").value);
+    let maxAmount = {{ $loan->amount ?? 0 }};
+
+    if (isNaN(approved)) return;
+
+    if (approved > maxAmount) {
+        e.preventDefault();
+        document.getElementById("amountError").innerText =
+            "Approved amount cannot exceed loan amount";
+    }
+});
+</script>
 
                     <div class="form-group" id="remark-box" style="display: none;">
                         <label for="remark">Remark:</label>
