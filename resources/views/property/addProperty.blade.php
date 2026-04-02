@@ -665,7 +665,7 @@ $('#state').change(function(){
 
         $.ajax({
 
-            url: '/get-cities/' + state_id, // ✅ FIX
+            url: '/get-cities-property' + state_id, // ✅ FIX
             type: 'GET', // ✅ FIX
 
             success:function(data){

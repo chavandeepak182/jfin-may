@@ -2668,4 +2668,57 @@ public function showProfileApi(Request $request)
         ]
     ]);
 }
+public function mydetailsapi(Request $request)
+{
+    $user = $request->user();
+
+    if (!$user) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Unauthorized'
+        ], 401);
+    }
+
+    // User
+    $userData = DB::table('users')
+        ->where('id', $user->id)
+        ->first();
+
+    // Profile with state & city
+    $profile = DB::table('profile')
+        ->leftJoin('states', 'states.id', '=', 'profile.state')
+        ->leftJoin('cities', 'cities.id', '=', 'profile.city')
+        ->where('profile.user_id', $user->id)
+        ->select(
+            'profile.*',
+            'states.name as state_name',
+            'cities.city as city_name'
+        )
+        ->first();
+
+    // Professional Details
+    $professionalDetails = DB::table('professional_details')
+        ->where('user_id', $user->id)
+        ->first();
+
+    // Bank Details
+    $bankDetails = DB::table('customer_banks')
+        ->where('user_id', $user->id)
+        ->first();
+
+    // States list
+    $states = DB::table('states')->get();
+
+    return response()->json([
+        'status' => true,
+        'message' => 'User personal details fetched successfully',
+        'data' => [
+            'user' => $userData,
+            'profile' => $profile,
+            'professional_details' => $professionalDetails,
+            'bank_details' => $bankDetails,
+            'states' => $states
+        ]
+    ], 200);
+}
 }

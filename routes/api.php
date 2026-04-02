@@ -40,6 +40,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/my-profile', [UsersController::class, 'showProfileApi']);
 });
 
-
+Route::middleware('auth:sanctum')->get('/mypersonal', [UsersController::class, 'mydetailsapi']);
 
 ?>
