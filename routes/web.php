@@ -1071,14 +1071,25 @@ Route::get('/partner/assigned-leads', [VisitEnquiryController::class, 'partnerLe
     ->name('partner.pending.leads');
 
     //price range
-    Route::middleware(['isAdmin'])->group(function () {
+    Route::middleware(['ispartner'])->group(function () {
 
-    Route::get('admin/price-range', [PriceRangeController::class, 'index']);
-    Route::get('admin/price-range/create', [PriceRangeController::class, 'create']);
-    Route::post('admin/price-range/store', [PriceRangeController::class, 'store']);
-    Route::get('admin/price-range/edit/{id}', [PriceRangeController::class, 'edit']);
-    Route::post('admin/price-range/update/{id}', [PriceRangeController::class, 'update']);
-    Route::get('admin/price-range/delete/{id}', [PriceRangeController::class, 'destroy']);
+    Route::get('admin/price-range', [PriceRangeController::class, 'index'])
+        ->name('admin.price.range');
+
+    Route::get('admin/price-range/create', [PriceRangeController::class, 'create'])
+        ->name('admin.price.range.create');
+
+    Route::post('admin/price-range/store', [PriceRangeController::class, 'store'])
+        ->name('admin.price.range.store');
+
+    Route::get('admin/price-range/edit/{id}', [PriceRangeController::class, 'edit'])
+        ->name('admin.price.range.edit');
+
+    Route::post('admin/price-range/update/{id}', [PriceRangeController::class, 'update'])
+        ->name('admin.price.range.update');
+
+    Route::get('admin/price-range/delete/{id}', [PriceRangeController::class, 'destroy'])
+        ->name('admin.price.range.delete');
 
 });
 
