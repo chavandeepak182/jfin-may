@@ -664,28 +664,28 @@ $('#state').change(function(){
     if(state_id){
 
         $.ajax({
-
-            url: '/get-cities-property' + state_id, // ✅ FIX
-            type: 'GET', // ✅ FIX
+            url: "{{ route('getCitiesproperty') }}",
+            type: 'POST',
+            data: {
+                _token: "{{ csrf_token() }}",
+                state_id: state_id
+            },
 
             success:function(data){
+
+                console.log("DATA:", data);
 
                 $('#city').html('<option value="">Select City</option>');
 
                 $.each(data,function(key,value){
 
                     $('#city').append(
-                        '<option value="'+value.id+'">'+value.city+'</option>'
+                        '<option value="'+value.id+'">'+value.city+'</option>' // ✅ FIX
                     );
 
                 });
 
-            },
-
-            error:function(err){
-                console.log("City error:", err);
             }
-
         });
 
     }
