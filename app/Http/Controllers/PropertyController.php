@@ -541,6 +541,7 @@ public function updatePropertyStatus(Request $request)
 public function updatePropertie(Request $request)
 {
     
+    
     $propertie_id = $request->propertie_id;
 
     // ✅ GET PROPERTY
@@ -559,23 +560,25 @@ public function updatePropertie(Request $request)
     $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 
     /* ================= IMAGE UPLOAD ================= */
-    if ($request->hasFile('property_image')) {
+   if ($request->hasFile('property_image')) {
 
-        $image_name = substr(str_shuffle($permitted_chars), 0, 8) . time() . '.' . $request->property_image->extension();
+    $file = $request->file('property_image');
 
-        $destination = public_path('property_photos');
+    $image_name = substr(str_shuffle($permitted_chars), 0, 8) . time() . '.' . $file->getClientOriginalExtension();
 
-        if (!file_exists($destination)) {
-            mkdir($destination, 0755, true);
-        }
+    $destination = public_path('property_photos');
 
-        $request->property_image->move($destination, $image_name);
-
-        $property_image_name = 'property_photos/' . $image_name;
-
-    } else {
-        $property_image_name = $old_image;
+    if (!file_exists($destination)) {
+        mkdir($destination, 0755, true);
     }
+
+    $file->move($destination, $image_name);
+
+    $property_image_name = 'property_photos/' . $image_name;
+
+} else {
+    $property_image_name = $old_image;
+}
 
     /* ================= VOUCHER UPLOAD ================= */
     if ($request->hasFile('property_voucher')) {

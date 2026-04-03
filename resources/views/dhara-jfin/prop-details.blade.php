@@ -1044,22 +1044,33 @@
                     <div class="gallery-main">
                         <button class="nav-arrow left" onclick="prevImage()">‹</button>
 
-                        <img id="mainImage"
-                             src="{{ asset($data['additional_images'][0]->image_url) }}"
-                             alt="{{ $title }}">
+                       <img id="mainImage"
+     src="{{ asset($data['main_image']) }}"
+     alt="{{ $title }}">
+                             
 
                         <button class="nav-arrow right" onclick="nextImage()">›</button>
                     </div>
 
-                    <div class="thumbnail-bar">
-                        @foreach($data['additional_images'] as $index => $img)
-                            <img
-                                src="{{ asset($img->image_url) }}"
-                                class="thumbnail {{ $index === 0 ? 'active' : '' }}"
-                                onclick="setImage({{ $index }})"
-                            >
-                        @endforeach
-                    </div>
+                  <div class="thumbnail-bar">
+
+    <!-- 🔥 MAIN IMAGE FIRST (properties table) -->
+    <img
+        src="{{ asset($data['main_image']) }}"
+        class="thumbnail active"
+        onclick="setImage(0)"
+    >
+
+    <!-- 🔥 बाकी images (property_images table) -->
+    @foreach($data['additional_images'] as $index => $img)
+        <img
+            src="{{ asset($img->image_url) }}"
+            class="thumbnail"
+            onclick="setImage({{ $index + 1 }})"
+        >
+    @endforeach
+
+</div>
                 </div>
 
                 <div id="galleryModal" class="gallery-modal">
@@ -1189,26 +1200,48 @@
                 <div class="details-section">
                     <h2 class="section-title"><i class="fas fa-route"></i> Nearby Locations</h2>
                     <div class="nearby-grid">
-                        @if($nearby_locations && is_array($nearby_locations))
-                            @foreach($nearby_locations as $category => $locations)
+    @if($nearby_locations && is_array($nearby_locations))
+
+        @foreach($nearby_locations as $category => $locations)
+
+            @if(!empty($locations)) {{-- 🔥 IMPORTANT CHECK --}}
+
+                @if(is_array($locations))
+                    @foreach($locations as $loc)
+
+                        @if(!empty($loc)) {{-- 🔥 EMPTY VALUE SKIP --}}
                             <div class="nearby-item">
-                                <div class="nearby-icon"><i class="fas fa-map-marker-alt"></i></div>
+                                <div class="nearby-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
                                 <div class="nearby-info">
-                                    <!-- <h4>{{ ucfirst($category) }}</h4> -->
-                                    @if(is_array($locations))
-                                        @foreach($locations as $loc)
-                                            <h4>{{ $loc }}</h4>
-                                        @endforeach
-                                    @else
-                                        <h4>{{ $locations }}</h4>
-                                    @endif
+                                    <h4>{{ $loc }}</h4>
                                 </div>
                             </div>
-                            @endforeach
-                        @else
-                            <p class="text-muted">No nearby locations specified.</p>
                         @endif
+
+                    @endforeach
+                @else
+
+                    <div class="nearby-item">
+                        <div class="nearby-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="nearby-info">
+                            <h4>{{ $locations }}</h4>
+                        </div>
                     </div>
+
+                @endif
+
+            @endif
+
+        @endforeach
+
+    @else
+        <p class="text-muted">No nearby locations specified.</p>
+    @endif
+</div>
                 </div>
 
                 <!-- Popular Searches -->

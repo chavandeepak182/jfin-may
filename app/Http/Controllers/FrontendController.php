@@ -512,50 +512,50 @@ $redirectRoutes = [
         return view('frontend.termcond');
     }
 
-    public function PropDetailsView($slugAndId){
-        // Separate the slug and ID from the URL segment
-        $parts = explode('-', $slugAndId);
-        $id = array_pop($parts); // Extract the ID (last part)
-        $slug = implode('-', $parts); // Reconstruct the slug
+    // public function PropDetailsView($slugAndId){
+    //     // Separate the slug and ID from the URL segment
+    //     $parts = explode('-', $slugAndId);
+    //     $id = array_pop($parts); // Extract the ID (last part)
+    //     $slug = implode('-', $parts); // Reconstruct the slug
 
-        // Fetch property based on both ID and slug (optional but safer)
-        $propertyDetails = DB::table('properties')
-            ->where('properties_id', $id)
-            ->where('slug', $slug)
-            ->first();
+    //     // Fetch property based on both ID and slug (optional but safer)
+    //     $propertyDetails = DB::table('properties')
+    //         ->where('properties_id', $id)
+    //         ->where('slug', $slug)
+    //         ->first();
 
-        if (!$propertyDetails) {
-            abort(404);
-        }
+    //     if (!$propertyDetails) {
+    //         abort(404);
+    //     }
 
-        // Get full property details
-        $data['propertie_details'] = DB::select(
-            'SELECT * FROM properties AS p, price_range AS pr, property_category AS pc 
-            WHERE p.price_range_id = pr.range_id 
-            AND pc.pid = p.property_type_id 
-            AND p.properties_id = ?', [$id]
-        );
+    //     // Get full property details
+    //     $data['propertie_details'] = DB::select(
+    //         'SELECT * FROM properties AS p, price_range AS pr, property_category AS pc 
+    //         WHERE p.price_range_id = pr.range_id 
+    //         AND pc.pid = p.property_type_id 
+    //         AND p.properties_id = ?', [$id]
+    //     );
 
-        // Get additional images
-        $data['additional_images'] = DB::table('property_images')
-            ->where('properties_id', $propertyDetails->properties_id)
-            ->get();
+    //     // Get additional images
+    //     $data['additional_images'] = DB::table('property_images')
+    //         ->where('properties_id', $propertyDetails->properties_id)
+    //         ->get();
 
-        // Get FAQs related to the property
-        $data['faqs'] = DB::table('faqs')
-            ->where('property_id', $propertyDetails->properties_id)
-            ->get();
+    //     // Get FAQs related to the property
+    //     $data['faqs'] = DB::table('faqs')
+    //         ->where('property_id', $propertyDetails->properties_id)
+    //         ->get();
 
-        // Return view with meta data
-        return view('dhara-jfin.prop-details', compact('data'))
-        ->with([
-            'faqs' => $data['faqs'],
-            'meta_title' => $propertyDetails->meta_title ?? 'Default Property Title',
-            'meta_description' => $propertyDetails->meta_description ?? 'Default Property Description',
-            'meta_keywords' => $propertyDetails->meta_keywords ?? 'Default Keywords',
-            'schema_markup' => $propertyDetails->schema_markup ?? '',
-        ]);
-    }
+    //     // Return view with meta data
+    //     return view('dhara-jfin.prop-details', compact('data'))
+    //     ->with([
+    //         'faqs' => $data['faqs'],
+    //         'meta_title' => $propertyDetails->meta_title ?? 'Default Property Title',
+    //         'meta_description' => $propertyDetails->meta_description ?? 'Default Property Description',
+    //         'meta_keywords' => $propertyDetails->meta_keywords ?? 'Default Keywords',
+    //         'schema_markup' => $propertyDetails->schema_markup ?? '',
+    //     ]);
+    // }
     // public function PropDetailsView($property_id)
     // {
     //     $data['propertie_details'] = DB::select('select * from properties as p, price_range as pr, property_category as pc where 
@@ -566,6 +566,56 @@ $redirectRoutes = [
 
     //     return view('frontend.property-details-test', compact('data'));
     // }
+
+public function PropDetailsView($slugAndId)
+{
+    // 🔹 Split slug + id
+    $parts = explode('-', $slugAndId);
+    $id = array_pop($parts);
+    $slug = implode('-', $parts);
+
+    // 🔹 Get property (MAIN DATA)
+    $property = DB::table('properties')
+        ->where('properties_id', $id)
+        ->where('slug', $slug)
+        ->first();
+
+    if (!$property) {
+        abort(404);
+    }
+
+    // 🔹 Full details with joins
+    $data['propertie_details'] = DB::table('properties as p')
+        ->join('price_range as pr', 'p.price_range_id', '=', 'pr.range_id')
+        ->join('property_category as pc', 'p.property_type_id', '=', 'pc.pid')
+        ->where('p.properties_id', $id)
+        ->select('p.*', 'pr.*', 'pc.*')
+        ->get();
+
+    // 🔥 MAIN IMAGE (IMPORTANT FIX)
+    $data['main_image'] = $property->image ?? 'default.jpg';
+
+    // 🔹 Additional images (gallery)
+    $data['additional_images'] = DB::table('property_images')
+        ->where('properties_id', $id)
+        ->get();
+
+    // 🔹 FAQs
+    $data['faqs'] = DB::table('faqs')
+        ->where('property_id', $id)
+        ->get();
+
+    // 🔹 Return view
+    return view('dhara-jfin.prop-details', compact('data'))
+        ->with([
+            'meta_title' => $property->meta_title ?? 'Default Property Title',
+            'meta_description' => $property->meta_description ?? 'Default Property Description',
+            'meta_keywords' => $property->meta_keywords ?? 'Default Keywords',
+            'schema_markup' => $property->schema_markup ?? '',
+        ]);
+}
+
+
 
     // Loan Application
     public function ProfessionalDetailView()
@@ -680,6 +730,196 @@ $redirectRoutes = [
 //     }
 
 
+// public function properties(Request $request)
+// {
+//     /* ================= MAIN QUERY ================= */
+
+//     $query = DB::table('properties')
+//         ->join('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
+//         ->join('property_category', 'properties.property_type_id', '=', 'property_category.pid')
+//         ->where('properties.is_active', 1)
+//         ->select(
+//             'properties.properties_id',
+//             'properties.slug',
+//             'properties.title',
+//             'properties.property_type_id',
+//             'properties.builder_name',
+//             'properties.select_bhk',
+//             'properties.address',
+//             'properties.facilities',
+//             'properties.beds',
+//             'properties.baths',
+//             'properties.balconies',
+//             'properties.parking',
+//             'properties.contact',
+//             'price_range.from_price',
+//             'price_range.to_price',
+//             'property_category.category_name',
+//             'properties.property_details',
+//             'properties.localities',
+//             'properties.city',
+//             'properties.area',
+//             'properties.is_featured',
+//             'properties.s_price'
+//         );
+
+//     /* ================= SEARCH ================= */
+
+//     if ($request->filled('search')) {
+//         $search = trim($request->search);
+
+//         $query->where(function ($q) use ($search) {
+//             $q->where('properties.title', 'LIKE', "%{$search}%")
+//               ->orWhere('properties.builder_name', 'LIKE', "%{$search}%")
+//               ->orWhere('properties.localities', 'LIKE', "%{$search}%")
+//               ->orWhere('properties.city', 'LIKE', "%{$search}%");
+//         });
+//     }
+
+//     /* ================= BHK FILTER ================= */
+
+//     if ($request->filled('bhk')) {
+//         $query->where('properties.select_bhk', $request->bhk);
+//     }
+
+//     /* ================= BUDGET FILTER ================= */
+
+//     if ($request->filled('budget')) {
+
+//         switch ($request->budget) {
+
+//             case '40-60':
+//                 $query->whereBetween('properties.s_price', [4000000, 6000000]);
+//                 break;
+
+//             case '60-80':
+//                 $query->whereBetween('properties.s_price', [6000000, 8000000]);
+//                 break;
+
+//             case '80-100':
+//                 $query->whereBetween('properties.s_price', [8000000, 10000000]);
+//                 break;
+
+//             case '100-200':
+//                 $query->whereBetween('properties.s_price', [10000000, 20000000]);
+//                 break;
+
+//             case '200+':
+//                 $query->where('properties.s_price', '>=', 20000000);
+//                 break;
+//         }
+//     }
+
+//     /* ================= PAGINATION ================= */
+
+//     $data['allProperties'] = $query->paginate(12)->appends($request->all());
+
+//     /* ================= CATEGORY ================= */
+
+//     $data['category'] = DB::table('property_category')->get();
+
+//     /* ================= IMAGES (FOR MAIN LIST) ================= */
+
+//     $propertyImages = DB::table('property_images')
+//         ->whereIn('properties_id', $data['allProperties']->pluck('properties_id'))
+//         ->select('properties_id','image_url')
+//         ->orderBy('is_featured','DESC')
+//         ->get()
+//         ->groupBy('properties_id');
+
+//     foreach ($data['allProperties'] as $property) {
+//         $property->image = isset($propertyImages[$property->properties_id])
+//             ? $propertyImages[$property->properties_id]->first()->image_url
+//             : 'default.jpg';
+//     }
+
+//     /* ================= FEATURED PROPERTIES ================= */
+
+//     if (!$request->filled('search') &&
+//         !$request->filled('bhk') &&
+//         !$request->filled('budget')) {
+
+//         $data['featuredProperties'] = DB::table('properties')
+//             ->where('is_featured',1)
+//             ->where('is_active',1)
+//             ->select(
+//                 'properties_id',
+//                 'slug',
+//                 'title',
+//                 'builder_name',
+//                 's_price',
+//                 'localities',
+//                 'city',
+//                 'select_bhk',
+//                 'area'
+//             )
+//             ->get();
+
+//         // Attach images
+//         $featuredImages = DB::table('property_images')
+//             ->whereIn('properties_id', $data['featuredProperties']->pluck('properties_id'))
+//             ->select('properties_id','image_url')
+//             ->orderBy('is_featured','DESC')
+//             ->get()
+//             ->groupBy('properties_id');
+
+//         foreach ($data['featuredProperties'] as $property) {
+//             $property->image = isset($featuredImages[$property->properties_id])
+//                 ? $featuredImages[$property->properties_id]->first()->image_url
+//                 : 'default.jpg';
+//         }
+
+//     } else {
+//         $data['featuredProperties'] = collect();
+//     }
+
+//     /* ================= SELECTED LOCALITIES ================= */
+
+//     if (!$request->filled('search')) {
+
+//         $selectedLocalities = DB::table('selected_localities')
+//             ->join('localities','selected_localities.locality_id','=','localities.id')
+//             ->select('localities.id','localities.name')
+//             ->limit(3)
+//             ->get();
+
+//         $data['selectedLocalities'] = [];
+
+//         foreach ($selectedLocalities as $locality) {
+
+//             $properties = DB::table('properties')
+//                 ->where('localities','LIKE',"%{$locality->name}%")
+//                 ->where('is_active',1)
+//                 ->select('properties_id','title','builder_name','slug')
+//                 ->limit(2)
+//                 ->get();
+
+//             // Attach images
+//             $localImages = DB::table('property_images')
+//                 ->whereIn('properties_id', $properties->pluck('properties_id'))
+//                 ->select('properties_id','image_url')
+//                 ->orderBy('is_featured','DESC')
+//                 ->get()
+//                 ->groupBy('properties_id');
+
+//             foreach ($properties as $property) {
+//                 $property->image = isset($localImages[$property->properties_id])
+//                     ? $localImages[$property->properties_id]->first()->image_url
+//                     : 'default.jpg';
+//             }
+
+//             $data['selectedLocalities'][] = [
+//                 'locality' => $locality->name,
+//                 'properties' => $properties
+//             ];
+//         }
+
+//     } else {
+//         $data['selectedLocalities'] = [];
+//     }
+
+//     return view('dhara-jfin.properties', compact('data'));
+// }
 public function properties(Request $request)
 {
     /* ================= MAIN QUERY ================= */
@@ -710,10 +950,11 @@ public function properties(Request $request)
             'properties.city',
             'properties.area',
             'properties.is_featured',
-            'properties.s_price'
+            'properties.s_price',
+            DB::raw("IFNULL(properties.image, 'default.jpg') as image") // 🔥 IMPORTANT
         );
 
-    /* ================= SEARCH ================= */
+    /* ================= FILTERS ================= */
 
     if ($request->filled('search')) {
         $search = trim($request->search);
@@ -726,34 +967,24 @@ public function properties(Request $request)
         });
     }
 
-    /* ================= BHK FILTER ================= */
-
     if ($request->filled('bhk')) {
         $query->where('properties.select_bhk', $request->bhk);
     }
 
-    /* ================= BUDGET FILTER ================= */
-
     if ($request->filled('budget')) {
-
         switch ($request->budget) {
-
             case '40-60':
                 $query->whereBetween('properties.s_price', [4000000, 6000000]);
                 break;
-
             case '60-80':
                 $query->whereBetween('properties.s_price', [6000000, 8000000]);
                 break;
-
             case '80-100':
                 $query->whereBetween('properties.s_price', [8000000, 10000000]);
                 break;
-
             case '100-200':
                 $query->whereBetween('properties.s_price', [10000000, 20000000]);
                 break;
-
             case '200+':
                 $query->where('properties.s_price', '>=', 20000000);
                 break;
@@ -768,104 +999,54 @@ public function properties(Request $request)
 
     $data['category'] = DB::table('property_category')->get();
 
-    /* ================= IMAGES (FOR MAIN LIST) ================= */
+    /* ================= FEATURED ================= */
 
-    $propertyImages = DB::table('property_images')
-        ->whereIn('properties_id', $data['allProperties']->pluck('properties_id'))
-        ->select('properties_id','image_url')
-        ->orderBy('is_featured','DESC')
-        ->get()
-        ->groupBy('properties_id');
+    $data['featuredProperties'] = DB::table('properties')
+        ->where('is_featured',1)
+        ->where('is_active',1)
+        ->select(
+            'properties_id',
+            'slug',
+            'title',
+            'builder_name',
+            's_price',
+            'localities',
+            'city',
+            'select_bhk',
+            'area',
+            DB::raw("IFNULL(image, 'default.jpg') as image") // 🔥 IMPORTANT
+        )
+        ->get();
 
-    foreach ($data['allProperties'] as $property) {
-        $property->image = isset($propertyImages[$property->properties_id])
-            ? $propertyImages[$property->properties_id]->first()->image_url
-            : 'default.jpg';
-    }
+    /* ================= LOCALITIES ================= */
 
-    /* ================= FEATURED PROPERTIES ================= */
+    $selectedLocalities = DB::table('selected_localities')
+        ->join('localities','selected_localities.locality_id','=','localities.id')
+        ->select('localities.id','localities.name')
+        ->limit(3)
+        ->get();
 
-    if (!$request->filled('search') &&
-        !$request->filled('bhk') &&
-        !$request->filled('budget')) {
+    $data['selectedLocalities'] = [];
 
-        $data['featuredProperties'] = DB::table('properties')
-            ->where('is_featured',1)
+    foreach ($selectedLocalities as $locality) {
+
+        $properties = DB::table('properties')
+            ->where('localities','LIKE',"%{$locality->name}%")
             ->where('is_active',1)
             ->select(
                 'properties_id',
-                'slug',
                 'title',
                 'builder_name',
-                's_price',
-                'localities',
-                'city',
-                'select_bhk',
-                'area'
+                'slug',
+                DB::raw("IFNULL(image, 'default.jpg') as image") // 🔥 IMPORTANT
             )
+            ->limit(2)
             ->get();
 
-        // Attach images
-        $featuredImages = DB::table('property_images')
-            ->whereIn('properties_id', $data['featuredProperties']->pluck('properties_id'))
-            ->select('properties_id','image_url')
-            ->orderBy('is_featured','DESC')
-            ->get()
-            ->groupBy('properties_id');
-
-        foreach ($data['featuredProperties'] as $property) {
-            $property->image = isset($featuredImages[$property->properties_id])
-                ? $featuredImages[$property->properties_id]->first()->image_url
-                : 'default.jpg';
-        }
-
-    } else {
-        $data['featuredProperties'] = collect();
-    }
-
-    /* ================= SELECTED LOCALITIES ================= */
-
-    if (!$request->filled('search')) {
-
-        $selectedLocalities = DB::table('selected_localities')
-            ->join('localities','selected_localities.locality_id','=','localities.id')
-            ->select('localities.id','localities.name')
-            ->limit(3)
-            ->get();
-
-        $data['selectedLocalities'] = [];
-
-        foreach ($selectedLocalities as $locality) {
-
-            $properties = DB::table('properties')
-                ->where('localities','LIKE',"%{$locality->name}%")
-                ->where('is_active',1)
-                ->select('properties_id','title','builder_name','slug')
-                ->limit(2)
-                ->get();
-
-            // Attach images
-            $localImages = DB::table('property_images')
-                ->whereIn('properties_id', $properties->pluck('properties_id'))
-                ->select('properties_id','image_url')
-                ->orderBy('is_featured','DESC')
-                ->get()
-                ->groupBy('properties_id');
-
-            foreach ($properties as $property) {
-                $property->image = isset($localImages[$property->properties_id])
-                    ? $localImages[$property->properties_id]->first()->image_url
-                    : 'default.jpg';
-            }
-
-            $data['selectedLocalities'][] = [
-                'locality' => $locality->name,
-                'properties' => $properties
-            ];
-        }
-
-    } else {
-        $data['selectedLocalities'] = [];
+        $data['selectedLocalities'][] = [
+            'locality' => $locality->name,
+            'properties' => $properties
+        ];
     }
 
     return view('dhara-jfin.properties', compact('data'));

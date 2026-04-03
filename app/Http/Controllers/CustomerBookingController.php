@@ -827,6 +827,47 @@ public function showConfirmOffer($id)
     return view('customer.booking-confirm', compact('booking'));
 }
 
+// public function showProperties(Request $request)
+// {
+//     if (auth()->user()->role_id != config('constants.roles.customer')) {
+//         abort(403);
+//     }
+
+//     $query = Property::with('category')->active();
+
+//     /* ================= SEARCH ================= */
+//     if ($request->search) {
+//         $query->where(function ($q) use ($request) {
+//             $q->where('builder_name', 'like', '%' . $request->search . '%')
+//               ->orWhere('title', 'like', '%' . $request->search . '%')
+//               ->orWhere('address', 'like', '%' . $request->search . '%')
+//               ->orWhere('s_price', 'like', '%' . $request->search . '%');
+//         });
+//     }
+
+//     $properties = $query->orderBy('created_at', 'desc')->get();
+
+//     /* ================= IMAGE LOGIC ADD ================= */
+//     $propertyImages = DB::table('property_images')
+//         ->whereIn('properties_id', $properties->pluck('properties_id'))
+//         ->select('properties_id', 'image_url')
+//         ->orderBy('is_featured', 'DESC')
+//         ->get()
+//         ->groupBy('properties_id');
+
+//     foreach ($properties as $property) {
+//         $property->image = isset($propertyImages[$property->properties_id])
+//             ? $propertyImages[$property->properties_id]->first()->image_url
+//             : 'default.jpg';
+//     }
+
+//     /* ================= CATEGORY ================= */
+//     $categories = DB::table('property_category')->get();
+
+//     return view('customer.properties.index', compact('properties','categories'));
+// }
+
+
 public function showProperties(Request $request)
 {
     if (auth()->user()->role_id != config('constants.roles.customer')) {
@@ -847,18 +888,9 @@ public function showProperties(Request $request)
 
     $properties = $query->orderBy('created_at', 'desc')->get();
 
-    /* ================= IMAGE LOGIC ADD ================= */
-    $propertyImages = DB::table('property_images')
-        ->whereIn('properties_id', $properties->pluck('properties_id'))
-        ->select('properties_id', 'image_url')
-        ->orderBy('is_featured', 'DESC')
-        ->get()
-        ->groupBy('properties_id');
-
+    /* ✅ USE DIRECT IMAGE FROM properties TABLE */
     foreach ($properties as $property) {
-        $property->image = isset($propertyImages[$property->properties_id])
-            ? $propertyImages[$property->properties_id]->first()->image_url
-            : 'default.jpg';
+        $property->image = $property->image ?? 'default.jpg';
     }
 
     /* ================= CATEGORY ================= */
@@ -866,9 +898,6 @@ public function showProperties(Request $request)
 
     return view('customer.properties.index', compact('properties','categories'));
 }
-
-
-
 public function showBookingForm($id)
 {
     if (auth()->user()->role_id != config('constants.roles.customer')) {

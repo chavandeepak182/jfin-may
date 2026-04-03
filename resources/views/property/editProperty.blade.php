@@ -29,7 +29,7 @@
         $boucher = env('baseURL'). "/".$v->boucher;
         
 ?>
-<form id="editProperty">
+<form id="editProperty" enctype="multipart/form-data">
     @csrf
     <!-- Breadcrumbs -->
     <div class="card-header py-3">
@@ -356,23 +356,32 @@ function getImgData() {
 </script>
 
 <script>   
-$('#editProperty').on('submit',function(e){
+$('#editProperty').on('submit', function(e){
     e.preventDefault();
 
     $('textarea[name=description]').val($('#summernote').summernote('code'));
 
-    $.ajax({               
-        url:"{{Route('updatePropertie')}}", 
-        method:"POST",                             
-        data:new FormData(this),
+    let formData = new FormData(this);
+
+    // 🔥 FILE manually add (safe)
+    let fileInput = $('#choose-file')[0].files[0];
+    if(fileInput){
+        formData.set('property_image', fileInput);
+    }
+
+    $.ajax({
+        url:"{{Route('updatePropertie')}}",
+        method:"POST",
+        data: formData,
         processData:false,
         contentType:false,
+        cache:false,
 
         beforeSend:function(){
             console.log("FORM SUBMIT");
         },
 
-        success:function(data){              
+        success:function(data){
             console.log(data);
 
             if(data.status == 0){
@@ -388,7 +397,6 @@ $('#editProperty').on('submit',function(e){
         }
     });
 });
-
 
  </script>
 <script>

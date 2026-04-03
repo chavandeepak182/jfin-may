@@ -34,7 +34,7 @@
                                 <div class="col-md-6 col-6 col-xs-12">
                                     <a href="{{ url($property->slug . '-' . $property->properties_id) }}" target="_blank">
                                         <p class="h6 text-primary p-14">{{ $property->builder_name }}</p>
-                                        <img src="{{ $property->image }}" class="img-fluid mb-2" alt="{{ $property->title }}" style="height:125px;">
+                                        <img src="{{ asset($property->image) }}" class="img-fluid mb-2" alt="{{ $property->title }}" style="height:125px;">
                                         <p class="text-muted p-14">{{ $property->title }}</p>
                                     </a>
                                 </div>
