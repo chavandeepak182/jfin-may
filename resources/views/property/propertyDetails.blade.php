@@ -128,12 +128,16 @@
                                     <input type="text" name="s_price" class="form-control" placeholder="Starting Price" readonly value="{{ $v->s_price }}" />
                                 </div>
                             </div>
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Property Description</label>
-                                    <textarea name="property_description" class="form-control" rows="2" style="resize:none" maxlength="250" value="" readonly>{{ $v->property_details }} </textarea>
-                                </div>
+                           <div class="col-lg-12">
+                            <div class="mb-3">
+                                <label class="form-label">Property Description</label>
+                                <textarea name="property_description" 
+                                        class="form-control" 
+                                        rows="10" 
+                                        style="resize:none" 
+                                        readonly>{{ strip_tags(base64_decode($v->property_details)) }}</textarea>
                             </div>
+                        </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Property Address</label>

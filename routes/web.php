@@ -1056,9 +1056,12 @@ Route::post('admin/booking/update/{id}', [CustomerBookingController::class, 'adm
     Route::post('admin/booking/final/{id}',
         [CustomerBookingController::class, 'adminFinalSubmit']
     );
-    Route::post('/admin/assign-partner/{id}', [CustomerBookingController::class, 'assignPartner'])
-    ->name('admin.assign.partner');
-});
+
+    // cp routes
+    Route::post('/assign-cp', [CustomerBookingController::class, 'assignCp'])
+    ->name('admin.assign.cp');
+    Route::post('/cp/accept', [CustomerBookingController::class, 'cpAccept'])->name('cp.accept');
+Route::post('/cp/reject', [CustomerBookingController::class, 'cpReject'])->name('cp.reject');
 // Route::get('/agent/assigned-leads', [VisitEnquiryController::class, 'agentLeads'])
 //     ->middleware('auth')
 //     ->name('agent.leads');
@@ -1069,9 +1072,11 @@ Route::get('/partner/assigned-leads', [VisitEnquiryController::class, 'partnerLe
     [VisitEnquiryController::class, 'partnerPendingLeads'])
     ->middleware('auth')
     ->name('partner.pending.leads');
+});
 
-    //price range
-    Route::middleware(['isPartner'])->group(function () {
+
+    
+Route::middleware(['isPartner'])->group(function () {
 
     Route::get('admin/price-range', [PriceRangeController::class, 'index'])
         ->name('admin.price.range');
@@ -1092,4 +1097,3 @@ Route::get('/partner/assigned-leads', [VisitEnquiryController::class, 'partnerLe
         ->name('admin.price.range.delete');
 
 });
-
