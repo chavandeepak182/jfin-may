@@ -1002,21 +1002,23 @@ public function properties(Request $request)
     /* ================= FEATURED ================= */
 
     $data['featuredProperties'] = DB::table('properties')
-        ->where('is_featured',1)
-        ->where('is_active',1)
-        ->select(
-            'properties_id',
-            'slug',
-            'title',
-            'builder_name',
-            's_price',
-            'localities',
-            'city',
-            'select_bhk',
-            'area',
-            DB::raw("IFNULL(image, 'default.jpg') as image") // 🔥 IMPORTANT
-        )
-        ->get();
+    ->join('property_category', 'properties.property_type_id', '=', 'property_category.pid') // ✅ ADD
+    ->where('properties.is_featured',1)
+    ->where('properties.is_active',1)
+    ->select(
+        'properties.properties_id',
+        'properties.slug',
+        'properties.title',
+        'properties.builder_name',
+        'properties.s_price',
+        'properties.localities',
+        'properties.city',
+        'properties.select_bhk',
+        'properties.area',
+        'property_category.category_name', // ✅ ADD
+        DB::raw("IFNULL(properties.image, 'default.jpg') as image")
+    )
+    ->get();
 
     /* ================= LOCALITIES ================= */
 
@@ -1031,7 +1033,7 @@ public function properties(Request $request)
     foreach ($selectedLocalities as $locality) {
 
         $properties = DB::table('properties')
-            ->where('localities','LIKE',"%{$locality->name}%")
+           ->whereRaw("LOWER(localities) LIKE ?", ['%' . strtolower($locality->name) . '%'])
             ->where('is_active',1)
             ->select(
                 'properties_id',
