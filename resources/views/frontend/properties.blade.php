@@ -25,24 +25,24 @@
             <p class="text-muted">Explore prime properties based on your location</p>
         </div>
         <div class="row g-4 justify-content-center">
-            @foreach($data['selectedLocalities'] as $localityData)
-                <div class="col-md-4">
-                    <div class="shadow rounded p-4 text-center bg-white">
-                        <h5 class="mb-3" data-wow-delay="0.1s">{{ $localityData['locality'] }}</h5>
-                        <div class="row">
-                            @foreach($localityData['properties'] as $property)
-                                <div class="col-md-6 col-6 col-xs-12">
-                                    <a href="{{ url($property->slug . '-' . $property->properties_id) }}" target="_blank">
-                                        <p class="h6 text-primary p-14">{{ $property->builder_name }}</p>
-                                        <img src="{{ asset($property->image) }}" class="img-fluid mb-2" alt="{{ $property->title }}" style="height:125px;">
-                                        <p class="text-muted p-14">{{ $property->title }}</p>
-                                    </a>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            @endforeach
+          @if(isset($data['selectedLocalities']) && count($data['selectedLocalities']) > 0)
+
+    @foreach($data['selectedLocalities'] as $loc)
+
+        <h3>{{ $loc['locality'] }}</h3>
+
+        @foreach($loc['properties'] as $property)
+
+            <div>
+                <img src="{{ asset($property->image) }}" width="150">
+                <h4>{{ $property->title }}</h4>
+            </div>
+
+        @endforeach
+
+    @endforeach
+
+@endif
         </div>
     </div>
 </section>

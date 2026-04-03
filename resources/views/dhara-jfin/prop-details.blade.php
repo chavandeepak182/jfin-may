@@ -1061,14 +1061,20 @@
         onclick="setImage(0)"
     >
 
-    <!-- 🔥 बाकी images (property_images table) -->
-    @foreach($data['additional_images'] as $index => $img)
+    
+  @foreach($data['additional_images'] as $index => $img)
+
+    @if($img->image_url != $data['main_image']) {{-- 🔥 IMPORTANT --}}
+    
         <img
             src="{{ asset($img->image_url) }}"
             class="thumbnail"
             onclick="setImage({{ $index + 1 }})"
         >
-    @endforeach
+
+    @endif
+
+@endforeach
 
 </div>
                 </div>
@@ -1449,81 +1455,54 @@
         }
     });
 </script> -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Safe parsing of coordinates
-        var lat = parseFloat("{{ $latitude }}") || 18.5204;
-        var lng = parseFloat("{{ $longitude }}") || 73.8567;
-        var title = {!! json_encode($title) !!};
-        
-        function initMap() {
-            if (typeof L !== 'undefined' && document.getElementById('map')) {
-                var map = L.map('map').setView([lat, lng], 15);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; OpenStreetMap contributors'
-                }).addTo(map);
-                
-                L.marker([lat, lng]).addTo(map)
-                    .bindPopup('<strong>' + title + '</strong>')
-                    .openPopup();
-                
-                // Fix for map not rendering correctly in some containers
-                setTimeout(function() {
-                    map.invalidateSize();
-                }, 500);
-            } else if (typeof L === 'undefined') {
-                console.error('Leaflet library not loaded');
-                // Retry after a short delay
-                setTimeout(initMap, 1000);
-            }
-        }
-        
-        initMap();
+<script>document.addEventListener('DOMContentLoaded', function () {
+
+    const images = [
+        "{{ asset($data['main_image']) }}",
+        ...@json(
+            collect($data['additional_images'])
+                ->pluck('image_url')
+                ->map(fn($img) => asset($img))
+        )
+    ];
+
+    let currentIndex = 0;
+
+    const mainImage = document.getElementById('mainImage');
+    const thumbnails = document.querySelectorAll('.thumbnail');
+
+    function updateGallery(index) {
+        currentIndex = index;
+        mainImage.src = images[currentIndex];
+
+        thumbnails.forEach((thumb, i) => {
+            thumb.classList.toggle('active', i === currentIndex);
         });
-
-    function openGallery(index) {
-        const modal = document.getElementById('galleryModal');
-        const thumbs = modal.querySelectorAll('.modal-thumb');
-        
-        if (thumbs[index]) {
-            updateModalImg(thumbs[index].src, thumbs[index]);
-        } else if (thumbs.length > 0) {
-            updateModalImg(thumbs[0].src, thumbs[0]);
-        }
-        
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Prevent scrolling
     }
 
-    function closeGallery() {
-        const modal = document.getElementById('galleryModal');
-        modal.classList.remove('active');
-        document.body.style.overflow = ''; // Restore scrolling
-    }
+    // 👇 GLOBAL FUNCTIONS (IMPORTANT)
+    window.nextImage = function () {
+        updateGallery((currentIndex + 1) % images.length);
+    };
 
-    function updateModalImg(src, thumbElement) {
-        document.getElementById('modalMainImg').src = src;
-        
-        // Update active thumbnail
-        const thumbs = document.querySelectorAll('.modal-thumb');
-        thumbs.forEach(t => t.classList.remove('active'));
-        thumbElement.classList.add('active');
-        
-        // Center the active thumbnail in the scroll view
-        thumbElement.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-    }
+    window.prevImage = function () {
+        updateGallery((currentIndex - 1 + images.length) % images.length);
+    };
 
-    // Close modal on escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeGallery();
-    });
-</script>
+    window.setImage = function (index) {
+        updateGallery(index);
+    };
+
+});</script>
 <script>
-    const images = @json(
+ const images = [
+    "{{ asset($data['main_image']) }}",
+    ...@json(
         collect($data['additional_images'])
             ->pluck('image_url')
             ->map(fn($img) => asset($img))
-    );
+    )
+];
 
     let currentIndex = 0;
 
