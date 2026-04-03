@@ -1071,7 +1071,7 @@ Route::get('/partner/assigned-leads', [VisitEnquiryController::class, 'partnerLe
     ->name('partner.pending.leads');
 
     //price range
-    Route::middleware(['ispartner'])->group(function () {
+    Route::middleware(['isPartner'])->group(function () {
 
     Route::get('admin/price-range', [PriceRangeController::class, 'index'])
         ->name('admin.price.range');
