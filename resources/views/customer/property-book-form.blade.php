@@ -233,7 +233,7 @@
         <div class="property-section">
             <!-- Property Image -->
             <div class="property-image">
-                <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&h=600&fit=crop" alt="Godrej Skyline Koregaon Park">
+                <img src="{{ asset($property->image) }}" alt="{{ $property->title }}">
                 <div class="badge">Featured Property</div>
             </div>
 
