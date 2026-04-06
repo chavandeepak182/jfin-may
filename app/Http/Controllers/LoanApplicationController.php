@@ -3408,7 +3408,7 @@ protected function handleProfessionalDetails(Request $request, $userId)
 //                 ],
 //                 [
 //                     'file_path' => $filePath,
-//                     'updated_at' => now(),
+//                     'updated_at' => now(),getCities
 //                     'created_at' => now(),
 //                 ]
 //             );

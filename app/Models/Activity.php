@@ -6,23 +6,20 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class IsStakeholderMiddleware
+class IsDsaMiddleware
 {
-    /**
-     * Handle an incoming request.
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        // Get role_id from session
         $role_id = session()->get('role_id');
 
-        // 👉 Change this value according to your stakeholder role_id
-        // Example: 3 = stakeholder
-        if ($role_id == 6 || $role_id == 4) { // 4 = admin (optional access)
+        if (
+            $role_id == config('constants.roles.dsa') ||
+            $role_id == config('constants.roles.admin')
+        ) {
             return $next($request);
         }
 
-        // Unauthorized access
-        return redirect('/')->with('error', 'You are not authorized to access this page');
+        return redirect()->route('login')
+            ->with('error', 'Unauthorized');
     }
 }

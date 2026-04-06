@@ -30,11 +30,11 @@
                                href="{{ route('agent.loan.view',$loan->loan_id) }}">
                                 <i class="fa fa-eye"></i>
                             </a>
-
+<!-- 
                             <a class="btn btn-sm btn-primary"
                                href="{{ route('agent.editLoan',$loan->loan_id) }}">
                                 <i class="fa fa-edit"></i>
-                            </a>
+                            </a> -->
                         </td>
                     </tr>
                 @empty
