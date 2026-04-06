@@ -9,7 +9,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\Authenticate;
-use App\Http\Middleware\IsStakeholderMiddleware;
+use App\Http\Middleware\IsDsaMiddleware; // ✅ change here
 
 
 
@@ -30,7 +30,8 @@ return Application::configure(basePath: dirname(__DIR__))
         'isUser' => IsUserMiddleware::class,
         'isUserOrAdmin' => IsUserOrAdminMiddleware::class,
         // ✅ ADD THIS
-    'isStakeholder' => IsStakeholderMiddleware::class,
+     // ✅ UPDATED
+            'isDsa' => IsDsaMiddleware::class,
     ]);
 })
 

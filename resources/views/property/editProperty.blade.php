@@ -78,19 +78,7 @@
                                 <input type="text" name="property_title" class="form-control" placeholder="Property Title" value="{{ $v->title }}"  />
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">Land Type</label>
-                                <select class="form-control" name="land_type">
-                                    <option>Select Type</option>
-                                    <option value="Flat" {{ old('land_type', $v->land_type) == 'Flat' ? 'selected' : '' }}>Flat</option>
-                                    <option value="Bunglow" {{ old('land_type', $v->land_type) == 'Bunglow' ? 'selected' : '' }}>Bunglow</option>
-                                    <option value="Villa" {{ old('land_type', $v->land_type) == 'Villa' ? 'selected' : '' }}>Villa</option>
-                                    <option value="Plot" {{ old('land_type', $v->land_type) == 'Plot' ? 'selected' : '' }}>Plot</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
+                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">Property Type</label>
                                 <select name="property_type_id" class="form-control">
@@ -112,31 +100,138 @@
                                 </select>
                             </div>
                         </div>
-                        <!-- <div class="col-lg-6">
+                        <div class="col-lg-6">
                             <div class="mb-3">
-                                <label class="form-label">Select BHK</label>
-                                <input type="text" name="select_bhk" class="form-control" placeholder="BHK" value="{{ $v->select_bhk }}"  />
+                                <label class="form-label">Land Type</label>
+                                <select class="form-control" name="land_type">
+                                    <option>Select Type</option>
+                                    <option value="Flat" {{ old('land_type', $v->land_type) == 'Flat' ? 'selected' : '' }}>Flat</option>
+                                    <option value="Bunglow" {{ old('land_type', $v->land_type) == 'Bunglow' ? 'selected' : '' }}>Bunglow</option>
+                                    <option value="Villa" {{ old('land_type', $v->land_type) == 'Villa' ? 'selected' : '' }}>Villa</option>
+                                    <option value="Plot" {{ old('land_type', $v->land_type) == 'Plot' ? 'selected' : '' }}>Plot</option>
+                                </select>
+                            </div>
+                        </div>
+                       
+ <div class="row">
+
+    <!-- Starting Price -->
+    <div class="col-lg-3">
+        <div class="mb-3">
+            <label class="form-label">Starting Price</label>
+            <input type="text"
+                   name="s_price"
+                   class="form-control"
+                   placeholder="Starting price"
+                   value="{{ $v->s_price }}" />
+        </div>
+    </div>
+
+    <!-- BHK -->
+    <div class="col-lg-3">
+        <div class="mb-3">
+            <label class="form-label">Select BHK</label>
+            <select class="form-control" name="select_bhk">
+
+                <option value="">Select</option>
+
+                <option value="1" {{ $v->select_bhk == '1' ? 'selected' : '' }}>1 BHK</option>
+                <option value="2" {{ $v->select_bhk == '2' ? 'selected' : '' }}>2 BHK</option>
+                <option value="3" {{ $v->select_bhk == '3' ? 'selected' : '' }}>3 BHK</option>
+                <option value="4" {{ $v->select_bhk == '4' ? 'selected' : '' }}>4 BHK</option>
+                <option value="5" {{ $v->select_bhk == '5' ? 'selected' : '' }}>5 BHK</option>
+
+                <option value="2 & 3" {{ $v->select_bhk == '2 & 3' ? 'selected' : '' }}>2 & 3 BHK</option>
+                <option value="3 & 4" {{ $v->select_bhk == '3 & 4' ? 'selected' : '' }}>3 & 4 BHK</option>
+
+            </select>
+        </div>
+    </div>
+
+    <!-- Carpet Area -->
+    <div class="col-lg-3">
+        <div class="mb-3">
+            <label class="form-label">Carpet Area</label>
+            <input type="text"
+                   name="area"
+                   class="form-control"
+                   placeholder="Carpet Area"
+                   value="{{ $v->area }}" />
+        </div>
+    </div>
+
+    <!-- Built-up Area -->
+    <div class="col-lg-3">
+        <div class="mb-3">
+            <label class="form-label">Built-up Area</label>
+            <input type="text"
+                   name="builtup_area"
+                   class="form-control"
+                   placeholder="Built-up Area"
+                   value="{{ $v->builtup_area }}" />
+        </div>
+    </div>
+
+</div>
+                        <!-- 🔥 NEW ROW: 4 FIELDS IN ONE LINE -->
+                            <div class="row">
+
+                                <!-- BHK -->
+                                
+
+                                <!-- Bedrooms -->
+                                <div class="col-lg-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Bedrooms</label>
+                                        <select class="form-control" name="beds">
+                                            <option value="">Select</option>
+                                            @for($i=0;$i<=7;$i++)
+                                                <option value="{{ $i }}" {{ $v->beds == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Bathrooms -->
+                                <div class="col-lg-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Bathrooms</label>
+                                        <select class="form-control" name="baths">
+                                            <option value="">Select</option>
+                                            @for($i=0;$i<=4;$i++)
+                                                <option value="{{ $i }}" {{ $v->baths == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Balconies -->
+                                <div class="col-lg-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Balconies</label>
+                                        <select class="form-control" name="balconies">
+                                            <option value="">Select</option>
+                                            @for($i=0;$i<=4;$i++)
+                                                <option value="{{ $i }}" {{ $v->balconies == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                            
+                                <div class="col-lg-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Parking</label>
+                                        <select class="form-control" name="parking">
+                                            <option value="">Select</option>
+                                            @for($i=0;$i<=4;$i++)
+                                                <option value="{{ $i }}" {{ $v->parking == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+
 
                             </div>
-                        </div> -->
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">Starting Price</label>
-                                <input type="text" name="s_price" class="form-control" placeholder="Staring price" value="{{ $v->s_price }}" />
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">Carpet area</label>
-                                <input type="text" name="area" class="form-control" placeholder="Carpet Area" value="{{ $v->area }}" />
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">Built-up area</label>
-                                <input type="text" name="builtup_area" class="form-control" placeholder="Builtup Area" value="{{ $v->builtup_area }}" />
-                            </div>
-                        </div>
                         <div class="col-lg-12">
                             <div class="position-relative pb-15 form-group">
                             <label for="description">Description</label>
@@ -146,14 +241,14 @@
                                                         <script>
                                                        $(document).ready(function () {
 
-    $('#summernote').summernote({
-        height: 200
-    });
+                                                        $('#summernote').summernote({
+                                                            height: 200
+                                                        });
 
-    // ✅ SET VALUE AFTER INIT
-   $('#summernote').summernote('code', {!! json_encode(base64_decode($v->property_details)) !!});
+                                                        // ✅ SET VALUE AFTER INIT
+                                                    $('#summernote').summernote('code', {!! json_encode(base64_decode($v->property_details)) !!});
 
-});</script>
+                                                    });</script>
                         <div class="col-lg-4">
                             <div class="mb-3">
                                 <label class="form-label">Property Address</label>
@@ -207,6 +302,27 @@
                                 <input type="text" name="longitude" class="form-control" value="{{ $data['propertie_details'][0]->longitude ?? '' }}" placeholder="Longitude" required>
                             </div>
                         </div>
+                        @php
+$nearby = !empty($v->nearby_locations) ? json_decode($v->nearby_locations, true) : [];
+@endphp
+<div class="col-lg-12">
+    <div class="mb-3">
+        <label class="form-label"><strong>Location Advantages</strong></label>
+
+        <div class="row">
+            @for($i = 0; $i < 9; $i++)
+                <div class="col-lg-4">
+                    <input type="text"
+                           name="nearby[]"
+                           class="form-control mb-2"
+                           placeholder="Nearby location {{ $i+1 }}"
+                           value="{{ $nearby[$i] ?? '' }}">
+                </div>
+            @endfor
+        </div>
+    </div>
+</div>
+
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">Email ID</label>
@@ -240,6 +356,69 @@
                     <a href = "{{ $boucher }}">Boucher URL </a>
                     <input class="form-control" type="file" accept=".pdf" name="property_voucher"  />
                 </div>
+
+                <!-- 🔥 SEO FIELDS -->
+<div class="mb-4">
+
+    <!-- Slug -->
+    <div class="form-group">
+        <label for="slug">Slug (URL)</label>
+        <input type="text"
+               class="form-control"
+               name="slug"
+               id="slug"
+               value="{{ $v->slug ?? '' }}"
+               placeholder="Enter Slug"
+               maxlength="100">
+    </div>
+
+    <!-- Meta Title -->
+    <div class="form-group">
+        <label for="meta_title"><strong>Meta Title</strong></label>
+        <input type="text"
+               class="form-control"
+               name="meta_title"
+               id="meta_title"
+               value="{{ $v->meta_title ?? '' }}"
+               placeholder="Enter Meta Title">
+    </div>
+
+    <!-- Meta Description -->
+    <div class="form-group">
+        <label for="meta_description"><strong>Meta Description</strong></label>
+        <textarea class="form-control"
+                  name="meta_description"
+                  id="meta_description"
+                  placeholder="Enter Meta Description">{{ $v->meta_description ?? '' }}</textarea>
+    </div>
+
+    <!-- Meta Keywords -->
+    <div class="form-group">
+        <label for="meta_keywords"><strong>Meta Keywords</strong></label>
+        <textarea class="form-control"
+                  name="meta_keywords"
+                  id="meta_keywords"
+                  placeholder="Enter Meta Keywords (comma separated)">{{ $v->meta_keywords ?? '' }}</textarea>
+    </div>
+
+</div>
+
+<div class="mb-4">
+    <label class="form-label"><strong>Property Status</strong></label>
+    <span class="text-danger">*</span>
+
+    <select name="property_status" class="form-control" required>
+        <option value="">Select Status</option>
+
+        @foreach($data['property_status'] as $status)
+            <option value="{{ $status->id }}"
+                {{ $status->id == $v->property_status ? 'selected' : '' }}>
+                {{ $status->status_name }}
+            </option>
+        @endforeach
+
+    </select>
+</div>
                 <!-- Notes -->
                 <div class="card-body">
                     <label class="form-label">Price Range</label>
@@ -260,6 +439,7 @@
                         <?php } ?>
                     </select>
                 </div>  
+              
                 @php
 $selectedAmenities = !empty($v->facilities) 
     ? array_map('trim', explode(',', $v->facilities)) 
@@ -424,22 +604,32 @@ $(document).ready(function () {
 
 function loadCities(stateId, selectedCity = null, selectedArea = null) {
 
-    $.get('/get-cities-property' + stateId, function (cities) {
+    $.ajax({
+        url: '/get-cities-property',
+        type: 'POST',
+        data: {
+            state_id: stateId,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(cities){
 
-        let options = '<option value="">Select City</option>';
+            let options = '<option value="">Select City</option>';
 
-        $.each(cities, function (i, city) {
-           let selected = (parseInt(city.id) === parseInt(selectedCity)) ? 'selected' : '';
-            options += `<option value="${city.id}" ${selected}>${city.city}</option>`;
-        });
+            $.each(cities, function (i, city) {
+                let selected = (parseInt(city.id) === parseInt(selectedCity)) ? 'selected' : '';
+                options += `<option value="${city.id}" ${selected}>${city.city}</option>`;
+            });
 
-        $('#city').html(options);
+            $('#city').html(options);
 
-        if (selectedCity) {
-            loadAreas(selectedCity, selectedArea);
+            if (selectedCity) {
+                loadAreas(selectedCity, selectedArea);
+            }
         }
     });
-}
+} // ✅ CLOSE FUNCTION
+
+// ================= AREA =================
 function loadAreas(cityId, selectedArea = null) {
 
     $.get('/get-areas/' + cityId, function (areas) {
@@ -447,7 +637,7 @@ function loadAreas(cityId, selectedArea = null) {
         let options = '<option value="">Select Area</option>';
 
         $.each(areas, function (i, area) {
-           let selected = (parseInt(area.id) === parseInt(selectedArea)) ? 'selected' : '';
+            let selected = (parseInt(area.id) === parseInt(selectedArea)) ? 'selected' : '';
             options += `<option value="${area.id}" ${selected}>${area.name}</option>`;
         });
 

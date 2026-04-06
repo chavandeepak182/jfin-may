@@ -178,6 +178,7 @@ JFS | Add Property
                             <th>Builder</th>
                             <th>BHK</th>
                             <th>Address</th>
+                            <th>Featured</th>
                             <th>Price</th>
                             <th>Action</th>
                         </tr>
@@ -194,6 +195,12 @@ JFS | Add Property
                             <td>{{ $p->builder_name }}</td>
                             <td>{{ $p->select_bhk }} BHK</td>
                             <td>{{ $p->address }}</td>
+                            <td>
+                                    <input type="checkbox" 
+                                        class="feature-checkbox"
+                                        data-id="{{ $p->properties_id }}"
+                                        {{ $p->is_featured == 1 ? 'checked' : '' }}>
+                                </td>
                             <td>{{ $p->from_price }} to {{ $p->to_price }}</td>
                             <td>
     <div class="d-flex gap-2">
@@ -406,6 +413,26 @@ function updatePropertyStatus(id,status){
     });
 
 }
+$(document).on('change', '.feature-checkbox', function(){
+
+    let property_id = $(this).data('id');
+    let status = $(this).is(':checked') ? 1 : 0;
+
+    $.ajax({
+        url: "{{ route('updateFeatured') }}",
+        type: "POST",
+        data: {
+            property_id: property_id,
+            status: status,
+            _token: "{{ csrf_token() }}"
+        },
+        success: function(res){
+            swal("Updated!", "", "success");
+        }
+    });
+
+});
 </script>
+
 
 @endsection

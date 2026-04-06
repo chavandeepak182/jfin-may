@@ -439,10 +439,10 @@ private function redirectByRole($user)
         return redirect('/broker/allLoansApplications');
     }
 
-    // ✅ STAKEHOLDER (ADD THIS)
-    if ($user->role_id == 6) {
-        return redirect('/stakeholder/dashboard');
-    }
+  // ✅ DSA redirect
+if ($user->role_id == config('constants.roles.dsa')) {
+    return redirect()->route('dsa.dashboard');
+}
 
     // CUSTOMER
     if ($user->role_id == 1) {
