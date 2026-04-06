@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthV2Controller;
 use App\Http\Controllers\AuthV3\AuthV3Controller;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\ReferralController;
 
 
 
@@ -41,5 +42,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::middleware('auth:sanctum')->get('/mypersonal', [UsersController::class, 'mydetailsapi']);
+Route::middleware('auth:sanctum')->post(
+    '/invite-referral-submit',
+    [ReferralController::class, 'submitInviteReferralApi']
+);
 
 ?>
