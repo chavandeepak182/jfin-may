@@ -40,15 +40,11 @@ use App\Http\Controllers\VisitEnquiryController;
 use App\Http\Controllers\AuthV3\PropertyAuthController;
 use App\Http\Controllers\DsaController;
 use App\Http\Controllers\PriceRangeController;
+use App\Http\Controllers\DsaPayoutConfigController;
+use App\Http\Controllers\DsaPayoutController;
 
 
 
-Route::middleware('isDsa')->group(function () {
-
-    Route::get('dsa/dashboard', [DsaController::class, 'dashboard'])
-        ->name('dsa.dashboard');
-
-});
 // admin 
 Route::get('/admin/change-password', [AdminController::class, 'changePasswordForm'])->name('admin.change.password');
 Route::post('/admin/change-password', [AdminController::class, 'updatePassword'])->name('admin.update.password');
@@ -1104,3 +1100,11 @@ Route::middleware(['isPartner'])->group(function () {
         ->name('admin.price.range.delete');
 
 });
+Route::prefix('admin')->group(function () {
+    Route::resource('payout-configs', DsaPayoutConfigController::class);
+});
+Route::post('admin/payouts/{id}/release', [DsaPayoutController::class, 'release'])
+    ->name('payouts.release');
+    Route::get('admin/payouts', [DsaPayoutController::class, 'index'])->name('payouts.index');
+
+   
