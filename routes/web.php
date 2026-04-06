@@ -38,17 +38,13 @@ use App\Http\Controllers\TicketMessageController;
 use App\Http\Controllers\CustomerBookingController;
 use App\Http\Controllers\VisitEnquiryController;
 use App\Http\Controllers\AuthV3\PropertyAuthController;
-use App\Http\Controllers\StakeholderController;
 use App\Http\Controllers\PriceRangeController;
+use App\Http\Controllers\DsaPayoutConfigController;
+use App\Http\Controllers\DsaPayoutController;
+use App\Http\Controllers\DsaController;
 
 
 
-Route::middleware('isStakeholder')->group(function () {
-
-    Route::get('stakeholder/dashboard', [StakeholderController::class, 'dashboard'])
-        ->name('stakeholder.dashboard');
-
-});
 // admin 
 Route::get('/admin/change-password', [AdminController::class, 'changePasswordForm'])->name('admin.change.password');
 Route::post('/admin/change-password', [AdminController::class, 'updatePassword'])->name('admin.update.password');
@@ -1097,3 +1093,11 @@ Route::middleware(['isPartner'])->group(function () {
         ->name('admin.price.range.delete');
 
 });
+Route::prefix('admin')->group(function () {
+    Route::resource('payout-configs', DsaPayoutConfigController::class);
+});
+Route::post('admin/payouts/{id}/release', [DsaPayoutController::class, 'release'])
+    ->name('payouts.release');
+    Route::get('admin/payouts', [DsaPayoutController::class, 'index'])->name('payouts.index');
+
+   
