@@ -246,7 +246,7 @@ $redirectRoutes = [
     4 => 'dashboard',
     2 => 'agentDashboard',
     3 => 'partnerDashboard',
-    6 => 'stakeholder.dashboard', // ✅ ADD THIS
+    6 => 'dsa.dashboard', // ✅ updated
     1 => 'loans.loans-list',
 ];
 
@@ -993,7 +993,7 @@ public function properties(Request $request)
 
     /* ================= PAGINATION ================= */
 
-    $data['allProperties'] = $query->paginate(12)->appends($request->all());
+    $data['allProperties'] = $query->get();
 
     /* ================= CATEGORY ================= */
 
@@ -1053,7 +1053,39 @@ public function properties(Request $request)
 
     return view('dhara-jfin.properties', compact('data'));
 }
+public function propertyBySlug($slug)
+{
+    // Get property using slug
+    $property = DB::table('properties')
+        ->where('slug', $slug)
+        ->first();
 
+    if (!$property) {
+        abort(404);
+    }
+
+    $id = $property->properties_id;
+
+    // Same logic as your old function
+    $data['propertie_details'] = DB::table('properties as p')
+        ->join('price_range as pr', 'p.price_range_id', '=', 'pr.range_id')
+        ->join('property_category as pc', 'p.property_type_id', '=', 'pc.pid')
+        ->where('p.properties_id', $id)
+        ->select('p.*', 'pr.*', 'pc.*')
+        ->get();
+
+    $data['main_image'] = $property->image ?? 'default.jpg';
+
+    $data['additional_images'] = DB::table('property_images')
+        ->where('properties_id', $id)
+        ->get();
+
+    $data['faqs'] = DB::table('faqs')
+        ->where('property_id', $id)
+        ->get();
+
+    return view('dhara-jfin.prop-details', compact('data'));
+}
 
     public function search_properties(Request $request)
     {

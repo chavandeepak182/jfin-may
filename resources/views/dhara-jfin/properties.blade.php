@@ -93,6 +93,9 @@
             text-align: center;
             margin: 4rem 0 3rem;
         }
+        .extra-property {
+    display: none;
+}
 
         .section-header h2 {
             font-size: 2.5rem;
@@ -178,12 +181,23 @@
         }
 
         /* Enhanced Property Cards */
-        .properties-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 2.5rem;
-            margin-bottom: 4rem;
-        }
+.properties-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+}
+
+@media (max-width: 992px) {
+    .properties-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .properties-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
         .property-card {
             background: white;
@@ -204,7 +218,9 @@
             overflow: hidden;
             height: 260px;
         }
-
+.featured-extra {
+    display: none;
+}
         .property-image-wrapper img {
             width: 100%;
             height: 100%;
@@ -625,9 +641,7 @@
                 font-size: 2rem;
             }
 
-            .properties-grid {
-                grid-template-columns: 1fr;
-            }
+         
 
             .property-specs {
                 flex-direction: column;
@@ -785,25 +799,45 @@
         <!-- FILTER ROW -->
         <div class="hero-search-filters">
 
-            <select name="type">
-                <option value="">Property Type</option>
-                @foreach($data['category'] as $cat)
-                    <option value="{{ $cat->pid }}"
-                        {{ request('type') == $cat->pid ? 'selected' : '' }}>
-                        {{ $cat->category_name }}
-                    </option>
-                @endforeach
-            </select>
+          <select name="type">
+    <option value="">All</option>
 
-            <select name="bhk">
-                <option value="">BHK Type</option>
-                @for($i=1;$i<=6;$i++)
-                    <option value="{{ $i }}"
-                        {{ request('bhk') == $i ? 'selected' : '' }}>
-                        {{ $i }} BHK
-                    </option>
-                @endfor
-            </select>
+    <option value="residential"
+        {{ request('type') == 'residential' ? 'selected' : '' }}>
+        Residential
+    </option>
+
+    <option value="commercial"
+        {{ request('type') == 'commercial' ? 'selected' : '' }}>
+        Commercial
+    </option>
+
+    <option value="rent"
+        {{ request('type') == 'rent' ? 'selected' : '' }}>
+        Rent
+    </option>
+</select>
+
+          <select name="bhk">
+    <option value="">BHK Type</option>
+
+    @php
+        $bhkOptions = [
+            '1','2','3','4','5','6',
+            '2 & 3',
+            '2,3 & 4',
+            '3 & 4',
+            '3,4 & 5'
+        ];
+    @endphp
+
+    @foreach($bhkOptions as $bhk)
+        <option value="{{ $bhk }}"
+            {{ request('bhk') == $bhk ? 'selected' : '' }}>
+            {{ $bhk }} BHK
+        </option>
+    @endforeach
+</select>
 
             <select name="budget">
                 <option value="">Budget Range</option>
@@ -824,11 +858,7 @@
         </section>
     <!-- Properties by Localities -->
     <!-- Properties by Localities -->
-@if(!request()->filled('search') 
-    && !request()->filled('bhk') 
-    && !request()->filled('budget') 
-    && !request()->filled('type') 
-    && count($data['selectedLocalities']) > 0)
+@if(count($data['featuredProperties']) > 0)
 
 <section class="container">
     <div class="section-header">
@@ -1026,7 +1056,7 @@
     </div>
 
     <div class="properties-grid">
-        @foreach($data['featuredProperties'] as $v)
+       @foreach($data['featuredProperties'] as $index => $v)
 
             @php
                 $img = $v->image 
@@ -1041,7 +1071,7 @@
                 $price = formatPrice($v->s_price);
             @endphp
 
-            <div class="property-card">
+       <div class="property-card {{ $index >= 3 ? 'featured-extra' : '' }}">
 
                 <!-- Image -->
                 <div class="property-image-wrapper">
@@ -1093,7 +1123,7 @@
                             {{ $price }}
                         </div>
 
-                        <a href="{{ url($v->slug . '-' . $v->properties_id) }}" target="_blank">
+                      <a href="{{ url('property/' . $v->slug) }}"  target="_blank">
                             <button class="contact-btn">
                                 Know More <span>→</span>
                             </button>
@@ -1104,11 +1134,31 @@
             </div>
         @endforeach
     </div>
+    <div class="text-center mt-4">
+    <button id="loadMoreFeatured" class="btn btn-primary px-4 py-2">
+        Load More
+    </button>
+</div>
 </section>
 
 @endif
 
+<script>
+document.addEventListener("DOMContentLoaded", function(){
 
+    document.getElementById("loadMoreFeatured").addEventListener("click", function(){
+
+        let hiddenItems = document.querySelectorAll(".featured-extra");
+
+        hiddenItems.forEach(function(item){
+            item.style.display = "block";
+        });
+
+        this.style.display = "none";
+    });
+
+});
+</script>
 
     <!-- All Properties -->
     <section class="container">
@@ -1118,7 +1168,7 @@
     </div>
 
     <div class="properties-grid">
-        @foreach($data['allProperties'] as $v)
+      @foreach($data['allProperties'] as $index => $v)
             @php
                 $img = env('baseURL') . '/' . $v->image;
                 $title = $v->title;
@@ -1130,7 +1180,7 @@
                 $price = formatPrice($v->s_price);
             @endphp
 
-            <div class="property-card">
+           <div class="property-card property-item {{ $index >= 3 ? 'extra-property' : '' }}">
                 <!-- Image -->
                 <div class="property-image-wrapper">
                     <img
@@ -1181,7 +1231,7 @@
                             {{ $price }}
                         </div>
 
-                        <a href="{{ url($v->slug . '-' . $v->properties_id) }}" target="_blank">
+                       <a href="{{ url('property/' . $v->slug) }}">
                             <button class="contact-btn">
                                 Contact <span>→</span>
                             </button>
@@ -1191,8 +1241,29 @@
             </div>
         @endforeach
     </div>
+    <br>
+    <div class="text-center mt-4">
+    <button id="loadMoreBtn" class="btn btn-primary px-4 py-2">
+        Load More
+    </button>
+</div>
 </section>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
 
+    document.getElementById("loadMoreBtn").addEventListener("click", function(){
+
+        let hiddenItems = document.querySelectorAll(".extra-property");
+
+        hiddenItems.forEach(function(item){
+            item.style.display = "block";
+        });
+
+        this.style.display = "none";
+    });
+
+});
+</script>
 
     <!-- Features Section -->
     <section class="container">

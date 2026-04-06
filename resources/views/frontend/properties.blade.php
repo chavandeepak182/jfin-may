@@ -189,7 +189,7 @@
                                     $area = $v->area;
                                 ?>
                                 <div class="col-12 col-md-3"> <!-- 1 card per slide on mobile, 4 per slide on desktop -->
-                                    <a href="{{ url($v->slug . '-' . $v->properties_id) }}" target="_blank">
+                                    <<a href="{{ url('property/' . $v->slug) }}"  target="_blank">
                                         <div class="blog-item">
                                             <div class="blog-img">
                                                 <img src="{{ $img }}" class="img-fluid rounded-top w-100" alt="new under constructrion projects in pune" style="height: 175px">
@@ -262,7 +262,7 @@
                                     $area = $v->area;
                                 ?>
                                 <div class="col-12 col-md-3"> <!-- 1 card per slide on mobile, 4 per slide on desktop -->
-                                    <a href="{{ url($v->slug . '-' . $v->properties_id) }}" target="_blank">
+                                   <a href="{{ url('property/' . $v->slug) }}"  target="_blank">
                                         <div class="blog-item">
                                             <div class="blog-img">
                                                 <img src="{{ $img }}" class="img-fluid rounded-top w-100" alt="new under constructrion projects in pune" style="height: 175px">

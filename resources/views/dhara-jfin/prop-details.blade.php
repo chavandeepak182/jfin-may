@@ -1331,7 +1331,13 @@
                         <!-- Laravel CSRF -->
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <input type="text" name="name" placeholder="Your Name" required>
-                        <input type="text" name="contact" placeholder="Phone" required>
+                        <input type="text"
+                            name="contact"
+                            id="contact"
+                            placeholder="Phone"
+                            maxlength="10"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                            required>
                         <input type="email" name="email" placeholder="Your Email" required>
                         <input type="hidden" name="enquiry_type" value="brochure">
                         <button type="submit">Download Now</button>
@@ -1339,6 +1345,21 @@
                 </div>
             </div>
         </div>
+        <script>
+document.getElementById("enquiryForm").addEventListener("submit", function(e){
+
+    let mobile = document.getElementById("contact").value.trim();
+
+    let mobilePattern = /^[0-9]{10}$/;
+
+    if(!mobilePattern.test(mobile)){
+        alert("Please enter valid 10 digit mobile number");
+        e.preventDefault();
+        return;
+    }
+
+});
+</script>
 
         <!-- //visit form -->
         <div class="form-container">
