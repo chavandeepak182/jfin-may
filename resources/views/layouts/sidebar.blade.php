@@ -111,6 +111,12 @@
                 <span>Users</span>
             </a>
         @endif
+        @if($role_id == 4)
+<a href="{{ route('admin.dsa') }}" class="nav-item">
+    <i class="fas fa-user-tie"></i>
+    <span>My DSA</span>
+</a>
+@endif
 
         {{-- ================= WEB FORM & LEADS (ADDED) ================= --}}
         @if($role_id == 4)

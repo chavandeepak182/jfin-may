@@ -114,11 +114,10 @@ $p->city = $city_name ?? '';
             $p->is_active = 0;
             $p->is_deleted = 0;
             $p->image = '';
-                $p->slug = '';
-                $p->meta_title = '';
-                $p->meta_description = '';
-                $p->meta_keywords = '';
-                $p->short_description = '';
+               $p->slug = $request->slug ?? '';
+$p->meta_title = $request->meta_title ?? '';
+$p->meta_description = $request->meta_description ?? '';
+$p->meta_keywords = $request->meta_keywords ?? '';
                 $p->maps_url = '';
                 $p->schema_markup = '';
 
@@ -526,6 +525,7 @@ public function updatePropertyStatus(Request $request)
     )
     ->where('p.properties_id', $property_id)
     ->get();
+    $data['property_status'] = DB::table('property_status')->get();
 
     // ✅ Images
     $data['property_images'] = DB::table('property_images')
@@ -543,6 +543,7 @@ public function updatePropertie(Request $request)
     
     
     $propertie_id = $request->propertie_id;
+    
 
     // ✅ GET PROPERTY
     $property = DB::table('properties')->where('properties_id', $propertie_id)->first();
@@ -608,6 +609,7 @@ $area_id = $request->area_id;
 
     /* ================= UPDATE DATA ================= */
     $amenities = $request->input('amenities', []);
+    $nearby_locations = $request->input('nearby', []);
     $updateProperty = [
 
         'title' => $request->property_title,
@@ -618,10 +620,17 @@ $area_id = $request->area_id;
        'property_details' => base64_encode($request->description),
         'address' => $request->property_address,
 
+    // 🔥 ADD THIS
+    'nearby_locations' => json_encode($nearby_locations),
+
         'email' => $request->email_id,
         'contact' => $request->contact_number,
         'price_range_id' => $request->price_range,
         'creator_id' => $request->creator_id,
+        'slug' => $request->slug,
+'meta_title' => $request->meta_title,
+'meta_description' => $request->meta_description,
+'meta_keywords' => $request->meta_keywords,
         
 
         // ✅ IMAGE
@@ -701,6 +710,14 @@ $area_id = $request->area_id;
             'line' => $e->getLine()
         ]);
     }
+}
+public function updateFeatured(Request $request)
+{
+    DB::table('properties')
+        ->where('properties_id', $request->property_id)
+        ->update(['is_featured' => $request->status]);
+
+    return response()->json(['msg' => 'Featured updated']);
 }
 
     public function deletePropertie(Request $request){

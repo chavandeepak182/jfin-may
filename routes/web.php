@@ -38,10 +38,10 @@ use App\Http\Controllers\TicketMessageController;
 use App\Http\Controllers\CustomerBookingController;
 use App\Http\Controllers\VisitEnquiryController;
 use App\Http\Controllers\AuthV3\PropertyAuthController;
+use App\Http\Controllers\DsaController;
 use App\Http\Controllers\PriceRangeController;
 use App\Http\Controllers\DsaPayoutConfigController;
 use App\Http\Controllers\DsaPayoutController;
-use App\Http\Controllers\DsaController;
 
 
 
@@ -77,6 +77,7 @@ Route::post('/admin/user/update-status',
 Route::get('admin/loans-list', [LoanApplicationController::class, 'loanlist'])->name('admin.loans');
 Route::get('admin/property', [PropertyController::class, 'propertylist'])->name('admin.property');
 Route::get('admin/leadslist', [LeadController::class, 'leadlist'])->name('admin.listlead');
+Route::post('/update-featured', [PropertyController::class,'updateFeatured'])->name('updateFeatured');
 Route::get('admin/banklist', [BankController::class, 'loanbankslist'])->name('admin.bank');
 Route::post('/admin/loan-bank/store', [BankController::class, 'insertLoanBank'])
     ->name('admin.loanbank.store');
@@ -424,9 +425,7 @@ Route::get('/property-details/{id}', function ($id) {
     abort(404);
 });
 // Route::get('/{slugAndId}', [FrontendController::class, 'PropDetailsView'])->name('property.details');
-Route::get('/{slugAndId}', [FrontendController::class, 'PropDetailsView'])
-    ->where('slugAndId', '.*-\d+')
-    ->name('property.details');
+Route::get('/property/{slug}', [FrontendController::class, 'propertyBySlug'])->name('property.slug');
 Route::get('referral-program', [FrontendController::class, 'ReferralsView']);
 
 Route::post('search_properties', [FrontendController::class, 'search_properties'])->name('search_properties');
@@ -435,6 +434,14 @@ Route::post('search_properties', [FrontendController::class, 'search_properties'
 // Loan Application Routes
 Route::get('professional-detail', [FrontendController::class, 'ProfessionalDetailView']);
 
+
+
+
+
+// DSA SECTION
+Route::get('/admin/dsa', [DsaController::class, 'index'])->name('admin.dsa');
+Route::get('/admin/dsa/list', [DsaController::class, 'getList'])->name('admin.dsa.list');
+Route::post('/admin/dsa/store', [DsaController::class, 'store'])->name('admin.dsa.store');
 
 //user routes
 Route::get('login', [AdminController::class, 'loginView'])->name('login');

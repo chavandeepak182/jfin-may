@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class IsStakeholderMiddleware
+class IsDsaMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,8 +15,8 @@ class IsStakeholderMiddleware
     {
         $role_id = session()->get('role_id');
 
-        // ✅ Only stakeholder allowed
-        if ($role_id == config('constants.roles.stakeholder')) {
+        // ✅ Only DSA allowed
+        if ($role_id == config('constants.roles.dsa')) {
             return $next($request);
         }
 

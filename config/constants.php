@@ -7,6 +7,6 @@ return [
         'partner'     => 3,
         'admin'       => 4,
         'broker'      => 5,
-        'dsa'      => 6, // ✅ Added
+        'dsa' => 6, // ✅ Added
     ],
 ];
