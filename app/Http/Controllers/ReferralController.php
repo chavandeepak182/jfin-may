@@ -554,4 +554,70 @@ public function listUsers(Request $request)
     // Pass the data to the view
     return view('admin.refer-tool', compact('users'));
 }
+
+//mobile api
+public function submitInviteReferralApi(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'name'         => 'required|string|max:255',
+        'mobile'       => ['required', 'regex:/^[6-9][0-9]{9}$/'],
+        'email'        => 'nullable|email',
+        'product_type' => 'required',
+        'other_remark' => 'nullable|string|max:255',
+    ], [
+        'mobile.regex' => 'Please enter a valid 10-digit Indian mobile number.'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status'  => false,
+            'message' => 'Validation error',
+            'errors'  => $validator->errors()
+        ], 422);
+    }
+
+    /* ✅ DUPLICATE CHECK */
+    $duplicate = DB::table('referral_leads')
+        ->where('mobile', $request->mobile)
+        ->when($request->filled('email'), function ($q) use ($request) {
+            $q->orWhere('email', $request->email);
+        })
+        ->exists();
+
+    if ($duplicate) {
+        return response()->json([
+            'status'  => false,
+            'message' => 'This mobile number or email is already referred.'
+        ], 409);
+    }
+
+    /* ✅ PRODUCT TYPE LOGIC */
+    $productType = null;
+    $otherRemark = null;
+
+    if ($request->product_type === 'other') {
+        $otherRemark = $request->other_remark;
+    } else {
+        $productType = (int) $request->product_type;
+    }
+
+    /* ✅ INSERT */
+    DB::table('referral_leads')->insert([
+        'user_id'       => auth()->id(),
+        'name'          => $request->name,
+        'mobile'        => $request->mobile,
+        'email'         => $request->email,
+        'product_type'  => $productType,
+        'other_remark'  => $otherRemark,
+        'referral_code' => auth()->user()->referral_code,
+        'status'        => 'pending',
+        'created_at'    => now(),
+        'updated_at'    => now(),
+    ]);
+
+    return response()->json([
+        'status'  => true,
+        'message' => 'Referral invite sent successfully'
+    ], 200);
+}
 }

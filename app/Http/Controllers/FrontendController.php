@@ -246,7 +246,7 @@ $redirectRoutes = [
     4 => 'dashboard',
     2 => 'agentDashboard',
     3 => 'partnerDashboard',
-    6 => 'stakeholder.dashboard', // ✅ ADD THIS
+    6 => 'dsa.dashboard', // ✅ ADD THIS
     1 => 'loans.loans-list',
 ];
 
