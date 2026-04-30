@@ -17,7 +17,7 @@ class PayoutService
         $user = User::find($loan->created_by);
 
         // Only DSA
-        if (!$user || $user->role_id != config('constants.roles.dsa')) {
+        if (!$user || $user->role_id != 6) {
             return;
         }
 

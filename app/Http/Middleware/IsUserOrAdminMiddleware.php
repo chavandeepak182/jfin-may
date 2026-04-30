@@ -17,7 +17,7 @@ class IsUserOrAdminMiddleware
 {
     $role_id = session()->get('role_id');
 
-    if ($role_id == 4 || $role_id == 1 || $role_id == 2) {
+    if (in_array($role_id, [1,2,3,4,6])) {
         return $next($request);
     }
 

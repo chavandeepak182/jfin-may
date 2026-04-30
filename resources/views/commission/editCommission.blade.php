@@ -31,54 +31,53 @@
  
 <!-- Begin Page Content -->
 <div class="container-fluid">
-    <?php foreach($data['commission'] as $v) {  ?>
-      
-        <div class="container-fluid">
-            <form id="editCommission">
-            @csrf
-                <!-- Title -->
-                <div class="d-flex justify-content-between align-items-lg-center py-3 flex-column flex-lg-row">
-                    <h2 class="h5 mb-3 mb-lg-0"><a href="../../pages/admin/customers.html" class="text-muted"><i class="bi bi-arrow-left-square me-2"></i></a> Commission Details</h2>
-                    <div class="hstack gap-3">
-                    <button class="btn btn-light btn-sm btn-icon-text"><i class="bi bi-x"></i> <span class="text">Cancel</span></button>
-                    <button type="submit" class="btn btn-primary btn-sm btn-icon-text"><i class="bi bi-save"></i> <span class="text">Update</span></button> 
-                 
-                    </div>
-                </div>
 
+    <form id="editCommission">
+        @csrf
 
-                <input type="hidden" name="creator_id" value=" {{ Session::get('user_id') }}" />
-                <input type="hidden" name="com_id" value=" {{ $v->com_id }}" />
-               
+        <!-- Title -->
+        <div class="d-flex justify-content-between align-items-lg-center py-3 flex-column flex-lg-row">
+            <h2 class="h5 mb-3 mb-lg-0">Commission Details</h2>
 
-                <!-- Main content -->
-                <div class="row">
-                    <!-- Left side -->
-                    <div class="col-lg-12">
-                        <!-- Basic information -->
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h3 class="h6 mb-4">Commission information</h3>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="mb-3">
-                                            <label class="form-label">Commission Amount</label>
-                                            <input type="text" name="commission_amount" class="form-control" value="{{ $v->commission_amount }}"  />
-                                        </div>
-                                    </div>
-                                   
+            <div class="hstack gap-3">
 
-                                </div>
+                <!-- ✅ Cancel FIX -->
+                <a href="{{ route('allCommission') }}" class="btn btn-light btn-sm btn-icon-text">
+                    Cancel
+                </a>
 
-                     
-                    </div>
-                   
-                </div>
+                <!-- ✅ Update -->
+                <button type="submit" class="btn btn-primary btn-sm btn-icon-text">
+                    Update
+                </button>
+
             </div>
-  
-   <?php } ?>
-   </form>
-</div>            
+        </div>
+
+        <!-- ✅ Hidden Inputs -->
+        <input type="hidden" name="creator_id" value="{{ Session::get('user_id') }}">
+        <input type="hidden" name="com_id" value="{{ $data['commission']->com_id }}">
+
+        <!-- Main content -->
+        <div class="card mb-4">
+            <div class="card-body">
+
+                <h3 class="h6 mb-4">Commission Information</h3>
+
+                <div class="mb-3">
+                    <label class="form-label">Commission Amount</label>
+                    <input type="text"
+                           name="commission_amount"
+                           class="form-control"
+                           value="{{ $data['commission']->commission_amount }}">
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+
+</div>           
 
             
 @endsection
@@ -88,38 +87,57 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
 
 <script>   
-    $('#editCommission').on('submit',function(e){
-        e.preventDefault();
-        $.ajax({               
-            url:"{{Route('updateCommission')}}", 
-            method:"POST",                             
-            data:new FormData(this) ,
-            processData:false,
-            dataType:'json',
-            contentType:false,
-            beforeSend:function(){
-                $(document).find('span.error-text').text('');
-            },
-            success:function(data){              
-                if(data.status == 0){
-                    $.each(data.error,function(prefix,val){
-                        $('span.'+prefix+'_error').text(val[0]);
-                    });                      
-                }else{
-                    swal({
-                        title: data.msg,
-                        text: "",
-                        type: "success",
-                        icon: "success",
-                        showConfirmButton: true
-                    }).then(function(){
-                        window.location.href = "/admin/allCommission";
-                    });
-                        
-                }
+   $('#editCommission').on('submit', function(e){
+    e.preventDefault();
+
+    $.ajax({
+        url: "{{ route('updateCommission') }}",
+        method: "POST",
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+
+        beforeSend: function(){
+            $('span.error-text').text('');
+        },
+
+        success: function(data){
+
+            // ✅ SUCCESS
+            if(data.status == 1){
+                swal({
+                    title: data.msg,
+                    icon: "success"
+                }).then(function(){
+                    window.location.href = "/admin/allCommission";
+                });
             }
-        });
-    }); 
+
+            // ❌ VALIDATION / SERVER ERROR
+            else{
+                swal("Error", data.msg, "error");
+            }
+        },
+
+        // 🔴 VERY IMPORTANT (to catch 500 error)
+        error: function(xhr){
+
+            console.log("Full Error:", xhr);
+
+            let errorMsg = "Something went wrong!";
+
+            // try to get real message
+            if(xhr.responseJSON && xhr.responseJSON.msg){
+                errorMsg = xhr.responseJSON.msg;
+            } else if(xhr.responseText){
+                errorMsg = xhr.responseText;
+            }
+
+            swal("Error", errorMsg, "error");
+        }
+    });
+});
  </script>
 
 @endsection

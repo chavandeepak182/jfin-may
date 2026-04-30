@@ -38,117 +38,6 @@ use Illuminate\Validation\Rule;
 class LoanApplicationController extends Controller
 {
 
-    // protected $creditScoreService;
-
-    // public function __construct(CreditScoreService $creditScoreService)
-    // {
-    //     $this->creditScoreService = $creditScoreService;
-    // }
-
-
-    // admin loan link
-   
-
-
-//    public function index(Request $request)
-// {
-   
-//     $totalLoans      = DB::table('loans')->count();
-
-//     $inProcessLoans  = DB::table('loans')
-//         ->where('status', 'in process')
-//         ->count();
-
-//     $trashedLoans    = DB::table('loans')
-//         ->whereNotNull('deleted_at')
-//         ->count();
-
-//     $approvedLoans   = DB::table('loans')
-//         ->where('status', 'approved')
-//         ->count();
-
-//     $disbursedLoans  = DB::table('loans')
-//         ->where('status', 'disbursed')
-//         ->count();
-
-//     $rejectedLoans   = DB::table('loans')
-//         ->where('status', 'rejected')
-//         ->count();
-
-
-   
-//     $query = \App\Models\Loan::with([
-//         'user.profile.cityRelation',
-//         'loanCategory',
-//         'bankDetails'
-//     ])
-//     ->whereNotNull('loan_reference_id');
-
-
-   
-//     if ($request->filled('status')) {
-//         $query->where('status', $request->input('status'));
-//     }
-
-//     if ($request->filled('start_date') && $request->filled('end_date')) {
-//         $query->whereBetween('created_at', [
-//             $request->input('start_date'),
-//             $request->input('end_date'),
-//         ]);
-//     }
-
-
- 
-//     $paginated = $query
-//         ->orderBy('created_at', 'desc')
-//         ->paginate(10);
-
-
-//     $paginated->getCollection()->transform(function ($loan) {
-//         return [
-//             'loan_id'             => $loan->loan_id,
-//             'amount'              => $loan->amount,
-//             'tenure'              => $loan->tenure,
-//             'loan_reference_id'   => $loan->loan_reference_id,
-//             'user_name'           => $loan->user->name ?? null,
-//             'status'              => $loan->status,
-//             'city'                => $loan->user->profile->cityRelation->city ?? null,
-//             'loan_category_name'  => $loan->loanCategory->category_name ?? null,
-//             'bank_name'           => $loan->bankDetails->bank_name ?? null,
-//             'agent_action'        => $loan->agent_action,
-//         ];
-//     });
-
-//     $data['loans'] = $paginated;
-
-
-   
-//     $recentLoans = DB::table('loans')
-//         ->join('users', 'loans.user_id', '=', 'users.id')
-//         ->select(
-//             'loans.loan_id',
-//             'loans.amount',
-//             'users.name as user_name',
-//             'loans.status'
-//         )
-//         ->whereNotNull('loans.loan_reference_id')
-//         ->orderByDesc('loans.created_at')
-//         ->take(5)
-//         ->get();
-
-
-    
-//     return view('frontend.all-loans', compact(
-//         'data',
-//         'recentLoans',
-//         'totalLoans',
-//         'inProcessLoans',
-//         'trashedLoans',
-//         'approvedLoans',
-//         'disbursedLoans',
-//         'rejectedLoans'
-//     ));
-// }
 public function index(Request $request)
 {
     // base query (AS IT IS)
@@ -270,43 +159,88 @@ public function index(Request $request)
     // count dashboard
 public function loanlist()
 {
+    $role   = session('role_id');
+    $userId = session('user_id');
+
+    /* ================= COMMON FILTER ================= */
+
+    $applyFilter = function ($query) use ($role, $userId) {
+
+        // ✅ DSA → both direct + mapped
+        if ($role == 6) {
+            $query->where(function($q) use ($userId){
+                $q->where('dsa_id', $userId)
+                  ->orWhereIn('user_id', function($sub) use ($userId){
+                      $sub->select('user_id')
+                          ->from('dsa_customers')
+                          ->where('dsa_id', $userId);
+                  });
+            });
+        }
+
+        // ✅ ADMIN → hide DSA loans
+        if ($role == 4) {
+            $query->where(function($q){
+                $q->whereNull('dsa_id')
+                  ->orWhere('dsa_id', 0);
+            });
+        }
+
+        return $query;
+    };
+
     /* ================= COUNTS ================= */
 
-    $totalLoans = Loan::count();
+    $totalLoans = $applyFilter(Loan::query())->count();
 
-    $inProcessLoans = Loan::where('status', 'in process')->count();
+    $inProcessLoans = $applyFilter(
+        Loan::where('status', 'in process')
+    )->count();
 
-    $trashedloans = Loan::onlyTrashed()->count();
+    $trashedloans = $applyFilter(
+        Loan::onlyTrashed()
+    )->count();
 
-    $approvedLoan = Loan::where('status', 'approved')->count();
+    $approvedLoan = $applyFilter(
+        Loan::where('status', 'approved')
+    )->count();
 
-    $disbursedLoans = Loan::where('status', 'disbursed')
-        ->whereNotNull('loan_reference_id')
-        ->count();
+    $disbursedLoans = $applyFilter(
+        Loan::where('status', 'disbursed')
+            ->whereNotNull('loan_reference_id')
+    )->count();
 
-    $rejectedLoans = DB::table('loans')
-    ->where('status', 'rejected')
-    ->count();
-    $pendingLoansCount = DB::table('loans')
-    ->where(function ($query) {
+    $rejectedLoans = $applyFilter(
+        Loan::where('status', 'rejected')
+    )->count();
+$pendingLoansCount = $applyFilter(
+    Loan::where(function ($query) {
         $query->whereNull('agent_id')
-              ->orWhereIn('agent_action', ['rejected', null]);
+              ->orWhere(function($q){
+                  $q->whereNotNull('agent_id')
+                    ->where('agent_action', 'rejected');
+              });
     })
-    ->count();
 
+    // 🔥 ADD THIS (VERY IMPORTANT)
+    ->whereNotIn('status', [
+        'approved',
+        'disbursed',
+        'rejected'
+    ])
+)->count();
 
+    /* ================= LOAN LIST ================= */
 
-
-    /* ================= PAGINATED LOANS ================= */
-
-    $loans = Loan::with([
+    $loans = $applyFilter(
+        Loan::with([
             'user.profile.cityRelation',
             'loanCategory',
             'bankDetails'
         ])
-        ->orderBy('created_at', 'desc')
-        ->paginate(10);   // 👈 REQUIRED
-
+    )
+    ->orderBy('created_at', 'desc')
+    ->paginate(10);
 
     return view('admin.admin-loans', compact(
         'totalLoans',
@@ -315,7 +249,7 @@ public function loanlist()
         'approvedLoan',
         'disbursedLoans',
         'rejectedLoans',
-        'loans', // 👈 IMPORTANT
+        'loans',
         'pendingLoansCount'
     ));
 }
@@ -370,240 +304,7 @@ return view('admin.edit-loan', compact(
     }
     
 
-    // public function loanedit($id)
-    // {
-    //     $loan = Loan::with(['user', 'loanCategory'])->where('loan_id', $id)->first();
-
-    //     if (!$loan) {
-    //         return redirect()->route('agent.allAgentLoans')->with('error', 'Loan not found');
-    //     }
-
-    //     // Fetch related data
-    //     $profile = Profile::with('cityRelation', 'stateRelation')->where('user_id', $loan->user_id)->first();
-    //     $professional = Professional::where('user_id', $loan->user_id)->first();
-    //     $education = Education::where('user_id', $loan->user_id)->first();
-    //     $documents = \DB::table('documents')->where('user_id', $loan->user_id)->get();
-
-    //     // Fetch all users with role_id 2 (agents) and loan categories
-    //     $agents = User::join('role_user', 'users.id', '=', 'role_user.user_id')
-    //         ->where('role_user.role_id', 2)
-    //         ->select('users.id', 'users.name')
-    //         ->get();
-
-    //     $applyingUser = User::find($loan->user_id);
-    //     $loanCategories = LoanCategory::all();
-
-    //     // Pass all data to the view
-    //     return view('frontend.profile.loanedit', compact('loan', 'loanCategories', 'profile', 'documents', 'professional', 'education', 'agents', 'applyingUser'));
-    // }
-
-    // public function update(Request $request)
-    // {
-    //     // dd($request->all());
-    //     try {
-    //         // Validate the request
-    //         $validated = $request->validate([
-    //             'loan_id' => 'required|integer',
-    //             'status' => 'required|string',
-    //             'loan_category_id' => 'required|integer',
-    //             'amount' => 'required|numeric','min:0',
-    //             'amount_approved' => ['required_if:status,disbursed','nullable','numeric','min:0'],
-    //             'tenure' => 'required|integer',
-    //             'in_principle' => 'nullable|string',
-    //             'remarks' => 'nullable|string',
-    //             'sanction_letter' => 'nullable|file|mimes:pdf,doc,docx',
-    //             'documents.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120'
-
-    //         ]);
-
-
-
-    //         \DB::transaction(function () use ($request) {
-    //             $loan = Loan::where('loan_id', $request->input('loan_id'))->firstOrFail();
-    //             $oldStatus = $loan->status;
-    //             $newStatus = $request->input('status');
-
-    //             \Log::info('Loan status update:', [
-    //                 'loan_id' => $loan->loan_id,
-    //                 'old_status' => $oldStatus,
-    //                 'new_status' => $newStatus,
-    //             ]);
-
-    //             // Update loan details
-    //             $loan->loan_category_id = $request->input('loan_category_id');
-    //             $loan->amount = $request->input('amount');
-    //             $loan->tenure = $request->input('tenure');
-    //             $loan->status = $newStatus;
-    //             $loan->remarks = $request->input('remarks');
-    //             $loan->in_principle = $request->input('in_principle');
-    //             $loan->amount_approved = $request->input('amount_approved');
-    //             $loan->save();
-
-    //             // echo $loan;die;
-
-    //             // Save the remark in the loan_remarks table
-    //             if ($request->input('remarks')) {
-    //                 \DB::table('loan_remarks')->insert([
-    //                     'loan_id' => $loan->loan_id,
-    //                     'agent_id' => session()->get('user_id'),
-    //                     'status' => $newStatus,
-    //                     'remarks' => $request->input('remarks'),
-    //                     'created_at' => now(),
-    //                     'updated_at' => now(),
-    //                 ]);
-    //             }
-
-    //             // Handle sanction letter upload
-    //             if ($request->hasFile('sanction_letter')) {
-    //                 $sanctionLetter = $request->file('sanction_letter');
-    //                 $sanctionLetterPath = $sanctionLetter->storeAs('sanction_letters', time() . '_' . $sanctionLetter->getClientOriginalName(), 'public');
-    //                 $loan->update(['sanction_letter' => $sanctionLetterPath]);
-    //             }
-
-    //             // Handle document uploads
-    //             if ($request->hasFile('documents')) {
-    //                 $documents = $request->file('documents');
-    //                 $documentNames = $request->input('document_name');
-
-    //                 foreach ($documents as $index => $document) {
-    //                     // Ensure there's a corresponding name for each document
-    //                     $name = $documentNames[$index] ?? $document->getClientOriginalName();
-
-    //                     $path = $document->store('documents', 'public');
-
-    //                     Document::create([
-    //                         'user_id' => $loan->user_id,
-    //                         'loan_id' => $loan->loan_id,
-    //                         'document_name' => $name,
-    //                         'file_path' => $path,
-    //                         'created_at' => now(),
-    //                         'updated_at' => now(),
-    //                     ]);
-    //                 }
-    //             }
-
-    //             // Send email notification if the status has changed
-    //             if ($oldStatus !== $newStatus) {
-    //                 log::info('Dispatching LoanStatusUpdated event for loan ID: ' . $loan->loan_reference_id, [
-    //                     'old_status' => $oldStatus,
-    //                     'new_status' => $newStatus,
-    //                     'loan_reference_id' => $loan->loan_reference_id,
-    //                     'user_id' => auth()->id(),
-    //                 ]);
-    //                 event(new LoanStatusUpdated(
-    //                     $loan->loan_reference_id,
-    //                     auth()->id(),
-    //                     auth()->user()->roles->name, // assuming you store role
-    //                     $loan->status,
-    //                     $loan->user_id
-    //                 ));
-    //                 $customer = $loan->user;
-    //                 $customerEmail = $customer->email_id;
-    //                 $customerName = $customer->name;
-    //                 $status = $newStatus;
-    //                 $remarks = $request->input('remarks');
-    //                 $msg = "Your loan status has been updated to: $status. Remarks: $remarks";
-    //                 $temp_id = 4; // Example template ID, adjust accordingly
-    //                 app(UsersController::class)->temail($customerEmail, $customerName, $msg, $temp_id);
-    //             }
-
-    //             // Start MLM Insertion
-    //             // if ($newStatus == 'disbursed') {
-    //             //     $name = $customerName;
-    //             //     $parent = $loan->referral_user_id;
-    //             //     $nodeInserted = app(CategoryController::class)->addNode($parent, $name);
-    //             //     $amount_approved = $loan->amount_approved;
-
-    //             //     $userId = $loan->user_id;
-    //             //     app(CategoryController::class)->commission_destribution($parent, $amount_approved, $userId);
-    //             // }
-
-    //             if ($newStatus == 'disbursed') {
-    //                 $loan->amount_approved = $request->input('amount_approved');
-    //                 $loan->status = $newStatus; // Set status again, to be sure
-    //                 $loan->save(); // Explicitly save all changes
-
-    //                 Log::info('Loan approved amount set for loan ID: ' . $loan->loan_id);
-
-    //                 // Handle tree node addition
-    //                 $referralUser = User::find($loan->referral_user_id);
-
-    //                 if (!$referralUser) {
-    //                     Log::warning("Referral user not found for ID: {$loan->referral_user_id}. Searching for next available node.");
-    //                     $parentNode = app(CategoryController::class)->findNextAvailableNode();
-
-    //                     if (!$parentNode) {
-    //                         Log::error("No available position found in the tree.");
-    //                         return;
-    //                     }
-
-    //                     $parentUserId = $parentNode->user_id;
-    //                 } else {
-    //                     Log::info("Referral user found: " . json_encode($referralUser->toArray()));
-    //                     $parentUserId = $referralUser->id;
-    //                 }
-
-    //                 $childName = $loan->user->name;
-    //                 $childUserId = $loan->user->id;
-
-    //                 $existingCategory = DB::table('categories')->where('user_id', $childUserId)->first();
-
-    //                 if ($existingCategory) {
-    //                     Log::info("User already exists in the tree. Skipping node insertion for user ID: {$childUserId}");
-    //                 } else {
-    //                     if (app(CategoryController::class)->addNode($parentUserId, $childName, $childUserId)) {
-    //                         Log::info("Node successfully inserted into tree for loan applicant.");
-    //                     } else {
-    //                         Log::error("Failed to insert node into tree for loan applicant.");
-    //                         return;
-    //                     }
-    //                 }
-
-    //                 // Fetch ancestors for commission distribution
-    //                 $childCategory = DB::table('categories')->where('user_id', $childUserId)->first();
-
-    //                 if (!$childCategory) {
-    //                     Log::error("Category not found for Child User ID: {$childUserId}");
-    //                     return;
-    //                 }
-
-    //                 $ancestors = DB::table('categories')
-    //                     ->where('_lft', '<', $childCategory->_lft)
-    //                     ->where('_rgt', '>', $childCategory->_rgt)
-    //                     ->orderBy('_lft', 'asc')
-    //                     ->get();
-
-    //                 if ($ancestors->isEmpty()) {
-    //                     Log::info("No ancestors found for Child User ID: {$childUserId}. Skipping commission distribution.");
-    //                     return;
-    //                 }
-
-    //                 // Distribute commission
-    //                 app(CategoryController::class)->commissionDistribution($childUserId, $loan->amount_approved);
-
-    //                 if ($referralUser) {
-    //                     Log::info("Commission distribution executed for user: {$loan->user_id}, Parent: {$referralUser->name}");
-    //                 } else {
-    //                     Log::info("Commission distribution executed for user: {$loan->user_id}, No valid referral user found.");
-    //                 }
-    //             }
-    //         });
-
-
-
-    //         return redirect()->back()->with('success', 'Loan updated successfully!');
-    //     } catch (\Exception $e) {
-    //         \Log::error('Error updating loan', ['exception' => $e->getMessage()]);
-    //         if ($request->expectsJson()) {
-    //             return response()->json(['status' => 0, 'msg' => 'An error occurred while updating: ' . $e->getMessage()]);
-    //         }
-    //         return redirect()->back()->withErrors(['error' => 'An error occurred while updating: ' . $e->getMessage()])->withInput();
-    //     }
-    // }
-
-
-
-    public function loanedit($id)
+        public function loanedit($id)
 {
     $loan = Loan::with(['user', 'loanCategory'])
                 ->where('loan_id', $id)
@@ -653,791 +354,197 @@ return view('admin.edit-loan', compact(
     );
 }
 
-    // public function update(Request $request)
-    // {
-    //     // dd($request->all());
-    //     try {
-    //         // Validate the request
-    //         $validated = $request->validate([
-    //             'loan_id' => 'required|integer',
-    //             'status' => 'required|string',
-    //             'loan_category_id' => 'required|integer',
-    //             'amount' => 'required|numeric','min:0',
-    //             'amount_approved' => ['required_if:status,disbursed','nullable','numeric','min:0'],
-    //             'tenure' => 'required|integer',
-    //             'in_principle' => 'nullable|string',
-    //             'remarks' => 'nullable|string',
-    //             'sanction_letter' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
-
-    //             'documents.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120'
-
-    //         ]);
-
-
-
-    //         \DB::transaction(function () use ($request) {
-    //             $loan = Loan::where('loan_id', $request->input('loan_id'))->firstOrFail();
-    //             $oldStatus = $loan->status;
-    //             $newStatus = $request->input('status');
-
-    //             \Log::info('Loan status update:', [
-    //                 'loan_id' => $loan->loan_id,
-    //                 'old_status' => $oldStatus,
-    //                 'new_status' => $newStatus,
-    //             ]);
-
-    //             // Update loan details
-    //             $loan->loan_category_id = $request->input('loan_category_id');
-    //             $loan->amount = $request->input('amount');
-    //             $loan->tenure = $request->input('tenure');
-    //             $loan->status = $newStatus;
-    //             $loan->remarks = $request->input('remarks');
-    //             $loan->in_principle = $request->input('in_principle');
-    //             $loan->amount_approved = $request->input('amount_approved');
-    //             $loan->save();
-
-    //             // echo $loan;die;
-
-    //             // Save the remark in the loan_remarks table
-    //             if ($request->input('remarks')) {
-    //                 \DB::table('loan_remarks')->insert([
-    //                     'loan_id' => $loan->loan_id,
-    //                     'agent_id' => session()->get('user_id'),
-    //                     'status' => $newStatus,
-    //                     'remarks' => $request->input('remarks'),
-    //                     'created_at' => now(),
-    //                     'updated_at' => now(),
-    //                 ]);
-    //             }
-
-    //            if ($request->hasFile('sanction_letter')) {
-    //                     $file = $request->file('sanction_letter');
-
-    //                     $filename = time() . '_' . $file->getClientOriginalName();
-
-    //                     $file->storeAs('sanction_letters', $filename, 'public');
-
-    //                     $loan->sanction_letter = $filename;
-    //                     $loan->save();
-    //                 }
-
-
-    //             // Handle document uploads
-    //             if ($request->hasFile('documents')) {
-    //                 $documents = $request->file('documents');
-    //                 $documentNames = $request->input('document_name');
-
-    //                 foreach ($documents as $index => $document) {
-    //                     // Ensure there's a corresponding name for each document
-    //                     $name = $documentNames[$index] ?? $document->getClientOriginalName();
-
-    //                     $path = $document->store('documents', 'public');
-
-    //                     Document::create([
-    //                         'user_id' => $loan->user_id,
-    //                         'loan_id' => $loan->loan_id,
-    //                         'document_name' => $name,
-    //                         'file_path' => $path,
-    //                         'created_at' => now(),
-    //                         'updated_at' => now(),
-    //                     ]);
-    //                 }
-    //             }
-
-    //             // Send email notification if the status has changed
-    //             if ($oldStatus !== $newStatus) {
-    //                 log::info('Dispatching LoanStatusUpdated event for loan ID: ' . $loan->loan_reference_id, [
-    //                     'old_status' => $oldStatus,
-    //                     'new_status' => $newStatus,
-    //                     'loan_reference_id' => $loan->loan_reference_id,
-    //                     'user_id' => auth()->id(),
-    //                 ]);
-    //                 event(new LoanStatusUpdated(
-    //                     $loan->loan_reference_id,
-    //                     auth()->id(),
-    //                     auth()->user()->roles->name, // assuming you store role
-    //                     $loan->status,
-    //                     $loan->user_id
-    //                 ));
-    //                 $customer = $loan->user;
-    //                 $customerEmail = $customer->email_id;
-    //                 $customerName = $customer->name;
-    //                 $status = $newStatus;
-    //                 $remarks = $request->input('remarks');
-    //                 $msg = "Your loan status has been updated to: $status. Remarks: $remarks";
-    //                 $temp_id = 4; // Example template ID, adjust accordingly
-    //                 app(UsersController::class)->temail($customerEmail, $customerName, $msg, $temp_id);
-    //             }
-
-    //             // Start MLM Insertion
-    //             // if ($newStatus == 'disbursed') {
-    //             //     $name = $customerName;
-    //             //     $parent = $loan->referral_user_id;
-    //             //     $nodeInserted = app(CategoryController::class)->addNode($parent, $name);
-    //             //     $amount_approved = $loan->amount_approved;
-
-    //             //     $userId = $loan->user_id;
-    //             //     app(CategoryController::class)->commission_destribution($parent, $amount_approved, $userId);
-    //             // }
-
-    //             if ($newStatus == 'disbursed') {
-    //                 $loan->amount_approved = $request->input('amount_approved');
-    //                 $loan->status = $newStatus; // Set status again, to be sure
-    //                 $loan->save(); // Explicitly save all changes
-
-    //                 Log::info('Loan approved amount set for loan ID: ' . $loan->loan_id);
-
-    //                 // Handle tree node addition
-    //                 $referralUser = User::find($loan->referral_user_id);
-
-    //                 if (!$referralUser) {
-    //                     Log::warning("Referral user not found for ID: {$loan->referral_user_id}. Searching for next available node.");
-    //                     $parentNode = app(CategoryController::class)->findNextAvailableNode();
-
-    //                     if (!$parentNode) {
-    //                         Log::error("No available position found in the tree.");
-    //                         return;
-    //                     }
-
-    //                     $parentUserId = $parentNode->user_id;
-    //                 } else {
-    //                     Log::info("Referral user found: " . json_encode($referralUser->toArray()));
-    //                     $parentUserId = $referralUser->id;
-    //                 }
-
-    //                 $childName = $loan->user->name;
-    //                 $childUserId = $loan->user->id;
-
-    //                 $existingCategory = DB::table('categories')->where('user_id', $childUserId)->first();
-
-    //                 if ($existingCategory) {
-    //                     Log::info("User already exists in the tree. Skipping node insertion for user ID: {$childUserId}");
-    //                 } else {
-    //                     if (app(CategoryController::class)->addNode($parentUserId, $childName, $childUserId)) {
-    //                         Log::info("Node successfully inserted into tree for loan applicant.");
-    //                     } else {
-    //                         Log::error("Failed to insert node into tree for loan applicant.");
-    //                         return;
-    //                     }
-    //                 }
-
-    //                 // Fetch ancestors for commission distribution
-    //                 $childCategory = DB::table('categories')->where('user_id', $childUserId)->first();
-
-    //                 if (!$childCategory) {
-    //                     Log::error("Category not found for Child User ID: {$childUserId}");
-    //                     return;
-    //                 }
-
-    //                 $ancestors = DB::table('categories')
-    //                     ->where('_lft', '<', $childCategory->_lft)
-    //                     ->where('_rgt', '>', $childCategory->_rgt)
-    //                     ->orderBy('_lft', 'asc')
-    //                     ->get();
-
-    //                 if ($ancestors->isEmpty()) {
-    //                     Log::info("No ancestors found for Child User ID: {$childUserId}. Skipping commission distribution.");
-    //                     return;
-    //                 }
-
-    //                 // Distribute commission
-    //                 app(CategoryController::class)->commissionDistribution($childUserId, $loan->amount_approved);
-
-    //                 if ($referralUser) {
-    //                     Log::info("Commission distribution executed for user: {$loan->user_id}, Parent: {$referralUser->name}");
-    //                 } else {
-    //                     Log::info("Commission distribution executed for user: {$loan->user_id}, No valid referral user found.");
-    //                 }
-    //             }
-    //         });
-
-
-
-    //         return redirect()->back()->with('success', 'Loan updated successfully!');
-    //     } catch (\Exception $e) {
-    //         \Log::error('Error updating loan', ['exception' => $e->getMessage()]);
-    //         if ($request->expectsJson()) {
-    //             return response()->json(['status' => 0, 'msg' => 'An error occurred while updating: ' . $e->getMessage()]);
-    //         }
-    //         return redirect()->back()->withErrors(['error' => 'An error occurred while updating: ' . $e->getMessage()])->withInput();
-    //     }
-    // }
-
-// public function update(Request $request)
-// {
-//     try {
-
-//         // ✅ VALIDATION (CORRECT)
-//         $request->validate([
-//             'loan_id'           => 'required|integer',
-//             'status'            => 'required|string',
-//             'loan_category_id'  => 'required|integer',
-//             'amount'            => 'required|numeric|min:0',
-//             'amount_approved' => 'required_if:status,approved,disbursed',
-//             'tenure'            => 'required|integer',
-//             'in_principle'      => 'nullable|string',
-//             'remarks'           => 'nullable|string',
-//             'sanction_letter' => 'required_if:status,approved,disbursed|file|mimes:pdf,doc,docx|max:2048',
-
-//             'documents.*'       => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120',
-//         ]);
-
-//         DB::transaction(function () use ($request) {
-
-//             $loan = Loan::where('loan_id', $request->loan_id)->firstOrFail();
-
-//             $oldStatus = $loan->status;
-//             $newStatus = $request->status;
-
-//             // ✅ UPDATE LOAN
-//             $loan->update([
-//                 'loan_category_id' => $request->loan_category_id,
-//                 'amount'           => $request->amount,
-//                 'tenure'           => $request->tenure,
-//                 'status'           => $newStatus,
-//                 'remarks'          => $request->remarks,
-//                 'in_principle'     => $request->in_principle,
-//                 'amount_approved'  => $request->amount_approved,
-//             ]);
-
-//             // ✅ SAVE REMARKS
-//             if (!empty($request->remarks)) {
-//                 DB::table('loan_remarks')->insert([
-//                     'loan_id'    => $loan->loan_id,
-//                     'agent_id'   => auth()->id(), // ✅ safer than session()
-//                     'status'     => $newStatus,
-//                     'remarks'    => $request->remarks,
-//                     'created_at' => now(),
-//                     'updated_at' => now(),
-//                 ]);
-//             }
-
-//            if ($request->hasFile('sanction_letter')) {
-
-//     $file = $request->file('sanction_letter');
-
-//     $filename = uniqid().'_'.$file->getClientOriginalName();
-
-//     // store file
-//     $path = $file->storeAs('sanction_letters', $filename, 'public');
-
-//     // ✅ save FULL path
-//     $loan->sanction_letter = $path; // sanction_letters/filename.pdf
-//     $loan->save();
-// }
-
-
-//             // ✅ DOCUMENT UPLOAD
-//             if ($request->hasFile('documents')) {
-//                 foreach ($request->file('documents') as $index => $doc) {
-//                     $path = $doc->store('documents', 'public');
-
-//                     Document::create([
-//                         'user_id'       => $loan->user_id,
-//                         'loan_id'       => $loan->loan_id,
-//                         'document_name' => $request->document_name[$index] ?? $doc->getClientOriginalName(),
-//                         'file_path'     => $path,
-//                     ]);
-//                 }
-//             }
-
-//             // ✅ STATUS CHANGE EVENT + EMAIL
-//             if ($oldStatus !== $newStatus) {
-
-//                 $roleName = auth()->user()?->roles?->first()?->name ?? null;
-
-//                 event(new LoanStatusUpdated(
-//                     $loan->loan_reference_id,
-//                     auth()->id(),
-//                     $roleName,
-//                     $newStatus,
-//                     $loan->user_id
-//                 ));
-
-//                 $customer = $loan->user;
-//                 app(UsersController::class)->temail(
-//                     $customer->email_id,
-//                     $customer->name,
-//                     "Your loan status has been updated to: $newStatus. Remarks: {$request->remarks}",
-//                     4
-//                 );
-//             }
-
-//             // ✅ MLM / COMMISSION (ONLY WHEN DISBURSED)
-//             if ($newStatus === 'disbursed') {
-
-//                 $referralUser = User::find($loan->referral_user_id);
-
-//                 $parentUserId = $referralUser?->id
-//                     ?? app(CategoryController::class)->findNextAvailableNode()?->user_id
-//                     ?? throw new \Exception('No parent node available');
-
-//                 $childUserId = $loan->user_id;
-
-//                 if (!DB::table('categories')->where('user_id', $childUserId)->exists()) {
-//                     app(CategoryController::class)->addNode(
-//                         $parentUserId,
-//                         $loan->user->name,
-//                         $childUserId
-//                     );
-//                 }
-
-//                 app(CategoryController::class)->commissionDistribution(
-//                     $childUserId,
-//                     $loan->amount_approved
-//                 );
-//             }
-//         });
-
-//         // ✅ JSON RESPONSE FOR AJAX
-//         return response()->json([
-//             'status' => 1,
-//             'msg' => 'Loan updated successfully'
-//         ]);
-
-//     } catch (\Exception $e) {
-
-//         return response()->json([
-//             'status' => 0,
-//             'msg' => $e->getMessage()
-//         ], 422);
-//     }
-// }
-// public function update(Request $request)
-// {
-//     try {
-
-//         Log::info('Loan update request initiated', [
-//             'loan_id'      => $request->loan_id,
-//             'requested_by' => auth()->id(),
-//         ]);
-
-//         // 🔹 Fetch loan
-//         $loan = Loan::where('loan_id', $request->loan_id)->firstOrFail();
-//         $user = auth()->user();
-
-//         /**
-//          * -------------------------------------------------
-//          * ✅ VALIDATION (FIXED)
-//          * -------------------------------------------------
-//          */
-//         $rules = [
-//             // loan
-//             'loan_id'          => 'required|integer',
-//             'status'           => 'required|string',
-//             'loan_category_id' => 'required|integer',
-//             'amount'           => 'required|numeric|min:0',
-//             'tenure'           => 'required|integer',
-//             'in_principle'     => 'nullable|string',
-//             'remarks'          => 'nullable|string',
-//             'amount_approved'  => 'nullable|numeric|min:0',
-
-//             // user
-//             'name'             => 'nullable|string|max:255',
-//             'mobile_no'        => 'nullable|string|max:15',
-
-//             // profile
-//             'marital_status'   => 'nullable|string',
-//             'dob'              => 'nullable|date',
-//             'residence_address'=> 'nullable|string',
-//             'city'             => 'nullable|string',
-//             'state'            => 'nullable|string',
-//             'pincode'          => 'nullable|string',
-
-//             // professional
-//             'company_name'     => 'nullable|string',
-//             'industry'         => 'nullable|string',
-//             'company_address'  => 'nullable|string',
-//             'experience_year'  => 'nullable|numeric',
-//             'designation'      => 'nullable|string',
-//             'netsalary'        => 'nullable|numeric',
-
-//             // files
-//             'documents.*'      => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120',
-//         ];
-
-//         if (in_array($request->status, ['approved', 'disbursed']) && empty($loan->sanction_letter)) {
-//             $rules['sanction_letter'] = 'required|file|mimes:pdf,doc,docx|max:2048';
-//         }
-
-//         $request->validate($rules);
-
-//         /**
-//          * -------------------------------------------------
-//          * ✅ TRANSACTION
-//          * -------------------------------------------------
-//          */
-//         DB::transaction(function () use ($request, $loan, $user) {
-
-//             $oldStatus = $loan->status;
-//             $newStatus = $request->status;
-
-//             // =========================
-//             // ✅ UPDATE USERS
-//             // =========================
-//             User::where('id', $loan->user_id)->update(array_filter([
-//                 'name'       => $request->name,
-//                 'mobile_no'  => $request->mobile_no,
-//             ]));
-
-//             // =========================
-//             // ✅ UPDATE PROFILE
-//             // =========================
-//             Profile::updateOrCreate(
-//                 ['user_id' => $loan->user_id],
-//                 array_filter([
-//                     'marital_status'    => $request->marital_status,
-//                     'dob'               => $request->dob,
-//                     'residence_address' => $request->residence_address,
-//                     'city'              => $request->city,
-//                     'state'             => $request->state,
-//                     'pincode'           => $request->pincode,
-//                 ])
-//             );
-
-//             // =========================
-//             // ✅ UPDATE PROFESSIONAL
-//             // =========================
-//             Professional::updateOrCreate(
-//                 ['user_id' => $loan->user_id],
-//                 array_filter([
-//                     'company_name'    => $request->company_name,
-//                     'industry'        => $request->industry,
-//                     'company_address' => $request->company_address,
-//                     'experience_year' => $request->experience_year,
-//                     'designation'     => $request->designation,
-//                     'netsalary'       => $request->netsalary,
-//                 ])
-//             );
-
-//             // =========================
-//             // ✅ UPDATE LOAN
-//             // =========================
-//             $loan->update([
-//                 'loan_category_id' => $request->loan_category_id,
-//                 'amount'           => $request->amount,
-//                 'tenure'           => $request->tenure,
-//                 'status'           => $newStatus,
-//                 'remarks'          => $request->remarks,
-//                 'in_principle'     => $request->in_principle,
-//                 'amount_approved'  => $request->amount_approved,
-//             ]);
-
-//             // =========================
-// // ✅ SANCTION LETTER (AS-IT-IS FROM OLD CODE)
-// // =========================
-// if ($request->hasFile('sanction_letter')) {
-
-//     // delete old file if exists
-//     if ($loan->sanction_letter && Storage::disk('public')->exists($loan->sanction_letter)) {
-//         Storage::disk('public')->delete($loan->sanction_letter);
-//     }
-
-//     $file = $request->file('sanction_letter');
-
-//     $filename = uniqid().'_'.$file->getClientOriginalName();
-
-//     // store file
-//     $path = $file->storeAs('sanction_letters', $filename, 'public');
-
-//     // save FULL path
-//     $loan->sanction_letter = $path;
-//     $loan->save();
-// }
-
-
-//             // =========================
-//             // ✅ DOCUMENTS
-//             // =========================
-//             if ($request->hasFile('documents')) {
-//                 foreach ($request->file('documents') as $index => $doc) {
-//                     Document::create([
-//                         'user_id'       => $loan->user_id,
-//                         'loan_id'       => $loan->loan_id,
-//                         'document_name' => $request->document_name[$index]
-//                             ?? $doc->getClientOriginalName(),
-//                         'file_path'     => $doc->store('documents', 'public'),
-//                     ]);
-//                 }
-//             }
-
-//             // =========================
-//             // ✅ STATUS EVENT
-//             // =========================
-//             if ($oldStatus !== $newStatus) {
-//                 event(new LoanStatusUpdated(
-//                     $loan->loan_reference_id,
-//                     $user->id,
-//                     $user->role_id,
-//                     $newStatus,
-//                     $loan->user_id
-//                 ));
-//             }
-//         });
-
-//         return response()->json([
-//             'status' => 1,
-//             'msg'    => 'Loan updated successfully'
-//         ]);
-
-//     } catch (\Throwable $e) {
-
-//         Log::error('Loan update failed', [
-//             'loan_id' => $request->loan_id,
-//             'error'   => $e->getMessage(),
-//         ]);
-
-//         return response()->json([
-//             'status' => 0,
-//             'msg'    => $e->getMessage()
-//         ], 422);
-//     }
-// }
-
+    
 public function update(Request $request)
 {
-        try {
-            $loan = Loan::where('loan_id', $request->loan_id)->firstOrFail();
+    try {
 
+        $loan = Loan::with(['user', 'dsaCustomer'])
+            ->where('loan_id', $request->loan_id)
+            ->firstOrFail();
 
-            // ===============================
-            // VALIDATION (UNCHANGED)
-            // ===============================
-            // $validated = $request->validate([
-            //     'loan_id' => 'required|integer',
-            //     'status' => 'required|string',
-            //     'loan_category_id' => 'required|integer',
-            //     'amount' => 'required|numeric',
-            //     'amount_approved' => ['required_if:status,disbursed', 'nullable', 'numeric', 'min:0'],
-            //     'tenure' => 'required|integer',
-            //     'in_principle' => 'nullable|string',
-            //     'remarks' => 'nullable|string',
-            //     // 'sanction_letter' => 'nullable|file|mimes:pdf,doc,docx',
-            //     'documents.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120'
-            // ]);
-            $rules = [
-        'loan_id'           => 'required|integer',
-        'status'            => 'required|string',
-        'loan_category_id'  => 'required|integer',
-        'amount'            => 'required|numeric',
-            'amount_approved' => [
-        'required_if:status,disbursed',
-        'numeric',
-        'min:0',
-        'max:' . $loan->amount
-    ],
-        'tenure'            => 'required|integer',
-        'in_principle'      => 'nullable|string',
-        'remarks'           => 'nullable|string',
-        
-        'documents.*'       => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120',
-    ];
-            // ===============================
-            // 🔴 SANCTION LETTER CONDITION (ONLY FOR DISBURSED)
-            // ===============================
-            if (
-                $request->status === 'disbursed'
-                && !$request->hasFile('sanction_letter')
-                && empty($loan->sanction_letter)
-            ) {
-                $rules['sanction_letter'] = 'required|file|mimes:pdf,doc,docx';
-            } else {
-                $rules['sanction_letter'] = 'nullable|file|mimes:pdf,doc,docx';
-            }
-            $request->validate(
-        $rules,
-        [
+        $rules = [
+            'loan_id'           => 'required|integer',
+            'status'            => 'required|string',
+            'loan_category_id'  => 'required|integer',
+            'amount'            => 'required|numeric',
+            'amount_approved'   => [
+                'required_if:status,disbursed',
+                'numeric',
+                'min:0',
+                'max:' . $loan->amount
+            ],
+            'tenure'            => 'required|integer',
+            'in_principle'      => 'nullable|string',
+            'remarks'           => 'nullable|string',
+            'documents.*'       => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120',
+        ];
+
+        // 🔴 SANCTION LETTER CONDITION
+        if (
+            $request->status === 'disbursed'
+            && !$request->hasFile('sanction_letter')
+            && empty($loan->sanction_letter)
+        ) {
+            $rules['sanction_letter'] = 'required|file|mimes:pdf,doc,docx';
+        } else {
+            $rules['sanction_letter'] = 'nullable|file|mimes:pdf,doc,docx';
+        }
+
+        $request->validate($rules, [
             'sanction_letter.required' =>
                 'Please upload the sanction letter before disbursing the loan.'
-        ]
-    );
+        ]);
 
+        DB::transaction(function () use ($request) {
 
-            DB::transaction(function () use ($request) {
+            $loan = Loan::with(['user', 'dsaCustomer'])
+                ->where('loan_id', $request->loan_id)
+                ->firstOrFail();
 
-                // ===============================
-                // FETCH LOAN
-                // ===============================
-                $loan = Loan::where('loan_id', $request->loan_id)->firstOrFail();
-                $oldStatus = $loan->status;
-                $newStatus = $request->status;
+            $oldStatus = $loan->status;
+            $newStatus = $request->status;
 
-                Log::info('Loan status update', [
+            // ✅ UPDATE LOAN
+            $loan->loan_category_id = $request->loan_category_id;
+            $loan->amount = $request->amount;
+            $loan->tenure = $request->tenure;
+            $loan->status = $newStatus;
+            $loan->remarks = $request->remarks;
+            $loan->in_principle = $request->in_principle;
+            $loan->amount_approved = $request->amount_approved;
+            $loan->save();
+
+            // ✅ SAVE REMARKS
+            if ($request->remarks) {
+                DB::table('loan_remarks')->insert([
                     'loan_id' => $loan->loan_id,
-                    'old_status' => $oldStatus,
-                    'new_status' => $newStatus,
+                    'agent_id' => session()->get('user_id'),
+                    'status' => $newStatus,
+                    'remarks' => $request->remarks,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
+            }
 
-                // ===============================
-                // UPDATE LOAN BASIC DETAILS
-                // ===============================
-                $loan->loan_category_id = $request->loan_category_id;
-                $loan->amount = $request->amount;
-                $loan->tenure = $request->tenure;
-                $loan->status = $newStatus;
-                $loan->remarks = $request->remarks;
-                $loan->in_principle = $request->in_principle;
-                $loan->amount_approved = $request->amount_approved;
+            // ✅ SANCTION LETTER
+            if ($request->hasFile('sanction_letter')) {
+
+                if ($loan->sanction_letter && Storage::disk('public')->exists($loan->sanction_letter)) {
+                    Storage::disk('public')->delete($loan->sanction_letter);
+                }
+
+                $file = $request->file('sanction_letter');
+                $filename = uniqid() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('sanction_letters', $filename, 'public');
+
+                $loan->sanction_letter = $path;
                 $loan->save();
+            }
 
-                // ===============================
-                // SAVE REMARKS
-                // ===============================
-                if ($request->remarks) {
-                    DB::table('loan_remarks')->insert([
+            // ✅ DOCUMENT UPLOAD
+            if ($request->hasFile('documents')) {
+                foreach ($request->file('documents') as $index => $document) {
+
+                    $name = $request->document_name[$index] ?? $document->getClientOriginalName();
+                    $path = $document->store('documents', 'public');
+
+                    Document::create([
+                        'user_id' => $loan->user_id,
                         'loan_id' => $loan->loan_id,
-                        'agent_id' => session()->get('user_id'),
-                        'status' => $newStatus,
-                        'remarks' => $request->remarks,
+                        'document_name' => $name,
+                        'file_path' => $path,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
                 }
-
-                // ===============================
-                // SANCTION LETTER UPLOAD
-                // ===============================
-                if ($request->hasFile('sanction_letter')) {
-
-                    if ($loan->sanction_letter && Storage::disk('public')->exists($loan->sanction_letter)) {
-                        Storage::disk('public')->delete($loan->sanction_letter);
-                    }
-
-                    $file = $request->file('sanction_letter');
-                    $filename = uniqid() . '_' . $file->getClientOriginalName();
-                    $path = $file->storeAs('sanction_letters', $filename, 'public');
-
-                    $loan->sanction_letter = $path;
-                    $loan->save();
-                }
-
-                // ===============================
-                // DOCUMENT UPLOADS
-                // ===============================
-                if ($request->hasFile('documents')) {
-                    foreach ($request->file('documents') as $index => $document) {
-
-                        $name = $request->document_name[$index] ?? $document->getClientOriginalName();
-                        $path = $document->store('documents', 'public');
-
-                        Document::create([
-                            'user_id' => $loan->user_id,
-                            'loan_id' => $loan->loan_id,
-                            'document_name' => $name,
-                            'file_path' => $path,
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ]);
-                    }
-                }
-
-                // ===============================
-                // EMAIL & EVENT (UNCHANGED)
-                // ===============================
-                if ($oldStatus !== $newStatus) {
-
-                // ===============================
-                // EVENT (optional - keep if needed)
-                // ===============================
-                event(new LoanStatusUpdated(
-                    $loan->loan_reference_id,
-                    auth()->id(),
-                    auth()->user()->roles->name,
-                    $loan->status,
-                    $loan->user_id
-                ));
-
-                // ===============================
-                // 🔥 NEW NOTIFICATION SYSTEM
-                // ===============================
-                $title = "Loan Status Updated";
-
-                $message = "Loan {$loan->loan_reference_id} is now {$newStatus}. Remarks: {$request->remarks}";
-
-                $users = [];
-
-// Customer
-if ($loan->user) {
-    $users[] = $loan->user;
-}
-
-// Agent
-if ($loan->agent_id) {
-    $agent = \App\Models\User::find($loan->agent_id);
-    if ($agent) {
-        $users[] = $agent;
-    }
-}}
-
-                // ==================================================
-                // DISBURSED LOGIC (CORRECTED & FINAL)
-                // ==================================================
-                if ($newStatus === 'disbursed') {
-
-                    $childUserId = $loan->user_id;
-                    $childName = $loan->user->name;
-
-                    // -------------------------------
-                    // MLM INSERTION (ONLY ONCE)
-                    // -------------------------------
-                    $existsInMLM = DB::table('categories')
-                        ->where('user_id', $childUserId)
-                        ->exists();
-
-                    if (!$existsInMLM) {
-
-                        $parentUserId = null;
-
-                        if ($loan->referral_user_id) {
-                            $referralUser = User::find($loan->referral_user_id);
-                            if ($referralUser) {
-                                $parentUserId = $referralUser->id;
-                            }
-                        }
-
-                        if (!$parentUserId) {
-                            $parentNode = app(CategoryController::class)->findNextAvailableNode();
-                            if ($parentNode) {
-                                $parentUserId = $parentNode->user_id;
-                            }
-                        }
-
-                        if ($parentUserId) {
-                            app(CategoryController::class)
-                                ->addNode($parentUserId, $childName, $childUserId);
-                        }
-                    }
-
-                    // -------------------------------
-                    // COMMISSION (EVERY LOAN)
-                    // -------------------------------
-                    $childCategory = DB::table('categories')
-                        ->where('user_id', $childUserId)
-                        ->first();
-
-                    if ($childCategory) {
-                        app(CategoryController::class)
-                            ->commissionDistribution($childUserId, $loan->amount_approved);
-                    }
-                }
-            });
-
-            return redirect()->back()->with('success', 'Loan updated successfully!');
-
-        } catch (\Exception $e) {
-
-            Log::error('Error updating loan', ['exception' => $e->getMessage()]);
-
-            if ($request->expectsJson()) {
-                return response()->json(['status' => 0, 'msg' => $e->getMessage()]);
             }
 
-            return redirect()->back()
-                ->withErrors(['error' => $e->getMessage()])
-                ->withInput();
-        }
-}
+            // ✅ EVENT (🔥 FIXED HERE)
+            if ($oldStatus !== $newStatus) {
 
+              try {
+    event(new LoanStatusUpdated(
+        $loan->loan_reference_id,
+        auth()->id() ?? session('user_id'),
+        optional(auth()->user()->roles)->name ?? 'system',
+        $loan->status,
+        $loan->user_id
+    ));
+} catch (\Exception $e) {
+    \Log::error('Event failed', ['error' => $e->getMessage()]);
+};
+            }
+
+            // ✅ DISBURSED LOGIC
+         if ($newStatus === 'disbursed' && session('role_id') != 6){
+
+                $childUserId = $loan->user_id;
+
+                $childName = null;
+
+                if (!empty($loan->user->name)) {
+                    $childName = $loan->user->name;
+                }
+
+                if (!$childName && $loan->dsaCustomer && !empty($loan->dsaCustomer->name)) {
+                    $childName = $loan->dsaCustomer->name;
+                }
+
+                if (!$childName) {
+                    $childName = 'Unknown User';
+                }
+
+                $existsInMLM = DB::table('categories')
+                    ->where('user_id', $childUserId)
+                    ->exists();
+
+                if (!$existsInMLM) {
+
+                    $parentUserId = null;
+
+                    if ($loan->referral_user_id) {
+                        $referralUser = User::find($loan->referral_user_id);
+                        if ($referralUser) {
+                            $parentUserId = $referralUser->id;
+                        }
+                    }
+
+                    if (!$parentUserId) {
+                        $parentNode = app(CategoryController::class)->findNextAvailableNode();
+                        if ($parentNode) {
+                            $parentUserId = $parentNode->user_id;
+                        }
+                    }
+
+                    if ($parentUserId) {
+                        app(CategoryController::class)
+                            ->addNode($parentUserId, $childName, $childUserId);
+                    }
+                }
+
+                $childCategory = DB::table('categories')
+                    ->where('user_id', $childUserId)
+                    ->first();
+
+                if ($childCategory) {
+                    app(CategoryController::class)
+                        ->commissionDistribution($childUserId, $loan->amount_approved);
+                }
+            }
+        });
+
+        return redirect()->back()->with('success', 'Loan updated successfully!');
+
+    } catch (\Exception $e) {
+
+        Log::error('Error updating loan', ['exception' => $e->getMessage()]);
+
+        return redirect()->back()
+            ->withErrors(['error' => $e->getMessage()])
+            ->withInput();
+    }
+}
 
 
     //admin
@@ -1507,49 +614,7 @@ if ($loan->agent_id) {
         $cities = DB::table('cities')->where('state_id', $state_id)->get();
         return response()->json($cities);
     }
-    // public function start_loan($id)
-    // {
-    //     $currentStep = 1;
-    //     Session::put('is_loan', $id);
-    //     $is_loan = $id;
-    //     $loanCategories = DB::table('loan_category')->get();
-    //     $loanBanks = DB::table('loan_bank_details')->get();
-    //     $userId = session('user_id'); // Get user ID from session
-
-    //     if (!$userId) {
-    //         return redirect()->route('login')->withErrors('User session expired. Please log in again.');
-    //     }
-
-    //     // Fetch existing data
-    //     $profile = DB::table('profile')->where('user_id', $userId)->first();
-    //     $professional = DB::table('professional_details')->where('user_id', $userId)->first();
-    //     $education = DB::table('education_details')->where('user_id', $userId)->first();
-    //     $existingLoans = DB::table('existing_loan')->where('user_id', $userId)->get();
-    //     $documents = DB::table('documents')->where('user_id', $userId)->get();
-    //     $loan = DB::table('loans')
-    //         ->select('loan_id', 'loan_reference_id', 'status', 'loan_category_id', 'bank_id') // Include loan_category_id
-    //         ->where('user_id', $userId)
-    //         ->first();
-    //     $hasExistingLoan = !is_null($existingLoans);
-    //     $states = DB::table('states')->get();
-    //     $user = DB::table('users')->where('id', $userId)->first();
-    //     return view('frontend.professional-info', compact(
-    //         'currentStep',
-    //         'is_loan',
-    //         'loanCategories',
-    //         'states',
-    //         'hasExistingLoan',
-    //         'loanBanks',
-    //         'profile',
-    //         'professional',
-    //         'education',
-    //         'existingLoans',
-    //         'documents',
-    //         'loan'
-    //     ));
-    // }
-
-
+    
 
 
     public function start_loan($id)
@@ -1627,6 +692,10 @@ if ($loan->agent_id) {
 
 public function showForm(Request $request)
 {
+    // 🔥 IMPORTANT FIX (ADD THIS AT TOP)
+if ($request->has('user_id')) {
+    session(['selected_user_id' => $request->user_id]);
+}
     /* =========================================================
        🔴 ADMIN: NEW APPLICATION RESET (FIRST LOAD ONLY)
        ========================================================= */
@@ -1713,22 +782,42 @@ public function showForm(Request $request)
 
     /* ---------------- ADMIN USER LIST ---------------- */
 
-    $loanUsers = collect();
-if (in_array(session('role_id'), [2,4])) {   // agent + admin
-        $loanUsers = User::join('otp', 'otp.user_id', '=', 'users.id')
-            ->where('users.role_id', 1)
-            ->where('otp.is_verify', 1)
-            ->where('users.is_email_verify', 1) // ✅ ACTIVE USERS ONLY
-        ->whereNull('users.deleted_at') // ✅ ignore deleted users
-            ->select(
-                'users.id',
-                'users.name',
-                'users.email_id',
-                'users.mobile_no'
-            )
-            ->distinct()
-            ->get();
-    }
+$loanUsers = collect();
+
+$role = session('role_id');
+$loginUserId = session('user_id');
+
+// ✅ ADMIN + AGENT
+if (in_array($role, [2,4])) {
+
+    $loanUsers = User::join('otp', 'otp.user_id', '=', 'users.id')
+        ->where('users.role_id', 1)
+        ->where('otp.is_verify', 1)
+        ->where('users.is_email_verify', 1)
+        ->whereNull('users.deleted_at')
+        ->select(
+            'users.id',
+            'users.name',
+            'users.email_id',
+            'users.mobile_no'
+        )
+        ->distinct()
+        ->get();
+
+}
+// ✅ DSA ONLY HIS CUSTOMERS
+elseif ($role == 6) {
+
+  $loanUsers = DB::table('dsa_customers')
+    ->where('dsa_id', $loginUserId)
+    ->select(
+        'user_id as id',   // 🔥 VERY IMPORTANT FIX
+        'name',
+        'email as email_id',
+        'mobile_no'
+    )
+    ->get();
+}
 
     /* =========================================================
        🔐 USER DATA LOADING CONTROL
@@ -1770,6 +859,14 @@ if (in_array(session('role_id'), [2,4])) {   // agent + admin
     $existingLoans = $canLoadUserData
         ? DB::table('existing_loan')->where('user_id', $effectiveUserId)->latest('existing_loan_id')->get()
         : collect();
+        // 🔥 DSA FLOW FIX (NO AUTOFILL)
+if (session('role_id') == 6) {
+
+    $profile = null;
+    $professional = null;
+    $education = null;
+
+}
 
     /* ---------------- LOAN ---------------- */
 
@@ -1783,9 +880,19 @@ if (in_array(session('role_id'), [2,4])) {   // agent + admin
 
     /* ---------------- USER MODEL ---------------- */
 
-    $user = $canLoadUserData
-        ? User::with('loans')->where('id', $effectiveUserId)->first()
-        : null;
+   $user = null;
+
+// 🔥 ONLY OTP USER FIX (NO IMPACT ON ADMIN/DSA)
+if (session('role_id') == 6 && $selectedUserId) {
+    // DSA selected customer
+   $user = DB::table('dsa_customers')
+    ->where('user_id', $selectedUserId) // ✅ CORRECT
+    ->first();
+} else {
+    $user = User::where('id', $effectiveUserId)->first();
+}
+
+
 
     /* ---------------- COMMON ---------------- */
 
@@ -1829,65 +936,34 @@ if (in_array(session('role_id'), [2,4])) {   // agent + admin
 
 
 
-
-// public function ajaxList(Request $request)
-// {
-//     $type = $request->type;
-
-//     $query = Loan::query();
-
-//     if ($type === 'pending') {
-//         $query->whereNull('assigned_to');
-//     }
-//     elseif ($type === 'inprocess') {
-//         $query->where('status', 'inprocess');
-//     }
-//     elseif ($type === 'approved') {
-//         $query->where('status', 'approved');
-//     }
-//     elseif ($type === 'disbursed') {
-//         $query->where('status', 'disbursed');
-//     }
-//     elseif ($type === 'rejected') {
-//         $query->where('status', 'rejected');
-//     }
-//     elseif ($type === 'trashed') {
-//         $query->onlyTrashed();
-//     }
-
-//     // ✅ NEW FIRST (LATEST)
-//     $loans = $query->latest()->paginate(10);
-//     // OR
-//     // $loans = $query->orderBy('created_at', 'desc')->paginate(10);
-
-//     return view('partials.list', compact('loans'))->render();
-// }
-
 public function ajaxList(Request $request)
 {
     $search = $request->search;
     $type   = $request->type;
 
-    $query = Loan::query();
+    $role   = session('role_id');
+    $userId = session('user_id');
 
+    // ✅ START QUERY (DON'T OVERRIDE LATER)
+    $query = Loan::with(['user', 'loanCategory']);
+
+    // 🔍 SEARCH
     if ($search) {
-    $query->where(function ($q) use ($search) {
+        $query->where(function ($q) use ($search) {
 
-        // Applicant name
-        $q->whereHas('user', function ($u) use ($search) {
-            $u->where('name', 'LIKE', "%{$search}%");
-        })
+            $q->whereHas('user', function ($u) use ($search) {
+                $u->where('name', 'LIKE', "%{$search}%");
+            })
 
-        // Loan category name
-        ->orWhereHas('loanCategory', function ($c) use ($search) {
-            $c->where('category_name', 'LIKE', "%{$search}%");
-        })
+            ->orWhereHas('loanCategory', function ($c) use ($search) {
+                $c->where('category_name', 'LIKE', "%{$search}%");
+            })
 
-        // Loan Reference ID (NOT loan_id)
-        ->orWhere('loan_reference_id', 'LIKE', "%{$search}%");
-    });
-}
+            ->orWhere('loan_reference_id', 'LIKE', "%{$search}%");
+        });
+    }
 
+    // 🎯 TYPE FILTER
     if ($type === 'pending') {
         $query->whereNull('assigned_to');
     } elseif ($type === 'inprocess') {
@@ -1902,54 +978,71 @@ public function ajaxList(Request $request)
         $query->onlyTrashed();
     }
 
+    // ✅ DSA FILTER (NEW SIMPLE)
+ $query = $this->applyRoleFilter($query, $role, $userId);
+    // 🔥 ADMIN FILTER (REMOVE DSA LOANS)
+   $query = $this->applyRoleFilter($query, $role, $userId);
+
     $loans = $query->latest()->paginate(10);
 
     return view('partials.list', compact('loans'));
 }
 
 
-// public function ajaxPendingLoans()
-// {
-//     $pendingLoans = DB::table('loans')
-//         ->leftJoin('users', 'loans.user_id', '=', 'users.id')
-//         ->leftJoin('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-//         ->where(function ($query) {
-//             $query->whereNull('loans.agent_id')
-//                 ->orWhere(function ($subQuery) {
-//                     $subQuery->whereNotNull('loans.agent_id')
-//                         ->whereIn('loans.agent_action', ['pending', 'rejected'])
-//                         ->orWhereNull('loans.agent_action');
-//                 });
-//         })
-//         ->select(
-//             'loans.*',
-//             'users.name as user_name',
-//             'loan_category.category_name as category_name'
-//         )
-//         ->orderByDesc('loans.created_at')
-//         ->paginate(10);
-
-//     $agents = DB::table('users')->where('role_id', 2)->get();
-
-//     return view('partials.pending-loans', compact('pendingLoans', 'agents'));
-// }
-
 public function ajaxPendingLoans(Request $request)
 {
     $search = $request->search;
+
+    $role   = session('role_id');
+    $userId = session('user_id');
 
     $pendingLoans = DB::table('loans')
         ->leftJoin('users', 'loans.user_id', '=', 'users.id')
         ->leftJoin('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
 
+        // ✅ Pending condition
         ->where(function ($query) {
-            $query->whereNull('loans.agent_id')
-                ->orWhere(function ($q) {
-                    $q->whereNotNull('loans.agent_id')
-                      ->where('loans.agent_action', 'rejected');
-                });
+          $query->where(function ($q) {
+    $q->whereNull('loans.agent_id')
+      ->orWhere(function ($qq) {
+          $qq->whereNotNull('loans.agent_id')
+             ->where('loans.agent_action', 'rejected');
+      });
+})
+
+->whereNotIn('loans.status', [
+    'approved',
+    'disbursed',
+    'rejected'
+]);
         })
 
+        // ✅ DSA FILTER
+        ->when($role == 6, function ($q) use ($userId) {
+            $q->where(function($qq) use ($userId){
+
+                // Direct DSA loans
+                $qq->where('loans.dsa_id', $userId)
+
+                // OR mapped customers
+                ->orWhereIn('loans.user_id', function($sub) use ($userId) {
+                    $sub->select('user_id')
+                        ->from('dsa_customers')
+                        ->where('dsa_id', $userId);
+                });
+
+            });
+        })
+
+        // ✅ ADMIN FILTER (FIXED 🔥)
+        ->when($role == 4, function ($q) {
+            $q->where(function($qq){
+                $qq->whereNull('loans.dsa_id')
+                   ->orWhere('loans.dsa_id', 0);
+            });
+        })
+
+        // 🔍 SEARCH
         ->when($search, function ($q) use ($search) {
             $q->where(function ($sub) use ($search) {
                 $sub->where('users.name', 'LIKE', "%{$search}%")
@@ -1968,42 +1061,20 @@ public function ajaxPendingLoans(Request $request)
         ->paginate(10)
         ->appends(['search' => $search]);
 
+    // ✅ Agents (no change)
     $agents = DB::table('users')
         ->where('role_id', 2)
         ->where('is_email_verify', 1)
         ->whereNull('deleted_at')
         ->get();
 
-    // 🔥 IMPORTANT FIX FOR AJAX PAGINATION
+    // ✅ AJAX
     if ($request->ajax()) {
         return view('partials.pending-loans', compact('pendingLoans', 'agents'))->render();
     }
 
     return view('admin.pending-loans', compact('pendingLoans', 'agents'));
 }
-
-
-// public function ajaxInprocessLoans()
-// {
-//     $loans = DB::table('loans')
-//         ->join('users', 'loans.user_id', '=', 'users.id')
-//         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
-//         ->select(
-//             'loans.loan_id',
-//             'loans.loan_reference_id',
-//             'loans.amount',
-//             'loans.tenure',
-//             'users.name as user_name',
-//             'loan_category.category_name'
-//         )
-//         ->where('loans.status', 'in process')   // ✅ only in-process
-//         ->whereNull('loans.deleted_at')          // ✅ exclude trashed
-//         ->orderByDesc('loans.created_at')
-//         ->paginate(10);
-
-//     return view('partials.inprocess-loans', compact('loans'));
-// }
-
 
 
 
@@ -2013,14 +1084,43 @@ public function ajaxInprocessLoans(Request $request)
 {
     $search = $request->search;
 
+    $role   = session('role_id');
+    $userId = session('user_id');
+
     $loans = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+
         ->where('loans.status', 'in process')          
         ->whereNotNull('loans.loan_reference_id')      
         ->whereNull('loans.deleted_at')                
 
-        // 🔍 SAME SEARCH LOGIC
+        // ✅ DSA FILTER (FIXED 🔥)
+        ->when($role == 6, function ($q) use ($userId) {
+            $q->where(function($qq) use ($userId){
+
+                // Direct DSA loans
+                $qq->where('loans.dsa_id', $userId)
+
+                // OR mapped customers
+                ->orWhereIn('loans.user_id', function($sub) use ($userId) {
+                    $sub->select('user_id')
+                        ->from('dsa_customers')
+                        ->where('dsa_id', $userId);
+                });
+
+            });
+        })
+
+        // ✅ ADMIN FILTER (ADD THIS 🔥)
+        ->when($role == 4, function ($q) {
+            $q->where(function($qq){
+                $qq->whereNull('loans.dsa_id')
+                   ->orWhere('loans.dsa_id', 0);
+            });
+        })
+
+        // 🔍 SEARCH
         ->when($search, function ($q) use ($search) {
             $q->where(function ($sub) use ($search) {
                 $sub->where('users.name', 'LIKE', "%{$search}%")
@@ -2034,6 +1134,7 @@ public function ajaxInprocessLoans(Request $request)
             'users.name as user_name',
             'loan_category.category_name as category_name'
         )
+
         ->orderByDesc('loans.created_at')
         ->paginate(10)
         ->appends(['search' => $search]);
@@ -2046,6 +1147,9 @@ public function ajaxTrashedLoans(Request $request)
 {
     $search = $request->search;
 
+    $role   = session('role_id');
+    $userId = session('user_id');
+
     $loans = \App\Models\Loan::onlyTrashed()
         ->with([
             'user.profile.cityRelation',
@@ -2054,21 +1158,43 @@ public function ajaxTrashedLoans(Request $request)
         ])
         ->whereNotNull('loan_reference_id')
 
-        // 🔍 SAME SEARCH LOGIC
+        // ✅ DSA FILTER (FIXED 🔥)
+        ->when($role == 6, function ($q) use ($userId) {
+            $q->where(function($qq) use ($userId){
+
+                // Direct DSA loans
+                $qq->where('dsa_id', $userId)
+
+                // OR mapped customers
+                ->orWhereIn('user_id', function($sub) use ($userId) {
+                    $sub->select('user_id')
+                        ->from('dsa_customers')
+                        ->where('dsa_id', $userId);
+                });
+
+            });
+        })
+
+        // ✅ ADMIN FILTER (ADD THIS 🔥)
+        ->when($role == 4, function ($q) {
+            $q->where(function($qq){
+                $qq->whereNull('dsa_id')
+                   ->orWhere('dsa_id', 0);
+            });
+        })
+
+        // 🔍 SEARCH
         ->when($search, function ($q) use ($search) {
             $q->where(function ($sub) use ($search) {
 
-                // Applicant name
                 $sub->whereHas('user', function ($u) use ($search) {
                     $u->where('name', 'LIKE', "%{$search}%");
                 })
 
-                // Loan category
                 ->orWhereHas('loanCategory', function ($c) use ($search) {
                     $c->where('category_name', 'LIKE', "%{$search}%");
                 })
 
-                // Loan Reference ID
                 ->orWhere('loan_reference_id', 'LIKE', "%{$search}%");
             });
         })
@@ -2106,13 +1232,42 @@ public function ajaxApprovedLoans(Request $request)
 {
     $search = $request->search;
 
+    $role   = session('role_id');
+    $userId = session('user_id');
+
     $loans = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+
         ->where('loans.status', 'approved')
         ->whereNotNull('loans.loan_reference_id')
 
-        // 🔍 SAME SEARCH LOGIC
+        // ✅ DSA FILTER (FIXED 🔥)
+        ->when($role == 6, function ($q) use ($userId) {
+            $q->where(function($qq) use ($userId){
+
+                // Direct DSA loans
+                $qq->where('loans.dsa_id', $userId)
+
+                // OR mapped customers
+                ->orWhereIn('loans.user_id', function($sub) use ($userId) {
+                    $sub->select('user_id')
+                        ->from('dsa_customers')
+                        ->where('dsa_id', $userId);
+                });
+
+            });
+        })
+
+        // ✅ ADMIN FILTER (ADD THIS 🔥)
+        ->when($role == 4, function ($q) {
+            $q->where(function($qq){
+                $qq->whereNull('loans.dsa_id')
+                   ->orWhere('loans.dsa_id', 0);
+            });
+        })
+
+        // 🔍 SEARCH
         ->when($search, function ($q) use ($search) {
             $q->where(function ($sub) use ($search) {
                 $sub->where('users.name', 'LIKE', "%{$search}%")
@@ -2126,6 +1281,7 @@ public function ajaxApprovedLoans(Request $request)
             'users.name as user_name',
             'loan_category.category_name as loan_category_name'
         )
+
         ->orderByDesc('loans.created_at')
         ->paginate(10)
         ->appends(['search' => $search]);
@@ -2134,15 +1290,17 @@ public function ajaxApprovedLoans(Request $request)
 }
 
 
-
-
 public function ajaxDisbursedLoans(Request $request)
 {
     $search = $request->search;
 
+    $role   = session('role_id');
+    $userId = session('user_id');
+
     $loans = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+
         ->select(
             'loans.loan_id',
             'loans.loan_reference_id',
@@ -2153,10 +1311,36 @@ public function ajaxDisbursedLoans(Request $request)
             'loans.amount_approved',
             'loan_category.category_name'
         )
+
         ->where('loans.status', 'disbursed')
         ->whereNotNull('loans.loan_reference_id')
 
-        // 🔍 SAME SEARCH LOGIC
+        // ✅ DSA FILTER (FIXED 🔥)
+        ->when($role == 6, function ($q) use ($userId) {
+            $q->where(function($qq) use ($userId){
+
+                // Direct DSA loans
+                $qq->where('loans.dsa_id', $userId)
+
+                // OR mapped customers
+                ->orWhereIn('loans.user_id', function($sub) use ($userId) {
+                    $sub->select('user_id')
+                        ->from('dsa_customers')
+                        ->where('dsa_id', $userId);
+                });
+
+            });
+        })
+
+        // ✅ ADMIN FILTER (ADD THIS 🔥)
+        ->when($role == 4, function ($q) {
+            $q->where(function($qq){
+                $qq->whereNull('loans.dsa_id')
+                   ->orWhere('loans.dsa_id', 0);
+            });
+        })
+
+        // 🔍 SEARCH
         ->when($search, function ($q) use ($search) {
             $q->where(function ($sub) use ($search) {
                 $sub->where('users.name', 'LIKE', "%{$search}%")
@@ -2173,11 +1357,11 @@ public function ajaxDisbursedLoans(Request $request)
 }
 public function ajaxRejectedLoans(Request $request)
 {
-    $role_id  = session()->get('role_id');
-    $agent_id = session()->get('user_id');
+    $role_id = session()->get('role_id');
+    $userId  = session()->get('user_id');
 
-    // Only agent or admin
-    if ($role_id != 2 && $role_id != 4) {
+    // ✅ Allow roles
+    if (!in_array($role_id, [2,4,6])) {
         abort(403);
     }
 
@@ -2186,6 +1370,7 @@ public function ajaxRejectedLoans(Request $request)
     $loans = DB::table('loans')
         ->join('users', 'loans.user_id', '=', 'users.id')
         ->join('loan_category', 'loans.loan_category_id', '=', 'loan_category.loan_category_id')
+
         ->select(
             'loans.loan_id',
             'loans.loan_reference_id',
@@ -2195,9 +1380,35 @@ public function ajaxRejectedLoans(Request $request)
             'users.name as user_name',
             'loan_category.category_name as loan_category_name'
         )
+
         ->where('loans.status', 'rejected')
 
-        // 🔍 SAME SEARCH LOGIC
+        // ✅ DSA FILTER (FIXED 🔥)
+        ->when($role_id == 6, function ($q) use ($userId) {
+            $q->where(function($qq) use ($userId){
+
+                // Direct DSA loans
+                $qq->where('loans.dsa_id', $userId)
+
+                // OR mapped customers
+                ->orWhereIn('loans.user_id', function($sub) use ($userId) {
+                    $sub->select('user_id')
+                        ->from('dsa_customers')
+                        ->where('dsa_id', $userId);
+                });
+
+            });
+        })
+
+        // ✅ ADMIN FILTER (ADD THIS 🔥)
+        ->when($role_id == 4, function ($q) {
+            $q->where(function($qq){
+                $qq->whereNull('loans.dsa_id')
+                   ->orWhere('loans.dsa_id', 0);
+            });
+        })
+
+        // 🔍 SEARCH
         ->when($search, function ($q) use ($search) {
             $q->where(function ($sub) use ($search) {
                 $sub->where('users.name', 'LIKE', "%{$search}%")
@@ -2212,7 +1423,30 @@ public function ajaxRejectedLoans(Request $request)
 
     return view('partials.rejected-loans', compact('loans'));
 }
+private function applyRoleFilter($query, $role, $userId)
+{
+    // ✅ DSA
+    if ($role == 6) {
+        $query->where(function($q) use ($userId){
+            $q->where('dsa_id', $userId)
+              ->orWhereIn('user_id', function($sub) use ($userId){
+                  $sub->select('user_id')
+                      ->from('dsa_customers')
+                      ->where('dsa_id', $userId);
+              });
+        });
+    }
 
+    // ✅ ADMIN
+    if ($role == 4) {
+        $query->where(function($q){
+            $q->whereNull('dsa_id')
+              ->orWhere('dsa_id', 0);
+        });
+    }
+
+    return $query;
+}
 
 
     //CreditReport
@@ -2255,122 +1489,7 @@ public function ajaxRejectedLoans(Request $request)
     }
 
 
-    // public function handleStep(Request $request)
-    // {
-    //     $userId = session('user_id'); // Get user ID from session
-    //     if (!$userId) {
-    //         return redirect()->route('login')->withErrors('User session expired. Please log in again.');
-    //     }
-
-    //     $currentStep = $request->input('current_step');
-
-    //     try {
-    //         // Determine whether the "Previous" or "Next" button was clicked
-    //         if ($request->has('previous')) {
-    //             $currentStep = max(1, $currentStep - 1); // Ensure the step doesn't go below 1
-    //             return redirect()->route('loan.form', ['current_step' => $currentStep]);
-    //         } elseif ($request->has('next')) {
-    //             // Validate and handle the current step
-    //             switch ($currentStep) {
-    //                 case 1:
-    //                     $this->handlePersonalDetails($request, $userId);
-    //                     break;
-    //                 case 2:
-    //                     $this->handleProfessionalDetails($request, $userId);
-    //                     break;
-    //                 case 3:
-    //                     $this->handleEducationDetails($request, $userId);
-    //                     break;
-
-    //                 case 4:
-    //                     $this->handleDocumentUpload($request, $userId);
-    //                     break;
-    //                 case 5:
-    //                     $this->handleLoanDetails($request, $userId);
-
-    //                     return redirect()->route('loan.thankyou');
-    //                 default:
-    //                     return redirect()->route('loan.form', ['current_step' => 1])
-    //                         ->withErrors('Invalid step. Please restart the application process.');
-    //             }
-
-    //             // Move to the next step
-    //             return redirect()->route('loan.form', ['current_step' => $currentStep + 1]);
-    //         } else {
-    //             return redirect()->back()->withErrors('Invalid action. Please try again.');
-    //         }
-    //     } catch (\Exception $e) {
-    //         Log::error('Error handling step: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
-    //         return redirect()->back()->withErrors('Something went wrong. Please try again.');
-    //     }
-    // }
-
-    // public function handleStep(Request $request)
-    // {
-    //     $sessionUserId = session('user_id');
-    //     $sessionUserRole = session('role_id');
-
-    //     if (!$sessionUserId) {
-    //         return redirect()->route('login')->withErrors('User session expired. Please log in again.');
-    //     }
-
-    //     $currentStep = $request->input('current_step');
-
-    //     try {
-    //         // Save user_id from step 1 dropdown to session if admin
-    //         if ($sessionUserRole == 4 && $currentStep == 1) {
-    //             $selectedUserId = $request->input('user_id');
-    //             if (!$selectedUserId) {
-    //                 return redirect()->back()->withErrors('Please select a user.');
-    //             }
-    //             session(['selected_user_id' => $selectedUserId]);
-    //         }
-
-          
-    //         if ($sessionUserRole == 4) {
-    //             $userId = session('selected_user_id');
-    //             if (!$userId) {
-    //                 return redirect()->route('loan.form', ['current_step' => 1])
-    //                     ->withErrors('User not selected. Please select a user in Step 1.');
-    //             }
-    //         } else {
-    //             $userId = $sessionUserId;
-    //         }
-
-    //         if ($request->has('previous')) {
-    //             $currentStep = max(1, $currentStep - 1);
-    //             return redirect()->route('loan.form', ['current_step' => $currentStep]);
-    //         } elseif ($request->has('next')) {
-    //             switch ($currentStep) {
-    //                 case 1:
-    //                     $this->handlePersonalDetails($request, $userId);
-    //                     break;
-    //                 case 2:
-    //                     $this->handleProfessionalDetails($request, $userId);
-    //                     break;
-    //                 case 3:
-    //                     $this->handleEducationDetails($request, $userId);
-    //                     break;
-    //                 case 4:
-    //                     $this->handleDocumentUpload($request, $userId);
-    //                     break;
-    //                 case 5:
-    //                     $this->handleLoanDetails($request, $userId);
-    //                     return redirect()->route('loan.thankyou');
-    //                 default:
-    //                     return redirect()->route('loan.form', ['current_step' => 1])
-    //                         ->withErrors('Invalid step. Please restart the application process.');
-    //             }
-
-    //             return redirect()->route('loan.form', ['current_step' => $currentStep + 1]);
-    //         } else {
-    //             return redirect()->back()->withErrors('Invalid action. Please try again.');
-    //         }
-    //     } catch (\Exception $e) {
-    //         Log::error('Error handling step: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
-    //         return redirect()->back()->withErrors('Something went wrong. Please try again.');
-    //     }
-    // }
+    
     public function handleStep(Request $request)
 {
     $sessionUserId   = session('user_id');
@@ -2383,19 +1502,20 @@ public function ajaxRejectedLoans(Request $request)
     $currentStep = (int) $request->input('current_step');
 
     // ADMIN user selection
-    if (in_array($sessionUserRole,[2,4]) && $currentStep == 1) {
-        if (!$request->user_id) {
-            return back()->withErrors(['user_id' => 'Please select user']);
-        }
+  if (in_array($sessionUserRole,[2,4,6])) {
+
+    if ($request->user_id) {
         session(['selected_user_id' => $request->user_id]);
     }
-if (in_array($sessionUserRole,[2,4])) {
+
+}
+if (in_array($sessionUserRole,[2,4,6])) {
 
     $userId = session('selected_user_id');
 
     if (!$userId) {
         return redirect()->back()->withErrors([
-            'user_id' => 'Please select a customer first.'
+            'user_id' => 'Please select customer first'
         ]);
     }
 
@@ -2408,292 +1528,47 @@ if (in_array($sessionUserRole,[2,4])) {
         ]);
     }
 
-    if ($request->has('next')) {
+  // 🔥 STEP 3: DOCUMENT UPLOAD (SEPARATE - VERY IMPORTANT)
+if ($request->has('upload_docs')) {
 
-        switch ($currentStep) {
-            case 1:
-                $this->handlePersonalDetails($request, $userId);
-                break;
+    $this->handleDocumentUpload($request, $userId);
 
-            case 2:
-                $this->handleProfessionalDetails($request, $userId);
-                break;
+    return back()->with('success', 'Documents uploaded successfully');
+}
 
-            case 3:
-                $this->handleDocumentUpload($request, $userId);
-                break;
 
-            case 4:
-                $this->handleLoanDetails($request, $userId);
-                return redirect()->route('loan.thankyou');
-        }
+// 🔥 NORMAL STEP FLOW
+if ($request->has('next')) {
 
-        // ✅ ONLY if validation passed
-        return redirect()->route('loan.form', [
-            'current_step' => $currentStep + 1
-        ]);
+    switch ($currentStep) {
+
+
+        case 1:
+            $this->handlePersonalDetails($request, $userId);
+            break;
+
+        case 2:
+            $this->handleProfessionalDetails($request, $userId);
+            break;
+
+        case 3:
+    $this->handleDocumentUpload($request, $userId);
+    break;
+
+        case 4:
+            $this->handleLoanDetails($request, $userId);
+            return redirect()->route('loan.thankyou');
     }
+
+    return redirect()->route('loan.form', [
+        'current_step' => $currentStep + 1
+    ]);
+}
 
     return back();
 }
 
-//  public function handleStep(Request $request)
-//     {
-//         $sessionUserId   = session('user_id');
-//         $sessionUserRole = session('role_id');
 
-//         if (!$sessionUserId) {
-//             return redirect()->route('login')
-//                 ->withErrors('User session expired. Please log in again.');
-//         }
-
-//         $currentStep = (int) $request->input('current_step');
-
-//         try {
-
-//             /* ---------------- ADMIN USER SELECTION (STEP 1) ---------------- */
-//             if ($sessionUserRole == 4 && $currentStep == 1) {
-//                 $selectedUserId = $request->input('user_id');
-//                 if (!$selectedUserId) {
-//                     return redirect()->back()->withErrors('Please select a user.');
-//                 }
-//                 session(['selected_user_id' => $selectedUserId]);
-//             }
-
-//             /* ---------------- USER ID RESOLUTION ---------------- */
-//             if ($sessionUserRole == 4) {
-//                 $userId = session('selected_user_id');
-//                 if (!$userId) {
-//                     return redirect()->route('loan.form', ['current_step' => 1])
-//                         ->withErrors('User not selected. Please select a user in Step 1.');
-//                 }
-//             } else {
-//                 $userId = $sessionUserId;
-//             }
-
-//             /* ---------------- PREVIOUS BUTTON ---------------- */
-//             if ($request->has('previous')) {
-//                 return redirect()->route('loan.form', [
-//                     'current_step' => max(1, $currentStep - 1)
-//                 ]);
-//             }
-
-//             /* ---------------- NEXT BUTTON ---------------- */
-//             if ($request->has('next')) {
-
-//                 switch ($currentStep) {
-
-//                     case 1:
-//                         $this->handlePersonalDetails($request, $userId);
-//                         break;
-
-//                     case 2:
-//                         $this->handleProfessionalDetails($request, $userId);
-//                         break;
-
-//                     case 3:
-//                         // ✅ FIX: Step-3 is Upload Documents
-//                         $this->handleDocumentUpload($request, $userId);
-//                         break;
-
-//                     case 4:
-//                         // ✅ FIX: Step-4 is Loan Details
-//                         $this->handleLoanDetails($request, $userId);
-//                         return redirect()->route('loan.thankyou');
-
-//                     default:
-//                         return redirect()->route('loan.form', ['current_step' => 1])
-//                             ->withErrors('Invalid step. Please restart the application.');
-//                 }
-
-//                 // ✅ MOVE TO NEXT STEP
-//                 return redirect()->route('loan.form', [
-//                     'current_step' => $currentStep + 1
-//                 ]);
-//             }
-
-//             return redirect()->back()->withErrors('Invalid action.');
-
-//         } catch (\Exception $e) {
-//             Log::error('Loan Step Error', [
-//                 'message' => $e->getMessage(),
-//                 'step'    => $currentStep,
-//                 'user'    => $userId
-//             ]);
-
-//             // return redirect()->back()
-//             //     ->withErrors('Something went wrong. Please try again.');
-//             return redirect()->back();
-
-//         }
-//     }
-
-
-
-    // protected function handlePersonalDetails(Request $request, $userId)
-    // {
-    //     $validated = $request->validate([
-    //         'mobile_no' => 'required|string|max:15',
-    //         'full_name' => 'required|string',
-    //         'pan_number' => 'required|string',
-    //         'marital_status' => 'required|string|max:50',
-    //         'dob' => 'required|date',
-    //         'residence_address' => 'required|string|max:255',
-    //         'city' => 'required|integer|exists:cities,id',
-    //         'state' => 'required|integer|exists:states,id',
-    //         'pincode' => 'required|string|max:10',
-    //         'loan_category_id' => 'required|integer',
-    //         'bank_id' => 'required|integer',
-    //     ]);
-
-    //     $loan = Loan::where('user_id', $userId)
-    //         ->whereNotIn('status', ['disbursed', 'rejected'])
-    //         ->first();
-
-    //     if (!$loan) {
-           
-    //         $loan = new Loan();
-    //         $loan->user_id = $userId;
-    //         $loan->loan_reference_id = $this->generateLoanReferenceId(); // Generate unique reference ID
-    //         $loan->loan_category_id = $validated['loan_category_id'];
-    //         $loan->bank_id = $validated['bank_id'];
-    //         $loan->status = 'in process';
-    //         $loan->save();
-    //     } else {
-           
-    //         $loan->update([
-    //             'loan_category_id' => $validated['loan_category_id'],
-    //             'bank_id' => $validated['bank_id']
-    //         ]);
-    //     }
-
-       
-    //     DB::table('profile')->updateOrInsert(
-    //         [
-    //             'user_id' => $userId,
-    //             'loan_id' => $loan->loan_id
-    //         ],
-    //         [
-    //             'mobile_no' => $validated['mobile_no'],
-    //             'full_name' => $validated['full_name'],
-    //             'pan_number' => $validated['pan_number'],
-    //             'marital_status' => $validated['marital_status'],
-    //             'dob' => $validated['dob'],
-    //             'residence_address' => $validated['residence_address'],
-    //             'city' => $validated['city'],
-    //             'state' => $validated['state'],
-    //             'pincode' => $validated['pincode']
-    //         ]
-    //     );
-
-   
-    //     Session::put('loan_category_id', $validated['loan_category_id']);
-    //     Session::put('bank_id', $validated['bank_id']);
-
-       
-
-
-    //     Session::put('current_loan_id', $loan->loan_id);
-    // }
-//       protected function handlePersonalDetails(Request $request, $userId)
-//     {
-//         $validated = $request->validate([
-//             'mobile_no' => 'required|string|max:15',
-//             'full_name' => 'required|string',
-//             'pan_number' => 'required|string',
-//             'marital_status' => 'required|string|max:50',
-//             'dob' => 'required|date',
-//             'residence_address' => 'required|string|max:255',
-//             'city' => 'required|integer|exists:cities,id',
-//             'state' => 'required|integer|exists:states,id',
-//             'pincode' => 'required|string|max:10',
-//             'loan_category_id' => 'required|integer',
-//             'bank_id' => 'required|integer',
-//         ]);
-
-//         $loan = Loan::where('user_id', $userId)
-//             ->whereNotIn('status', ['disbursed', 'rejected'])
-//             ->first();
-
-//         if (!$loan) {
-           
-//             $loan = new Loan();
-//             $loan->user_id = $userId;
-//             $loan->loan_reference_id = $this->generateLoanReferenceId(); // Generate unique reference ID
-//             $loan->loan_category_id = $validated['loan_category_id'];
-//             $loan->bank_id = $validated['bank_id'];
-//             $loan->status = 'in process';
-//             $loan->save();
-//         } else {
-           
-//             $loan->update([
-//                 'loan_category_id' => $validated['loan_category_id'],
-//                 'bank_id' => $validated['bank_id']
-//             ]);
-//         }
-
-       
-//    Profile::updateOrCreate(
-//     ['user_id' => $userId],   // ✅ ONLY user_id (UNIQUE)
-//     [
-//         'mobile_no'         => $validated['mobile_no'],
-//         'full_name'         => $validated['full_name'],
-//         'pan_number'        => $validated['pan_number'],
-//         'marital_status'    => $validated['marital_status'],
-//         'dob'               => $validated['dob'],
-//         'residence_address' => $validated['residence_address'],
-//         'city'              => $validated['city'],
-//         'state'             => $validated['state'],
-//         'pincode'           => $validated['pincode'],
-//     ]
-// );
-
-   
-//         Session::put('loan_category_id', $validated['loan_category_id']);
-//         Session::put('bank_id', $validated['bank_id']);
-
-       
-
-
-//         Session::put('current_loan_id', $loan->loan_id);
-//     }
-
-// protected function handlePersonalDetails(Request $request, $userId)
-// {
-//     $validated = $request->validate([
-//     'mobile_no' => 'required|digits:10',
-//     'full_name' => 'required|string|min:3',
-//     'pan_number' => 'required|regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/',
-//     'marital_status' => 'required',
-//     'dob' => 'required|date',
-//     'residence_address' => 'required|min:5',
-//     'state' => 'required',
-//     'city' => 'required',
-//     'pincode' => 'required|digits:6',
-//     'loan_category_id' => 'required',
-//     'bank_id' => 'required',
-// ]);
-
-//     // ✅ ONLY PROFILE (NO LOAN HERE)
-//     Profile::updateOrCreate(
-//         ['user_id' => $userId],
-//         [
-//             'mobile_no'         => $validated['mobile_no'],
-//             'full_name'         => $validated['full_name'],
-//             'pan_number'        => $validated['pan_number'],
-//             'marital_status'    => $validated['marital_status'],
-//             'dob'               => $validated['dob'],
-//             'residence_address' => $validated['residence_address'],
-//             'city'              => $validated['city'],
-//             'state'             => $validated['state'],
-//             'pincode'           => $validated['pincode'],
-//         ]
-//     );
-
-//     // store only selections
-//     Session::put('loan_category_id', $validated['loan_category_id']);
-//     Session::put('bank_id', $validated['bank_id']);
-// }
 protected function handlePersonalDetails(Request $request, $userId)
 {
   // Normalize gender to lowercase
@@ -2777,161 +1652,7 @@ protected function handlePersonalDetails(Request $request, $userId)
 
 
 
-    // protected function handleProfessionalDetails(Request $request, $userId)
-    // {
-
-       
-
-    //     $validated = $request->validate([
-    //         'profession_type' => 'required|string|in:salaried,self',
-    //         'company_name' => 'required|string|max:255',
-    //         'industry' => 'required|string|max:100',
-    //         'company_address' => 'required|string|max:255',
-    //         'experience_year' => 'required|integer',
-    //         'designation' => 'required|string|max:100',
-    //         'netsalary' => $request->input('profession_type') === 'salaried' ? 'required|numeric' : 'nullable|numeric',
-    //         'gross_salary' => $request->input('profession_type') === 'salaried' ? 'required|numeric' : 'nullable|numeric',
-    //         'selfincome' => $request->input('profession_type') === 'self' ? 'required|numeric' : 'nullable|numeric',
-    //         'business_establish_date' => $request->input('profession_type') === 'self' ? 'required|date' : 'nullable|date',
-    //     ]);
-
-
-    //     $loan_id = Session::get('current_loan_id') ?? Loan::where('user_id', $userId)
-    //         ->whereNotIn('status', ['disbursed', 'rejected'])
-    //         ->first();
-    //     $professional = Professional::where('user_id', $userId)->where('loan_id', $loan_id)->first();
-
-    //     if (!$professional) {
-            
-    //         Professional::create([
-    //             'user_id' => $userId,
-    //             'loan_id' => $loan_id,
-    //             'profession_type' => $validated['profession_type'],
-    //             'company_name' => $validated['company_name'],
-    //             'industry' => $validated['industry'],
-    //             'company_address' => $validated['company_address'],
-    //             'experience_year' => $validated['experience_year'],
-    //             'designation' => $validated['designation'],
-    //             'netsalary' => $validated['netsalary'] ?? null,
-    //             'gross_salary' => $validated['gross_salary'] ?? null,
-    //             'business_establish_date' => $validated['business_establish_date'] ?? null,
-    //             'selfincome' => $validated['selfincome'] ?? null,
-    //         ]);
-    //     } else {
-          
-    //         $professional->update([
-    //             'profession_type' => $validated['profession_type'],
-    //             'company_name' => $validated['company_name'],
-    //             'industry' => $validated['industry'],
-    //             'company_address' => $validated['company_address'],
-    //             'experience_year' => $validated['experience_year'],
-    //             'designation' => $validated['designation'],
-    //             'netsalary' => $validated['netsalary'] ?? null,
-    //             'gross_salary' => $validated['gross_salary'] ?? null,
-    //             'business_establish_date' => $validated['business_establish_date'] ?? null,
-    //             'selfincome' => $validated['selfincome'] ?? null,
-    //         ]);
-    //     }
-    // }
-
-//     protected function handleProfessionalDetails(Request $request, $userId)
-// {
-//     $validated = $request->validate([
-//         'profession_type' => 'required|string|in:salaried,self',
-//         'company_name' => 'required|string|max:255',
-//         'industry' => 'required|string|max:100',
-//         'company_address' => 'required|string|max:255',
-//         'experience_year' => 'required|integer',
-//         'designation' => 'required|string|max:100',
-//         'netsalary' => $request->profession_type === 'salaried' ? 'required|numeric' : 'nullable|numeric',
-//         'gross_salary' => $request->profession_type === 'salaried' ? 'required|numeric' : 'nullable|numeric',
-//         'selfincome' => $request->profession_type === 'self' ? 'required|numeric' : 'nullable|numeric',
-//         'business_establish_date' => $request->profession_type === 'self' ? 'required|date' : 'nullable|date',
-//     ]);
-
-   
-//     $loanId = session('current_loan_id');
-
-//     if (!$loanId) {
-//         throw new \Exception('Loan ID missing in session');
-//     }
-
-   
-//     Professional::updateOrCreate(
-//         [
-//             'loan_id' => $loanId,   // UNIQUE KEY
-//         ],
-//         [
-//             'user_id' => $userId,
-//             'profession_type' => $validated['profession_type'],
-//             'company_name' => $validated['company_name'],
-//             'industry' => $validated['industry'],
-//             'company_address' => $validated['company_address'],
-//             'experience_year' => $validated['experience_year'],
-//             'designation' => $validated['designation'],
-//             'netsalary' => $validated['netsalary'] ?? null,
-//             'gross_salary' => $validated['gross_salary'] ?? null,
-//             'selfincome' => $validated['selfincome'] ?? null,
-//             'business_establish_date' => $validated['business_establish_date'] ?? null,
-//         ]
-//     );
-// }
-// protected function handleProfessionalDetails(Request $request, $userId)
-// {
-//     // $validated = $request->validate([
-//     //     'profession_type' => 'required|string|in:salaried,self',
-//     //     'company_name' => 'required|string|max:255',
-//     //     'industry' => 'required|string|max:100',
-//     //     'company_address' => 'required|string|max:255',
-//     //     'experience_year' => 'required|integer',
-//     //     'designation' => 'required|string|max:100',
-//     //     'netsalary' => $request->profession_type === 'salaried' ? 'required|numeric' : 'nullable|numeric',
-//     //     'gross_salary' => $request->profession_type === 'salaried' ? 'required|numeric' : 'nullable|numeric',
-//     //     'selfincome' => $request->profession_type === 'self' ? 'required|numeric' : 'nullable|numeric',
-//     //     'business_establish_date' => $request->profession_type === 'self' ? 'required|date' : 'nullable|date',
-//     // ]);
-//     $validated = $request->validate([
-//     'profession_type' => 'required|in:salaried,self',
-//     'company_name' => 'required|min:2',
-//     'industry' => 'required',
-//     'company_address' => 'required|min:5',
-//     'experience_year' => 'required|integer|min:0',
-//     'designation' => 'required',
-
-//     'netsalary' => $request->profession_type === 'salaried'
-//         ? 'required|numeric|min:1'
-//         : 'nullable',
-
-//     'gross_salary' => $request->profession_type === 'salaried'
-//         ? 'required|numeric|min:1'
-//         : 'nullable',
-
-//     'selfincome' => $request->profession_type === 'self'
-//         ? 'required|numeric|min:1'
-//         : 'nullable',
-
-//     'business_establish_date' => $request->profession_type === 'self'
-//         ? 'required|date'
-//         : 'nullable',
-// ]);
-
-//     // ✅ NO loan_id here
-//     Professional::updateOrCreate(
-//         ['user_id' => $userId],
-//         [
-//             'profession_type' => $validated['profession_type'],
-//             'company_name' => $validated['company_name'],
-//             'industry' => $validated['industry'],
-//             'company_address' => $validated['company_address'],
-//             'experience_year' => $validated['experience_year'],
-//             'designation' => $validated['designation'],
-//             'netsalary' => $validated['netsalary'] ?? null,
-//             'gross_salary' => $validated['gross_salary'] ?? null,
-//             'selfincome' => $validated['selfincome'] ?? null,
-//             'business_establish_date' => $validated['business_establish_date'] ?? null,
-//         ]
-//     );
-// }
+    
 
 protected function handleProfessionalDetails(Request $request, $userId)
 {
@@ -3079,342 +1800,7 @@ protected function handleProfessionalDetails(Request $request, $userId)
             );
         }
     }
-    // protected function handleDocumentUpload(Request $request, $userId)
-    // {
-
-    //     $loan_id = Session::get('current_loan_id') ?? Loan::where('user_id', $userId)
-    //         ->whereNotIn('status', ['disbursed', 'rejected'])
-    //         ->first();
-
-    //     $documents = ['aadhar_card', 'pancard', 'qualification_proof', 'salary_slip', 'form_16', 'bank_statement', 'passport', 'light_bill', 'dl', 'rent_agree']; // List of possible document types
-
-    //     foreach ($documents as $docType) {
-    //         if ($request->hasFile($docType)) {
-    //             $file = $request->file($docType);
-    //             $fileName = $docType . '_' . $userId . '.' . $file->extension();
-    //             $filePath = $file->storeAs('documents', $fileName, 'public');
-
-    //             DB::table('documents')->updateOrInsert(
-    //                 [
-    //                     'user_id' => $userId,
-    //                     'loan_id' => $loan_id,
-    //                     'document_name' => $docType
-    //                 ],
-    //                 [
-    //                     'file_path' => $filePath
-    //                 ]
-    //             );
-    //         }
-    //     }
-    // }
-    // protected function handleLoanDetails(Request $request, $userId)
-    // {
-    //     // Retrieve stored loan category and bank from session
-    //     $loan_category_id = Session::get('loan_category_id');
-    //     $bank_id = Session::get('bank_id');
-
-    //     if (!$loan_category_id || !$bank_id) {
-    //         return redirect()->back()->withErrors(['error' => 'Loan category and bank ID are required.']);
-    //     }
-
-    //     $validated = $request->validate([
-    //         'amount' => 'required|numeric',
-    //         'tenure' => 'required|integer',
-    //         'referral_code' => 'nullable|string|max:50',
-    //     ]);
-
-    //     if (!empty($validated['referral_code'])) {
-    //         $referralUser = DB::table('users')->where('referral_code', $validated['referral_code'])->first();
-
-    //              if ($referralUser=="" || $referralUser==Null || $referralUser==null ) {
-    //                 // dd($referralUser);die;
-    //                 return redirect()->back()->withErrors(['error' => 'Referral code is incorrect. Please try again.']);
-    //               }
-
-    //          // If referral user not found, return an error
-
-
-    //         $referralUserId = $referralUser->id ?? null;
-    //     }
-
-    //     // dd($validated);die;
-
-    //     $loanReferenceId = Str::upper(Str::random(8));
-    //     $referralUserId = null;
-
-
-
-    //     $is_loan = Session::get('is_loan');
-    //     $loan_id = Session::get('loan_id', null);
-
-    //     if ($is_loan == 1) {
-    //         // Ensure the loan is created if not existing
-    //         $loan = Loan::updateOrCreate(
-    //             ['user_id' => $userId, 'loan_id' => $loan_id], // Find existing loan if any
-    //             [
-    //                 'user_id' => $userId,
-    //                 'loan_reference_id' => $loanReferenceId,
-    //                 'loan_category_id' => $loan_category_id,
-    //                 'bank_id' => $bank_id,
-    //                 'amount' => $validated['amount'],
-    //                 'tenure' => $validated['tenure'],
-    //                 'referral_user_id' => $referralUserId,
-    //                 'status' => 'in process',
-    //             ]
-    //         );
-
-    //         // Store loan ID in session for further steps
-    //         Session::put('loan_id', $loan->loan_id);
-    //     } else {
-    //         // If not a new loan, update the existing loan details
-    //         DB::table('loans')->where('user_id', $userId)->update([
-    //             'loan_category_id' => $loan_category_id,
-    //             'amount' => $validated['amount'],
-    //             'tenure' => $validated['tenure'],
-    //             'referral_user_id' => $referralUserId,
-    //         ]);
-    //     }
-    // }
-
-    //     protected function handleLoanDetails(Request $request)
-    // {
-
-    //     $loan_category_id = Session::get('loan_category_id');
-    //     $bank_id = Session::get('bank_id');
-
-
-
-    //     if (!$loan_category_id || !$bank_id) {
-    //         return redirect()->back()->withErrors(['error' => 'Loan category and bank ID are required.']);
-    //     }
-
-    //     $validated = $request->validate([
-    //         'amount' => 'required|numeric',
-    //         'tenure' => 'required|integer',
-    //         'referral_code' => 'nullable|string|max:50',
-    //     ]);
-
-
-    //     // Generate loan reference ID
-    //     $loanReferenceId = Str::upper(Str::random(8));
-    //     $referralUserId = null;
-
-
-
-
-    //     if (!empty($validated['referral_code'])) {
-    //         $referralUser = DB::table('users')->where('referral_code', $validated['referral_code'])->first();
-    //         if (!$referralUser) {
-    //             // echo $referralUser;die;
-    //             return redirect()->back()->withErrors(['referral_code' => 'Referral code is incorrect. Please try again.']);
-
-    //                 // dd($validated);die;
-
-    //         }
-    //         $referralUserId = $referralUser->id;
-    //     } 
-
-
-
-    //     // Check loan session and create or update loan data
-    //     $is_loan = Session::get('is_loan');
-    //     $loan_id = Session::get('loan_id', null);
-
-    //     if ($is_loan == 1) {
-    //         // Ensure the loan is created if not existing
-    //         $loan = Loan::updateOrCreate(
-    //             ['user_id' => $user->id, 'loan_id' => $loan_id], // Find existing loan if any
-    //             [
-    //                 'user_id' => $user->id,
-    //                 'loan_reference_id' => $loanReferenceId,
-    //                 'loan_category_id' => $loan_category_id,
-    //                 'bank_id' => $bank_id,
-    //                 'amount' => $validated['amount'],
-    //                 'tenure' => $validated['tenure'],
-    //                 'referral_user_id' => $referralUserId,
-    //                 'status' => 'in process',
-    //             ]
-    //         );
-
-    //         // Store loan ID in session for further steps
-    //         Session::put('loan_id', $loan->loan_id);
-    //     } else {
-    //         // If not a new loan, update the existing loan details
-    //         DB::table('loans')->where('user_id', $user->id)->update([
-    //             'loan_category_id' => $loan_category_id,
-    //             'amount' => $validated['amount'],
-    //             'tenure' => $validated['tenure'],
-    //             'referral_user_id' => $referralUserId,
-    //         ]);
-    //     }
-
-
-    //      return redirect()->route('loan.thankyou');
-
-
-
-    // }
-
-    // protected function handleLoanDetails(Request $request, $userId)
-    // {
-    //     // Retrieve stored loan category and bank from session
-    //     $loan_category_id = Session::get('loan_category_id');
-    //     $bank_id = Session::get('bank_id');
-
-    //     if (!$loan_category_id || !$bank_id) {
-    //         return redirect()->back()->withErrors(['error' => 'Loan category and bank ID are required.']);
-    //     }
-
-    //     $validated = $request->validate([
-    //         'amount' => 'required|numeric',
-    //         'tenure' => 'required|integer',
-    //         'referral_code' => 'nullable|string|max:50',
-    //     ]);
-
-    //     $loanReferenceId = $this->generateLoanReferenceId();
-    //     $referralUserId = null;
-
-    //     if (!empty($validated['referral_code'])) {
-    //         $referralUser = DB::table('users')->where('referral_code', $validated['referral_code'])->first();
-    //         $referralUserId = $referralUser->id ?? null;
-    //     }
-
-    //     $existingLoan = Session::get('current_loan_id');
-
-    //     if ($existingLoan && is_int($existingLoan)) {
-    //         $existingLoan = Loan::find($existingLoan); // Convert ID to model
-    //     }
-
-    //     if (!$existingLoan) {
-    //         // First-time creation
-    //         $loan = Loan::create([
-    //             'user_id' => $userId,
-    //             'loan_reference_id' => $loanReferenceId,
-    //             'loan_category_id' => $loan_category_id,
-    //             'bank_id' => $bank_id,
-    //             'amount' => $validated['amount'],
-    //             'tenure' => $validated['tenure'],
-    //             'referral_user_id' => $referralUserId,
-    //             'status' => 'in process',
-    //         ]);
-    //         Session::put('loan_reference_id', $loanReferenceId);
-    //         Session::put('current_loan_id', $loan->loan_id);
-    //     } else {
-    //         $existingLoan->update([
-    //             'loan_category_id' => $loan_category_id,
-    //             'bank_id' => $bank_id,
-    //             'amount' => $validated['amount'],
-    //             'tenure' => $validated['tenure'],
-    //             'referral_user_id' => $referralUserId,
-    //         ]);
-    //         Session::put('loan_reference_id', $loanReferenceId);
-    //         Session::put('current_loan_id', $existingLoan->loan_id);
-    //     }
-
-    //     Session::put('is_loan', true);
-    // }
-
-// protected function handleDocumentUpload(Request $request, $userId)
-// {
-//     /* ===============================
-//        STEP 1: VALIDATION (OPTIONAL FILES)
-//        =============================== */
-
-//     $request->validate([
-//         'aadhar_card'         => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'pancard'             => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'qualification_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'salary_slip'         => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'form_16'             => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'bank_statement'      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'passport'            => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'light_bill'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'driving_license'     => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'rent_agreement'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'business_license'            => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'itr_with_tax_paid_challan'   => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'balance_sheet'               => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'bank_acount_statments'       => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'offer_letter'                => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'hr_verification_letter'      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'closure_letter'              => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'degree_certificate'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'propert_document'            => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'existing_loan_statment'      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//         'saction_letter'              => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-//     ], [
-//         'mimes' => 'Only JPG, PNG or PDF files are allowed.',
-//         'max'   => 'File size must be less than 2MB.',
-//     ]);
-
-//     /* ===============================
-//        STEP 2: LOAN FETCH (SAFE)
-//        =============================== */
-
-//     $loan = Session::get('current_loan_id')
-//         ? Loan::find(Session::get('current_loan_id'))
-//         : Loan::where('user_id', $userId)
-//             ->whereNotIn('status', ['disbursed', 'rejected'])
-//             ->first();
-
-//     if (!$loan) {
-//         return; // loan नसल्यास upload skip
-//     }
-
-//     /* ===============================
-//        STEP 3: DOCUMENT UPLOAD
-//        =============================== */
-
-//     $documents = [
-//         'aadhar_card',
-//         'pancard',
-//         'qualification_proof',
-//         'salary_slip',
-//         'form_16',
-//         'bank_statement',
-//         'passport',
-//         'light_bill',
-//         'driving_license',
-//         'rent_agreement',
-//         'business_license',
-//         'itr_with_tax_paid_challan',
-//         'balance_sheet',
-//         'bank_acount_statments',
-//         'offer_letter',
-//         'hr_verification_letter',
-//         'closure_letter',
-//         'degree_certificate',
-//         'propert_document',
-//         'existing_loan_statment',
-//         'saction_letter',
-//     ];
-
-//     foreach ($documents as $docType) {
-
-//         if ($request->hasFile($docType)) {
-
-//             $file = $request->file($docType);
-
-//             // ✅ unique filename (overwrite issue avoid)
-//             $fileName = $docType . '_' . $userId . '_' . time() . '.' . $file->getClientOriginalExtension();
-
-//             $filePath = $file->storeAs('documents', $fileName, 'public');
-
-//             DB::table('documents')->updateOrInsert(
-//                 [
-//                     'user_id'       => $userId,
-//                     'loan_id'       => $loan->loan_id,
-//                     'document_name' => $docType
-//                 ],
-//                 [
-//                     'file_path' => $filePath,
-//                     'updated_at' => now(),getCities
-//                     'created_at' => now(),
-//                 ]
-//             );
-//         }
-//     }
-// }
+    
 protected function handleDocumentUpload(Request $request, $userId)
 {
     /* ===============================
@@ -3458,10 +1844,10 @@ if (Session::get('current_loan_id')) {
 
 // 2. If not found → try DB (latest active loan)
 if (!$loan) {
-    $loan = Loan::where('user_id', $userId)
-        ->whereNotIn('status', ['disbursed', 'rejected'])
-        ->latest()
-        ->first();
+   if ($loan) {
+    $loan->status = strtolower($request->status);
+    $loan->save();
+}
 
     // 👉 found → set session
     if ($loan) {
@@ -3546,6 +1932,12 @@ if (!$loan) {
 
 
 
+
+
+
+
+
+
 protected function handleLoanDetails(Request $request, $userId)
 {
     Log::info('DEBUG ADMIN LOAN SESSION', [
@@ -3602,6 +1994,17 @@ protected function handleLoanDetails(Request $request, $userId)
          * 🔹 CHECK EXISTING LOAN IN SESSION
          * -------------------------------------------------
          */
+        // 🔥 DSA FIX (ADD THIS)
+if (session('role_id') == 6) {
+
+    $mappedUserId = DB::table('dsa_customers')
+        ->where('id', $userId)
+        ->value('user_id');
+
+    if ($mappedUserId) {
+        $userId = $mappedUserId;
+    }
+}
        $existingLoanId = Session::get('current_loan_id');
 $loan = null;
 
@@ -3623,9 +2026,12 @@ if ($loan && in_array($loan->status, ['disbursed', 'rejected'])) {
          */
         if (!$loan) {
 
-            // First-time loan creation
   $loan = Loan::create([
     'user_id' => $userId,
+
+    // 🔥 ADD THIS LINE
+    'dsa_id' => session('role_id') == 6 ? session('user_id') : null,
+
     'loan_reference_id' => $this->generateLoanReferenceId(),
     'loan_category_id' => $loan_category_id,
     'bank_id' => $bank_id,
@@ -3634,7 +2040,6 @@ if ($loan && in_array($loan->status, ['disbursed', 'rejected'])) {
     'referral_user_id' => $referralUserId,
     'status' => 'in process',
 
-    // IMPORTANT
     'agent_id' => session('role_id') == 2 ? session('user_id') : null,
 ]);
 
@@ -3650,6 +2055,11 @@ if ($loan && in_array($loan->status, ['disbursed', 'rejected'])) {
     'tenure' => $validated['tenure'],
     'referral_user_id' => $referralUserId,
     'status' => 'in process',
+
+    // 🔥 ADD THIS
+    'dsa_id' => session('role_id') == 6 
+    ? session('user_id') 
+    : ($loan->dsa_id ?? null),
 
     'agent_id' => session('role_id') == 2 ? session('user_id') : $loan->agent_id,
 ]);
@@ -3699,128 +2109,164 @@ if ($loan && in_array($loan->status, ['disbursed', 'rejected'])) {
 
 
 
-    public function submitLoanApplication(Request $request)
-    {
-        $userId = session('user_id'); // default = customer
+ public function submitLoanApplication(Request $request)
+{
+    $userId = session('user_id'); // default = customer
 
-// ✅ ADMIN FLOW FIX
-if (session('role_id') == 4) {
-    $userId = session('selected_user_id'); // customer selected by admin
-}
+    // ✅ ADMIN FLOW FIX
+    if (session('role_id') == 4) {
+        $userId = session('selected_user_id'); // customer selected by admin
+    }
 
-         if (!$userId) {
+    // ✅ SAFETY CHECK (ADD)
+    if (!$userId) {
         return redirect()->route('login')
             ->withErrors('User / Customer session missing.');
     }
 
-        DB::beginTransaction();
-        try {
-            // Save Personal Details
-            DB::table('profile')->updateOrInsert(
-                ['user_id' => $userId],
-                $request->only([
-                    'mobile_no',
-                    'marital_status',
-                    'gender',
-                    'dob',
-                    'residence_address',
-                    'city',
-                    'state',
-                    'pincode',
-                    'loan_category_id',
-                    'bank_id'
-                ])
-            );
+    DB::beginTransaction();
 
-            // Create or Update Loan
-            $loan = Loan::updateOrCreate(
-                ['user_id' => $userId],
-                [
-                    'loan_reference_id' => session('loan_reference_id') ?? $this->generateLoanReferenceId(),
-                    'loan_category_id' => $request->loan_category_id,
-                    'bank_id' => $request->bank_id,
-                    'status' => 'in process',
-                    'loan_amount' => $request->loan_amount,
-                    'loan_tenure' => $request->loan_tenure,
-                    'interest_rate' => $request->interest_rate,
-                    'purpose' => $request->purpose
-                ]
-            );
+    try {
 
-            // Save Professional Details
-            Professional::updateOrCreate(
-                ['user_id' => $userId],
-                $request->only([
-                    'profession_type',
-                    'company_name',
-                    'industry',
-                    'company_address',
-                    'experience_year',
-                    'designation',
-                    'netsalary',
-                    'gross_salary',
-                    'selfincome',
-                    'business_establish_date'
-                ])
-            );
+        // ✅ Save Personal Details
+        DB::table('profile')->updateOrInsert(
+            ['user_id' => $userId],
+            $request->only([
+                'mobile_no',
+                'marital_status',
+                'gender',
+                'dob',
+                'residence_address',
+                'city',
+                'state',
+                'pincode',
+                'loan_category_id',
+                'bank_id'
+            ])
+        );
 
-            // Save Education Details
-            Education::updateOrCreate(
-                ['user_id' => $userId],
-                $request->only(['qualification', 'pass_year', 'college_name', 'college_address'])
-            );
+        // ✅ FETCH EXISTING LOAN (FIX + SOFT DELETE CHECK)
+        $loan = Loan::where('user_id', $userId)
+            ->whereNotIn('status', ['disbursed','rejected'])
+            ->whereNull('deleted_at') // 🔥 ADD
+            ->latest()
+            ->first();
 
-            // Save Existing Loan Details (If Any)
-            if ($request->has('existing_loans')) {
-                foreach ($request->existing_loans as $loanData) {
-                    DB::table('existing_loan')->updateOrInsert(
-                        ['user_id' => $userId, 'existing_loan_id' => $loanData['existing_loan_id'] ?? null],
-                        [
-                            'type_loan' => $loanData['type_loan'] ?? null,
-                            'loan_amount' => $loanData['loan_amount'] ?? null,
-                            'tenure_loan' => $loanData['tenure_loan'] ?? null,
-                            'emi_amount' => $loanData['emi_amount'] ?? null,
-                            'sanction_date' => $loanData['sanction_date'] ?? null,
-                            'emi_bounce_count' => $loanData['emi_bounce_count'] ?? null,
-                        ]
-                    );
-                }
-            }
-
-            // Save Uploaded Documents
-            if ($request->hasFile('documents')) {
-                foreach ($request->file('documents') as $document) {
-                    $documentPath = $document->store('documents/' . $userId, 'public');
-
-                    DB::table('document_uploads')->insert([
-                        'user_id' => $userId,
-                        'document_path' => $documentPath,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                }
-            }
-
-            DB::commit();
-
-
-            $role_id = session()->get('role_id');
-
-            if ($role_id == 4) {
-                return view('admin.thank-you', ['loanReferenceId' => $loan->loan_reference_id]);
-            }
-
-            // Return Thank You View with Loan Reference ID
-            return view('frontend.thank-loan', ['loanReferenceId' => $loan->loan_reference_id]);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Loan application submission failed: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
-            // return redirect()->back()->withErrors('Something went wrong. Please try again.');
-            throw $e; // or just let validation handle it
-
+        // ✅ CREATE IF NOT EXISTS (ADD)
+        if (!$loan) {
+            $loan = Loan::create([
+                'user_id' => $userId,
+                'loan_reference_id' => $this->generateLoanReferenceId(),
+                'status' => 'in process',
+                'dsa_id' => session('role_id') == 6 ? session('user_id') : null,
+            ]);
         }
-    }
 
+        // ✅ ALWAYS UPDATE
+        $loan->update([
+            'loan_category_id' => $request->loan_category_id,
+            'bank_id' => $request->bank_id,
+            'status' => 'in process',
+
+            // 🔥 SAFE DSA UPDATE
+            'dsa_id' => session('role_id') == 6 
+                ? session('user_id') 
+                : $loan->dsa_id,
+
+            'loan_amount' => $request->loan_amount,
+            'loan_tenure' => $request->loan_tenure,
+            'interest_rate' => $request->interest_rate,
+            'purpose' => $request->purpose
+        ]);
+
+        // ✅ Save Professional Details
+        Professional::updateOrCreate(
+            ['user_id' => $userId],
+            $request->only([
+                'profession_type',
+                'company_name',
+                'industry',
+                'company_address',
+                'experience_year',
+                'designation',
+                'netsalary',
+                'gross_salary',
+                'selfincome',
+                'business_establish_date'
+            ])
+        );
+
+        // ✅ Save Education Details
+        Education::updateOrCreate(
+            ['user_id' => $userId],
+            $request->only([
+                'qualification',
+                'pass_year',
+                'college_name',
+                'college_address'
+            ])
+        );
+
+        // ✅ Existing Loans
+        if ($request->has('existing_loans')) {
+            foreach ($request->existing_loans as $loanData) {
+                DB::table('existing_loan')->updateOrInsert(
+                    [
+                        'user_id' => $userId,
+                        'existing_loan_id' => $loanData['existing_loan_id'] ?? null
+                    ],
+                    [
+                        'type_loan' => $loanData['type_loan'] ?? null,
+                        'loan_amount' => $loanData['loan_amount'] ?? null,
+                        'tenure_loan' => $loanData['tenure_loan'] ?? null,
+                        'emi_amount' => $loanData['emi_amount'] ?? null,
+                        'sanction_date' => $loanData['sanction_date'] ?? null,
+                        'emi_bounce_count' => $loanData['emi_bounce_count'] ?? null,
+                    ]
+                );
+            }
+        }
+
+        // ✅ Documents Upload
+        if ($request->hasFile('documents')) {
+            foreach ($request->file('documents') as $document) {
+
+                $documentPath = $document->store('documents/' . $userId, 'public');
+
+                DB::table('document_uploads')->insert([
+                    'user_id' => $userId,
+                    'document_path' => $documentPath,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
+
+        DB::commit();
+
+        $role_id = session()->get('role_id');
+
+        if ($role_id == 4) {
+            return view('admin.thank-you', [
+                'loanReferenceId' => $loan->loan_reference_id
+            ]);
+        }
+
+        return view('frontend.thank-loan', [
+            'loanReferenceId' => $loan->loan_reference_id
+        ]);
+
+    } catch (\Exception $e) {
+
+        DB::rollBack();
+
+        Log::error('Loan application submission failed: ' . $e->getMessage(), [
+            'stack' => $e->getTraceAsString()
+        ]);
+
+        throw $e;
+    }
+}
 
 
 
@@ -4368,16 +2814,6 @@ public function applyNow()
 }
 
 
-// public function applyNow()
-// {
-//     if (Auth::check()) {
-//         // user already logged in
-//         return redirect('/start_loan/1');
-//     }
-
-//     // user not logged in → go to login/signup
-//     return redirect()->route('authv3.login.form');
-// }
 
     //fetch recent loans
     public function fetchRecentLoans($limit = 5)

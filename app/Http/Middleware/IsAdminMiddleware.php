@@ -15,10 +15,9 @@ class IsAdminMiddleware
      */
   public function handle(Request $request, Closure $next): Response
 {
-   
     $role_id = session()->get('role_id');
 
-    if ($role_id == 4) { // admin
+    if (in_array($role_id, [4, 6])) { // ✅ admin + dsa
         return $next($request);
     }
 

@@ -16,7 +16,7 @@ class IsDsaMiddleware
         $role_id = session()->get('role_id');
 
         // ✅ Only DSA allowed
-        if ($role_id == config('constants.roles.dsa')) {
+        if ($role_id == 6) {
             return $next($request);
         }
 

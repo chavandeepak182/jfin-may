@@ -69,6 +69,9 @@ class AdminController extends Controller
             if ($user->role_id == 1) {
                 return redirect('/admin/loan-application');
             }
+            if ($user->role_id == config('roles.roles.dsa')) {
+    return redirect()->route('dsa.dashboard');
+}
         } else {
             return back()->withErrors(['otp' => 'OTP does not match, try again']);
         }

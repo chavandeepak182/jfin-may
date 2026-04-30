@@ -15,6 +15,7 @@ use App\Models\UserRelation;
 use App\Models\MlmUsers;
 use App\Models\Category;
 use App\Models\Commission;
+use App\Http\Controllers\UsersController;
 
 
 
@@ -30,35 +31,53 @@ class CommissionController extends Controller
     }    
 
     public function editCommission($com_id){    
-        $data['commission'] = DB::table('commission')->where('com_id', $com_id)->get();
+       $data['commission'] = DB::table('commission')
+    ->where('com_id', $com_id)
+    ->first();
         return view('commission.editCommission',compact('data'));
 
     }
 
-    public function updateCommission(Request $request){
-        $com_id = $request->com_id;
-  
-        $updateCommission = array(
-            'commission_amount'=> $request->commission_amount
-        );
+  public function updateCommission(Request $request)
+{
+    try {
+        // ✅ Get ID properly (trim avoids space issue)
+        $com_id = trim($request->com_id);
 
-        try{     
+        // ✅ Update data
+        DB::table('commission')
+            ->where('com_id', $com_id)
+            ->update([
+                'commission_amount' => $request->commission_amount
+            ]);
 
-            //activity logs
-            $username = Session::get('username');
-            $user_id = Session::get('user_id');
-            $details = "Commission amount updated successfully by ".$username; 
-            app(UsersController::class)->insertActivityLogs($user_id, $details);
-            //end of activity logs   
+        // ✅ Safe activity log (won’t break code)
+        try {
+            if (class_exists(\App\Http\Controllers\UsersController::class)) {
+                $username = Session::get('username');
+                $user_id = Session::get('user_id');
+                $details = "Commission amount updated successfully by " . $username;
 
-            $update_bank = DB::table('commission')->where('com_id',$com_id)->update($updateCommission);
-            return response()->json(['status'=>1,'msg'=>'Commission amount updated successfully !']);
-
-        }catch (\Exception $e) {           
-            return $e->getMessage();
+                app(\App\Http\Controllers\UsersController::class)
+                    ->insertActivityLogs($user_id, $details);
+            }
+        } catch (\Exception $logError) {
+            // ignore log error (important)
         }
-    }
 
+        // ✅ Always return JSON
+        return response()->json([
+            'status' => 1,
+            'msg' => 'Commission amount updated successfully!'
+        ]);
+
+    } catch (\Exception $e) {
+    return response()->json([
+        'status' => 0,
+        'msg' => $e->getMessage()
+    ]);
+}
+}
     public function deleteCommission(Request $request){
         try{        
             $com_id = $request->com_id;    

@@ -126,6 +126,23 @@ JFS | Add Property
                 <span class="property-stat-status">Tracked from Records</span>
             </div>
         </div>
+        <!-- ✅ PROPERTY PRICE RANGE CARD -->
+<a href="{{ route('admin.price.range') }}" style="text-decoration:none;">
+    <div class="property-stat-card">
+
+        <div class="property-stat-icon purple">
+            <i class="fas fa-tags"></i>
+        </div>
+
+        <div class="property-stat-content">
+            <h3>Price Range</h3>
+            <!-- <div class="property-stat-value">View</div> -->
+             <div class="property-stat-value">View</div>
+            <span class="property-stat-status">Manage Property Pricing</span>
+        </div>
+
+    </div>
+</a>
 
        
             
