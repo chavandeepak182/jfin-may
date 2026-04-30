@@ -6,6 +6,8 @@
 @section('content')
     @parent
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
    
  <style>/* ===== Overlay ===== */
 .modal-overlay {
@@ -79,7 +81,20 @@ body.modal-open {
 .modal-backdrop.show {
     opacity: 0 !important;
 }
+.select2-container .select2-selection--single {
+    height: 38px !important;
+    padding: 5px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
 
+.select2-container .select2-selection__rendered {
+    line-height: 28px !important;
+}
+
+.select2-container .select2-selection__arrow {
+    height: 38px !important;
+}
 /* ===== Header ===== */
 .modal-header {
     display: flex;
@@ -242,8 +257,7 @@ body.modal-open {
 <div class="customer-overview-grid">
 
     <!-- TOTAL DSA -->
-    <a href="javascript:void(0)" class="overview-link active">
-        <div class="overview-card green">
+    <div class="overview-card green" onclick="loadDSA()" style="cursor:pointer;">
 
             <div class="overview-icon">
                 <i class="fas fa-user-tie"></i>
@@ -256,12 +270,98 @@ body.modal-open {
             </div>
 
         </div>
-    </a>
+    
+   <div class="overview-card teal" onclick="loadCustomers()" style="cursor:pointer;">
 
+        <div class="overview-icon">
+            <i class="fas fa-users"></i>
+        </div>
+
+        <div class="overview-content">
+            <h3>Total Customers</h3>
+            <p>{{ $totalCustomers }}</p>
+            <span>All DSA Users</span>
+        </div>
+
+    </div>
+    <div class="overview-card" onclick="loadDsaMIS()" style="cursor:pointer; background:#6366f1; color:#fff;">
+    <div class="overview-icon">
+        <i class="fas fa-chart-line"></i>
+    </div>
+    <div class="overview-content">
+        <h3>All DSA MIS</h3>
+         <p>{{ $total}}</p>
+
+        <span>DSA Leads</span>
+    </div>
+</div>
+<div class="overview-card" onclick="loadDsaCustomerLoans()" style="cursor:pointer; background:#f59e0b; color:#fff;">
+    <div class="overview-icon">
+        <i class="fas fa-file-invoice"></i>
+    </div>
+
+    <div class="overview-content">
+        <h3>All DSA Customer Loans</h3>
+        <p>{{ $totalCustomerLoans ?? 0 }}</p>
+        <span>Loan List</span>
+    </div>
+</div>
+
+</div>
+<!-- 🔽 CUSTOMER LIST SECTION -->
+<!-- 🔽 CUSTOMER LIST SECTION -->
+<div class="row mt-4" id="customerSection" style="display:none;">
+    <div class="col-12">
+        <div class="card p-3">
+
+            <h5 class="mb-3">All Customers</h5>
+
+            <!-- 🔍 SEARCH BOX (INSIDE SECTION) -->
+            <div class="mb-3">
+                <input type="text"
+                       id="customerSearch"
+                       class="form-control"
+                       placeholder="Search by Name, Email, Mobile">
+            </div>
+
+            <!-- TABLE -->
+            <div class="table-responsive">
+                <table class="table">
+
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>State</th>
+                            <th>City</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="customer_table_body"></tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- MIS -->
+
+<div class="row mt-4" id="dsaMisSection" style="display:none;">
+    <div class="col-12">
+        <div class="card p-3">
+
+            <h5 class="mb-3">All DSA MIS</h5>
+
+            <div id="dsa_mis_table"></div>
+
+        </div>
+    </div>
 </div>
 
 <!-- 🔽 DSA LIST SECTION -->
-<div class="row mt-4">
+<div class="row mt-4" id="dsaSection">
     <div class="col-12">
         <div class="card p-3">
 
@@ -279,13 +379,16 @@ body.modal-open {
 
                     <thead>
                         <tr>
-                            <th>ID</th>
+                           <th>Sr No</th>
+                            <th>DSA Code</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Mobile</th>
                             <th>City</th>
                             <th>State</th>
-                            <th>Pincode</th>
+                            <th>Pan Number</th>
+                             <th>Action</th>
+
                         </tr>
                     </thead>
 
@@ -296,6 +399,61 @@ body.modal-open {
                 <!-- PAGINATION -->
                 <div class="pagination-area mt-3"></div>
 
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4" id="dsaCustomerLoanSection" style="display:none;">
+    <div class="col-12">
+        <div class="card p-3">
+
+            <h5 class="mb-3">All DSA Customer Loans</h5>
+
+            <!-- ✅ FILTER INSIDE -->
+            <div class="row mb-3">
+<div class="col-md-3">
+    <select id="filterDsa" class="form-control">
+        <option value="">All DSA</option>
+    </select>
+</div>
+
+                <div class="col-md-3">
+                    <select id="filterStatus" class="form-control">
+                        <option value="">All Status</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="in process">In Process</option>
+                         <option value="disbursed">Disbursed</option> <!-- ✅ ADD THIS -->
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <input type="date" id="filterDate" class="form-control">
+                </div>
+
+                <div class="col-md-3">
+                    <button class="btn btn-primary w-100" onclick="loadDsaCustomerLoans()">Search</button>
+                </div>
+
+            </div>
+
+            <!-- TABLE -->
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Customer Name</th>
+                            <th>Loan Ref ID</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="dsa_customer_loan_body"></tbody>
+                </table>
             </div>
 
         </div>
@@ -325,23 +483,47 @@ body.modal-open {
                             <label>Name</label>
                             <input type="text" name="full_name" class="form-control" required>
                         </div>
+                        <input type="hidden" name="id" id="dsa_id">
 
                         <!-- EMAIL -->
                         <div class="form-group col-lg-4 mb-3">
                             <label>Email</label>
                             <input type="email" name="email_id" class="form-control" required>
+                           <small class="text-danger error-email_id"></small>
                         </div>
 
                         <!-- PASSWORD -->
                         <div class="form-group col-lg-4 mb-3">
                             <label>Password</label>
-                            <input type="password" name="password" class="form-control" required>
+                            <input type="password" name="password" class="form-control">
                         </div>
 
                         <!-- MOBILE -->
                         <div class="form-group col-lg-4 mb-3">
                             <label>Mobile</label>
                             <input type="text" name="mobile_no" class="form-control" required>
+                             <small class="text-danger error-mobile_no"></small>
+                        </div>
+
+                        <!-- DOB -->
+                        <div class="form-group col-lg-4 mb-3">
+                            <label>Date of Birth</label>
+                            <!-- DOB -->
+                            <input type="date" name="dob" class="form-control" required>
+                            <small class="text-danger error-dob"></small>
+                        </div>
+
+                        <!-- PAN -->
+                        <div class="form-group col-lg-4 mb-3">
+                            <label>PAN No</label>
+                            <input type="text" name="pan_no" class="form-control" required>
+                           <small class="text-danger error-pan_no"></small>
+                        </div>
+
+                        <!-- ADDRESS -->
+                        <div class="form-group col-lg-12 mb-3">
+                            <label>Address</label>
+                            <textarea name="address" class="form-control" rows="2" required></textarea>
                         </div>
 
                         <!-- STATE -->
@@ -366,15 +548,18 @@ body.modal-open {
                         <!-- PINCODE -->
                         <div class="form-group col-lg-4 mb-3">
                             <label>Pincode</label>
-                            <input type="text" name="pincode" class="form-control" required>
+                            <!-- PINCODE -->
+<input type="text" name="pincode" class="form-control" required>
+<small class="text-danger error-pincode"></small>
                         </div>
 
-                    </div>
+
+                   
 
                     <!-- FOOTER -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Save</button>
                     </div>
 
                 </form>
@@ -384,6 +569,95 @@ body.modal-open {
         </div>
     </div>
 </div>
+<script>
+    let typingTimer;
+let doneTypingInterval = 500;
+
+$('input[name="mobile_no"], input[name="email_id"], input[name="pan_no"]').on('keyup', function(){
+
+    clearTimeout(typingTimer);
+
+    let input = $(this);
+
+    typingTimer = setTimeout(function(){
+
+        let field = input.attr('name');
+        let value = input.val();
+        let id = $('#dsa_id').val();
+
+        // clear old error
+        $('.error-' + field).text('');
+
+        if(value.trim() === '') return;
+
+        if(field === 'mobile_no' && value.length !== 10) return;
+        if(field === 'pan_no' && value.length !== 10) return;
+        if(field === 'email_id' && !value.includes('@')) return;
+
+        $.ajax({
+            url: "/check-duplicate",
+            type: "POST",
+            data: {
+                _token: $('input[name="_token"]').val(),
+                field: field,
+                value: value,
+                id: id
+            },
+            success: function(res){
+
+                if(res.exists){
+                    $('.error-' + field).text(field + " already exists!");
+                    input.addClass('is-invalid');
+                } else {
+                    $('.error-' + field).text('');
+                    input.removeClass('is-invalid');
+                }
+
+            }
+        });
+
+    }, doneTypingInterval);
+});
+// ✅ PINCODE VALIDATION
+$('input[name="pincode"]').on('input', function(){
+
+    let value = this.value.replace(/[^0-9]/g, '');
+    this.value = value;
+
+    if(value.length !== 6){
+        $(this).addClass('is-invalid');
+        $('.error-pincode').text("Pincode must be 6 digits");
+    } else {
+        $(this).removeClass('is-invalid');
+        $('.error-pincode').text("");
+    }
+
+});
+
+
+// ✅ DOB VALIDATION (18+)
+$('input[name="dob"]').on('change', function(){
+
+    let dob = new Date(this.value);
+    let today = new Date();
+
+    let age = today.getFullYear() - dob.getFullYear();
+    let m = today.getMonth() - dob.getMonth();
+
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+        age--;
+    }
+
+    if(age < 18){
+        $(this).addClass('is-invalid');
+        $('.error-dob').text("DOB must be 18+");
+    } else {
+        $(this).removeClass('is-invalid');
+        $('.error-dob').text("");
+    }
+
+});
+</script>
 <script>
 
 // 🔥 STATE → CITY LOAD
@@ -419,6 +693,7 @@ $('#addDSAForm').submit(function(e){
         data: $(this).serialize(),
 
         success: function(res){
+            $('#submitBtn').text('Save');
 
             if(res.status == 1){
 
@@ -454,36 +729,222 @@ $('#addDSAForm').submit(function(e){
     });
 });
 
+$('#addDSA').on('show.bs.modal', function () {
+
+    // 👉 ONLY reset when ADD (no id)
+    if(!$('#dsa_id').val()){
+        $('#submitBtn').text('Save');
+        $('#addDSAForm')[0].reset();
+    }
+
+});
 </script>
 <script>
-    $(document).ready(function(){
+    $(document).on('click', '.editBtn', function () {
+        $('#submitBtn').text('Update');
+
+    let id = $(this).data('id');
+
+    $.ajax({
+        url: "/admin/dsa/edit/" + id,
+        type: "GET",
+        success: function (res) {
+
+            // basic fields
+            $('#dsa_id').val(res.id);
+            $('input[name="full_name"]').val(res.name);
+            $('input[name="email_id"]').val(res.email_id);
+            $('input[name="mobile_no"]').val(res.mobile_no);
+            $('input[name="pan_no"]').val(res.pan_number);
+            $('textarea[name="address"]').val(res.residence_address);
+            $('input[name="dob"]').val(res.dob);
+
+            // ✅ PINCODE FIX
+            $('input[name="pincode"]').val(res.pincode);
+
+            // ✅ STATE
+            $('#state').val(res.state);
+
+            // ✅ CITY FIX (NO setTimeout)
+            $.get("/get-cities/" + res.state, function(cityRes){
+
+                let options = '<option value="">-- Select City --</option>';
+
+                cityRes.forEach(function(city){
+                    options += `<option value="${city.id}">${city.city}</option>`;
+                });
+
+                $('#city').html(options);
+
+                $('#city').val(res.city); // select properly
+            });
+
+            $('#addDSA').modal('show');
+            // ✅ AFTER modal open
+            $('#submitBtn').text('Update');
+        }
+    });
+
+});
+</script>
+<script>
+$(document).ready(function(){
     loadDSA();
 });
 
+// ✅ LOAD DSA
 function loadDSA(page = 1)
 {
+    $('#customerSection').hide();   
+    $('#dsaMisSection').hide();   
+    $('#dsaCustomerLoanSection').hide(); // ✅ ADD
+    $('#dsaSection').show();        
+
     $.get("{{ route('admin.dsa.list') }}", {
         page: page,
         search: $('#dsaSearch').val()
     }, function(res){
-
-        console.log(res);
-
         $('#dsa_table_body').html(res.html);
-        $('.pagination-area').html(res.pagination);
     });
 }
 
-// SEARCH
-$('#dsaSearch').keyup(function(){
-    loadDSA();
+// ✅ LOAD CUSTOMERS
+function loadCustomers()
+{
+    $('#dsaSection').hide();        
+    $('#dsaMisSection').hide();   
+    $('#dsaCustomerLoanSection').hide();
+    $('#customerSection').show();   
+
+    $.get("{{ route('admin.customers.list') }}", {
+        search: $('#customerSearch').val() // ✅ ADD THIS
+    }, function(res){
+        $('#customer_table_body').html(res.html);
+    });
+}
+// ✅ LOAD DSA MIS
+function loadDsaMIS()
+{
+    $('#dsaSection').hide();
+    $('#customerSection').hide();
+    $('#dsaCustomerLoanSection').hide(); // ✅ ADD
+    $('#dsaMisSection').show();
+
+    $.get("{{ route('admin.dsa.mis.list') }}", function(res){
+        $('#dsa_mis_table').html(res.html);
+        $('#dsaMisCount').text(res.total);
+    });
+}
+
+// ✅ LOAD DSA CUSTOMER LOANS (ONLY ONE FUNCTION)
+function loadDsaCustomerLoans()
+{
+    $('#dsaSection').hide();
+    $('#customerSection').hide();
+    $('#dsaMisSection').hide();
+    $('#dsaCustomerLoanSection').show();
+
+    $.get("{{ route('admin.dsa.customer.loans') }}", {
+        dsa: $('#filterDsa').val(), // ✅ NEW
+        customer: $('#filterCustomer').val(),
+        status: $('#filterStatus').val(),
+        date: $('#filterDate').val()
+    }, function(res){
+
+        $('#dsa_customer_loan_body').html(res.html);
+
+        // ✅ Load DSA dropdown
+        if ($('#filterDsa option').length <= 1) {
+            let dsaOptions = '<option value="">All DSA</option>';
+            res.dsas.forEach(function(d){
+                dsaOptions += `<option value="${d.id}">${d.name}</option>`;
+            });
+            $('#filterDsa').html(dsaOptions);
+        }
+
+        // ✅ Load customers (based on DSA)
+        let custOptions = '<option value="">All Customers</option>';
+        res.customers.forEach(function(c){
+            custOptions += `<option value="${c.name}">${c.name}</option>`;
+        });
+        $('#filterCustomer').html(custOptions);
+    });
+}
+</script>
+
+<script>
+    function loadDsaCustomerLoans()
+{
+    console.log("CLICK WORKING ✅");
+
+    $('#dsaSection').hide();
+    $('#customerSection').hide();
+    $('#dsaMisSection').hide();
+    $('#dsaCustomerLoanSection').show();
+
+    $.get("{{ route('admin.dsa.customer.loans') }}", {
+        dsa: $('#filterDsa').val(),
+        status: $('#filterStatus').val(),
+        date: $('#filterDate').val()
+    }, function(res){
+
+        console.log("API RESPONSE:", res);
+
+        $('#dsa_customer_loan_body').html(res.html);
+
+        // DSA dropdown
+        if ($('#filterDsa option').length <= 1) {
+            let dsaOptions = '<option value="">All DSA</option>';
+            res.dsas.forEach(function(d){
+                dsaOptions += `<option value="${d.id}">${d.name}</option>`;
+            });
+            $('#filterDsa').html(dsaOptions);
+        }
+    });
+}
+</script>
+<!-- validation dsa  -->
+ <script>
+    $('input[name="pan_no"]').on('input', function(){
+    this.value = this.value.toUpperCase();
+
+    let pattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+
+    if(this.value.length === 10 && !pattern.test(this.value)){
+        this.setCustomValidity("Invalid PAN format (ABCDE1234F)");
+    } else {
+        this.setCustomValidity("");
+    }
+});
+$('input[name="mobile_no"]').on('input', function(){
+    this.value = this.value.replace(/[^0-9]/g, '');
+
+    if(this.value.length != 10){
+        this.setCustomValidity("Mobile must be 10 digits");
+    } else {
+        this.setCustomValidity("");
+    }
 });
 
-// PAGINATION
-$(document).on('click', '.pagination a', function(e){
-    e.preventDefault();
-    let page = new URL($(this).attr('href')).searchParams.get('page');
-    loadDSA(page);
+$(document).ready(function(){
+
+    if ($.fn.select2) {
+        $('#filterDsa').select2({
+            width: '100%',
+            placeholder: "Search DSA...",
+            allowClear: true
+        });
+    }
+
+});
+ </script>
+ <script>
+    $(document).on('keyup', '#dsaSearch', function(){
+        loadDSA();
+    });
+    // 🔍 CUSTOMER SEARCH
+$(document).on('keyup', '#customerSearch', function(){
+    loadCustomers();
 });
 </script>
 @endsection

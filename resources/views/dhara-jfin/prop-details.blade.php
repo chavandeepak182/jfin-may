@@ -1361,103 +1361,203 @@ document.getElementById("enquiryForm").addEventListener("submit", function(e){
 });
 </script>
 
-        <!-- //visit form -->
-        <div class="form-container">
-            <!-- <div class="form-header"> -->
-                <div class="form-header-title">
-                    <h1>Book a Visit</h1>
-                    <p>Fill out the form below to schedule your visit</p>
-                </div>
-                <button class="close-btn visit-close" onclick="closeFormOverlay()">X</button>
-            <!-- </div> -->
-            <form id="visitForm" method="POST" action="{{ route('visit.enquiry.submit') }}">
-                @csrf
-                <div class="form-group">
-                    <label for="name">
-                        Name <span class="required">*</span>
-                    </label>
-                    <input 
-                        type="text" 
-                        id="name" 
-                        name="name" 
-                        required 
-                        placeholder="Enter your full name"
-                    >
-                </div>
-    
-                <div class="form-group">
-                    <label for="email">
-                        Email 
-                    </label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        placeholder="your.email@example.com"
-                    >
-                </div>
-    
-                <div class="form-group">
-    <label for="phone">
-        Phone Number <span class="required">*</span>
-    </label>
-    <input 
-        type="tel" 
-        id="phone" 
-        name="phone" 
-        required 
-        placeholder="Enter 10 digit mobile number"
-        pattern="[0-9]{10}" 
-        maxlength="10"
-        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-    >
-</div>
-    
-                <div class="form-group">
-                    <label>
-                        Visit Date <span class="required">*</span>
-                    </label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input 
-                                type="radio" 
-                                name="visitedate" 
-                                value="this week" 
-                                required
-                            >
-                            <span class="radio-label">This Week</span>
-                        </label>
-                        <label class="radio-option">
-                            <input 
-                                type="radio" 
-                                name="visitedate" 
-                                value="this weekend" 
-                                required
-                            >
-                            <span class="radio-label">This Weekend</span>
-                        </label>
-                        <label class="radio-option">
-                            <input 
-                                type="radio" 
-                                name="visitedate" 
-                                value="this month" 
-                                required
-                            >
-                            <span class="radio-label">This Month</span>
-                        </label>
-                    </div>
-                </div>
-    
-                <button type="submit" class="submit-btn" onclick="closeFormOverlay()">
-                    Book Visit
-                </button>
-            </form>
-        </div>
+   <!-- //visit form -->
+<div class="form-container">
+    <div class="form-header-title">
+        <h1>Book a Visit</h1>
+        <p>Fill out the form below to schedule your visit</p>
     </div>
+
+    <button class="close-btn visit-close" onclick="closeFormOverlay()">X</button>
+
+    <form id="visitForm" method="POST" action="{{ route('visit.enquiry.submit') }}">
+        @csrf
+
+        <!-- NAME (NO VALIDATION) -->
+        <div class="form-group">
+            <label for="name">
+                Name <span class="required">*</span>
+            </label>
+            <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                placeholder="Enter your full name"
+            >
+        </div>
+
+        <!-- EMAIL -->
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                placeholder="your.email@example.com"
+            >
+            <small class="error" id="emailError"></small>
+        </div>
+
+        <!-- PHONE -->
+        <div class="form-group">
+            <label for="phone">
+                Phone Number <span class="required">*</span>
+            </label>
+            <input 
+                type="tel" 
+                id="phone" 
+                name="phone" 
+                placeholder="Enter 10 digit mobile number"
+                maxlength="10"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            >
+            <small class="error" id="phoneError"></small>
+        </div>
+
+        <!-- VISIT DATE -->
+        <div class="form-group">
+            <label>
+                Visit Date <span class="required">*</span>
+            </label>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="visitedate" value="this week">
+                    <span class="radio-label">This Week</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="visitedate" value="this weekend">
+                    <span class="radio-label">This Weekend</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="visitedate" value="this month">
+                    <span class="radio-label">This Month</span>
+                </label>
+            </div>
+            <small class="error" id="dateError"></small>
+        </div>
+
+        <!-- SUBMIT -->
+        <button type="submit" class="submit-btn">
+            Book Visit
+        </button>
+    </form>
+</div>
+
+
+
+<!-- CSS -->
+<style>
+.error {
+    color: red;
+    font-size: 13px;
+    margin-top: 4px;
+    display: block;
+}
+input.error-border {
+    border: 1px solid red;
+}
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+    const form = document.getElementById("visitForm");
+    const nameInput = document.getElementById("name");
+
+    // 🔥 NAME: only alphabets allow (typing time)
+    nameInput.addEventListener("keypress", function(e){
+        let char = String.fromCharCode(e.which);
+        if(!/[A-Za-z ]/.test(char)){
+            e.preventDefault();
+        }
+    });
+
+    // 🔥 fallback (paste case)
+    nameInput.addEventListener("input", function(){
+        this.value = this.value.replace(/[^A-Za-z ]/g, '');
+    });
+
+    // 🔥 FORM SUBMIT VALIDATION
+    form.addEventListener("submit", function(e){
+
+        let isValid = true;
+
+        // clear old errors
+        document.querySelectorAll(".error").forEach(el => el.innerText = "");
+        document.querySelectorAll("input").forEach(el => el.classList.remove("error-border"));
+
+        // ===== EMAIL =====
+        let email = document.getElementById("email").value.trim();
+        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (email !== "" && !emailPattern.test(email)) {
+            document.getElementById("emailError").innerText = "Enter proper email format";
+            document.getElementById("email").classList.add("error-border");
+            isValid = false;
+        }
+
+        // ===== PHONE =====
+        let phone = document.getElementById("phone").value.trim();
+        let phonePattern = /^[0-9]{10}$/;
+
+        if (!phonePattern.test(phone)) {
+            document.getElementById("phoneError").innerText = "Enter valid 10 digit number";
+            document.getElementById("phone").classList.add("error-border");
+            isValid = false;
+        }
+
+        // ===== VISIT DATE =====
+        let dateChecked = document.querySelector('input[name="visitedate"]:checked');
+
+        if (!dateChecked) {
+            document.getElementById("dateError").innerText = "Please select visit date";
+            isValid = false;
+        }
+
+        // ===== FINAL =====
+        if (!isValid) {
+            e.preventDefault();
+        } else {
+            closeFormOverlay();
+        }
+
+    });
+
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const nameInput = document.querySelector('#visitForm input[name="name"]');
+
+    if(nameInput){
+
+        // 🔥 typing time block
+        nameInput.addEventListener("keypress", function (e) {
+
+            let char = String.fromCharCode(e.which);
+
+            if (!/[A-Za-z ]/.test(char)) {
+                e.preventDefault();
+            }
+
+        });
+
+        // 🔥 paste / mobile fix
+        nameInput.addEventListener("input", function () {
+            this.value = this.value.replace(/[^A-Za-z ]/g, '');
+        });
+
+    }
+
+});
+</script>
+
+
+
 </main>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<!-- <script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         var lat = {{ !empty($latitude) ? $latitude : 18.5204 }};
         var lng = {{ !empty($longitude) ? $longitude : 73.8567 }};
@@ -1475,7 +1575,7 @@ document.getElementById("enquiryForm").addEventListener("submit", function(e){
             }, 500);
         }
     });
-</script> -->
+</script>
 <script>document.addEventListener('DOMContentLoaded', function () {
 
     const images = [

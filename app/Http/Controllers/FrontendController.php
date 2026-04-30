@@ -956,44 +956,60 @@ public function properties(Request $request)
 
     /* ================= FILTERS ================= */
 
-    if ($request->filled('search')) {
-        $search = trim($request->search);
+  /* ================= FILTERS ================= */
 
-        $query->where(function ($q) use ($search) {
-            $q->where('properties.title', 'LIKE', "%{$search}%")
-              ->orWhere('properties.builder_name', 'LIKE', "%{$search}%")
-              ->orWhere('properties.localities', 'LIKE', "%{$search}%")
-              ->orWhere('properties.city', 'LIKE', "%{$search}%");
+// 🔍 SEARCH
+if ($request->filled('search')) {
+    $search = trim($request->search);
+
+    $query->where(function ($q) use ($search) {
+        $q->where('properties.title', 'LIKE', "%{$search}%")
+          ->orWhere('properties.builder_name', 'LIKE', "%{$search}%")
+          ->orWhere('properties.localities', 'LIKE', "%{$search}%")
+          ->orWhere('properties.city', 'LIKE', "%{$search}%");
+    });
+}
+
+// 🏢 TYPE (Residential / Commercial / Rent)
+if ($request->filled('type')) {
+    $query->whereRaw("LOWER(property_category.category_name) = ?", [strtolower($request->type)]);
+}
+// 🏠 BHK (FIXED → use LIKE for flexible values)
+if ($request->filled('bhk')) {
+    $query->where('properties.select_bhk', 'LIKE', "%{$request->bhk}%");
+}
+
+// 💰 DYNAMIC BUDGET (IMPORTANT FIX 🔥)
+if ($request->filled('budget')) {
+
+    $range = DB::table('price_range')
+                ->where('range_id', $request->budget)
+                ->first();
+
+    if ($range) {
+        $query->where(function ($q) use ($range) {
+
+            // ✅ FULL OVERLAP LOGIC (IMPORTANT)
+            $q->whereBetween('price_range.from_price', [
+                $range->from_price,
+                $range->to_price
+            ])
+            ->orWhereBetween('price_range.to_price', [
+                $range->from_price,
+                $range->to_price
+            ])
+            ->orWhere(function ($q2) use ($range) {
+                $q2->where('price_range.from_price', '<=', $range->from_price)
+                   ->where('price_range.to_price', '>=', $range->to_price);
+            });
+
         });
     }
-
-    if ($request->filled('bhk')) {
-        $query->where('properties.select_bhk', $request->bhk);
-    }
-
-    if ($request->filled('budget')) {
-        switch ($request->budget) {
-            case '40-60':
-                $query->whereBetween('properties.s_price', [4000000, 6000000]);
-                break;
-            case '60-80':
-                $query->whereBetween('properties.s_price', [6000000, 8000000]);
-                break;
-            case '80-100':
-                $query->whereBetween('properties.s_price', [8000000, 10000000]);
-                break;
-            case '100-200':
-                $query->whereBetween('properties.s_price', [10000000, 20000000]);
-                break;
-            case '200+':
-                $query->where('properties.s_price', '>=', 20000000);
-                break;
-        }
-    }
-
+}
     /* ================= PAGINATION ================= */
 
     $data['allProperties'] = $query->get();
+    $data['priceRanges'] = DB::table('price_range')->get();
 
     /* ================= CATEGORY ================= */
 
@@ -1001,8 +1017,9 @@ public function properties(Request $request)
 
     /* ================= FEATURED ================= */
 
-    $data['featuredProperties'] = DB::table('properties')
-    ->join('property_category', 'properties.property_type_id', '=', 'property_category.pid') // ✅ ADD
+   $data['featuredProperties'] = DB::table('properties')
+    ->join('price_range', 'properties.price_range_id', '=', 'price_range.range_id')
+    ->join('property_category', 'properties.property_type_id', '=', 'property_category.pid')
     ->where('properties.is_featured',1)
     ->where('properties.is_active',1)
     ->select(
@@ -1010,46 +1027,44 @@ public function properties(Request $request)
         'properties.slug',
         'properties.title',
         'properties.builder_name',
-        'properties.s_price',
         'properties.localities',
         'properties.city',
         'properties.select_bhk',
         'properties.area',
-        'property_category.category_name', // ✅ ADD
+        'property_category.category_name',
+        'price_range.from_price',   // ✅ ADD
+        'price_range.to_price',     // ✅ ADD
         DB::raw("IFNULL(properties.image, 'default.jpg') as image")
     )
     ->get();
 
     /* ================= LOCALITIES ================= */
+$selectedLocalities = DB::table('localities')
+    ->limit(6)
+    ->get();
 
-    $selectedLocalities = DB::table('selected_localities')
-        ->join('localities','selected_localities.locality_id','=','localities.id')
-        ->select('localities.id','localities.name')
-        ->limit(3)
+$data['selectedLocalities'] = [];
+
+foreach ($selectedLocalities as $locality) {
+
+    $properties = DB::table('properties')
+        ->where('locality_id', $locality->id) // ✅ FIX
+        ->where('is_active', 1)
+        ->select(
+            'properties_id',
+            'title',
+            'builder_name',
+            'slug',
+            DB::raw("IFNULL(image, 'default.jpg') as image")
+        )
+        ->limit(2)
         ->get();
 
-    $data['selectedLocalities'] = [];
-
-    foreach ($selectedLocalities as $locality) {
-
-        $properties = DB::table('properties')
-           ->whereRaw("LOWER(localities) LIKE ?", ['%' . strtolower($locality->name) . '%'])
-            ->where('is_active',1)
-            ->select(
-                'properties_id',
-                'title',
-                'builder_name',
-                'slug',
-                DB::raw("IFNULL(image, 'default.jpg') as image") // 🔥 IMPORTANT
-            )
-            ->limit(2)
-            ->get();
-
-        $data['selectedLocalities'][] = [
-            'locality' => $locality->name,
-            'properties' => $properties
-        ];
-    }
+    $data['selectedLocalities'][] = [
+        'locality' => $locality->name,
+        'properties' => $properties
+    ];
+}
 
     return view('dhara-jfin.properties', compact('data'));
 }

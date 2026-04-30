@@ -42,7 +42,7 @@
             <th>Status</th>
             <th>Assigned CP</th> <!-- ✅ NEW -->
             <th>Action</th>
-            <th>Assign Partner</th>
+            <!-- <th>Assign Partner</th> -->
         </tr>
     </thead>
 
@@ -139,32 +139,7 @@
         @endif
     </td>
 
-    {{-- ✅ NEW COLUMN --}}
-    <td>
-        @if(!in_array($booking->status, ['customer_confirmed','completed']))
-            
-            <form method="POST" action="{{ route('admin.assign.partner', $booking->id) }}">
-                @csrf
-
-                <select name="partner_id" required>
-                    <option value="">Select Partner</option>
-
-                    @foreach(\App\Models\User::where('role_id', 3)->get() as $partner)
-                        <option value="{{ $partner->id }}"
-                            {{ $booking->partner_id == $partner->id ? 'selected' : '' }}>
-                            {{ $partner->name }}
-                        </option>
-                    @endforeach
-                </select>
-
-                <button type="submit">Assign</button>
-            </form>
-
-        @else
-            <span style="color:gray;">Locked</span>
-        @endif
-    </td>
-
+   
 </tr>
     @empty
         <tr>
