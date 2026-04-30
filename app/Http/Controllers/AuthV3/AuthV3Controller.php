@@ -47,6 +47,7 @@ class AuthV3Controller extends Controller
         $this->generateOtp($user->id);
 
         session()->put('otp_user_id', $user->id);
+        session()->put('otp_mobile', $request->mobile_no);
 
         return redirect()->route('authv3.otp.form')
             ->with('success', 'OTP sent to your mobile');
@@ -95,9 +96,14 @@ class AuthV3Controller extends Controller
         // login user
       Auth::loginUsingId($userId);
 
-User::where('id', $userId)->update([
+$user = User::find($userId);
+
+$user->update([
     'last_login_at' => now(),
-    'is_email_verify' => 1
+    'is_email_verify' => 1,
+
+    // 🔥 ADD THIS LINE (MOST IMPORTANT)
+    'mobile_no' => $user->mobile_no ?? request('mobile_no')
 ]);
 
         session([
@@ -440,7 +446,7 @@ private function redirectByRole($user)
     }
 
   // ✅ DSA redirect
-if ($user->role_id == config('constants.roles.dsa')) {
+if ($user->role_id == 6) {
     return redirect()->route('dsa.dashboard');
 }
 

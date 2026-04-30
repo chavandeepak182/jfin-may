@@ -20,19 +20,22 @@ class Loan extends Model
         'amount_approved' => 'integer',
     ];
 
-    protected $fillable = [
-        'loan_category_id',
-        'amount',
-        'tenure',
-        'status',
-        'referral_user_id',
-        'amount_approved',
-        'loan_reference_id',
-        'bank_id',
-        'user_id',
-        'agent_id',
-        'agent_action',
-    ];
+  protected $fillable = [
+    'loan_category_id',
+    'amount',
+    'tenure',
+    'status',
+    'referral_user_id',
+    'amount_approved',
+    'loan_reference_id',
+    'bank_id',
+    'user_id',
+    'agent_id',
+    'agent_action',
+
+    // 🔥 ADD THIS
+    'dsa_id'
+];
 
   public function loanCategory()
 {
@@ -57,4 +60,9 @@ class Loan extends Model
     {
         return $this->belongsTo(Bank::class, 'bank_id', 'bank_id');
     }
+
+    public function dsaCustomer()
+{
+    return $this->belongsTo(\App\Models\DsaCustomer::class, 'user_id', 'user_id');
+}
 }

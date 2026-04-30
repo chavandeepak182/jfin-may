@@ -134,7 +134,7 @@
                     <div class="col-lg-3">
                     <div class="mb-3">
                         <label class="form-label">Select BHK</label><span class="text-danger">*</span>
-                        <select class="form-control" name="select_bhk" required>
+                        <select class="form-control" name="select_bhk">
                             <option value="">Select BHK</option>
                             <option value="1">1</option>
                             <option value="2">2</option>

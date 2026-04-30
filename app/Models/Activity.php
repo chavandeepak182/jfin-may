@@ -1,25 +1,15 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Models;
 
-use Closure;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Database\Eloquent\Model;
 
-class IsDsaMiddleware
+class Activity extends Model
 {
-    public function handle(Request $request, Closure $next): Response
-    {
-        $role_id = session()->get('role_id');
+    protected $table = 'activity'; // ⚠️ change if your table name is different
 
-        if (
-            $role_id == config('constants.roles.dsa') ||
-            $role_id == config('constants.roles.admin')
-        ) {
-            return $next($request);
-        }
-
-        return redirect()->route('login')
-            ->with('error', 'Unauthorized');
-    }
+    protected $fillable = [
+        'user_id',
+        'details'
+    ];
 }

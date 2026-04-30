@@ -52,31 +52,38 @@
 
     <nav class="sidebar-nav">
 
-        {{-- ================= DASHBOARD ================= --}}
-        @if($role_id == 4 || $role_id == 6)
-            <a href="{{ route('dashboard') }}" class="nav-item">
-                <i class="fas fa-home"></i>
-                <span>Dashboard</span>
-            </a>
-        @elseif($role_id == 2)
-            <a href="{{ route('agentDashboard') }}" class="nav-item">
-                <i class="fas fa-home"></i>
-                <span>Agent Dashboard</span>
-            </a>
-        @elseif($role_id == config('constants.roles.partner'))
-            <a href="{{ route('partnerDashboard') }}" class="nav-item">
-                <i class="fas fa-home"></i>
-                <span>CP Dashboard</span>
-            </a>
-        @endif
+        @if($role_id == 6)
+    <a href="{{ route('dsa.dashboard') }}" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>DSA Dashboard</span>
+    </a>
 
-        {{-- ================= LOANS ================= --}}
-        @if(in_array($role_id, [4, 2, env('brokerRole_id')]))
-            <a href="{{ $role_id == 2 ? route('agent.allAgentLoans') : route('admin.loans') }}" class="nav-item">
-                <i class="fas fa-file-invoice-dollar"></i>
-                <span>Loan Applications</span>
-            </a>
-        @endif
+@elseif($role_id == config('constants.roles.admin'))
+    <a href="{{ route('dashboard') }}" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Admin Dashboard</span>
+    </a>
+
+@elseif($role_id == 2)
+    <a href="{{ route('agentDashboard') }}" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Agent Dashboard</span>
+    </a>
+
+@elseif($role_id == config('constants.roles.partner'))
+    <a href="{{ route('partnerDashboard') }}" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>CP Dashboard</span>
+    </a>
+@endif
+
+     @if(in_array($role_id, [4, 2, 6, env('brokerRole_id')]))
+    <a href="{{ $role_id == 2 ? route('agent.allAgentLoans') : ($role_id == 6 ? route('dsa.loans') : route('admin.loans')) }}" class="nav-item">
+        <i class="fas fa-file-invoice-dollar"></i>
+        <span>Loan Applications</span>
+    </a>
+@endif
+        
         {{-- PROPERTY ASSIGN – ONLY FOR CP --}}
         @if($role_id == config('constants.roles.partner'))
             <a href="{{ route('partner.leads') }}" class="nav-item">
@@ -92,10 +99,7 @@
         <span>Property</span>
     </a>
 
-    <a href="{{ route('admin.price.range') }}" class="nav-item">
-    <i class="fas fa-tags"></i>
-    <span>Property Price Range</span>
-</a>
+    
 @endif
          @if($role_id == 4 || $role_id == config('constants.roles.partner'))
     <a href="{{ route('admin.property.bookings') }}" class="nav-item">
@@ -111,12 +115,35 @@
                 <span>Users</span>
             </a>
         @endif
-        @if($role_id == 4)
-<a href="{{ route('admin.dsa') }}" class="nav-item">
-    <i class="fas fa-user-tie"></i>
-    <span>My DSA</span>
+                    @if($role_id == 4)
+            <a href="{{ route('admin.dsa') }}" class="nav-item">
+                <i class="fas fa-user-tie"></i>
+                <span>My DSA</span>
+            </a>
+            @endif
+            @if($role_id == 4)
+<a href="{{ route('payout-configs.index') }}" class="nav-item">
+    <i class="fas fa-money-bill-wave"></i>
+    <span>DSA Payout</span>
 </a>
 @endif
+
+@if($role_id == 4)
+<a href="{{ route('dsa.payout.index') }}" class="nav-item">
+    <i class="fas fa-user-cog"></i>
+    <span>DSA Master</span>
+</a>
+@endif
+
+
+{{-- ================= DSA Users ================= --}}
+@if($role_id == 6)
+    <a href="{{ route('dsa.users') }}" class="nav-item">
+        <i class="fas fa-users"></i>
+        <span>My Users</span>
+    </a>
+@endif
+
 
         {{-- ================= WEB FORM & LEADS (ADDED) ================= --}}
         @if($role_id == 4)
@@ -142,6 +169,24 @@
     </a>
 @endif
 
+
+
+
+{{-- ================= TOOLS DSA MIS ================= --}}
+  @if($role_id == 6)
+    <a href="{{ route('mis.index') }}" class="nav-item">
+        <i class="fas fa-chart-line"></i>
+        <span>MIS</span>
+    </a>
+@endif
+
+{{-- ================= DSA Setting ================= --}}
+@if($role_id == 6)
+<a href="{{ route('dsa.settings') }}" class="nav-item">
+    <i class="fas fa-cog"></i>
+    <span>Settings</span>
+</a>
+@endif
 
 
         {{-- ================= MLM (ADDED) ================= --}}

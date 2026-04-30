@@ -71,6 +71,7 @@
 
 </style>
 
+
 @php
     $completedSteps = $completedSteps ?? [];
     $currentStep = $currentStep ?? 1;
@@ -138,13 +139,13 @@
             2. Professional Details
         </li>
 
-        {{-- Step 3 (Qualification skipped, Upload Documents shown) --}}
-        <li class="list-group-item {{ $currentStep == 3 ? 'active' : '' }}">
-            @if(in_array(3, $completedSteps))
-                <i class="bi bi-check-circle-fill step-icon me-2"></i>
-            @endif
-            3. Upload Documents
-        </li>
+      {{-- Step 3 --}}
+<li class="list-group-item {{ $currentStep == 3 ? 'active' : '' }}">
+    @if(in_array(3, $completedSteps))
+        <i class="bi bi-check-circle-fill step-icon me-2"></i>
+    @endif
+    3. Upload Documents
+</li>
 
         {{-- Step 4 --}}
         <li class="list-group-item {{ $currentStep == 4 ? 'active' : '' }}">
@@ -177,6 +178,7 @@
                                 </ul>
                             </div>
                         @endif -->
+                        
 
                         <form  id="loanForm" action="{{ route('loan.handle_step') }}" method="POST" enctype="multipart/form-data"
                             role="form" autocomplete="off" class="form">
@@ -211,7 +213,7 @@
                                             </div>
                                         </div>
                                     @endif -->
-                                                @if (in_array(session('role_id'), [4,2]))
+                                               @if (in_array(session('role_id'), [4,2,6]))
                                                     <div class="col-md-6">
                                                         <div class="custom-floating">
                                                             <label class="custom-label">
@@ -329,15 +331,16 @@
                                            <div class="col-md-4">
                                                 <div class="form-floating">
                                                 <input type="text"
-                                                class="form-control"
-                                                id="phone"
-                                                name="mobile_no"
-                                                value="{{ session('role_id') == 1 ? old('mobile_no', optional($profile)->mobile_no ?? optional($user)->mobile_no ?? '') : old('mobile_no') }}"
-                                                placeholder="Phone"
-                                                maxlength="10"
-                                                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
-                                                required
-                                                readonly>
+    class="form-control"
+    id="phone"
+    name="mobile_no"
+
+  value="{{ old('mobile_no', $profile->mobile_no ?? ($user->mobile_no ?? '')) }}"
+
+    placeholder="Phone"
+    maxlength="10"
+    readonly>
+    
 
                                                     <label for="phone">Phone <span class="text-danger">*</span></label>
                                                     <span id="phone-error" class="text-danger" style="font-size: 13px;"></span>
@@ -365,13 +368,12 @@
                                         <div class="col-md-4">
     <div class="form-floating">
         <input type="date"
-               class="form-control @error('dob') is-invalid @enderror"
-               id="dob"
-               name="dob"
-               value="{{ old('dob', $profile->dob ?? '') }}"
-               placeholder="DOB"
-               max="{{ now()->subYears(18)->format('Y-m-d') }}"
-               required>
+    class="form-control @error('dob') is-invalid @enderror"
+    id="dob"
+    name="dob"
+    value="{{ old('dob', isset($profile->dob) ? \Carbon\Carbon::parse($profile->dob)->format('Y-m-d') : '') }}"
+    max="{{ now()->subYears(18)->format('Y-m-d') }}"
+    required>
 
         <label for="dob">Date of Birth <span class="text-danger">*</span></label>
 
@@ -562,25 +564,54 @@
     </div>
 </div>
 <script>
-document.getElementById('loanForm').addEventListener('submit', function (e) {
+document.addEventListener("DOMContentLoaded", function () {
 
-    const radios = document.querySelectorAll('input[name="profession_type"]');
-    const errorBox = document.getElementById('profession-error');
+    const form = document.getElementById('loanForm');
 
-    let selected = false;
+    form.addEventListener('submit', function (e) {
 
-    radios.forEach(function(radio) {
-        if (radio.checked) {
-            selected = true;
+        // ✅ Profession validation
+        const radios = document.querySelectorAll('input[name="profession_type"]');
+        const errorBox = document.getElementById('profession-error');
+
+        let selected = false;
+
+        radios.forEach(radio => {
+            if (radio.checked) selected = true;
+        });
+
+        if (!selected) {
+            e.preventDefault();
+            errorBox.style.display = 'block';
+            return;
+        } else {
+            errorBox.style.display = 'none';
         }
+
+        // ✅ Future date validation
+        const dateInput = document.getElementById('business_establish_date');
+
+        if (dateInput && dateInput.value) {
+
+            let today = new Date().toISOString().split("T")[0];
+
+            // remove old error
+            let oldError = dateInput.closest('.col-md-6').querySelector('.date-error');
+            if (oldError) oldError.remove();
+
+            if (dateInput.value > today) {
+                e.preventDefault();
+
+                let error = document.createElement("span");
+                error.className = "text-danger date-error";
+                error.innerText = "Future date is not allowed";
+
+                dateInput.closest('.col-md-6').appendChild(error);
+            }
+        }
+
     });
 
-    if (!selected) {
-        e.preventDefault(); // ⛔ submit थांबवतो
-        errorBox.style.display = 'block';
-    } else {
-        errorBox.style.display = 'none';
-    }
 });
 </script>
 
@@ -748,7 +779,7 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
                                             </div>
 
                                             <div class="col-md-6">
-                                                <div class="form-floating" id="business_establish_date">
+                                                <div class="form-floating">
                                                     <input type="date" class="form-control"
                                                         id="business_establish_date" name="business_establish_date"
                                                         placeholder="Business Establish Date">
@@ -780,6 +811,41 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
                                         }
                                     });
                               </script>
+                              <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const inputs = document.querySelectorAll('input[name="business_establish_date"]');
+
+    inputs.forEach(function(input) {
+
+        function validateDate() {
+
+            let selectedDate = input.value;
+            let today = new Date().toISOString().split("T")[0];
+
+            // remove old error
+            let parent = input.closest('.col-md-6');
+            let oldError = parent.querySelector(".date-error");
+            if (oldError) oldError.remove();
+
+            if (selectedDate && selectedDate > today) {
+
+                let error = document.createElement("div");
+                error.className = "text-danger date-error mt-1";
+                error.innerText = "Future date is not allowed";
+
+                parent.appendChild(error);
+            }
+        }
+
+        // 🔥 important: both events use kara
+        input.addEventListener("change", validateDate);
+        input.addEventListener("input", validateDate);
+
+    });
+
+});
+</script>
 
                                 <!-- Upload Documents -->
                             @elseif ($currentStep == 3)
@@ -1104,13 +1170,19 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
                                 </fieldset>
 
                         <!-- Loan Details -->
-@elseif ($currentStep == 4)
+
+
+                        
+                        @elseif ($currentStep == 4)
 
 @php
-    // Check if user already has any DISBURSED loan
+    $hasDisbursedLoan = false;
+
+if ($user && $user instanceof \App\Models\User) {
     $hasDisbursedLoan = $user->loans()
         ->where('status', 'disbursed')
         ->exists();
+}
 @endphp
 
 <h4 class="text-primary mb-3">Loan Details</h4>
@@ -1622,26 +1694,31 @@ document.getElementById('pincode').addEventListener('input', function() {
 <script>
 $(document).ready(function () {
 
-    $('#user_id').on('select2:select', function (e) {
-        const selectedOption = e.params.data.element;
-        const mobile = selectedOption.getAttribute('data-mobile');
+    function setMobile() {
+        let mobile = $('#user_id option:selected').data('mobile');
 
         if (mobile) {
             $('#phone').val(mobile);
         }
-    });
-
-    // 🔥 page reload / validation error नंतर auto-fill
-    const selected = $('#user_id').find(':selected');
-    if (selected.length && selected.data('mobile')) {
-        $('#phone').val(selected.data('mobile'));
     }
+
+    $('#user_id').on('change', function () {
+        setMobile();
+    });
 
 });
 </script>
 
 
+<script>
+$('#user_id').on('change', function () {
+    let mobile = $('#user_id option:selected').data('mobile');
 
+    if (mobile) {
+        $('#phone').val(mobile);
+    }
+});
+</script>
 
 
 <script>

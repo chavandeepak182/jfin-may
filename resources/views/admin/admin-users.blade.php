@@ -5,6 +5,7 @@
 @endsection
 @section('content')
     @parent
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
    
  <style>/* ===== Overlay ===== */
@@ -1166,5 +1167,24 @@ $(document).ready(function () {
 });
 
 </script>
+<script>
+    // 🔴 LIVE EMAIL VALIDATION (typing time)
+$(document).on('input', '#email_id', function () {
 
+    let email = $(this).val().trim();
+
+    // remove old error
+    $('#email_id').next('.text-danger').remove();
+
+    let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|in|net|org|edu)$/i;
+
+    if (email === '') {
+        $('#email_id').after('<small class="text-danger">Email is required</small>');
+    }
+    else if (!emailPattern.test(email)) {
+        $('#email_id').after('<small class="text-danger">Only .com, .in, .net, .org, .edu allowed</small>');
+    }
+
+});
+</script>
 @endsection

@@ -105,6 +105,6 @@ class DsaPayoutConfigController extends Controller
         $config = DsaPayoutConfig::findOrFail($id);
         $config->delete();
 
-        return back()->with('success', 'Deleted successfully');
+        return redirect()->back()->with('success', 'Deleted successfully');
     }
 }

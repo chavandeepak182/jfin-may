@@ -19,6 +19,58 @@
     flex: 1 0 auto;
     background-color: #fff;
 }
+
+.metrics-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.metric-link {
+    text-decoration: none;
+    flex: 1 1 250px;
+}
+
+.metric-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+}
+
+.metric-icon {
+    font-size: 22px;
+    padding: 15px;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.metric-icon.purple { background: #6366f1; }
+.metric-icon.yellow { background: #f59e0b; }
+.metric-icon.green { background: #10b981; }
+
+.metric-content h3 {
+    font-size: 14px;
+    margin: 0;
+}
+
+.metric-value {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.metric-change {
+    font-size: 12px;
+    margin-top: 5px;
+}
     </style>
 
 
@@ -32,61 +84,85 @@
         <div class="container-fluid bg-white">
 
             <!-- ================= ROW 1 : METRICS ================= -->
-            <div class="row pt-5 pb-4">
-                <div class="col-12">
-                    <div class="metrics-grid">
-                        <!-- Total Loans -->
-                        <a href="{{ route('admin.loans') }}" class="metric-link">
-                            <div class="metric-card">
-                                <div class="metric-icon purple"><i class="fas fa-dollar-sign"></i></div>
-                                <div class="metric-content">
-                                    <h3>Total Disbursed Amount</h3>
-                                    <div class="metric-value">{{ $totalDisbursedAmount }}</div>
-                                    <div class="metric-change positive">
+         <div class="row pt-5 pb-4">
+    <div class="col-12">
+        <div class="metrics-grid d-flex gap-3 flex-wrap">
+
+            <!-- ✅ TOTAL LOANS -->
+            <a href="{{ route('dsa.loans') }}" class="metric-link">
+                <div class="metric-card">
+                    <div class="metric-icon purple">
+                        <i class="fas fa-file"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3>Total Loans</h3>
+                        <div class="metric-value">{{ $totalLoans }}</div>
+                        <div class="metric-change positive">
                             <i class="fas fa-arrow-up"></i>
                             <span>+12.5%</span>
-                            <span class="metric-subtext">+$180K from last month</span>
+                            <span class="metric-subtext">Loan growth</span>
                         </div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <!-- Total Leads -->
-                       
-                        <!-- Total Employees -->
-                      <!-- Total Customers -->
-                        <a href="{{ route('admin.customers') }}" class="metric-link">
-                            <div class="metric-card">
-                                <div class="metric-icon purple"><i class="fas fa-users"></i></div>
-                                <div class="metric-content">
-                                    <h3>Total Customers</h3>
-                                    <div class="metric-value">0</div>
-                                    <div class="metric-change positive">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>+15.3%</span>
-                            <span class="metric-subtext">+1,124 new this month</span>
-                        </div>
-                                </div>
-                            </div>
-                        </a>
-                        <!-- Total Customers -->
-                        <a href="{{ route('admin.customers') }}" class="metric-link">
-                            <div class="metric-card">
-                                <div class="metric-icon purple"><i class="fas fa-users"></i></div>
-                                <div class="metric-content">
-                                    <h3>Total Customers</h3>
-                                    <div class="metric-value">0</div>
-                                    <div class="metric-change positive">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>+15.3%</span>
-                            <span class="metric-subtext">+1,124 new this month</span>
-                        </div>
-                                </div>
-                            </div>
-                        </a>
                     </div>
                 </div>
-            </div>
+            </a>
+
+            <!-- ✅ TOTAL MIS -->
+            <a href="{{ route('mis.index') }}" class="metric-link">
+                <div class="metric-card">
+                    <div class="metric-icon yellow">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3>Total MIS</h3>
+                        <div class="metric-value">{{ $totalMIS }}</div>
+                        <div class="metric-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+8.2%</span>
+                            <span class="metric-subtext">MIS updates</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- ✅ TOTAL CUSTOMERS (NEW 🔥) -->
+            <a href="{{ route('dsa.users') }}" class="metric-link">
+                <div class="metric-card">
+                    <div class="metric-icon green">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3>Total Customers</h3>
+                        <div class="metric-value">{{ $totalCustomers }}</div>
+                        <div class="metric-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+10%</span>
+                            <span class="metric-subtext">Customer growth</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- ✅ TOTAL DISBURSED AMOUNT -->
+            <a href="{{ route('dsa.loans') }}" class="metric-link">
+                <div class="metric-card">
+                    <div class="metric-icon purple">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3>Total Disbursed Amount</h3>
+                        <div class="metric-value">₹ {{ number_format($totalDisbursedAmount) }}</div>
+                        <div class="metric-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+15%</span>
+                            <span class="metric-subtext">Disbursed growth</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    </div>
+</div>
 
             <!-- ================= ROW 2 : CHARTS ================= -->
             <div class="row mb-4">

@@ -325,11 +325,10 @@
                     <div class="form-group">
                         <label for="coApplicantName">Full Name</label>
                         <!-- <input type="text" id="coApplicantName" name="co_name" placeholder="Enter full name"> -->
-                                                <input type="text"
-                            id="coApplicantName"
-                            name="co_name"
-                            pattern="[A-Za-z ]+"
-                            title="Only letters allowed">
+                                                <input type="email" id="coApplicantEmail" name="co_email"
+       placeholder="Enter email address"
+       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+       title="Enter valid email">
                     </div>
                     
                     <div class="form-group">
@@ -417,7 +416,9 @@
 
 <div class="form-group">
 <label>Experience (Years)</label>
-<input type="number" name="experience_year">
+<input type="number" id="experience_year" name="experience_year"
+       min="0" max="99"
+       oninput="this.value=this.value.slice(0,2)">
 </div>
 
 <div class="form-group full-width">
@@ -581,6 +582,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+<script>
+document.querySelector("input[name='experience_year']").addEventListener("input", function () {
+    if (this.value.length > 2) {
+        this.value = this.value.slice(0, 2);
+    }
+});
+</script>
+<script>
+document.getElementById("bookingForm").addEventListener("submit", function(e){
 
+    // Email validation (extra safety)
+    let email = document.getElementById("coApplicantEmail").value;
+    if(email !== ""){
+        let pattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+        if(!pattern.test(email)){
+            alert("Enter valid email format");
+            e.preventDefault();
+            return;
+        }
+    }
+
+    // Experience validation
+    let exp = document.getElementById("experience_year").value;
+
+    if(exp !== "" && (exp < 0 || exp > 99)){
+        alert("Experience must be between 0 to 99 only");
+        e.preventDefault();
+        return;
+    }
+
+});
+</script>
 
 @endsection

@@ -1051,6 +1051,7 @@ public function loadListByType(Request $request)
                     : '<span class="badge bg-danger">Inactive</span>').'
             </td>
             <td>';
+            
 
         /* ================= ACTION BUTTONS ================= */
 
@@ -1066,7 +1067,12 @@ public function loadListByType(Request $request)
                 <button class="btn btn-warning btn-xs reset-password"
                         data-id="'.$user->id.'">
                     <i class="fa fa-key"></i>
-                </button>';
+                </button>
+                 <button class="btn btn-danger btn-xs delete-user"
+                data-id="'.$user->id.'">
+            <i class="fa fa-trash"></i>
+        </button>';
+                
         }
 
         /* ================= EMPLOYEE STATUS ================= */
@@ -1127,20 +1133,6 @@ Inactive
         'total'      => $users->total()
     ]);
 }
-public function updateEmployeeStatus(Request $request)
-{
-    $user = User::find($request->user_id);
-
-    if($user){
-        $user->is_email_verify = $request->status;
-        $user->save();
-    }
-
-    return response()->json([
-        'success' => true
-    ]);
-}
-
 
 // public function loadListByType(Request $request)
 // {
@@ -1509,20 +1501,33 @@ public function updateUser(Request $request)
     }
 }
 
-   public function deleteUser(Request $request)
-    {
-        try {
-            $user = User::find($request->user_id);
-            if ($user) {
-                $user->delete(); // Soft delete instead of hard delete
-                return response()->json(['status' => 1, 'msg' => 'User deleted successfully!']);
-            } else {
-                return response()->json(['status' => 0, 'error' => 'User not found']);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['status' => 0, 'error' => $e->getMessage()]);
+ public function deleteUser(Request $request)
+{
+    try {
+        $user = User::where('id', $request->user_id)
+                    ->whereNull('deleted_at') // 🔥 ADD THIS
+                    ->first();
+
+        if ($user) {
+            $user->delete(); // Soft delete
+            return response()->json([
+                'status' => 1,
+                'msg' => 'User deleted successfully!'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 0,
+                'error' => 'User not found or already deleted'
+            ]);
         }
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 0,
+            'error' => $e->getMessage()
+        ]);
     }
+}
     //user register
     public function register(Request $request)
     {

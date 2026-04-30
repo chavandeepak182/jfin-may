@@ -1,4 +1,5 @@
 @include('dhara-jfin.layout.header')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <main>
 <!-- Page Banner -->
@@ -100,7 +101,33 @@
 </section>
 
 </main>
-
+@if(session('success'))
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    Swal.fire({
+        title: "Thank You!",
+        text: "{{ session('success') }}",
+        icon: "success",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#0d6efd"
+    });
+});
+</script>
+@endif
+<style>
+.swal2-popup {
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+}
+.swal2-title {
+    font-size: 24px;
+    font-weight: 600;
+}
+.swal2-confirm {
+    padding: 10px 25px;
+    font-size: 16px;
+}
+</style>
 @include('dhara-jfin.layout.footer')
 
 <script src="{{ asset('theme/dhara-jfin/js/chatbot.js') }}"></script>
