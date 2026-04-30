@@ -367,6 +367,7 @@
                     <tr>
                         <td>{{ $bank->bank_name }}</td>
                         <td>{{ $bank->ifsc_code }}</td>
+                        <td>{{ $bank->bank_id }}</td>
                         <td>{{ $bank->branch_name }}</td>
                         <td>{{ $bank->manager_name }}</td>
                         <td>{{ $bank->manager_number }}</td>
@@ -410,9 +411,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="addBank"
-      method="POST"
-      action="{{ route('admin.loanbank.store') }}">
+               <form id="addBank" method="POST">
     
 
                     @csrf
@@ -855,26 +854,38 @@ document.getElementById('addBank').addEventListener('submit', function (e) {
 <script>
 function deleteBank(bankId) {
 
-    if (!confirm('Are you sure you want to delete this bank?')) {
-        return;
-    }
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
 
-    fetch("{{ route('deleteBank') }}", {
-        method: "POST",
-        headers: {
-            "X-CSRF-TOKEN": "{{ csrf_token() }}",
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ bank_id: bankId })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.status === 1) {
-            alert(data.msg);
-            window.location.reload();
-        } else {
-            alert('Delete failed');
+        if (result.isConfirmed) {
+
+            fetch("{{ route('deleteBank') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ bank_id: bankId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 1) {
+                    Swal.fire('Deleted!', data.msg, 'success')
+                        .then(() => location.reload());
+                } else {
+                    Swal.fire('Error', data.msg, 'error');
+                }
+            });
+
         }
+
     });
 }
 </script>
@@ -1030,16 +1041,28 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: formData
         })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === 1) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: 'Bank saved successfully'
-                }).then(() => location.reload());
-            }
-        });
+       .then(res => res.text())
+.then(text => {
+    console.log("RAW RESPONSE:", text); // 👈 THIS WILL SHOW ERROR
+
+    try {
+        let data = JSON.parse(text);
+
+        if (data.status === 1) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: data.msg
+            }).then(() => location.reload());
+        } else {
+            alert(data.msg);
+        }
+
+    } catch (e) {
+        console.error("SERVER ERROR:", text);
+        alert("Backend error — check console");
+    }
+});
     });
 
 });

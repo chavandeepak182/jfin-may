@@ -42,6 +42,8 @@ use App\Http\Controllers\DsaController;
 use App\Http\Controllers\PriceRangeController;
 use App\Http\Controllers\DsaPayoutConfigController;
 use App\Http\Controllers\DsaPayoutController;
+use App\Http\Controllers\DsaMonthlyPayoutController;
+
 
 
 
@@ -49,7 +51,16 @@ use App\Http\Controllers\DsaPayoutController;
 Route::get('/admin/change-password', [AdminController::class, 'changePasswordForm'])->name('admin.change.password');
 Route::post('/admin/change-password', [AdminController::class, 'updatePassword'])->name('admin.update.password');
 
+Route::middleware('isDsa')->group(function () {
 
+    Route::get('dsa/dashboard', [DsaController::class, 'dashboard'])
+        ->name('dsa.dashboard');
+
+});
+
+// dsa mis
+Route::get('/admin/dsa/mis/export', [DsaController::class, 'exportDsaMIS'])
+    ->name('admin.dsa.mis.export');
 // refreal leads city
 Route::get('/get-cities/{state_id}', function ($state_id) {
     return DB::table('cities')
@@ -76,6 +87,7 @@ Route::post('/admin/user/update-status',
 
 Route::get('admin/loans-list', [LoanApplicationController::class, 'loanlist'])->name('admin.loans');
 Route::get('admin/property', [PropertyController::class, 'propertylist'])->name('admin.property');
+
 Route::get('admin/leadslist', [LeadController::class, 'leadlist'])->name('admin.listlead');
 Route::post('/update-featured', [PropertyController::class,'updateFeatured'])->name('updateFeatured');
 Route::get('admin/banklist', [BankController::class, 'loanbankslist'])->name('admin.bank');
@@ -439,13 +451,55 @@ Route::get('professional-detail', [FrontendController::class, 'ProfessionalDetai
 
 
 // DSA SECTION
+
+
+/* ================= ADMIN DSA ================= */
+
 Route::get('/admin/dsa', [DsaController::class, 'index'])->name('admin.dsa');
-Route::get('/admin/dsa/list', [DsaController::class, 'getList'])->name('admin.dsa.list');
+
+Route::get('/admin/dsa/list', [DsaController::class, 'loadDSAList'])->name('admin.dsa.list');
+
 Route::post('/admin/dsa/store', [DsaController::class, 'store'])->name('admin.dsa.store');
+
+Route::get('/admin/dsa/edit/{id}', [DsaController::class, 'edit']);
+
+
+/* ================= DSA PANEL ================= */
+
+// Dashboard
+Route::get('/dsa/dashboard', [DsaController::class, 'dashboard'])->name('dsa.dashboard');
+
+// Loans
+Route::get('/dsa/loans', [DsaController::class, 'allLoans'])->name('dsa.loans');
+
+// Users Page
+Route::get('/dsa/users', [DsaController::class, 'users'])->name('dsa.users');
+
+// Users List (AJAX)
+Route::get('/dsa/users/list', [DsaController::class, 'loadUsers'])->name('dsa.users.list');
+
+// Save Customer
+Route::post('/dsa/save-customer', [DsaController::class, 'saveCustomer'])->name('dsa.save.customer');
+
+// Get Cities
+Route::get('/get-cities', [DsaController::class, 'getCities'])->name('get.cities');
+Route::get('/dsa/customer/edit/{id}', [DsaController::class, 'editCustomer'])
+    ->name('dsa.customer.edit');
+    
+    Route::get('/admin/customers/list', [DsaController::class, 'loadAllCustomers'])
+    ->name('admin.customers.list');
+
+    Route::get('/admin/dsa/customer-loans', [DsaController::class, 'loadDsaCustomerLoans'])
+    ->name('admin.dsa.customer.loans');
+
+    Route::get('/admin/dsa-mis-list', [MisController::class, 'getDsaMisList'])
+    ->name('admin.dsa.mis.list');
+    Route::get('/mis/export-excel', [MisController::class, 'exportExcel'])
+    ->name('mis.export.excel');
 
 //user routes
 Route::get('login', [AdminController::class, 'loginView'])->name('login');
-Route::post('a', [FrontendController::class, 'userLogin'])->name('userLogin');
+Route::post('userLogin', [FrontendController::class, 'userLogin'])->name('userLogin');
 
 // Route::get('verify-otp', [AdminController::class, 'verifyOtp'])->name('verify-otp');
 
@@ -463,6 +517,38 @@ Route::post('reset_password_link', [FrontendController::class, 'reset_password_l
 Route::get('reset_password/{auth_id}', [FrontendController::class, 'reset_password'])->name('reset_password');
 Route::post('update_password', [FrontendController::class, 'update_password'])->name('update_password');
 
+
+Route::prefix('admin')->group(function () {
+
+    // 📄 Index Page
+    Route::get('/dsa-payouts', [DsaMonthlyPayoutController::class, 'index'])
+        ->name('dsa.payout.index');
+
+    // 🔢 Calculate Monthly Payout
+    Route::post('/dsa-payouts/calculate', [DsaMonthlyPayoutController::class, 'calculate'])
+        ->name('dsa.payout.calculate');
+
+    // 💰 Release Payment
+    Route::post('/dsa-payouts/release/{id}', [DsaMonthlyPayoutController::class, 'release'])
+        ->name('dsa.payout.release');
+});
+Route::get('/admin/dsa-payouts/{dsa}/{month}', 
+    [DsaMonthlyPayoutController::class, 'details']
+)->name('dsa.payout.details');
+
+
+// dsa settig routes
+Route::prefix('dsa')->group(function () {
+
+    Route::get('/settings', [DsaController::class, 'settings'])
+        ->name('dsa.settings');
+
+    Route::post('/settings/save', [DsaController::class, 'saveSettings'])
+        ->name('dsa.settings.save');
+
+});
+Route::post('/dsa/documents/upload', [App\Http\Controllers\DsaController::class, 'uploadDocument'])
+    ->name('dsa.documents.upload');
 
 // notification routes
 Route::middleware(['auth'])->group(function () {
@@ -701,7 +787,7 @@ Route::post('/loan/restore', [LoanApplicationController::class, 'restoreLoan'])
     Route::get('admin/referral_earnings', [ReferralController::class, 'referral_earnings'])->name('admin.referral_earnings');
     Route::get('/admin/refer-tool', [ReferralController::class, 'listUsers'])->name('admin.refer.tool');
 
-
+Route::post('/check-duplicate', [App\Http\Controllers\DsaController::class, 'checkDuplicate']);
     //bank 
     Route::get('admin/allbanks', [BankController::class, 'allbanks'])->name('allbanks');
     Route::post('bank/insertBank',[BankController::class,'insertBank'])->name('insertBank');

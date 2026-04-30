@@ -223,7 +223,7 @@
 								<label class="form-label">Mobile No</label>
 								<input type="text" name="mobile_no"
 									class="form-control"
-									value="{{ old('mobile_no', $profile->mobile_no ?? '') }}">
+									value="{{ old('mobile_no', $profile->mobile_no ?? '') }}" required>
 							</div>
 
 							<div class="col-md-6">
@@ -366,9 +366,10 @@
 
 							<div class="col-md-6">
 								<label class="form-label">Experience (Years)</label>
-								<input type="number" name="experience_year"
-									class="form-control"
-									value="{{ old('experience_year', $professionalDetails->experience_year ?? '') }}">
+								<input type="number" name="experience_year" id="experience_year"
+       class="form-control"
+       max="99" min="0"
+       value="{{ old('experience_year', $professionalDetails->experience_year ?? '') }}">
 							</div>
 
 							<div class="col-12">
@@ -388,6 +389,43 @@
 				</div>
 			</div>
 		</div>
+
+        <script>
+document.querySelector("form").addEventListener("submit", function(e) {
+
+    let exp = document.getElementById("experience_year").value;
+
+    if (exp !== "" && (exp < 0 || exp > 99)) {
+        alert("Experience must be between 0 to 99 years");
+        e.preventDefault();
+        return;
+    }
+
+});
+</script>
+<script>
+document.querySelector("form").addEventListener("submit", function(e) {
+
+    let phone = document.getElementById("phone").value.trim();
+
+    // Phone empty check
+    if (phone === "") {
+        alert("Phone number is required");
+        e.preventDefault();
+        return;
+    }
+
+    // Only digits + 10 length (India standard)
+    let phonePattern = /^[0-9]{10}$/;
+
+    if (!phonePattern.test(phone)) {
+        alert("Enter valid 10 digit phone number");
+        e.preventDefault();
+        return;
+    }
+
+});
+</script>
 
 {{-- ================= BANK DETAILS ================= --}}
 <div class="col-xl-6">
@@ -605,6 +643,68 @@ document.addEventListener('DOMContentLoaded', function () {
     if (stateSelect.value) {
         loadCities(stateSelect.value, selectedCity);
     }
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.querySelector('#editProfileModal form');
+    const phoneInput = document.querySelector('input[name="mobile_no"]');
+    const dobInput = document.querySelector('input[name="dob"]');
+
+    // 🔥 create error elements
+    const phoneError = document.createElement("div");
+    phoneError.className = "text-danger mt-1";
+
+    const dobError = document.createElement("div");
+    dobError.className = "text-danger mt-1";
+
+    phoneInput.parentNode.appendChild(phoneError);
+    dobInput.parentNode.appendChild(dobError);
+
+    form.addEventListener("submit", function(e){
+
+        let isValid = true;
+
+        // clear old errors
+        phoneError.innerText = "";
+        dobError.innerText = "";
+
+        // ===== MOBILE VALIDATION =====
+        let phone = phoneInput.value.trim();
+        let phonePattern = /^[0-9]{10}$/;
+
+        if (!phonePattern.test(phone)) {
+            phoneError.innerText = "Enter valid 10 digit mobile number";
+            isValid = false;
+        }
+
+        // ===== DOB VALIDATION (18+) =====
+        let dob = dobInput.value;
+
+        if (dob) {
+            let birthDate = new Date(dob);
+            let today = new Date();
+
+            let age = today.getFullYear() - birthDate.getFullYear();
+            let m = today.getMonth() - birthDate.getMonth();
+
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            if (age < 18) {
+                dobError.innerText = "Age must be 18+";
+                isValid = false;
+            }
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+
+    });
+
 });
 </script>
 

@@ -226,34 +226,23 @@ public function eligiblelist()
 
 public function updateBank(Request $request)
 {
-    $bank_id = $request->bank_id;
-
-    $updateBank = [
-        'ifsc_code'      => $request->ifsc_code,
-        'bank_name'      => $request->bank_name,
-        'branch_name'    => $request->branch_name,
-        'manager_name'   => $request->manager_name,
-        'bank_address'   => $request->bank_address,
-        'manager_number' => $request->manager_number,
-        'updated_at'     => now()
-    ];
-
     try {
 
-        // activity logs
-        $username = Session::get('username');
-        $user_id  = Session::get('user_id');
-        $details  = "Bank information updated successfully by " . $username;
-        app(UsersController::class)->insertActivityLogs($user_id, $details);
-
-        // ✅ FIXED TABLE NAME
         DB::table('loan_bank_details')
-            ->where('bank_id', $bank_id)
-            ->update($updateBank);
+            ->where('bank_id', $request->bank_id)
+            ->update([
+                'ifsc_code'      => $request->ifsc_code,
+                'bank_name'      => $request->bank_name,
+                'branch_name'    => $request->branch_name,
+                'manager_name'   => $request->manager_name,
+                'bank_address'   => $request->bank_address,
+                'manager_number' => $request->manager_number,
+                'updated_at'     => now()
+            ]);
 
         return response()->json([
             'status' => 1,
-            'msg' => 'Bank information updated successfully!'
+            'msg' => 'Bank updated successfully!'
         ]);
 
     } catch (\Exception $e) {
@@ -263,7 +252,6 @@ public function updateBank(Request $request)
         ]);
     }
 }
-
     // public function deleteBank(Request $request){
     //     try{        
     //         $bank_id = $request->bank_id;    
@@ -290,36 +278,20 @@ public function updateBank(Request $request)
 
 
 
-    public function deleteBank(Request $request)
+public function deleteBank(Request $request)
 {
     try {
 
-        $bank_id = $request->bank_id;
-
-        $deleted = DB::table('loan_bank_details')
-            ->where('bank_id', $bank_id)
+        DB::table('loan_bank_details')
+            ->where('bank_id', $request->bank_id)
             ->delete();
 
-        // activity logs
-        $username = Session::get('username');
-        $user_id  = Session::get('user_id');
-        $details  = "Bank information deleted successfully by " . $username;
-        app(UsersController::class)->insertActivityLogs($user_id, $details);
-
-        if ($deleted) {
-            return response()->json([
-                'status' => 1,
-                'msg' => 'Bank deleted successfully!'
-            ]);
-        }
-
         return response()->json([
-            'status' => 0,
-            'msg' => 'Bank not found or already deleted'
+            'status' => 1,
+            'msg' => 'Bank deleted successfully!'
         ]);
 
     } catch (\Exception $e) {
-
         return response()->json([
             'status' => 0,
             'msg' => $e->getMessage()

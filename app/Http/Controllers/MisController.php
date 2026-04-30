@@ -17,10 +17,13 @@ use Illuminate\Http\Request;
 
 class MisController extends Controller
 {
-    public function exportExcel()
-    {
-        return Excel::download(new MisExport, 'mis_records.xlsx');
-    }
+   public function exportExcel()
+{
+    $roleId = session()->get('role_id');
+    $userId = session()->get('user_id');
+
+    return Excel::download(new MisExport($roleId, $userId), 'mis_records.xlsx');
+}
     public function exportPDF()
     {
         $misRecords = Mis::all();
@@ -40,10 +43,21 @@ class MisController extends Controller
     $userId = session()->get('user_id');
 
     $query = MIS::query()->latest();
+// 🔐 Agent + DSA restriction
+if (
+    $roleId == config('constants.roles.agent') ||
+    $roleId == 6
+) {
+    $query->where('created_by', $userId);
+}
 
-    // 🔐 Agent restriction
-    if ($roleId == config('constants.roles.agent')) {
-        $query->where('created_by', $userId);
+    // 🔥 ADMIN → DSA exclude (MAIN LOGIC)
+    if ($roleId == config('constants.roles.admin')) {
+        $query->whereNotIn('created_by', function ($q) {
+            $q->select('id')
+              ->from('users')
+              ->where('role_id', 6);
+        });
     }
 
     // Date filter
@@ -69,6 +83,49 @@ class MisController extends Controller
 
     return view('mis.index', compact('misRecords', 'banks'));
 }
+
+//  DSA MIS
+public function getDsaMisList(Request $request)
+{
+    try {
+
+        $query = DB::table('mis')
+            ->join('users', 'mis.created_by', '=', 'users.id')
+            ->where('users.role_id', 6);
+
+        if (!empty($request->search)) {
+            $query->where(function ($q) use ($request) {
+                $q->where('mis.name', 'like', "%{$request->search}%")
+                  ->orWhere('mis.email', 'like', "%{$request->search}%")
+                  ->orWhere('mis.contact', 'like', "%{$request->search}%");
+            });
+        }
+
+        if (!empty($request->from_date) && !empty($request->to_date)) {
+            $query->whereBetween('mis.created_at', [
+                $request->from_date . ' 00:00:00',
+                $request->to_date . ' 23:59:59'
+            ]);
+        }
+
+        // ✅ 🔥 THIS WAS MISSING
+        $misRecords = $query->select('mis.*')->latest()->paginate(10);
+
+        $html = view('mis.partials.dsa_mis_table', compact('misRecords'))->render();
+
+        return response()->json(['html' => $html]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage()
+        ]);
+    }
+}
+
+
+
+
+
 // public function index(Request $request)
 // {
 //     $user = auth()->user();
@@ -114,11 +171,14 @@ private function authorizeMIS($mis)
 
     // Agent → only own records
     if (
-        $roleId == config('constants.roles.agent') &&
-        (int) $mis->created_by === (int) $userId
-    ) {
-        return true;
-    }
+    in_array($roleId, [
+        config('constants.roles.agent'),
+        6
+    ]) &&
+    (int) $mis->created_by === (int) $userId
+) {
+    return true;
+}
 
     abort(403, 'Unauthorized MIS access');
 }
@@ -271,7 +331,7 @@ public function update(Request $request, $id)
         // Log updated record
         Log::info('Updated MIS Record:', $misRecord->fresh()->toArray());
 
-        return redirect()->route('admin.listlead')->with('success', 'Record updated successfully');
+        return redirect()->route('mis.index')->with('success', 'Record updated successfully');
     }
     public function destroy(Request $request)
 {

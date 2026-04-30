@@ -26,9 +26,6 @@ class EnquiryController extends Controller
         ]);
         Enquiry::create($validated);
         // return view('frontend.thank-loan');
-        return response()->json([
-        'status' => true,
-        'message' => 'Thank you! Your enquiry has been submitted.'
-    ]);
+       return redirect()->back()->with('success', 'Thank you for your enquiry! Our team will get back to you shortly.');
     }
 }

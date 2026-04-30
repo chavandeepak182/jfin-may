@@ -64,6 +64,108 @@
             color: #4c5fd7;
         } */
 
+            /* LOCALITIES SECTION ENHANCED */
+
+.locality-card {
+    background: linear-gradient(135deg, #ffffff, #f8f9ff);
+    border-radius: 18px;
+    padding: 1.8rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover Glow Effect */
+.locality-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(76,95,215,0.2), transparent);
+    transition: 0.6s;
+}
+
+.locality-card:hover::before {
+    left: 100%;
+}
+
+.locality-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(76, 95, 215, 0.18);
+}
+
+/* LOCALITIES SECTION ENHANCED */
+
+.locality-card {
+    background: linear-gradient(135deg, #ffffff, #f8f9ff);
+    border-radius: 18px;
+    padding: 1.8rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover Glow Effect */
+.locality-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(76,95,215,0.2), transparent);
+    transition: 0.6s;
+}
+
+.locality-card:hover::before {
+    left: 100%;
+}
+
+.locality-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(76, 95, 215, 0.18);
+}
+.mini-property {
+    display: block;
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.mini-property:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+.mini-property img {
+    border-radius: 8px;
+    transition: transform 0.4s ease;
+}
+
+.mini-property:hover img {
+    transform: scale(1.08);
+}
+.mini-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+.mini-developer {
+    color: #4c5fd7;
+    font-size: 0.85rem;
+}
+
+.mini-location {
+    font-size: 0.8rem;
+    color: #888;
+}
+
         .apply-btn {
             background: #4c5fd7;
             color: white;
@@ -778,7 +880,7 @@
     <section class="container">
 
         <!-- Search and Filter Section -->
-       <form method="GET" action="{{ route('properties') }}">
+      
  
 
 
@@ -812,10 +914,10 @@
         Commercial
     </option>
 
-    <option value="rent"
+    <!-- <option value="rent"
         {{ request('type') == 'rent' ? 'selected' : '' }}>
         Rent
-    </option>
+    </option> -->
 </select>
 
           <select name="bhk">
@@ -839,14 +941,20 @@
     @endforeach
 </select>
 
-            <select name="budget">
-                <option value="">Budget Range</option>
-                <option value="40-60">₹40L - ₹60L</option>
-                <option value="60-80">₹60L - ₹80L</option>
-                <option value="80-100">₹80L - ₹1Cr</option>
-                <option value="100-200">₹1Cr - ₹2Cr</option>
-                <option value="200+">Above ₹2Cr</option>
-            </select>
+         <select name="budget">
+    <option value="">Budget Range</option>
+
+    @foreach($data['priceRanges'] as $range)
+        <option value="{{ $range->range_id }}"
+            {{ request('budget') == $range->range_id ? 'selected' : '' }}>
+
+            ₹{{ number_format($range->from_price) }}
+            -
+            ₹{{ number_format($range->to_price) }}
+
+        </option>
+    @endforeach
+</select>
 
         </div>
 
@@ -877,7 +985,7 @@
 
                     <div class="properties-mini-grid">
                         @foreach($localityData['properties'] as $property)
-                            <a href="{{ url($property->slug . '-' . $property->properties_id) }}"
+                            <a href="{{ url('property/' . $property->slug) }}"
                                target="_blank"
                                class="mini-property">
 
@@ -1068,7 +1176,7 @@
                 $location = ($v->localities ?? '') . ', ' . ($v->city ?? '');
                 $bhk = $v->select_bhk;
                 $area = $v->area;
-                $price = formatPrice($v->s_price);
+                $price = "" . formatPrice($v->from_price) . " - " . formatPrice($v->to_price);
             @endphp
 
        <div class="property-card {{ $index >= 3 ? 'featured-extra' : '' }}">
@@ -1161,33 +1269,43 @@ document.addEventListener("DOMContentLoaded", function(){
 </script>
 
     <!-- All Properties -->
-    <section class="container">
+<section class="container">
+
     <div class="section-header">
         <h2>All Properties</h2>
         <p>Explore prime properties based on your accommodation</p>
     </div>
 
+    {{-- ✅ CHECK IF DATA EXISTS --}}
+    @if(count($data['allProperties']) > 0)
+
     <div class="properties-grid">
-      @foreach($data['allProperties'] as $index => $v)
+
+        @foreach($data['allProperties'] as $index => $v)
+
             @php
-                $img = env('baseURL') . '/' . $v->image;
+                $img = $v->image ? env('baseURL') . '/' . $v->image : asset('default.jpg');
                 $title = $v->title;
                 $category = $v->category_name ?? 'Available';
                 $builder = $v->builder_name;
-                $location = $v->localities . ', ' . $v->city;
+                $location = ($v->localities ?? '') . ', ' . ($v->city ?? '');
                 $bhk = $v->select_bhk;
                 $area = $v->area;
-                $price = formatPrice($v->s_price);
+
+                // ✅ PRICE FIX (DYNAMIC RANGE)
+                if (!empty($v->from_price) && !empty($v->to_price)) {
+                    $price = "" . formatPrice($v->from_price) . " - " . formatPrice($v->to_price);
+                } else {
+                    $price = "Price on Request";
+                }
             @endphp
 
-           <div class="property-card property-item {{ $index >= 3 ? 'extra-property' : '' }}">
+            {{-- ❌ REMOVE HIDE WHEN FILTER ACTIVE --}}
+            <div class="property-card property-item {{ (!request()->hasAny(['search','bhk','budget','type']) && $index >= 3) ? 'extra-property' : '' }}">
+
                 <!-- Image -->
                 <div class="property-image-wrapper">
-                    <img
-                        src="{{ $img }}"
-                        alt="{{ $title }}"
-                        loading="lazy"
-                    >
+                    <img src="{{ $img }}" alt="{{ $title }}" loading="lazy">
 
                     <div class="property-badge">
                         {{ $category }}
@@ -1203,6 +1321,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
                 <!-- Details -->
                 <div class="property-details">
+
                     <h3 class="property-title">
                         {{ $title }}
                     </h3>
@@ -1212,7 +1331,7 @@ document.addEventListener("DOMContentLoaded", function(){
                     </div>
 
                     <div class="property-location">
-                        <i class="fa-solid fa-location-dot"></i>     {{ $location }}
+                        <i class="fa-solid fa-location-dot"></i> {{ $location }}
                     </div>
 
                     <div class="property-specs">
@@ -1227,26 +1346,44 @@ document.addEventListener("DOMContentLoaded", function(){
                     </div>
 
                     <div class="property-footer">
-                        <div class="property-price price-format" data-price="{{ $price }}">
+                        <div class="property-price">
                             {{ $price }}
                         </div>
 
-                       <a href="{{ url('property/' . $v->slug) }}">
+                        <a href="{{ url('property/' . $v->slug) }}">
                             <button class="contact-btn">
                                 Contact <span>→</span>
                             </button>
                         </a>
                     </div>
+
                 </div>
+
             </div>
+
         @endforeach
+
     </div>
-    <br>
+
+    {{-- ✅ LOAD MORE ONLY WHEN NO FILTER --}}
+    @if(!request()->hasAny(['search','bhk','budget','type']))
     <div class="text-center mt-4">
-    <button id="loadMoreBtn" class="btn btn-primary px-4 py-2">
-        Load More
-    </button>
-</div>
+        <button id="loadMoreBtn" class="btn btn-primary px-4 py-2">
+            Load More
+        </button>
+    </div>
+    @endif
+
+    @else
+
+    {{-- ❌ NO DATA CASE --}}
+    <div class="text-center mt-5">
+        <h3>No Properties Found 😔</h3>
+        <p>Try changing filters</p>
+    </div>
+
+    @endif
+
 </section>
 <script>
 document.addEventListener("DOMContentLoaded", function(){

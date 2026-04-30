@@ -346,11 +346,9 @@ $nearby = !empty($v->nearby_locations) ? json_decode($v->nearby_locations, true)
                     <input type="text" name="rera" class="form-control" placeholder="Rera No." value="{{ $v->rera }}" />
                 </div>
                 <div class="card-body">
-                    <h3 class="h6">Property Image</h3>
-                    <img src="{{ $img }}" class="img-thumbnail" id="old_image"/>
-                    <div id="img-preview" class="img-thumbnail"></div>
-                    <input class="form-control mt-2" type="file" accept=".jpg,.jpeg,.png,.webp " name="property_image"  id="choose-file"/>
-                </div>
+    <h3 class="h6">Add Multiple Images</h3>
+    <input type="file" name="additional_images[]" multiple class="form-control">
+</div>
                 <div class="card-body">
                     <h3 class="h6">Property Boucher</h3>
                     <a href = "{{ $boucher }}">Boucher URL </a>
@@ -544,11 +542,11 @@ $('#editProperty').on('submit', function(e){
     let formData = new FormData(this);
 
     // 🔥 FILE manually add (safe)
-    let fileInput = $('#choose-file')[0].files[0];
-    if(fileInput){
-        formData.set('property_image', fileInput);
-    }
+   let multiFiles = $('input[name="additional_images[]"]')[0].files;
 
+for (let i = 0; i < multiFiles.length; i++) {
+    formData.append('additional_images[]', multiFiles[i]);
+}
     $.ajax({
         url:"{{Route('updatePropertie')}}",
         method:"POST",

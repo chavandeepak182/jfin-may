@@ -325,7 +325,26 @@ body {
             @if(Session::has('role_id'))
                 <div class="dropdown-divider"></div>
 
-                <a href="/my-profile" class="dropdown-link">
+               @php $role = session('role_id'); @endphp
+
+@if($role == config('roles.customer'))
+    <a href="/customer/dashboard" class="dropdown-link">
+
+@elseif($role == config('roles.agent'))
+    <a href="/agent/dashboard" class="dropdown-link">
+
+@elseif($role == config('roles.dsa'))
+    <a href="/dsa/dashboard" class="dropdown-link">
+
+@elseif($role == config('roles.partner'))
+    <a href="/partner/dashboard" class="dropdown-link">
+
+@elseif($role == config('roles.admin'))
+    <a href="/admin/dashboard" class="dropdown-link">
+
+@else
+    <a href="/my-profile" class="dropdown-link">
+@endif
                     <i class="fas fa-chart-line"></i>
                     <span>Dashboard</span>
                 </a>
@@ -407,7 +426,26 @@ body {
             @if(Session::has('role_id'))
                 <div class="dropdown-divider"></div>
 
-                <a href="/my-profile" class="dropdown-link">
+               @php $role = session('role_id'); @endphp
+
+@if($role == config('roles.customer'))
+    <a href="/customer/dashboard" class="dropdown-link">
+
+@elseif($role == config('roles.agent'))
+    <a href="/agent/dashboard" class="dropdown-link">
+
+@elseif($role == config('roles.dsa'))
+    <a href="/dsa/dashboard" class="dropdown-link">
+
+@elseif($role == config('roles.partner'))
+    <a href="/partner/dashboard" class="dropdown-link">
+
+@elseif($role == config('roles.admin'))
+    <a href="/admin/dashboard" class="dropdown-link">
+
+@else
+    <a href="/my-profile" class="dropdown-link">
+@endif
                     <i class="fas fa-chart-line"></i>
                     <span>Dashboard</span>
                 </a>
@@ -416,7 +454,7 @@ body {
    class="dropdown-link logout-link"
    onclick="document.getElementById('logout-form').submit();">
     <i class="fas fa-sign-out-alt"></i>
-    <span>Logout</span>
+    <!-- <span>Logout</span> -->
 </a>
 
 

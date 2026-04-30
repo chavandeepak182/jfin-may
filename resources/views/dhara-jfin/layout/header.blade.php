@@ -92,11 +92,31 @@
         {{-- IF USER IS LOGGED IN --}}
         @if(Session::has('role_id'))
 
-            <li>
-                <a href="/my-profile">
-                    <i class="fa-solid fa-chart-line"></i> Dashboard
-                </a>
-            </li>
+            @php $role = session('role_id'); @endphp
+
+<li>
+@if($role == config('roles.customer'))
+    <a href="/customer/dashboard">
+
+@elseif($role == config('roles.agent'))
+    <a href="/agent/dashboard">
+
+@elseif($role == config('roles.dsa'))
+    <a href="/dsa/dashboard">
+
+@elseif($role == config('roles.partner'))
+    <a href="/partner/dashboard">
+
+@elseif($role == config('roles.admin'))
+    <a href="/admin/dashboard">
+
+@else
+    <a href="/my-profile">
+@endif
+
+        <i class="fa-solid fa-chart-line"></i> Dashboard
+    </a>
+</li>
 
          <li>
     <form method="POST" action="{{ route('logout') }}" class="logout-form">
