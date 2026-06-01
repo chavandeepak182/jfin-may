@@ -77,6 +77,23 @@
 
     {{-- FORM CARD --}}
     <div class="form-card">
+        {{-- SUCCESS MESSAGE --}}
+@if(session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+{{-- ERROR MESSAGE --}}
+@if($errors->any())
+<div class="alert alert-danger">
+
+    @foreach($errors->all() as $error)
+        <div>{{ $error }}</div>
+    @endforeach
+
+</div>
+@endif
 
         <form method="POST" action="{{ url('admin/price-range/store') }}">
             @csrf

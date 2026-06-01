@@ -130,7 +130,7 @@
                                 </div>
                     </div>
 
-
+<!-- 
                     <div class="col-lg-3">
                     <div class="mb-3">
                         <label class="form-label">Select BHK</label><span class="text-danger">*</span>
@@ -148,7 +148,94 @@
                             <option value="3,4 & 5">3,4 & 5</option>
                         </select>
                     </div>
-                </div>
+                </div> -->
+<div class="col-lg-3" id="bhkWrapper">
+    <div class="mb-3">
+
+        <label class="form-label">
+            Select BHK
+        </label>
+
+        <span class="text-danger">*</span>
+
+        <select class="form-control"
+                name="select_bhk">
+
+            <option value="">
+                Select BHK
+            </option>
+
+            @foreach($data['bhks'] as $bhk)
+
+                <option value="{{ $bhk->bhk_name }}">
+
+                    {{ $bhk->bhk_name }}
+
+                </option>
+
+            @endforeach
+
+        </select>
+
+    </div>
+
+</div>
+<div class="col-lg-3"
+     id="sqftWrapper"
+     style="display:none;">
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Sq Ft
+        </label>
+
+        <input type="text"
+               name="commercial_sqft"
+               class="form-control"
+               placeholder="Enter Sq Ft">
+
+    </div>
+
+</div>
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    const propertyType = document.getElementById("propertyType");
+
+    const bhkWrapper = document.getElementById("bhkWrapper");
+
+    const sqftWrapper = document.getElementById("sqftWrapper");
+
+    function toggleCommercialFields(){
+
+        let selectedText =
+            propertyType.options[propertyType.selectedIndex].text.toLowerCase();
+
+        if(selectedText.includes('commercial')){
+
+            bhkWrapper.style.display = "none";
+
+            sqftWrapper.style.display = "block";
+
+        }
+        else{
+
+            bhkWrapper.style.display = "block";
+
+            sqftWrapper.style.display = "none";
+
+        }
+    }
+
+    propertyType.addEventListener("change", toggleCommercialFields);
+
+    toggleCommercialFields();
+
+});
+
+</script>
 
 
                     <div class="col-lg-3">
@@ -505,7 +592,7 @@ document.getElementById("property_images").addEventListener("change", function(e
     </small>
 </div>                                
 
-            <div class=" mb-4">
+            <!-- <div class=" mb-4">
                 <label for="amenities"><strong>Select Amenities:</strong></label><br>
                 <input type="checkbox" name="amenities[]" value="WiFi"> WiFi<br>
                 <input type="checkbox" name="amenities[]" value="Parking"> Parking<br>
@@ -519,7 +606,35 @@ document.getElementById("property_images").addEventListener("change", function(e
                 <input type="checkbox" name="amenities[]" value="Laundry Room"> Laundry Room<br>
                 <input type="checkbox" name="amenities[]" value="Pets Allowed"> Pets Allowed<br>
                 <input type="checkbox" name="amenities[]" value="Spa & Massage"> Spa & Massage<br>
-            </div>                     
+            </div>                      -->
+           <div class="mb-4">
+
+    <label>
+        <strong>Select Amenities:</strong>
+    </label>
+
+    <br>
+
+    @foreach($data['amenities'] as $amenity)
+
+        <div class="form-check mb-2">
+
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="amenities[]"
+                   value="{{ $amenity->amenity_name }}">
+
+            <label class="form-check-label">
+
+                {{ $amenity->amenity_name }}
+
+            </label>
+
+        </div>
+
+    @endforeach
+
+</div>      
         </div>
     </div>        
 </form>       

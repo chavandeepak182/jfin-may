@@ -18,20 +18,35 @@ class PriceRangeController extends Controller
         return view('admin.price_range.create');
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'from_price' => 'required|numeric',
-            'to_price'   => 'required|numeric|gt:from_price',
-        ]);
+   public function store(Request $request)
+{
+    $request->validate([
+        'from_price' => 'required|numeric',
+        'to_price'   => 'required|numeric|gt:from_price',
+    ]);
 
-        DB::table('price_range')->insert([
-            'from_price' => $request->from_price,
-            'to_price'   => $request->to_price,
-        ]);
+    // Duplicate check
+    $exists = DB::table('price_range')
+        ->where('from_price', $request->from_price)
+        ->where('to_price', $request->to_price)
+        ->exists();
 
-        return redirect('admin/price-range')->with('success', 'Added Successfully');
+    if($exists){
+        return redirect()->back()
+            ->withErrors([
+                'duplicate' => 'Price range already exists!'
+            ])
+            ->withInput();
     }
+
+    DB::table('price_range')->insert([
+        'from_price' => $request->from_price,
+        'to_price'   => $request->to_price,
+    ]);
+
+    return redirect('admin/price-range')
+        ->with('success', 'Added Successfully');
+}
 
     public function edit($id)
     {

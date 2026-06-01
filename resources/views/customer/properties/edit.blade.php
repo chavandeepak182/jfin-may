@@ -45,19 +45,27 @@ $isLocked = in_array($booking->status, ['customer_confirmed','completed']);
 
 <div class="form-group">
 <label>TDS %</label>
-<input type="number" name="tds_percentage" value="{{ $booking->tds_percentage }}">
+<input type="number"
+       step="0.01"
+       name="tds_percentage"
+       value="{{ ($booking->tds_percentage == '0.00' || $booking->tds_percentage == 0) ? '' : $booking->tds_percentage }}">
 </div>
 
 <div class="form-group">
 <label>GST %</label>
-<input type="number" name="gst_percentage" value="{{ $booking->gst_percentage }}">
+<input type="number"
+       step="0.01"
+       name="gst_percentage"
+       value="{{ ($booking->gst_percentage == '0.00' || $booking->gst_percentage == 0) ? '' : $booking->gst_percentage }}">
 </div>
 
 <div class="form-group">
 <label>MLM Amount (₹)</label>
-<input type="number" name="mlm_amount" value="{{ $booking->mlm_amount }}">
+<input type="number"
+       step="0.01"
+       name="mlm_amount"
+       value="{{ ($booking->mlm_amount == '0.00' || $booking->mlm_amount == 0) ? '' : $booking->mlm_amount }}">
 </div>
-
 </div>
 </div>
 
@@ -251,5 +259,6 @@ updateSubTotals(row.getAttribute('data-offer'));
 });
 
 </script>
+
 
 @endsection
