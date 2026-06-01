@@ -959,6 +959,10 @@ public function loadListByType(Request $request)
                   ->from('loans')
                   ->where('status', '!=', 'disbursed');
             })
+            ->where(function($q) {
+    $q->whereNull('users.dsa_code')
+      ->orWhere('users.dsa_code', '');
+})
             ->whereNull('users.deleted_at')
             ->select(
                 'users.*',
@@ -993,7 +997,13 @@ public function loadListByType(Request $request)
 
         $users = User::leftJoin('profile', 'users.id', '=', 'profile.user_id')
             ->where('users.role_id', $roleId)
-            ->whereNull('users.deleted_at')
+
+->where(function($q) {
+    $q->whereNull('users.dsa_code')
+      ->orWhere('users.dsa_code', '');
+})
+
+->whereNull('users.deleted_at')
 
             ->when($search, function ($q) use ($search) {
                 $q->where(function ($qq) use ($search) {

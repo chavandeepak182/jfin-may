@@ -470,6 +470,25 @@
             gap: 0.5rem;
             font-size: 0.95rem;
         }
+        .budget-select{
+    max-height: 200px;
+    overflow-y: auto;
+}
+.select2-container{
+    width:100% !important;
+}
+
+.select2-selection--single{
+    height:42px !important;
+    border-radius:6px !important;
+    border:none !important;
+    padding:6px 10px !important;
+}
+
+.select2-results__options{
+    max-height:200px !important;
+    overflow-y:auto !important;
+}
 
         .contact-btn:hover {
             transform: translateX(4px);
@@ -845,6 +864,11 @@
         return '₹' . number_format($price);
     }
 @endphp
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <body>
     <!-- Header -->
     <!-- <header>
@@ -901,7 +925,7 @@
         <!-- FILTER ROW -->
         <div class="hero-search-filters">
 
-          <select name="type">
+        <select name="type" id="propertyType">
     <option value="">All</option>
 
     <option value="residential"
@@ -920,38 +944,42 @@
     </option> -->
 </select>
 
-          <select name="bhk">
+<div id="bhkField">
+<select name="bhk">
+
     <option value="">BHK Type</option>
 
-    @php
-        $bhkOptions = [
-            '1','2','3','4','5','6',
-            '2 & 3',
-            '2,3 & 4',
-            '3 & 4',
-            '3,4 & 5'
-        ];
-    @endphp
-
-    @foreach($bhkOptions as $bhk)
-        <option value="{{ $bhk }}"
-            {{ request('bhk') == $bhk ? 'selected' : '' }}>
-            {{ $bhk }} BHK
-        </option>
+    @foreach($data['bhks'] as $bhk)
+    <option value="{{ $bhk->bhk_name }}">
+        {{ $bhk->bhk_name }} BHK
+    </option>
     @endforeach
+
+</select>
+</div>
+<div id="sqftField" style="display:none;">
+
+<select name="sqft">
+
+<option value="">SQ FT</option>
+<option value="500">500 SQ FT</option>
+<option value="1000">1000 SQ FT</option>
+<option value="1500">1500 SQ FT</option>
+<option value="2000">2000 SQ FT</option>
+
 </select>
 
-         <select name="budget">
+</div>
+
+
+<select name="budget" id="budgetSelect" style="width:100%">
     <option value="">Budget Range</option>
 
     @foreach($data['priceRanges'] as $range)
-        <option value="{{ $range->range_id }}"
-            {{ request('budget') == $range->range_id ? 'selected' : '' }}>
-
+        <option value="{{ $range->range_id }}">
             ₹{{ number_format($range->from_price) }}
             -
             ₹{{ number_format($range->to_price) }}
-
         </option>
     @endforeach
 </select>
@@ -964,6 +992,7 @@
 
         </form>
         </section>
+
     <!-- Properties by Localities -->
     <!-- Properties by Localities -->
 @if(count($data['featuredProperties']) > 0)
@@ -1227,10 +1256,15 @@
                     </div>
 
                     <div class="property-footer">
-                        <div class="property-price">
-                            {{ $price }}
-                        </div>
+                       <div class="property-price">
 
+                            {{ $price }}
+
+                            <!--<span class="onwards-text">-->
+                            <!--    Onwards-->
+                            <!--</span>-->
+
+                        </div>
                       <a href="{{ url('property/' . $v->slug) }}"  target="_blank">
                             <button class="contact-btn">
                                 Know More <span>→</span>
@@ -1346,8 +1380,14 @@ document.addEventListener("DOMContentLoaded", function(){
                     </div>
 
                     <div class="property-footer">
-                        <div class="property-price">
+                      <div class="property-price">
+
                             {{ $price }}
+
+                            <!--<span class="onwards-text">-->
+                            <!--    Onwards-->
+                            <!--</span>-->
+
                         </div>
 
                         <a href="{{ url('property/' . $v->slug) }}">
@@ -1523,5 +1563,47 @@ document.addEventListener("DOMContentLoaded", function(){
 </body>
 </html>
 </main>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    let propertyType = document.getElementById("propertyType");
+    let bhkField = document.getElementById("bhkField");
+    let sqftField = document.getElementById("sqftField");
+
+    function toggleFields(){
+
+        if(propertyType.value === "commercial"){
+
+            bhkField.style.display = "none";
+            sqftField.style.display = "block";
+
+        }else{
+
+            bhkField.style.display = "block";
+            sqftField.style.display = "none";
+
+        }
+    }
+
+    propertyType.addEventListener("change", toggleFields);
+
+    toggleFields();
+
+});
+
+</script>
+
+<script>
+$(document).ready(function(){
+
+    $('#budgetSelect').select2({
+        width:'100%',
+        minimumResultsForSearch: -1
+    });
+
+});
+</script>
 @include('dhara-jfin.layout.footer')
 

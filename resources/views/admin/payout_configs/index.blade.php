@@ -78,7 +78,12 @@ swal("Success", "{{ session('success') }}", "success");
                     @endforelse
                 </tbody>
             </table>
-
+<!-- PAGINATION -->
+@if($configs->hasPages())
+<div class="pagination-wrapper">
+    {{ $configs->links() }}
+</div>
+@endif
         </div>
     </div>
 
@@ -172,6 +177,51 @@ $(document).on('click', '.deleteBtn', function(){
 /* Action buttons spacing */
 .btn-sm {
     padding: 5px 10px;
+}
+
+/* Pagination Wrapper */
+.pagination-wrapper{
+    padding: 18px 20px;
+    display: flex;
+    justify-content: center;
+    background: #fff;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Pagination */
+.pagination{
+    margin: 0;
+    gap: 6px;
+}
+
+/* Pagination Buttons */
+.page-link{
+    border: none;
+    border-radius: 8px !important;
+    padding: 8px 14px;
+    color: #2563eb;
+    font-weight: 500;
+    background: #f1f5f9;
+    transition: 0.2s;
+}
+
+/* Hover */
+.page-link:hover{
+    background: #2563eb;
+    color: #fff;
+}
+
+/* Active */
+.page-item.active .page-link{
+    background: linear-gradient(135deg,#2563eb,#1d4ed8);
+    color: #fff;
+    border: none;
+}
+
+/* Disabled */
+.page-item.disabled .page-link{
+    background: #e5e7eb;
+    color: #94a3b8;
 }
 </style>
 

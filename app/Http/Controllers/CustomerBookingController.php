@@ -892,11 +892,18 @@ public function showProperties(Request $request)
     foreach ($properties as $property) {
         $property->image = $property->image ?? 'default.jpg';
     }
+    $bhks = DB::table('bhks')
+            ->orderBy('bhk_name','asc')
+            ->get();
+
+$priceRanges = DB::table('price_range')
+                    ->orderBy('from_price','asc')
+                    ->get();
 
     /* ================= CATEGORY ================= */
     $categories = DB::table('property_category')->get();
 
-    return view('customer.properties.index', compact('properties','categories'));
+    return view('customer.properties.index', compact('properties','categories','bhks','priceRanges'));
 }
 public function showBookingForm($id)
 {

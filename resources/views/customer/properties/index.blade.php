@@ -409,38 +409,69 @@
 </select>
 
         </div> -->
-        <div class="filter-group">
-    <label>BHK Type</label>
-    <select id="bhkFilter" class="filter-select">
-        <option value="">Any BHK</option>
+  
+   <div class="filter-group" id="bhkField">
 
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
+<label style="display:block; margin-bottom:8px;">BHK TYPE</label>
 
-        <option value="2 & 3">2 & 3</option>
-        <option value="2,3 & 4">2,3 & 4</option>
-        <option value="3 & 4">3 & 4</option>
-        <option value="3,4 & 5">3,4 & 5</option>
-    </select>
+<select id="bhkFilter" class="filter-select">
+
+<option value="">Any BHK</option>
+
+@foreach($bhks as $bhk)
+
+<option value="{{ $bhk->bhk_name }}">
+{{ $bhk->bhk_name }} BHK
+</option>
+
+@endforeach
+
+</select>
+
 </div>
 
 
-        <!-- BUDGET FILTER -->
-        <div class="filter-group">
-            <label>Budget Range</label>
-            <select id="budgetFilter" class="filter-select">
-                <option value="">Any Budget</option>
-                <option value="0-4000000">Below ₹40L</option>
-                <option value="4000000-6000000">₹40L - ₹60L</option>
-                <option value="6000000-8000000">₹60L - ₹80L</option>
-                <option value="8000000-10000000">₹80L - ₹1Cr</option>
-                <option value="10000000-999999999">Above ₹1Cr</option>
-            </select>
-        </div>
+<div class="filter-group" id="sqftField" style="display:none;">
+
+<label style="display:block; margin-bottom:8px;">SQ FT</label>
+
+<select id="sqftFilter" class="filter-select">
+
+<option value="">Any SQ FT</option>
+<option value="500">500 SQ FT</option>
+<option value="1000">1000 SQ FT</option>
+<option value="1500">1500 SQ FT</option>
+<option value="2000">2000 SQ FT</option>
+
+</select>
+
+</div>
+<!-- BUDGET FILTER -->
+       <div class="filter-group">
+
+    <label>Budget Range</label>
+
+    <select id="budgetFilter" class="filter-select">
+
+        <option value="">
+            Any Budget
+        </option>
+
+        @foreach($priceRanges as $range)
+
+            <option value="{{ $range->from_price }}-{{ $range->to_price }}">
+
+                ₹{{ number_format($range->from_price) }}
+                -
+                ₹{{ number_format($range->to_price) }}
+
+            </option>
+
+        @endforeach
+
+    </select>
+
+</div>
 
     </div>
 </div>
@@ -510,7 +541,7 @@
 </div>
 
 </div>
-<script>
+<!-- <script>
 document.addEventListener('DOMContentLoaded', function () {
 
     const searchInput  = document.getElementById('propertySearch');
@@ -556,9 +587,134 @@ document.addEventListener('DOMContentLoaded', function () {
     bhkFilter.addEventListener('change', applyFilters);
     budgetFilter.addEventListener('change', applyFilters);
     typeFilter.addEventListener('change', applyFilters);
+    
+});
+</script> -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const searchInput  = document.getElementById('propertySearch');
+    const bhkFilter    = document.getElementById('bhkFilter');
+    const sqftFilter   = document.getElementById('sqftFilter');
+    const budgetFilter = document.getElementById('budgetFilter');
+    const typeFilter   = document.getElementById('typeFilter');
+
+    const bhkField     = document.getElementById('bhkField');
+    const sqftField    = document.getElementById('sqftField');
+
+    const cards = document.querySelectorAll('.property-card');
+
+
+    // Toggle BHK / SQFT
+    function toggleCommercial() {
+
+        let type = typeFilter.value.toLowerCase();
+
+        if(type.includes('commercial')){
+
+            bhkField.style.display = "none";
+            sqftField.style.display = "block";
+
+        } else {
+
+            bhkField.style.display = "block";
+            sqftField.style.display = "none";
+
+            // reset sqft when residential
+            if(sqftFilter){
+                sqftFilter.value = "";
+            }
+        }
+    }
+
+
+    // Apply filters
+    function applyFilters() {
+
+        let searchVal = searchInput.value.toLowerCase();
+        let bhkVal    = bhkFilter.value;
+        let sqftVal   = sqftFilter ? sqftFilter.value : "";
+        let typeVal   = typeFilter.value.toLowerCase();
+        let budgetVal = budgetFilter.value;
+
+        let minPrice = 0;
+        let maxPrice = Infinity;
+
+        if (budgetVal) {
+            [minPrice, maxPrice] = budgetVal.split('-').map(Number);
+        }
+
+        cards.forEach(card => {
+
+            let text   = card.dataset.search.toLowerCase();
+            let bhk    = card.dataset.bhk || "";
+            let price  = parseInt(card.dataset.price) || 0;
+            let type   = card.dataset.type.toLowerCase();
+            let area   = card.dataset.area || "";
+
+            let matchSearch =
+                text.includes(searchVal);
+
+            let matchBhk =
+                !bhkVal ||
+                bhk.toLowerCase().includes(bhkVal.toLowerCase());
+
+            let matchSqft =
+                !sqftVal ||
+                area.includes(sqftVal);
+
+            let matchBudget =
+                price >= minPrice &&
+                price <= maxPrice;
+
+            let matchType =
+                !typeVal ||
+                type.includes(typeVal);
+
+
+            // Commercial -> use SQFT
+            // Others -> use BHK
+            let finalMatch =
+                typeVal.includes('commercial')
+                ?
+                (matchSearch && matchSqft && matchBudget && matchType)
+                :
+                (matchSearch && matchBhk && matchBudget && matchType);
+
+
+            card.style.display =
+                finalMatch ? "flex" : "none";
+
+        });
+
+    }
+
+
+    // Events
+    searchInput.addEventListener('keyup', applyFilters);
+
+    bhkFilter.addEventListener('change', applyFilters);
+
+    if(sqftFilter){
+        sqftFilter.addEventListener('change', applyFilters);
+    }
+
+    budgetFilter.addEventListener('change', applyFilters);
+
+    typeFilter.addEventListener('change', function(){
+
+        toggleCommercial();
+        applyFilters();
+
+    });
+
+
+    // Initial load
+    toggleCommercial();
+    applyFilters();
+
 });
 </script>
-
-
 
 @endsection

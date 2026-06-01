@@ -26,12 +26,17 @@
                     <!-- BANK -->
                     <div class="col-md-3">
                         <label>Select Bank</label>
-                        <select name="bank_id" class="form-control">
+                      <select name="bank_id" class="form-control">
+
+                            <option value="">-- Select Bank --</option>
+
                             @foreach($banks as $id => $name)
-                                <option value="{{ $id }}" {{ (isset($config) && $config->bank_id == $id) ? 'selected' : '' }}>
+                                <option value="{{ $id }}"
+                                    {{ (isset($config) && $config->bank_id == $id) ? 'selected' : '' }}>
                                     {{ $name }}
                                 </option>
                             @endforeach
+
                         </select>
                     </div>
 
@@ -39,22 +44,34 @@
                     <div class="col-md-3">
                         <label>Loan Category</label>
                         <select name="loan_category_id" class="form-control">
-                            @foreach($categories as $id => $name)
-                                <option value="{{ $id }}" {{ (isset($config) && $config->loan_category_id == $id) ? 'selected' : '' }}>
-                                    {{ $name }}
-                                </option>
-                            @endforeach
-                        </select>
+
+    <option value="">-- Select Category --</option>
+
+    @foreach($categories as $id => $name)
+        <option value="{{ $id }}"
+            {{ (isset($config) && $config->loan_category_id == $id) ? 'selected' : '' }}>
+            {{ $name }}
+        </option>
+    @endforeach
+
+</select>
                     </div>
 
                     <!-- PERCENTAGE -->
                     <div class="col-md-3">
-                        <label>Payout (%)</label>
-                        <input type="number" step="0.01" name="percentage"
-                            class="form-control"
-                            value="{{ $config->percentage ?? '' }}"
-                            placeholder="Enter %" />
-                    </div>
+    <label>Payout (%)</label>
+
+    <input type="number"
+           step="0.01"
+           min="0.01"
+           name="percentage"
+           class="form-control"
+           value="{{ $config->percentage ?? '' }}"
+           placeholder="Enter %"
+           required />
+
+    <small class="text-danger error-percentage"></small>
+</div>
 
                     <!-- SAVE BUTTON -->
                     <div class="col-md-3 text-end">
