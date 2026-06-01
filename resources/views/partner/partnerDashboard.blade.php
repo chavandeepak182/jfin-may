@@ -55,7 +55,7 @@
 
 
                         <!-- Total Leads -->
-                        <a href="{{ route('pendingProperties') }}" class="metric-link">
+                        <a href="{{ route('allProperties') }}" class="metric-link">
                             <div class="metric-card">
                                 <div class="metric-icon yellow">
                                     <i class="fas fa-bullhorn"></i>

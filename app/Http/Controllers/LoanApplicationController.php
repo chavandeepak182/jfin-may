@@ -157,6 +157,104 @@ public function index(Request $request)
 
 
     // count dashboard
+// public function loanlist()
+// {
+//     $role   = session('role_id');
+//     $userId = session('user_id');
+
+//     /* ================= COMMON FILTER ================= */
+
+//     $applyFilter = function ($query) use ($role, $userId) {
+
+//         // ✅ DSA → both direct + mapped
+//         if ($role == 6) {
+//             $query->where(function($q) use ($userId){
+//                 $q->where('dsa_id', $userId)
+//                   ->orWhereIn('user_id', function($sub) use ($userId){
+//                       $sub->select('user_id')
+//                           ->from('dsa_customers')
+//                           ->where('dsa_id', $userId);
+//                   });
+//             });
+//         }
+
+//         // ✅ ADMIN → hide DSA loans
+//         if ($role == 4) {
+//             $query->where(function($q){
+//                 $q->whereNull('dsa_id')
+//                   ->orWhere('dsa_id', 0);
+//             });
+//         }
+
+//         return $query;
+//     };
+
+//     /* ================= COUNTS ================= */
+
+//     $totalLoans = $applyFilter(Loan::query())->count();
+
+//     $inProcessLoans = $applyFilter(
+//         Loan::where('status', 'in process')
+//     )->count();
+
+//     $trashedloans = $applyFilter(
+//         Loan::onlyTrashed()
+//     )->count();
+
+//     $approvedLoan = $applyFilter(
+//         Loan::where('status', 'approved')
+//     )->count();
+
+//     $disbursedLoans = $applyFilter(
+//         Loan::where('status', 'disbursed')
+//             ->whereNotNull('loan_reference_id')
+//     )->count();
+
+//     $rejectedLoans = $applyFilter(
+//         Loan::where('status', 'rejected')
+//     )->count();
+// $pendingLoansCount = $applyFilter(
+//     Loan::where(function ($query) {
+//         $query->whereNull('agent_id')
+//               ->orWhere(function($q){
+//                   $q->whereNotNull('agent_id')
+//                     ->where('agent_action', 'rejected');
+//               });
+//     })
+
+//     // 🔥 ADD THIS (VERY IMPORTANT)
+//     ->whereNotIn('status', [
+//         'approved',
+//         'disbursed',
+//         'rejected'
+//     ])
+// )->count();
+
+//     /* ================= LOAN LIST ================= */
+
+//     $loans = $applyFilter(
+//         Loan::with([
+//             'user.profile.cityRelation',
+//             'loanCategory',
+//             'bankDetails'
+//         ])
+//     )
+//     ->orderBy('created_at', 'desc')
+//     ->paginate(10);
+
+//     return view('admin.admin-loans', compact(
+//         'totalLoans',
+//         'inProcessLoans',
+//         'trashedloans',
+//         'approvedLoan',
+//         'disbursedLoans',
+//         'rejectedLoans',
+//         'loans',
+//         'pendingLoansCount'
+//     ));
+// }
+
+
 public function loanlist()
 {
     $role   = session('role_id');
@@ -213,22 +311,29 @@ public function loanlist()
     $rejectedLoans = $applyFilter(
         Loan::where('status', 'rejected')
     )->count();
-$pendingLoansCount = $applyFilter(
-    Loan::where(function ($query) {
-        $query->whereNull('agent_id')
-              ->orWhere(function($q){
-                  $q->whereNotNull('agent_id')
-                    ->where('agent_action', 'rejected');
-              });
-    })
 
-    // 🔥 ADD THIS (VERY IMPORTANT)
-    ->whereNotIn('status', [
-        'approved',
-        'disbursed',
-        'rejected'
-    ])
-)->count();
+    // ✅ ONLY ADMIN CAN SEE PENDING ASSIGN COUNT
+    $pendingLoansCount = 0;
+
+    if ($role == 4) {
+
+        $pendingLoansCount = $applyFilter(
+            Loan::where(function ($query) {
+
+                $query->whereNull('agent_id')
+                      ->orWhere(function($q){
+                          $q->whereNotNull('agent_id')
+                            ->where('agent_action', 'rejected');
+                      });
+            })
+
+            ->whereNotIn('status', [
+                'approved',
+                'disbursed',
+                'rejected'
+            ])
+        )->count();
+    }
 
     /* ================= LOAN LIST ================= */
 

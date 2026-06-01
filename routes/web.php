@@ -43,8 +43,25 @@ use App\Http\Controllers\PriceRangeController;
 use App\Http\Controllers\DsaPayoutConfigController;
 use App\Http\Controllers\DsaPayoutController;
 use App\Http\Controllers\DsaMonthlyPayoutController;
+use App\Http\Controllers\MasterController;
+use Illuminate\Support\Facades\DB;
 
+// aminities nd bk routes
 
+Route::get('/bhk-list', [MasterController::class,'bhkList'])->name('bhk.list');
+
+Route::post('/bhk-store', [MasterController::class,'bhkStore'])->name('bhk.store');
+
+Route::post('/bhk-update', [MasterController::class,'bhkUpdate'])->name('bhk.update');
+
+Route::post('/bhk-delete', [MasterController::class,'bhkDelete'])->name('bhk.delete');
+Route::get('/amenities-list', [MasterController::class,'amenitiesList'])->name('amenities.list');
+
+Route::post('/amenities-store', [MasterController::class,'amenitiesStore'])->name('amenities.store');
+
+Route::post('/amenities-update', [MasterController::class,'amenitiesUpdate'])->name('amenities.update');
+
+Route::post('/amenities-delete', [MasterController::class,'amenitiesDelete'])->name('amenities.delete');
 
 
 // admin 
@@ -99,7 +116,12 @@ Route::get('admin/eligible', [BankController::class, 'eligiblelist'])->name('adm
  Route::get('admin/dashboard_test', [AdminController::class, 'dashboard_test'])->name('dashboard_test');
 
 Route::get('/', function () {
-    return view('dhara-jfin.index');
+
+    $data['allProperties'] = DB::table('properties')
+        ->where('is_active',1)
+        ->get();
+
+    return view('dhara-jfin.index', compact('data'));
 });
 // Route::get('/', function () {
 //     return view('frontend.index');
@@ -535,6 +557,8 @@ Route::prefix('admin')->group(function () {
 Route::get('/admin/dsa-payouts/{dsa}/{month}', 
     [DsaMonthlyPayoutController::class, 'details']
 )->name('dsa.payout.details');
+Route::get('/dsa/wallet', [App\Http\Controllers\DsaMonthlyPayoutController::class, 'wallet'])
+    ->name('dsa.wallet');
 
 
 // dsa settig routes

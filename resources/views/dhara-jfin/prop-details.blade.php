@@ -1008,7 +1008,7 @@
                     </div>
                     <div class="property-price-box">
                         <div class="price-value">₹{{ number_format($s_price, 0, '.', ',') }}*</div>
-                        <div class="agreement-label">Starting Price</div>
+                        <div class="agreement-label"> Onwords</div>
                         <button  class="btn-contact-top" onclick="openFormOverlay()">
                             <i class="fas fa-phone-alt"></i> Book your Visit
                         </button>

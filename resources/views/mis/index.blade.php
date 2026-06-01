@@ -545,27 +545,41 @@ $('#addMISRecord').on('submit', function (e) {
             }
         },
 
-        error: function (xhr) {
+       error: function (xhr) {
 
-            if (xhr.status === 422) {
-                let firstError = Object.values(xhr.responseJSON.errors)[0][0];
+    let message = 'Something went wrong';
 
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: firstError
-                });
+    if (xhr.status === 422) {
 
-            } else {
+        // Custom message from controller
+        if (xhr.responseJSON?.message) {
+            message = xhr.responseJSON.message;
+        }
 
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Server error occurred'
-                });
+        // Laravel validation messages
+        if (xhr.responseJSON?.errors) {
+            let firstKey = Object.keys(xhr.responseJSON.errors)[0];
 
+            if (firstKey) {
+                message = xhr.responseJSON.errors[firstKey][0];
             }
         }
+
+        Swal.fire({
+            icon: 'warning',
+            title: 'Duplicate Customer',
+            text: message
+        });
+
+    } else {
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Server error occurred'
+        });
+    }
+}
     });
 });
 

@@ -7,6 +7,9 @@ use App\Models\DsaMonthlyPayout;
 use App\Models\User;   // ✅ ONLY HERE
 use Carbon\Carbon;
 use DB;
+use App\Models\DsaWallet;
+use App\Models\DsaPayout;
+
 
 class DsaMonthlyPayoutController extends Controller
 {
@@ -89,11 +92,19 @@ public function calculate(Request $request)
 
     // ✅ SAVE / UPDATE
     if ($existingPayout) {
-        $existingPayout->update([
-            'total_loans'  => $totalLoans,
-            'total_amount' => $totalAmount,
-            'total_payout' => $totalPayout,
-        ]);
+      $existingPayout->update([
+
+    'total_loans'  => $totalLoans,
+    'total_amount' => $totalAmount,
+    'total_payout' => $totalPayout,
+
+    'status' => (
+        $totalPayout > $existingPayout->released_amount
+    )
+    ? 'pending'
+    : 'released'
+
+]);
     } else {
         DsaMonthlyPayout::create([
             'dsa_id'       => $request->dsa_id,
@@ -146,18 +157,88 @@ public function details($dsaId, $month)
 
 
     // 🔹 RELEASE PAYMENT
-    public function release($id)
+public function release($id)
+{
+    $payout = DsaMonthlyPayout::findOrFail($id);
+
+    // LAST BALANCE
+    $lastBalance = DsaWallet::where('dsa_id', $payout->dsa_id)
+                    ->latest()
+                    ->value('balance');
+
+    $lastBalance = $lastBalance ?? 0;
+
+    // ONLY NEW AMOUNT
+    $pendingAmount =
+        $payout->total_payout - $payout->released_amount;
+
+    // Already fully released
+    if($pendingAmount <= 0)
     {
-        $payout = DsaMonthlyPayout::findOrFail($id);
-
-        if ($payout->status == 'released') {
-            return back()->with('error', 'Already released');
-        }
-
-        $payout->update([
-            'status' => 'released'
-        ]);
-
-        return back()->with('success', 'Payment released successfully');
+        return back()->with(
+            'error',
+            'Already fully released'
+        );
     }
+
+    // NEW BALANCE
+    $newBalance =
+        $lastBalance + $pendingAmount;
+
+    // WALLET ENTRY
+    DsaWallet::create([
+
+        'dsa_id' => $payout->dsa_id,
+        'payout_id' => $payout->id,
+
+        'credit' => $pendingAmount,
+        'debit' => 0,
+
+        'balance' => $newBalance,
+
+        'remark' => 'Monthly payout released'
+
+    ]);
+
+    // UPDATE RELEASED AMOUNT
+    $payout->released_amount =
+        $payout->released_amount +
+        $pendingAmount;
+
+    // STATUS UPDATE
+    if(
+        $payout->released_amount >=
+        $payout->total_payout
+    )
+    {
+        $payout->status = 'released';
+    }
+    else
+    {
+        $payout->status = 'pending';
+    }
+
+    $payout->save();
+
+    return back()->with(
+        'success',
+        'Payout Released Successfully'
+    );
+}
+public function wallet()
+{
+    $dsaId = session('user_id');
+
+    $wallets = DsaWallet::where('dsa_id', $dsaId)
+                ->latest()
+                ->get();
+
+    $balance = DsaWallet::where('dsa_id', $dsaId)
+                ->latest()
+                ->value('balance');
+
+    $balance = $balance ?? 0;
+
+    return view('admin.dsa.wallet', compact('wallets','balance'));
+}
 }

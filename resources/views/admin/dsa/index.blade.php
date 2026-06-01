@@ -317,25 +317,35 @@ body.modal-open {
             <h5 class="mb-3">All Customers</h5>
 
             <!-- 🔍 SEARCH BOX (INSIDE SECTION) -->
-            <div class="mb-3">
-                <input type="text"
-                       id="customerSearch"
-                       class="form-control"
-                       placeholder="Search by Name, Email, Mobile">
-            </div>
+           <div class="row mb-3">
+<div class="col-md-6">
+        <input type="text"
+               id="dsaSearchCustomer"
+               class="form-control"
+               placeholder="Search by DSA Name">
+    </div>
+    <div class="col-md-6">
+        <input type="text"
+               id="customerSearch"
+               class="form-control"
+               placeholder="Search by Name, Email, Mobile">
+    </div>
+
+    
+
+</div>
 
             <!-- TABLE -->
             <div class="table-responsive">
                 <table class="table">
 
                     <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Mobile</th>
-                            <th>Email</th>
-                            <th>State</th>
-                            <th>City</th>
-                        </tr>
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>DSA Name</th>
+                        <th>State</th>
+                        <th>City</th>
                     </thead>
 
                     <tbody id="customer_table_body"></tbody>
@@ -591,8 +601,50 @@ $('input[name="mobile_no"], input[name="email_id"], input[name="pan_no"]').on('k
         if(value.trim() === '') return;
 
         if(field === 'mobile_no' && value.length !== 10) return;
-        if(field === 'pan_no' && value.length !== 10) return;
-        if(field === 'email_id' && !value.includes('@')) return;
+        
+     if(field === 'pan_no'){
+
+    value = value.toUpperCase();
+    input.val(value);
+
+    let pattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+
+    if(value !== '' && !pattern.test(value)){
+
+        $('.error-pan_no').text(
+            "Invalid PAN format (ABCDE1234F)"
+        );
+
+        input.addClass('is-invalid');
+
+        return;
+
+    } else {
+
+        $('.error-pan_no').text('');
+        input.removeClass('is-invalid');
+    }
+}
+
+if(field === 'email_id'){
+
+    let pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if(value !== '' && !pattern.test(value)){
+
+       $('.error-email_id').text(
+    "Enter valid email format (example@gmail.com, example@yahoo.in, example@company.in)"
+);
+        input.addClass('is-invalid');
+
+        return;
+
+    } else {
+
+        $('.error-email_id').text('');
+        input.removeClass('is-invalid');
+    }
+}
 
         $.ajax({
             url: "/check-duplicate",
@@ -618,6 +670,7 @@ $('input[name="mobile_no"], input[name="email_id"], input[name="pan_no"]').on('k
 
     }, doneTypingInterval);
 });
+
 // ✅ PINCODE VALIDATION
 $('input[name="pincode"]').on('input', function(){
 
@@ -817,7 +870,8 @@ function loadCustomers()
     $('#customerSection').show();   
 
     $.get("{{ route('admin.customers.list') }}", {
-        search: $('#customerSearch').val() // ✅ ADD THIS
+        search: $('#customerSearch').val(),
+        dsa_search: $('#dsaSearchCustomer').val()
     }, function(res){
         $('#customer_table_body').html(res.html);
     });
@@ -905,25 +959,48 @@ function loadDsaCustomerLoans()
 </script>
 <!-- validation dsa  -->
  <script>
-    $('input[name="pan_no"]').on('input', function(){
-    this.value = this.value.toUpperCase();
-
-    let pattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-
-    if(this.value.length === 10 && !pattern.test(this.value)){
-        this.setCustomValidity("Invalid PAN format (ABCDE1234F)");
-    } else {
-        this.setCustomValidity("");
-    }
-});
+  
+// ✅ MOBILE: only 10 digits allowed
 $('input[name="mobile_no"]').on('input', function(){
-    this.value = this.value.replace(/[^0-9]/g, '');
+
+    // allow numbers only
+    this.value = this.value.replace(/\D/g, '');
+
+    // restrict to max 10 digits
+    if(this.value.length > 10){
+        this.value = this.value.slice(0,10);
+    }
 
     if(this.value.length != 10){
-        this.setCustomValidity("Mobile must be 10 digits");
+        $('.error-mobile_no').text("Mobile must be 10 digits");
+        $(this).addClass('is-invalid');
     } else {
-        this.setCustomValidity("");
+        $('.error-mobile_no').text("");
+        $(this).removeClass('is-invalid');
     }
+
+});
+
+
+// ✅ PINCODE: only 6 digits allowed
+$('input[name="pincode"]').on('input', function(){
+
+    // allow numbers only
+    this.value = this.value.replace(/\D/g, '');
+
+    // restrict to max 6 digits
+    if(this.value.length > 6){
+        this.value = this.value.slice(0,6);
+    }
+
+    if(this.value.length != 6){
+        $('.error-pincode').text("Pincode must be 6 digits");
+        $(this).addClass('is-invalid');
+    } else {
+        $('.error-pincode').text("");
+        $(this).removeClass('is-invalid');
+    }
+
 });
 
 $(document).ready(function(){
@@ -943,7 +1020,7 @@ $(document).ready(function(){
         loadDSA();
     });
     // 🔍 CUSTOMER SEARCH
-$(document).on('keyup', '#customerSearch', function(){
+$(document).on('keyup', '#customerSearch,#dsaSearchCustomer', function(){
     loadCustomers();
 });
 </script>

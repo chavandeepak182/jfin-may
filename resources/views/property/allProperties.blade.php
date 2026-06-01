@@ -127,7 +127,11 @@ JFS | Add Property
             </div>
         </div>
         <!-- ✅ PROPERTY PRICE RANGE CARD -->
-<a href="{{ route('admin.price.range') }}" style="text-decoration:none;">
+<!-- ✅ PROPERTY PRICE RANGE CARD -->
+
+<a href="{{ route('admin.price.range') }}"
+   style="text-decoration:none;">
+
     <div class="property-stat-card">
 
         <div class="property-stat-icon purple">
@@ -135,15 +139,88 @@ JFS | Add Property
         </div>
 
         <div class="property-stat-content">
+
             <h3>Price Range</h3>
-            <!-- <div class="property-stat-value">View</div> -->
-             <div class="property-stat-value">View</div>
-            <span class="property-stat-status">Manage Property Pricing</span>
+
+            <div class="property-stat-value">
+
+                {{ $data['priceRangeCount'] }}
+
+            </div>
+
+            <span class="property-stat-status">
+                Manage Property Pricing
+            </span>
+
         </div>
 
     </div>
+
+</a>
+<!-- ✅ BHK MASTER CARD -->
+
+<!-- ✅ BHK MASTER CARD -->
+
+<a href="{{ route('bhk.list') }}"
+   style="text-decoration:none;">
+
+    <div class="property-stat-card">
+
+        <div class="property-stat-icon blue">
+            <i class="fas fa-home"></i>
+        </div>
+
+        <div class="property-stat-content">
+
+            <h3>BHK Master</h3>
+
+            <div class="property-stat-value">
+
+                {{ $data['bhkCount'] }}
+
+            </div>
+
+            <span class="property-stat-status">
+                Total BHK Types
+            </span>
+
+        </div>
+
+    </div>
+
 </a>
 
+
+<!-- ✅ AMENITIES MASTER CARD -->
+
+<a href="{{ route('amenities.list') }}"
+   style="text-decoration:none;">
+
+    <div class="property-stat-card">
+
+        <div class="property-stat-icon green">
+            <i class="fas fa-list"></i>
+        </div>
+
+        <div class="property-stat-content">
+
+            <h3>Amenities Master</h3>
+
+            <div class="property-stat-value">
+
+                {{ $data['amenitiesCount'] }}
+
+            </div>
+
+            <span class="property-stat-status">
+                Total Amenities
+            </span>
+
+        </div>
+
+    </div>
+
+</a>
        
             
          

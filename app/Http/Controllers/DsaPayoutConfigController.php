@@ -12,13 +12,13 @@ class DsaPayoutConfigController extends Controller
      // LIST
     // ✅ LIST
     public function index()
-    {
-        $configs = DsaPayoutConfig::with(['bank', 'category'])
-            ->latest()
-            ->get();
+{
+    $configs = DsaPayoutConfig::with(['bank', 'category'])
+        ->latest()
+        ->paginate(10);
 
-        return view('admin.payout_configs.index', compact('configs'));
-    }
+    return view('admin.payout_configs.index', compact('configs'));
+}
 
     // ✅ CREATE FORM
     public function create()

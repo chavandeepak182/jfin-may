@@ -218,27 +218,38 @@ public function loadAllCustomers(Request $request)
 {
     try {
 
-        $query = DB::table('dsa_customers')
-            ->leftJoin('states', 'dsa_customers.state_id', '=', 'states.id')
-            ->leftJoin('cities', 'dsa_customers.city_id', '=', 'cities.id');
+       $query = DB::table('dsa_customers')
+    ->leftJoin('states', 'dsa_customers.state_id', '=', 'states.id')
+    ->leftJoin('cities', 'dsa_customers.city_id', '=', 'cities.id')
+    ->leftJoin('users as dsa', 'dsa_customers.dsa_id', '=', 'dsa.id');
 
-        // 🔍 SEARCH ADD
-        if ($request->search) {
-            $query->where(function($q) use ($request){
-                $q->where('dsa_customers.name','like',"%{$request->search}%")
-                  ->orWhere('dsa_customers.email','like',"%{$request->search}%")
-                  ->orWhere('dsa_customers.mobile_no','like',"%{$request->search}%");
-            });
-        }
+   // 🔍 Customer Search
+if ($request->search) {
+    $query->where(function($q) use ($request){
+        $q->where('dsa_customers.name','like',"%{$request->search}%")
+          ->orWhere('dsa_customers.email','like',"%{$request->search}%")
+          ->orWhere('dsa_customers.mobile_no','like',"%{$request->search}%");
+    });
+}
 
-        $customers = $query->select(
-            'dsa_customers.id',
-            'dsa_customers.name',
-            'dsa_customers.mobile_no',
-            'dsa_customers.email',
-            'states.name as state_name',
-            'cities.city as city_name'
-        )->get();
+// 🔍 DSA Search
+if ($request->dsa_search) {
+    $query->where(
+        'dsa.name',
+        'like',
+        "%{$request->dsa_search}%"
+    );
+}
+
+   $customers = $query->select(
+    'dsa_customers.id',
+    'dsa_customers.name',
+    'dsa_customers.mobile_no',
+    'dsa_customers.email',
+    'dsa.name as dsa_name',      // important
+    'states.name as state_name',
+    'cities.city as city_name'
+)->get();
 
         $html = view('admin.dsa.customers.partials.list', compact('customers'))->render();
 
@@ -352,9 +363,18 @@ public function store(Request $request)
             // ✅ EDIT
             $request->validate([
                 'full_name' => 'required',
-                'email_id' => 'required|email|unique:users,email_id,' . $request->id,
+                        'email_id' => [
+            'required',
+            'email',
+            'regex:/^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$/',
+            'unique:users,email_id,' . $request->id
+        ],
                 'mobile_no' => 'required|digits:10|unique:users,mobile_no,' . $request->id,
-                'pan_no' => 'required|unique:profile,pan_number,' . $request->id . ',user_id',
+                'pan_no' => [
+                'required',
+                'regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/',
+                'unique:profile,pan_number,' . $request->id . ',user_id'
+            ],
                 'pincode' => 'required|digits:6',
                 'dob' => 'required|before:18 years ago'
             ]);
@@ -364,9 +384,18 @@ public function store(Request $request)
             // ✅ ADD
             $request->validate([
                 'full_name' => 'required',
-                'email_id' => 'required|email|unique:users,email_id',
+                                    'email_id' => [
+                        'required',
+                        'email',
+                        'regex:/^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$/',
+                        'unique:users,email_id'
+                    ],
                 'mobile_no' => 'required|digits:10|unique:users,mobile_no',
-                'pan_no' => 'required|unique:profile,pan_number',
+                'pan_no' => [
+    'required',
+    'regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/',
+    'unique:profile,pan_number'
+],
                 'pincode' => 'required|digits:6',
                 'dob' => 'required|before:18 years ago',
                 'password' => 'required|min:6'

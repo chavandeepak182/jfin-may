@@ -29,6 +29,9 @@ class PropertyController extends Controller
         $data['category'] = DB::table('property_category')->get();
         $data['localities'] = DB::table('localities')->get();
         $data['property_status'] = DB::table('property_status')->get();
+        $data['bhks'] = DB::table('bhks')->get();
+
+$data['amenities'] = DB::table('amenities')->get();
          // ✅ ADD THIS LINE
     $data['states'] = States::all();
         return view('property.addProperty',compact('data'));
@@ -96,6 +99,7 @@ $p->city = $city_name ?? '';
         $p->baths = $request->baths;
         $p->balconies = $request->balconies;
         $p->parking = $request->parking;
+        $p->commercial_sqft = $request->commercial_sqft ?? '';
        
         $p->email = $request->email_id;
         $p->select_bhk = $request->select_bhk;
@@ -363,6 +367,12 @@ if (!in_array($status, ['all', 'pending', 'verified'])) {
     $totalVerifiedProperties = DB::table('properties')
         ->where('is_active', 1)
         ->count();
+          // NEW COUNTS
+    $data['bhkCount'] = DB::table('bhks')->count();
+
+    $data['amenitiesCount'] = DB::table('amenities')->count();
+
+    $data['priceRangeCount'] = DB::table('price_range')->count();
 
     
 
@@ -513,6 +523,9 @@ public function updatePropertyStatus(Request $request)
 {
     $data['range'] = DB::table('price_range')->get();
     $data['category'] = DB::table('property_category')->get();
+    $data['bhks'] = DB::table('bhks')->get();
+
+$data['amenities'] = DB::table('amenities')->get();
 
     // ✅ MAIN FIX (NO SELECT * ISSUE)
   $data['propertie_details'] = DB::table('properties as p')
@@ -644,6 +657,7 @@ $area_id = $request->area_id;
 'facilities' => !empty($amenities) ? implode(', ', $amenities) : $property->facilities,
 
         'area' => !empty($request->area) ? $request->area : '',
+        'commercial_sqft' => $request->commercial_sqft ?? '',
         'builtup_area' => $request->builtup_area,
 
         // ✅ LOCATION ID

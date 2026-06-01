@@ -81,7 +81,9 @@
                          <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">Property Type</label>
-                                <select name="property_type_id" class="form-control">
+                                <select name="property_type_id"
+        class="form-control"
+        id="propertyType">
                                     <?php
                                         foreach($data['category'] as $r){
                                             $sel = $v->property_type_id;
@@ -128,26 +130,94 @@
     </div>
 
     <!-- BHK -->
-    <div class="col-lg-3">
-        <div class="mb-3">
-            <label class="form-label">Select BHK</label>
-            <select class="form-control" name="select_bhk">
+<div class="col-lg-3" id="bhkWrapper">
 
-                <option value="">Select</option>
+    <div class="mb-3">
 
-                <option value="1" {{ $v->select_bhk == '1' ? 'selected' : '' }}>1 BHK</option>
-                <option value="2" {{ $v->select_bhk == '2' ? 'selected' : '' }}>2 BHK</option>
-                <option value="3" {{ $v->select_bhk == '3' ? 'selected' : '' }}>3 BHK</option>
-                <option value="4" {{ $v->select_bhk == '4' ? 'selected' : '' }}>4 BHK</option>
-                <option value="5" {{ $v->select_bhk == '5' ? 'selected' : '' }}>5 BHK</option>
+        <label class="form-label">
+            Select BHK
+        </label>
 
-                <option value="2 & 3" {{ $v->select_bhk == '2 & 3' ? 'selected' : '' }}>2 & 3 BHK</option>
-                <option value="3 & 4" {{ $v->select_bhk == '3 & 4' ? 'selected' : '' }}>3 & 4 BHK</option>
+        <select class="form-control"
+                name="select_bhk">
 
-            </select>
-        </div>
+            <option value="">
+                Select
+            </option>
+
+            @foreach($data['bhks'] as $bhk)
+
+                <option value="{{ $bhk->bhk_name }}"
+                    {{ $v->select_bhk == $bhk->bhk_name ? 'selected' : '' }}>
+
+                    {{ $bhk->bhk_name }}
+
+                </option>
+
+            @endforeach
+
+        </select>
+
     </div>
 
+</div>
+<div class="col-lg-3"
+     id="sqftWrapper"
+     style="{{ strtolower($v->land_type) == 'office' || strtolower($v->land_type) == 'shop' || strtolower($v->land_type) == 'showroom' ? '' : 'display:none;' }}">
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Sq Ft
+        </label>
+
+        <input type="text"
+               name="commercial_sqft"
+               class="form-control"
+               placeholder="Enter Sq Ft"
+               value="{{ $v->commercial_sqft ?? '' }}">
+
+    </div>
+
+</div>
+<script>
+
+$(document).ready(function(){
+
+    toggleCommercialFields();
+
+    $('#propertyType').change(function(){
+
+        toggleCommercialFields();
+
+    });
+
+});
+
+function toggleCommercialFields(){
+
+    let selectedText = $('#propertyType option:selected')
+                        .text()
+                        .toLowerCase();
+
+    if(selectedText.includes('commercial')){
+
+        $('#bhkWrapper').hide();
+
+        $('#sqftWrapper').show();
+
+    }
+    else{
+
+        $('#bhkWrapper').show();
+
+        $('#sqftWrapper').hide();
+
+    }
+
+}
+
+</script>
     <!-- Carpet Area -->
     <div class="col-lg-3">
         <div class="mb-3">
@@ -438,53 +508,44 @@ $nearby = !empty($v->nearby_locations) ? json_decode($v->nearby_locations, true)
                     </select>
                 </div>  
               
-                @php
-$selectedAmenities = !empty($v->facilities) 
-    ? array_map('trim', explode(',', $v->facilities)) 
+ @php
+
+$selectedAmenities = !empty($v->facilities)
+    ? array_map('trim', explode(',', $v->facilities))
     : [];
+
 @endphp
-                <div class="card-body">
-                    <!-- <label for="amenities"><strong>Select Amenities:</strong></label><br> -->
-                    <div class="card-body">
-    <label><strong>Select Amenities:</strong></label><br>
 
-    <input type="checkbox" name="amenities[]" value="WiFi"
-    {{ in_array('WiFi', $selectedAmenities) ? 'checked' : '' }}> WiFi<br>
+<div class="card-body">
 
-    <input type="checkbox" name="amenities[]" value="Parking"
-    {{ in_array('Parking', $selectedAmenities) ? 'checked' : '' }}> Parking<br>
+    <label>
+        <strong>Select Amenities:</strong>
+    </label>
 
-    <input type="checkbox" name="amenities[]" value="Swimming Pool"
-    {{ in_array('Swimming Pool', $selectedAmenities) ? 'checked' : '' }}> Swimming Pool<br>
+    <br>
 
-    <input type="checkbox" name="amenities[]" value="Balcony"
-    {{ in_array('Balcony', $selectedAmenities) ? 'checked' : '' }}> Balcony<br>
+    @foreach($data['amenities'] as $amenity)
 
-    <input type="checkbox" name="amenities[]" value="Garden"
-    {{ in_array('Garden', $selectedAmenities) ? 'checked' : '' }}> Garden<br>
+        <div class="form-check mb-2">
 
-    <input type="checkbox" name="amenities[]" value="Security"
-    {{ in_array('Security', $selectedAmenities) ? 'checked' : '' }}> Security<br>
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="amenities[]"
+                   value="{{ $amenity->amenity_name }}"
 
-    <input type="checkbox" name="amenities[]" value="Fitness Center"
-    {{ in_array('Fitness Center', $selectedAmenities) ? 'checked' : '' }}> Fitness Center<br>
+                   {{ in_array($amenity->amenity_name, $selectedAmenities) ? 'checked' : '' }}>
 
-    <input type="checkbox" name="amenities[]" value="Air Conditioning"
-    {{ in_array('Air Conditioning', $selectedAmenities) ? 'checked' : '' }}> Air Conditioning<br>
+            <label class="form-check-label">
 
-    <input type="checkbox" name="amenities[]" value="Central Heating"
-    {{ in_array('Central Heating', $selectedAmenities) ? 'checked' : '' }}> Central Heating<br>
+                {{ $amenity->amenity_name }}
 
-    <input type="checkbox" name="amenities[]" value="Laundry Room"
-    {{ in_array('Laundry Room', $selectedAmenities) ? 'checked' : '' }}> Laundry Room<br>
+            </label>
 
-    <input type="checkbox" name="amenities[]" value="Pets Allowed"
-    {{ in_array('Pets Allowed', $selectedAmenities) ? 'checked' : '' }}> Pets Allowed<br>
+        </div>
 
-    <input type="checkbox" name="amenities[]" value="Spa & Massage"
-    {{ in_array('Spa & Massage', $selectedAmenities) ? 'checked' : '' }}> Spa & Massage<br>
+    @endforeach
+
 </div>
-                </div>
             </div>
         </div>         
     </div> 
