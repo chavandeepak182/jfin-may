@@ -94,29 +94,29 @@
 
             @php $role = session('role_id'); @endphp
 
-<li>
-@if($role == config('roles.customer'))
-    <a href="/customer/dashboard">
+                    <li>
+                    @if($role == config('roles.customer'))
+                        <a href="/customer/dashboard">
 
-@elseif($role == config('roles.agent'))
-    <a href="/agent/dashboard">
+                    @elseif($role == config('roles.agent'))
+                        <a href="/agent/dashboard">
 
-@elseif($role == config('roles.dsa'))
-    <a href="/dsa/dashboard">
+                    @elseif($role == config('roles.dsa'))
+                        <a href="/dsa/dashboard">
 
-@elseif($role == config('roles.partner'))
-    <a href="/partner/dashboard">
+                    @elseif($role == config('roles.partner'))
+                        <a href="/partner/dashboard">
 
-@elseif($role == config('roles.admin'))
-    <a href="/admin/dashboard">
+                    @elseif($role == config('roles.admin'))
+                        <a href="/admin/dashboard">
 
-@else
-    <a href="/my-profile">
-@endif
+                    @else
+                        <a href="/my-profile">
+                    @endif
 
-        <i class="fa-solid fa-chart-line"></i> Dashboard
-    </a>
-</li>
+                            <i class="fa-solid fa-chart-line"></i> Dashboard
+                        </a>
+                    </li>
 
          <li>
     <form method="POST" action="{{ route('logout') }}" class="logout-form">
@@ -126,11 +126,11 @@
             <span style="margin-left:16px;"> <b>Logout</b></span>
         </button>
     </form>
-</li>
+         </li>
 
 
         {{-- IF USER IS NOT LOGGED IN --}}
-        @else
+           @else
 
             <li>
                 <a href="{{ route('authv3.login.form') }}">
@@ -144,7 +144,7 @@
                 </a>
             </li>
 
-        @endif
+            @endif
 
     </ul>
 </li>

@@ -17,7 +17,7 @@ class IsAdminMiddleware
 {
     $role_id = session()->get('role_id');
 
-    if (in_array($role_id, [4, 6])) { // ✅ admin + dsa
+    if (in_array($role_id, [4, 6,3])) { // ✅ admin + dsa
         return $next($request);
     }
 

@@ -169,7 +169,7 @@
     </div>
 
     <!-- Not Assigned Loans -->
-    <div class="col-xl-3 col-lg-4 col-md-6">
+    <!-- <div class="col-xl-3 col-lg-4 col-md-6">
       <a href="javascript:void(0)" class="card-link loan-filter" data-type="pending">
 
             <div class="loan-card">
@@ -185,8 +185,32 @@
                 <div class="loan-sub">Tracked from records</div>
             </div>
         </a>
-    </div>
+    </div> -->
+@if(session('role_id') == 4)
 
+<div class="col-xl-3 col-lg-4 col-md-6">
+   <a href="javascript:void(0)"
+   id="pendingLoanCard"
+   class="card-link loan-filter"
+   data-type="pending">
+
+        <div class="loan-card">
+            <div class="card-top">
+                <div class="card-icon bg-yellow-soft">
+                    <i class="fas fa-hourglass-start"></i>
+                </div>
+                <span class="badge-soft badge-red">+8.2%</span>
+            </div>
+
+            <div class="loan-title">Pending Assign Loans</div>
+            <div class="loan-value">{{ $pendingLoansCount }}</div>
+            <div class="loan-sub">Tracked from records</div>
+        </div>
+
+    </a>
+</div>
+
+@endif
     <!-- Inprocess Loans -->
     <div class="col-xl-3 col-lg-4 col-md-6">
          <a href="javascript:void(0)"

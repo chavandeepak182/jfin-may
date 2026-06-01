@@ -135,6 +135,14 @@
 </a>
 @endif
 
+{{-- ================= DSA Wallet ================= --}}
+{{-- ================= DSA Wallet ================= --}}
+@if($role_id == 6)
+<a href="{{ route('dsa.wallet') }}" class="nav-item">
+    <i class="fas fa-wallet"></i>
+    <span>Wallet</span>
+</a>
+@endif
 
 {{-- ================= DSA Users ================= --}}
 @if($role_id == 6)

@@ -10,6 +10,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Models\LoanBank;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rule;
 
 
 
@@ -184,6 +186,119 @@ private function authorizeMIS($mis)
 }
 
 
+// public function store(Request $request)
+// {
+//     Log::info('MIS::store – incoming request', $request->all());
+
+//     try {
+
+//         $validatedData = $request->validate([
+//             'name'         => 'required|string|max:255',
+//             'email' => [
+//         'required',
+//         'email',
+//         Rule::unique('mis')->where(function ($query) use ($request) {
+
+//             return $query
+//                 ->where('contact','!=',$request->contact);
+//         })
+//     ],
+
+//     'contact' => 'required|string|max:255',
+//             'product_type' => 'required|string|max:255',
+//             'bank_name'    => 'required|string|max:255',
+//             'occupation'   => 'required|string|max:255',
+//             'branch_name'  => 'required|string|max:255',
+//             'amount'       => 'required|numeric',
+//             'address'      => 'required|string',
+//             'city'         => 'required|string|max:255',
+//             'bm_name'      => 'nullable|string|max:255',
+//             'login_date'   => 'nullable|date',
+//             'status'       => 'nullable|string|max:255',
+//             'in_principle' => 'nullable|string|max:255',
+//             'remark'       => 'nullable|string',
+//             'legal'        => 'nullable|string|max:255',
+//             'valuation'    => 'nullable|string|max:255',
+//             'leads'        => 'nullable|string|max:255',
+//             'file_work'    => 'nullable|string|max:255',
+//         ]);
+
+//         $userId = session()->get('user_id');
+// $existingUser = DB::table('mis')
+//     ->where('email', $request->email)
+//     ->first();
+
+// if ($existingUser && $existingUser->contact != $request->contact) {
+
+//     return response()->json([
+//         'status' => false,
+//         'message' => 'Email already belongs to another customer'
+//     ],422);
+// }
+//         if (!$userId) {
+//             return response()->json([
+//                 'status' => 'error',
+//                 'message' => 'Session expired. Please login again.'
+//             ], 401);
+//         }
+
+//         $validatedData['created_by'] = $userId;
+
+//         DB::transaction(function () use (&$misId, &$validatedData) {
+
+//     // Fetch by bank name only
+//     $bankDetail = DB::table('company_bank_details')
+//         ->where('bank_name', $validatedData['bank_name'])
+//         ->first();
+
+//     // Auto create if not exists
+//     if (!$bankDetail) {
+
+//         $bankId = DB::table('company_bank_details')->insertGetId([
+//             'bank_name'    => $validatedData['bank_name'],
+//             'branch_name'  => $validatedData['branch_name'] ?? null,
+//             'manager_name' => $validatedData['bm_name'] ?? null,
+//             'created_at'   => now(),
+//             'updated_at'   => now(),
+//         ]);
+
+//         $bankDetail = (object) ['id' => $bankId];
+//     }
+
+//     // Save reference in MIS
+//     $validatedData['company_bank_detail_id'] = $bankDetail->id;
+
+//     // Insert MIS
+//     $misId = DB::table('mis')->insertGetId($validatedData);
+// });
+
+//        return response()->json([
+//     'status'  => true,
+//     'message' => 'MIS record added successfully!',
+//     'id'      => $misId,
+// ], 201);
+
+//     } catch (ValidationException $e) {
+
+//         return response()->json([
+//             'status' => 'error',
+//             'errors' => $e->errors(),
+//         ], 422);
+
+//     } catch (\Throwable $e) {
+
+//         Log::error('MIS::store error', [
+//             'message' => $e->getMessage(),
+//         ]);
+
+//         return response()->json([
+//             'status'  => 'error',
+//             'message' => $e->getMessage(), // helpful for debugging
+//         ], 500);
+//     }
+// }
+
+
 public function store(Request $request)
 {
     Log::info('MIS::store – incoming request', $request->all());
@@ -192,7 +307,7 @@ public function store(Request $request)
 
         $validatedData = $request->validate([
             'name'         => 'required|string|max:255',
-            'email'        => 'required|email|max:255|unique:mis,email',
+            'email'        => 'required|email|max:255',
             'contact'      => 'required|string|max:255',
             'product_type' => 'required|string|max:255',
             'bank_name'    => 'required|string|max:255',
@@ -212,57 +327,98 @@ public function store(Request $request)
             'file_work'    => 'nullable|string|max:255',
         ]);
 
+        // Same email + same contact => allow
+        // Same email + different contact => block
+      $existingUser = DB::table('mis')
+    ->where(function($query) use ($request){
+        $query->where('email', $request->email)
+              ->orWhere('contact', $request->contact);
+    })
+    ->first();
+
+if ($existingUser) {
+
+    $sameCustomer =
+        strtolower(trim($existingUser->name)) == strtolower(trim($request->name))
+        && $existingUser->email == $request->email
+        && $existingUser->contact == $request->contact;
+
+    // Same customer
+    if ($sameCustomer) {
+
+        // Same product already exists?
+        $sameProduct = DB::table('mis')
+            ->where('name', $request->name)
+            ->where('email', $request->email)
+            ->where('contact', $request->contact)
+            ->where('product_type', $request->product_type)
+            ->exists();
+
+        if ($sameProduct) {
+            return response()->json([
+                'status' => false,
+                'message' => 'This product type already exists for this customer'
+            ], 422);
+        }
+
+    } else {
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Email or Mobile already belongs to another customer'
+        ], 422);
+    }
+}
+
         $userId = session()->get('user_id');
 
         if (!$userId) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Session expired. Please login again.'
-            ], 401);
+            ],401);
         }
 
         $validatedData['created_by'] = $userId;
 
         DB::transaction(function () use (&$misId, &$validatedData) {
 
-    // Fetch by bank name only
-    $bankDetail = DB::table('company_bank_details')
-        ->where('bank_name', $validatedData['bank_name'])
-        ->first();
+            $bankDetail = DB::table('company_bank_details')
+                ->where('bank_name', $validatedData['bank_name'])
+                ->first();
 
-    // Auto create if not exists
-    if (!$bankDetail) {
+            if (!$bankDetail) {
 
-        $bankId = DB::table('company_bank_details')->insertGetId([
-            'bank_name'    => $validatedData['bank_name'],
-            'branch_name'  => $validatedData['branch_name'] ?? null,
-            'manager_name' => $validatedData['bm_name'] ?? null,
-            'created_at'   => now(),
-            'updated_at'   => now(),
-        ]);
+                $bankId = DB::table('company_bank_details')
+                    ->insertGetId([
+                        'bank_name'    => $validatedData['bank_name'],
+                        'branch_name'  => $validatedData['branch_name'] ?? null,
+                        'manager_name' => $validatedData['bm_name'] ?? null,
+                        'created_at'   => now(),
+                        'updated_at'   => now(),
+                    ]);
 
-        $bankDetail = (object) ['id' => $bankId];
-    }
+                $bankDetail = (object)['id' => $bankId];
+            }
 
-    // Save reference in MIS
-    $validatedData['company_bank_detail_id'] = $bankDetail->id;
+            $validatedData['company_bank_detail_id'] = $bankDetail->id;
 
-    // Insert MIS
-    $misId = DB::table('mis')->insertGetId($validatedData);
-});
+            $misId = DB::table('mis')->insertGetId($validatedData);
 
-       return response()->json([
-    'status'  => true,
-    'message' => 'MIS record added successfully!',
-    'id'      => $misId,
-], 201);
+        });
+
+        return response()->json([
+            'status' => true,
+            'message' => 'MIS record added successfully!',
+            'id' => $misId,
+        ],201);
 
     } catch (ValidationException $e) {
 
         return response()->json([
-            'status' => 'error',
+            'status' => false,
             'errors' => $e->errors(),
-        ], 422);
+        ],422);
 
     } catch (\Throwable $e) {
 
@@ -271,14 +427,11 @@ public function store(Request $request)
         ]);
 
         return response()->json([
-            'status'  => 'error',
-            'message' => $e->getMessage(), // helpful for debugging
-        ], 500);
+            'status' => false,
+            'message' => $e->getMessage()
+        ],500);
     }
 }
-
-
-
     public function edit($id)
     {
         $misRecord = MIS::findOrFail($id);

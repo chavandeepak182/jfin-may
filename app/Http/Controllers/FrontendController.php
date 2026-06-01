@@ -1010,6 +1010,9 @@ if ($request->filled('budget')) {
 
     $data['allProperties'] = $query->get();
     $data['priceRanges'] = DB::table('price_range')->get();
+    $data['bhks'] = DB::table('bhks')
+                    ->orderBy('bhk_name','asc')
+                    ->get();
 
     /* ================= CATEGORY ================= */
 

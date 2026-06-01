@@ -178,14 +178,33 @@
    
 
                 <td>
-                    @if($p->status == 'pending')
-                        <form method="POST" action="{{ route('dsa.payout.release',$p->id) }}">
-                            @csrf
-                            <button class="btn btn-success btn-sm">Release</button>
-                        </form>
-                    @else
-                        ✔ Released
-                    @endif
+                 
+                   @php
+$remaining =
+$p->total_payout - $p->released_amount;
+@endphp
+
+@if($remaining > 0)
+
+<form method="POST"
+      action="{{ route('dsa.payout.release',$p->id) }}"
+      class="releaseForm">
+
+    @csrf
+
+    <button class="btn btn-success btn-sm">
+        Release
+    </button>
+
+</form>
+
+@else
+
+<span class="text-success">
+    ✔ Fully Released
+</span>
+
+@endif
                 </td>
             </tr>
             @empty
@@ -197,5 +216,35 @@
     </table>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
 
+document.querySelectorAll('.releaseForm').forEach(form => {
+
+    form.addEventListener('submit', function(e){
+
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to release this payout?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Release',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+
+            if(result.isConfirmed){
+                form.submit();
+            }
+
+        });
+
+    });
+
+});
+
+</script>
 @endsection

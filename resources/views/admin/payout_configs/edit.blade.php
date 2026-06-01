@@ -50,9 +50,9 @@
                     <!-- PERCENTAGE -->
                     <div class="form-group">
                         <label>Payout (%)</label>
-                        <input type="number" step="0.01" name="percentage"
-                            value="{{ $config->percentage ?? '' }}"
-                            placeholder="Enter %" />
+                        <input type="number" step="0.01" min="0.01" name="percentage"
+    value="{{ $config->percentage ?? '' }}"
+    placeholder="Enter %" />
                     </div>
 
                     <!-- BUTTON -->

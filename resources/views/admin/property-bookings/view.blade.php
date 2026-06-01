@@ -500,21 +500,30 @@ h2{
         </div>
         <div class="form-group">
             <label>TDS %</label>
-            <input type="number" id="tds_percentage" name="tds_percentage" step="0.01"
-                   value="{{ $booking->tds_percentage }}"
-                   {{ $isLocked ? 'readonly' : 'required' }}>
+            <!-- <input type="number" id="tds_percentage" name="tds_percentage" step="0.01"
+                  value="{{ $booking->tds_percentage }}"
+                   {{ $isLocked ? 'readonly' : 'required' }}> -->
+                    <input type="number" id="tds_percentage" name="tds_percentage" step="0.01"
+value="{{ ($booking->tds_percentage == '0.00' || $booking->tds_percentage == 0) ? '' : $booking->tds_percentage }}"
+{{ $isLocked ? 'readonly' : 'required' }}>
         </div>
         <div class="form-group">
             <label>GST %</label>
-            <input type="number" id="gst_percentage" name="gst_percentage" step="0.01"
+            <!-- <input type="number" id="gst_percentage" name="gst_percentage" step="0.01"
                    value="{{ $booking->gst_percentage }}"
-                   {{ $isLocked ? 'readonly' : 'required' }}>
+                   {{ $isLocked ? 'readonly' : 'required' }}> -->
+                    <input type="number" id="gst_percentage" name="gst_percentage" step="0.01"
+value="{{ ($booking->gst_percentage == '0.00' || $booking->gst_percentage == 0) ? '' : $booking->gst_percentage }}"
+{{ $isLocked ? 'readonly' : 'required' }} required>
         </div>
         <div class="form-group">
             <label>MLM Amount (₹)</label>
-            <input type="number" id="mlm_amount" name="mlm_amount"
+            <!-- <input type="number" id="mlm_amount" name="mlm_amount"
                    value="{{ $booking->mlm_amount }}"
-                   {{ $isLocked ? 'readonly' : 'required' }}>
+                   {{ $isLocked ? 'readonly' : 'required' }}> -->
+                    <input type="number" id="mlm_amount" name="mlm_amount"
+value="{{ ($booking->mlm_amount == '0.00' || $booking->mlm_amount == 0) ? '' : $booking->mlm_amount }}"
+{{ $isLocked ? 'readonly' : 'required' }} required>
         </div>
     </div>
 </div>
