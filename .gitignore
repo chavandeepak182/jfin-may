@@ -21,3 +21,4 @@ yarn-error.log
 /public/property_brochures
 /public/property_photos
 /storage/framework/views/*
+*.zip
