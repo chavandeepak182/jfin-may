@@ -399,6 +399,16 @@
     </div>
 
 </div>
+@if(session('message'))
+<script>
+    swal({
+        title: "Alert",
+        text: "{{ session('message') }}",
+        icon: "warning",
+        button: "OK",
+    });
+</script>
+@endif
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {

@@ -18,35 +18,60 @@ class MasterController extends Controller
         return view('admin.master.bhk-list', compact('bhks'));
     }
 
-   public function bhkStore(Request $request)
+public function bhkStore(Request $request)
 {
     $request->merge([
-        'bhk_name' => strtolower(trim($request->bhk_name))
+        'bhk_name' => trim($request->bhk_name)
     ]);
 
-    $request->validate([
-        'bhk_name' => 'required|unique:bhks,bhk_name'
-    ]);
+    $request->validate(
+        [
+            'bhk_name' => [
+                'required',
+                'regex:/^(\d+(\.5)?)$/',
+                'unique:bhks,bhk_name'
+            ]
+        ],
+        [
+            'bhk_name.required' => 'BHK name is required.',
+            'bhk_name.regex' => 'Only valid BHK values are allowed (e.g. 1, 2, 2.5, 3, 3.5, 4). Values like 2.6 are not allowed.',
+            'bhk_name.unique' => 'This BHK already exists.'
+        ]
+    );
 
     Bhk::create([
         'bhk_name' => $request->bhk_name
     ]);
 
-    return back()->with('success','BHK Added Successfully');
+    return back()->with('success', 'BHK Added Successfully');
 }
 
-   public function bhkUpdate(Request $request)
+public function bhkUpdate(Request $request)
 {
-    $request->validate([
-        'bhk_name' => 'required|unique:bhks,bhk_name,'.$request->id
+    $request->merge([
+        'bhk_name' => trim($request->bhk_name)
     ]);
 
-    Bhk::where('id',$request->id)
-        ->update([
-            'bhk_name' => $request->bhk_name
-        ]);
+    $request->validate(
+        [
+            'bhk_name' => [
+                'required',
+                'regex:/^(\d+(\.5)?)$/',
+                'unique:bhks,bhk_name,' . $request->id
+            ]
+        ],
+        [
+            'bhk_name.required' => 'BHK name is required.',
+            'bhk_name.regex' => 'Only valid BHK values are allowed (e.g. 1, 2, 2.5, 3, 3.5, 4). Values like 2.6 are not allowed.',
+            'bhk_name.unique' => 'This BHK already exists.'
+        ]
+    );
 
-    return back()->with('success','BHK Updated Successfully');
+    Bhk::where('id', $request->id)->update([
+        'bhk_name' => $request->bhk_name
+    ]);
+
+    return back()->with('success', 'BHK Updated Successfully');
 }
     public function bhkDelete(Request $request)
     {

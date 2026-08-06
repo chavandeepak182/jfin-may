@@ -187,5 +187,6 @@
                 </div>
             </div>
         </div>
+        
     <!-- FAQs End -->
 @endsection

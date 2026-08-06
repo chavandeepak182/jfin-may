@@ -325,10 +325,12 @@
                     <div class="form-group">
                         <label for="coApplicantName">Full Name</label>
                         <!-- <input type="text" id="coApplicantName" name="co_name" placeholder="Enter full name"> -->
-                                                <input type="email" id="coApplicantEmail" name="co_email"
-       placeholder="Enter email address"
-       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-       title="Enter valid email">
+                                                <input type="text"
+       id="coApplicantName"
+       name="co_name"
+       placeholder="Enter full name"
+       pattern="[A-Za-z ]{2,50}"
+       title="Enter a valid full name (letters and spaces only)">
                     </div>
                     
                     <div class="form-group">

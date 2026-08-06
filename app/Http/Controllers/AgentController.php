@@ -483,6 +483,7 @@ public function getCities($state_id)
     }
     public function update(Request $request)
     {
+        
         // dd($request->all());
         try {
             $validated = $request->validate([
@@ -490,12 +491,7 @@ public function getCities($state_id)
                 'status' => 'required|string',
                 'loan_category_id' => 'required|integer',
                 'amount' => 'required|numeric',
-                            'amount_approved' => [
-                        'required_if:status,disbursed',
-                        'numeric',
-                        'min:0',
-                        'max:' . $request->amount   // 🔥 important
-                    ],
+                     'amount_approved' => 'nullable|required_if:status,disbursed|numeric|min:0|max:'.$request->amount,
                 'tenure' => 'required|integer',
                 'in_principle' => 'nullable|string',
                 'remarks' => 'nullable|string',
@@ -513,6 +509,7 @@ public function getCities($state_id)
                     'old_status' => $oldStatus,
                     'new_status' => $newStatus,
                 ]);
+                
 
                $loan->update([
                     'loan_category_id' => $request->input('loan_category_id'),

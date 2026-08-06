@@ -275,7 +275,6 @@
             const interestPercent = (totalInterest / totalPayable) * 360;
             document.getElementById('emi-chart').style.background = `conic-gradient(#3b82f6 0deg ${360 - interestPercent}deg, #10b981 ${360 - interestPercent}deg 360deg)`;
 
-            updateAmortizationSchedule(loanAmount, monthlyRate, tenureMonths, emi);
         }
 
         function updateAmortizationSchedule(principal, monthlyRate, months, emi) {
@@ -339,40 +338,64 @@
         }
 
         // Add listeners
-        ['emi-loan', 'emi-tenure', 'emi-interest'].forEach(id => {
-            document.getElementById(id).addEventListener('input', calculateEMI);
-        });
+      let emiTimer;
+
+['emi-loan', 'emi-tenure', 'emi-interest'].forEach(id => {
+
+    document.getElementById(id).addEventListener('input', function () {
+
+        clearTimeout(emiTimer);
+
+        emiTimer = setTimeout(() => {
+
+            calculateEMI();
+
+        }, 300);
+
+    });
+
+});
 
         // Initial calculation
         calculateEMI();
 
         // Loan Eligibility Logic
-        function calculateEligibility() {
-            const income = parseFloat(document.getElementById('elig-income').value) || 0;
-            const existingEmi = parseFloat(document.getElementById('elig-emi').value) || 0;
-            const interestRate = parseFloat(document.getElementById('elig-interest').value) || 0;
-            const tenureYears = parseFloat(document.getElementById('elig-tenure').value) || 0;
+      function calculateEligibility() {
 
-            // Standard bank rule: Max EMI = 50% of (Monthly Income - Existing EMIs)
-            const foire = 0.5; 
-            const maxEmi = (income * foire) - existingEmi;
+    const income = Number(document.getElementById("elig-income").value) || 0;
+    const existingEmi = Number(document.getElementById("elig-emi").value) || 0;
+    const interestRate = Number(document.getElementById("elig-interest").value) || 0;
+    const tenureYears = Number(document.getElementById("elig-tenure").value) || 0;
 
-            if (maxEmi <= 0) {
-                document.getElementById('display-eligibility').innerText = "₹0";
-                document.getElementById('display-max-emi').innerText = "₹0";
-                return;
-            }
+    const FOIR = 40; // %
 
-            const monthlyRate = interestRate / 12 / 100;
-            const tenureMonths = tenureYears * 12;
+    // Eligible EMI
+    const eligibleEmi = ((income - existingEmi) * FOIR) / 100;
 
-            // Loan Amount = EMI / [ (r * (1+r)^n) / ((1+r)^n - 1) ]
-            const maxLoan = maxEmi / ((monthlyRate * Math.pow(1 + monthlyRate, tenureMonths)) / (Math.pow(1 + monthlyRate, tenureMonths) - 1));
+    if (eligibleEmi <= 0) {
 
-            document.getElementById('display-eligibility').innerText = '₹' + Math.round(maxLoan).toLocaleString('en-IN');
-            document.getElementById('display-max-emi').innerText = '₹' + Math.round(maxEmi).toLocaleString('en-IN');
-        }
+        document.getElementById("display-max-emi").innerHTML = "₹0";
 
+        document.getElementById("display-eligibility").innerHTML = "₹0";
+
+        return;
+    }
+
+    const r = interestRate / 12 / 100;
+
+    const n = tenureYears * 12;
+
+    const loanAmount =
+        eligibleEmi *
+        (((Math.pow(1 + r, n)) - 1) /
+        (r * Math.pow(1 + r, n)));
+
+    document.getElementById("display-max-emi").innerHTML =
+        "₹" + Math.round(eligibleEmi).toLocaleString("en-IN");
+
+    document.getElementById("display-eligibility").innerHTML =
+        "₹" + Math.round(loanAmount).toLocaleString("en-IN");
+}
         // Add listeners for eligibility
         ['elig-income', 'elig-emi', 'elig-interest', 'elig-tenure'].forEach(id => {
             document.getElementById(id).addEventListener('input', calculateEligibility);

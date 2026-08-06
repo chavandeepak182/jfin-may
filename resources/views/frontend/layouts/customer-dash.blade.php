@@ -16,6 +16,7 @@
 
     <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <title>@yield('title')</title>
     <style>
 /* =========================================
@@ -301,9 +302,11 @@
                         <a class="nav-icon dropdown-toggle" href="#" data-bs-toggle="dropdown">
                             <div class="position-relative">
                                 <i data-feather="bell"></i>
-                                <span class="indicator">
-                                    {{ \App\Models\NotificationLog::where('user_id', auth()->id())->where('seen_by_user', false)->count() }}
-                                </span>
+                               <span class="indicator" id="notification-count">
+                                {{ \App\Models\NotificationLog::where('user_id', auth()->id())
+                                    ->where('seen_by_user',0)
+                                    ->count() }}
+                            </span>
                             </div>
                         </a>
 
@@ -319,8 +322,9 @@
                                     ->limit(5)->get()
                                     as $notification
                                 )
-                                    <a href="{{ $notification->url ?? '#' }}"
-                                    class="list-group-item list-group-item-action {{ $notification->seen_by_user ? '' : 'fw-bold' }}">
+                                    <a href="{{ route('loan.myloans') }}"
+   class="list-group-item list-group-item-action"
+   data-id="{{ $notification->id }}">
                                         <div class="d-flex">
                                             <i class="me-2 text-primary" data-feather="{{ $notification->icon ?? 'bell' }}"></i>
                                             <div>

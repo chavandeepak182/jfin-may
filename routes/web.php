@@ -45,7 +45,123 @@ use App\Http\Controllers\DsaPayoutController;
 use App\Http\Controllers\DsaMonthlyPayoutController;
 use App\Http\Controllers\MasterController;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\LeadReferralController;
+use App\Http\Controllers\AdminLeadReferralController;
 
+
+
+
+Route::middleware(['auth', 'leadreferral'])
+    ->prefix('referraldsa')
+    ->name('referraldsa.')
+    ->group(function () {
+
+        // Dashboard
+        Route::get('/dashboard', [LeadReferralController::class, 'dashboard'])
+            ->name('dashboard');
+
+        // Add Lead
+       Route::get('/add-lead', [LeadReferralController::class, 'addLead'])
+    ->name('add.lead');
+
+        Route::post('/store', [LeadReferralController::class, 'store'])
+            ->name('store');
+
+        // My Leads
+        Route::get('/list', [LeadReferralController::class, 'list'])
+            ->name('list');
+
+        // Edit Lead
+        Route::get('/edit/{id}', [LeadReferralController::class, 'edit'])
+            ->name('edit');
+
+        Route::post('/update/{id}', [LeadReferralController::class, 'update'])
+            ->name('update');
+
+        Route::delete('/delete/{id}', [LeadReferralController::class, 'destroy'])
+            ->name('delete');
+
+        // My Referral
+        Route::get('/my-dsa-referral', [LeadReferralController::class, 'myDsaReferral'])
+            ->name('my.dsa.referral');
+
+        // Customers
+        Route::get('/customers', [LeadReferralController::class, 'customers'])
+            ->name('customers');
+
+        // Wallet
+        Route::get('/wallet', [LeadReferralController::class, 'wallet'])
+            ->name('wallet');
+
+        // Earnings
+        Route::get('/earnings', [LeadReferralController::class, 'earnings'])
+            ->name('earnings');
+
+        // Profile
+        Route::get('/profile', [LeadReferralController::class, 'profile'])
+            ->name('profile');
+
+        Route::post('/profile/update', [LeadReferralController::class, 'updateProfile'])
+            ->name('profile.update');
+
+        // Settings
+        Route::get('/settings', [LeadReferralController::class, 'settings'])
+            ->name('settings');
+
+        Route::post('/settings/save', [LeadReferralController::class, 'saveSettings'])
+            ->name('settings.save');
+
+        // Logout
+        Route::post('/logout', [LeadReferralController::class, 'logout'])
+            ->name('logout');
+    });
+
+
+
+
+Route::prefix('admin')
+    ->middleware(['auth'])
+    ->group(function () {
+
+        // Lead Referral Dashboard
+        Route::get('/lead-referral', [AdminLeadReferralController::class, 'index'])
+            ->name('admin.lead-referral.index');
+
+        // Load Lead Referral List (AJAX)
+        Route::get('/lead-referral/list', [AdminLeadReferralController::class, 'loadList'])
+            ->name('admin.lead-referral.list');
+
+        // Store Lead Referral
+        Route::post('/lead-referral/store', [AdminLeadReferralController::class, 'store'])
+            ->name('admin.lead-referral.store');
+
+        // Get Cities by State (AJAX)
+        Route::post('/lead-referral/get-city', [AdminLeadReferralController::class, 'getCity'])
+            ->name('admin.lead-referral.city');
+
+        // Edit Lead Referral
+        Route::get('/lead-referral/edit/{id}', [AdminLeadReferralController::class, 'edit'])
+            ->name('admin.lead-referral.edit');
+
+        // Update Lead Referral
+        Route::post('/lead-referral/update/{id}', [AdminLeadReferralController::class, 'update'])
+            ->name('admin.lead-referral.update');
+
+        // Delete Lead Referral
+        Route::delete('/lead-referral/delete/{id}', [AdminLeadReferralController::class, 'destroy'])
+            ->name('admin.lead-referral.delete');
+            Route::post('/admin/lead-referral/change-status', [AdminLeadReferralController::class, 'changeStatus'])
+    ->name('admin.lead-referral.change-status');
+    });
+    Route::post('/admin/lead-referral/change-status',
+    [AdminLeadReferralController::class,'changeStatus'])
+    ->name('admin.lead-referral.change-status');
+     Route::get('/referraldsa/settings', [LeadReferralController::class, 'settings'])
+        ->name('referraldsa.settings');
+
+    Route::post('/referraldsa/change-password', [LeadReferralController::class, 'changePassword'])
+        ->name('referraldsa.change-password');
+    
 // aminities nd bk routes
 
 Route::get('/bhk-list', [MasterController::class,'bhkList'])->name('bhk.list');
@@ -94,6 +210,19 @@ Route::get('/admin/customers', [UsersController::class, 'adminCustomer'])
     ->name('admin.customers');
 // update user
 // reset pass user
+
+// loan category
+Route::post('/loan-category/store',
+    [BankController::class,'loanCategoryStore'])
+    ->name('loan.category.store');
+
+Route::post('/loan-category/update',
+    [BankController::class,'loanCategoryUpdate'])
+    ->name('loan.category.update');
+
+Route::post('/loan-category/delete',
+    [BankController::class,'loanCategoryDelete'])
+    ->name('loan.category.delete');
 Route::post('/admin/reset-password', [UsersController::class, 'resetPassword'])
      ->name('admin.reset.password');
 
@@ -128,6 +257,10 @@ Route::get('/', function () {
 // });
 Route::get('/about',function () {
     return view('dhara-jfin.about');
+    });
+
+    Route::get('/referearn',function () {
+    return view('dhara-jfin.refer_earn_with_jfinmate');
     });
 // Route::get('about', [FrontendController::class, 'AboutView']);
 

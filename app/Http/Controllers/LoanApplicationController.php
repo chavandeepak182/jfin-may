@@ -566,20 +566,34 @@ public function update(Request $request)
             }
 
             // ✅ EVENT (🔥 FIXED HERE)
-            if ($oldStatus !== $newStatus) {
+          if ($oldStatus !== $newStatus) {
 
-              try {
-    event(new LoanStatusUpdated(
-        $loan->loan_reference_id,
-        auth()->id() ?? session('user_id'),
-        optional(auth()->user()->roles)->name ?? 'system',
-        $loan->status,
-        $loan->user_id
-    ));
-} catch (\Exception $e) {
-    \Log::error('Event failed', ['error' => $e->getMessage()]);
-};
-            }
+    try {
+
+        event(new LoanStatusUpdated(
+            $loan->loan_reference_id,
+            auth()->id() ?? session('user_id'),
+            optional(auth()->user()->roles)->name ?? 'system',
+            $loan->status,
+            $loan->user_id
+        ));
+
+        // Save notification
+      \App\Models\NotificationLog::create([
+    'user_id'      => $loan->user_id,
+    'title'        => 'Loan Status Updated',
+    'description'  => 'Your loan status has been changed to ' . ucfirst($newStatus),
+    'url'          => route('loan.view', $loan->loan_id), // replace with your route
+    'seen_by_user' => 0,
+]);
+
+    } catch (\Exception $e) {
+
+        \Log::error('Notification Error', [
+            'error' => $e->getMessage()
+        ]);
+    }
+}
 
             // ✅ DISBURSED LOGIC
          if ($newStatus === 'disbursed' && session('role_id') != 6){

@@ -20,16 +20,38 @@ use App\Models\Category;
 
 class ReferralController extends Controller
 {
-    public function referral_earnings()
-    {
-            $data['earnings'] = DB::table('users')
+ public function referral_earnings()
+{
+    // Referral Users
+    $data['earnings'] = DB::table('users')
         ->join('profile', 'users.id', '=', 'profile.user_id')
         ->join('wallet', 'users.id', '=', 'wallet.user_id')
-        ->select('users.id', 'users.name', 'users.email_id', 'users.referral_code', 'profile.mobile_no', 'profile.dob', 'wallet.wallet_balance')
+        ->select(
+            'users.id',
+            'users.name',
+            'users.email_id',
+            'users.referral_code',
+            'profile.mobile_no',
+            'profile.dob',
+            'wallet.wallet_balance'
+        )
         ->paginate(10);
 
-        return view('admin.earnings',compact('data'));
-    }
+    // Pending Redeem Requests Count
+    $redeemCount = DB::table('withdrawal_requests')
+        ->where('status', 'pending')
+        ->count();
+
+    // Transaction Count
+    $transactionCount = DB::table('transactions')
+        ->count();
+
+    return view('admin.earnings', compact(
+        'data',
+        'redeemCount',
+        'transactionCount'
+    ));
+}
     //agent wallet
     public function walletbalance()
 {
@@ -61,6 +83,48 @@ class ReferralController extends Controller
 
     return view('admin.walletbalance', compact('walletBalance', 'combinedData'));
 }
+// public function requestWithdrawal(Request $request)
+// {
+//     $request->validate([
+//         'amount' => 'required|numeric|min:1',
+//     ]);
+
+//     // Fetch the user ID from the session
+//     $userId = session('user_id');
+//     $requestedAmount = $request->input('amount');
+
+//     // Retrieve the user's current wallet balance
+//     $walletBalance = DB::table('wallet')->where('user_id', $userId)->value('wallet_balance');
+
+//     // Check if the requested withdrawal amount exceeds the wallet balance
+//     if ($requestedAmount > $walletBalance) {
+//         return redirect()->back()->with('message', 'You cannot withdraw more than your current wallet balance.');
+//     }
+
+//     // GST and TDS percentages
+//     $gstPercentage = 10; // Example: 10%
+//     $tdsPercentage = 5;  // Example: 5%
+
+//     // Calculate GST, TDS, and final amount after deductions
+//     $gstAmount = ($requestedAmount * $gstPercentage) / 100;
+//     $tdsAmount = ($requestedAmount * $tdsPercentage) / 100;
+//     $finalAmount = $requestedAmount - $gstAmount - $tdsAmount;
+
+//     // Create a new withdrawal request
+//     DB::table('withdrawal_requests')->insert([
+//         'user_id' => $userId,
+//         'amount' => $requestedAmount, // Requested amount
+//         'gst' => $gstAmount,
+//         'tds' => $tdsAmount,
+//         'final_amount' => $finalAmount, // Amount after GST & TDS
+//         'status' => 'pending',
+//         'created_at' => now(),
+//     ]);
+
+//     return redirect()->back()->with('message', 'Withdrawal request submitted successfully.');
+// }
+
+
 public function requestWithdrawal(Request $request)
 {
     $request->validate([
@@ -72,12 +136,28 @@ public function requestWithdrawal(Request $request)
     $requestedAmount = $request->input('amount');
 
     // Retrieve the user's current wallet balance
-    $walletBalance = DB::table('wallet')->where('user_id', $userId)->value('wallet_balance');
+    $walletBalance = DB::table('wallet')
+        ->where('user_id', $userId)
+        ->value('wallet_balance');
 
-    // Check if the requested withdrawal amount exceeds the wallet balance
-    if ($requestedAmount > $walletBalance) {
-        return redirect()->back()->with('message', 'You cannot withdraw more than your current wallet balance.');
+    // ============================
+    // NEW CODE - Pending Withdrawal Check
+    // ============================
+    $pendingAmount = DB::table('withdrawal_requests')
+        ->where('user_id', $userId)
+        ->where('status', 'pending')
+        ->sum('amount');
+
+    $availableBalance = $walletBalance - $pendingAmount;
+
+    // Check if requested amount exceeds available balance
+    if ($requestedAmount > $availableBalance) {
+        return redirect()->back()->with(
+            'message',
+            'Withdrawal amount exceeds your available balance.'
+        );
     }
+    // ============================
 
     // GST and TDS percentages
     $gstPercentage = 10; // Example: 10%
@@ -90,28 +170,54 @@ public function requestWithdrawal(Request $request)
 
     // Create a new withdrawal request
     DB::table('withdrawal_requests')->insert([
-        'user_id' => $userId,
-        'amount' => $requestedAmount, // Requested amount
-        'gst' => $gstAmount,
-        'tds' => $tdsAmount,
-        'final_amount' => $finalAmount, // Amount after GST & TDS
-        'status' => 'pending',
-        'created_at' => now(),
+        'user_id'      => $userId,
+        'amount'       => $requestedAmount,
+        'gst'          => $gstAmount,
+        'tds'          => $tdsAmount,
+        'final_amount' => $finalAmount,
+        'status'       => 'pending',
+        'created_at'   => now(),
     ]);
 
     return redirect()->back()->with('message', 'Withdrawal request submitted successfully.');
 }
+public function viewWithdrawalRequests()
+{
+    // Pending Withdrawal Requests
+    $requests = DB::table('withdrawal_requests')
+        ->join('users', 'withdrawal_requests.user_id', '=', 'users.id')
+        ->leftJoin('profile', 'users.id', '=', 'profile.user_id')
+        ->where('withdrawal_requests.status', 'pending')
+        ->select(
+            'withdrawal_requests.*',
+            'users.name',
+            'users.email_id as email',
+            'profile.mobile_no as mobile'
+        )
+        ->get();
 
-    public function viewWithdrawalRequests()
-    {
-        $requests = DB::table('withdrawal_requests')
-            ->join('users', 'withdrawal_requests.user_id', '=', 'users.id') // Join with the users table
-            ->where('withdrawal_requests.status', 'pending') // Filter pending requests
-            ->select('withdrawal_requests.*', 'users.name', 'users.referral_code') // Select all fields from withdrawal_requests, the name, and referral_code from users
-            ->get();
-    
-        return view('admin.withdrawal_requests', compact('requests'));
-    }
+    // Total Referral Users (same as Referral Earnings page)
+    $referralCount = DB::table('users')
+        ->join('profile', 'users.id', '=', 'profile.user_id')
+        ->join('wallet', 'users.id', '=', 'wallet.user_id')
+        ->count();
+
+    // Pending Withdrawal Count
+    $pendingCount = DB::table('withdrawal_requests')
+        ->where('status', 'pending')
+        ->count();
+
+    // Total Transactions Count
+    $transactionCount = DB::table('transactions')
+        ->count();
+
+    return view('admin.withdrawal_requests', compact(
+        'requests',
+        'referralCount',
+        'pendingCount',
+        'transactionCount'
+    ));
+}
 
     // Approve a withdrawal request
     public function approveWithdrawal(Request $request, $id)

@@ -32,6 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // ✅ ADD THIS
      // ✅ UPDATED
             'isDsa' => IsDsaMiddleware::class,
+            'leadreferral' => \App\Http\Middleware\IsLeadReferralMiddleware::class,
     ]);
 })
 

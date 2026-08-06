@@ -10,7 +10,30 @@
 @php
     $role_id = session()->get('role_id');
 @endphp
-<style>/* ===== SIDEBAR NAV ===== */
+<style>
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+    background: #bdbdbd;
+    border-radius: 10px;
+}
+
+
+/* ===== SIDEBAR NAV ===== */
 .sidebar-nav .nav-item {
     display: flex;
     align-items: center;
@@ -51,6 +74,47 @@
 </div>
 
     <nav class="sidebar-nav">
+
+    @if($role_id == 7)
+
+<a href="{{ route('referraldsa.dashboard') }}" class="nav-item">
+    <i class="fas fa-home"></i>
+    <span>Dashboard</span>
+</a>
+
+<a href="{{ route('referraldsa.add.lead') }}" class="nav-item">
+    <i class="fas fa-user-plus"></i>
+    <span>Add Lead</span>
+</a>
+
+<a href="{{ route('referraldsa.settings') }}" class="nav-item">
+    <i class="fas fa-cog"></i>
+    <span>Settings</span>
+</a>
+<a href="{{ route('referraldsa.list') }}" class="nav-item">
+    <i class="fas fa-cog"></i>
+    <span>Lead List</span>
+</a>
+
+
+ 
+
+
+<a href="{{ route('referraldsa.logout') }}"
+   class="nav-item"
+   onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+    <i class="fas fa-sign-out-alt"></i>
+    <span>Logout</span>
+</a>
+
+<form id="logout-form"
+      action="{{ route('referraldsa.logout') }}"
+      method="POST"
+      style="display:none;">
+    @csrf
+</form>
+
+@endif
 
         @if($role_id == 6)
     <a href="{{ route('dsa.dashboard') }}" class="nav-item">
@@ -121,6 +185,14 @@
                 <span>My DSA</span>
             </a>
             @endif
+
+
+            @if($role_id == 4)
+    <a href="{{ route('admin.lead-referral.index') }}" class="nav-item">
+        <i class="fas fa-users"></i>
+        <span>Lead Referral</span>
+    </a>
+@endif
             @if($role_id == 4)
 <a href="{{ route('payout-configs.index') }}" class="nav-item">
     <i class="fas fa-money-bill-wave"></i>
@@ -151,6 +223,9 @@
         <span>My Users</span>
     </a>
 @endif
+
+
+
 
 
         {{-- ================= WEB FORM & LEADS (ADDED) ================= --}}
@@ -204,6 +279,29 @@
                 <span>MLM</span>
             </a>
         @endif
+        @if($role_id == 4)
+
+<a href="{{ route('admin.tree.show') }}" class="nav-item">
+    <i class="fas fa-project-diagram"></i>
+    <span>MLM Tree</span>
+</a>
+
+<a href="{{ route('referral_earnings') }}" class="nav-item">
+    <i class="fas fa-users"></i>
+    <span>Referral Earnings</span>
+</a>
+
+<a href="{{ route('admin.withdrawal.requests') }}" class="nav-item">
+    <i class="fas fa-wallet"></i>
+    <span>Redeem Requests</span>
+</a>
+
+<a href="{{ route('admin.transactions') }}" class="nav-item">
+    <i class="fas fa-history"></i>
+    <span>Transaction History</span>
+</a>
+
+@endif
    @if (in_array($role_id, [2, 4]))
     <a href="{{ route('tickets.index') }}" class="nav-item">
         <i class="fas fa-question-circle"></i>

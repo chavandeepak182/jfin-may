@@ -733,50 +733,40 @@ public function settings()
 return view('admin.dsa.settings', compact('documents', 'bank'));    }
 
     // 🔹 SAVE SETTINGS
-    public function saveSettings(Request $request)
-    {
-        $dsaId = session('user_id');
+  public function saveSettings(Request $request)
+{
+    $request->validate([
+        'bank_name' => 'required',
+        'account_number' => 'required|numeric|digits_between:9,18',
+        'ifsc_code' => 'required',
+        'account_holder_name' => 'required',
+        'upi_id' => 'required',
+    ],[
+        'bank_name.required' => 'Bank Name is required',
+        'account_number.required' => 'Account Number is required',
+        'ifsc_code.required' => 'IFSC Code is required',
+        'branch_name' => 'required',
+        'account_holder_name.required' => 'Account Holder Name is required',
+        'upi_id.required' => 'UPI ID is required',
+    ]);
 
-        // ✅ FILE UPLOAD
-        $pan = $request->file('pan_card')
-            ? $request->file('pan_card')->store('uploads')
-            : null;
+    $dsaId = session('user_id');
 
-        $aadhaar = $request->file('aadhaar_card')
-            ? $request->file('aadhaar_card')->store('uploads')
-            : null;
+    DB::table('dsa_bank_details')->updateOrInsert(
+        ['dsa_id' => $dsaId],
+        [
+            'bank_name' => $request->bank_name,
+            'account_number' => $request->account_number,
+            'ifsc_code' => strtoupper($request->ifsc_code),
+            'account_holder_name' => $request->account_holder_name,
+            'upi_id' => $request->upi_id,
+            'branch_name' => $request->branch_name,
+            'updated_at' => now()
+        ]
+    );
 
-        $photo = $request->file('photo')
-            ? $request->file('photo')->store('uploads')
-            : null;
-
-        // ✅ SAVE DOCUMENTS
-        DB::table('dsa_documents')->updateOrInsert(
-            ['dsa_id' => $dsaId],
-            [
-                'pan_card' => $pan,
-                'aadhaar_card' => $aadhaar,
-                'photo' => $photo,
-                'updated_at' => now()
-            ]
-        );
-
-        // ✅ SAVE BANK DETAILS
-       DB::table('dsa_bank_details')->updateOrInsert(
-    ['dsa_id' => $dsaId],
-    [
-        'bank_name' => $request->bank_name,
-        'account_number' => $request->account_number,
-        'ifsc_code' => $request->ifsc_code,
-        'account_holder_name' => $request->account_holder_name,
-        'upi_id' => $request->upi_id, // ✅ ADDED ONLY THIS
-        'updated_at' => now()
-    ]
-);
-
-        return back()->with('success', 'Settings saved successfully');
-    }
-
+    return back()->with('success','Bank Details Added Successfully');
+}
     public function uploadDocument(Request $request)
 {
     $request->validate([

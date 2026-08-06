@@ -110,7 +110,15 @@
 
     <div class="d-flex gap-2">
 
-        
+        <div id="addMonthlyBtn"></div>
+        <div id="addLoanCategoryBtn" style="display:none;">
+    <button class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#loanCategoryModal">
+        <i class="fa fa-plus"></i>
+        Add Loan Category
+    </button>
+</div>
 
        
         <div id="addBankBtn" style="display:none;">
@@ -333,6 +341,39 @@
 
         </div>
     </a>
+</div>
+<div class="col-xl-3 col-lg-4 col-md-6">
+    <div class="analytics-card"
+         onclick="showLoanCategory()"
+         style="cursor:pointer;">
+
+        <div class="analytics-row">
+            <div class="analytics-icon icon-yellow">
+                <i class="fas fa-list"></i>
+            </div>
+
+            <div class="analytics-content">
+
+                <div class="analytics-title">
+                    Loan Category
+                </div>
+
+                <div class="analytics-bottom">
+                    <div class="analytics-value">
+                        {{ $loanCategoryCount }}
+                    </div>
+                </div>
+
+                <div class="analytics-bottom">
+                    <div class="analytics-growth">
+                        Total Categories
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
 </div>
 
         
@@ -625,8 +666,188 @@
         </div>
     </div>
 </div> 
+<div id="loanCategorySection" class="card mt-5" style="display:none;">
 
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 style="color:#000;">Loan Categories</h4>
+    </div>
 
+    <div class="card-body">
+        <div class="mb-3">
+
+<input
+
+type="text"
+
+id="loanCategorySearch"
+
+class="form-control"
+
+placeholder="Search Loan Category">
+
+</div>
+
+        <table class="table table-bordered table-striped">
+
+            <thead>
+                <tr>
+                    <th width="80">ID</th>
+                    <th>Category Name</th>
+                    <th width="180">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @forelse($loanCategories as $category)
+
+                    <tr>
+
+                        <td>{{ $category->loan_category_id }}</td>
+
+                        <td>{{ $category->category_name }}</td>
+
+                        <td>
+
+                            <button
+                                class="btn btn-primary btn-sm editCategory"
+
+                                data-id="{{ $category->loan_category_id }}"
+
+                                data-name="{{ $category->category_name }}">
+
+                                <i class="fa fa-edit"></i>
+
+                            </button>
+
+                            <button
+                                class="btn btn-danger btn-sm deleteCategory"
+
+                                data-id="{{ $category->loan_category_id }}">
+
+                                <i class="fa fa-trash"></i>
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                @empty
+
+                    <tr>
+
+                        <td colspan="3" class="text-center">
+                            No Loan Categories Found
+                        </td>
+
+                    </tr>
+
+                @endforelse
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+<div class="modal fade" id="loanCategoryModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <form action="{{ route('loan.category.store') }}" method="POST">
+                @csrf
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Loan Category</h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <input type="hidden"
+                           name="loan_category_id"
+                           id="loan_category_id">
+
+                    <div class="mb-3">
+
+                        <label>Category Name</label>
+
+                        <input
+                            type="text"
+                            name="category_name"
+                            id="category_name"
+                            class="form-control"
+                            required>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Close
+                    </button>
+
+                    <button class="btn btn-primary">
+                        Save
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('.editCategory').forEach(function(btn){
+
+    btn.addEventListener('click',function(){
+
+        document.getElementById('loan_category_id').value =
+            this.dataset.id;
+
+        document.getElementById('category_name').value =
+            this.dataset.name;
+
+        document.querySelector('#loanCategoryModal .modal-title').innerHTML =
+            "Edit Loan Category";
+
+        document.querySelector('#loanCategoryModal form').action =
+            "{{ route('loan.category.update') }}";
+
+        var modal = new bootstrap.Modal(
+            document.getElementById('loanCategoryModal')
+        );
+
+        modal.show();
+
+    });
+
+});
+document.getElementById('loanCategoryModal')
+.addEventListener('hidden.bs.modal',function(){
+
+document.getElementById('loan_category_id').value='';
+
+document.getElementById('category_name').value='';
+
+document.querySelector('.modal-title').innerHTML='Add Loan Category';
+
+document.querySelector('#loanCategoryModal form').action="{{ route('loan.category.store') }}";
+
+});
+
+</script>
 <script>
 function showMonthlyPL() {
     hideAllSections();
@@ -637,30 +858,37 @@ function showMonthlyPL() {
 </script>
 <script>
 /* ================= HIDE ALL SECTIONS ================= */
-function hideAllSections() {
-    const sections = [
-        'loanBankSection',
-        'estimatedFileSection',
-        'monthlyPLSection'
-    ];
+function hideAllSections(){
 
-    const buttons = [
-        'addBankBtn',
-        'addEstimatedBtn',
-        'addMonthlyBtn'
-    ];
+    document.getElementById('loanBankSection').style.display='none';
 
-    sections.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-    });
+    document.getElementById('estimatedFileSection').style.display='none';
 
-    buttons.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-    });
+    document.getElementById('monthlyPLSection').style.display='none';
+
+    document.getElementById('loanCategorySection').style.display='none';
+
+    document.getElementById('addBankBtn').style.display='none';
+
+    document.getElementById('addEstimatedBtn').style.display='none';
+
+    document.getElementById('addMonthlyBtn').style.display='none';
+
+    document.getElementById('addLoanCategoryBtn').style.display='none';
+
 }
 
+function showLoanCategory(){
+
+    hideAllSections();
+
+    document.getElementById('loanCategorySection').style.display='block';
+
+    document.getElementById('addLoanCategoryBtn').style.display='block';
+
+    localStorage.setItem('activeSection','loancategory');
+
+}
 function showLoanBanks() {
     hideAllSections();
     document.getElementById('loanBankSection').style.display = 'block';
@@ -682,24 +910,46 @@ function showMonthlyPL() {
     localStorage.setItem('activeSection', 'monthlypl');
 }
 
+
+function showLoanCategory() {
+
+    hideAllSections();
+
+    document.getElementById('loanCategorySection').style.display='block';
+
+    document.getElementById('addLoanCategoryBtn').style.display='block';
+
+    localStorage.setItem('activeSection','loancategory');
+
+}
 document.addEventListener('DOMContentLoaded', function () {
+
     const active = localStorage.getItem('activeSection');
 
-    switch (active) {
+    switch(active){
+
         case 'loanbanks':
             showLoanBanks();
             break;
+
         case 'estimatedfiles':
             showEstimatedFiles();
             break;
+
         case 'monthlypl':
             showMonthlyPL();
             break;
+
+        case 'loancategory':
+            showLoanCategory();
+            break;
+
         default:
             showLoanBanks();
-    }
-});
 
+    }
+
+});
 /* ================= SHOW LOAN BANKS ================= */
 function showLoanBanks() {
     hideAllSections();
@@ -756,11 +1006,12 @@ function hideAllSections() {
         'monthlyPLSection'
     ];
 
-    const buttons = [
-        'addBankBtn',
-        'addEstimatedBtn',
-        'addMonthlyBtn'
-    ];
+   const buttons = [
+    'addBankBtn',
+    'addEstimatedBtn',
+    'addMonthlyBtn',
+    'addLoanCategoryBtn'
+];
 
     sections.forEach(id => {
         const el = document.getElementById(id);
@@ -1095,6 +1346,19 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
+<script>
+    document.getElementById('loanCategorySearch').addEventListener('keyup',function(){
+
+let value=this.value.toLowerCase();
+
+document.querySelectorAll('#loanCategorySection tbody tr').forEach(function(row){
+
+row.style.display=row.innerText.toLowerCase().includes(value)?'':'none';
+
+});
+
+});
+</script>
 
 @endsection
 

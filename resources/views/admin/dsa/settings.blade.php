@@ -167,24 +167,66 @@
 <div class="modal-bg" id="bankModal">
     <div class="modal-box">
 
-        <h5>Add Bank Details</h5>
+        <h5 style="color: #000;">Add Bank Details</h5>
 
         <form method="POST" action="{{ route('dsa.settings.save') }}">
             @csrf
 
             <div class="form-row">
-                <input type="text" name="bank_name" placeholder="Bank Name" value="{{ $bank->bank_name ?? '' }}">
-                <input type="text" name="account_number" placeholder="Account Number" value="{{ $bank->account_number ?? '' }}">
+                <input type="text"
+                name="bank_name"
+                value="{{ old('bank_name', $bank->bank_name ?? '') }}"
+                placeholder="Bank Name">
+
+            @error('bank_name')
+            <small class="text-danger">{{ $message }}</small>
+            @enderror
+                <input type="text"
+                name="account_number"
+                value="{{ old('account_number', $bank->account_number ?? '') }}"
+                placeholder="Account Number">
+
+            @error('account_number')
+            <small class="text-danger">{{ $message }}</small>
+            @enderror
             </div>
 
             <div class="form-row">
-                <input type="text" name="ifsc_code" placeholder="IFSC Code" value="{{ $bank->ifsc_code ?? '' }}">
-                <input type="text" name="branch_name" placeholder="Branch Name">
+               <input type="text"
+                    name="ifsc_code"
+                    value="{{ old('ifsc_code', $bank->ifsc_code ?? '') }}"
+                    placeholder="IFSC Code">
+
+                @error('ifsc_code')
+                <small class="text-danger">{{ $message }}</small>
+                @enderror
+                                <input type="text"
+       name="branch_name"
+       placeholder="Branch Name"
+       value="{{ old('branch_name', $bank->branch_name ?? '') }}">
+
+@error('branch_name')
+<small class="text-danger">{{ $message }}</small>
+@enderror
             </div>
 
             <div class="form-row">
-                <input type="text" name="account_holder_name" placeholder="Account Holder" value="{{ $bank->account_holder_name ?? '' }}">
-                <input type="text" name="upi_id" placeholder="UPI ID">
+                <input type="text"
+                    name="account_holder_name"
+                    value="{{ old('account_holder_name', $bank->account_holder_name ?? '') }}"
+                    placeholder="Account Holder">
+
+                @error('account_holder_name')
+                <small class="text-danger">{{ $message }}</small>
+                @enderror
+                <input type="text"
+       name="upi_id"
+       value="{{ old('upi_id', $bank->upi_id ?? '') }}"
+       placeholder="UPI ID">
+
+@error('upi_id')
+<small class="text-danger">{{ $message }}</small>
+@enderror
             </div>
 
             <button class="btn-add w-100 mt-2">Save Bank Details</button>
@@ -204,5 +246,11 @@ function closeModal(){
     document.getElementById('bankModal').style.display='none';
 }
 </script>
-
+@if($errors->any())
+<script>
+window.onload = function () {
+    openModal();
+}
+</script>
+@endif
 @endsection

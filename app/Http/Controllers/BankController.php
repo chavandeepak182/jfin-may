@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\LoanBank;
 use App\Models\EstimatedFile;
 use App\Models\MonthlyPL;
+use App\Models\LoanCategory;
 
 
 
@@ -40,6 +41,11 @@ public function loanbankslist(Request $request)
     $totalmis             = DB::table('mis')->count();
     $totalEstimatedFiles  = DB::table('estimated_files')->count();
     $totalMonthlyPL       = DB::table('monthly_pls')->count();
+    $loanCategoryCount = DB::table('loan_category')->count();
+
+$loanCategories = DB::table('loan_category')
+    ->orderBy('loan_category_id', 'desc')
+    ->get();
 
     // ================= LOAN BANK LIST =================
     $loanbanks = DB::table('loan_bank_details')->paginate(10);
@@ -77,16 +83,60 @@ $estimatedFiles = $query
                 ->paginate(10);
 
 
-    return view('admin.admin-tool', compact(
-        'totalloanbank',
-        'totalmis',
-        'totalEstimatedFiles',
-        'totalMonthlyPL',
-        'loanbanks',
-        'estimatedFiles',
-        'grossRevenue',
-        'pls'
-    ));
+   return view('admin.admin-tool', compact(
+    'totalloanbank',
+    'totalmis',
+    'totalEstimatedFiles',
+    'totalMonthlyPL',
+    'loanCategoryCount',
+    'loanCategories',
+    'loanbanks',
+    'estimatedFiles',
+    'grossRevenue',
+    'pls'
+));
+}
+
+public function loanCategoryStore(Request $request)
+{
+    $request->validate([
+        'category_name' => 'required|unique:loan_category,category_name',
+    ]);
+
+    DB::table('loan_category')->insert([
+        'category_name' => $request->category_name,
+    ]);
+
+    return redirect()
+        ->route('admin.bank')
+        ->with('success', 'Loan Category Added Successfully');
+}
+public function loanCategoryUpdate(Request $request)
+{
+    $request->validate([
+        'category_name' => 'required'
+    ]);
+
+    LoanCategory::where('loan_category_id', $request->loan_category_id)
+        ->update([
+            'category_name' => $request->category_name
+        ]);
+
+    return redirect()
+        ->route('admin.bank')
+        ->with('success', 'Loan Category updated successfully.');
+}
+
+public function loanCategoryDelete(Request $request)
+{
+    DB::table('loan_category')
+        ->where('loan_category_id', $request->loan_category_id)
+        ->delete();
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Category Deleted Successfully'
+    ]);
 }
 
     public function listreferral()

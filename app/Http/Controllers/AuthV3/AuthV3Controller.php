@@ -455,6 +455,11 @@ if ($user->role_id == 6) {
         return redirect('/loans-list');
     }
 
+    // LEAD REFERRAL
+if ($user->role_id == 7) {
+    return redirect()->route('referraldsa.dashboard');
+}
+
     // fallback
     return redirect('/');
 }

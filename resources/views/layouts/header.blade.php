@@ -130,29 +130,56 @@
 
     <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" data-toggle="dropdown">
         <i class="fas fa-bell"></i>
-        <span class="badge badge-danger" id="notification-count">
-            {{ isset($notifications) ? $notifications->where('seen_by_user', 0)->count() : 0 }}
-        </span>
+       @php
+$count = \App\Models\NotificationLog::where('user_id', session('user_id'))
+    ->where('seen_by_user', 0)
+    ->count();
+@endphp
+
+<span class="badge badge-danger" id="notification-count">
+    {{ $count }}
+</span>
     </a>
 
-    <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="notificationDropdown">
-        <h6 class="dropdown-header">Notifications</h6>
+   <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="notificationDropdown">
 
-        <div id="notification-list">
-            @if(isset($notifications) && $notifications->count())
-                @foreach($notifications as $n)
-                    <a href="{{ $n->url ?? '#' }}"
-                       class="dropdown-item {{ $n->seen_by_user ? '' : 'font-weight-bold' }}">
-                        {{ $n->title }}
-                    </a>
-                @endforeach
-            @else
-                <div class="dropdown-item text-muted text-center">
-                    No notifications
-                </div>
-            @endif
-        </div>
+    <h6 class="dropdown-header">Notifications</h6>
+
+    @php
+        $notifications = \App\Models\NotificationLog::where('user_id', session('user_id'))
+            ->latest()
+            ->take(5)
+            ->get();
+    @endphp
+
+    <div id="notification-list">
+
+        @if($notifications->count())
+
+            @foreach($notifications as $n)
+
+                <a href="{{ $n->url }}"
+   class="dropdown-item notification-item {{ $n->seen_by_user ? '' : 'font-weight-bold' }}"
+   data-id="{{ $n->id }}">
+
+    <strong>{{ $n->title }}</strong><br>
+    <small>{{ $n->description }}</small>
+
+</a>
+
+            @endforeach
+
+        @else
+
+            <div class="dropdown-item text-muted text-center">
+                No notifications
+            </div>
+
+        @endif
+
     </div>
+
+</div>
 
 </li>
 

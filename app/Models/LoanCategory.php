@@ -14,4 +14,10 @@ class LoanCategory extends Model
     {
         return $this->hasMany(Loan::class, 'loan_category_id', 'loan_category_id');
     }
+    public function dsaReferral()
+{
+    $loanCategories = LoanCategory::orderBy('category_name')->get();
+
+    return view('leadreferral.add-lead', compact('loanCategories'));
+}
 }

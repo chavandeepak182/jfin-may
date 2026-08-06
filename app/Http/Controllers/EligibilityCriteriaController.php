@@ -307,7 +307,7 @@ class EligibilityCriteriaController extends Controller
             'taxAmount' => $taxAmount,
             'remainingIncomeAfterTax' => $remainingIncomeAfterTax,
             'foirPercentage' => $foirPercentage * 100,
-            'totalDeductions' => $totalDeductions + $totalCoApplicantDeductions, // Total deductions from both applicants
+            // 'totalDeductions' => $totalDeductions + $totalCoApplicantDeductions, // Total deductions from both applicants
             'proposedEmi' => $proposedEmi, // Proposed EMI for both applicants
             'bankName' => $bank->name, // Bank name associated with the loan
         ]);

@@ -63,7 +63,12 @@ class TicketController extends Controller
         // Admin data
         if ($user->role_id == config('constants.roles.admin')) {
 
-            $users  = \App\Models\User::where('role_id', config('constants.roles.customer'))->get();
+            $users = User::where('role_id', config('constants.roles.customer'))
+    ->whereNotIn('id', function ($query) {
+        $query->select('user_id')   // change to customer_id if that's the column name
+              ->from('dsa_customers');
+    })
+    ->get();
             $agents = \App\Models\User::where('role_id', config('constants.roles.agent'))->get();
             $loans  = \App\Models\Loan::all();
 
